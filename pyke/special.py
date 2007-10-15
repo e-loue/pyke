@@ -1,4 +1,5 @@
 # $Id$
+# coding=utf-8
 # 
 # Copyright © 2007 Bruce Frederiksen
 # 

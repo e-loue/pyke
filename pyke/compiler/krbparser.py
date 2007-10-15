@@ -1,4 +1,5 @@
 # $Id$
+# coding=utf-8
 # 
 # Copyright © 2007 Bruce Frederiksen
 # 
@@ -64,7 +65,7 @@ def p_inc_plan_vars(p):
     p[0] = None
 
 def p_fifth(p):
-    ''' doing_opt : DOING_TOK NL_TOK start_python_statements INDENT_TOK python_plan_code nls DEINDENT_TOK
+    ''' with_opt : WITH_TOK NL_TOK start_python_statements INDENT_TOK python_plan_code nls DEINDENT_TOK
     '''
     p[0] = p[5]
 
@@ -123,7 +124,7 @@ def p_python_assertion(p):
     p[0] = ('python_assertion', p[4])
 
 def p_bc_rule(p):
-    ''' bc_rule : SYMBOL_TOK ':' NL_TOK INDENT_TOK PROVEN_TOK goal when_opt doing_opt DEINDENT_TOK
+    ''' bc_rule : SYMBOL_TOK ':' NL_TOK INDENT_TOK USE_TOK goal when_opt with_opt DEINDENT_TOK
     '''
     p[0] = ('bc_rule', p[1], p[6], tuple(p[7]), tuple(p[8][0]), tuple(p[8][1]))
 
@@ -284,7 +285,7 @@ def p_empty_tuple(p):
     p[0] = ()
 
 def p_double_empty_tuple(p):
-    ''' doing_opt :
+    ''' with_opt :
     '''
     p[0] = (), ()
 
@@ -334,7 +335,11 @@ def p_tuple(p):
     ''' data : LP_TOK data_list comma_opt RP_TOK '''
     p[0] = '(' + ' '.join(str(x) + ',' for x in p[2]) + ')'
 
-parser = yacc.yacc(write_tables=0)
+def p_error(p):
+    raise SyntaxError("%s(%d): syntax error" %
+                          (scanner.lexer.filename, scanner.lexer.lineno))
+
+parser = yacc.yacc(write_tables=0, debug=0)
 
 def parse(filename, debug = 0):
     with contextlib.closing(file(filename)) as f:

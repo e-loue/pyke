@@ -1,4 +1,5 @@
 # $Id$
+# coding=utf-8
 # 
 # Copyright © 2007 Bruce Frederiksen
 # 
@@ -25,8 +26,8 @@
 """
 
 from __future__ import with_statement, absolute_import, division
-from ply import lex
 import contextlib
+from ply import lex
 
 debug=0
 
@@ -39,18 +40,18 @@ keywords = frozenset((
     'as',
     'assert',
     'check',
-    'doing',
     'extending',
     'False',
     'foreach',
     'in',
     'None',
-    'proven',
     'python',
     'step',
     'True',
+    'use',
     'using',
     'when',
+    'with',
     'without',
 ))
 
@@ -60,14 +61,14 @@ tokens = tuple(x.upper() + '_TOK' for x in keywords) + (
   # 'DATE_TOK',		# FIX: Add the definition for this!
     'DEINDENT_TOK',
     'INDENT_TOK',
-    'LB_TOK',
-    'LC_TOK',
+  # 'LB_TOK',
+  # 'LC_TOK',
     'LP_TOK',
     'NL_TOK',
     'NUMBER_TOK',
     'PATTERN_VAR_TOK',
-    'RB_TOK',
-    'RC_TOK',
+  # 'RB_TOK',
+  # 'RC_TOK',
     'RP_TOK',
     'STRING_TOK',
     'SYMBOL_TOK',
@@ -93,6 +94,9 @@ def t_NL_TOK(t):
         return t
 
 indent_levels = []
+
+# to prevent getting a warning...
+t_indent_ignore = ''
 
 def t_indent_sp(t):
     # ply doesn't like re's that can be empty, so we'll include the prior
@@ -150,6 +154,9 @@ def start_code(plan_name = None, multiline = False,
     current_plan_name = plan_name
     code_nesting_level = 0
     lexer.begin('code')
+
+# to prevent getting a warning...
+t_code_ignore = ''
 
 def t_code_string(t):
     r"'''([^\\]|\\.)*?'''|" \
@@ -325,13 +332,13 @@ def t_LB_TOK(t):
     r'\['
     global nesting_level
     nesting_level += 1
-    return t
+    #return t
 
 def t_LC_TOK(t):
     r'\{'
     global nesting_level
     nesting_level += 1
-    return t
+    #return t
 
 def t_LP_TOK(t):
     r'\('
@@ -344,14 +351,14 @@ def t_RB_TOK(t):
     global nesting_level
     assert nesting_level > 0
     nesting_level -= 1
-    return t
+    #return t
 
 def t_RC_TOK(t):
     r'\}'
     global nesting_level
     assert nesting_level > 0
     nesting_level -= 1
-    return t
+    #return t
 
 def t_RP_TOK(t):
     r'\)'
@@ -359,6 +366,10 @@ def t_RP_TOK(t):
     assert nesting_level > 0
     nesting_level -= 1
     return t
+
+def t_ANY_error(t):
+    raise SyntaxError("%s(%d): illegal character %s\n" %
+                         (t.lexer.filename, t.lexer.lineno, repr(t.value[0])))
 
 # helper functions:
 

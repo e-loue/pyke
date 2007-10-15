@@ -28,9 +28,9 @@ fc_assert ::= 'assert' NL_TOK INDENT_TOK {assertion NL_TOK} DEINDENT_TOK
 
 assertion ::= fact_pattern | 'python' ':' python_statement
 
-bc_rule ::= SYMBOL_TOK ':' NL_TOK INDENT_TOK proven [when] [doing] [exception]
+bc_rule ::= SYMBOL_TOK ':' NL_TOK INDENT_TOK use [when] [with]
 
-proven ::= 'proven' SYMBOL_TOK '(' {pattern,} ')'
+use ::= 'use' SYMBOL_TOK '(' {pattern,} ')'
 		['using' '(' <arg_spec> ')'] NL_TOK
 
 when ::= 'when' NL_TOK INDENT_TOK {bc_predicate NL_TOK} DEINDENT_TOK
@@ -52,4 +52,4 @@ plan_spec ::= step_opt NL_TOK
 step_opt ::=
 	   | 'step' NUMBER_TOK
 
-doing ::= 'doing' NL_TOK INDENT_TOK {<python_statement> NL_TOK} DEINDENT_TOK
+with ::= 'with' NL_TOK INDENT_TOK {<python_statement> NL_TOK} DEINDENT_TOK
