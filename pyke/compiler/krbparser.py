@@ -129,7 +129,7 @@ def p_bc_rule(p):
     p[0] = ('bc_rule', p[1], p[6], tuple(p[7]), tuple(p[8][0]), tuple(p[8][1]))
 
 def p_goal(p):
-    ''' goal : SYMBOL_TOK LP_TOK patterns_opt RP_TOK using_opt nls
+    ''' goal : SYMBOL_TOK LP_TOK patterns_opt RP_TOK taking_opt nls
     '''
     p[0] = ('goal', p[1], tuple(p[3]), p[5])
 
@@ -236,8 +236,8 @@ def p_last(p):
     '''
     p[0] = p[len(p)-1]
 
-def p_using(p):
-    ''' using_opt : start_python_code USING_TOK python_rule_code
+def p_taking(p):
+    ''' taking_opt : start_python_code TAKING_TOK python_rule_code
     '''
     p[0] = p[len(p)-1][0]
 
@@ -278,7 +278,7 @@ def p_empty_tuple(p):
         data : LP_TOK RP_TOK
 	foreach_opt :
         patterns_opt :
-	using_opt :
+	taking_opt :
         when_opt :
 	without_opt :
     '''

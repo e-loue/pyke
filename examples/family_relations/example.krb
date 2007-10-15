@@ -205,14 +205,14 @@ nth_cousin_rest:
         return "%dth cousins" % $n
 
 add_empty_prefix:
-    use add_prefix(()) using (x, y)
+    use add_prefix(()) taking (x, y)
     when
 	special.cut()
     with
 	return x + ' <=> ' + y
 
 add_prefix:
-    use add_prefix($prefix) using (x, y)
+    use add_prefix($prefix) taking (x, y)
     with
 	pre = ' '.join($prefix) + ' '
 	return pre + x + ' <=> ' + pre + y

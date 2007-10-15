@@ -31,7 +31,7 @@ assertion ::= fact_pattern | 'python' ':' python_statement
 bc_rule ::= SYMBOL_TOK ':' NL_TOK INDENT_TOK use [when] [with]
 
 use ::= 'use' SYMBOL_TOK '(' {pattern,} ')'
-		['using' '(' <arg_spec> ')'] NL_TOK
+		['taking' '(' <arg_spec> ')'] NL_TOK
 
 when ::= 'when' NL_TOK INDENT_TOK {bc_predicate NL_TOK} DEINDENT_TOK
 

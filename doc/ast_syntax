@@ -21,7 +21,7 @@ counting : ('counting', quoted_pattern_var_name,
 bc_rule: ('bc_rule', name, goal, (bc_predicate), (python_code),
                      (plan_vars_needed))
 
-goal : ('goal', <entity_name>SYMBOL, (pattern), <using>(python_line))
+goal : ('goal', <entity_name>SYMBOL, (pattern), <taking>(python_line))
 
 bc_predicate : ('bc_predicate', <required>_bool,
                                 <kb>name_opt, <entity>name, (pattern),
