@@ -1,0 +1,55 @@
+file ::= [NL_TOK] ['extending' SYMBOL_TOK ['without' {SYMBOL_TOK,}] NL_TOK]
+	 {fc_rule}
+	 {bc_rule}
+
+data ::= NONE_TOK | TRUE_TOK | FALSE_TOK
+       | NUMBER_TOK | SYMBOL_TOK | STRING_TOK | '(' {data,} ')'
+
+variable ::= PATTERN_VAR_TOK | ANONYMOUS_VAR_TOK
+
+pattern ::= variable | data | '(' {pattern,} ['*' variable] ')'
+
+fact_pattern ::= SYMBOL_TOK '.' SYMBOL_TOK '(' {pattern,} ')'
+
+fc_rule ::= SYMBOL_TOK ':' NL_TOK INDENT_TOK [fc_foreach] fc_assert DEINDENT_TOK
+
+fc_foreach ::= 'foreach' NL_TOK INDENT_TOK {fc_predicate NL_TOK} DEINDENT_TOK
+
+fc_predicate ::= fact_pattern
+	       | python_predicate
+
+python_predicate ::= pattern '=' python_exp
+	           | pattern 'in' python_exp
+		         ['counting' PATTERN_VAR_TOK ['from' python_exp]
+						     ['by' python_exp]]
+	           | 'check' python_exp
+
+fc_assert ::= 'assert' NL_TOK INDENT_TOK {assertion NL_TOK} DEINDENT_TOK
+
+assertion ::= fact_pattern | 'python' ':' python_statement
+
+bc_rule ::= SYMBOL_TOK ':' NL_TOK INDENT_TOK proven [when] [doing] [exception]
+
+proven ::= 'proven' SYMBOL_TOK '(' {pattern,} ')'
+		['using' '(' <arg_spec> ')'] NL_TOK
+
+when ::= 'when' NL_TOK INDENT_TOK {bc_predicate NL_TOK} DEINDENT_TOK
+
+bc_predicate ::= goal_name '(' {pattern,} ')' plan_spec
+	       | python_predicate
+
+goal_name ::= name '.' name
+	    | name
+
+name ::= SYMBOL_TOK
+       | PATTERN_VAR_TOK
+
+plan_spec ::= step_opt NL_TOK
+	    | 'as' variable NL_TOK
+	    | step_opt NL_TOK INDENT_TOK <python_statement> NL_TOK DEINDENT_TOK
+					 (with 'plan' for returned fn)
+
+step_opt ::=
+	   | 'step' NUMBER_TOK
+
+doing ::= 'doing' NL_TOK INDENT_TOK {<python_statement> NL_TOK} DEINDENT_TOK

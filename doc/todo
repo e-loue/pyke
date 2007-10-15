@@ -1,0 +1,16 @@
+- build top level driver functions
+- document
+- change proven/when/doing keywords to use/when/with
+- remove simple_contexts that were only put there to capture an undo list
+- add python if statements to bc_predicates
+- add ability to use normal python variables
+    - normal_var = python_code
+    - tuple_of_normal_vars = python_code
+    - possibly mixing normal_vars and pattern_vars in patterns?
+        - patterns used in goal arguments?
+        - patterns used in bc_predicates
+        - patterns assigned to with python_code
+- add a way to bring import statements in at the beginning of the generated
+  .py files
+- indent body "prove(...)" in "for x_%d in prove(...)" by 2 more spaces
+- figure out a better name for special.cut()

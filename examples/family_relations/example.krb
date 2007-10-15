@@ -1,0 +1,198 @@
+# example.krb
+
+son_of:
+    foreach
+	family.son_of($child, $father, $mother)
+    assert
+	family.child_parent($child, $father, father, son)
+	family.child_parent($child, $mother, mother, son)
+
+daughter_of:
+    foreach
+	family.daughter_of($child, $father, $mother)
+    assert
+	family.child_parent($child, $father, father, daughter)
+	family.child_parent($child, $mother, mother, daughter)
+
+brothers:
+    foreach
+	family.son_of($brother1, $father, $mother)
+	family.son_of($brother2, $father, $mother)
+	check $brother1 != $brother2
+    assert
+	family.siblings($brother1, $brother2, brother, brother)
+
+sisters:
+    foreach
+	family.daughter_of($sister1, $father, $mother)
+	family.daughter_of($sister2, $father, $mother)
+	check $sister1 != $sister2
+    assert
+	family.siblings($sister1, $sister2, sister, sister)
+
+brother_and_sister:
+    foreach
+	family.son_of($brother, $father, $mother)
+	family.daughter_of($sister, $father, $mother)
+    assert
+	family.siblings($brother, $sister, sister, brother)
+	family.siblings($sister, $brother, brother, sister)
+
+facts_for_bc_rules:
+    assert
+	family.as_au(brother, uncle)
+	family.as_au(sister, aunt)
+	family.as_nn(son, nephew)
+	family.as_nn(daughter, niece)
+
+niece_or_nephew_and_aunt_or_uncle:
+    proven nn_au($younger, $elder, (), $au_type, $nn_type)
+    when
+	family.siblings($elder, $parent, $_, $elder_type)
+	family.child_parent($younger, $parent, $_, $younger_type)
+	family.as_au($elder_type, $au_type)
+	family.as_nn($younger_type, $nn_type)
+
+parent_and_child:
+    proven child_parent($child, $parent, (), $parent_type, $child_type)
+    when
+	family.child_parent($child, $parent, $parent_type, $child_type)
+
+grand_parent_and_child:
+    proven child_parent($child, $grand_parent, (grand),
+                        $parent_type, $child_type)
+    when
+	family.child_parent($child, $parent, $_, $child_type)
+	family.child_parent($parent, $grand_parent, $parent_type, $_)
+
+great_grand_parent_and_child:
+    proven child_parent($child, $grand_parent, (great, $a, *$b),
+                        $parent_type, $child_type)
+    when
+	family.child_parent($child, $grand_child, $_, $child_type)
+	child_parent($grand_child, $grand_parent, ($a, *$b), $parent_type, $_)
+
+great_niece_or_nephew_and_aunt_or_uncle:
+    proven nn_au($younger, $elder, (great, *$greats), $au_type, $nn_type)
+    when
+	family.child_parent($younger, $parent, $_, $younger_type)
+	nn_au($parent, $elder, $greats, $au_type, $_)
+	family.as_nn($younger_type, $nn_type)
+
+first_cousins:
+    proven cousins($cousin1, $cousin2, 1)
+    when
+	family.child_parent($cousin1, $sibling1, $_, $_)
+	family.siblings($sibling1, $sibling2, $_, $_)
+	family.child_parent($cousin2, $sibling2, $_, $_)
+
+nth_cousins:
+    proven cousins($next_cousin1, $next_cousin2, $next_n)
+    when
+	family.child_parent($next_cousin1, $cousin1, $_, $_)
+	family.siblings($cousin1, $cousin2, $n)
+	family.child_parent($next_cousin2, $cousin2, $_, $_)
+	$next_n = $n + 1
+
+how_related_child_parent:
+    proven how_related($person1, $person2)
+    when
+	child_parent($person1, $person2, $prefix, $p2_type, $p1_type)
+	add_prefix($prefix)
+	    return $plan($p2_type, $p1_type)
+
+how_related_parent_child:
+    proven how_related($person1, $person2)
+    when
+	child_parent($person2, $person1, $prefix, $p1_type, $p2_type)
+	add_prefix($prefix)
+	    return $plan($p2_type, $p1_type)
+
+how_related_siblings:
+    proven how_related($person1, $person2)
+    when
+	family.siblings($person1, $person2, $p2_type, $p1_type)
+    doing
+	return $p2_type + ' <=> ' + $p1_type
+
+how_related_nn_au:
+    proven how_related($person1, $person2)
+    when
+	nn_au($person1, $person2, $prefix, $p2_type, $p1_type)
+	add_prefix($prefix)
+	    return $plan($p2_type, $p1_type)
+
+how_related_au_nn:
+    proven how_related($person1, $person2)
+    when
+	nn_au($person2, $person1, $prefix, $p1_type, $p2_type)
+	add_prefix($prefix)
+	    return $plan($p2_type, $p1_type)
+
+how_related_cousins:
+    proven how_related($cousin1, $cousin2)
+    when
+	cousins($cousin1, $cousin2, $n)
+        nth_cousin($n)
+	    return $plan()
+
+how_related_removed_cousins:
+    proven how_related($removed_cousin1, $cousin2)
+    when
+        child_parent($removed_cousin1, $cousin1, $grand, $_, $_)
+	cousins($cousin1, $cousin2, $n)
+        nth_cousin($n)
+	    nth_cousin = $plan()
+        $r1 = len($grand) + 1
+    doing
+        return "%s, %d removed" % (nth_cousin, $r1)
+
+how_related_cousins_removed:
+    proven how_related($cousin1, $removed_cousin2)
+    when
+	cousins($cousin1, $cousin2, $n)
+        child_parent($removed_cousin2, $cousin2, $grand, $_, $_)
+        nth_cousin($n)
+	    nth_cousin = $plan()
+        $r1 = len($grand) + 1
+    doing
+        return "%s, %d removed" % (nth_cousin, $r1)
+
+nth_cousin_1:
+    proven nth_cousin(1)
+    when
+        special.cut()
+    doing
+        return "1st cousins"
+
+nth_cousin_2:
+    proven nth_cousin(2)
+    when
+        special.cut()
+    doing
+        return "2nd cousins"
+
+nth_cousin_3:
+    proven nth_cousin(3)
+    when
+        special.cut()
+    doing
+        return "3rd cousins"
+
+nth_cousin_rest:
+    proven nth_cousin($n)
+    doing
+        return "%dth cousins" % $n
+
+add_empty_prefix:
+    proven add_prefix(()) using (x, y)
+    when
+	special.cut()
+    doing
+	return x + ' <=> ' + y
+
+add_prefix:
+    proven add_prefix($prefix) using (x, y)
+    doing
+	pre = ' '.join($prefix) + ' '
+	return pre + x + ' <=> ' + pre + y

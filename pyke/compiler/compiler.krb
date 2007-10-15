@@ -1,0 +1,401 @@
+# compiler.krb
+
+file:
+    proven compile($rb_name, (file, $parent, $fc_rules, $bc_rules),
+                   $plan_lines, $bc_lines)
+    when
+        !plan_head($rb_name, $parent, $plan_head)
+        $bc_head = helpers.bc_head($rb_name)
+        !fc_rules($fc_rules, $fc_lines)
+        !bc_rules($rb_name, $bc_rules, $bc_plan_lines, $bc_bc_lines)
+        $plan_lines = $plan_head + $fc_lines + $bc_plan_lines
+        $bc_lines = $bc_head + $bc_bc_lines
+
+plan_head:
+    proven plan_head($rb_name, None, $lines)
+    when
+        $lines1 = helpers.plan_head1($rb_name)
+        $lines = helpers.splice($lines1,
+                     "This_rule_base = rule_base.rule_base('%s')" % $rb_name)
+
+fc_rules0:
+    proven fc_rules((), ())
+
+fc_rules1:
+    proven fc_rules(($fc_rule, *$fc_rest), $lines)
+    when
+        !fc_rule($fc_rule, $fc_lines)
+        !fc_rules($fc_rest, $lines_rest)
+        $lines = $fc_lines + $lines_rest
+
+fc_rule_:
+    proven fc_rule((fc_rule, $rule_name, $fc_predicates, $assertions),
+                   $fc_lines)
+    when
+        !fc_predicates($rule_name, 0, $fc_predicates,
+                       $pred_fn_head, $pred_fn_tail, $pred_decl_lines,
+                       (), $patterns_out1)
+        !assertions($assertions, $asserts_fn_lines,
+                    $patterns_out1, $patterns_out)
+        $fc_lines = helpers.splice(
+                      "",
+                      "def %s(rule, context = None, index = None):" %
+                        $rule_name,
+                      (("INDENT", 2),),
+                      "if context is None: context = contexts.simple_context()",
+                      $pred_fn_head,
+                      $asserts_fn_lines,
+                      $pred_fn_tail,
+                      "context.done()",
+                      "POPINDENT",
+                      "",
+                      "fc_rule.fc_rule('%(name)s', This_rule_base, %(name)s," %
+                        {'name': $rule_name},
+                      (("INDENT", 2),),
+                      helpers.add_brackets($pred_decl_lines, '(', '),'),
+                      helpers.list_format($patterns_out, '(', '))'),
+                      'POPINDENT')
+
+fc_predicates0:
+    proven fc_predicates($_, $_, (), (), (), (), $patterns_in, $patterns_in)
+
+fc_predicates1:
+    proven fc_predicates($rule_name, $clause_num, ($first_pred, *$rest_preds),
+                         $fn_head, $fn_tail, $decl_lines,
+                         $patterns_in, $patterns_out)
+    when
+        !fc_predicate($rule_name, $clause_num, $next_clause_num,
+                      $first_pred, $fn_head1, $fn_tail1, $decl_lines1,
+                      $patterns_in, $patterns_out1)
+        !fc_predicates($rule_name, $next_clause_num, $rest_preds,
+                       $fn_head2, $fn_tail2, $decl_lines2,
+                       $patterns_out1, $patterns_out)
+        $fn_head = helpers.splice($fn_head1, $fn_head2)
+        $fn_tail = helpers.splice($fn_tail2, $fn_tail1)
+        $decl_lines = helpers.splice($decl_lines1, $decl_lines2)
+
+fc_predicate:
+    proven fc_predicate($rule_name, $clause_num, $next_clause_num,
+                        (fc_predicate, $kb_name, $entity_name, $arg_patterns),
+                        $fn_head, ('POPINDENT',), $decl_lines,
+                        $patterns_in, $patterns_in)
+    when
+        $fn_head = ("for dummy in (None,) if index == %d else \\" % $clause_num,
+                    ('INDENT', 2),
+                    ('INDENT', 11),
+                    "lookup('%s', '%s', context, rule.foreach_patterns(%d)):" %
+                        ($kb_name, $entity_name, $clause_num),
+                    'POPINDENT',)
+        $next_clause_num = $clause_num + 1
+        $decl_lines = helpers.splice("('%s', '%s'," % ($kb_name, $entity_name),
+                                     (('INDENT', 1),),
+                                     helpers.list_format($arg_patterns,
+                                                         '(', ')),'),
+                                     'POPINDENT')
+
+fc_python_predicate:
+    proven fc_predicate($rule_name, $clause_num, $clause_num,
+                        $python_predicate,
+                        $fn_head, $fn_tail, (),
+                        $patterns_in, $patterns_out)
+    when
+        python_predicate($clause_num, $python_predicate,
+                         $patterns_in, $patterns_out,
+                         $fn_head, $fn_tail)
+
+assertions_0:
+    proven assertions((), (), $patterns_in, $patterns_in)
+
+assertions_n:
+    proven assertions(($first_assertion, *$rest_assertions),
+                      $fn_lines, $patterns_in, $patterns_out)
+    when
+        !assertion($first_assertion, $fn_lines1, $patterns_in, $patterns_out1)
+        !assertions($rest_assertions, $fn_lines2, $patterns_out1, $patterns_out)
+        $fn_lines = helpers.splice($fn_lines1, $fn_lines2)
+
+assertion:
+    proven assertion(('assert', $kb_name, $entity_name, $patterns),
+                     $fn_lines, $patterns_in, $patterns_out)
+    when
+        ($pat_nums, $patterns_out) = \
+            helpers.merge_patterns($patterns, $patterns_in)
+        $fn_lines = helpers.splice(
+                      "assert_('%s', '%s'," % ($kb_name, $entity_name),
+                      (('INDENT', 8),),
+                      helpers.list_format(
+                        ("rule.pattern(%d).as_data(context)" % pat_num
+                         for pat_num in $pat_nums),
+                        '(', '))'),
+                      'POPINDENT')
+
+python_assertion:
+    proven assertion((python_assertion, ($python_code, $_)),
+                     $python_code, $patterns_in, $patterns_in)
+
+bc_rules0:
+    proven bc_rules($_, (), (), ())
+
+bc_rules1:
+    proven bc_rules($rb_name, ($bc_rule, *$bc_rest), $plan_lines, $bc_lines)
+    when
+        !bc_rule($rb_name, $bc_rule, $bc_plan_lines, $bc_bc_lines)
+        !bc_rules($rb_name, $bc_rest, $plan_lines_rest, $bc_lines_rest)
+        $plan_lines = $bc_plan_lines + $plan_lines_rest
+        $bc_lines = $bc_bc_lines + $bc_lines_rest
+
+bc_rule_:
+    proven bc_rule($rb_name, (bc_rule, $name, $goal, $bc_predicates,
+                                       $python_lines, $plan_vars_needed),
+                   $plan_lines, $bc_lines)
+    when
+        !bc_predicates($rb_name, $name, $bc_predicates, $plan_vars_needed,
+                       $pred_plan_lines, $pred_fn_head, $pred_fn_tail,
+                       $pred_decl_lines)
+        ($plan_lines, $goal_fn_head, $goal_fn_tail, $goal_decl_lines) = \
+            helpers.goal($rb_name, $name, $goal,
+                         $pred_plan_lines, $python_lines)
+        $bc_lines = helpers.splice(
+                      $goal_fn_head,
+                      $pred_fn_head,
+                      'yield context' if $plan_lines else 'yield',
+                      $pred_fn_tail,
+                      $goal_fn_tail,
+                      $goal_decl_lines,
+                      $pred_decl_lines,
+                      'POPINDENT')
+
+bc_predicates:
+    proven bc_predicates($rb_name, $rule_name, $bc_predicates,
+                         $plan_vars_needed, $plan_lines, $fn_head, $fn_tail,
+                         $decl_lines)
+    when
+        !bc_predicates1($rb_name, $rule_name, 1, $bc_predicates, (), $patterns,
+                        $plan_vars_needed, $plan_var_names,
+                        $plan_lines1, $fn_head, $fn_tail)
+        $pat_lines = helpers.list_format($patterns, '(', '))')
+        $decl_lines = ('(' + ' '.join(tuple(repr(plan_var_name) + ','
+                                            for plan_var_name
+                                             in $plan_var_names)) +
+                       '),',) + $pat_lines
+        $plan_lines = tuple(itertools.chain(itertools.chain(
+            ((lines for step, lines in $plan_lines1 if step is None),
+             (lines for step, lines
+                     in sorted(((step, lines) for step, lines in $plan_lines1
+                                               if step is not None),
+                               key=lambda (step, lines): step))))))
+
+bc_predicates1_0:
+    proven bc_predicates1($_, $_, $_, (), $patterns, $patterns,
+                          $plan_var_names, $plan_var_names,
+                          (), (), ())
+
+bc_predicates1_n:
+    proven bc_predicates1($rb_name, $rule_name, $clause_num,
+                          ($first_pred, *$rest_preds),
+                          $patterns_in, $patterns_out,
+                          $plan_var_names_in, $plan_var_names_out,
+                          $plan_lines, $fn_head, $fn_tail)
+    when
+        !bc_predicate($rb_name, $rule_name, $clause_num, $first_pred,
+                      $patterns_in, $patterns_out1,
+                      $plan_var_names_in, $plan_var_names_out1,
+                      $plan_lines1, $fn_head1, $fn_tail1)
+        $next_clause_num = $clause_num + 1
+        !bc_predicates1($rb_name, $rule_name, $next_clause_num, $rest_preds,
+                        $patterns_out1, $patterns_out,
+                        $plan_var_names_out1, $plan_var_names_out,
+                        $plan_lines2, $fn_head2, $fn_tail2)
+        $plan_lines = $plan_lines1 + $plan_lines2
+        $fn_head = $fn_head1 + $fn_head2
+        $fn_tail = $fn_tail2 + $fn_tail1
+
+bc_predicate:
+    proven bc_predicate($rb_name, $rule_name, $clause_num,
+                        (bc_predicate, $required, $kb_name, $entity_name,
+                                       $arg_patterns, $plan_spec),
+                        $patterns_in, $patterns_out,
+                        $plan_var_names_in, $plan_var_names_out,
+                        $plan_lines, $fn_head, $fn_tail)
+    when
+        $kb_name2 = $kb_name or "'" + $rb_name + "'"
+        ($pat_nums, $patterns_out1) = \
+            helpers.merge_patterns($arg_patterns, $patterns_in)
+        $fn_head1 = helpers.splice(
+                      "for x_%(clause_num)d in "
+                        "prove(%(kb_name)s, %(entity_name)s, context," %
+                          {'clause_num': $clause_num,
+                           'kb_name': $kb_name2,
+                           'entity_name': $entity_name},
+                      (('INDENT', 2),
+                       ('INDENT', 13),),
+                      helpers.list_format(('rule.pattern(%d)' % pat_num
+                                           for pat_num in $pat_nums),
+                                          '(', ')):'),
+                      'POPINDENT',)
+        !add_required($required, $rb_name, $rule_name, $clause_num,
+                      $fn_head1, (POPINDENT), $fn_head2, $fn_tail2)
+        !gen_plan_lines($rb_name, $rule_name, $clause_num, $plan_spec,
+                        $patterns_out1, $patterns_out,
+                        $fn_head3, $fn_tail3, $plan_lines, $plan_vars_needed)
+        ($_, $plan_var_names_out) = helpers.merge_patterns($plan_vars_needed,
+                                                           $plan_var_names_in)
+        $fn_head = $fn_head2 + $fn_head3
+        $fn_tail = $fn_tail3 + $fn_tail2
+
+no_plan:
+    proven gen_plan_lines($rb_name, $rule_name, $clause_num,
+                          None,
+                          $patterns_in, $patterns_in, $fn_head, (), (), ())
+    when
+        $fn_head = ('assert x_%d is None, \\' % $clause_num,
+                    ('INDENT', 2),
+                    '"%(rb_name).%(rule_name)s: got unexpected plan from '
+                     'when clause %(clause_num)d"' %
+                     {'clause_num': $clause_num,
+                      'rb_name': $rb_name,
+                      'rule_name': $rule_name},
+                    'POPINDENT',)
+
+as_plan:
+    proven gen_plan_lines($rb_name, $rule_name, $clause_num,
+                          ('as', $pat_var_name),
+                          $patterns_in, $patterns_out,
+                          $fn_head, $fn_tail,
+                          (), ())
+    when
+        ($pat_num, $patterns_out) = \
+            helpers.merge_pattern("contexts.variable('%s')" % $pat_var_name,
+                                  $patterns_in)
+        !plan_bindings($rb_name, $rule_name, $clause_num, $pat_var_name,
+                       $pat_num, $fn_head, $fn_tail)
+
+plan_spec:
+    proven gen_plan_lines($rb_name, $rule_name, $clause_num,
+                          (plan_spec, $step_num, $plan_var_name,
+                                      $python_code, $plan_vars_needed),
+                          $patterns_in, $patterns_out,
+                          $fn_head, $fn_tail,
+                          (($step_num, $python_code),), $plan_vars_needed)
+    when
+        ($pat_num, $patterns_out) = \
+            helpers.merge_pattern("contexts.variable('%s')" % $plan_var_name,
+                                  $patterns_in)
+        !plan_bindings($rb_name, $rule_name, $clause_num, $plan_var_name,
+                       $pat_num, $fn_head, $fn_tail)
+
+plan_bindings:
+    proven plan_bindings($rb_name, $rule_name, $clause_num, $plan_var_name,
+                         $pat_num, $fn_head, $fn_tail)
+    when
+        $fn_head = ('assert x_%d is not None, \\' % $clause_num,
+                    ('INDENT', 2),
+                    '"%(rb_name).%(rule_name)s: expected plan from '
+                     'when clause %(clause_num)d"' %
+                     {'clause_num': $clause_num,
+                      'rb_name': $rb_name,
+                      'rule_name': $rule_name},
+                    'POPINDENT',
+                    "mark%d = context.mark(True)" % $clause_num,
+                    "if not rule.pattern(%d).match_data(context, context, "
+                     "x_%d):" % ($pat_num, $clause_num),
+                    ('INDENT', 2),
+                    'raise AssertionError("%(rb_name).%(rule_name)s: '
+                     'plan match to $%(plan_var_name)s failed in '
+                     'when clause %(clause_num)d")' %
+                     {'clause_num': $clause_num,
+                      'plan_var_name': $plan_var_name,
+                      'rb_name': $rb_name,
+                      'rule_name': $rule_name},
+                    'POPINDENT',
+                    "context.end_save_all_undo()")
+        $fn_tail = ("context.undo_to_mark(mark%d)" % $clause_num,)
+
+not_required:
+    proven add_required(False, $_, $_, $_,
+                        $fn_head, $fn_tail, $fn_head, $fn_tail)
+
+required:
+    proven add_required(True, $rb_name, $rule_name, $clause_num,
+                        $fn_head1, $fn_tail1, $fn_head, $fn_tail)
+    when
+        $fn_head = helpers.splice(
+                     "flag_%d = False" % $clause_num,
+                     $fn_head1,
+                     "flag_%d = True" % $clause_num,)
+        $fn_tail = helpers.splice(
+                     $fn_tail1,
+                     "if not flag_%d:" % $clause_num,
+                     (("INDENT", 2),),
+                     "raise AssertionError(\"%s.%s: 'when' clause %d failed\")"
+                        % ($rb_name, $rule_name, $clause_num),
+                     "POPINDENT")
+
+bc_python_predicate:
+    proven bc_predicate($rb_name, $rule_name, $clause_num,
+                        $python_predicate,
+                        $patterns_in, $patterns_out,
+                        $plan_var_names, $plan_var_names,
+                        (), $fn_head, $fn_tail)
+    when
+        python_predicate($clause_num, $python_predicate,
+                         $patterns_in, $patterns_out,
+                         $fn_head, $fn_tail)
+
+python_eq:
+    proven python_predicate($clause_num,
+                            (python_eq, $pattern, ($python_code, $_)),
+                            $patterns_in, $patterns_out, $fn_head, $fn_tail)
+    when
+        ($pat_num, $patterns_out) = \
+            helpers.merge_pattern($pattern, $patterns_in)
+        $python_code2 = $python_code[:-1] + ($python_code[-1] + '):',)
+        $fn_head = helpers.splice(
+                     "mark%d = context.mark(True)" % $clause_num,
+                     "if rule.pattern(%d).match_data(context, context," %
+                        $pat_num,
+                     (('INDENT', 2),
+                      ('INDENT', 5),),
+                     $python_code2,
+                     'POPINDENT',
+                     "context.end_save_all_undo()")
+        $fn_tail = ('POPINDENT',
+                    "else: context.end_save_all_undo()",
+                    "context.undo_to_mark(mark%d)" % $clause_num,)
+
+python_in:
+    proven python_predicate($clause_num,
+                            (python_in, $pattern, ($python_code, $_)),
+                            $patterns_in, $patterns_out, $fn_head, $fn_tail)
+    when
+        ($pat_num, $patterns_out) = \
+            helpers.merge_pattern($pattern, $patterns_in)
+        $python_code2 = $python_code[:-1] + ($python_code[-1] + ':',)
+        $fn_head = helpers.splice(
+                     "for python_ans in \\",
+                     (('INDENT', 2),
+                      ('INDENT', 2),),
+                     $python_code2,
+                     'POPINDENT',
+                     "mark%d = context.mark(True)" % $clause_num,
+                     "if rule.pattern(%d).match_data(context, context, "
+                         "python_ans):" % $pat_num,
+                     (('INDENT', 2),),
+                     "context.end_save_all_undo()")
+        $fn_tail = ('POPINDENT',
+                    "else: context.end_save_all_undo()",
+                    "context.undo_to_mark(mark%d)" % $clause_num,
+                    'POPINDENT',)
+
+python_check:
+    proven python_predicate($clause_num,
+                            (python_check, ($python_code, $_)),
+                            $patterns_in, $patterns_in,
+                            $fn_head, ('POPINDENT',))
+    when
+        $python_code2 = $python_code[:-1] + ($python_code[-1] + ':',)
+        $fn_head = helpers.splice(
+                     "if " + $python_code2[0].strip(),
+                     $python_code2[1:],
+                     (('INDENT', 2),),)
+

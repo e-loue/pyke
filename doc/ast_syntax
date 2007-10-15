@@ -1,0 +1,49 @@
+file : ('file', parent, (fc_rule), (bc_rule))
+
+parent : None
+       | ('parent', extending_symbol, (without_symbols))
+
+fc_rule: ('fc_rule', name, (fc_predicate), (assertion))
+
+fc_predicate : ('fc_predicate', kb_name, entity_name, (pattern))
+             | python_predicate
+
+assertion : ('assert', kb_name, entity_name, (pattern))
+          | ('python_assertion', python_code)
+
+python_predicate : ('python_eq', pattern, python_code)
+                 | ('python_in', pattern, python_code)
+                 | ('python_check', python_code)
+
+counting : ('counting', quoted_pattern_var_name,
+                        <from>python_code_opt, <by>python_code_opt)
+
+bc_rule: ('bc_rule', name, goal, (bc_predicate), (python_code),
+                     (plan_vars_needed))
+
+goal : ('goal', <entity_name>SYMBOL, (pattern), <using>(python_line))
+
+bc_predicate : ('bc_predicate', <required>_bool,
+                                <kb>name_opt, <entity>name, (pattern),
+                                plan_spec_opt)
+             | python_predicate
+
+name : quoted_STRING
+     | "context.lookup_data('PATTERN_VAR_NAME')"
+
+plan_spec : ('as', <unquoted>pattern_var_name)
+          | ('plan_spec', <step>NUMBER_opt, <unquoted>plan_var_name,
+                          (python_line), (<unquoted>plan_var_needed))
+
+pattern : variable
+        | "pattern_literal(<data>)"
+        | "pattern_tuple((<pattern>))"
+        | "pattern_tuple((<pattern>), <variable>)"
+
+variable: "contexts.variable('<var_name>')"
+        | "contexts.anonymous()"
+
+data : None | True | False | NUMBER | quoted_STRING | TUPLE
+
+python_code : ((python_line), (<unquoted>plan_var_needed))
+

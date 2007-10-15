@@ -1,0 +1,30 @@
+# This is a comment
+# line 2 of comment
+
+# comment after blank line
+name1:
+    foreach
+	a.b(x, $b)
+    assert
+	c.d($b)
+
+name2:
+    proven x(1, $c, (1, b), (1, b, $c)) using (a, b, c)
+    when
+        a.b(x, $c)
+            line1
+            line2 $d end2
+        x(1,2,3)
+            some $plan(stuff) \
+                and more stuff fail here
+    doing
+        a $plan b
+
+name3:
+    proven x(1, $c, (1, b), (1, b, $c))
+    when
+        a.b(x, $c)
+            line1
+            line2 $d end2
+        x(1,2,3) as $foo_fn
+
