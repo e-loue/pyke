@@ -4,6 +4,7 @@
   .py files
 - indent body "prove(...)" in "for x_%d in prove(...)" by 2 more spaces
 - figure out a better name for special.cut()
+- create an alpha release
 - add python if statements to bc_predicates
 - add ability to use normal python variables
     - normal_var = python_code
@@ -12,5 +13,6 @@
         - patterns used in goal arguments?
         - patterns used in bc_predicates
         - patterns assigned to with python_code
+- split compiled forward chaining functions from compiled plan functions
+  into two different output files.
 - add error recovery to krbparser
-- create an alpha release

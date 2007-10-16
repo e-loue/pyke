@@ -2,9 +2,11 @@
 
 from __future__ import with_statement, absolute_import, division
 from pyke import tmp_itertools as itertools
-from pyke import contexts, pattern, bc_rule
+from pyke import rule_base, contexts, pattern, bc_rule
 from pyke import prove
 import example
+
+This_rule_base = rule_base.get_create('example')
 
 def niece_or_nephew_and_aunt_or_uncle(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
@@ -42,7 +44,7 @@ def niece_or_nephew_and_aunt_or_uncle(rule, arg_patterns, arg_context):
               yield
     context.done()
 
-bc_rule.bc_rule('niece_or_nephew_and_aunt_or_uncle', example.This_rule_base, 'nn_au',
+bc_rule.bc_rule('niece_or_nephew_and_aunt_or_uncle', This_rule_base, 'nn_au',
                 niece_or_nephew_and_aunt_or_uncle, None,
                 (contexts.variable('younger'),
                  contexts.variable('elder'),
@@ -78,7 +80,7 @@ def parent_and_child(rule, arg_patterns, arg_context):
         yield
     context.done()
 
-bc_rule.bc_rule('parent_and_child', example.This_rule_base, 'child_parent',
+bc_rule.bc_rule('parent_and_child', This_rule_base, 'child_parent',
                 parent_and_child, None,
                 (contexts.variable('child'),
                  contexts.variable('parent'),
@@ -117,7 +119,7 @@ def grand_parent_and_child(rule, arg_patterns, arg_context):
           yield
     context.done()
 
-bc_rule.bc_rule('grand_parent_and_child', example.This_rule_base, 'child_parent',
+bc_rule.bc_rule('grand_parent_and_child', This_rule_base, 'child_parent',
                 grand_parent_and_child, None,
                 (contexts.variable('child'),
                  contexts.variable('grand_parent'),
@@ -159,7 +161,7 @@ def great_grand_parent_and_child(rule, arg_patterns, arg_context):
           yield
     context.done()
 
-bc_rule.bc_rule('great_grand_parent_and_child', example.This_rule_base, 'child_parent',
+bc_rule.bc_rule('great_grand_parent_and_child', This_rule_base, 'child_parent',
                 great_grand_parent_and_child, None,
                 (contexts.variable('child'),
                  contexts.variable('grand_parent'),
@@ -207,7 +209,7 @@ def great_niece_or_nephew_and_aunt_or_uncle(rule, arg_patterns, arg_context):
             yield
     context.done()
 
-bc_rule.bc_rule('great_niece_or_nephew_and_aunt_or_uncle', example.This_rule_base, 'nn_au',
+bc_rule.bc_rule('great_niece_or_nephew_and_aunt_or_uncle', This_rule_base, 'nn_au',
                 great_niece_or_nephew_and_aunt_or_uncle, None,
                 (contexts.variable('younger'),
                  contexts.variable('elder'),
@@ -257,7 +259,7 @@ def first_cousins(rule, arg_patterns, arg_context):
             yield
     context.done()
 
-bc_rule.bc_rule('first_cousins', example.This_rule_base, 'cousins',
+bc_rule.bc_rule('first_cousins', This_rule_base, 'cousins',
                 first_cousins, None,
                 (contexts.variable('cousin1'),
                  contexts.variable('cousin2'),
@@ -307,7 +309,7 @@ def nth_cousins(rule, arg_patterns, arg_context):
             context.undo_to_mark(mark4)
     context.done()
 
-bc_rule.bc_rule('nth_cousins', example.This_rule_base, 'cousins',
+bc_rule.bc_rule('nth_cousins', This_rule_base, 'cousins',
                 nth_cousins, None,
                 (contexts.variable('next_cousin1'),
                  contexts.variable('next_cousin2'),
@@ -350,7 +352,7 @@ def how_related_child_parent(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
     context.done()
 
-bc_rule.bc_rule('how_related_child_parent', example.This_rule_base, 'how_related',
+bc_rule.bc_rule('how_related_child_parent', This_rule_base, 'how_related',
                 how_related_child_parent, example.how_related_child_parent,
                 (contexts.variable('person1'),
                  contexts.variable('person2'),),
@@ -391,7 +393,7 @@ def how_related_parent_child(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
     context.done()
 
-bc_rule.bc_rule('how_related_parent_child', example.This_rule_base, 'how_related',
+bc_rule.bc_rule('how_related_parent_child', This_rule_base, 'how_related',
                 how_related_parent_child, example.how_related_parent_child,
                 (contexts.variable('person1'),
                  contexts.variable('person2'),),
@@ -422,7 +424,7 @@ def how_related_siblings(rule, arg_patterns, arg_context):
         yield context
     context.done()
 
-bc_rule.bc_rule('how_related_siblings', example.This_rule_base, 'how_related',
+bc_rule.bc_rule('how_related_siblings', This_rule_base, 'how_related',
                 how_related_siblings, example.how_related_siblings,
                 (contexts.variable('person1'),
                  contexts.variable('person2'),),
@@ -461,7 +463,7 @@ def how_related_nn_au(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
     context.done()
 
-bc_rule.bc_rule('how_related_nn_au', example.This_rule_base, 'how_related',
+bc_rule.bc_rule('how_related_nn_au', This_rule_base, 'how_related',
                 how_related_nn_au, example.how_related_nn_au,
                 (contexts.variable('person1'),
                  contexts.variable('person2'),),
@@ -502,7 +504,7 @@ def how_related_au_nn(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
     context.done()
 
-bc_rule.bc_rule('how_related_au_nn', example.This_rule_base, 'how_related',
+bc_rule.bc_rule('how_related_au_nn', This_rule_base, 'how_related',
                 how_related_au_nn, example.how_related_au_nn,
                 (contexts.variable('person1'),
                  contexts.variable('person2'),),
@@ -541,7 +543,7 @@ def how_related_cousins(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
     context.done()
 
-bc_rule.bc_rule('how_related_cousins', example.This_rule_base, 'how_related',
+bc_rule.bc_rule('how_related_cousins', This_rule_base, 'how_related',
                 how_related_cousins, example.how_related_cousins,
                 (contexts.variable('cousin1'),
                  contexts.variable('cousin2'),),
@@ -592,7 +594,7 @@ def how_related_removed_cousins(rule, arg_patterns, arg_context):
             context.undo_to_mark(mark3)
     context.done()
 
-bc_rule.bc_rule('how_related_removed_cousins', example.This_rule_base, 'how_related',
+bc_rule.bc_rule('how_related_removed_cousins', This_rule_base, 'how_related',
                 how_related_removed_cousins, example.how_related_removed_cousins,
                 (contexts.variable('removed_cousin1'),
                  contexts.variable('cousin2'),),
@@ -647,7 +649,7 @@ def how_related_cousins_removed(rule, arg_patterns, arg_context):
             context.undo_to_mark(mark3)
     context.done()
 
-bc_rule.bc_rule('how_related_cousins_removed', example.This_rule_base, 'how_related',
+bc_rule.bc_rule('how_related_cousins_removed', This_rule_base, 'how_related',
                 how_related_cousins_removed, example.how_related_cousins_removed,
                 (contexts.variable('cousin1'),
                  contexts.variable('removed_cousin2'),),
@@ -677,7 +679,7 @@ def nth_cousin_1(rule, arg_patterns, arg_context):
         yield context
     context.done()
 
-bc_rule.bc_rule('nth_cousin_1', example.This_rule_base, 'nth_cousin',
+bc_rule.bc_rule('nth_cousin_1', This_rule_base, 'nth_cousin',
                 nth_cousin_1, example.nth_cousin_1,
                 (pattern.pattern_literal(1),),
                 (),
@@ -699,7 +701,7 @@ def nth_cousin_2(rule, arg_patterns, arg_context):
         yield context
     context.done()
 
-bc_rule.bc_rule('nth_cousin_2', example.This_rule_base, 'nth_cousin',
+bc_rule.bc_rule('nth_cousin_2', This_rule_base, 'nth_cousin',
                 nth_cousin_2, example.nth_cousin_2,
                 (pattern.pattern_literal(2),),
                 (),
@@ -721,7 +723,7 @@ def nth_cousin_3(rule, arg_patterns, arg_context):
         yield context
     context.done()
 
-bc_rule.bc_rule('nth_cousin_3', example.This_rule_base, 'nth_cousin',
+bc_rule.bc_rule('nth_cousin_3', This_rule_base, 'nth_cousin',
                 nth_cousin_3, example.nth_cousin_3,
                 (pattern.pattern_literal(3),),
                 (),
@@ -739,7 +741,7 @@ def nth_cousin_rest(rule, arg_patterns, arg_context):
       yield context
     context.done()
 
-bc_rule.bc_rule('nth_cousin_rest', example.This_rule_base, 'nth_cousin',
+bc_rule.bc_rule('nth_cousin_rest', This_rule_base, 'nth_cousin',
                 nth_cousin_rest, example.nth_cousin_rest,
                 (contexts.variable('n'),),
                 ('n',),
@@ -761,7 +763,7 @@ def add_empty_prefix(rule, arg_patterns, arg_context):
         yield context
     context.done()
 
-bc_rule.bc_rule('add_empty_prefix', example.This_rule_base, 'add_prefix',
+bc_rule.bc_rule('add_empty_prefix', This_rule_base, 'add_prefix',
                 add_empty_prefix, example.add_empty_prefix,
                 (pattern.pattern_literal(()),),
                 (),
@@ -779,7 +781,7 @@ def add_prefix(rule, arg_patterns, arg_context):
       yield context
     context.done()
 
-bc_rule.bc_rule('add_prefix', example.This_rule_base, 'add_prefix',
+bc_rule.bc_rule('add_prefix', This_rule_base, 'add_prefix',
                 add_prefix, example.add_prefix,
                 (contexts.variable('prefix'),),
                 ('prefix',),

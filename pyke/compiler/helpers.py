@@ -41,6 +41,7 @@ def bc_head(rb_name):
         "from pyke import tmp_itertools as itertools",
         "from pyke import rule_base, contexts, pattern, bc_rule",
         "from pyke import prove",
+        "import %s" % rb_name,
         "",
     )
 

@@ -17,67 +17,75 @@ def file(rule, arg_patterns, arg_context):
                                               arg, arg_context),
                           patterns,
                           arg_patterns)):
-      flag_1 = False
-      for x_1 in prove('compiler', 'plan_head', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),)):
-        flag_1 = True
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
+      mark1 = context.mark(True)
+      if rule.pattern(0).match_data(context, context,
+              helpers.plan_head1(context.lookup_data('rb_name'))):
+        context.end_save_all_undo()
         mark2 = context.mark(True)
-        if rule.pattern(3).match_data(context, context,
+        if rule.pattern(1).match_data(context, context,
                 helpers.bc_head(context.lookup_data('rb_name'))):
           context.end_save_all_undo()
           flag_3 = False
-          for x_3 in prove('compiler', 'fc_rules', context,
-                         (rule.pattern(4),
-                          rule.pattern(5),)):
+          for x_3 in prove('compiler', 'rule_decl', context,
+                         (rule.pattern(2),
+                          rule.pattern(3),
+                          rule.pattern(4),)):
             flag_3 = True
             assert x_3 is None, \
               "%(rule_name)s: got unexpected plan from when clause 3"
             flag_4 = False
-            for x_4 in prove('compiler', 'bc_rules', context,
-                           (rule.pattern(0),
-                            rule.pattern(6),
-                            rule.pattern(7),
-                            rule.pattern(8),)):
+            for x_4 in prove('compiler', 'fc_rules', context,
+                           (rule.pattern(5),
+                            rule.pattern(6),)):
               flag_4 = True
               assert x_4 is None, \
                 "%(rule_name)s: got unexpected plan from when clause 4"
-              mark5 = context.mark(True)
-              if rule.pattern(9).match_data(context, context,
-                      context.lookup_data('plan_head') + context.lookup_data('fc_lines') + context.lookup_data('bc_plan_lines')):
-                context.end_save_all_undo()
+              flag_5 = False
+              for x_5 in prove('compiler', 'bc_rules', context,
+                             (rule.pattern(2),
+                              rule.pattern(7),
+                              rule.pattern(8),
+                              rule.pattern(9),)):
+                flag_5 = True
+                assert x_5 is None, \
+                  "%(rule_name)s: got unexpected plan from when clause 5"
                 mark6 = context.mark(True)
                 if rule.pattern(10).match_data(context, context,
-                        context.lookup_data('bc_head') + context.lookup_data('bc_bc_lines')):
+                        context.lookup_data('lines1') + (context.lookup_data('decl_line'),) + context.lookup_data('fc_lines') + context.lookup_data('bc_plan_lines')):
                   context.end_save_all_undo()
-                  yield
+                  mark7 = context.mark(True)
+                  if rule.pattern(11).match_data(context, context,
+                          context.lookup_data('bc_head') + (context.lookup_data('decl_line'),) + context.lookup_data('bc_bc_lines')):
+                    context.end_save_all_undo()
+                    yield
+                  else: context.end_save_all_undo()
+                  context.undo_to_mark(mark7)
                 else: context.end_save_all_undo()
                 context.undo_to_mark(mark6)
-              else: context.end_save_all_undo()
-              context.undo_to_mark(mark5)
+              if not flag_5:
+                raise AssertionError("compiler.file: 'when' clause 5 failed")
             if not flag_4:
               raise AssertionError("compiler.file: 'when' clause 4 failed")
           if not flag_3:
             raise AssertionError("compiler.file: 'when' clause 3 failed")
         else: context.end_save_all_undo()
         context.undo_to_mark(mark2)
-      if not flag_1:
-        raise AssertionError("compiler.file: 'when' clause 1 failed")
+      else: context.end_save_all_undo()
+      context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('file', This_rule_base, 'compile', file, None,
+bc_rule.bc_rule('file', This_rule_base, 'compile',
+                file, None,
                 (contexts.variable('rb_name'),
                  pattern.pattern_tuple((pattern.pattern_literal('file'), contexts.variable('parent'), contexts.variable('fc_rules'), contexts.variable('bc_rules'),), None),
                  contexts.variable('plan_lines'),
                  contexts.variable('bc_lines'),),
                 (),
-                (contexts.variable('rb_name'),
-                 contexts.variable('parent'),
-                 contexts.variable('plan_head'),
+                (contexts.variable('lines1'),
                  contexts.variable('bc_head'),
+                 contexts.variable('rb_name'),
+                 contexts.variable('parent'),
+                 contexts.variable('decl_line'),
                  contexts.variable('fc_rules'),
                  contexts.variable('fc_lines'),
                  contexts.variable('bc_rules'),
@@ -86,7 +94,7 @@ bc_rule.bc_rule('file', This_rule_base, 'compile', file, None,
                  contexts.variable('plan_lines'),
                  contexts.variable('bc_lines'),))
 
-def plan_head(rule, arg_patterns, arg_context):
+def rule_decl(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
@@ -97,27 +105,48 @@ def plan_head(rule, arg_patterns, arg_context):
                           arg_patterns)):
       mark1 = context.mark(True)
       if rule.pattern(0).match_data(context, context,
-              helpers.plan_head1(context.lookup_data('rb_name'))):
+              "This_rule_base = rule_base.get_create('%s')" % context.lookup_data('rb_name')):
         context.end_save_all_undo()
-        mark2 = context.mark(True)
-        if rule.pattern(1).match_data(context, context,
-                helpers.splice(context.lookup_data('lines1'),
-               "This_rule_base = rule_base.get_create('%s')" % context.lookup_data('rb_name'))):
-          context.end_save_all_undo()
-          yield
-        else: context.end_save_all_undo()
-        context.undo_to_mark(mark2)
+        yield
       else: context.end_save_all_undo()
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('plan_head', This_rule_base, 'plan_head', plan_head, None,
+bc_rule.bc_rule('rule_decl', This_rule_base, 'rule_decl',
+                rule_decl, None,
                 (contexts.variable('rb_name'),
                  pattern.pattern_literal(None),
-                 contexts.variable('lines'),),
+                 contexts.variable('decl_line'),),
                 (),
-                (contexts.variable('lines1'),
-                 contexts.variable('lines'),))
+                (contexts.variable('decl_line'),))
+
+def rule_decl_with_parent(rule, arg_patterns, arg_context):
+  patterns = rule.goal_arg_patterns()
+  if len(arg_patterns) == len(patterns):
+    context = contexts.bc_context(rule)
+    if all(itertools.imap(lambda pat, arg:
+                            pat.match_pattern(context, context,
+                                              arg, arg_context),
+                          patterns,
+                          arg_patterns)):
+      mark1 = context.mark(True)
+      if rule.pattern(0).match_data(context, context,
+              "This_rule_base = rule_base.get_create('%s', '%s', %s)" % \
+                                      (context.lookup_data('rb_name'), context.lookup_data('parent'),
+             tuple(repr(sym) for sym in context.lookup_data('excluded_symbols')))):
+        context.end_save_all_undo()
+        yield
+      else: context.end_save_all_undo()
+      context.undo_to_mark(mark1)
+    context.done()
+
+bc_rule.bc_rule('rule_decl_with_parent', This_rule_base, 'rule_decl',
+                rule_decl_with_parent, None,
+                (contexts.variable('rb_name'),
+                 pattern.pattern_tuple((pattern.pattern_literal('parent'), contexts.variable('parent'), contexts.variable('excluded_symbols'),), None),
+                 contexts.variable('decl_line'),),
+                (),
+                (contexts.variable('decl_line'),))
 
 def fc_rules0(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
@@ -131,7 +160,8 @@ def fc_rules0(rule, arg_patterns, arg_context):
       yield
     context.done()
 
-bc_rule.bc_rule('fc_rules0', This_rule_base, 'fc_rules', fc_rules0, None,
+bc_rule.bc_rule('fc_rules0', This_rule_base, 'fc_rules',
+                fc_rules0, None,
                 (pattern.pattern_literal(()),
                  pattern.pattern_literal(()),),
                 (),
@@ -173,7 +203,8 @@ def fc_rules1(rule, arg_patterns, arg_context):
         raise AssertionError("compiler.fc_rules1: 'when' clause 1 failed")
     context.done()
 
-bc_rule.bc_rule('fc_rules1', This_rule_base, 'fc_rules', fc_rules1, None,
+bc_rule.bc_rule('fc_rules1', This_rule_base, 'fc_rules',
+                fc_rules1, None,
                 (pattern.pattern_tuple((contexts.variable('fc_rule'),), contexts.variable('fc_rest')),
                  contexts.variable('lines'),),
                 (),
@@ -244,7 +275,8 @@ def fc_rule_(rule, arg_patterns, arg_context):
         raise AssertionError("compiler.fc_rule_: 'when' clause 1 failed")
     context.done()
 
-bc_rule.bc_rule('fc_rule_', This_rule_base, 'fc_rule', fc_rule_, None,
+bc_rule.bc_rule('fc_rule_', This_rule_base, 'fc_rule',
+                fc_rule_, None,
                 (pattern.pattern_tuple((pattern.pattern_literal('fc_rule'), contexts.variable('rule_name'), contexts.variable('fc_predicates'), contexts.variable('assertions'),), None),
                  contexts.variable('fc_lines'),),
                 (),
@@ -273,7 +305,8 @@ def fc_predicates0(rule, arg_patterns, arg_context):
       yield
     context.done()
 
-bc_rule.bc_rule('fc_predicates0', This_rule_base, 'fc_predicates', fc_predicates0, None,
+bc_rule.bc_rule('fc_predicates0', This_rule_base, 'fc_predicates',
+                fc_predicates0, None,
                 (contexts.anonymous(),
                  contexts.anonymous(),
                  pattern.pattern_literal(()),

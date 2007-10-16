@@ -27,13 +27,13 @@ from pyke import knowledge_base
 
 Rule_bases = {}
 
-def get(rule_base_name):
-    ans = Rule_bases.get(rule_base_name)
-    if ans is None: raise KeyError("rule_base: %s not found" % rule_base_name)
+def get(rb_name):
+    ans = Rule_bases.get(rb_name)
+    if ans is None: raise KeyError("rule_base: %s not found" % rb_name)
     return ans
 
 def get_create(rb_name, parent = None, exclude_list = ()):
-    ans = Rule_bases.get(rule_base_name)
+    ans = Rule_bases.get(rb_name)
     if ans is None: ans = rule_base(rb_name, parent, exclude_list)
     elif ans.parent != parent or ans.exclude_set != frozenset(exclude_list):
         raise AssertionError("duplicate rule_base: %s" % rb_name)
