@@ -22,42 +22,14 @@
 # THE SOFTWARE.
 
 from __future__ import with_statement, absolute_import, division
-from pyke import pattern, contexts, condensedPrint
 
 Knowledge_bases = {}
-Variables = tuple(contexts.variable('ans_%d' % i) for i in range(10))
 
-class CanNotProve(StandardError):
-    pass
-
-def get(kb_name):
+def get(kb_name, new_class = None):
     ans = Knowledge_bases.get(kb_name)
-    if ans is None: raise KeyError("knowledge_base: %s not found" % kb_name)
-    return ans
-
-def assert_(kb_name, entity_name, args):
-    return get(kb_name).assert_(entity_name, args)
-
-def lookup(kb_name, entity_name, pat_context, patterns):
-    return get(kb_name).lookup(pat_context, pat_context, entity_name, patterns)
-
-def prove(kb_name, entity_name, pat_context, patterns):
-    return get(kb_name).prove(pat_context, pat_context, entity_name, patterns)
-
-def prove_n(kb_name, entity_name, fixed_args, num_returns):
-    context = contexts.simple_context()
-    vars = Variables[:num_returns]
-    try:
-        prove(kb_name, entity_name, context,
-              tuple(pattern.pattern_literal(arg)
-                    for arg in fixed_args) + vars) \
-         .next()
-    except StopIteration:
-        raise CanNotProve("Can not prove %s.%s%s" %
-                              (kb_name, entity_name,
-                               condensedPrint.cprint(fixed_args + vars)))
-    ans = tuple(context.lookup_data(var.name) for var in vars)
-    context.done()
+    if ans is None:
+        if new_class: ans = new_class(kb_name)
+        else: raise KeyError("knowledge_base: %s not found" % kb_name)
     return ans
 
 class knowledge_base(object):

@@ -27,15 +27,16 @@ import copy_reg
 import contextlib
 import functools
 
+# This causes the family universal facts to be loaded as a byproduct of the
+# import.
 import family
+
 #import example
 import example_bc
+import pyke
 from pyke import knowledge_base, rule_base, contexts, pattern, special
 
-rule_base.init()
-
-family = knowledge_base.get('family')
-example = rule_base.get('example')
+pyke.init()
 
 patterns = (pattern.pattern_literal('bruce'), contexts.variable('who'))
 
@@ -45,19 +46,11 @@ copy_reg.pickle(functools.partial,
 
 def test():
     global plan
-    rule_base.reset()
+    pyke.reset()
 
     context = contexts.simple_context()
 
-    #print "family: universal_facts:"
-    #family.dump_universal_facts()
-    #print
-
-    #print "family: case_specific_facts:"
-    #family.dump_specific_facts()
-    #print
-
-    example.activate()
+    #family = pyke.get_kb('family')
 
     #print "family: universal_facts:"
     #family.dump_universal_facts()
@@ -67,15 +60,19 @@ def test():
     #family.dump_specific_facts()
     #print
 
-    #print "get_rule_lists_for test:"
-    #for ans in example.gen_rule_lists_for('how_related'):
-    #    print "how_related:", ans
+    pyke.activate('example')
+
+    #print "family: universal_facts:"
+    #family.dump_universal_facts()
+    #print
+
+    #print "family: case_specific_facts:"
+    #family.dump_specific_facts()
     #print
 
     test_pickle = False
     print "doing proof"
-    # prove(bindings, pat_context, goal_name, patterns)
-    for ans in example.prove(context, context, 'how_related', patterns):
+    for ans in pyke.prove('example', 'how_related', context, patterns):
 	#print "prove:", ans
         print [pat.as_data(context) for pat in patterns]
 	#print "making plan"

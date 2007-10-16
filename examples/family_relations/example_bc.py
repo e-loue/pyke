@@ -3,7 +3,7 @@
 from __future__ import with_statement, absolute_import, division
 from pyke import tmp_itertools as itertools
 from pyke import contexts, pattern, bc_rule
-from pyke.knowledge_base import prove
+from pyke import prove
 import example
 
 def niece_or_nephew_and_aunt_or_uncle(rule, arg_patterns, arg_context):

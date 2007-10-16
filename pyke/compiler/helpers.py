@@ -29,7 +29,7 @@ def plan_head1(rb_name):
         "",
         "from __future__ import with_statement, absolute_import, division",
         "from pyke import contexts, pattern, fc_rule, rule_base",
-        "from pyke.knowledge_base import lookup, assert_",
+        "from pyke import lookup, assert_",
         "",
     )
 
@@ -40,7 +40,7 @@ def bc_head(rb_name):
         "from __future__ import with_statement, absolute_import, division",
         "from pyke import tmp_itertools as itertools",
         "from pyke import contexts, pattern, bc_rule",
-        "from pyke.knowledge_base import prove",
+        "from pyke import prove",
         "import %s" % rb_name,
     )
 
