@@ -22,15 +22,23 @@
 
 file:
     use compile($rb_name, (file, $parent, $fc_rules, $bc_rules),
-                $plan_lines, $bc_lines)
+                $fc_lines, $bc_lines, $plan_lines)
     when
         $lines1 = helpers.plan_head1($rb_name)
         $bc_head = helpers.bc_head($rb_name)
         !rule_decl($rb_name, $parent, $decl_line)
-        !fc_rules($fc_rules, $fc_lines)
+        !fc_rules($fc_rules, $fc_funs_lines)
         !bc_rules($rb_name, $bc_rules, $bc_plan_lines, $bc_bc_lines)
-        $plan_lines = $lines1 + ($decl_line,) + $fc_lines + $bc_plan_lines
-        $bc_lines = $bc_head + ($decl_line,) + $bc_bc_lines
+        $fc_lines = ($lines1 + ($decl_line,) + $fc_funs_lines) \
+                        if $fc_funs_lines \
+                        else ()
+        $plan_lines = $bc_plan_lines
+        $bc_lines = ($bc_head + (("import %s_plans" % $rb_name, "") 
+                                     if $bc_plan_lines
+                                     else ("",)) + 
+                        ($decl_line,) + $bc_bc_lines) \
+                        if $bc_bc_lines \
+                        else ()
 
 rule_decl:
     use rule_decl($rb_name, None, $decl_line)

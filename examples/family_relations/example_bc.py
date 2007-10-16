@@ -4,7 +4,7 @@ from __future__ import with_statement, absolute_import, division
 from pyke import tmp_itertools as itertools
 from pyke import rule_base, contexts, pattern, bc_rule
 from pyke import prove
-import example
+import example_plans
 
 This_rule_base = rule_base.get_create('example')
 
@@ -369,7 +369,7 @@ def how_related_child_parent(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('how_related_child_parent', This_rule_base, 'how_related',
-                how_related_child_parent, example.how_related_child_parent,
+                how_related_child_parent, example_plans.how_related_child_parent,
                 (contexts.variable('person1'),
                  contexts.variable('person2'),),
                 ('plan#2', 'p2_type', 'p1_type',),
@@ -412,7 +412,7 @@ def how_related_parent_child(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('how_related_parent_child', This_rule_base, 'how_related',
-                how_related_parent_child, example.how_related_parent_child,
+                how_related_parent_child, example_plans.how_related_parent_child,
                 (contexts.variable('person1'),
                  contexts.variable('person2'),),
                 ('plan#2', 'p2_type', 'p1_type',),
@@ -445,7 +445,7 @@ def how_related_siblings(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('how_related_siblings', This_rule_base, 'how_related',
-                how_related_siblings, example.how_related_siblings,
+                how_related_siblings, example_plans.how_related_siblings,
                 (contexts.variable('person1'),
                  contexts.variable('person2'),),
                 ('p2_type', 'p1_type',),
@@ -486,7 +486,7 @@ def how_related_nn_au(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('how_related_nn_au', This_rule_base, 'how_related',
-                how_related_nn_au, example.how_related_nn_au,
+                how_related_nn_au, example_plans.how_related_nn_au,
                 (contexts.variable('person1'),
                  contexts.variable('person2'),),
                 ('plan#2', 'p2_type', 'p1_type',),
@@ -529,7 +529,7 @@ def how_related_au_nn(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('how_related_au_nn', This_rule_base, 'how_related',
-                how_related_au_nn, example.how_related_au_nn,
+                how_related_au_nn, example_plans.how_related_au_nn,
                 (contexts.variable('person1'),
                  contexts.variable('person2'),),
                 ('plan#2', 'p2_type', 'p1_type',),
@@ -570,7 +570,7 @@ def how_related_cousins(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('how_related_cousins', This_rule_base, 'how_related',
-                how_related_cousins, example.how_related_cousins,
+                how_related_cousins, example_plans.how_related_cousins,
                 (contexts.variable('cousin1'),
                  contexts.variable('cousin2'),),
                 ('plan#2',),
@@ -623,7 +623,7 @@ def how_related_removed_cousins(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('how_related_removed_cousins', This_rule_base, 'how_related',
-                how_related_removed_cousins, example.how_related_removed_cousins,
+                how_related_removed_cousins, example_plans.how_related_removed_cousins,
                 (contexts.variable('removed_cousin1'),
                  contexts.variable('cousin2'),),
                 ('r1', 'plan#3',),
@@ -680,7 +680,7 @@ def how_related_cousins_removed(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('how_related_cousins_removed', This_rule_base, 'how_related',
-                how_related_cousins_removed, example.how_related_cousins_removed,
+                how_related_cousins_removed, example_plans.how_related_cousins_removed,
                 (contexts.variable('cousin1'),
                  contexts.variable('removed_cousin2'),),
                 ('r1', 'plan#3',),
@@ -712,7 +712,7 @@ def nth_cousin_1(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('nth_cousin_1', This_rule_base, 'nth_cousin',
-                nth_cousin_1, example.nth_cousin_1,
+                nth_cousin_1, example_plans.nth_cousin_1,
                 (pattern.pattern_literal(1),),
                 (),
                 ())
@@ -736,7 +736,7 @@ def nth_cousin_2(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('nth_cousin_2', This_rule_base, 'nth_cousin',
-                nth_cousin_2, example.nth_cousin_2,
+                nth_cousin_2, example_plans.nth_cousin_2,
                 (pattern.pattern_literal(2),),
                 (),
                 ())
@@ -760,7 +760,7 @@ def nth_cousin_3(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('nth_cousin_3', This_rule_base, 'nth_cousin',
-                nth_cousin_3, example.nth_cousin_3,
+                nth_cousin_3, example_plans.nth_cousin_3,
                 (pattern.pattern_literal(3),),
                 (),
                 ())
@@ -780,7 +780,7 @@ def nth_cousin_rest(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('nth_cousin_rest', This_rule_base, 'nth_cousin',
-                nth_cousin_rest, example.nth_cousin_rest,
+                nth_cousin_rest, example_plans.nth_cousin_rest,
                 (contexts.variable('n'),),
                 ('n',),
                 ())
@@ -804,7 +804,7 @@ def add_empty_prefix(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('add_empty_prefix', This_rule_base, 'add_prefix',
-                add_empty_prefix, example.add_empty_prefix,
+                add_empty_prefix, example_plans.add_empty_prefix,
                 (pattern.pattern_literal(()),),
                 (),
                 ())
@@ -824,7 +824,7 @@ def add_prefix(rule, arg_patterns, arg_context):
       context.done()
 
 bc_rule.bc_rule('add_prefix', This_rule_base, 'add_prefix',
-                add_prefix, example.add_prefix,
+                add_prefix, example_plans.add_prefix,
                 (contexts.variable('prefix'),),
                 ('prefix',),
                 ())

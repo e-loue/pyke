@@ -52,13 +52,26 @@ def file(rule, arg_patterns, arg_context):
                     "%(rule_name)s: got unexpected plan from when clause 5"
                   mark6 = context.mark(True)
                   if rule.pattern(10).match_data(context, context,
-                          context.lookup_data('lines1') + (context.lookup_data('decl_line'),) + context.lookup_data('fc_lines') + context.lookup_data('bc_plan_lines')):
+                          (context.lookup_data('lines1') + (context.lookup_data('decl_line'),) + context.lookup_data('fc_funs_lines')) \
+                                                 if context.lookup_data('fc_funs_lines') \
+                                                 else ()):
                     context.end_save_all_undo()
                     mark7 = context.mark(True)
                     if rule.pattern(11).match_data(context, context,
-                            context.lookup_data('bc_head') + (context.lookup_data('decl_line'),) + context.lookup_data('bc_bc_lines')):
+                            context.lookup_data('bc_plan_lines')):
                       context.end_save_all_undo()
-                      yield
+                      mark8 = context.mark(True)
+                      if rule.pattern(12).match_data(context, context,
+                              (context.lookup_data('bc_head') + (("import %s_plans" % context.lookup_data('rb_name'), "") 
+                             if context.lookup_data('bc_plan_lines')
+                             else ("",)) + 
+                             (context.lookup_data('decl_line'),) + context.lookup_data('bc_bc_lines')) \
+                                                     if context.lookup_data('bc_bc_lines') \
+                                                     else ()):
+                        context.end_save_all_undo()
+                        yield
+                      else: context.end_save_all_undo()
+                      context.undo_to_mark(mark8)
                     else: context.end_save_all_undo()
                     context.undo_to_mark(mark7)
                   else: context.end_save_all_undo()
@@ -80,8 +93,9 @@ bc_rule.bc_rule('file', This_rule_base, 'compile',
                 file, None,
                 (contexts.variable('rb_name'),
                  pattern.pattern_tuple((pattern.pattern_literal('file'), contexts.variable('parent'), contexts.variable('fc_rules'), contexts.variable('bc_rules'),), None),
-                 contexts.variable('plan_lines'),
-                 contexts.variable('bc_lines'),),
+                 contexts.variable('fc_lines'),
+                 contexts.variable('bc_lines'),
+                 contexts.variable('plan_lines'),),
                 (),
                 (contexts.variable('lines1'),
                  contexts.variable('bc_head'),
@@ -89,10 +103,11 @@ bc_rule.bc_rule('file', This_rule_base, 'compile',
                  contexts.variable('parent'),
                  contexts.variable('decl_line'),
                  contexts.variable('fc_rules'),
-                 contexts.variable('fc_lines'),
+                 contexts.variable('fc_funs_lines'),
                  contexts.variable('bc_rules'),
                  contexts.variable('bc_plan_lines'),
                  contexts.variable('bc_bc_lines'),
+                 contexts.variable('fc_lines'),
                  contexts.variable('plan_lines'),
                  contexts.variable('bc_lines'),))
 

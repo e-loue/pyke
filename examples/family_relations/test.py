@@ -32,6 +32,7 @@ import functools
 import family
 
 #import example
+import example_fc
 import example_bc
 import pyke
 

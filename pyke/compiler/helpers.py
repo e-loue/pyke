@@ -41,8 +41,6 @@ def bc_head(rb_name):
         "from pyke import tmp_itertools as itertools",
         "from pyke import rule_base, contexts, pattern, bc_rule",
         "from pyke import prove",
-        "import %s" % rb_name,
-        "",
     )
 
 def goal(rb_name, rule_name, (goal, goal_name, pattern_args, using),
@@ -86,7 +84,7 @@ def goal(rb_name, rule_name, (goal, goal_name, pattern_args, using),
         plan_fn_name = "None"
         plan_lines = ()
     else:
-        plan_fn_name = "%s.%s" % (rb_name, rule_name)
+        plan_fn_name = "%s_plans.%s" % (rb_name, rule_name)
         def_start = "def %s" % rule_name
         using = [line.strip() for line in using if line.strip()]
         if not using:

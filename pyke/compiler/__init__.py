@@ -102,8 +102,9 @@ def compile(filename):
     if not Name_test.match(rb_name):
         raise ValueError("compile: %s illegal as python identifier" % rb_name)
     base_path = filename[:-4]
+    fc_path = base_path + '_fc.py'
     bc_path = base_path + '_bc.py'
-    plan_path = base_path + '.py'
+    plan_path = base_path + '_plans.py'
     try:
         ast = krbparser.parse(filename)
         sys.stderr.write("got ast\n")
@@ -112,19 +113,24 @@ def compile(filename):
         pyke.reset()
         if use_test:
             pyke.activate('compiler_test')
-            (plan_lines, bc_lines), plan = \
-                pyke.prove_1('compiler_test', 'compile', (rb_name, ast), 2)
+            (fc_lines, bc_lines, plan_lines), plan = \
+                pyke.prove_1('compiler_test', 'compile', (rb_name, ast), 3)
         else:
             pyke.activate('compiler')
-            (plan_lines, bc_lines), plan = \
-                pyke.prove_1('compiler', 'compile', (rb_name, ast), 2)
-        sys.stderr.write("writing bc_lines\n")
-        write_file(bc_lines, bc_path)
-        sys.stderr.write("writing plan_lines\n")
-        #sys.stderr.write("plan_lines:\n")
-        #for line in plan_lines:
-        #    sys.stderr.write("  " + repr(line) + "\n")
-        write_file(plan_lines, plan_path)
+            (fc_lines, bc_lines, plan_lines), plan = \
+                pyke.prove_1('compiler', 'compile', (rb_name, ast), 3)
+        if fc_lines:
+            sys.stderr.write("writing fc_lines\n")
+            write_file(fc_lines, fc_path)
+        if bc_lines:
+            sys.stderr.write("writing bc_lines\n")
+            write_file(bc_lines, bc_path)
+        if plan_lines:
+            sys.stderr.write("writing plan_lines\n")
+            #sys.stderr.write("plan_lines:\n")
+            #for line in plan_lines:
+            #    sys.stderr.write("  " + repr(line) + "\n")
+            write_file(plan_lines, plan_path)
         sys.stderr.write("done!\n")
     except:
         if os.path.lexists(bc_path) and not no_nuke: os.remove(bc_path)
