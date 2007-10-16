@@ -8,19 +8,21 @@ This_rule_base = rule_base.get_create('example')
 
 def son_of(rule, context = None, index = None):
   if context is None: context = contexts.simple_context()
-  for dummy in (None,) if index == 0 else \
-               lookup('family', 'son_of', context, rule.foreach_patterns(0)):
-    assert_('family', 'child_parent',
-            (rule.pattern(0).as_data(context),
-             rule.pattern(1).as_data(context),
-             rule.pattern(2).as_data(context),
-             rule.pattern(3).as_data(context),))
-    assert_('family', 'child_parent',
-            (rule.pattern(0).as_data(context),
-             rule.pattern(4).as_data(context),
-             rule.pattern(5).as_data(context),
-             rule.pattern(3).as_data(context),))
-  context.done()
+  try:
+    for dummy in (None,) if index == 0 else \
+                 lookup('family', 'son_of', context, rule.foreach_patterns(0)):
+      assert_('family', 'child_parent',
+              (rule.pattern(0).as_data(context),
+               rule.pattern(1).as_data(context),
+               rule.pattern(2).as_data(context),
+               rule.pattern(3).as_data(context),))
+      assert_('family', 'child_parent',
+              (rule.pattern(0).as_data(context),
+               rule.pattern(4).as_data(context),
+               rule.pattern(5).as_data(context),
+               rule.pattern(3).as_data(context),))
+  finally:
+    context.done()
 
 fc_rule.fc_rule('son_of', This_rule_base, son_of,
   (('family', 'son_of',
@@ -36,19 +38,21 @@ fc_rule.fc_rule('son_of', This_rule_base, son_of,
 
 def daughter_of(rule, context = None, index = None):
   if context is None: context = contexts.simple_context()
-  for dummy in (None,) if index == 0 else \
-               lookup('family', 'daughter_of', context, rule.foreach_patterns(0)):
-    assert_('family', 'child_parent',
-            (rule.pattern(0).as_data(context),
-             rule.pattern(1).as_data(context),
-             rule.pattern(2).as_data(context),
-             rule.pattern(3).as_data(context),))
-    assert_('family', 'child_parent',
-            (rule.pattern(0).as_data(context),
-             rule.pattern(4).as_data(context),
-             rule.pattern(5).as_data(context),
-             rule.pattern(3).as_data(context),))
-  context.done()
+  try:
+    for dummy in (None,) if index == 0 else \
+                 lookup('family', 'daughter_of', context, rule.foreach_patterns(0)):
+      assert_('family', 'child_parent',
+              (rule.pattern(0).as_data(context),
+               rule.pattern(1).as_data(context),
+               rule.pattern(2).as_data(context),
+               rule.pattern(3).as_data(context),))
+      assert_('family', 'child_parent',
+              (rule.pattern(0).as_data(context),
+               rule.pattern(4).as_data(context),
+               rule.pattern(5).as_data(context),
+               rule.pattern(3).as_data(context),))
+  finally:
+    context.done()
 
 fc_rule.fc_rule('daughter_of', This_rule_base, daughter_of,
   (('family', 'daughter_of',
@@ -64,17 +68,19 @@ fc_rule.fc_rule('daughter_of', This_rule_base, daughter_of,
 
 def brothers(rule, context = None, index = None):
   if context is None: context = contexts.simple_context()
-  for dummy in (None,) if index == 0 else \
-               lookup('family', 'son_of', context, rule.foreach_patterns(0)):
-    for dummy in (None,) if index == 1 else \
-                 lookup('family', 'son_of', context, rule.foreach_patterns(1)):
-      if context.lookup_data('brother1') != context.lookup_data('brother2'):
-        assert_('family', 'siblings',
-                (rule.pattern(0).as_data(context),
-                 rule.pattern(1).as_data(context),
-                 rule.pattern(2).as_data(context),
-                 rule.pattern(2).as_data(context),))
-  context.done()
+  try:
+    for dummy in (None,) if index == 0 else \
+                 lookup('family', 'son_of', context, rule.foreach_patterns(0)):
+      for dummy in (None,) if index == 1 else \
+                   lookup('family', 'son_of', context, rule.foreach_patterns(1)):
+        if context.lookup_data('brother1') != context.lookup_data('brother2'):
+          assert_('family', 'siblings',
+                  (rule.pattern(0).as_data(context),
+                   rule.pattern(1).as_data(context),
+                   rule.pattern(2).as_data(context),
+                   rule.pattern(2).as_data(context),))
+  finally:
+    context.done()
 
 fc_rule.fc_rule('brothers', This_rule_base, brothers,
   (('family', 'son_of',
@@ -91,17 +97,19 @@ fc_rule.fc_rule('brothers', This_rule_base, brothers,
 
 def sisters(rule, context = None, index = None):
   if context is None: context = contexts.simple_context()
-  for dummy in (None,) if index == 0 else \
-               lookup('family', 'daughter_of', context, rule.foreach_patterns(0)):
-    for dummy in (None,) if index == 1 else \
-                 lookup('family', 'daughter_of', context, rule.foreach_patterns(1)):
-      if context.lookup_data('sister1') != context.lookup_data('sister2'):
-        assert_('family', 'siblings',
-                (rule.pattern(0).as_data(context),
-                 rule.pattern(1).as_data(context),
-                 rule.pattern(2).as_data(context),
-                 rule.pattern(2).as_data(context),))
-  context.done()
+  try:
+    for dummy in (None,) if index == 0 else \
+                 lookup('family', 'daughter_of', context, rule.foreach_patterns(0)):
+      for dummy in (None,) if index == 1 else \
+                   lookup('family', 'daughter_of', context, rule.foreach_patterns(1)):
+        if context.lookup_data('sister1') != context.lookup_data('sister2'):
+          assert_('family', 'siblings',
+                  (rule.pattern(0).as_data(context),
+                   rule.pattern(1).as_data(context),
+                   rule.pattern(2).as_data(context),
+                   rule.pattern(2).as_data(context),))
+  finally:
+    context.done()
 
 fc_rule.fc_rule('sisters', This_rule_base, sisters,
   (('family', 'daughter_of',
@@ -118,21 +126,23 @@ fc_rule.fc_rule('sisters', This_rule_base, sisters,
 
 def brother_and_sister(rule, context = None, index = None):
   if context is None: context = contexts.simple_context()
-  for dummy in (None,) if index == 0 else \
-               lookup('family', 'son_of', context, rule.foreach_patterns(0)):
-    for dummy in (None,) if index == 1 else \
-                 lookup('family', 'daughter_of', context, rule.foreach_patterns(1)):
-      assert_('family', 'siblings',
-              (rule.pattern(0).as_data(context),
-               rule.pattern(1).as_data(context),
-               rule.pattern(2).as_data(context),
-               rule.pattern(3).as_data(context),))
-      assert_('family', 'siblings',
-              (rule.pattern(1).as_data(context),
-               rule.pattern(0).as_data(context),
-               rule.pattern(3).as_data(context),
-               rule.pattern(2).as_data(context),))
-  context.done()
+  try:
+    for dummy in (None,) if index == 0 else \
+                 lookup('family', 'son_of', context, rule.foreach_patterns(0)):
+      for dummy in (None,) if index == 1 else \
+                   lookup('family', 'daughter_of', context, rule.foreach_patterns(1)):
+        assert_('family', 'siblings',
+                (rule.pattern(0).as_data(context),
+                 rule.pattern(1).as_data(context),
+                 rule.pattern(2).as_data(context),
+                 rule.pattern(3).as_data(context),))
+        assert_('family', 'siblings',
+                (rule.pattern(1).as_data(context),
+                 rule.pattern(0).as_data(context),
+                 rule.pattern(3).as_data(context),
+                 rule.pattern(2).as_data(context),))
+  finally:
+    context.done()
 
 fc_rule.fc_rule('brother_and_sister', This_rule_base, brother_and_sister,
   (('family', 'son_of',
@@ -150,19 +160,21 @@ fc_rule.fc_rule('brother_and_sister', This_rule_base, brother_and_sister,
 
 def facts_for_bc_rules(rule, context = None, index = None):
   if context is None: context = contexts.simple_context()
-  assert_('family', 'as_au',
-          (rule.pattern(0).as_data(context),
-           rule.pattern(1).as_data(context),))
-  assert_('family', 'as_au',
-          (rule.pattern(2).as_data(context),
-           rule.pattern(3).as_data(context),))
-  assert_('family', 'as_nn',
-          (rule.pattern(4).as_data(context),
-           rule.pattern(5).as_data(context),))
-  assert_('family', 'as_nn',
-          (rule.pattern(6).as_data(context),
-           rule.pattern(7).as_data(context),))
-  context.done()
+  try:
+    assert_('family', 'as_au',
+            (rule.pattern(0).as_data(context),
+             rule.pattern(1).as_data(context),))
+    assert_('family', 'as_au',
+            (rule.pattern(2).as_data(context),
+             rule.pattern(3).as_data(context),))
+    assert_('family', 'as_nn',
+            (rule.pattern(4).as_data(context),
+             rule.pattern(5).as_data(context),))
+    assert_('family', 'as_nn',
+            (rule.pattern(6).as_data(context),
+             rule.pattern(7).as_data(context),))
+  finally:
+    context.done()
 
 fc_rule.fc_rule('facts_for_bc_rules', This_rule_base, facts_for_bc_rules,
   (),

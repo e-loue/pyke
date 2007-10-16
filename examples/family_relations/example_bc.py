@@ -12,37 +12,39 @@ def niece_or_nephew_and_aunt_or_uncle(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('family', 'siblings', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(3),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('family', 'child_parent', context,
-                       (rule.pattern(4),
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('family', 'siblings', context,
+                       (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
-                        rule.pattern(5),)):
-          assert x_2 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 2"
-          for x_3 in prove('family', 'as_au', context,
-                         (rule.pattern(3),
-                          rule.pattern(6),)):
-            assert x_3 is None, \
-              "%(rule_name)s: got unexpected plan from when clause 3"
-            for x_4 in prove('family', 'as_nn', context,
-                           (rule.pattern(5),
-                            rule.pattern(7),)):
-              assert x_4 is None, \
-                "%(rule_name)s: got unexpected plan from when clause 4"
-              yield
-    context.done()
+                        rule.pattern(3),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('family', 'child_parent', context,
+                         (rule.pattern(4),
+                          rule.pattern(1),
+                          rule.pattern(2),
+                          rule.pattern(5),)):
+            assert x_2 is None, \
+              "%(rule_name)s: got unexpected plan from when clause 2"
+            for x_3 in prove('family', 'as_au', context,
+                           (rule.pattern(3),
+                            rule.pattern(6),)):
+              assert x_3 is None, \
+                "%(rule_name)s: got unexpected plan from when clause 3"
+              for x_4 in prove('family', 'as_nn', context,
+                             (rule.pattern(5),
+                              rule.pattern(7),)):
+                assert x_4 is None, \
+                  "%(rule_name)s: got unexpected plan from when clause 4"
+                yield
+    finally:
+      context.done()
 
 bc_rule.bc_rule('niece_or_nephew_and_aunt_or_uncle', This_rule_base, 'nn_au',
                 niece_or_nephew_and_aunt_or_uncle, None,
@@ -65,20 +67,22 @@ def parent_and_child(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('family', 'child_parent', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(3),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        yield
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('family', 'child_parent', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),
+                        rule.pattern(3),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          yield
+    finally:
+      context.done()
 
 bc_rule.bc_rule('parent_and_child', This_rule_base, 'child_parent',
                 parent_and_child, None,
@@ -97,27 +101,29 @@ def grand_parent_and_child(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('family', 'child_parent', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(3),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('family', 'child_parent', context,
-                       (rule.pattern(1),
-                        rule.pattern(4),
-                        rule.pattern(5),
-                        rule.pattern(2),)):
-          assert x_2 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 2"
-          yield
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('family', 'child_parent', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),
+                        rule.pattern(3),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('family', 'child_parent', context,
+                         (rule.pattern(1),
+                          rule.pattern(4),
+                          rule.pattern(5),
+                          rule.pattern(2),)):
+            assert x_2 is None, \
+              "%(rule_name)s: got unexpected plan from when clause 2"
+            yield
+    finally:
+      context.done()
 
 bc_rule.bc_rule('grand_parent_and_child', This_rule_base, 'child_parent',
                 grand_parent_and_child, None,
@@ -138,28 +144,30 @@ def great_grand_parent_and_child(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('family', 'child_parent', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(3),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('example', 'child_parent', context,
-                       (rule.pattern(1),
-                        rule.pattern(4),
-                        rule.pattern(5),
-                        rule.pattern(6),
-                        rule.pattern(2),)):
-          assert x_2 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 2"
-          yield
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('family', 'child_parent', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),
+                        rule.pattern(3),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('example', 'child_parent', context,
+                         (rule.pattern(1),
+                          rule.pattern(4),
+                          rule.pattern(5),
+                          rule.pattern(6),
+                          rule.pattern(2),)):
+            assert x_2 is None, \
+              "%(rule_name)s: got unexpected plan from when clause 2"
+            yield
+    finally:
+      context.done()
 
 bc_rule.bc_rule('great_grand_parent_and_child', This_rule_base, 'child_parent',
                 great_grand_parent_and_child, None,
@@ -181,33 +189,35 @@ def great_niece_or_nephew_and_aunt_or_uncle(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('family', 'child_parent', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(3),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('example', 'nn_au', context,
-                       (rule.pattern(1),
-                        rule.pattern(4),
-                        rule.pattern(5),
-                        rule.pattern(6),
-                        rule.pattern(2),)):
-          assert x_2 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 2"
-          for x_3 in prove('family', 'as_nn', context,
-                         (rule.pattern(3),
-                          rule.pattern(7),)):
-            assert x_3 is None, \
-              "%(rule_name)s: got unexpected plan from when clause 3"
-            yield
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('family', 'child_parent', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),
+                        rule.pattern(3),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('example', 'nn_au', context,
+                         (rule.pattern(1),
+                          rule.pattern(4),
+                          rule.pattern(5),
+                          rule.pattern(6),
+                          rule.pattern(2),)):
+            assert x_2 is None, \
+              "%(rule_name)s: got unexpected plan from when clause 2"
+            for x_3 in prove('family', 'as_nn', context,
+                           (rule.pattern(3),
+                            rule.pattern(7),)):
+              assert x_3 is None, \
+                "%(rule_name)s: got unexpected plan from when clause 3"
+              yield
+    finally:
+      context.done()
 
 bc_rule.bc_rule('great_niece_or_nephew_and_aunt_or_uncle', This_rule_base, 'nn_au',
                 great_niece_or_nephew_and_aunt_or_uncle, None,
@@ -230,34 +240,36 @@ def first_cousins(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('family', 'child_parent', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(2),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('family', 'siblings', context,
-                       (rule.pattern(1),
-                        rule.pattern(3),
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('family', 'child_parent', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
                         rule.pattern(2),
                         rule.pattern(2),)):
-          assert x_2 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 2"
-          for x_3 in prove('family', 'child_parent', context,
-                         (rule.pattern(4),
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('family', 'siblings', context,
+                         (rule.pattern(1),
                           rule.pattern(3),
                           rule.pattern(2),
                           rule.pattern(2),)):
-            assert x_3 is None, \
-              "%(rule_name)s: got unexpected plan from when clause 3"
-            yield
-    context.done()
+            assert x_2 is None, \
+              "%(rule_name)s: got unexpected plan from when clause 2"
+            for x_3 in prove('family', 'child_parent', context,
+                           (rule.pattern(4),
+                            rule.pattern(3),
+                            rule.pattern(2),
+                            rule.pattern(2),)):
+              assert x_3 is None, \
+                "%(rule_name)s: got unexpected plan from when clause 3"
+              yield
+    finally:
+      context.done()
 
 bc_rule.bc_rule('first_cousins', This_rule_base, 'cousins',
                 first_cousins, None,
@@ -275,39 +287,41 @@ def nth_cousins(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('family', 'child_parent', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(2),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('family', 'siblings', context,
-                       (rule.pattern(1),
-                        rule.pattern(3),
-                        rule.pattern(4),)):
-          assert x_2 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 2"
-          for x_3 in prove('family', 'child_parent', context,
-                         (rule.pattern(5),
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('family', 'child_parent', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),
+                        rule.pattern(2),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('family', 'siblings', context,
+                         (rule.pattern(1),
                           rule.pattern(3),
-                          rule.pattern(2),
-                          rule.pattern(2),)):
-            assert x_3 is None, \
-              "%(rule_name)s: got unexpected plan from when clause 3"
-            mark4 = context.mark(True)
-            if rule.pattern(6).match_data(context, context,
-                    context.lookup_data('n') + 1):
-              context.end_save_all_undo()
-              yield
-            else: context.end_save_all_undo()
-            context.undo_to_mark(mark4)
-    context.done()
+                          rule.pattern(4),)):
+            assert x_2 is None, \
+              "%(rule_name)s: got unexpected plan from when clause 2"
+            for x_3 in prove('family', 'child_parent', context,
+                           (rule.pattern(5),
+                            rule.pattern(3),
+                            rule.pattern(2),
+                            rule.pattern(2),)):
+              assert x_3 is None, \
+                "%(rule_name)s: got unexpected plan from when clause 3"
+              mark4 = context.mark(True)
+              if rule.pattern(6).match_data(context, context,
+                      context.lookup_data('n') + 1):
+                context.end_save_all_undo()
+                yield
+              else: context.end_save_all_undo()
+              context.undo_to_mark(mark4)
+    finally:
+      context.done()
 
 bc_rule.bc_rule('nth_cousins', This_rule_base, 'cousins',
                 nth_cousins, None,
@@ -327,30 +341,32 @@ def how_related_child_parent(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('example', 'child_parent', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(3),
-                      rule.pattern(4),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('example', 'add_prefix', context,
-                       (rule.pattern(2),)):
-          assert x_2 is not None, \
-            "%(rule_name)s: expected plan from when clause 2"
-          mark2 = context.mark(True)
-          if not rule.pattern(5).match_data(context, context, x_2):
-            raise AssertionError("%(rule_name)s: plan match to $plan#2 failed in when clause 2")
-          context.end_save_all_undo()
-          yield context
-          context.undo_to_mark(mark2)
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('example', 'child_parent', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),
+                        rule.pattern(3),
+                        rule.pattern(4),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('example', 'add_prefix', context,
+                         (rule.pattern(2),)):
+            assert x_2 is not None, \
+              "%(rule_name)s: expected plan from when clause 2"
+            mark2 = context.mark(True)
+            if not rule.pattern(5).match_data(context, context, x_2):
+              raise AssertionError("%(rule_name)s: plan match to $plan#2 failed in when clause 2")
+            context.end_save_all_undo()
+            yield context
+            context.undo_to_mark(mark2)
+    finally:
+      context.done()
 
 bc_rule.bc_rule('how_related_child_parent', This_rule_base, 'how_related',
                 how_related_child_parent, example.how_related_child_parent,
@@ -368,30 +384,32 @@ def how_related_parent_child(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('example', 'child_parent', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(3),
-                      rule.pattern(4),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('example', 'add_prefix', context,
-                       (rule.pattern(2),)):
-          assert x_2 is not None, \
-            "%(rule_name)s: expected plan from when clause 2"
-          mark2 = context.mark(True)
-          if not rule.pattern(5).match_data(context, context, x_2):
-            raise AssertionError("%(rule_name)s: plan match to $plan#2 failed in when clause 2")
-          context.end_save_all_undo()
-          yield context
-          context.undo_to_mark(mark2)
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('example', 'child_parent', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),
+                        rule.pattern(3),
+                        rule.pattern(4),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('example', 'add_prefix', context,
+                         (rule.pattern(2),)):
+            assert x_2 is not None, \
+              "%(rule_name)s: expected plan from when clause 2"
+            mark2 = context.mark(True)
+            if not rule.pattern(5).match_data(context, context, x_2):
+              raise AssertionError("%(rule_name)s: plan match to $plan#2 failed in when clause 2")
+            context.end_save_all_undo()
+            yield context
+            context.undo_to_mark(mark2)
+    finally:
+      context.done()
 
 bc_rule.bc_rule('how_related_parent_child', This_rule_base, 'how_related',
                 how_related_parent_child, example.how_related_parent_child,
@@ -409,20 +427,22 @@ def how_related_siblings(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('family', 'siblings', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(3),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        yield context
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('family', 'siblings', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),
+                        rule.pattern(3),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          yield context
+    finally:
+      context.done()
 
 bc_rule.bc_rule('how_related_siblings', This_rule_base, 'how_related',
                 how_related_siblings, example.how_related_siblings,
@@ -438,30 +458,32 @@ def how_related_nn_au(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('example', 'nn_au', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(3),
-                      rule.pattern(4),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('example', 'add_prefix', context,
-                       (rule.pattern(2),)):
-          assert x_2 is not None, \
-            "%(rule_name)s: expected plan from when clause 2"
-          mark2 = context.mark(True)
-          if not rule.pattern(5).match_data(context, context, x_2):
-            raise AssertionError("%(rule_name)s: plan match to $plan#2 failed in when clause 2")
-          context.end_save_all_undo()
-          yield context
-          context.undo_to_mark(mark2)
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('example', 'nn_au', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),
+                        rule.pattern(3),
+                        rule.pattern(4),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('example', 'add_prefix', context,
+                         (rule.pattern(2),)):
+            assert x_2 is not None, \
+              "%(rule_name)s: expected plan from when clause 2"
+            mark2 = context.mark(True)
+            if not rule.pattern(5).match_data(context, context, x_2):
+              raise AssertionError("%(rule_name)s: plan match to $plan#2 failed in when clause 2")
+            context.end_save_all_undo()
+            yield context
+            context.undo_to_mark(mark2)
+    finally:
+      context.done()
 
 bc_rule.bc_rule('how_related_nn_au', This_rule_base, 'how_related',
                 how_related_nn_au, example.how_related_nn_au,
@@ -479,30 +501,32 @@ def how_related_au_nn(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('example', 'nn_au', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(3),
-                      rule.pattern(4),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('example', 'add_prefix', context,
-                       (rule.pattern(2),)):
-          assert x_2 is not None, \
-            "%(rule_name)s: expected plan from when clause 2"
-          mark2 = context.mark(True)
-          if not rule.pattern(5).match_data(context, context, x_2):
-            raise AssertionError("%(rule_name)s: plan match to $plan#2 failed in when clause 2")
-          context.end_save_all_undo()
-          yield context
-          context.undo_to_mark(mark2)
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('example', 'nn_au', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),
+                        rule.pattern(3),
+                        rule.pattern(4),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('example', 'add_prefix', context,
+                         (rule.pattern(2),)):
+            assert x_2 is not None, \
+              "%(rule_name)s: expected plan from when clause 2"
+            mark2 = context.mark(True)
+            if not rule.pattern(5).match_data(context, context, x_2):
+              raise AssertionError("%(rule_name)s: plan match to $plan#2 failed in when clause 2")
+            context.end_save_all_undo()
+            yield context
+            context.undo_to_mark(mark2)
+    finally:
+      context.done()
 
 bc_rule.bc_rule('how_related_au_nn', This_rule_base, 'how_related',
                 how_related_au_nn, example.how_related_au_nn,
@@ -520,28 +544,30 @@ def how_related_cousins(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('example', 'cousins', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('example', 'nth_cousin', context,
-                       (rule.pattern(2),)):
-          assert x_2 is not None, \
-            "%(rule_name)s: expected plan from when clause 2"
-          mark2 = context.mark(True)
-          if not rule.pattern(3).match_data(context, context, x_2):
-            raise AssertionError("%(rule_name)s: plan match to $plan#2 failed in when clause 2")
-          context.end_save_all_undo()
-          yield context
-          context.undo_to_mark(mark2)
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('example', 'cousins', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('example', 'nth_cousin', context,
+                         (rule.pattern(2),)):
+            assert x_2 is not None, \
+              "%(rule_name)s: expected plan from when clause 2"
+            mark2 = context.mark(True)
+            if not rule.pattern(3).match_data(context, context, x_2):
+              raise AssertionError("%(rule_name)s: plan match to $plan#2 failed in when clause 2")
+            context.end_save_all_undo()
+            yield context
+            context.undo_to_mark(mark2)
+    finally:
+      context.done()
 
 bc_rule.bc_rule('how_related_cousins', This_rule_base, 'how_related',
                 how_related_cousins, example.how_related_cousins,
@@ -557,42 +583,44 @@ def how_related_removed_cousins(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('example', 'child_parent', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),
-                      rule.pattern(3),
-                      rule.pattern(3),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('example', 'cousins', context,
-                       (rule.pattern(1),
-                        rule.pattern(4),
-                        rule.pattern(5),)):
-          assert x_2 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 2"
-          for x_3 in prove('example', 'nth_cousin', context,
-                         (rule.pattern(5),)):
-            assert x_3 is not None, \
-              "%(rule_name)s: expected plan from when clause 3"
-            mark3 = context.mark(True)
-            if not rule.pattern(6).match_data(context, context, x_3):
-              raise AssertionError("%(rule_name)s: plan match to $plan#3 failed in when clause 3")
-            context.end_save_all_undo()
-            mark4 = context.mark(True)
-            if rule.pattern(7).match_data(context, context,
-                    len(context.lookup_data('grand')) + 1):
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('example', 'child_parent', context,
+                       (rule.pattern(0),
+                        rule.pattern(1),
+                        rule.pattern(2),
+                        rule.pattern(3),
+                        rule.pattern(3),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('example', 'cousins', context,
+                         (rule.pattern(1),
+                          rule.pattern(4),
+                          rule.pattern(5),)):
+            assert x_2 is None, \
+              "%(rule_name)s: got unexpected plan from when clause 2"
+            for x_3 in prove('example', 'nth_cousin', context,
+                           (rule.pattern(5),)):
+              assert x_3 is not None, \
+                "%(rule_name)s: expected plan from when clause 3"
+              mark3 = context.mark(True)
+              if not rule.pattern(6).match_data(context, context, x_3):
+                raise AssertionError("%(rule_name)s: plan match to $plan#3 failed in when clause 3")
               context.end_save_all_undo()
-              yield context
-            else: context.end_save_all_undo()
-            context.undo_to_mark(mark4)
-            context.undo_to_mark(mark3)
-    context.done()
+              mark4 = context.mark(True)
+              if rule.pattern(7).match_data(context, context,
+                      len(context.lookup_data('grand')) + 1):
+                context.end_save_all_undo()
+                yield context
+              else: context.end_save_all_undo()
+              context.undo_to_mark(mark4)
+              context.undo_to_mark(mark3)
+    finally:
+      context.done()
 
 bc_rule.bc_rule('how_related_removed_cousins', This_rule_base, 'how_related',
                 how_related_removed_cousins, example.how_related_removed_cousins,
@@ -612,42 +640,44 @@ def how_related_cousins_removed(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('example', 'cousins', context,
-                     (rule.pattern(0),
-                      rule.pattern(1),
-                      rule.pattern(2),)):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        for x_2 in prove('example', 'child_parent', context,
-                       (rule.pattern(3),
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('example', 'cousins', context,
+                       (rule.pattern(0),
                         rule.pattern(1),
-                        rule.pattern(4),
-                        rule.pattern(5),
-                        rule.pattern(5),)):
-          assert x_2 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 2"
-          for x_3 in prove('example', 'nth_cousin', context,
-                         (rule.pattern(2),)):
-            assert x_3 is not None, \
-              "%(rule_name)s: expected plan from when clause 3"
-            mark3 = context.mark(True)
-            if not rule.pattern(6).match_data(context, context, x_3):
-              raise AssertionError("%(rule_name)s: plan match to $plan#3 failed in when clause 3")
-            context.end_save_all_undo()
-            mark4 = context.mark(True)
-            if rule.pattern(7).match_data(context, context,
-                    len(context.lookup_data('grand')) + 1):
+                        rule.pattern(2),)):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          for x_2 in prove('example', 'child_parent', context,
+                         (rule.pattern(3),
+                          rule.pattern(1),
+                          rule.pattern(4),
+                          rule.pattern(5),
+                          rule.pattern(5),)):
+            assert x_2 is None, \
+              "%(rule_name)s: got unexpected plan from when clause 2"
+            for x_3 in prove('example', 'nth_cousin', context,
+                           (rule.pattern(2),)):
+              assert x_3 is not None, \
+                "%(rule_name)s: expected plan from when clause 3"
+              mark3 = context.mark(True)
+              if not rule.pattern(6).match_data(context, context, x_3):
+                raise AssertionError("%(rule_name)s: plan match to $plan#3 failed in when clause 3")
               context.end_save_all_undo()
-              yield context
-            else: context.end_save_all_undo()
-            context.undo_to_mark(mark4)
-            context.undo_to_mark(mark3)
-    context.done()
+              mark4 = context.mark(True)
+              if rule.pattern(7).match_data(context, context,
+                      len(context.lookup_data('grand')) + 1):
+                context.end_save_all_undo()
+                yield context
+              else: context.end_save_all_undo()
+              context.undo_to_mark(mark4)
+              context.undo_to_mark(mark3)
+    finally:
+      context.done()
 
 bc_rule.bc_rule('how_related_cousins_removed', This_rule_base, 'how_related',
                 how_related_cousins_removed, example.how_related_cousins_removed,
@@ -667,17 +697,19 @@ def nth_cousin_1(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('special', 'cut', context,
-                     ()):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        yield context
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('special', 'cut', context,
+                       ()):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          yield context
+    finally:
+      context.done()
 
 bc_rule.bc_rule('nth_cousin_1', This_rule_base, 'nth_cousin',
                 nth_cousin_1, example.nth_cousin_1,
@@ -689,17 +721,19 @@ def nth_cousin_2(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('special', 'cut', context,
-                     ()):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        yield context
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('special', 'cut', context,
+                       ()):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          yield context
+    finally:
+      context.done()
 
 bc_rule.bc_rule('nth_cousin_2', This_rule_base, 'nth_cousin',
                 nth_cousin_2, example.nth_cousin_2,
@@ -711,17 +745,19 @@ def nth_cousin_3(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('special', 'cut', context,
-                     ()):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        yield context
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('special', 'cut', context,
+                       ()):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          yield context
+    finally:
+      context.done()
 
 bc_rule.bc_rule('nth_cousin_3', This_rule_base, 'nth_cousin',
                 nth_cousin_3, example.nth_cousin_3,
@@ -733,13 +769,15 @@ def nth_cousin_rest(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      yield context
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        yield context
+    finally:
+      context.done()
 
 bc_rule.bc_rule('nth_cousin_rest', This_rule_base, 'nth_cousin',
                 nth_cousin_rest, example.nth_cousin_rest,
@@ -751,17 +789,19 @@ def add_empty_prefix(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      for x_1 in prove('special', 'cut', context,
-                     ()):
-        assert x_1 is None, \
-          "%(rule_name)s: got unexpected plan from when clause 1"
-        yield context
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        for x_1 in prove('special', 'cut', context,
+                       ()):
+          assert x_1 is None, \
+            "%(rule_name)s: got unexpected plan from when clause 1"
+          yield context
+    finally:
+      context.done()
 
 bc_rule.bc_rule('add_empty_prefix', This_rule_base, 'add_prefix',
                 add_empty_prefix, example.add_empty_prefix,
@@ -773,13 +813,15 @@ def add_prefix(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
-    if all(itertools.imap(lambda pat, arg:
-                            pat.match_pattern(context, context,
-                                              arg, arg_context),
-                          patterns,
-                          arg_patterns)):
-      yield context
-    context.done()
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        yield context
+    finally:
+      context.done()
 
 bc_rule.bc_rule('add_prefix', This_rule_base, 'add_prefix',
                 add_prefix, example.add_prefix,

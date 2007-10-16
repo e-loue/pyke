@@ -112,12 +112,12 @@ def compile(filename):
         pyke.reset()
         if use_test:
             pyke.activate('compiler_test')
-            plan_lines, bc_lines = pyke.prove_n('compiler_test', 'compile',
-                                                (rb_name, ast), 2)
+            (plan_lines, bc_lines), plan = \
+                pyke.prove_1('compiler_test', 'compile', (rb_name, ast), 2)
         else:
             pyke.activate('compiler')
-            plan_lines, bc_lines = pyke.prove_n('compiler', 'compile',
-                                                (rb_name, ast), 2)
+            (plan_lines, bc_lines), plan = \
+                pyke.prove_1('compiler', 'compile', (rb_name, ast), 2)
         sys.stderr.write("writing bc_lines\n")
         write_file(bc_lines, bc_path)
         sys.stderr.write("writing plan_lines\n")
@@ -134,15 +134,20 @@ def compile(filename):
 def write_file(lines, filename):
     with contextlib.closing(file(filename, 'w')) as f:
         indents = [0]
-        for line in lines:
-            if line == 'POPINDENT':
-                assert len(indents) > 1
-                del indents[-1]
-            elif isinstance(line, tuple):
-                assert len(line) == 2 and line[0] == 'INDENT'
+        write_file2(lines, f, indents)
+
+def write_file2(lines, f, indents):
+    for line in lines:
+        if line == 'POPINDENT':
+            assert len(indents) > 1
+            del indents[-1]
+        elif isinstance(line, tuple):
+            if len(line) == 2 and line[0] == 'INDENT':
                 indents.append(indents[-1] + line[1])
             else:
-                f.write(' ' * indents[-1] + line + '\n')
+                write_file2(line, f, indents)
+        else:
+            f.write(' ' * indents[-1] + line + '\n')
 
 def test():
     import doctest

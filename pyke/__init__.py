@@ -60,20 +60,30 @@ def prove(kb_name, entity_name, pat_context, patterns):
                                  entity_name, patterns)
 
 def prove_n(kb_name, entity_name, fixed_args, num_returns):
+    ''' Generates: a tuple of len == num_returns, and a plan (or None).
+    '''
     context = contexts.simple_context()
     vars = Variables[:num_returns]
     try:
-        prove(kb_name, entity_name, context,
-              tuple(pattern.pattern_literal(arg)
-                    for arg in fixed_args) + vars) \
-            .next()
+        for plan in prove(kb_name, entity_name, context,
+                          tuple(pattern.pattern_literal(arg)
+                                for arg in fixed_args) + vars):
+            ans = tuple(context.lookup_data(var.name) for var in vars)
+            if plan: plan = plan.create_plan()
+            yield ans, plan
+    finally:
+        context.done()
+
+def prove_1(kb_name, entity_name, fixed_args, num_returns):
+    ''' Returns a tuple of len == num_returns, and a plan (or None).
+    '''
+    try:
+        # All we need is the first one!
+        return prove_n(kb_name, entity_name, fixed_args, num_returns).next()
     except StopIteration:
         raise CanNotProve("Can not prove %s.%s%s" %
                               (kb_name, entity_name,
                                condensedPrint.cprint(fixed_args + vars)))
-    ans = tuple(context.lookup_data(var.name) for var in vars)
-    context.done()
-    return ans
 
 def test():
     import doctest

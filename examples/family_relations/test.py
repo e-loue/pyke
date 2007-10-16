@@ -34,11 +34,8 @@ import family
 #import example
 import example_bc
 import pyke
-from pyke import knowledge_base, rule_base, contexts, pattern, special
 
 pyke.init()
-
-patterns = (pattern.pattern_literal('bruce'), contexts.variable('who'))
 
 # To be able to pickle plans.  (Not needed to unpickle).
 copy_reg.pickle(functools.partial,
@@ -47,8 +44,6 @@ copy_reg.pickle(functools.partial,
 def test():
     global plan
     pyke.reset()
-
-    context = contexts.simple_context()
 
     #family = pyke.get_kb('family')
 
@@ -72,11 +67,9 @@ def test():
 
     test_pickle = False
     print "doing proof"
-    for ans in pyke.prove('example', 'how_related', context, patterns):
+    for (ans,), plan in pyke.prove_n('example', 'how_related', ('bruce',), 1):
 	#print "prove:", ans
-        print [pat.as_data(context) for pat in patterns]
-	#print "making plan"
-	plan = ans.create_plan()
+        print "bruce,", ans
 	#print "plan:", plan
 	if test_pickle:
 	    print "pickling plan"
