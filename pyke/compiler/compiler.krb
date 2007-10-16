@@ -24,19 +24,25 @@ file:
     use compile($rb_name, (file, $parent, $fc_rules, $bc_rules),
                 $plan_lines, $bc_lines)
     when
-        !plan_head($rb_name, $parent, $plan_head)
+        $lines1 = helpers.plan_head1($rb_name)
         $bc_head = helpers.bc_head($rb_name)
+        !rule_decl($rb_name, $parent, $decl_line)
         !fc_rules($fc_rules, $fc_lines)
         !bc_rules($rb_name, $bc_rules, $bc_plan_lines, $bc_bc_lines)
-        $plan_lines = $plan_head + $fc_lines + $bc_plan_lines
-        $bc_lines = $bc_head + $bc_bc_lines
+        $plan_lines = $lines1 + ($decl_line,) + $fc_lines + $bc_plan_lines
+        $bc_lines = $bc_head + ($decl_line,) + $bc_bc_lines
 
-plan_head:
-    use plan_head($rb_name, None, $lines)
+rule_decl:
+    use rule_decl($rb_name, None, $decl_line)
     when
-        $lines1 = helpers.plan_head1($rb_name)
-        $lines = helpers.splice($lines1,
-                     "This_rule_base = rule_base.rule_base('%s')" % $rb_name)
+        $decl_line = "This_rule_base = rule_base.get_create('%s')" % $rb_name
+
+rule_decl_with_parent:
+    use rule_decl($rb_name, (parent, $parent, $excluded_symbols), $decl_line)
+    when
+        $decl_line = "This_rule_base = rule_base.get_create('%s', '%s', %s)" % \
+                         ($rb_name, $parent,
+                          tuple(repr(sym) for sym in $excluded_symbols))
 
 fc_rules0:
     use fc_rules((), ())

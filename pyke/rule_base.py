@@ -32,6 +32,13 @@ def get(rule_base_name):
     if ans is None: raise KeyError("rule_base: %s not found" % rule_base_name)
     return ans
 
+def get_create(rb_name, parent = None, exclude_list = ()):
+    ans = Rule_bases.get(rule_base_name)
+    if ans is None: ans = rule_base(rb_name, parent, exclude_list)
+    elif ans.parent != parent or ans.exclude_set != frozenset(exclude_list):
+        raise AssertionError("duplicate rule_base: %s" % rb_name)
+    return ans
+
 def init():
     for kb in knowledge_base.Knowledge_bases.itervalues(): kb.init2()
     for rb in Rule_bases.itervalues(): rb.init2()

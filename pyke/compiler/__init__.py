@@ -31,7 +31,7 @@ import sys
 use_test = False
 
 # If set, doesn't delete output files on error.
-no_nuke = False
+no_nuke = True
 
 import pyke
 

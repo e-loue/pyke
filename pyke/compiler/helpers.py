@@ -39,9 +39,9 @@ def bc_head(rb_name):
         "",
         "from __future__ import with_statement, absolute_import, division",
         "from pyke import tmp_itertools as itertools",
-        "from pyke import contexts, pattern, bc_rule",
+        "from pyke import rule_base, contexts, pattern, bc_rule",
         "from pyke import prove",
-        "import %s" % rb_name,
+        "",
     )
 
 def goal(rb_name, rule_name, (goal, goal_name, pattern_args, using),
@@ -106,8 +106,7 @@ def goal(rb_name, rule_name, (goal, goal_name, pattern_args, using),
                        'POPINDENT')
     goal_decl_lines = (
         "",
-        "bc_rule.bc_rule('%s', %s.This_rule_base, '%s'," %
-            (rule_name, rb_name, goal_name),
+        "bc_rule.bc_rule('%s', This_rule_base, '%s'," % (rule_name, goal_name),
         ("INDENT", 16),
         "%s, %s," % (rule_name, plan_fn_name),
     ) + list_format(pattern_args, "(", "),")

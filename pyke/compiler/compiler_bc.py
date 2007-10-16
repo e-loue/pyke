@@ -2,10 +2,11 @@
 
 from __future__ import with_statement, absolute_import, division
 from pyke import tmp_itertools as itertools
-from pyke import contexts, pattern, bc_rule
+from pyke import rule_base, contexts, pattern, bc_rule
 from pyke import prove
-from pyke.compiler import compiler
 from pyke.compiler import helpers
+
+This_rule_base = rule_base.get_create('compiler')
 
 def file(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
@@ -67,8 +68,7 @@ def file(rule, arg_patterns, arg_context):
         raise AssertionError("compiler.file: 'when' clause 1 failed")
     context.done()
 
-bc_rule.bc_rule('file', compiler.This_rule_base, 'compile',
-                file, None,
+bc_rule.bc_rule('file', This_rule_base, 'compile', file, None,
                 (contexts.variable('rb_name'),
                  pattern.pattern_tuple((pattern.pattern_literal('file'), contexts.variable('parent'), contexts.variable('fc_rules'), contexts.variable('bc_rules'),), None),
                  contexts.variable('plan_lines'),
@@ -102,7 +102,7 @@ def plan_head(rule, arg_patterns, arg_context):
         mark2 = context.mark(True)
         if rule.pattern(1).match_data(context, context,
                 helpers.splice(context.lookup_data('lines1'),
-               "This_rule_base = rule_base.rule_base('%s')" % context.lookup_data('rb_name'))):
+               "This_rule_base = rule_base.get_create('%s')" % context.lookup_data('rb_name'))):
           context.end_save_all_undo()
           yield
         else: context.end_save_all_undo()
@@ -111,8 +111,7 @@ def plan_head(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('plan_head', compiler.This_rule_base, 'plan_head',
-                plan_head, None,
+bc_rule.bc_rule('plan_head', This_rule_base, 'plan_head', plan_head, None,
                 (contexts.variable('rb_name'),
                  pattern.pattern_literal(None),
                  contexts.variable('lines'),),
@@ -132,8 +131,7 @@ def fc_rules0(rule, arg_patterns, arg_context):
       yield
     context.done()
 
-bc_rule.bc_rule('fc_rules0', compiler.This_rule_base, 'fc_rules',
-                fc_rules0, None,
+bc_rule.bc_rule('fc_rules0', This_rule_base, 'fc_rules', fc_rules0, None,
                 (pattern.pattern_literal(()),
                  pattern.pattern_literal(()),),
                 (),
@@ -175,8 +173,7 @@ def fc_rules1(rule, arg_patterns, arg_context):
         raise AssertionError("compiler.fc_rules1: 'when' clause 1 failed")
     context.done()
 
-bc_rule.bc_rule('fc_rules1', compiler.This_rule_base, 'fc_rules',
-                fc_rules1, None,
+bc_rule.bc_rule('fc_rules1', This_rule_base, 'fc_rules', fc_rules1, None,
                 (pattern.pattern_tuple((contexts.variable('fc_rule'),), contexts.variable('fc_rest')),
                  contexts.variable('lines'),),
                 (),
@@ -247,8 +244,7 @@ def fc_rule_(rule, arg_patterns, arg_context):
         raise AssertionError("compiler.fc_rule_: 'when' clause 1 failed")
     context.done()
 
-bc_rule.bc_rule('fc_rule_', compiler.This_rule_base, 'fc_rule',
-                fc_rule_, None,
+bc_rule.bc_rule('fc_rule_', This_rule_base, 'fc_rule', fc_rule_, None,
                 (pattern.pattern_tuple((pattern.pattern_literal('fc_rule'), contexts.variable('rule_name'), contexts.variable('fc_predicates'), contexts.variable('assertions'),), None),
                  contexts.variable('fc_lines'),),
                 (),
@@ -277,8 +273,7 @@ def fc_predicates0(rule, arg_patterns, arg_context):
       yield
     context.done()
 
-bc_rule.bc_rule('fc_predicates0', compiler.This_rule_base, 'fc_predicates',
-                fc_predicates0, None,
+bc_rule.bc_rule('fc_predicates0', This_rule_base, 'fc_predicates', fc_predicates0, None,
                 (contexts.anonymous(),
                  contexts.anonymous(),
                  pattern.pattern_literal(()),
@@ -351,7 +346,7 @@ def fc_predicates1(rule, arg_patterns, arg_context):
         raise AssertionError("compiler.fc_predicates1: 'when' clause 1 failed")
     context.done()
 
-bc_rule.bc_rule('fc_predicates1', compiler.This_rule_base, 'fc_predicates',
+bc_rule.bc_rule('fc_predicates1', This_rule_base, 'fc_predicates',
                 fc_predicates1, None,
                 (contexts.variable('rule_name'),
                  contexts.variable('clause_num'),
@@ -419,7 +414,7 @@ def fc_predicate(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('fc_predicate', compiler.This_rule_base, 'fc_predicate',
+bc_rule.bc_rule('fc_predicate', This_rule_base, 'fc_predicate',
                 fc_predicate, None,
                 (contexts.variable('rule_name'),
                  contexts.variable('clause_num'),
@@ -456,7 +451,7 @@ def fc_python_predicate(rule, arg_patterns, arg_context):
         yield
     context.done()
 
-bc_rule.bc_rule('fc_python_predicate', compiler.This_rule_base, 'fc_predicate',
+bc_rule.bc_rule('fc_python_predicate', This_rule_base, 'fc_predicate',
                 fc_python_predicate, None,
                 (contexts.variable('rule_name'),
                  contexts.variable('clause_num'),
@@ -487,7 +482,7 @@ def assertions_0(rule, arg_patterns, arg_context):
       yield
     context.done()
 
-bc_rule.bc_rule('assertions_0', compiler.This_rule_base, 'assertions',
+bc_rule.bc_rule('assertions_0', This_rule_base, 'assertions',
                 assertions_0, None,
                 (pattern.pattern_literal(()),
                  pattern.pattern_literal(()),
@@ -536,7 +531,7 @@ def assertions_n(rule, arg_patterns, arg_context):
         raise AssertionError("compiler.assertions_n: 'when' clause 1 failed")
     context.done()
 
-bc_rule.bc_rule('assertions_n', compiler.This_rule_base, 'assertions',
+bc_rule.bc_rule('assertions_n', This_rule_base, 'assertions',
                 assertions_n, None,
                 (pattern.pattern_tuple((contexts.variable('first_assertion'),), contexts.variable('rest_assertions')),
                  contexts.variable('fn_lines'),
@@ -584,7 +579,7 @@ def assertion(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('assertion', compiler.This_rule_base, 'assertion',
+bc_rule.bc_rule('assertion', This_rule_base, 'assertion',
                 assertion, None,
                 (pattern.pattern_tuple((pattern.pattern_literal('assert'), contexts.variable('kb_name'), contexts.variable('entity_name'), contexts.variable('patterns'),), None),
                  contexts.variable('fn_lines'),
@@ -606,7 +601,7 @@ def python_assertion(rule, arg_patterns, arg_context):
       yield
     context.done()
 
-bc_rule.bc_rule('python_assertion', compiler.This_rule_base, 'assertion',
+bc_rule.bc_rule('python_assertion', This_rule_base, 'assertion',
                 python_assertion, None,
                 (pattern.pattern_tuple((pattern.pattern_literal('python_assertion'), pattern.pattern_tuple((contexts.variable('python_code'), contexts.anonymous(),), None),), None),
                  contexts.variable('python_code'),
@@ -627,7 +622,7 @@ def bc_rules0(rule, arg_patterns, arg_context):
       yield
     context.done()
 
-bc_rule.bc_rule('bc_rules0', compiler.This_rule_base, 'bc_rules',
+bc_rule.bc_rule('bc_rules0', This_rule_base, 'bc_rules',
                 bc_rules0, None,
                 (contexts.anonymous(),
                  pattern.pattern_literal(()),
@@ -682,7 +677,7 @@ def bc_rules1(rule, arg_patterns, arg_context):
         raise AssertionError("compiler.bc_rules1: 'when' clause 1 failed")
     context.done()
 
-bc_rule.bc_rule('bc_rules1', compiler.This_rule_base, 'bc_rules',
+bc_rule.bc_rule('bc_rules1', This_rule_base, 'bc_rules',
                 bc_rules1, None,
                 (contexts.variable('rb_name'),
                  pattern.pattern_tuple((contexts.variable('bc_rule'),), contexts.variable('bc_rest')),
@@ -748,7 +743,7 @@ def bc_rule_(rule, arg_patterns, arg_context):
         raise AssertionError("compiler.bc_rule_: 'when' clause 1 failed")
     context.done()
 
-bc_rule.bc_rule('bc_rule_', compiler.This_rule_base, 'bc_rule',
+bc_rule.bc_rule('bc_rule_', This_rule_base, 'bc_rule',
                 bc_rule_, None,
                 (contexts.variable('rb_name'),
                  pattern.pattern_tuple((pattern.pattern_literal('bc_rule'), contexts.variable('name'), contexts.variable('goal'), contexts.variable('bc_predicates'), contexts.variable('python_lines'), contexts.variable('plan_vars_needed'),), None),
@@ -822,7 +817,7 @@ def bc_predicates(rule, arg_patterns, arg_context):
         raise AssertionError("compiler.bc_predicates: 'when' clause 1 failed")
     context.done()
 
-bc_rule.bc_rule('bc_predicates', compiler.This_rule_base, 'bc_predicates',
+bc_rule.bc_rule('bc_predicates', This_rule_base, 'bc_predicates',
                 bc_predicates, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
@@ -860,7 +855,7 @@ def bc_predicates1_0(rule, arg_patterns, arg_context):
       yield
     context.done()
 
-bc_rule.bc_rule('bc_predicates1_0', compiler.This_rule_base, 'bc_predicates1',
+bc_rule.bc_rule('bc_predicates1_0', This_rule_base, 'bc_predicates1',
                 bc_predicates1_0, None,
                 (contexts.anonymous(),
                  contexts.anonymous(),
@@ -948,7 +943,7 @@ def bc_predicates1_n(rule, arg_patterns, arg_context):
         raise AssertionError("compiler.bc_predicates1_n: 'when' clause 1 failed")
     context.done()
 
-bc_rule.bc_rule('bc_predicates1_n', compiler.This_rule_base, 'bc_predicates1',
+bc_rule.bc_rule('bc_predicates1_n', This_rule_base, 'bc_predicates1',
                 bc_predicates1_n, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
@@ -1077,7 +1072,7 @@ def bc_predicate(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('bc_predicate', compiler.This_rule_base, 'bc_predicate',
+bc_rule.bc_rule('bc_predicate', This_rule_base, 'bc_predicate',
                 bc_predicate, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
@@ -1137,7 +1132,7 @@ def no_plan(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('no_plan', compiler.This_rule_base, 'gen_plan_lines',
+bc_rule.bc_rule('no_plan', This_rule_base, 'gen_plan_lines',
                 no_plan, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
@@ -1186,7 +1181,7 @@ def as_plan(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('as_plan', compiler.This_rule_base, 'gen_plan_lines',
+bc_rule.bc_rule('as_plan', This_rule_base, 'gen_plan_lines',
                 as_plan, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
@@ -1242,7 +1237,7 @@ def plan_spec(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('plan_spec', compiler.This_rule_base, 'gen_plan_lines',
+bc_rule.bc_rule('plan_spec', This_rule_base, 'gen_plan_lines',
                 plan_spec, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
@@ -1308,7 +1303,7 @@ def plan_bindings(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('plan_bindings', compiler.This_rule_base, 'plan_bindings',
+bc_rule.bc_rule('plan_bindings', This_rule_base, 'plan_bindings',
                 plan_bindings, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
@@ -1333,7 +1328,7 @@ def not_required(rule, arg_patterns, arg_context):
       yield
     context.done()
 
-bc_rule.bc_rule('not_required', compiler.This_rule_base, 'add_required',
+bc_rule.bc_rule('not_required', This_rule_base, 'add_required',
                 not_required, None,
                 (pattern.pattern_literal(False),
                  contexts.anonymous(),
@@ -1379,7 +1374,7 @@ def required(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('required', compiler.This_rule_base, 'add_required',
+bc_rule.bc_rule('required', This_rule_base, 'add_required',
                 required, None,
                 (pattern.pattern_literal(True),
                  contexts.variable('rb_name'),
@@ -1414,7 +1409,7 @@ def bc_python_predicate(rule, arg_patterns, arg_context):
         yield
     context.done()
 
-bc_rule.bc_rule('bc_python_predicate', compiler.This_rule_base, 'bc_predicate',
+bc_rule.bc_rule('bc_python_predicate', This_rule_base, 'bc_predicate',
                 bc_python_predicate, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
@@ -1482,7 +1477,7 @@ def python_eq(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('python_eq', compiler.This_rule_base, 'python_predicate',
+bc_rule.bc_rule('python_eq', This_rule_base, 'python_predicate',
                 python_eq, None,
                 (contexts.variable('clause_num'),
                  pattern.pattern_tuple((pattern.pattern_literal('python_eq'), contexts.variable('pattern'), pattern.pattern_tuple((contexts.variable('python_code'), contexts.anonymous(),), None),), None),
@@ -1546,7 +1541,7 @@ def python_in(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('python_in', compiler.This_rule_base, 'python_predicate',
+bc_rule.bc_rule('python_in', This_rule_base, 'python_predicate',
                 python_in, None,
                 (contexts.variable('clause_num'),
                  pattern.pattern_tuple((pattern.pattern_literal('python_in'), contexts.variable('pattern'), pattern.pattern_tuple((contexts.variable('python_code'), contexts.anonymous(),), None),), None),
@@ -1587,7 +1582,7 @@ def python_check(rule, arg_patterns, arg_context):
       context.undo_to_mark(mark1)
     context.done()
 
-bc_rule.bc_rule('python_check', compiler.This_rule_base, 'python_predicate',
+bc_rule.bc_rule('python_check', This_rule_base, 'python_predicate',
                 python_check, None,
                 (contexts.variable('clause_num'),
                  pattern.pattern_tuple((pattern.pattern_literal('python_check'), pattern.pattern_tuple((contexts.variable('python_code'), contexts.anonymous(),), None),), None),
