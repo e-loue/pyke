@@ -1,9 +1,8 @@
 - document
 - add a way to bring import statements in at the beginning of the generated
   .py files
-- indent body "prove(...)" in "for x_%d in prove(...)" by 2 more spaces
-- figure out a better name for special.cut()
 - create an alpha release
+- indent body "prove(...)" in "for x_%d in prove(...)" by 2 more spaces
 - add python if statements to bc_predicates
 - add ability to use normal python variables
     - normal_var = python_code

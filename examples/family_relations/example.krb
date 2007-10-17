@@ -181,21 +181,21 @@ how_related_cousins_removed:
 nth_cousin_1:
     use nth_cousin(1)
     when
-        special.cut()
+        special.claim_goal()
     with
         return "1st cousins"
 
 nth_cousin_2:
     use nth_cousin(2)
     when
-        special.cut()
+        special.claim_goal()
     with
         return "2nd cousins"
 
 nth_cousin_3:
     use nth_cousin(3)
     when
-        special.cut()
+        special.claim_goal()
     with
         return "3rd cousins"
 
@@ -207,7 +207,7 @@ nth_cousin_rest:
 add_empty_prefix:
     use add_prefix(()) taking (x, y)
     when
-	special.cut()
+	special.claim_goal()
     with
 	return x + ' <=> ' + y
 

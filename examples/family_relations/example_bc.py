@@ -703,7 +703,7 @@ def nth_cousin_1(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
-        for x_1 in prove('special', 'cut', context,
+        for x_1 in prove('special', 'claim_goal', context,
                        ()):
           assert x_1 is None, \
             "%(rule_name)s: got unexpected plan from when clause 1"
@@ -727,7 +727,7 @@ def nth_cousin_2(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
-        for x_1 in prove('special', 'cut', context,
+        for x_1 in prove('special', 'claim_goal', context,
                        ()):
           assert x_1 is None, \
             "%(rule_name)s: got unexpected plan from when clause 1"
@@ -751,7 +751,7 @@ def nth_cousin_3(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
-        for x_1 in prove('special', 'cut', context,
+        for x_1 in prove('special', 'claim_goal', context,
                        ()):
           assert x_1 is None, \
             "%(rule_name)s: got unexpected plan from when clause 1"
@@ -795,7 +795,7 @@ def add_empty_prefix(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
-        for x_1 in prove('special', 'cut', context,
+        for x_1 in prove('special', 'claim_goal', context,
                        ()):
           assert x_1 is None, \
             "%(rule_name)s: got unexpected plan from when clause 1"

@@ -23,7 +23,7 @@
 
 from pyke import knowledge_base, rule_base
 
-# cut, fact, prove_all, gather_all
+# claim_goal, fact, prove_all, gather_all
 
 class special_knowledge_base(knowledge_base.knowledge_base):
     def __init__(self):
@@ -46,11 +46,11 @@ class special_fn(knowledge_base.knowledge_entity_list):
 	raise SyntaxError("special.%s may not be used in backward chaining "
 			  "rules" % self.name)
 
-class cut(special_fn):
+class claim_goal(special_fn):
     def __init__(self):
-	super(cut, self).__init__('cut')
+	super(claim_goal, self).__init__('claim_goal')
     def prove(self, bindings, pat_context, patterns):
 	yield
 	raise rule_base.StopProof
 
-cut()
+claim_goal()
