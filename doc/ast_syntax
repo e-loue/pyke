@@ -1,4 +1,6 @@
-file : ('file', parent, (fc_rule), (bc_rule))
+file : ('file', parent,
+            ((fc_rule), (fc_extras_line)),
+            ((bc_rule), (bc_extras_line), (plan_extras_line)))
 
 parent : None
        | ('parent', extending_symbol, (without_symbols))

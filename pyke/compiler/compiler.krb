@@ -21,7 +21,10 @@
 # THE SOFTWARE.
 
 file:
-    use compile($rb_name, (file, $parent, $fc_rules, $bc_rules),
+    use compile($rb_name,
+                (file, $parent,
+                       ($fc_rules, $fc_extra_lines),
+                       ($bc_rules, $bc_extra_lines, $plan_extra_lines)),
                 $fc_lines, $bc_lines, $plan_lines)
     when
         $lines1 = helpers.plan_head1($rb_name)
@@ -29,14 +32,18 @@ file:
         !rule_decl($rb_name, $parent, $decl_line)
         !fc_rules($fc_rules, $fc_funs_lines)
         !bc_rules($rb_name, $bc_rules, $bc_plan_lines, $bc_bc_lines)
-        $fc_lines = ($lines1 + ($decl_line,) + $fc_funs_lines) \
+        $fc_lines = ($lines1 + ($decl_line,) + $fc_funs_lines + ("",) +
+                     $fc_extra_lines) \
                         if $fc_funs_lines \
                         else ()
-        $plan_lines = $bc_plan_lines
+        $plan_lines = ($bc_plan_lines + ("",) + $plan_extra_lines) \
+                        if $bc_plan_lines \
+                        else ()
         $bc_lines = ($bc_head + (("import %s_plans" % $rb_name, "") 
                                      if $bc_plan_lines
                                      else ("",)) + 
-                        ($decl_line,) + $bc_bc_lines) \
+                     ($decl_line,) + $bc_bc_lines + ("",) +
+                     $bc_extra_lines) \
                         if $bc_bc_lines \
                         else ()
 
@@ -439,3 +446,5 @@ python_check:
                      $python_code2[1:],
                      (('INDENT', 2),),)
 
+bc_extras
+    from pyke.compiler import helpers

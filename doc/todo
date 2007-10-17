@@ -1,6 +1,4 @@
 - document
-- add a way to bring import statements in at the beginning of the generated
-  .py files
 - create an alpha release
 - indent body "prove(...)" in "for x_%d in prove(...)" by 2 more spaces
 - add python if statements to bc_predicates

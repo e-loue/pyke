@@ -21,6 +21,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+""" See http://www.dabeaz.com/ply/ply.html for syntax of grammer definitions.
+""" 
+
 from __future__ import with_statement, absolute_import, division
 from pyke import tmp_itertools as itertools
 import contextlib
@@ -31,7 +34,17 @@ from pyke.compiler import scanner
 def p_file(p):
     ''' file : nls_opt parent_opt fc_rules bc_rules_opt
     '''
-    p[0] = ('file', p[2], tuple(p[3]), tuple(p[4]))
+    p[0] = ('file', p[2], (tuple(p[3]), ()), p[4])
+
+def p_file_fc_extras(p):
+    ''' file : nls_opt parent_opt fc_rules fc_extras bc_rules_opt
+    '''
+    p[0] = ('file', p[2], (tuple(p[3]), p[4]), p[5])
+
+def p_file_bc(p):
+    ''' file : nls_opt parent_opt bc_rules_section
+    '''
+    p[0] = ('file', p[2], ((), ()), p[3])
 
 def p_parent(p):
     ''' parent_opt : EXTENDING_TOK SYMBOL_TOK without_opt nls
@@ -65,7 +78,10 @@ def p_inc_plan_vars(p):
     p[0] = None
 
 def p_fifth(p):
-    ''' with_opt : WITH_TOK NL_TOK start_python_statements INDENT_TOK python_plan_code nls DEINDENT_TOK
+    ''' bc_extras_opt : BC_EXTRAS_TOK NL_TOK start_extra_statements INDENT_TOK python_extras_code nls DEINDENT_TOK
+        fc_extras : FC_EXTRAS_TOK NL_TOK start_extra_statements INDENT_TOK python_extras_code nls DEINDENT_TOK
+        plan_extras_opt : PLAN_EXTRAS_TOK NL_TOK start_extra_statements INDENT_TOK python_extras_code nls DEINDENT_TOK
+        with_opt : WITH_TOK NL_TOK start_python_statements INDENT_TOK python_plan_code nls DEINDENT_TOK
     '''
     p[0] = p[5]
 
@@ -127,6 +143,16 @@ def p_bc_rule(p):
     ''' bc_rule : SYMBOL_TOK ':' NL_TOK INDENT_TOK USE_TOK goal when_opt with_opt DEINDENT_TOK
     '''
     p[0] = ('bc_rule', p[1], p[6], tuple(p[7]), tuple(p[8][0]), tuple(p[8][1]))
+
+def p_empty_bc_rules_opt(p):
+    ''' bc_rules_opt :
+    '''
+    p[0] = ((), (), ())
+
+def p_bc_rules_section(p):
+    ''' bc_rules_section : bc_rules bc_extras_opt plan_extras_opt
+    '''
+    p[0] = (tuple(p[1]), p[2], p[3])
 
 def p_goal(p):
     ''' goal : SYMBOL_TOK LP_TOK patterns_opt RP_TOK taking_opt nls
@@ -196,6 +222,12 @@ def p_start_python_statements(p):
     scanner.start_code(multiline = True)
     p[0] = None
 
+def p_start_extra_statements(p):
+    ''' start_extra_statements :
+    '''
+    scanner.start_code(multiline = True, var_format = None)
+    p[0] = None
+
 def p_start_python_assertion(p):
     ''' start_python_assertion :
     '''
@@ -213,6 +245,11 @@ def p_python_plan_code(p):
     '''
     p[0] = p[1]
 
+def p_python_extras_code(p):
+    ''' python_extras_code : CODE_TOK
+    '''
+    p[0] = p[1][0]
+
 def p_pattern_var(p):
     ''' variable : PATTERN_VAR_TOK
     '''
@@ -225,7 +262,7 @@ def p_anonymous_var(p):
 
 def p_last(p):
     ''' bc_predicate : python_predicate
-	bc_rules_opt : bc_rules
+        bc_rules_opt : bc_rules_section
         data : NUMBER_TOK
 	data : STRING_TOK
         fc_predicate : python_predicate
@@ -262,22 +299,19 @@ def p_start_list(p):
 	bc_rules : bc_rule
         data_list : data
         fc_predicates : fc_predicate
+        fc_rules : fc_rule
         patterns : pattern
         patterns_proper : pattern_proper
 	without_names : SYMBOL_TOK
     '''
     p[0] = [p[1]]
 
-def p_empty_list(p):
-    ''' fc_rules :
-    '''
-    p[0] = []
-
 def p_empty_tuple(p):
-    ''' bc_rules_opt :
+    ''' bc_extras_opt :
         data : LP_TOK RP_TOK
 	foreach_opt :
         patterns_opt :
+        plan_extras_opt :
 	taking_opt :
         when_opt :
 	without_opt :
@@ -336,8 +370,8 @@ def p_tuple(p):
     p[0] = '(' + ' '.join(str(x) + ',' for x in p[2]) + ')'
 
 def p_error(p):
-    raise SyntaxError("%s(%d): syntax error" %
-                          (scanner.lexer.filename, scanner.lexer.lineno))
+    raise SyntaxError("%s(%d): syntax error at token %s" %
+                          (scanner.lexer.filename, scanner.lexer.lineno, p))
 
 parser = yacc.yacc(write_tables=0, debug=0)
 

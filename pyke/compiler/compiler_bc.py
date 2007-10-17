@@ -4,7 +4,6 @@ from __future__ import with_statement, absolute_import, division
 from pyke import tmp_itertools as itertools
 from pyke import rule_base, contexts, pattern, bc_rule
 from pyke import prove
-from pyke.compiler import helpers
 
 This_rule_base = rule_base.get_create('compiler')
 
@@ -52,20 +51,24 @@ def file(rule, arg_patterns, arg_context):
                     "%(rule_name)s: got unexpected plan from when clause 5"
                   mark6 = context.mark(True)
                   if rule.pattern(10).match_data(context, context,
-                          (context.lookup_data('lines1') + (context.lookup_data('decl_line'),) + context.lookup_data('fc_funs_lines')) \
+                          (context.lookup_data('lines1') + (context.lookup_data('decl_line'),) + context.lookup_data('fc_funs_lines') + ("",) +
+                         context.lookup_data('fc_extra_lines')) \
                                                  if context.lookup_data('fc_funs_lines') \
                                                  else ()):
                     context.end_save_all_undo()
                     mark7 = context.mark(True)
                     if rule.pattern(11).match_data(context, context,
-                            context.lookup_data('bc_plan_lines')):
+                            (context.lookup_data('bc_plan_lines') + ("",) + context.lookup_data('plan_extra_lines')) \
+                                                   if context.lookup_data('bc_plan_lines') \
+                                                   else ()):
                       context.end_save_all_undo()
                       mark8 = context.mark(True)
                       if rule.pattern(12).match_data(context, context,
                               (context.lookup_data('bc_head') + (("import %s_plans" % context.lookup_data('rb_name'), "") 
                              if context.lookup_data('bc_plan_lines')
                              else ("",)) + 
-                             (context.lookup_data('decl_line'),) + context.lookup_data('bc_bc_lines')) \
+                             (context.lookup_data('decl_line'),) + context.lookup_data('bc_bc_lines') + ("",) +
+                             context.lookup_data('bc_extra_lines')) \
                                                      if context.lookup_data('bc_bc_lines') \
                                                      else ()):
                         context.end_save_all_undo()
@@ -92,7 +95,7 @@ def file(rule, arg_patterns, arg_context):
 bc_rule.bc_rule('file', This_rule_base, 'compile',
                 file, None,
                 (contexts.variable('rb_name'),
-                 pattern.pattern_tuple((pattern.pattern_literal('file'), contexts.variable('parent'), contexts.variable('fc_rules'), contexts.variable('bc_rules'),), None),
+                 pattern.pattern_tuple((pattern.pattern_literal('file'), contexts.variable('parent'), pattern.pattern_tuple((contexts.variable('fc_rules'), contexts.variable('fc_extra_lines'),), None), pattern.pattern_tuple((contexts.variable('bc_rules'), contexts.variable('bc_extra_lines'), contexts.variable('plan_extra_lines'),), None),), None),
                  contexts.variable('fc_lines'),
                  contexts.variable('bc_lines'),
                  contexts.variable('plan_lines'),),
@@ -1709,3 +1712,5 @@ bc_rule.bc_rule('python_check', This_rule_base, 'python_predicate',
                 (),
                 (contexts.variable('python_code2'),
                  contexts.variable('fn_head'),))
+
+from pyke.compiler import helpers

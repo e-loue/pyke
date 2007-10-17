@@ -1,6 +1,12 @@
 file ::= [NL_TOK] ['extending' SYMBOL_TOK ['without' {SYMBOL_TOK,}] NL_TOK]
 	 {fc_rule}
+         ['fc_extras' NL_TOK INDENT_TOK
+            {<python_statement> NL_TOK} DEINDENT_TOK]
 	 {bc_rule}
+         ['bc_extras' NL_TOK INDENT_TOK
+            {<python_statement> NL_TOK} DEINDENT_TOK]
+         ['plan_extras' NL_TOK INDENT_TOK
+            {<python_statement> NL_TOK} DEINDENT_TOK]
 
 data ::= NONE_TOK | TRUE_TOK | FALSE_TOK
        | NUMBER_TOK | SYMBOL_TOK | STRING_TOK | '(' {data,} ')'

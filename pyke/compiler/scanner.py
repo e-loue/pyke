@@ -21,8 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-""" See file:///usr/share/doc/python-ply-doc/ply.html for syntax of grammer
-    definitions.
+""" See http://www.dabeaz.com/ply/ply.html for syntax of grammer definitions.
 """
 
 from __future__ import with_statement, absolute_import, division
@@ -39,12 +38,15 @@ states = (
 keywords = frozenset((
     'as',
     'assert',
+    'bc_extras',
     'check',
     'extending',
     'False',
+    'fc_extras',
     'foreach',
     'in',
     'None',
+    'plan_extras',
     'python',
     'step',
     'taking',
@@ -175,26 +177,31 @@ def t_code_comment(t):
     current_line += t.value
 
 def t_code_plan(t):
-    r'\$plan\b'
+    r'\$\$\b'
     global current_line
     if debug:
-        print "scanner saw 'plan', current_plan_name is", current_plan_name
-    if current_plan_name:
-        current_line += pattern_var_format % current_plan_name
-        plan_vars_needed.append(current_plan_name)
-    else:
-        current_line += pattern_var_format % t.value[1:]
-        plan_vars_needed.append(t.value[1:])
+        print "scanner saw '$$', current_plan_name is", current_plan_name
+    if not current_plan_name:
+        raise SyntaxError("%s(%d): $$ only allowed in plan_specs within the "
+                          "'when' clause" % (t.lexer.filename, t.lexer.lineno))
+    current_line += pattern_var_format % current_plan_name
+    plan_vars_needed.append(current_plan_name)
 
 def t_code_fail(t):
     r'fail\b'
     global current_line
+    if not pattern_var_format:
+        raise SyntaxError("%s(%d): 'fail' only allowed in backward chaining "
+                          "rules" % (t.lexer.filename, t.lexer.lineno))
     if debug: print "scanner saw 'fail'"
     current_line += 'return'
 
 def t_code_pattern_var(t):
     r'\$[a-zA-Z_][a-zA-Z0-9_]*\b'
     global current_line
+    if not pattern_var_format:
+        raise SyntaxError("%s(%d): $<name> only allowed in backward chaining "
+                          "rules" % (t.lexer.filename, t.lexer.lineno))
     current_line += pattern_var_format % t.value[1:]
     plan_vars_needed.append(t.value[1:])
     if debug: print "scanner saw pattern_var:", t.value
