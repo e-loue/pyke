@@ -31,7 +31,7 @@ import sys
 use_test = False
 
 # If set, doesn't delete output files on error.
-no_nuke = True
+no_nuke = False
 
 import pyke
 
@@ -120,19 +120,23 @@ def compile(filename):
             (fc_lines, bc_lines, plan_lines), plan = \
                 pyke.prove_1('compiler', 'compile', (rb_name, ast), 3)
         if fc_lines:
-            sys.stderr.write("writing fc_lines\n")
+            sys.stderr.write("writing %s\n" % fc_path)
             write_file(fc_lines, fc_path)
+        elif os.path.lexists(fc_path): os.remove(fc_path)
         if bc_lines:
-            sys.stderr.write("writing bc_lines\n")
+            sys.stderr.write("writing %s\n" % bc_path)
             write_file(bc_lines, bc_path)
+        elif os.path.lexists(bc_path): os.remove(bc_path)
         if plan_lines:
-            sys.stderr.write("writing plan_lines\n")
+            sys.stderr.write("writing %s\n" % plan_path)
             #sys.stderr.write("plan_lines:\n")
             #for line in plan_lines:
             #    sys.stderr.write("  " + repr(line) + "\n")
             write_file(plan_lines, plan_path)
+        elif os.path.lexists(plan_path): os.remove(plan_path)
         sys.stderr.write("done!\n")
     except:
+        if os.path.lexists(fc_path) and not no_nuke: os.remove(fc_path)
         if os.path.lexists(bc_path) and not no_nuke: os.remove(bc_path)
         if os.path.lexists(plan_path) and not no_nuke: os.remove(plan_path)
         raise
@@ -155,10 +159,13 @@ def write_file2(lines, f, indents):
         else:
             f.write(' ' * indents[-1] + line + '\n')
 
-def test():
-    import doctest
+def main():
     import sys
-    sys.exit(doctest.testmod()[0])
+    if len(sys.argv) > 1:
+        for filename in sys.argv[1:]: compile(filename)
+    else:
+        import doctest
+        sys.exit(doctest.testmod()[0])
 
 if __name__ == "__main__":
-    test()
+    main()

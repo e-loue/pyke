@@ -32,11 +32,11 @@ import functools
 import family
 
 #import example
-import example_fc
-import example_bc
+#import example_fc
+#import example_bc
 import pyke
 
-pyke.init()
+pyke.load('.')
 
 # To be able to pickle plans.  (Not needed to unpickle).
 copy_reg.pickle(functools.partial,
