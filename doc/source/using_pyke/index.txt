@@ -1,0 +1,21 @@
+restindex
+    crumb: Using Pyke
+    page-description:
+        Everything you need to know to use pyke!
+    /description
+    section-pages: , overview/index, rule_base_syntax/index, interfacing_to_pyke/index
+    format: html
+    page-title: Using Pyke
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+<h1 class="title">Using Pyke</h1>
+
+<div class="displaybox">
+    <#
+        print_details(default_section)
+    #>
+</div>
+

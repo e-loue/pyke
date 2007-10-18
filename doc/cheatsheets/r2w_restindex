@@ -1,0 +1,26 @@
+include: yes            # include this page in index?
+format: rest            # or html
+file-extension: html    # setting in index.txt applies to all files in dir
+template: filepath      # in index.txt, applies to whole dir and subdirs
+template-encoding: ??   # guessed if not specified
+index-file: alt_file    # only for index.txt to specify alt main page for dir
+section: None           # for index.txt what section to appear in one level up
+link-title: text        # text in link from index page, page title is default
+page-title: text        # needed for index.txt and html pages
+page-description:\n     # rest format, default ''
+   text
+/description
+crumb: name             # default page title, or filename if no page title
+                        # in index page
+target: filename        # default is filename minus .txt plus file_extension
+build: yes              # build this file?
+initialheaderlevel: 1   # starting header level for rest headers
+encoding: ??            # default is to leave 'subtools' (docutils) to guess it
+output-encoding: ??     # setting in index applies to whole dir and subdirs
+sectionlist: name...    # only in index, default is single 'default'
+section-title:          # only in index, default is section name (in Title-Case)
+section-pages:          # only in index, order of pages, default is arbitrary
+section-description:\n  # only in index, default is ''
+tags:                   # list of keywords that applies to the page, default ()
+file: filename          # additional file to copy to from source to target
+plugins:                # list of plugins to apply to page

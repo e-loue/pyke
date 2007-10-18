@@ -1,0 +1,16 @@
+restindex
+    crumb: Overview
+    page-description:
+        So what is all this knowledge-base, inference and program
+        generation stuff anyway?
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+==================
+Overview
+==================
+

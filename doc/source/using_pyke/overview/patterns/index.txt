@@ -1,0 +1,15 @@
+restindex
+    crumb: Patterns
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+================
+Overview
+================
+------------------------------
+Patterns and Pattern Matching
+------------------------------
+

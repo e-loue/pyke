@@ -1,0 +1,15 @@
+restindex
+    crumb: Rule Base Syntax
+    page-description:
+        Syntax of the rule base files (.krb files) where you write your rules.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+===================
+Rule Base Syntax
+===================
+

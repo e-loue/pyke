@@ -1,0 +1,53 @@
+title           - title of the page
+body            - full body of the page
+breadcrumbs     - list of (crumb_link, crumb)
+sections        - {section_name: {
+                      title: ...,
+                      description: ...,
+                      pages: [{target:, section:, link-title:,
+                               page-description:, crumb:, namespace:, subdir:}]
+                      }}
+                  .sortpages(sortorder, section=True)
+                      where sortorder is either 'link-title' or a python
+                      function.
+                  NOTE: The default section_name is keyed by None.
+default_section - exactly the same as sections[None]
+pagename        - filename of the page (not the full path).
+pagepath        - full path from top level to current document.
+encoding        - the orginal encoding for the document.
+output_encoding - may be 'none' or 'unicode'
+final_encoding  - may be None
+path_to_root    - path from current document to top level site directory
+                  (ends with '/', e.g., '../../')
+sectionlist     - list of subsections in this directory
+rest_dict       - full dict of parts returned by docutils html_parts function
+doc             - everything that has been printed so far (StringIO instance)
+stdout          - real sys.stdout
+modified        - time the page was last modified (secs since epoch)
+modtime         - string representing last modified time, created using
+                  time.ctime(modified)
+template_file   - path to file
+template_encoding
+indexpage       - information dict for the index page for this section, not
+                  included in 'sections' value
+indextree       - pages that have been rendered so far (above the one
+                  currently rendered)
+thispage        - reference into indextree for this page
+sidebar         - standard function
+minibar         - standard function
+print_crumbs    - standard function
+print_details   - standard function for printing indexes
+section_contents- standard function
+Processor       - the actual processor doing the work, be careful with it!
+page_description - string
+include         - standard function for including files within templates
+globalValues    - dict, initially empty, can store stuff here from one page
+                  to the next...
+current_dir     - relative to top level directory
+source_file     - source filepath
+target_dir      - absolute path to target directory, BUT not if 'target'
+                  specifies a different directory, then use
+                  os.path.dirname(target_file).
+full_page_url   - full url, starting with '/', won't work for relative
+                  references
+target_file     - full output filepath of the page being rendered

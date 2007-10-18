@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Welcome to Pyke!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="stylesheets/rest.css" type="text/css" />
+    <link rel="stylesheet" href="stylesheets/test.css" type="text/css" />    
+</head>
+<body id="the-whole-page">
+  <table id="page-table">
+    <thead class="head">
+        <tr id="header1"><td id="header" colspan="3">
+            PyKE : Python Knowledge Engine
+        </td></tr>
+        <tr id="header2"><td id="crumb-line" colspan="3">
+          <div id="nav">
+            <ul>
+                <li>Home</li>
+
+            </ul>
+          </div>
+        </td></tr>
+    </thead>
+    <tbody id="body">
+        <tr id="body-tr">
+          <td id="left-nav">
+            <div class="nav-branch">
+<br/><strong><a class="title-nav" href="index.html">Home</a></strong>
+<br/><a class="normal-nav" href="using_pyke/index.html">Using Pyke</a>
+<br/><a class="normal-nav" href="pyke_internals/index.html">Internals</a>
+</div>
+
+          </td>
+          <td id="main-td">
+            <div id="main>
+                <a name="startcontent" id="startcontent"></a>
+                
+<h1 class="title">Welcome to Pyke!</h1>
+<h2 class="subtitle">Python Knowledge Engine</h2>
+
+<p>Pyke is a knowledge-based inference engine written in 100% python that can:
+</p>
+<ul>
+<li>Do both forward chaining (data driven) and
+backward chaining (goal directed) inferencing.
+<ul>
+<li>Pyke may be embedded into any python program.
+</li>
+</ul>
+</li>
+<li>Automatically generate python programs by assembling individual python
+functions into complete call graphs.
+<ul>
+<li>This is done through a unique design where the individual python functions are attached to backward-chaining rules.
+</li>
+<li>Unlike other approaches to code reuse (e.g. zope adapters and generic
+functions), this allows the inference engine to ensure that all of the
+function's requirements are completely satisfied, by examining the entire
+call graph down to the leaves, before <u>any</u> of the functions are executed.
+</li>
+<li>This is an optional feature.  You don't need to use it, if you just
+want the inferencing capability by itself.
+</li>
+</ul>
+</li>
+</ul>
+
+<p>The knowledge engine supports:</p>
+<ul>
+<li>Multiple <i>fact bases</i>, each with it's own list of facts.</li>
+<li>Both <i>forward-chaining</i> rules and <i>backward-chaining</i> rules.</li>
+<li>Multiple <i>rule bases</i>, each with it's own list of forward and/or backward-chaining rules.</li>
+<li>Rule base inheritance -- <i>activating</i> the derived rule base
+includes the rules from the base rule base.</li>
+</ul>
+
+<p>The automatic program generation:</p>
+<ul>
+<li>Calls the generated python programs <i>plans</i>.</li>
+<li>Plans may be run multiple times without needing to rerun the inference
+rules.
+</li>
+<li>Plans may be pickled and cached to disk to be used by other programs or
+in later runs of the same program.
+</li>
+<li>No pyke modules are required to run the plans.
+</li>
+</ul>
+
+<div class="displaybox">
+    <h3>Sub Sections</h3>
+<ul><li><a href="using_pyke/index.html">Using Pyke</a><p>Everything you need to know to use pyke!</p>
+</li>
+<li><a href="pyke_internals/index.html">Pyke Internals</a><p>This section documents pyke's internal workings for those that want
+to dabble in the pyke source code.</p>
+</li></ul>
+
+</div>
+
+
+            </div>
+          </td>
+        </tr>
+    </tbody>
+    <tfoot id="foot">
+        <tr id="foot1"><td id="final-stuff" colspan="3">
+            <div id="end">
+                <p><a href="#startcontent">Return to Top</a><br />
+                <small>Page last modified <strong>Thu Oct 18 13:11:19 2007</strong>.</small> 
+                </p>
+            </div>
+        </td></tr>
+        <tr id="foot2"><td id="copyright" colspan="3">
+            Copyright &copy; 2007 Bruce Frederiksen
+        </td></tr>
+    </tfoot>
+  </table>
+</body>
+</html>

@@ -1,0 +1,10 @@
+names must be: [a-zA-Z][a-zA-Z0-9-]*    -- hyphens; not underscores!
+
+.class
+#id
+:hover
+:active         -- between button-down and button-up
+:focus
+:before         -- to insert content before an element's content (content: xxx)
+:after          -- to insert content after an element's content (content: xxx)
+

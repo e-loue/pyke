@@ -1,0 +1,15 @@
+restindex
+    crumb: Plans
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+=================
+Overview
+=================
+------------------------------------------------------
+Plans: Automatically Generating Python Programs
+------------------------------------------------------
+

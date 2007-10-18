@@ -1,0 +1,16 @@
+Use <# ... #> for all of these!
+
+http://www.voidspace.org.uk/python/rest2web/functions.html
+
+print_details           -- prints index for all pages within a section
+section_contents        -- returns list of (url, link title, description)
+                           for an individual section
+print_crumbs            -- prints breadcrumbs
+minibar                 -- prints simple sidebar that shows links to all
+                           pages in the current directory (excluding index
+                           page)
+sidebar                 -- generator to print indexes from indextree
+include(filename)       -- filename may use all normal template values 
+formattime(t, format="%a, %d %b %Y %H:%M:%S")
+                        -- default format: 'Fri, 27 Jan 2006 09:53:52'.
+                           the time is always understood as a local time.

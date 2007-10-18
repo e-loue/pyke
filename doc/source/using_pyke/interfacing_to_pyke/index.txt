@@ -1,0 +1,15 @@
+restindex
+    crumb: Interfacing to Pyke
+    page-description:
+        How to integrate pyke into your python program.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+=====================
+Interfacing to Pyke
+=====================
+

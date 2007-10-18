@@ -1,0 +1,204 @@
+/*css file for Voidspace content pages. http://www.voidspace.org.uk
+css source based on the 2 column layout from :
+http://www.456bereastreet.com/lab/developing_with_web_standards/csslayout/2-col/
+*/
+
+@import url('pysrc.css');
+
+p, td, li, ul, ol, h1, h2, h3, h4, h5, h6  {
+    font-family: Georgia, "New Century Schoolbook", Times, serif;
+}
+
+body {
+    margin:0px;
+    padding:0;
+    background-color:#A7A09A;
+    color:#000;
+    min-width:850px;
+}
+
+#left-nav {
+    width: 90px;
+}
+
+#main { 
+    background-color:#FFFFE0;
+    padding: 10px;
+    margin: auto;
+    width: 90%;
+    font-size: 12pt;
+    height: 100%;
+}
+
+#main h2,#main h3,#main p,#main h4 {
+    padding:0 10px;
+}
+
+#main a { 
+    font-weight:bold;
+    border-bottom: 1px dotted black;
+    text-decoration: none;
+}
+
+#main h2 a {border-bottom: none;}
+#main h3 a {border-bottom: none;}
+#main h4 a {border-bottom: none;}
+
+#main a.toc-backref {border-bottom: none;}
+
+/* void1 and void2 are the text elements of the header */
+
+#header {
+    background-color: #318;
+    text-align: center;
+    padding: 10px;
+    color: silver;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size:31pt;
+}
+
+#header img {
+    display: block;
+    margin: 15px auto 10px;
+}
+
+#void1 {
+    font-size:13pt;
+    font-weight:bold;
+}
+#void2 {
+    font-size:9pt;
+    font-weight:normal;
+}
+
+a:hover {background:yellow;}
+a[name]:hover {background: none;}
+
+#nav {
+    background-color:#c99;
+    padding:3px;
+    text-align:left;
+    font-size:11pt;
+    font-weight:bold;
+}
+#nav ul {
+    margin:0;
+    padding:0
+}
+
+#nav li {
+    display:inline;
+    list-style:none;
+    margin:0;
+    padding:2px;
+}
+
+
+#header a:hover{background:none;}
+
+.title {
+    text-align: center;
+    padding: 15px;
+    max-width: 80%;
+    margin: 20px auto;
+}
+
+.title h1 {
+    font-size:30pt;
+}
+
+.title img {
+    display: block;
+    margin: 20px auto;
+}
+
+.intro {
+    border:medium outset;
+    border-color:blue;
+    margin-left:5em;
+    margin-right:5em;
+    background-color:#ddd;
+}
+
+.sitemap {
+    padding-top: 20px; 
+    text-align:center;
+}
+
+.sitemap th {
+    font-size:24pt;   
+}
+.sitemap td { 
+    font-weight:bold;
+    padding:5px;    
+}
+.sitemap table {
+    margin-left: auto; 
+    margin-right: auto; 
+}
+
+.displaybox {
+    width: 65%; 
+    margin-left: auto; 
+    margin-right: auto; 
+    border-color:#191970;
+    border-width:medium; 
+    background-color:#F5F5F5;
+    border-style:solid;
+    padding:5px;
+}
+
+.displaybox h3 {
+    font-size:24pt;
+    text-align:center;
+    font-weight:bold;
+}
+
+
+.indexblock {
+    border: thick solid;
+    border-color:blue;
+    margin:2em;
+    background-color:#edd;
+    padding: 10px;
+    -moz-border-radius: 10px;
+}
+
+.indexblock table {
+    margin: auto;
+    padding: 10px;
+}
+
+
+.end {
+    margin: auto; 20px;
+    padding: 10px;
+    text-align: center;
+}
+
+.sidie h3 {
+    margin: 10px;
+}
+
+.sidie li {
+    font-weight: bold;
+}
+
+hr {text-align: center;}
+
+.zentrum {
+    margin:auto;
+    text-align:center; 
+    width:80%;
+    padding:10px;
+}
+
+.ex {
+    background-color: #FFFFFF;
+    margin: 10px;
+    padding: 5px;
+    border: 2px;
+    border-color: #FFFF00;
+    border-style: dashed;
+    width: 65%
+}
