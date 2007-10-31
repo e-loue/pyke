@@ -33,12 +33,3 @@ distinct phases:
 - Backward-chaining rules are processed when your program asks pyke to
   prove a specific goal.
 
-
-.. raw:: html
-
-    <div class="displaybox">
-    <#
-        print_details(default_section)
-    #>
-    </div>
-

@@ -9,7 +9,7 @@ p, td, li, ul, ol, h1, h2, h3, h4, h5, h6  {
     font-family: Georgia, "New Century Schoolbook", Times, serif;
 }
 
-body {
+#the-whole-page {
     margin:0px;
     padding:0;
     background-color:#A7A09A;
@@ -17,18 +17,20 @@ body {
     min-width:850px;
 }
 
-#left-nav {
-    width: 90px;
+#main-td { 
+    background-color: white;
+    padding: 10px;
 }
 
+/*
 #main { 
-    background-color:#FFFFE0;
     padding: 10px;
     margin: auto;
     width: 90%;
     font-size: 12pt;
     height: 100%;
 }
+*/
 
 #main h2,#main h3,#main p,#main h4 {
     padding:0 10px;
@@ -48,20 +50,6 @@ body {
 
 /* void1 and void2 are the text elements of the header */
 
-#header {
-    background-color: #318;
-    text-align: center;
-    padding: 10px;
-    color: silver;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size:31pt;
-}
-
-#header img {
-    display: block;
-    margin: 15px auto 10px;
-}
-
 #void1 {
     font-size:13pt;
     font-weight:bold;
@@ -74,27 +62,6 @@ body {
 a:hover {background:yellow;}
 a[name]:hover {background: none;}
 
-#nav {
-    background-color:#c99;
-    padding:3px;
-    text-align:left;
-    font-size:11pt;
-    font-weight:bold;
-}
-#nav ul {
-    margin:0;
-    padding:0
-}
-
-#nav li {
-    display:inline;
-    list-style:none;
-    margin:0;
-    padding:2px;
-}
-
-
-#header a:hover{background:none;}
 
 .title {
     text-align: center;
@@ -152,6 +119,7 @@ a[name]:hover {background: none;}
     font-size:24pt;
     text-align:center;
     font-weight:bold;
+    margin-top: 0;
 }
 
 

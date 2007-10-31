@@ -122,12 +122,3 @@ These rules could be run as follows:
     son_of('michael', 'bruce', 'marilyn')
     son_of('bruce', 'thomas', 'norma')
 
-
-.. raw:: html
-
-    <div class="displaybox">
-    <#
-        print_details(default_section)
-    #>
-    </div>
-

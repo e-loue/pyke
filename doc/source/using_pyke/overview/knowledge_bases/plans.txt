@@ -132,11 +132,3 @@ from 'my_other_bank', 'bruce', 'checking' to 'bruce', 'savings'.
     deposit 200 to central_accts ach_send_acct
     send 200 to bank my_other_bank acct bruce savings
 
-.. raw:: html
-
-    <div class="displaybox">
-    <#
-        print_details(default_section)
-    #>
-    </div>
-

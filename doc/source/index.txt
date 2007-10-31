@@ -1,6 +1,6 @@
 restindex
     crumb: Home
-    format: html
+    format: rest
     encoding: utf8
     output-encoding: utf8
     section-pages: , using_pyke/index, pyke_internals/index
@@ -10,65 +10,51 @@ restindex
     include: No
 /restindex
 
-<h1 class="title">Welcome to Pyke!</h1>
-<h2 class="subtitle">Python Knowledge Engine</h2>
+=========================
+Welcome to Pyke!
+=========================
+-------------------------
+Python Knowledge Engine
+-------------------------
 
-<p>Pyke is a knowledge-based inference engine written in 100% python that can:
-</p>
-<ul>
-<li>Do both forward chaining (data driven) and
-backward chaining (goal directed) inferencing.
-<ul>
-<li>Pyke may be embedded into any python program.
-</li>
-</ul>
-</li>
-<li>Automatically generate python programs by assembling individual python
-functions into complete call graphs.
-<ul>
-<li>This is done through a unique design where the individual python functions are attached to backward-chaining rules.
-</li>
-<li>Unlike other approaches to code reuse (e.g. zope adapters and generic
-functions), this allows the inference engine to ensure that all of the
-function's requirements are completely satisfied, by examining the entire
-call graph down to the leaves, before <u>any</u> of the functions are executed.
-</li>
-<li>This is an optional feature.  You don't need to use it, if you just
-want the inferencing capability by itself.
-</li>
-</ul>
-</li>
-</ul>
+Pyke is a knowledge-based inference engine written in 100% python that can:
 
-<p>The knowledge engine supports:</p>
-<ul>
-<li>Multiple <i>fact bases</i>, each with it's own list of facts.</li>
-<li>Both <i>forward-chaining</i> rules and <i>backward-chaining</i> rules.</li>
-<li>Multiple <i>rule bases</i>, each with it's own list of forward and/or backward-chaining rules.</li>
-<li>Rule base inheritance -- <i>activating</i> the derived rule base 
-includes the rules from the base rule base.</li>
-<li>The inference rules are compiled into python functions, allowing 
-python code snippets to be used within the rules.
-This greatly enhances the expressiveness of the rules.
-</li>
-</ul>
+- Do both forward chaining (data driven) and
+  backward chaining (goal directed) inferencing.
 
-<p>The automatic program generation:</p>
-<ul>
-<li>Calls the generated python programs <i>plans</i>.</li>
-<li>Plans may be run multiple times without needing to rerun the inference
-rules.
-</li>
-<li>Plans may be pickled and cached to disk to be used by other programs or
-in later runs of the same program.
-</li>
-<li>No pyke modules are required to run the plans.
-</li>
-</ul>
+  - Pyke may be embedded into any python program.
 
-<div class="displaybox">
-    <#
-        print_details(default_section)
-    #>
-</div>
+- Automatically generate python programs by assembling individual python
+  functions into complete call graphs.
+
+  - This is done through a unique design where the individual python
+    functions are attached to backward-chaining rules.
+  - Unlike other approaches to code reuse (e.g. zope adapters and generic
+    functions), this allows the inference engine to ensure that all of the
+    function's requirements are completely satisfied, by examining the entire
+    call graph down to the leaves, before **any** of the functions are
+    executed.
+  - This is an optional feature.  You don't need to use it, if you just
+    want the inferencing capability by itself.
+
+The knowledge engine supports:
+
+- Multiple *fact bases*, each with it's own list of facts.
+- Both *forward-chaining* rules and *backward-chaining* rules.
+- Multiple *rule bases*, each with it's own list of forward-chaining
+  and/or backward-chaining rules.
+- Rule base inheritance -- *activating* the derived rule base 
+  includes the rules from the base rule base.
+- The inference rules are compiled into python functions, allowing 
+  python code snippets to be used within the rules.
+  This greatly enhances the expressiveness of the rules.
+
+The automatic program generation:
+
+- Calls the generated python programs *plans*.
+- Plans may be run multiple times without needing to rerun the inference
+  rules.
+- Plans may be pickled and cached to disk to be used by other programs or
+  in later runs of the same program.
+- No pyke modules are required to run the plans.
 

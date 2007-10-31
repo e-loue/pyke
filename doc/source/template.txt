@@ -11,28 +11,37 @@
         <tr id="header1"><th id="header" colspan="3">
             PyKE : Python Knowledge Engine
         </th></tr>
-        <tr id="header2"><th id="crumb-line" colspan="3">
-          <div id="nav">
-            <ul>
-                <# print_crumbs(breadcrumbs) #>
-            </ul>
-          </div>
-        </th></tr>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <# print_crumbs(breadcrumbs) #>
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
     </thead>
     <tbody id="body">
         <tr id="body-tr">
           <td id="left-nav">
             <div id="left-nav-div">
               <#
-                for page in sidebar(indextree, div='<div class="nav-branch">'):
+                for page in sidebar(indextree, div=''):
                     val = page['crumb']
                     link = page['target']
                     if page['title']:
-                        print '<br/><strong><a class="title-nav" href="%s">%s</a></strong>' % \
+                        print '<div class="title-nav"><a href="%s">%s</a></div><div class="nav-branch">' % \
                               (link, val)
                     else:
-                        print '<br/><a class="normal-nav" href="%s">%s</a>' % (link, val)
+                        print '<div class="normal-nav"><a href="%s">%s</a></div>' % (link, val)
               #>
+            </div>
+            <div id="icons">
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
             </div>
           </td>
           <td id="main-td">
@@ -43,24 +52,31 @@
           </td>
           <td id="right-nav">
             <div id="right-nav-div">
-                <br />
-                Hosted by: <br />
-                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+                <#
+                    print_details(default_section)
+                #>
             </div>
           </td>
         </tr>
     </tbody>
     <tfoot id="foot">
-        <tr id="foot1"><td id="final-stuff" colspan="3">
+        <tr id="foot1">
+          <td id="final-left"></td>
+          <td id="final-stuff">
             <div id="end">
-                <p><a href="#startcontent">Return to Top</a><br />
-                <small>Page last modified <strong><% modtime %></strong>.</small> 
-                </p>
+                <div id="return-to-top"><a href="#startcontent">Return to Top</a></div>
+                <div id="last-modified"><small>Page last modified <% modtime %>.</small></div>
             </div>
-        </td></tr>
-        <tr id="foot2"><td id="copyright" colspan="3">
+          </td>
+          <td id="final-right"></td>
+        </tr>
+        <tr id="foot2">
+          <td id="final-left"></td>
+          <td id="copyright">
             Copyright &copy; 2007 Bruce Frederiksen
-        </td></tr>
+          </td>
+          <td id="final-right"></td>
+        </tr>
     </tfoot>
   </table>
 </body>

@@ -134,11 +134,3 @@ and backwards up and down the list of subgoals, depending on whether each
 subgoal succeeds or fails.  The process of backing up in the ``when``
 clause to try alternate subproofs is called *backtracking*.
 
-.. raw:: html
-
-    <div class="displaybox">
-    <#
-        print_details(default_section)
-    #>
-    </div>
-

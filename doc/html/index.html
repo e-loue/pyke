@@ -11,120 +11,119 @@
         <tr id="header1"><th id="header" colspan="3">
             PyKE : Python Knowledge Engine
         </th></tr>
-        <tr id="header2"><th id="crumb-line" colspan="3">
-          <div id="nav">
-            <ul>
-                <li>Home</li>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <li>Home</li>
 
-            </ul>
-          </div>
-        </th></tr>
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
     </thead>
     <tbody id="body">
         <tr id="body-tr">
           <td id="left-nav">
             <div id="left-nav-div">
-              <div class="nav-branch">
-<br/><strong><a class="title-nav" href="index.html">Home</a></strong>
-<br/><a class="normal-nav" href="using_pyke/index.html">Using Pyke</a>
-<br/><a class="normal-nav" href="pyke_internals/index.html">Internals</a>
+              
+<div class="title-nav"><a href="index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="using_pyke/index.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="pyke_internals/index.html">Internals</a></div>
 </div>
 
+            </div>
+            <div id="icons">
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
             </div>
           </td>
           <td id="main-td">
             <div id="main>
                 <a name="startcontent" id="startcontent"></a>
-                
+                <div class="document" id="welcome-to-pyke">
 <h1 class="title">Welcome to Pyke!</h1>
-<h2 class="subtitle">Python Knowledge Engine</h2>
-
-<p>Pyke is a knowledge-based inference engine written in 100% python that can:
-</p>
-<ul>
+<h2 class="subtitle" id="python-knowledge-engine">Python Knowledge Engine</h2>
+<p>Pyke is a knowledge-based inference engine written in 100% python that can:</p>
+<ul class="simple">
 <li>Do both forward chaining (data driven) and
-backward chaining (goal directed) inferencing.
-<ul>
-<li>Pyke may be embedded into any python program.
-</li>
+backward chaining (goal directed) inferencing.<ul>
+<li>Pyke may be embedded into any python program.</li>
 </ul>
 </li>
 <li>Automatically generate python programs by assembling individual python
-functions into complete call graphs.
-<ul>
-<li>This is done through a unique design where the individual python functions are attached to backward-chaining rules.
-</li>
+functions into complete call graphs.<ul>
+<li>This is done through a unique design where the individual python
+functions are attached to backward-chaining rules.</li>
 <li>Unlike other approaches to code reuse (e.g. zope adapters and generic
 functions), this allows the inference engine to ensure that all of the
 function's requirements are completely satisfied, by examining the entire
-call graph down to the leaves, before <u>any</u> of the functions are executed.
-</li>
+call graph down to the leaves, before <strong>any</strong> of the functions are
+executed.</li>
 <li>This is an optional feature.  You don't need to use it, if you just
-want the inferencing capability by itself.
-</li>
+want the inferencing capability by itself.</li>
 </ul>
 </li>
 </ul>
-
 <p>The knowledge engine supports:</p>
-<ul>
-<li>Multiple <i>fact bases</i>, each with it's own list of facts.</li>
-<li>Both <i>forward-chaining</i> rules and <i>backward-chaining</i> rules.</li>
-<li>Multiple <i>rule bases</i>, each with it's own list of forward and/or backward-chaining rules.</li>
-<li>Rule base inheritance -- <i>activating</i> the derived rule base
+<ul class="simple">
+<li>Multiple <em>fact bases</em>, each with it's own list of facts.</li>
+<li>Both <em>forward-chaining</em> rules and <em>backward-chaining</em> rules.</li>
+<li>Multiple <em>rule bases</em>, each with it's own list of forward-chaining
+and/or backward-chaining rules.</li>
+<li>Rule base inheritance -- <em>activating</em> the derived rule base
 includes the rules from the base rule base.</li>
 <li>The inference rules are compiled into python functions, allowing
 python code snippets to be used within the rules.
-This greatly enhances the expressiveness of the rules.
-</li>
+This greatly enhances the expressiveness of the rules.</li>
 </ul>
-
 <p>The automatic program generation:</p>
-<ul>
-<li>Calls the generated python programs <i>plans</i>.</li>
+<ul class="simple">
+<li>Calls the generated python programs <em>plans</em>.</li>
 <li>Plans may be run multiple times without needing to rerun the inference
-rules.
-</li>
+rules.</li>
 <li>Plans may be pickled and cached to disk to be used by other programs or
-in later runs of the same program.
-</li>
-<li>No pyke modules are required to run the plans.
-</li>
+in later runs of the same program.</li>
+<li>No pyke modules are required to run the plans.</li>
 </ul>
+</div>
 
-<div class="displaybox">
-    <h3>Sub Sections</h3>
+            </div>
+          </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <h3>Sub Sections</h3>
 <ul><li><a href="using_pyke/index.html">Using Pyke</a><p>Everything you need to know to use pyke!</p>
 </li>
 <li><a href="pyke_internals/index.html">Pyke Internals</a><p>This section documents pyke's internal workings for those that want
 to dabble in the pyke source code.</p>
 </li></ul>
 
-</div>
-
-
-            </div>
-          </td>
-          <td id="right-nav">
-            <div id="right-nav-div">
-                <br />
-                Hosted by: <br />
-                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
             </div>
           </td>
         </tr>
     </tbody>
     <tfoot id="foot">
-        <tr id="foot1"><td id="final-stuff" colspan="3">
+        <tr id="foot1">
+          <td id="final-left"></td>
+          <td id="final-stuff">
             <div id="end">
-                <p><a href="#startcontent">Return to Top</a><br />
-                <small>Page last modified <strong>Thu Oct 18 15:28:42 2007</strong>.</small> 
-                </p>
+                <div id="return-to-top"><a href="#startcontent">Return to Top</a></div>
+                <div id="last-modified"><small>Page last modified Wed Oct 31 10:09:14 2007.</small></div>
             </div>
-        </td></tr>
-        <tr id="foot2"><td id="copyright" colspan="3">
+          </td>
+          <td id="final-right"></td>
+        </tr>
+        <tr id="foot2">
+          <td id="final-left"></td>
+          <td id="copyright">
             Copyright &copy; 2007 Bruce Frederiksen
-        </td></tr>
+          </td>
+          <td id="final-right"></td>
+        </tr>
     </tfoot>
   </table>
 </body>

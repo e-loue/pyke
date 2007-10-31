@@ -40,11 +40,3 @@ called *fact bases*.  Those that contain rules are called *rule bases*.
 All knowledge bases share the same name space; so that no two of them,
 regardless of their type, may have the same name.
 
-.. raw:: html
-
-    <div class="displaybox">
-    <#
-        print_details(default_section)
-    #>
-    </div>
-

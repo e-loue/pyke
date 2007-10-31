@@ -38,11 +38,3 @@ The ``$_`` acts
 like a "don't care" variable.  If there are multiple ``$_`` variables in the
 rule, they may each match different data values.
 
-.. raw:: html
-
-    <div class="displaybox">
-    <#
-        print_details(default_section)
-    #>
-    </div>
-
