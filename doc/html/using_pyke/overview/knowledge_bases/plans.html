@@ -64,90 +64,131 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="plans-and-automatic-program-generation">
 <h1 class="title">Plans and Automatic Program Generation</h1>
-<p>Backward chaining rules are processed when your program asks pyke to prove
-a specific <em>goal</em>.  Pyke will only use activated rule bases to do the
-proof.</p>
-<p>Consider this example:</p>
-<pre class="literal-block">
- 1  son_father:
- 2      use child_parent($son, $father, (), son, father)
- 3      when
- 4          family.son_of($son, $father, $_)
-
- 5  son_mother:
- 6      use child_parent($son, $mother, (), son, mother)
- 7      when
- 8          family.son_of($son, $_, $mother)
-
- 9  daughter_father:
-10      use child_parent($daughter, $father, (), daughter, father)
-11      when
-12          family.daughter_of($daughter, $father, $_)
-
-13  daughter_mother:
-14      use child_parent($daughter, $mother, (), daughter, mother)
-15      when
-16          family.daughter_of($daughter, $_, $mother)
-
-17  grand_parent_and_child:
-18      use child_parent($grand_child, $grand_parent, (grand),
-19                       $grand_child_type, $grand_parent_type)
-20      when
-21          child_parent($grand_child, $parent, (), $grand_child_type, $_)
-22          child_parent($parent, $grand_parent, (), $_, $grand_parent_type)
-
-23  great_grand_parent_and_child:
-24      use child_parent($gg_child, $gg_parent, (great, $prefix1, *$rest_prefixes),
-25                       $gg_child_type, $gg_parent_type)
-26      when
-27          child_parent($gg_child, $parent, (), $gg_child_type, $_)
-28          child_parent($parent, $gg_parent, ($prefix1, *$rest_prefixes),
-29                       $_, $gg_parent_type)
-</pre>
-<p>These rules draw the same conclusions as the <em>forward-chaining</em> example;
-but you'll notice three differences:</p>
-<ol class="arabic">
-<li><p class="first">The rule's <strong>if</strong> and <strong>then</strong> parts are reversed.</p>
-</li>
-<li><p class="first">The rules use different keywords:
-<tt class="docutils literal"><span class="pre">use</span></tt> for the <strong>then</strong> clause and <tt class="docutils literal"><span class="pre">when</span></tt> for the <strong>if</strong> clause.</p>
-</li>
-<li><p class="first">The facts established by backward-chaining do not have a knowledge
-base name prefix.</p>
-<blockquote>
-<p>In this case, the knowledge base name defaults to
-the rule base category of this rule base (it's root rule base name).</p>
-</blockquote>
-</li>
+<p>Once you understand how backward-chaining works, it is relatively easy to
+do automatic program generation.</p>
+<p>The way this is done is by attaching python functions to the
+backward-chaining rules.  These functions are written at the end of each
+rule in the .krb file.  They don't affect how the rules run, but are
+gathered up to form a call graph that is returned along with the pattern
+variable bindings that prove the top-level goal.</p>
+<p>Consider a small rule base to construct programs to transfer money between
+bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two forms:</p>
+<ol class="arabic simple">
+<li>(name, account_type)
+- This is a local account with this bank.
+- Example: ('bruce', 'checking').</li>
+<li>(bank, name, account_type)
+- This is a foreign account with another bank.
+- Example: ('my_other_bank', 'bruce', 'checking').</li>
 </ol>
-<p>These rules are not used until you ask pyke to prove a goal.</p>
-<p>The easiest way
-to do this is with <tt class="docutils literal"><span class="pre">pyke.prove_1</span></tt> or <tt class="docutils literal"><span class="pre">pyke.prove_n</span></tt>.  <tt class="docutils literal"><span class="pre">prove_1</span></tt> only
-returns the first proof found and then stops (or raises pyke.CanNotProve).
-<tt class="docutils literal"><span class="pre">prove_n</span></tt> is a generator that generates all possible proofs (which, in
-some cases, might be infinite).  In both cases, you pass a tuple of
-arguments and the number of variable arguments as the last two parameters.
-The total number of arguments for the goal is the sum of the length of the
-arguments you pass plus the number of variable arguments that you pass.
-The functions return the variable bindings for the number of variable
-arguments you indicated as a tuple, along with the plan (to be discussed
-later).</p>
+<p>At least one of the bank accounts must be a local account.</p>
+<p>Here's the example rule base:</p>
+<pre class="literal-block">
+ 1  transfer1:
+ 2      use transfer($from_acct, $to_acct) taking (amount)
+ 3      when
+ 4          withdraw($from_acct)
+ 5              $$(amount)
+ 6          deposit($to_acct)
+ 7              $$(amount)
+
+ 8  transfer2:
+ 9      use transfer($from_acct, $to_acct) taking (amount)
+10      when
+11          transfer_ach($from_acct, $to_acct)
+12              $$(amount)
+
+13  withdraw:
+14      use withdraw(($who, $acct_type)) taking (amount)
+15      with
+16          print &quot;withdraw&quot;, amount, &quot;from&quot;, $who, $acct_type
+
+17  deposit:
+18      use deposit(($who, $acct_type)) taking (amount)
+19      with
+20          print &quot;deposit&quot;, amount, &quot;to&quot;, $who, $acct_type
+
+21  transfer_ach1:
+22      use transfer_ach($from_acct, ($bank, $who, $acct_type)) taking (amount)
+23      when
+24          withdraw($from_acct)
+25              $$(amount)
+26          deposit((central_accts, ach_send_acct))
+27              $$(amount)
+28      with
+29          print &quot;send&quot;, amount, &quot;to bank&quot;, $bank, &quot;acct&quot;, $who, $acct_type
+
+30  transfer_ach2:
+31      use transfer_ach($from_acct, $to_acct) taking (amount)
+32      when
+33          get_ach($from_acct)
+34              $$(amount)
+35          withdraw((central_accts, ach_recv_acct))
+36              $$(amount)
+37          deposit($to_acct)
+38              $$(amount)
+
+39  get_ach:
+40      use get_ach(($bank, $who, $acct_type)) taking (amount)
+41      with
+42          print &quot;get&quot;, amount, &quot;from bank&quot;, $bank, &quot;acct&quot;, $who, $acct_type
+</pre>
+<p>The plan is created as a byproduct of proving the goal:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; import pyke
 &gt;&gt;&gt; pyke.load('examples')
-&gt;&gt;&gt; pyke.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
-&gt;&gt;&gt; pyke.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
-&gt;&gt;&gt; pyke.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
-&gt;&gt;&gt; pyke.activate('bc_example')
-&gt;&gt;&gt; for vars, no_plan in pyke.prove_n('bc_example', 'child_parent', ('michael',), 4):
-...     print vars
-('bruce', (), 'son', 'father')
-('marilyn', (), 'son', 'mother')
-('thomas', ('grand',), 'son', 'father')
-('norma', ('grand',), 'son', 'mother')
-('allen', ('great', 'grand'), 'son', 'father')
-('ismay', ('great', 'grand'), 'son', 'mother')
+&gt;&gt;&gt; pyke.activate('plan_example')
+&gt;&gt;&gt; no_vars, plan1 = pyke.prove_1('plan_example', 'transfer',
+...                               (('bruce', 'checking'),
+...                                ('bruce', 'savings')),
+...                               0)
+</pre>
+</blockquote>
+<p><tt class="docutils literal"><span class="pre">plan1</span></tt> is now a program to transfer X amount
+from 'bruce', 'checking' to 'bruce', 'savings'.</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; plan1(100)
+withdraw 100 from bruce checking
+deposit 100 to bruce savings
+</pre>
+</blockquote>
+<p>The program may be used multiple times:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; plan1(50)
+withdraw 50 from bruce checking
+deposit 50 to bruce savings
+</pre>
+</blockquote>
+<p>Let's create another program:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; no_vars, plan2 = pyke.prove_1('plan_example', 'transfer',
+...                               (('my_other_bank', 'bruce', 'checking'),
+...                                ('bruce', 'savings')),
+...                               0)
+</pre>
+</blockquote>
+<p><tt class="docutils literal"><span class="pre">plan2</span></tt> is now a program to transfer X amount
+from 'my_other_bank', 'bruce', 'checking' to 'bruce', 'savings'.</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; plan2(150)
+get 150 from bank my_other_bank acct bruce checking
+withdraw 150 from central_accts ach_recv_acct
+deposit 150 to bruce savings
+</pre>
+<pre class="doctest-block">
+&gt;&gt;&gt; no_vars, plan3 = pyke.prove_1('plan_example', 'transfer',
+...                               (('bruce', 'checking'),
+...                                ('my_other_bank', 'bruce', 'savings')),
+...                               0)
+&gt;&gt;&gt; plan3(200)
+withdraw 200 from bruce checking
+deposit 200 to central_accts ach_send_acct
+send 200 to bank my_other_bank acct bruce savings
 </pre>
 </blockquote>
 <div class="displaybox">
@@ -183,7 +224,7 @@ are of compiled and loaded into your python program.</p>
         <tr id="foot1"><td id="final-stuff" colspan="3">
             <div id="end">
                 <p><a href="#startcontent">Return to Top</a><br />
-                <small>Page last modified <strong>Tue Oct 30 19:23:47 2007</strong>.</small> 
+                <small>Page last modified <strong>Tue Oct 30 23:10:18 2007</strong>.</small> 
                 </p>
             </div>
         </td></tr>

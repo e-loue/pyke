@@ -34,7 +34,7 @@ bank accounts.  Each *from_acct* and *to_acct* takes one of two forms:
 
 At least one of the bank accounts must be a local account.
 
-Here's the example rule base:
+Here's the example rule base::
 
      1  transfer1:
      2      use transfer($from_acct, $to_acct) taking (amount)
