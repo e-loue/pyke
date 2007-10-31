@@ -4,6 +4,7 @@ restindex
         Knowledge is made up of both *facts* and *rules*.  These are gathered
         into named repositories called *knowledge bases*.
     /description
+    section-pages: , fact_bases, rule_bases
     format: rest
     encoding: utf8
     output-encoding: utf8

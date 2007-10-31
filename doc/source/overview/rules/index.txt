@@ -1,8 +1,9 @@
 restindex
     crumb: Rules
     page-description:
-        Explanation of rules.
+        Explanation of rules, forward-chaining and backward-chaining.
     /description
+    section-pages: , forward_chaining, backward_chaining
     format: rest
     encoding: utf8
     output-encoding: utf8
