@@ -4,7 +4,7 @@ restindex
         So what is all this knowledge-base, inferencing and automatic program
         generation stuff anyway?
     /description
-    section-pages: , patterns/index, knowledge_bases/index
+    section-pages: , knowledge_bases/index
     format: rest
     encoding: utf8
     output-encoding: utf8
