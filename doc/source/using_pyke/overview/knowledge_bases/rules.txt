@@ -1,0 +1,44 @@
+restindex
+    crumb: Rules
+    page-description:
+        Explanation of rules.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+=============================================
+Rules
+=============================================
+
+Rules have two parts to them: an **if** part (the *premises*),
+and a **then** part (the *conclusions*).
+
+Each of these **if** and **then** parts contain one or more facts represented
+by *patterns*.
+Logically, the rule says that if **all** of the premises in the **if** part of
+the rule are true, then each of the conclusions in the **then** part of the
+rule must also be true.
+
+Rules are specified individually within a rule base.  They are not nested
+or explicitly linked to each other.  So the question is how does pyke combine
+these rules in order to accomplish some larger task?  The answer depends on
+whether the rule is a *forward-chaining* or *backward-chaining* rule.
+Pyke processes forward-chaining rules and backward-chaining rules in two
+distinct phases:
+
+- All forward-chaining rules are processed when a rule base is *activated*.
+- Backward-chaining rules are processed when your program asks pyke to
+  prove a specific goal.
+
+
+.. raw:: html
+
+    <div class="displaybox">
+    <#
+        print_details(default_section)
+    #>
+    </div>
+

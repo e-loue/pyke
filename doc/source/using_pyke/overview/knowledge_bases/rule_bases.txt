@@ -1,0 +1,51 @@
+restindex
+    crumb: Rule Bases
+    page-description:
+        Explanation of rule bases, overview of .krb files and how these files
+        are of compiled and loaded into your python program.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+=============================================
+Rule Bases
+=============================================
+
+Rule bases are collections of rules.  A single rule base may contain both
+forward-chaining and backward-chaining rules.
+
+Rule bases are created by writing a *knowledge rule base* (or .krb) file
+with your favorite text editor.  Place all of your .krb files into a
+directory structure.  Then ``load`` this directory in your python program.
+
+The ``load`` will walk the directory structure recursively and
+automatically compile any .krb files that have changed into python source
+files.  These python modules are then automatically imported to define the
+rule base.
+
+The name of each rule base is the filename of the .krb file (with the .krb
+suffix removed).  This must be a legal python identifier.
+
+Inheritance, Rule Base Categories and Rule Base Activation
+============================================================
+
+Loading the rule bases only makes the rule bases available for use.  It
+does not automatically activate any rule bases.  This must be done by your
+python program.  Your program may decide to activate different rule bases
+in different situations.
+
+Rule bases use single inheritance to inherit the rules from another rule
+base.  This can go on to any depth.
+
+Each root rule base implicitly defines a *rule base category*.
+Each rule base category may only have one active rule base.  Once one rule
+base has been activated in a rule base category, only children of the rule
+base may be activated from that point on.  Because these children inherit
+the rules of the currently active rule base; activating rule bases 
+only adds new rules, and doesn't take any away.
+
+Forward-chaining rules may be used to activate more specific rule bases,
+based on their inferencing.

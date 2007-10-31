@@ -39,7 +39,12 @@ get_rb = rule_base.get
 init = rule_base.init
 reset = rule_base.reset
 
-def load(paths, load_fc = True, load_bc = True):
+_Load_done = False
+
+def load(paths = ('.',), load_fc = True, load_bc = True):
+    global _Load_done
+    assert not _Load_done, "pyke.load may only be called once"
+    _Load_done = True
     if isinstance(paths, types.StringTypes): paths = (paths,)
     compile_list = _get_compile_list(paths)
     if compile_list:
@@ -110,7 +115,7 @@ def _import(modulepath):
     '''
     name = os.path.basename(modulepath)
     path = os.path.dirname(modulepath)
-    print "modulepath", modulepath, "name", name, "path", path
+    #print "modulepath", modulepath, "name", name, "path", path
     file, pathname, description = imp.find_module(name, [path])
     try:
         imp.load_module(name, file, pathname, description)

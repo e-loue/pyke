@@ -1,0 +1,38 @@
+fail (vs. special.claim_goal())
+special.claim_goal()
+knowledge bases
+fact bases
+rule bases
+special
+facts immutable
+fact arguments immutable
+fact arguments: string, number, None, True/False, tuple
+identifier in fact arguments or patterns same as string: quotes not required
+facts stored in fact bases
+fact bases have no inheritance
+rule bases have single inheritance
+rule base inheritance can exclude specific backward-chaining goal names
+krb lexical same as python
+krb keywords: as assert bc_extras check extending False fc_extras foreach in None plan_extras python step taking True use when with without
+fact bases created and populated directly by user python code and by forward-chaining rules
+rule bases created through krb files which are automatically compiled into python modules and imported
+fact bases have universal facts and case_specific facts
+universal facts are not deleted when pyke is reset
+case_specific facts are deleted when pyke is reset
+fact bases are always active
+rule bases must be explicitly activated by user python code and can also be activated by forward-chaining rules
+forward-chaining rules are run when the rule base is activated
+when pyke is reset, all rule bases are deactivated (but not deleted)
+each root rule base represents a different rule base category
+all derived rule bases are in the same rule base category as their parent
+only one rule base in each rule base category may be active at one time
+once a rule base has been activated in a given rule base category, further activatations in that category are restricted to its (direct or indirect) children
+forward-chaining rules are automatically fired for each combination of matched facts in the 'foreach' clause
+if one forward-chaining rule asserts a fact that matches one of the patterns in another forward-chaining rule's foreach clause, the second forward-chaining rule may be fired again for the new fact; even if it has already been examined by the inference engine (thus, forward-chaining rules may link in a "forward" direction ffrom one rule's 'assert' clause to another rule's 'foreach' clause)
+forward-chaining stops when no more forward-chaining rules can be fired
+backward-chaining rules may not assert new facts (which might then fire old forward-chaining rules)
+backward-chaining rules are only run to prove goals requested by the user program
+four steps for user programs: add_case_specific_fact, activate rule base(s), prove goal, run plan
+pyke should be reset between cases
+initializing pyke: load, add_universal_fact
+special.claim_goal()

@@ -1,9 +1,10 @@
 restindex
     crumb: Overview
     page-description:
-        So what is all this knowledge-base, inference and program
+        So what is all this knowledge-base, inferencing and automatic program
         generation stuff anyway?
     /description
+    section-pages: , patterns/index, knowledge_bases/index, inferencing/index, plans/index
     format: rest
     encoding: utf8
     output-encoding: utf8
@@ -13,4 +14,79 @@ restindex
 ==================
 Overview
 ==================
+
+Pyke is an inference engine that applies *rules* to *facts* to establish
+additional facts (through forward-chaining rules), and/or to prove *goals*
+and optionally assemble python functions
+into customized call graphs, called *plans* (through backward-chaining rules).
+
+Pyke may then be reset, deleting the last set of facts, so that the cycle
+may be repeated using the same set of rules.
+
+The plan capability allow the postponement of code execution until the
+top-level goal has been completely proven.  This shields the code from
+blind alleys and backtracking within the rules.
+
+Once a plan has been created, it may be executed multiple times with different
+arguments.  It may also be pickled,
+and later run again without requiring any pyke modules.
+
+Rules
+=============
+
+Rules have two parts to them: an *if* part, and a *then* part.
+
+Each of these *if* and *then* parts contain one or more facts represented
+by *patterns*.
+Logically, the rule says that if **all** of the facts in the *if* part of
+the rule are true, then each of the facts in the *then* part of the rule
+must also be true.
+
+Patterns
+----------------
+
+A *pattern* serves as a template for a data item, such as a fact argument.
+This template may be matched to a data item or to another pattern.  The match
+may either succeed or fail.  If it succeeds, pattern variables within the
+pattern are bound to show what the variable matched.
+
+The template may also be used to generate a data item.  In this case, the
+value bound to pattern variables is substituted in the pattern to form a
+data item.
+
+The template is formed by using either data items or pattern variables.
+In addition, a pattern variable may be used at the end of tuple with a
+preceeding '\*' to match the rest of the tuple, for example,
+(1, $var1, \*$var2).
+
+Pattern Variables
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pattern variables are identifiers preceeded by a '$', such as $a or
+$filename.  It is important to note that the same pattern variable must
+always match the same data value within each rule.  For example, if $a
+matches 24 in one place in the rule, it must also match 24 everywhere else
+it is used within the rule.
+
+The special variable, $_, is called the *anonymous* variable.  The $_ acts
+like a "don't care" variable.  If there are multiple $_ variables in the
+rule, they may each match different data values.
+
+Forward-chaining
+--------------------
+
+Backward-chaining
+--------------------
+
+
+Knowledge
+==================
+
+.. raw:: html
+
+    <div class="displaybox">
+    <#
+        print_details(default_section)
+    #>
+    </div>
 

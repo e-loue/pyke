@@ -75,7 +75,8 @@ class knowledge_base(object):
 	if entity is None: return ()
 	return entity.prove(bindings, pat_context, patterns)
     def add_fc_rule_ref(self, entity_name, fc_rule, foreach_index):
-	self.entity_lists[entity_name].add_fc_rule_ref(fc_rule, foreach_index)
+        self.get_entity_list(entity_name) \
+            .add_fc_rule_ref(fc_rule, foreach_index)
 
 class knowledge_entity_list(object):
     ''' This object keeps track of all of the knowledge entities sharing the

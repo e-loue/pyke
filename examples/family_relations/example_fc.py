@@ -186,3 +186,4 @@ fc_rule.fc_rule('facts_for_bc_rules', This_rule_base, facts_for_bc_rules,
    pattern.pattern_literal('nephew'),
    pattern.pattern_literal('daughter'),
    pattern.pattern_literal('niece'),))
+

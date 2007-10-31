@@ -1,0 +1,75 @@
+/* css file for pyke content pages. http://pyke.sourceforge.net.
+*/
+
+/***********************************
+ 
+ Ids used:
+
+ #startcontent          -- <a name=> tag, has no contents
+ #the-whole-page        -- <body>
+ #end                   -- <div>
+ #main                  -- <div>
+ #nav                   -- <div>
+ #page-table            -- <table>
+ #body                  -- <tbody>
+ #left-nav              -- <td>
+ #left-nav-div          -- <div>
+ #sf-logo               -- <div>
+ #main-td               -- <td>
+ #foot                  -- <tfoot>
+ #body-tr               -- <tr>
+ #foot1                 -- <tr>
+ #final-stuff           -- <td>
+ #foot2                 -- <tr>
+ #copyright             -- <td>
+ #header1               -- <tr>
+ #header                -- <td>
+ #header2               -- <tr>
+ #crumb-line            -- <td>
+
+ ***********************************/
+
+/***********************************
+ 
+ Classes used:
+
+ .normal-nav             -- <a> in left nav
+ .title-nav              -- <a> in left nav
+
+ -- these may be combined:
+ .first                  -- <ul> tag, <dl> with docutils class, <p> in <li>
+ .last                   -- <ul> tag
+ .simple                 -- <ul> tag
+
+ .docutils               -- <dl> with first class
+
+ .displaybox             -- <div>
+ .document               -- <div>
+ .nav-branch             -- <div>
+ .section                -- <div>
+ .title                  -- <h1>
+ .subtitle               -- <h2>
+ .head                   -- <thead>
+
+ ***********************************/
+
+@import url(rest.css);
+@import url(test.css);
+
+#left-nav, #right-nav {
+    width: 200px;
+    vertical-align: top;
+}
+
+#left-nav-div, #right-nav-div {
+    margin-top: 90px;
+}
+
+#right-nav-div {
+    align: middle;
+}
+
+pre.literal-block, pre.doctest-block {
+    margin-left: 5%;
+    margin-right: 10%;
+}

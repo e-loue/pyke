@@ -3,3 +3,4 @@ This is 100% python, so it should run on anything that python runs on.
 Needs:
     python 2.5 (http://www.python.org)
     ply 2.3 (http://www.dabeaz.com/ply/)
+    rest2web (http://www.voidspace.org.uk/python/rest2web/index.html)

@@ -52,6 +52,7 @@
 
 from __future__ import with_statement, absolute_import, division
 from pyke import contexts, knowledge_base
+import itertools
 
 class rule(object):
     ''' Common to both fc_rules and bc_rules. '''

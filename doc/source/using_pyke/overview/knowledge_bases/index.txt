@@ -1,5 +1,9 @@
 restindex
     crumb: Knowledge Bases
+    page-description:
+        Knowledge is made up of both *facts* and *rules*.  These are gathered
+        into named repositories called *knowledge bases*.
+    /description
     format: rest
     encoding: utf8
     output-encoding: utf8
@@ -7,9 +11,40 @@ restindex
 /restindex
 
 ====================
-Overview
-====================
---------------------
 Knowledge Bases
---------------------
+====================
+
+Knowledge is made up of both *facts* and *rules*.  These are organized
+into named repositories called *knowledge bases*.  A knowledge base is like
+a directory for files on disk, except that knowledge bases may not be
+nested.  Therefore, facts and goals always have a two-level name.
+
+Here are some examples of facts you might see in a web server application::
+
+    header.cookie('session=123456789;remember=the_alamo')
+    cookie.session(123456789)
+    cookie.remember(the_alamo)
+    header.accept_encoding(gzip)
+    header.accept_encoding(deflate)
+    request.path('/my/site.html')
+    request.path_segment(0, my)
+    request.path_segment(1, 'site.html')
+    request.path_segment(-2, my)
+    request.path_segment(-1, 'site.html')
+
+Note that three different knowledge bases are shown here:
+``header``, ``cookie``, and ``request``; each with multiple facts.
+
+There are different types of knowledge bases.  Those that contain facts are
+called *fact bases*.  Those that contain rules are called *rule bases*.
+All knowledge bases share the same name space; so that no two of them,
+regardless of their type, may have the same name.
+
+.. raw:: html
+
+    <div class="displaybox">
+    <#
+        print_details(default_section)
+    #>
+    </div>
 

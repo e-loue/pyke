@@ -47,6 +47,10 @@ want the inferencing capability by itself.
 <li>Multiple <i>rule bases</i>, each with it's own list of forward and/or backward-chaining rules.</li>
 <li>Rule base inheritance -- <i>activating</i> the derived rule base 
 includes the rules from the base rule base.</li>
+<li>The inference rules are compiled into python functions, allowing 
+python code snippets to be used within the rules.
+This greatly enhances the expressiveness of the rules.
+</li>
 </ul>
 
 <p>The automatic program generation:</p>

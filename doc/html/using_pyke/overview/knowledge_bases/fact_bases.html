@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-    <title>Knowledge Bases</title>
+    <title>Fact Bases</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="../../../stylesheets/pyke.css" type="text/css" />
 </head>
@@ -20,7 +20,9 @@
 <li>&gt;</li>
 <li><a href="../index.html">Overview</a></li>
 <li>&gt;</li>
-<li>Knowledge Bases</li>
+<li><a href="index.html">Knowledge Bases</a></li>
+<li>&gt;</li>
+<li>Fact Bases</li>
 
             </ul>
           </div>
@@ -60,48 +62,49 @@
           <td id="main-td">
             <div id="main>
                 <a name="startcontent" id="startcontent"></a>
-                <div class="document" id="knowledge-bases">
-<h1 class="title">Knowledge Bases</h1>
-<p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are organized
-into named repositories called <em>knowledge bases</em>.  A knowledge base is like
-a directory for files on disk, except that knowledge bases may not be
-nested.  Therefore, facts and goals always have a two-level name.</p>
-<p>Here are some examples of facts you might see in a web server application:</p>
+                <div class="document" id="fact-bases">
+<h1 class="title">Fact Bases</h1>
+<p>Facts are organized into fact bases.  The fact bases are created
+automatically as new facts are asserted.</p>
+<div class="section">
+<h1><a id="facts" name="facts">Facts</a></h1>
+<p>Think of a &quot;fact&quot; as a simple statement.  It has a name and a set of
+arguments.  The arguments may be:</p>
+<ul class="simple">
+<li>strings
+- proper identifiers don't need quotes: <tt class="docutils literal"><span class="pre">Fred</span></tt> is the same as <tt class="docutils literal"><span class="pre">'Fred'</span></tt></li>
+<li>numbers</li>
+<li>None</li>
+<li>True/False</li>
+<li>tuples of any of these (including nested tuples)
+- singleton tuples don't require a comma: <tt class="docutils literal"><span class="pre">(1)</span></tt> is the same as <tt class="docutils literal"><span class="pre">(1,)</span></tt></li>
+</ul>
+<p>Duplicate facts are not allowed.  An attempt to assert a fact that already
+exists is silently ignored.  But note that to be a duplicate, all of the
+arguments must be the same too!</p>
+<p>Facts are immutable.  They may not be changed or retracted.  That's why
+dictionaries, lists and user-defined objects are not allowed as arguments.</p>
+<div class="section">
+<h2><a id="case-specific-facts" name="case-specific-facts">Case Specific Facts</a></h2>
+<p>Most facts are case specific facts.  This means that they will be deleted
+when a reset is done to prepare for another run of the inference engine.
+Case specific facts are asserted through either:</p>
 <pre class="literal-block">
-header.cookie('session=123456789;remember=the_alamo')
-cookie.session(123456789)
-cookie.remember(the_alamo)
-header.accept_encoding(gzip)
-header.accept_encoding(deflate)
-request.path('/my/site.html')
-request.path_segment(0, my)
-request.path_segment(1, 'site.html')
-request.path_segment(-2, my)
-request.path_segment(-1, 'site.html')
+pyke.assert_(kb_name, fact_name, arguments)
+pyke.add_case_specific_fact(kb_name, fact_name, arguments)
 </pre>
-<p>Note that three different knowledge bases are shown here:
-<tt class="docutils literal"><span class="pre">header</span></tt>, <tt class="docutils literal"><span class="pre">cookie</span></tt>, and <tt class="docutils literal"><span class="pre">request</span></tt>; each with multiple facts.</p>
-<p>There are different types of knowledge bases.  Those that contain facts are
-called <em>fact bases</em>.  Those that contain rules are called <em>rule bases</em>.
-All knowledge bases share the same name space; so that no two of them,
-regardless of their type, may have the same name.</p>
-<div class="displaybox">
-<h3>Pages</h3>
-<ul><li><a href="rules.html">Rules</a><p>Explanation of rules.</p>
-</li>
-<li><a href="fact_bases.html">Fact Bases</a><p>Explanation of fact bases and facts.</p>
-</li>
-<li><a href="rule_bases.html">Rule Bases</a><p>Explanation of rule bases, overview of .krb files and how these files
-are of compiled and loaded into your python program.</p>
-</li>
-<li><a href="forward_chaining.html">Forward Chaining</a><p>Explanation of forward-chaining rules.</p>
-</li>
-<li><a href="backward_chaining.html">Backward Chaining</a><p>Explanation of backward-chaining rules.</p>
-</li>
-<li><a href="plans.html">Plans and Automatic Program Generation</a><p>Explanation of plans and automatic program generation.</p>
-</li></ul>
-
-</div></div>
+<p>They may also be asserted by forward-chaining rules.</p>
+</div>
+<div class="section">
+<h2><a id="universal-facts" name="universal-facts">Universal Facts</a></h2>
+<p>Universal facts are never deleted, specifically, when a reset is done.  Add
+universal facts by calling:</p>
+<pre class="literal-block">
+pyke.add_universal_fact(kb_name, fact_name, arguments)
+</pre>
+</div>
+</div>
+</div>
 
             </div>
           </td>
@@ -118,7 +121,7 @@ are of compiled and loaded into your python program.</p>
         <tr id="foot1"><td id="final-stuff" colspan="3">
             <div id="end">
                 <p><a href="#startcontent">Return to Top</a><br />
-                <small>Page last modified <strong>Mon Oct 29 22:35:07 2007</strong>.</small> 
+                <small>Page last modified <strong>Tue Oct 30 19:23:11 2007</strong>.</small> 
                 </p>
             </div>
         </td></tr>

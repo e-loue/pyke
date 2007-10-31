@@ -1,0 +1,144 @@
+restindex
+    crumb: Backward Chaining
+    page-description:
+        Explanation of backward-chaining rules.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+=============================================
+Backward Chaining
+=============================================
+
+Backward chaining rules are processed when your program asks pyke to prove
+a specific *goal*.  Pyke will only use activated rule bases to do the
+proof.
+
+Consider this example::
+
+     1  son_father:
+     2      use child_parent($son, $father, (), son, father)
+     3      when
+     4          family.son_of($son, $father, $_)
+        
+     5  son_mother:
+     6      use child_parent($son, $mother, (), son, mother)
+     7      when
+     8          family.son_of($son, $_, $mother)
+        
+     9  daughter_father:
+    10      use child_parent($daughter, $father, (), daughter, father)
+    11      when
+    12          family.daughter_of($daughter, $father, $_)
+        
+    13  daughter_mother:
+    14      use child_parent($daughter, $mother, (), daughter, mother)
+    15      when
+    16          family.daughter_of($daughter, $_, $mother)
+        
+    17  grand_parent_and_child:
+    18      use child_parent($grand_child, $grand_parent, (grand),
+    19                       $grand_child_type, $grand_parent_type)
+    20      when
+    21          child_parent($grand_child, $parent, (), $grand_child_type, $_)
+    22          child_parent($parent, $grand_parent, (), $_, $grand_parent_type)
+        
+    23  great_grand_parent_and_child:
+    24      use child_parent($gg_child, $gg_parent, (great, $prefix1, *$rest_prefixes),
+    25                       $gg_child_type, $gg_parent_type)
+    26      when
+    27          child_parent($gg_child, $parent, (), $gg_child_type, $_)
+    28          child_parent($parent, $gg_parent, ($prefix1, *$rest_prefixes),
+    29                       $_, $gg_parent_type)
+
+These rules draw the same conclusions as the *forward-chaining* example;
+but you'll notice three differences:
+
+#. The rule's **if** and **then** parts are reversed.
+#. The rules use different keywords: ``use`` for the **then** clause
+   and ``when`` for the **if** clause.
+#. The facts established by backward-chaining do not have a knowledge
+   base name prefix.  In this case, the knowledge base name defaults to
+   the rule base category of this rule base (it's root rule base name).
+
+These rules are not used until you ask pyke to prove a goal.
+
+The easiest way
+to do this is with ``pyke.prove_1`` or ``pyke.prove_n``.  ``Prove_1`` only
+returns the first proof found and then stops (or raises pyke.CanNotProve).
+``Prove_n`` is a generator that generates all possible proofs (which, in
+some cases, might be infinite).  In both cases, you pass a tuple of
+arguments and the number of variable arguments as the last two parameters.
+The total number of arguments for the goal is the sum of the length of the
+actual arguments that you pass plus the number of variable arguments that you
+specify.
+Both functions return the variable bindings for the number of variable
+arguments you specified as a tuple, along with the plan (to be discussed
+later).
+
+    >>> import pyke
+    >>> pyke.load('examples')
+    >>> pyke.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
+    >>> pyke.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
+    >>> pyke.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
+    >>> pyke.activate('bc_example')
+    >>> for vars, no_plan in pyke.prove_n('bc_example', 'child_parent', ('michael',), 4):
+    ...     print vars
+    ('bruce', (), 'son', 'father')
+    ('marilyn', (), 'son', 'mother')
+    ('thomas', ('grand',), 'son', 'father')
+    ('norma', ('grand',), 'son', 'mother')
+    ('allen', ('great', 'grand'), 'son', 'father')
+    ('ismay', ('great', 'grand'), 'son', 'mother')
+
+Pyke performs the proof by:
+
+#. Checking to see if the goal is simply a known fact.
+   If so, it has a proof!
+#. Look for the first backward-chaining rule that concludes the goal
+   in its ``use`` clause.
+
+   * If not found, the goal fails.
+   * If found, try to recursively prove all of the subgoals in the
+     rule's ``when`` clause.
+
+     * If this succeeds, the goal is proven.
+     * If this fails, go back to step 2 and look for the next rule
+       that concludes the goal in its ``use`` clause.
+
+Note how the rules are combined in the opposite direction from
+forward-chaining rules.  Here the first rule's **if** (``when``) clause is
+linked backwards to the next rule's **then** (``use``) clause.  This is why
+these rules are called *backward-chaining* rules.
+
+Also note that while processing each subgoal within a rule's ``when`` clause:
+
+* If pyke succeeds at proving the subgoal:
+
+  * Pyke will proceed to the next subgoal within the ``when`` clause.
+  * If pyke reaches the end of the ``when`` clause, the rule succeeds.
+
+* If pyke fails at proving the subgoal:
+
+  * Pyke will back up to the prior subgoal within the ``when`` clause
+    and try to find another proof for it.  The process starts over
+    from this prior subgoal.
+  * If pyke reaches the beginning of the ``when`` clause, the rule
+    fails.
+
+Thus, execution within each rule's ``when`` clause proceeds both forwards
+and backwards up and down the list of subgoals, depending on whether each
+subgoal succeeds or fails.  The process of backing up in the ``when``
+clause to try alternate subproofs is called *backtracking*.
+
+.. raw:: html
+
+    <div class="displaybox">
+    <#
+        print_details(default_section)
+    #>
+    </div>
+

@@ -1,0 +1,186 @@
+See: http://docutils.sourceforge.net/rst.html
+
+Paragraphs:
+    Separated by blank lines.
+    Indented paragraphs are treated as quoted paragraphs.
+
+Characters:
+
+    *italics*
+    **bold**
+    ``fixed-space literal``         -- text not checked for further markup
+                                    -- spaces preserved, but not line breaks
+
+    To turn off special meaning, either \* or ``*``.
+
+Lists:
+
+    Blank line required before first item and after last item, optional
+    between items.
+
+    Numbered:
+
+        1. foobar
+     or 1) foobar
+     or (1) foobar
+     or A. foobar
+     or a. foobar
+     or I. foobar
+     or i. foobar
+     or #. foobar       -- to auto number
+
+        use indenting for nested lists (must match first char in outer list)
+            - need blank line before and after nested list
+        can have indented paragraphs (must match first char in outer list)
+        first number is starting number for list
+
+    Bullet:
+
+        * foobar
+     or + foobar
+     or - foobar
+
+    Definition Lists:
+
+       term1
+         definition1
+
+       term2
+         definition2
+       
+       blank lines not allowed between term and definition
+
+Preformatting:
+
+    End prior paragraph with :: (shows as single :, unless preceeded by a
+    space)
+
+    Or use :: on a line by itself.
+
+    All indented text after that is preformatted (left alone).
+
+    OR
+
+    Use > (per-line quoting) at the start of each line (> is seen in
+    output).  These don't need to be indented (but are rendered indented
+    slightly).
+
+    Use >>> for doctests.  These go until the next blank line.
+
+Line Blocks:
+
+    | blah blah                 -- the | causes a line break
+    | blah blah
+      blah blah                 -- must use space instead of | for line
+                                   continuation that will wrap with first
+                                   line.
+
+Field Lists:
+    Creates a two-column table to line up field name with descriptions.
+
+    :Authors:
+        blah blah
+        blah blah
+
+        more blah               -- blank line causes a line break
+
+Option Lists:
+
+    -a             blah blah
+    -b file        blah blah
+                   blah blah
+
+    must be at least two spaces between option and description
+
+Tables:
+
++---------+---------+
+| Header1 | Header2 |
++=========+=========+
+| blah    | blah    |
++---------+---------+
+
+    Can omit boundary lines (vertical or horizontal) colspan and rowspan.
+
+OR
+
+===== ====== ======
+  colspan    blah
+------------ ------
+  A     B      C
+===== ====== ======
+blah  blah   blah
+blah  blah   blah
+blah  blah   blah
+===== ====== ======
+
+
+Sections:
+
+    Underline headers with -, = or ~.  Underline only is distinct from
+    overline/underline.  Underlines and overlines must be at least as long
+    as the header text.
+
+    The text for overline/underline style (but not underline only) may be
+    inset for aesthetics.
+
+Document Title/Subtitle:
+
+    A unique adornment style at the beginning of the document.  Use a
+    second unique adornment style immediately after that for the subtitle
+    (if any).
+
+Images:
+
+    .. image:: images/foobar.png
+
+    Can immediately follow with attributes:
+
+    .. image:: images/foobar.png
+       :height: 100
+       :width: 200
+       :scale: 50
+       :alt: alternate text
+
+Horizontal Rule:
+
+----------------                -- 4 or more repeated punctuation chars
+
+Linking:
+
+    Name_
+    .. _Name: link      -- external link
+    .. _Name:           -- internal link target
+
+    `blah blah`__       -- indirect link
+    __ Name_            -- link __ to what Name_ links to
+
+    `section title`_    -- section titles as links don't require a link
+                           definition
+
+ or `Name <link>`_
+
+    [1]_                -- footnote reference
+    .. [1] blah blah    -- footnote
+
+    [#]_                -- autonumbered footnotes
+    .. [#] blah blah
+
+    [*]_                -- auto-symbol footnotes
+    .. [*] blah blah
+
+    [CITATION]_         -- citation reference
+    .. [CITATION] blah blah
+
+
+Substitution References:
+
+The |name| blah...
+
+.. |name| image:: foobar.jpg
+
+
+Comments:
+
+.. blah blah            -- that doesn't match any format above
+   blah blah

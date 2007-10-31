@@ -6,10 +6,43 @@ restindex
     include: yes
 /restindex
 
-================
-Overview
-================
-------------------------------
+====================================
 Patterns and Pattern Matching
-------------------------------
+====================================
+
+A *pattern* serves as a template for a data item, such as a fact argument.
+This template may be matched to a data item or to another pattern.  The match
+may either succeed or fail.  If it succeeds, pattern variables within the
+pattern are bound to show what the variable matched.
+
+The template may also be used to generate a data item.  In this case, the
+value bound to pattern variables is substituted in the pattern to form a
+data item.
+
+The template is formed by using either data items or pattern variables.
+In addition, a pattern variable may be used at the end of tuple with a
+preceeding ``*`` to match the rest of the tuple, for example,
+``(1, $var1, \*$var2)``.
+
+Pattern Variables
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pattern variables are identifiers preceeded by a ``$``, such as ``$a`` or
+``$filename``.  It is important to note that the same pattern variable must
+always match the same data value within each rule.  For example, if ``$a``
+matches ``24`` in one place in the rule, it must also match ``24`` everywhere
+else it is used within the rule.
+
+The special variable, ``$_``, is called the *anonymous* variable.
+The ``$_`` acts
+like a "don't care" variable.  If there are multiple ``$_`` variables in the
+rule, they may each match different data values.
+
+.. raw:: html
+
+    <div class="displaybox">
+    <#
+        print_details(default_section)
+    #>
+    </div>
 

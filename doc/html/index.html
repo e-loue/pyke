@@ -3,33 +3,34 @@
 <head>
     <title>Welcome to Pyke!</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="stylesheets/rest.css" type="text/css" />
-    <link rel="stylesheet" href="stylesheets/test.css" type="text/css" />    
+    <link rel="stylesheet" href="stylesheets/pyke.css" type="text/css" />
 </head>
 <body id="the-whole-page">
   <table id="page-table">
     <thead class="head">
-        <tr id="header1"><td id="header" colspan="3">
+        <tr id="header1"><th id="header" colspan="3">
             PyKE : Python Knowledge Engine
-        </td></tr>
-        <tr id="header2"><td id="crumb-line" colspan="3">
+        </th></tr>
+        <tr id="header2"><th id="crumb-line" colspan="3">
           <div id="nav">
             <ul>
                 <li>Home</li>
 
             </ul>
           </div>
-        </td></tr>
+        </th></tr>
     </thead>
     <tbody id="body">
         <tr id="body-tr">
           <td id="left-nav">
-            <div class="nav-branch">
+            <div id="left-nav-div">
+              <div class="nav-branch">
 <br/><strong><a class="title-nav" href="index.html">Home</a></strong>
 <br/><a class="normal-nav" href="using_pyke/index.html">Using Pyke</a>
 <br/><a class="normal-nav" href="pyke_internals/index.html">Internals</a>
 </div>
 
+            </div>
           </td>
           <td id="main-td">
             <div id="main>
@@ -72,6 +73,10 @@ want the inferencing capability by itself.
 <li>Multiple <i>rule bases</i>, each with it's own list of forward and/or backward-chaining rules.</li>
 <li>Rule base inheritance -- <i>activating</i> the derived rule base
 includes the rules from the base rule base.</li>
+<li>The inference rules are compiled into python functions, allowing
+python code snippets to be used within the rules.
+This greatly enhances the expressiveness of the rules.
+</li>
 </ul>
 
 <p>The automatic program generation:</p>
@@ -100,13 +105,20 @@ to dabble in the pyke source code.</p>
 
             </div>
           </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <br />
+                Hosted by: <br />
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+            </div>
+          </td>
         </tr>
     </tbody>
     <tfoot id="foot">
         <tr id="foot1"><td id="final-stuff" colspan="3">
             <div id="end">
                 <p><a href="#startcontent">Return to Top</a><br />
-                <small>Page last modified <strong>Thu Oct 18 13:11:19 2007</strong>.</small> 
+                <small>Page last modified <strong>Thu Oct 18 15:28:42 2007</strong>.</small> 
                 </p>
             </div>
         </td></tr>

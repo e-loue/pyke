@@ -1,0 +1,142 @@
+restindex
+    crumb: Plans
+    page-description:
+        Explanation of plans and automatic program generation.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+=============================================
+Plans and Automatic Program Generation
+=============================================
+
+Once you understand how backward-chaining works, it is relatively easy to
+do automatic program generation.
+
+The way this is done is by attaching python functions to the
+backward-chaining rules.  These functions are written at the end of each
+rule in the .krb file.  They don't affect how the rules run, but are
+gathered up to form a call graph that is returned along with the pattern
+variable bindings that prove the top-level goal.
+
+Consider a small rule base to construct programs to transfer money between
+bank accounts.  Each *from_acct* and *to_acct* takes one of two forms:
+
+#. (name, account_type)
+   - This is a local account with this bank.
+   - Example: ('bruce', 'checking').
+#. (bank, name, account_type)
+   - This is a foreign account with another bank.
+   - Example: ('my_other_bank', 'bruce', 'checking').
+
+At least one of the bank accounts must be a local account.
+
+Here's the example rule base:
+
+     1  transfer1:
+     2      use transfer($from_acct, $to_acct) taking (amount)
+     3      when
+     4          withdraw($from_acct)
+     5              $$(amount)
+     6          deposit($to_acct)
+     7              $$(amount)
+        
+     8  transfer2:
+     9      use transfer($from_acct, $to_acct) taking (amount)
+    10      when
+    11          transfer_ach($from_acct, $to_acct)
+    12              $$(amount)
+        
+    13  withdraw:
+    14      use withdraw(($who, $acct_type)) taking (amount)
+    15      with
+    16          print "withdraw", amount, "from", $who, $acct_type
+        
+    17  deposit:
+    18      use deposit(($who, $acct_type)) taking (amount)
+    19      with
+    20          print "deposit", amount, "to", $who, $acct_type
+        
+    21  transfer_ach1:
+    22      use transfer_ach($from_acct, ($bank, $who, $acct_type)) taking (amount)
+    23      when
+    24          withdraw($from_acct)
+    25              $$(amount)
+    26          deposit((central_accts, ach_send_acct))
+    27              $$(amount)
+    28      with
+    29          print "send", amount, "to bank", $bank, "acct", $who, $acct_type
+        
+    30  transfer_ach2:
+    31      use transfer_ach($from_acct, $to_acct) taking (amount)
+    32      when
+    33          get_ach($from_acct)
+    34              $$(amount)
+    35          withdraw((central_accts, ach_recv_acct))
+    36              $$(amount)
+    37          deposit($to_acct)
+    38              $$(amount)
+        
+    39  get_ach:
+    40      use get_ach(($bank, $who, $acct_type)) taking (amount)
+    41      with
+    42          print "get", amount, "from bank", $bank, "acct", $who, $acct_type
+
+The plan is created as a byproduct of proving the goal:
+
+    >>> import pyke
+    >>> pyke.load('examples')
+    >>> pyke.activate('plan_example')
+    >>> no_vars, plan1 = pyke.prove_1('plan_example', 'transfer',
+    ...                               (('bruce', 'checking'),
+    ...                                ('bruce', 'savings')),
+    ...                               0)
+
+``plan1`` is now a program to transfer X amount
+from 'bruce', 'checking' to 'bruce', 'savings'.
+
+    >>> plan1(100)
+    withdraw 100 from bruce checking
+    deposit 100 to bruce savings
+
+The program may be used multiple times:
+
+    >>> plan1(50)
+    withdraw 50 from bruce checking
+    deposit 50 to bruce savings
+
+Let's create another program:
+
+    >>> no_vars, plan2 = pyke.prove_1('plan_example', 'transfer',
+    ...                               (('my_other_bank', 'bruce', 'checking'),
+    ...                                ('bruce', 'savings')),
+    ...                               0)
+
+``plan2`` is now a program to transfer X amount
+from 'my_other_bank', 'bruce', 'checking' to 'bruce', 'savings'.
+
+    >>> plan2(150)
+    get 150 from bank my_other_bank acct bruce checking
+    withdraw 150 from central_accts ach_recv_acct
+    deposit 150 to bruce savings
+
+    >>> no_vars, plan3 = pyke.prove_1('plan_example', 'transfer',
+    ...                               (('bruce', 'checking'),
+    ...                                ('my_other_bank', 'bruce', 'savings')),
+    ...                               0)
+    >>> plan3(200)
+    withdraw 200 from bruce checking
+    deposit 200 to central_accts ach_send_acct
+    send 200 to bank my_other_bank acct bruce savings
+
+.. raw:: html
+
+    <div class="displaybox">
+    <#
+        print_details(default_section)
+    #>
+    </div>
+

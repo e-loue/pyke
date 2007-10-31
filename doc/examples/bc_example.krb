@@ -1,0 +1,56 @@
+# $Id$
+# 
+# Copyright © 2007 Bruce Frederiksen
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+son_father:
+    use child_parent($son, $father, (), son, father)
+    when
+        family.son_of($son, $father, $_)
+    
+son_mother:
+    use child_parent($son, $mother, (), son, mother)
+    when
+        family.son_of($son, $_, $mother)
+    
+daughter_father:
+    use child_parent($daughter, $father, (), daughter, father)
+    when
+        family.daughter_of($daughter, $father, $_)
+    
+daughter_mother:
+    use child_parent($daughter, $mother, (), daughter, mother)
+    when
+        family.daughter_of($daughter, $_, $mother)
+    
+grand_parent_and_child:
+    use child_parent($grand_child, $grand_parent, (grand),
+                     $grand_child_type, $grand_parent_type)
+    when
+        child_parent($grand_child, $parent, (), $grand_child_type, $_)
+        child_parent($parent, $grand_parent, (), $_, $grand_parent_type)
+    
+great_grand_parent_and_child:
+    use child_parent($gg_child, $gg_parent, (great, $prefix1, *$rest_prefixes),
+                     $gg_child_type, $gg_parent_type)
+    when
+        child_parent($gg_child, $parent, (), $gg_child_type, $_)
+        child_parent($parent, $gg_parent, ($prefix1, *$rest_prefixes),
+                     $_, $gg_parent_type)

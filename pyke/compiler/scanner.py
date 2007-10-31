@@ -177,7 +177,7 @@ def t_code_comment(t):
     current_line += t.value
 
 def t_code_plan(t):
-    r'\$\$\b'
+    r'\$\$'
     global current_line
     if debug:
         print "scanner saw '$$', current_plan_name is", current_plan_name

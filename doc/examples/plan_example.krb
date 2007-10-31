@@ -1,0 +1,70 @@
+# $Id$
+# 
+# Copyright © 2007 Bruce Frederiksen
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+transfer1:
+    use transfer($from_acct, $to_acct) taking (amount)
+    when
+        withdraw($from_acct)
+            $$(amount)
+        deposit($to_acct)
+            $$(amount)
+    
+transfer2:
+    use transfer($from_acct, $to_acct) taking (amount)
+    when
+        transfer_ach($from_acct, $to_acct)
+            $$(amount)
+    
+withdraw:
+    use withdraw(($who, $acct_type)) taking (amount)
+    with
+        print "withdraw", amount, "from", $who, $acct_type
+
+deposit:
+    use deposit(($who, $acct_type)) taking (amount)
+    with
+        print "deposit", amount, "to", $who, $acct_type
+    
+transfer_ach1:
+    use transfer_ach($from_acct, ($bank, $who, $acct_type)) taking (amount)
+    when
+        withdraw($from_acct)
+            $$(amount)
+        deposit((central_accts, ach_send_acct))
+            $$(amount)
+    with
+        print "send", amount, "to bank", $bank, "acct", $who, $acct_type
+    
+transfer_ach2:
+    use transfer_ach($from_acct, $to_acct) taking (amount)
+    when
+        get_ach($from_acct)
+            $$(amount)
+        withdraw((central_accts, ach_recv_acct))
+            $$(amount)
+        deposit($to_acct)
+            $$(amount)
+    
+get_ach:
+    use get_ach(($bank, $who, $acct_type)) taking (amount)
+    with
+        print "get", amount, "from bank", $bank, "acct", $who, $acct_type

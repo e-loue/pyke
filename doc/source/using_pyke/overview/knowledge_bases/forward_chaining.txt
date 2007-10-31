@@ -1,0 +1,133 @@
+restindex
+    crumb: Forward Chaining
+    page-description:
+        Explanation of forward-chaining rules.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+=============================================
+Forward Chaining
+=============================================
+
+Forward chaining rules are processed automatically as each rule base is
+*activated*.
+
+When a rule base is activated, all of its forward-chaining rules (and then,
+its inherited forward-chaining rules) are run in the order that they appear
+in the .krb file.
+
+Consider this example::
+
+     1  son_of:
+     2      foreach
+     3          family.son_of($son, $father, $mother)
+     4      assert
+     5          family.child_parent($son, $father, (), son, father)
+     6          family.child_parent($son, $mother, (), son, mother)
+        
+     7  daughter_of:
+     8      foreach
+     9          family.daughter_of($daughter, $father, $mother)
+    10      assert
+    11          family.child_parent($daughter, $father, (), daughter, father)
+    12          family.child_parent($daughter, $mother, (), daughter, mother)
+        
+    13  grand_parent_and_child:
+    14      foreach
+    15          family.child_parent($grand_child, $parent, (),
+    16                              $grand_child_type, $_)
+    17          family.child_parent($parent, $grand_parent, (),
+    18                              $_, $grand_parent_type)
+    19      assert
+    20          family.child_parent($grand_child, $grand_parent, (grand),
+    21                              $grand_child_type, $grand_parent_type)
+        
+    22  great_grand_parent_and_child:
+    23      foreach
+    24          family.child_parent($gg_child, $parent, (), $gg_child_type, $_)
+    25          family.child_parent($parent, $gg_parent,
+    26                              ($prefix1, *$rest_prefixes),
+    27                              $_, $gg_parent_type)
+    28      assert
+    29          family.child_parent($gg_child, $gg_parent,
+    30                              (great, $prefix1, *$rest_prefixes),
+    31                              $gg_child_type, $gg_parent_type)
+
+Note that the keyword ``foreach`` is used for the **if** part of each rule
+and the keyword ``assert`` is used for the **then** part of each rule.
+The use of these keywords is what identifies these rules as
+forward-chaining rules.
+
+Starting off with a set of ``family.son_of`` and ``family.daughter_of`` facts,
+these rules will figure out, and assert, all ``family.child_parent``
+relationships.
+
+The rules are run in order.  First the ``son_of`` rule is run.  For each match
+of facts to the pattern ``family.son_of($son, $father, $mother)`` it asserts
+two additional ``family.child_parent`` facts.
+
+Note that ``$son``, ``$father`` and ``$mother`` are pattern variables.
+These can match any value, but once matched they have the same value for
+the rest of that rule invocation.  Thus, the value the ``$son`` is bound to
+on line 3, will be the same value used on lines 5 and 6 for ``$son`` in the
+new facts to be asserted.
+
+After the ``son_of`` rule, the ``daughter_of`` rule is run for all
+``family.daugher_of`` facts.
+
+Then the ``grand_parent_and_child`` rule is run for all combinations of
+``family.child_parent`` facts that satisfy the two patterns on lines 15 and
+17.  This rule asserts the grand-child/grand-parent relationships.  You'll
+notice that it uses the ``$_`` pattern variable.  This is called the
+*anonymous* variable.  It is different than other pattern variables in that
+each use of ``$_`` can match a different value.
+
+Finally, the ``great_grand_parent_and_child`` rule is run.  As this rule
+asserts new facts, those facts may be used by the same rule to produce even
+more great, great... ``family.child_parent`` relationships.
+
+Thus, even though pyke runs the rules in order, it will go back and rerun
+prior rules if a new fact is asserted that matches any of the prior rule's
+premises.  This forms an implicit linkage from one rule's **then** 
+(``assert``) clause
+to another rule's **if** (``foreach``) clause.  This is what the term
+*forward-chaining* refers to.
+
+These rules could be run as follows:
+
+    >>> import pyke
+    >>> pyke.load('examples')
+    >>> pyke.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
+    >>> pyke.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
+    >>> pyke.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
+    >>> pyke.activate('fc_example')     # This is where the rules are run!
+    >>> pyke.get_kb('family').dump_specific_facts()
+    child_parent('michael', 'norma', ('grand',), 'son', 'mother')
+    child_parent('michael', 'marilyn', (), 'son', 'mother')
+    child_parent('norma', 'allen', (), 'daughter', 'father')
+    child_parent('michael', 'thomas', ('grand',), 'son', 'father')
+    child_parent('michael', 'bruce', (), 'son', 'father')
+    child_parent('bruce', 'ismay', ('grand',), 'son', 'mother')
+    child_parent('michael', 'ismay', ('great', 'grand'), 'son', 'mother')
+    child_parent('bruce', 'norma', (), 'son', 'mother')
+    child_parent('michael', 'allen', ('great', 'grand'), 'son', 'father')
+    child_parent('bruce', 'allen', ('grand',), 'son', 'father')
+    child_parent('bruce', 'thomas', (), 'son', 'father')
+    child_parent('norma', 'ismay', (), 'daughter', 'mother')
+    daughter_of('norma', 'allen', 'ismay')
+    son_of('michael', 'bruce', 'marilyn')
+    son_of('bruce', 'thomas', 'norma')
+
+
+.. raw:: html
+
+    <div class="displaybox">
+    <#
+        print_details(default_section)
+    #>
+    </div>
+

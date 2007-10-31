@@ -7,9 +7,14 @@ restindex
 /restindex
 
 ================
-Overview
-================
-----------------
 Inferencing
-----------------
+================
+
+.. raw:: html
+
+    <div class="displaybox">
+    <#
+        print_details(default_section)
+    #>
+    </div>
 
