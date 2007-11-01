@@ -26,9 +26,12 @@ Consider a small rule base to construct programs to transfer money between
 bank accounts.  Each *from_acct* and *to_acct* takes one of two forms:
 
 #. (name, account_type)
+
    - This is a local account with this bank.
    - Example: ('bruce', 'checking').
+
 #. (bank, name, account_type)
+
    - This is a foreign account with another bank.
    - Example: ('my_other_bank', 'bruce', 'checking').
 
@@ -122,6 +125,8 @@ from 'my_other_bank', 'bruce', 'checking' to 'bruce', 'savings'.
     get 150 from bank my_other_bank acct bruce checking
     withdraw 150 from central_accts ach_recv_acct
     deposit 150 to bruce savings
+
+And the final use case:
 
     >>> no_vars, plan3 = pyke.prove_1('plan_example', 'transfer',
     ...                               (('bruce', 'checking'),

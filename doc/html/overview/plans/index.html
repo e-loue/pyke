@@ -67,12 +67,16 @@ variable bindings that prove the top-level goal.</p>
 <p>Consider a small rule base to construct programs to transfer money between
 bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two forms:</p>
 <ol class="arabic simple">
-<li>(name, account_type)
-- This is a local account with this bank.
-- Example: ('bruce', 'checking').</li>
-<li>(bank, name, account_type)
-- This is a foreign account with another bank.
-- Example: ('my_other_bank', 'bruce', 'checking').</li>
+<li>(name, account_type)<ul>
+<li>This is a local account with this bank.</li>
+<li>Example: ('bruce', 'checking').</li>
+</ul>
+</li>
+<li>(bank, name, account_type)<ul>
+<li>This is a foreign account with another bank.</li>
+<li>Example: ('my_other_bank', 'bruce', 'checking').</li>
+</ul>
+</li>
 </ol>
 <p>At least one of the bank accounts must be a local account.</p>
 <p>Here's the example rule base:</p>
@@ -173,6 +177,9 @@ get 150 from bank my_other_bank acct bruce checking
 withdraw 150 from central_accts ach_recv_acct
 deposit 150 to bruce savings
 </pre>
+</blockquote>
+<p>And the final use case:</p>
+<blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; no_vars, plan3 = pyke.prove_1('plan_example', 'transfer',
 ...                               (('bruce', 'checking'),
@@ -201,7 +208,7 @@ send 200 to bank my_other_bank acct bruce savings
           <td id="final-stuff">
             <div id="end">
                 <div id="return-to-top"><a href="#startcontent">Return to Top</a></div>
-                <div id="last-modified"><small>Page last modified Wed Oct 31 16:52:04 2007.</small></div>
+                <div id="last-modified"><small>Page last modified Wed Oct 31 17:16:06 2007.</small></div>
             </div>
           </td>
           <td id="final-right"></td>

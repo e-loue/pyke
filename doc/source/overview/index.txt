@@ -31,14 +31,3 @@ Once a plan has been created, it may be executed multiple times with different
 arguments.  It may also be pickled,
 and later run again without requiring any pyke modules.
 
-Rules
-=============
-
-Rules have two parts to them: an *if* part, and a *then* part.
-
-Each of these *if* and *then* parts contain one or more facts represented
-by *patterns*.
-Logically, the rule says that if **all** of the facts in the *if* part of
-the rule are true, then each of the facts in the *then* part of the rule
-must also be true.
-

@@ -1,5 +1,7 @@
 Box model: margin | border | padding | content | padding | border | margin
-margin is transparent
+margin is always transparent
+
+table: "border-collapse: collapse"
 
 names must be: [a-zA-Z][a-zA-Z0-9-]*    -- hyphens; not underscores!
 
