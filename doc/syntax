@@ -1,48 +1,54 @@
+'<chars>'       -- required punctuation or keyword
+|               -- alternation
+[]              -- optional
+{}              -- repeated at least once
+                   -- if it ends in a comma, the last comma is optional
+NL_TOK          -- means one or more newlines
+
 file ::= [NL_TOK] ['extending' SYMBOL_TOK ['without' {SYMBOL_TOK,}] NL_TOK]
-	 {fc_rule}
-         ['fc_extras' NL_TOK INDENT_TOK
-            {<python_statement> NL_TOK} DEINDENT_TOK]
-	 {bc_rule}
-         ['bc_extras' NL_TOK INDENT_TOK
-            {<python_statement> NL_TOK} DEINDENT_TOK]
-         ['plan_extras' NL_TOK INDENT_TOK
-            {<python_statement> NL_TOK} DEINDENT_TOK]
-
-data ::= NONE_TOK | TRUE_TOK | FALSE_TOK
-       | NUMBER_TOK | SYMBOL_TOK | STRING_TOK | '(' {data,} ')'
-
-variable ::= PATTERN_VAR_TOK | ANONYMOUS_VAR_TOK
-
-pattern ::= variable | data | '(' {pattern,} ['*' variable] ')'
-
-fact_pattern ::= SYMBOL_TOK '.' SYMBOL_TOK '(' {pattern,} ')'
+	 [{fc_rule}
+          ['fc_extras' NL_TOK INDENT_TOK
+             {<python_statement> NL_TOK} DEINDENT_TOK]]
+	 [{bc_rule}
+          ['bc_extras' NL_TOK INDENT_TOK
+             {<python_statement> NL_TOK} DEINDENT_TOK]
+          ['plan_extras' NL_TOK INDENT_TOK
+             {<python_statement> NL_TOK} DEINDENT_TOK]]
 
 fc_rule ::= SYMBOL_TOK ':' NL_TOK INDENT_TOK [fc_foreach] fc_assert DEINDENT_TOK
 
-fc_foreach ::= 'foreach' NL_TOK INDENT_TOK {fc_predicate NL_TOK} DEINDENT_TOK
+fc_foreach ::= 'foreach' NL_TOK INDENT_TOK {fc_premise NL_TOK} DEINDENT_TOK
 
-fc_predicate ::= fact_pattern
-	       | python_predicate
+fc_premise ::= fact_pattern
+	     | python_premise
 
-python_predicate ::= pattern '=' python_exp
-	           | pattern 'in' python_exp
-		         ['counting' PATTERN_VAR_TOK ['from' python_exp]
-						     ['by' python_exp]]
-	           | 'check' python_exp
+fact_pattern ::= SYMBOL_TOK '.' SYMBOL_TOK '(' [{pattern,}] ')'
+
+pattern ::= NONE_TOK | TRUE_TOK | FALSE_TOK
+          | NUMBER_TOK | SYMBOL_TOK | STRING_TOK | variable
+          | '(' [{pattern,}] ['*' variable] ')'
+
+variable ::= PATTERN_VAR_TOK | ANONYMOUS_VAR_TOK
+
+python_premise ::= pattern '=' python_exp
+	         | pattern 'in' python_exp
+	         | 'check' python_exp
 
 fc_assert ::= 'assert' NL_TOK INDENT_TOK {assertion NL_TOK} DEINDENT_TOK
 
-assertion ::= fact_pattern | 'python' ':' python_statement
+assertion ::= fact_pattern
+            | 'python' ':' NL_TOK INDENT_TOK
+                {python_statement NL_TOK} DEINDENT_TOK
 
-bc_rule ::= SYMBOL_TOK ':' NL_TOK INDENT_TOK use [when] [with]
+bc_rule ::= SYMBOL_TOK ':' NL_TOK INDENT_TOK use [when] [with] DEINDENT_TOK
 
 use ::= 'use' SYMBOL_TOK '(' {pattern,} ')'
-		['taking' '(' <arg_spec> ')'] NL_TOK
+		['taking' '(' <python_arg_spec> ')'] NL_TOK
 
-when ::= 'when' NL_TOK INDENT_TOK {bc_predicate NL_TOK} DEINDENT_TOK
+when ::= 'when' NL_TOK INDENT_TOK {bc_premise NL_TOK} DEINDENT_TOK
 
-bc_predicate ::= goal_name '(' {pattern,} ')' plan_spec
-	       | python_predicate
+bc_premise ::= ['!'] goal_name '(' {pattern,} ')' plan_spec
+	     | python_premise
 
 goal_name ::= name '.' name
 	    | name
@@ -51,11 +57,12 @@ name ::= SYMBOL_TOK
        | PATTERN_VAR_TOK
 
 plan_spec ::= step_opt NL_TOK
-	    | 'as' variable NL_TOK
-	    | step_opt NL_TOK INDENT_TOK <python_statement> NL_TOK DEINDENT_TOK
-					 (with 'plan' for returned fn)
+	    | 'as' PATTERN_VAR_TOK NL_TOK
+	    | step_opt NL_TOK INDENT_TOK {<python_statement> NL_TOK} DEINDENT_TOK
+					  (with '$$' for returned fn)
 
 step_opt ::=
 	   | 'step' NUMBER_TOK
 
 with ::= 'with' NL_TOK INDENT_TOK {<python_statement> NL_TOK} DEINDENT_TOK
+

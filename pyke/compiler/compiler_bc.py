@@ -253,7 +253,7 @@ def fc_rule_(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'fc_predicates', context,
+        for x_1 in prove('compiler', 'fc_premises', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -284,9 +284,9 @@ def fc_rule_(rule, arg_patterns, arg_context):
                    "if context is None: context = contexts.simple_context()",
                    "try:",
                    (("INDENT", 2),),
-                   context.lookup_data('pred_fn_head'),
+                   context.lookup_data('prem_fn_head'),
                    context.lookup_data('asserts_fn_lines'),
-                   context.lookup_data('pred_fn_tail'),
+                   context.lookup_data('prem_fn_tail'),
                    "POPINDENT",
                    "finally:",
                    (("INDENT", 2),),
@@ -297,7 +297,7 @@ def fc_rule_(rule, arg_patterns, arg_context):
                    "fc_rule.fc_rule('%(name)s', This_rule_base, %(name)s," %
                    {'name': context.lookup_data('rule_name')},
                    (("INDENT", 2),),
-                   helpers.add_brackets(context.lookup_data('pred_decl_lines'), '(', '),'),
+                   helpers.add_brackets(context.lookup_data('prem_decl_lines'), '(', '),'),
                    helpers.list_format(context.lookup_data('patterns_out'), '(', '))'),
                    'POPINDENT')):
               context.end_save_all_undo()
@@ -313,15 +313,15 @@ def fc_rule_(rule, arg_patterns, arg_context):
 
 bc_rule.bc_rule('fc_rule_', This_rule_base, 'fc_rule',
                 fc_rule_, None,
-                (pattern.pattern_tuple((pattern.pattern_literal('fc_rule'), contexts.variable('rule_name'), contexts.variable('fc_predicates'), contexts.variable('assertions'),), None),
+                (pattern.pattern_tuple((pattern.pattern_literal('fc_rule'), contexts.variable('rule_name'), contexts.variable('fc_premises'), contexts.variable('assertions'),), None),
                  contexts.variable('fc_lines'),),
                 (),
                 (contexts.variable('rule_name'),
                  pattern.pattern_literal(0),
-                 contexts.variable('fc_predicates'),
-                 contexts.variable('pred_fn_head'),
-                 contexts.variable('pred_fn_tail'),
-                 contexts.variable('pred_decl_lines'),
+                 contexts.variable('fc_premises'),
+                 contexts.variable('prem_fn_head'),
+                 contexts.variable('prem_fn_tail'),
+                 contexts.variable('prem_decl_lines'),
                  pattern.pattern_literal(()),
                  contexts.variable('patterns_out1'),
                  contexts.variable('assertions'),
@@ -329,7 +329,7 @@ bc_rule.bc_rule('fc_rule_', This_rule_base, 'fc_rule',
                  contexts.variable('patterns_out'),
                  contexts.variable('fc_lines'),))
 
-def fc_predicates0(rule, arg_patterns, arg_context):
+def fc_premises0(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
@@ -343,8 +343,8 @@ def fc_predicates0(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
-bc_rule.bc_rule('fc_predicates0', This_rule_base, 'fc_predicates',
-                fc_predicates0, None,
+bc_rule.bc_rule('fc_premises0', This_rule_base, 'fc_premises',
+                fc_premises0, None,
                 (contexts.anonymous(),
                  contexts.anonymous(),
                  pattern.pattern_literal(()),
@@ -356,7 +356,7 @@ bc_rule.bc_rule('fc_predicates0', This_rule_base, 'fc_predicates',
                 (),
                 ())
 
-def fc_predicates1(rule, arg_patterns, arg_context):
+def fc_premises1(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
@@ -367,7 +367,7 @@ def fc_predicates1(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'fc_predicate', context,
+        for x_1 in prove('compiler', 'fc_premise', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -381,7 +381,7 @@ def fc_predicates1(rule, arg_patterns, arg_context):
           assert x_1 is None, \
             "%(rule_name)s: got unexpected plan from when clause 1"
           flag_2 = False
-          for x_2 in prove('compiler', 'fc_predicates', context,
+          for x_2 in prove('compiler', 'fc_premises', context,
                          (rule.pattern(0),
                           rule.pattern(2),
                           rule.pattern(9),
@@ -413,17 +413,17 @@ def fc_predicates1(rule, arg_patterns, arg_context):
             else: context.end_save_all_undo()
             context.undo_to_mark(mark3)
           if not flag_2:
-            raise AssertionError("compiler.fc_predicates1: 'when' clause 2 failed")
+            raise AssertionError("compiler.fc_premises1: 'when' clause 2 failed")
         if not flag_1:
-          raise AssertionError("compiler.fc_predicates1: 'when' clause 1 failed")
+          raise AssertionError("compiler.fc_premises1: 'when' clause 1 failed")
     finally:
       context.done()
 
-bc_rule.bc_rule('fc_predicates1', This_rule_base, 'fc_predicates',
-                fc_predicates1, None,
+bc_rule.bc_rule('fc_premises1', This_rule_base, 'fc_premises',
+                fc_premises1, None,
                 (contexts.variable('rule_name'),
                  contexts.variable('clause_num'),
-                 pattern.pattern_tuple((contexts.variable('first_pred'),), contexts.variable('rest_preds')),
+                 pattern.pattern_tuple((contexts.variable('first_prem'),), contexts.variable('rest_prems')),
                  contexts.variable('fn_head'),
                  contexts.variable('fn_tail'),
                  contexts.variable('decl_lines'),
@@ -433,13 +433,13 @@ bc_rule.bc_rule('fc_predicates1', This_rule_base, 'fc_predicates',
                 (contexts.variable('rule_name'),
                  contexts.variable('clause_num'),
                  contexts.variable('next_clause_num'),
-                 contexts.variable('first_pred'),
+                 contexts.variable('first_prem'),
                  contexts.variable('fn_head1'),
                  contexts.variable('fn_tail1'),
                  contexts.variable('decl_lines1'),
                  contexts.variable('patterns_in'),
                  contexts.variable('patterns_out1'),
-                 contexts.variable('rest_preds'),
+                 contexts.variable('rest_prems'),
                  contexts.variable('fn_head2'),
                  contexts.variable('fn_tail2'),
                  contexts.variable('decl_lines2'),
@@ -448,7 +448,7 @@ bc_rule.bc_rule('fc_predicates1', This_rule_base, 'fc_predicates',
                  contexts.variable('fn_tail'),
                  contexts.variable('decl_lines'),))
 
-def fc_predicate(rule, arg_patterns, arg_context):
+def fc_premise(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
@@ -489,12 +489,12 @@ def fc_predicate(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
-bc_rule.bc_rule('fc_predicate', This_rule_base, 'fc_predicate',
-                fc_predicate, None,
+bc_rule.bc_rule('fc_premise', This_rule_base, 'fc_premise',
+                fc_premise, None,
                 (contexts.variable('rule_name'),
                  contexts.variable('clause_num'),
                  contexts.variable('next_clause_num'),
-                 pattern.pattern_tuple((pattern.pattern_literal('fc_predicate'), contexts.variable('kb_name'), contexts.variable('entity_name'), contexts.variable('arg_patterns'),), None),
+                 pattern.pattern_tuple((pattern.pattern_literal('fc_premise'), contexts.variable('kb_name'), contexts.variable('entity_name'), contexts.variable('arg_patterns'),), None),
                  contexts.variable('fn_head'),
                  pattern.pattern_literal(('POPINDENT',)),
                  contexts.variable('decl_lines'),
@@ -505,7 +505,7 @@ bc_rule.bc_rule('fc_predicate', This_rule_base, 'fc_predicate',
                  contexts.variable('next_clause_num'),
                  contexts.variable('decl_lines'),))
 
-def fc_python_predicate(rule, arg_patterns, arg_context):
+def fc_python_premise(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
@@ -515,7 +515,7 @@ def fc_python_predicate(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
-        for x_1 in prove('compiler', 'python_predicate', context,
+        for x_1 in prove('compiler', 'python_premise', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -528,12 +528,12 @@ def fc_python_predicate(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
-bc_rule.bc_rule('fc_python_predicate', This_rule_base, 'fc_predicate',
-                fc_python_predicate, None,
+bc_rule.bc_rule('fc_python_premise', This_rule_base, 'fc_premise',
+                fc_python_premise, None,
                 (contexts.variable('rule_name'),
                  contexts.variable('clause_num'),
                  contexts.variable('clause_num'),
-                 contexts.variable('python_predicate'),
+                 contexts.variable('python_premise'),
                  contexts.variable('fn_head'),
                  contexts.variable('fn_tail'),
                  pattern.pattern_literal(()),
@@ -541,7 +541,7 @@ bc_rule.bc_rule('fc_python_predicate', This_rule_base, 'fc_predicate',
                  contexts.variable('patterns_out'),),
                 (),
                 (contexts.variable('clause_num'),
-                 contexts.variable('python_predicate'),
+                 contexts.variable('python_premise'),
                  contexts.variable('patterns_in'),
                  contexts.variable('patterns_out'),
                  contexts.variable('fn_head'),
@@ -794,7 +794,7 @@ def bc_rule_(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'bc_predicates', context,
+        for x_1 in prove('compiler', 'bc_premises', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -810,18 +810,18 @@ def bc_rule_(rule, arg_patterns, arg_context):
           if rule.pattern(8).match_data(context, context,
                   \
                              helpers.goal(context.lookup_data('rb_name'), context.lookup_data('name'), context.lookup_data('goal'),
-                 context.lookup_data('pred_plan_lines'), context.lookup_data('python_lines'))):
+                 context.lookup_data('prem_plan_lines'), context.lookup_data('python_lines'))):
             context.end_save_all_undo()
             mark3 = context.mark(True)
             if rule.pattern(9).match_data(context, context,
                     helpers.splice(
                    context.lookup_data('goal_fn_head'),
-                   context.lookup_data('pred_fn_head'),
+                   context.lookup_data('prem_fn_head'),
                    'yield context' if context.lookup_data('plan_lines') else 'yield',
-                   context.lookup_data('pred_fn_tail'),
+                   context.lookup_data('prem_fn_tail'),
                    context.lookup_data('goal_fn_tail'),
                    context.lookup_data('goal_decl_lines'),
-                   context.lookup_data('pred_decl_lines'),
+                   context.lookup_data('prem_decl_lines'),
                    'POPINDENT')):
               context.end_save_all_undo()
               yield
@@ -837,22 +837,22 @@ def bc_rule_(rule, arg_patterns, arg_context):
 bc_rule.bc_rule('bc_rule_', This_rule_base, 'bc_rule',
                 bc_rule_, None,
                 (contexts.variable('rb_name'),
-                 pattern.pattern_tuple((pattern.pattern_literal('bc_rule'), contexts.variable('name'), contexts.variable('goal'), contexts.variable('bc_predicates'), contexts.variable('python_lines'), contexts.variable('plan_vars_needed'),), None),
+                 pattern.pattern_tuple((pattern.pattern_literal('bc_rule'), contexts.variable('name'), contexts.variable('goal'), contexts.variable('bc_premises'), contexts.variable('python_lines'), contexts.variable('plan_vars_needed'),), None),
                  contexts.variable('plan_lines'),
                  contexts.variable('bc_lines'),),
                 (),
                 (contexts.variable('rb_name'),
                  contexts.variable('name'),
-                 contexts.variable('bc_predicates'),
+                 contexts.variable('bc_premises'),
                  contexts.variable('plan_vars_needed'),
-                 contexts.variable('pred_plan_lines'),
-                 contexts.variable('pred_fn_head'),
-                 contexts.variable('pred_fn_tail'),
-                 contexts.variable('pred_decl_lines'),
+                 contexts.variable('prem_plan_lines'),
+                 contexts.variable('prem_fn_head'),
+                 contexts.variable('prem_fn_tail'),
+                 contexts.variable('prem_decl_lines'),
                  pattern.pattern_tuple((contexts.variable('plan_lines'), contexts.variable('goal_fn_head'), contexts.variable('goal_fn_tail'), contexts.variable('goal_decl_lines'),), None),
                  contexts.variable('bc_lines'),))
 
-def bc_predicates(rule, arg_patterns, arg_context):
+def bc_premises(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
@@ -863,7 +863,7 @@ def bc_predicates(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'bc_predicates1', context,
+        for x_1 in prove('compiler', 'bc_premises1', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -906,15 +906,15 @@ def bc_predicates(rule, arg_patterns, arg_context):
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
         if not flag_1:
-          raise AssertionError("compiler.bc_predicates: 'when' clause 1 failed")
+          raise AssertionError("compiler.bc_premises: 'when' clause 1 failed")
     finally:
       context.done()
 
-bc_rule.bc_rule('bc_predicates', This_rule_base, 'bc_predicates',
-                bc_predicates, None,
+bc_rule.bc_rule('bc_premises', This_rule_base, 'bc_premises',
+                bc_premises, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
-                 contexts.variable('bc_predicates'),
+                 contexts.variable('bc_premises'),
                  contexts.variable('plan_vars_needed'),
                  contexts.variable('plan_lines'),
                  contexts.variable('fn_head'),
@@ -924,7 +924,7 @@ bc_rule.bc_rule('bc_predicates', This_rule_base, 'bc_predicates',
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
                  pattern.pattern_literal(1),
-                 contexts.variable('bc_predicates'),
+                 contexts.variable('bc_premises'),
                  pattern.pattern_literal(()),
                  contexts.variable('patterns'),
                  contexts.variable('plan_vars_needed'),
@@ -936,7 +936,7 @@ bc_rule.bc_rule('bc_predicates', This_rule_base, 'bc_predicates',
                  contexts.variable('decl_lines'),
                  contexts.variable('plan_lines'),))
 
-def bc_predicates1_0(rule, arg_patterns, arg_context):
+def bc_premises1_0(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
@@ -950,8 +950,8 @@ def bc_predicates1_0(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
-bc_rule.bc_rule('bc_predicates1_0', This_rule_base, 'bc_predicates1',
-                bc_predicates1_0, None,
+bc_rule.bc_rule('bc_premises1_0', This_rule_base, 'bc_premises1',
+                bc_premises1_0, None,
                 (contexts.anonymous(),
                  contexts.anonymous(),
                  contexts.anonymous(),
@@ -966,7 +966,7 @@ bc_rule.bc_rule('bc_predicates1_0', This_rule_base, 'bc_predicates1',
                 (),
                 ())
 
-def bc_predicates1_n(rule, arg_patterns, arg_context):
+def bc_premises1_n(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
@@ -977,7 +977,7 @@ def bc_predicates1_n(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'bc_predicate', context,
+        for x_1 in prove('compiler', 'bc_premise', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -997,7 +997,7 @@ def bc_predicates1_n(rule, arg_patterns, arg_context):
                   context.lookup_data('clause_num') + 1):
             context.end_save_all_undo()
             flag_3 = False
-            for x_3 in prove('compiler', 'bc_predicates1', context,
+            for x_3 in prove('compiler', 'bc_premises1', context,
                            (rule.pattern(0),
                             rule.pattern(1),
                             rule.pattern(11),
@@ -1032,20 +1032,20 @@ def bc_predicates1_n(rule, arg_patterns, arg_context):
               else: context.end_save_all_undo()
               context.undo_to_mark(mark4)
             if not flag_3:
-              raise AssertionError("compiler.bc_predicates1_n: 'when' clause 3 failed")
+              raise AssertionError("compiler.bc_premises1_n: 'when' clause 3 failed")
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
         if not flag_1:
-          raise AssertionError("compiler.bc_predicates1_n: 'when' clause 1 failed")
+          raise AssertionError("compiler.bc_premises1_n: 'when' clause 1 failed")
     finally:
       context.done()
 
-bc_rule.bc_rule('bc_predicates1_n', This_rule_base, 'bc_predicates1',
-                bc_predicates1_n, None,
+bc_rule.bc_rule('bc_premises1_n', This_rule_base, 'bc_premises1',
+                bc_premises1_n, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
                  contexts.variable('clause_num'),
-                 pattern.pattern_tuple((contexts.variable('first_pred'),), contexts.variable('rest_preds')),
+                 pattern.pattern_tuple((contexts.variable('first_prem'),), contexts.variable('rest_prems')),
                  contexts.variable('patterns_in'),
                  contexts.variable('patterns_out'),
                  contexts.variable('plan_var_names_in'),
@@ -1057,7 +1057,7 @@ bc_rule.bc_rule('bc_predicates1_n', This_rule_base, 'bc_predicates1',
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
                  contexts.variable('clause_num'),
-                 contexts.variable('first_pred'),
+                 contexts.variable('first_prem'),
                  contexts.variable('patterns_in'),
                  contexts.variable('patterns_out1'),
                  contexts.variable('plan_var_names_in'),
@@ -1066,7 +1066,7 @@ bc_rule.bc_rule('bc_predicates1_n', This_rule_base, 'bc_predicates1',
                  contexts.variable('fn_head1'),
                  contexts.variable('fn_tail1'),
                  contexts.variable('next_clause_num'),
-                 contexts.variable('rest_preds'),
+                 contexts.variable('rest_prems'),
                  contexts.variable('patterns_out'),
                  contexts.variable('plan_var_names_out'),
                  contexts.variable('plan_lines2'),
@@ -1076,7 +1076,7 @@ bc_rule.bc_rule('bc_predicates1_n', This_rule_base, 'bc_predicates1',
                  contexts.variable('fn_head'),
                  contexts.variable('fn_tail'),))
 
-def bc_predicate(rule, arg_patterns, arg_context):
+def bc_premise(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
@@ -1159,9 +1159,9 @@ def bc_predicate(rule, arg_patterns, arg_context):
                   else: context.end_save_all_undo()
                   context.undo_to_mark(mark6)
                 if not flag_5:
-                  raise AssertionError("compiler.bc_predicate: 'when' clause 5 failed")
+                  raise AssertionError("compiler.bc_premise: 'when' clause 5 failed")
               if not flag_4:
-                raise AssertionError("compiler.bc_predicate: 'when' clause 4 failed")
+                raise AssertionError("compiler.bc_premise: 'when' clause 4 failed")
             else: context.end_save_all_undo()
             context.undo_to_mark(mark3)
           else: context.end_save_all_undo()
@@ -1171,12 +1171,12 @@ def bc_predicate(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
-bc_rule.bc_rule('bc_predicate', This_rule_base, 'bc_predicate',
-                bc_predicate, None,
+bc_rule.bc_rule('bc_premise', This_rule_base, 'bc_premise',
+                bc_premise, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
                  contexts.variable('clause_num'),
-                 pattern.pattern_tuple((pattern.pattern_literal('bc_predicate'), contexts.variable('required'), contexts.variable('kb_name'), contexts.variable('entity_name'), contexts.variable('arg_patterns'), contexts.variable('plan_spec'),), None),
+                 pattern.pattern_tuple((pattern.pattern_literal('bc_premise'), contexts.variable('required'), contexts.variable('kb_name'), contexts.variable('entity_name'), contexts.variable('arg_patterns'), contexts.variable('plan_spec'),), None),
                  contexts.variable('patterns_in'),
                  contexts.variable('patterns_out'),
                  contexts.variable('plan_var_names_in'),
@@ -1499,7 +1499,7 @@ bc_rule.bc_rule('required', This_rule_base, 'add_required',
                 (contexts.variable('fn_head'),
                  contexts.variable('fn_tail'),))
 
-def bc_python_predicate(rule, arg_patterns, arg_context):
+def bc_python_premise(rule, arg_patterns, arg_context):
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
     context = contexts.bc_context(rule)
@@ -1509,7 +1509,7 @@ def bc_python_predicate(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
-        for x_1 in prove('compiler', 'python_predicate', context,
+        for x_1 in prove('compiler', 'python_premise', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -1522,12 +1522,12 @@ def bc_python_predicate(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
-bc_rule.bc_rule('bc_python_predicate', This_rule_base, 'bc_predicate',
-                bc_python_predicate, None,
+bc_rule.bc_rule('bc_python_premise', This_rule_base, 'bc_premise',
+                bc_python_premise, None,
                 (contexts.variable('rb_name'),
                  contexts.variable('rule_name'),
                  contexts.variable('clause_num'),
-                 contexts.variable('python_predicate'),
+                 contexts.variable('python_premise'),
                  contexts.variable('patterns_in'),
                  contexts.variable('patterns_out'),
                  contexts.variable('plan_var_names'),
@@ -1537,7 +1537,7 @@ bc_rule.bc_rule('bc_python_predicate', This_rule_base, 'bc_predicate',
                  contexts.variable('fn_tail'),),
                 (),
                 (contexts.variable('clause_num'),
-                 contexts.variable('python_predicate'),
+                 contexts.variable('python_premise'),
                  contexts.variable('patterns_in'),
                  contexts.variable('patterns_out'),
                  contexts.variable('fn_head'),
@@ -1592,7 +1592,7 @@ def python_eq(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
-bc_rule.bc_rule('python_eq', This_rule_base, 'python_predicate',
+bc_rule.bc_rule('python_eq', This_rule_base, 'python_premise',
                 python_eq, None,
                 (contexts.variable('clause_num'),
                  pattern.pattern_tuple((pattern.pattern_literal('python_eq'), contexts.variable('pattern'), pattern.pattern_tuple((contexts.variable('python_code'), contexts.anonymous(),), None),), None),
@@ -1658,7 +1658,7 @@ def python_in(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
-bc_rule.bc_rule('python_in', This_rule_base, 'python_predicate',
+bc_rule.bc_rule('python_in', This_rule_base, 'python_premise',
                 python_in, None,
                 (contexts.variable('clause_num'),
                  pattern.pattern_tuple((pattern.pattern_literal('python_in'), contexts.variable('pattern'), pattern.pattern_tuple((contexts.variable('python_code'), contexts.anonymous(),), None),), None),
@@ -1701,7 +1701,7 @@ def python_check(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
-bc_rule.bc_rule('python_check', This_rule_base, 'python_predicate',
+bc_rule.bc_rule('python_check', This_rule_base, 'python_premise',
                 python_check, None,
                 (contexts.variable('clause_num'),
                  pattern.pattern_tuple((pattern.pattern_literal('python_check'), pattern.pattern_tuple((contexts.variable('python_code'), contexts.anonymous(),), None),), None),

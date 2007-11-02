@@ -57,7 +57,7 @@ def p_second(p):
     p[0] = p[2]
 
 def p_fourth(p):
-    ''' when_opt : WHEN_TOK NL_TOK reset_plan_vars INDENT_TOK bc_predicates DEINDENT_TOK
+    ''' when_opt : WHEN_TOK NL_TOK reset_plan_vars INDENT_TOK bc_premises DEINDENT_TOK
     '''
     p[0] = p[5]
 
@@ -105,27 +105,27 @@ def p_fc_rule(p):
     p[0] = ('fc_rule', p[1], p[5], tuple(p[9]))
 
 def p_foreach(p):
-    ''' foreach_opt : FOREACH_TOK NL_TOK INDENT_TOK fc_predicates DEINDENT_TOK
+    ''' foreach_opt : FOREACH_TOK NL_TOK INDENT_TOK fc_premises DEINDENT_TOK
     '''
     p[0] = tuple(p[4])
 
-def p_fc_predicate(p):
-    ''' fc_predicate : SYMBOL_TOK '.' SYMBOL_TOK LP_TOK patterns_opt RP_TOK nls
+def p_fc_premise(p):
+    ''' fc_premise : SYMBOL_TOK '.' SYMBOL_TOK LP_TOK patterns_opt RP_TOK nls
     '''
-    p[0] = ('fc_predicate', p[1], p[3], tuple(p[5]))
+    p[0] = ('fc_premise', p[1], p[3], tuple(p[5]))
 
 def p_python_eq(p):
-    ''' python_predicate : pattern start_python_code '=' python_rule_code nls
+    ''' python_premise : pattern start_python_code '=' python_rule_code nls
     '''
     p[0] = ('python_eq', p[1], p[4])
 
 def p_python_in(p):
-    ''' python_predicate : pattern start_python_code IN_TOK python_rule_code nls
+    ''' python_premise : pattern start_python_code IN_TOK python_rule_code nls
     '''
     p[0] = ('python_in', p[1], p[4])
 
 def p_python_check(p):
-    ''' python_predicate : start_python_code CHECK_TOK python_rule_code nls
+    ''' python_premise : start_python_code CHECK_TOK python_rule_code nls
     '''
     p[0] = ('python_check', p[3])
 
@@ -169,25 +169,25 @@ def p_name_pat_var(p):
     '''
     p[0] = "context.lookup_data(%s)" % p[1]
 
-def p_bc_predicate1(p):
-    ''' bc_predicate : name LP_TOK patterns_opt RP_TOK plan_spec
+def p_bc_premise1(p):
+    ''' bc_premise : name LP_TOK patterns_opt RP_TOK plan_spec
     '''
-    p[0] = ('bc_predicate', False, None, p[1], tuple(p[3]), p[5])
+    p[0] = ('bc_premise', False, None, p[1], tuple(p[3]), p[5])
 
-def p_bc_predicate2(p):
-    ''' bc_predicate : '!' name LP_TOK patterns_opt RP_TOK plan_spec
+def p_bc_premise2(p):
+    ''' bc_premise : '!' name LP_TOK patterns_opt RP_TOK plan_spec
     '''
-    p[0] = ('bc_predicate', True, None, p[2], tuple(p[4]), p[6])
+    p[0] = ('bc_premise', True, None, p[2], tuple(p[4]), p[6])
 
-def p_bc_predicate3(p):
-    ''' bc_predicate : name '.' name LP_TOK patterns_opt RP_TOK plan_spec
+def p_bc_premise3(p):
+    ''' bc_premise : name '.' name LP_TOK patterns_opt RP_TOK plan_spec
     '''
-    p[0] = ('bc_predicate', False, p[1], p[3], tuple(p[5]), p[7])
+    p[0] = ('bc_premise', False, p[1], p[3], tuple(p[5]), p[7])
 
-def p_bc_predicate4(p):
-    ''' bc_predicate : '!' name '.' name LP_TOK patterns_opt RP_TOK plan_spec
+def p_bc_premise4(p):
+    ''' bc_premise : '!' name '.' name LP_TOK patterns_opt RP_TOK plan_spec
     '''
-    p[0] = ('bc_predicate', True, p[2], p[4], tuple(p[6]), p[8])
+    p[0] = ('bc_premise', True, p[2], p[4], tuple(p[6]), p[8])
 
 def p_as(p):
     ''' plan_spec : AS_TOK PATTERN_VAR_TOK nls
@@ -260,16 +260,20 @@ def p_anonymous_var(p):
     '''
     p[0] = "contexts.anonymous()"
 
-def p_last(p):
-    ''' bc_predicate : python_predicate
+def p_first(p):
+    ''' bc_premise : python_premise
         bc_rules_opt : bc_rules_section
         data : NUMBER_TOK
 	data : STRING_TOK
-        fc_predicate : python_predicate
+        fc_premise : python_premise
         pattern : pattern_proper
 	pattern_proper : variable
-        patterns_opt : patterns
-	rest_opt : ',' '*' variable
+        patterns_opt : patterns comma_opt
+    '''
+    p[0] = p[1]
+
+def p_last(p):
+    ''' rest_opt : ',' '*' variable
     '''
     p[0] = p[len(p)-1]
 
@@ -295,10 +299,10 @@ def p_true(p):
 
 def p_start_list(p):
     ''' assertions : assertion
-        bc_predicates : bc_predicate
+        bc_premises : bc_premise
 	bc_rules : bc_rule
         data_list : data
-        fc_predicates : fc_predicate
+        fc_premises : fc_premise
         fc_rules : fc_rule
         patterns : pattern
         patterns_proper : pattern_proper
@@ -325,10 +329,10 @@ def p_double_empty_tuple(p):
 
 def p_append_list(p):
     ''' assertions : assertions assertion
-	bc_predicates : bc_predicates inc_plan_vars bc_predicate
+	bc_premises : bc_premises inc_plan_vars bc_premise
 	bc_rules : bc_rules bc_rule
         data_list : data_list ',' data
-	fc_predicates : fc_predicates fc_predicate
+	fc_premises : fc_premises fc_premise
 	fc_rules : fc_rules fc_rule
         patterns : patterns ',' pattern
         patterns_proper : patterns_proper ',' pattern
@@ -373,7 +377,7 @@ def p_error(p):
     raise SyntaxError("%s(%d): syntax error at token %s" %
                           (scanner.lexer.filename, scanner.lexer.lineno, p))
 
-parser = yacc.yacc(write_tables=0, debug=0)
+parser = yacc.yacc(write_tables=0, debug=1)
 
 def parse(filename, debug = 0):
     with contextlib.closing(file(filename)) as f:

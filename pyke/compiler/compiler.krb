@@ -70,12 +70,12 @@ fc_rules1:
         $lines = $fc_lines + $lines_rest
 
 fc_rule_:
-    use fc_rule((fc_rule, $rule_name, $fc_predicates, $assertions),
+    use fc_rule((fc_rule, $rule_name, $fc_premises, $assertions),
                 $fc_lines)
     when
-        !fc_predicates($rule_name, 0, $fc_predicates,
-                       $pred_fn_head, $pred_fn_tail, $pred_decl_lines,
-                       (), $patterns_out1)
+        !fc_premises($rule_name, 0, $fc_premises,
+                     $prem_fn_head, $prem_fn_tail, $prem_decl_lines,
+                     (), $patterns_out1)
         !assertions($assertions, $asserts_fn_lines,
                     $patterns_out1, $patterns_out)
         $fc_lines = helpers.splice(
@@ -86,9 +86,9 @@ fc_rule_:
                       "if context is None: context = contexts.simple_context()",
                       "try:",
                       (("INDENT", 2),),
-                      $pred_fn_head,
+                      $prem_fn_head,
                       $asserts_fn_lines,
-                      $pred_fn_tail,
+                      $prem_fn_tail,
                       "POPINDENT",
                       "finally:",
                       (("INDENT", 2),),
@@ -99,33 +99,33 @@ fc_rule_:
                       "fc_rule.fc_rule('%(name)s', This_rule_base, %(name)s," %
                         {'name': $rule_name},
                       (("INDENT", 2),),
-                      helpers.add_brackets($pred_decl_lines, '(', '),'),
+                      helpers.add_brackets($prem_decl_lines, '(', '),'),
                       helpers.list_format($patterns_out, '(', '))'),
                       'POPINDENT')
 
-fc_predicates0:
-    use fc_predicates($_, $_, (), (), (), (), $patterns_in, $patterns_in)
+fc_premises0:
+    use fc_premises($_, $_, (), (), (), (), $patterns_in, $patterns_in)
 
-fc_predicates1:
-    use fc_predicates($rule_name, $clause_num, ($first_pred, *$rest_preds),
-                      $fn_head, $fn_tail, $decl_lines,
-                      $patterns_in, $patterns_out)
+fc_premises1:
+    use fc_premises($rule_name, $clause_num, ($first_prem, *$rest_prems),
+                    $fn_head, $fn_tail, $decl_lines,
+                    $patterns_in, $patterns_out)
     when
-        !fc_predicate($rule_name, $clause_num, $next_clause_num,
-                      $first_pred, $fn_head1, $fn_tail1, $decl_lines1,
-                      $patterns_in, $patterns_out1)
-        !fc_predicates($rule_name, $next_clause_num, $rest_preds,
-                       $fn_head2, $fn_tail2, $decl_lines2,
-                       $patterns_out1, $patterns_out)
+        !fc_premise($rule_name, $clause_num, $next_clause_num,
+                    $first_prem, $fn_head1, $fn_tail1, $decl_lines1,
+                    $patterns_in, $patterns_out1)
+        !fc_premises($rule_name, $next_clause_num, $rest_prems,
+                     $fn_head2, $fn_tail2, $decl_lines2,
+                     $patterns_out1, $patterns_out)
         $fn_head = helpers.splice($fn_head1, $fn_head2)
         $fn_tail = helpers.splice($fn_tail2, $fn_tail1)
         $decl_lines = helpers.splice($decl_lines1, $decl_lines2)
 
-fc_predicate:
-    use fc_predicate($rule_name, $clause_num, $next_clause_num,
-                     (fc_predicate, $kb_name, $entity_name, $arg_patterns),
-                     $fn_head, ('POPINDENT',), $decl_lines,
-                     $patterns_in, $patterns_in)
+fc_premise:
+    use fc_premise($rule_name, $clause_num, $next_clause_num,
+                   (fc_premise, $kb_name, $entity_name, $arg_patterns),
+                   $fn_head, ('POPINDENT',), $decl_lines,
+                   $patterns_in, $patterns_in)
     when
         $fn_head = ("for dummy in (None,) if index == %d else \\" % $clause_num,
                     ('INDENT', 2),
@@ -140,15 +140,15 @@ fc_predicate:
                                                          '(', ')),'),
                                      'POPINDENT')
 
-fc_python_predicate:
-    use fc_predicate($rule_name, $clause_num, $clause_num,
-                     $python_predicate,
-                     $fn_head, $fn_tail, (),
-                     $patterns_in, $patterns_out)
+fc_python_premise:
+    use fc_premise($rule_name, $clause_num, $clause_num,
+                   $python_premise,
+                   $fn_head, $fn_tail, (),
+                   $patterns_in, $patterns_out)
     when
-        python_predicate($clause_num, $python_predicate,
-                         $patterns_in, $patterns_out,
-                         $fn_head, $fn_tail)
+        python_premise($clause_num, $python_premise,
+                       $patterns_in, $patterns_out,
+                       $fn_head, $fn_tail)
 
 assertions_0:
     use assertions((), (), $patterns_in, $patterns_in)
@@ -192,34 +192,34 @@ bc_rules1:
         $bc_lines = $bc_bc_lines + $bc_lines_rest
 
 bc_rule_:
-    use bc_rule($rb_name, (bc_rule, $name, $goal, $bc_predicates,
+    use bc_rule($rb_name, (bc_rule, $name, $goal, $bc_premises,
                                     $python_lines, $plan_vars_needed),
                 $plan_lines, $bc_lines)
     when
-        !bc_predicates($rb_name, $name, $bc_predicates, $plan_vars_needed,
-                       $pred_plan_lines, $pred_fn_head, $pred_fn_tail,
-                       $pred_decl_lines)
+        !bc_premises($rb_name, $name, $bc_premises, $plan_vars_needed,
+                     $prem_plan_lines, $prem_fn_head, $prem_fn_tail,
+                     $prem_decl_lines)
         ($plan_lines, $goal_fn_head, $goal_fn_tail, $goal_decl_lines) = \
             helpers.goal($rb_name, $name, $goal,
-                         $pred_plan_lines, $python_lines)
+                         $prem_plan_lines, $python_lines)
         $bc_lines = helpers.splice(
                       $goal_fn_head,
-                      $pred_fn_head,
+                      $prem_fn_head,
                       'yield context' if $plan_lines else 'yield',
-                      $pred_fn_tail,
+                      $prem_fn_tail,
                       $goal_fn_tail,
                       $goal_decl_lines,
-                      $pred_decl_lines,
+                      $prem_decl_lines,
                       'POPINDENT')
 
-bc_predicates:
-    use bc_predicates($rb_name, $rule_name, $bc_predicates,
-                      $plan_vars_needed, $plan_lines, $fn_head, $fn_tail,
-                      $decl_lines)
+bc_premises:
+    use bc_premises($rb_name, $rule_name, $bc_premises,
+                    $plan_vars_needed, $plan_lines, $fn_head, $fn_tail,
+                    $decl_lines)
     when
-        !bc_predicates1($rb_name, $rule_name, 1, $bc_predicates, (), $patterns,
-                        $plan_vars_needed, $plan_var_names,
-                        $plan_lines1, $fn_head, $fn_tail)
+        !bc_premises1($rb_name, $rule_name, 1, $bc_premises, (), $patterns,
+                      $plan_vars_needed, $plan_var_names,
+                      $plan_lines1, $fn_head, $fn_tail)
         $pat_lines = helpers.list_format($patterns, '(', '))')
         $decl_lines = ('(' + ' '.join(tuple(repr(plan_var_name) + ','
                                             for plan_var_name
@@ -232,38 +232,38 @@ bc_predicates:
                                                if step is not None),
                                key=lambda (step, lines): step))))))
 
-bc_predicates1_0:
-    use bc_predicates1($_, $_, $_, (), $patterns, $patterns,
-                       $plan_var_names, $plan_var_names,
-                       (), (), ())
+bc_premises1_0:
+    use bc_premises1($_, $_, $_, (), $patterns, $patterns,
+                     $plan_var_names, $plan_var_names,
+                     (), (), ())
 
-bc_predicates1_n:
-    use bc_predicates1($rb_name, $rule_name, $clause_num,
-                       ($first_pred, *$rest_preds),
-                       $patterns_in, $patterns_out,
-                       $plan_var_names_in, $plan_var_names_out,
-                       $plan_lines, $fn_head, $fn_tail)
+bc_premises1_n:
+    use bc_premises1($rb_name, $rule_name, $clause_num,
+                     ($first_prem, *$rest_prems),
+                     $patterns_in, $patterns_out,
+                     $plan_var_names_in, $plan_var_names_out,
+                     $plan_lines, $fn_head, $fn_tail)
     when
-        !bc_predicate($rb_name, $rule_name, $clause_num, $first_pred,
-                      $patterns_in, $patterns_out1,
-                      $plan_var_names_in, $plan_var_names_out1,
-                      $plan_lines1, $fn_head1, $fn_tail1)
+        !bc_premise($rb_name, $rule_name, $clause_num, $first_prem,
+                    $patterns_in, $patterns_out1,
+                    $plan_var_names_in, $plan_var_names_out1,
+                    $plan_lines1, $fn_head1, $fn_tail1)
         $next_clause_num = $clause_num + 1
-        !bc_predicates1($rb_name, $rule_name, $next_clause_num, $rest_preds,
-                        $patterns_out1, $patterns_out,
-                        $plan_var_names_out1, $plan_var_names_out,
-                        $plan_lines2, $fn_head2, $fn_tail2)
+        !bc_premises1($rb_name, $rule_name, $next_clause_num, $rest_prems,
+                      $patterns_out1, $patterns_out,
+                      $plan_var_names_out1, $plan_var_names_out,
+                      $plan_lines2, $fn_head2, $fn_tail2)
         $plan_lines = $plan_lines1 + $plan_lines2
         $fn_head = $fn_head1 + $fn_head2
         $fn_tail = $fn_tail2 + $fn_tail1
 
-bc_predicate:
-    use bc_predicate($rb_name, $rule_name, $clause_num,
-                     (bc_predicate, $required, $kb_name, $entity_name,
-                                    $arg_patterns, $plan_spec),
-                     $patterns_in, $patterns_out,
-                     $plan_var_names_in, $plan_var_names_out,
-                     $plan_lines, $fn_head, $fn_tail)
+bc_premise:
+    use bc_premise($rb_name, $rule_name, $clause_num,
+                   (bc_premise, $required, $kb_name, $entity_name,
+                                  $arg_patterns, $plan_spec),
+                   $patterns_in, $patterns_out,
+                   $plan_var_names_in, $plan_var_names_out,
+                   $plan_lines, $fn_head, $fn_tail)
     when
         $kb_name2 = $kb_name or "'" + $rb_name + "'"
         ($pat_nums, $patterns_out1) = \
@@ -378,21 +378,21 @@ required:
                         % ($rb_name, $rule_name, $clause_num),
                      "POPINDENT")
 
-bc_python_predicate:
-    use bc_predicate($rb_name, $rule_name, $clause_num,
-                     $python_predicate,
-                     $patterns_in, $patterns_out,
-                     $plan_var_names, $plan_var_names,
-                     (), $fn_head, $fn_tail)
+bc_python_premise:
+    use bc_premise($rb_name, $rule_name, $clause_num,
+                   $python_premise,
+                   $patterns_in, $patterns_out,
+                   $plan_var_names, $plan_var_names,
+                   (), $fn_head, $fn_tail)
     when
-        python_predicate($clause_num, $python_predicate,
-                         $patterns_in, $patterns_out,
-                         $fn_head, $fn_tail)
+        python_premise($clause_num, $python_premise,
+                       $patterns_in, $patterns_out,
+                       $fn_head, $fn_tail)
 
 python_eq:
-    use python_predicate($clause_num,
-                         (python_eq, $pattern, ($python_code, $_)),
-                         $patterns_in, $patterns_out, $fn_head, $fn_tail)
+    use python_premise($clause_num,
+                       (python_eq, $pattern, ($python_code, $_)),
+                       $patterns_in, $patterns_out, $fn_head, $fn_tail)
     when
         ($pat_num, $patterns_out) = \
             helpers.merge_pattern($pattern, $patterns_in)
@@ -411,9 +411,9 @@ python_eq:
                     "context.undo_to_mark(mark%d)" % $clause_num,)
 
 python_in:
-    use python_predicate($clause_num,
-                         (python_in, $pattern, ($python_code, $_)),
-                         $patterns_in, $patterns_out, $fn_head, $fn_tail)
+    use python_premise($clause_num,
+                       (python_in, $pattern, ($python_code, $_)),
+                       $patterns_in, $patterns_out, $fn_head, $fn_tail)
     when
         ($pat_num, $patterns_out) = \
             helpers.merge_pattern($pattern, $patterns_in)
@@ -435,10 +435,10 @@ python_in:
                     'POPINDENT',)
 
 python_check:
-    use python_predicate($clause_num,
-                         (python_check, ($python_code, $_)),
-                         $patterns_in, $patterns_in,
-                         $fn_head, ('POPINDENT',))
+    use python_premise($clause_num,
+                       (python_check, ($python_code, $_)),
+                       $patterns_in, $patterns_in,
+                       $fn_head, ('POPINDENT',))
     when
         $python_code2 = $python_code[:-1] + ($python_code[-1] + ':',)
         $fn_head = helpers.splice(

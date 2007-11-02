@@ -15,7 +15,8 @@ Rules
 =============================================
 
 Rules have two parts to them: an **if** part (the *premises*),
-and a **then** part (the *conclusions*).
+and a **then** part (the *conclusions*).  (Though pyke uses different
+names for these).
 
 Each of these **if** and **then** parts contain one or more facts represented
 by *patterns*.
@@ -31,6 +32,14 @@ Pyke processes forward-chaining rules and backward-chaining rules in two
 distinct phases:
 
 - All forward-chaining rules are processed when a rule base is *activated*.
+
+  - These rules assert new facts, and can activate more specific rule
+    bases.
+
 - Backward-chaining rules are processed when your program asks pyke to
-  prove a specific goal.
+  *prove* a specific *goal*.
+
+  - These rules don't assert new facts or activate more specific rule
+    bases.  But they do have the ability to assemble python functions into
+    a customized call graph to meet a specific need.
 

@@ -30,7 +30,8 @@ import sys
 # FIX: Take this out:
 use_test = False
 
-# If set, doesn't delete output files on error.
+# If set, doesn't delete output files on error
+# (if we don't want to nuke a hand tweaked compiler_bc.py).
 no_nuke = False
 
 import pyke
