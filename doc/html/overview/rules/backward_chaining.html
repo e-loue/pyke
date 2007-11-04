@@ -135,7 +135,8 @@ later).</p>
 &gt;&gt;&gt; pyke.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
 &gt;&gt;&gt; pyke.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
 &gt;&gt;&gt; pyke.activate('bc_example')
-&gt;&gt;&gt; for vars, no_plan in pyke.prove_n('bc_example', 'child_parent', ('michael',), 4):
+&gt;&gt;&gt; for vars, no_plan in pyke.prove_n('bc_example', 'child_parent',
+...                                   ('michael',), 4):
 ...     print vars
 ('bruce', (), 'son', 'father')
 ('marilyn', (), 'son', 'mother')
@@ -213,7 +214,7 @@ clause to try alternate subproofs is called <em>backtracking</em>.</p>
     </tfoot>
   </table>
 
-  <div id="last-modified">Page last modified Wed Oct 31 16:51:51 2007.</div>
+  <div id="last-modified">Page last modified Sun Nov  4 18:36:43 2007.</div>
 
 </body>
 </html>

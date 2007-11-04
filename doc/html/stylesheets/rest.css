@@ -14,7 +14,7 @@ Based on ``blue_box.css`` by Ian Bicking
 and ``default.css`` revision 3442
 */
 
-@import url(default.css);
+@import url("default.css");
 
 em, i {
   /* Typically serif fonts have much nicer italics */

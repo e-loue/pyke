@@ -5,27 +5,29 @@
  
  Ids used:
 
- #startcontent          -- <a name=> tag, has no contents
- #the-whole-page        -- <body>
- #end                   -- <div>
+ #body                  -- <tbody>
+ #body-tr               -- <tr>
+ #copyright             -- <td>
+ #crumb-left            -- <th>
+ #crumb-line            -- <th>
+ #crumb-right           -- <th>
+ #foot2                 -- <tr>
+ #foot                  -- <tfoot>
+ #header1               -- <tr>
+ #header2               -- <tr>
+ #header                -- <th>
+ #icons                 -- <div>
+ #last-modified         -- <div>
+ #left-nav-div          -- <div>
+ #left-nav              -- <td>
  #main                  -- <div>
+ #main-td               -- <td>
  #nav                   -- <div>
  #page-table            -- <table>
- #body                  -- <tbody>
- #left-nav              -- <td>
- #left-nav-div          -- <div>
- #sf-logo               -- <div>
- #main-td               -- <td>
- #foot                  -- <tfoot>
- #body-tr               -- <tr>
- #foot1                 -- <tr>
- #final-stuff           -- <td>
- #foot2                 -- <tr>
- #copyright             -- <td>
- #header1               -- <tr>
- #header                -- <td>
- #header2               -- <tr>
- #crumb-line            -- <td>
+ #return-to-top         -- <div>
+ #right-nav-div         -- <div>
+ #right-nav             -- <td>
+ #startcontent          -- <a name=> tag, has no contents
 
  ***********************************/
 
@@ -33,33 +35,77 @@
  
  Classes used:
 
- .normal-nav             -- <a> in left nav
- .title-nav              -- <a> in left nav
+ -- these may be combined:
+ .docutils               -- <dl> <table> <tt>
+ .literal                -- <tt>
 
  -- these may be combined:
- .first                  -- <ul> tag, <dl> with docutils class, <p> in <li>
- .last                   -- <ul> tag
- .simple                 -- <ul> tag
+ .arabic                 -- <ol>
+ .simple                 -- <ol> <ul>
 
- .docutils               -- <dl> with first class
-
- .displaybox             -- <div>
+ .doctest-block          -- <pre>
  .document               -- <div>
- .nav-branch             -- <div>
- .section                -- <div>
- .title                  -- <h1>
- .subtitle               -- <h2>
  .head                   -- <thead>
+ .literal-block          -- <pre>
+ .nav-branch             -- <div>
+ .normal-nav             -- <div>
+ .pre                    -- <span>    only inside <tt class="docutils literal">
+ .right-item             -- <div>
+ .section                -- <div>
+ .subtitle               -- <h2>
+ .title                  -- <h1>
+ .title-nav              -- <div>
 
  ***********************************/
 
-@import url(rest.css);
-@import url(test.css);
+@import url("rest.css");
+@import url("pysrc.css");
+
+p, td, li, ul, ol, h1, h2, h3, h4, h5, h6  {
+    font-family: arial, helvetica, geneva, sans-serif; 
+}
+
+#main h2, #main h3, #main p, #main h4 {
+    padding:0 10px;
+}
+
+#main a { 
+    font-weight:bold;
+    border-bottom: 1px dotted black;
+    text-decoration: none;
+}
+
+#main h2 a {border-bottom: none;}
+#main h3 a {border-bottom: none;}
+#main h4 a {border-bottom: none;}
+
+#main a.toc-backref {border-bottom: none;}
+
+a[name]:hover {background: none;}
+
+.title {
+    text-align: center;
+    padding: 15px;
+    max-width: 80%;
+    margin: 20px auto;
+}
+
+.title h1 {
+    font-size:30pt;
+}
+
+.title img {
+    display: block;
+    margin: 20px auto;
+}
+
+hr {text-align: center;}
 
 body {
     background-color: #E0E3D8;
     color: #000000;
     margin: 0;
+ /* min-width:850px; */
 }
 
 a {
@@ -81,6 +127,7 @@ a:hover {
 #page-table {
     font-family: arial, helvetica, geneva, sans-serif; 
     width: 90%;
+    min-width: 1080px;
     height: 100%;
     margin: 0 auto;
     border-collapse: collapse;
@@ -119,8 +166,8 @@ a:hover {
 #header {
     height: 77px;
     background-color: #B4C0AA;
-    background-image: url(../images/header.gif);
-    background-position: 3px 0px;
+    background-image: url("../images/header.gif");
+    background-position: 8px 0px;      /* was 8px 0px */
     background-repeat: no-repeat;
     text-align: center;
     color: silver;
@@ -165,7 +212,8 @@ a:hover {
     padding: 40px 10px 0 10px;
     border-right: 1px solid #67735D;
     border-left: 1px solid #67735D;
-    width: 160px;
+    width: 170px;
+    min-width: 170px;
     background-color: #CFD8C8;
 }
 
@@ -186,6 +234,7 @@ a:hover {
     border-right: 1px solid #67735D;
     border-left: 1px solid #67735D;
     width: 170px;
+    min-width: 170px;
     background-color: #DEE5D9;
     font-size: 13px;
     line-height: 17px;
@@ -218,6 +267,11 @@ a:hover {
 
 #icons {
     margin-top: 55px;
+}
+
+#main-td { 
+    background-color: white;
+    padding: 10px;
 }
 
 #main, #main-td, .document {

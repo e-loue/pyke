@@ -7,9 +7,18 @@ names must be: [a-zA-Z][a-zA-Z0-9-]*    -- hyphens; not underscores!
 
 .class
 #id
-:hover
-:active         -- between button-down and button-up
-:focus
-:before         -- to insert content before an element's content (content: xxx)
-:after          -- to insert content after an element's content (content: xxx)
 
+-- pseudo classes:
+:active         -- between button-down and button-up
+:first-child
+:focus
+:hover
+:lang(X)
+:link
+:visited
+
+-- pseudo elements:
+:after          -- to insert content after an element's content (content: xxx)
+:before         -- to insert content before an element's content (content: xxx)
+:first-letter
+:first-line
