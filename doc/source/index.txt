@@ -6,12 +6,12 @@ restindex
     section-pages: , overview/index, krb_syntax/index, interfacing_to_pyke/index, pyke_internals/index
     template: template.txt
     template-encoding: utf8
-    page-title: Welcome to Pyke!
+    page-title: Welcome to PyKE!
     include: No
 /restindex
 
 =========================
-Welcome to Pyke!
+Welcome to PyKE
 =========================
 -------------------------
 Python Knowledge Engine
@@ -19,8 +19,8 @@ Python Knowledge Engine
 
 Pyke is a knowledge-based inference engine written in 100% python that can:
 
-- Do both forward chaining (data driven) and
-  backward chaining (goal directed) inferencing.
+- Do both forward-chaining (data driven) and
+  backward-chaining (goal directed) inferencing.
 
   - Pyke may be embedded into any python program.
 
@@ -29,19 +29,19 @@ Pyke is a knowledge-based inference engine written in 100% python that can:
 
   - This is done through a unique design where the individual python
     functions are attached to backward-chaining rules.
-  - Unlike other approaches to code reuse (e.g. zope adapters and generic
+  - Unlike other approaches to code reuse (e.g. Zope adapters and generic
     functions), this allows the inference engine to ensure that all of the
     function's requirements are completely satisfied, by examining the entire
     call graph down to the leaves, before **any** of the functions are
     executed.
-  - This is an optional feature.  You don't need to use it, if you just
+  - This is an optional feature.  You don't need to use it if you just
     want the inferencing capability by itself.
 
 The knowledge engine supports:
 
-- Multiple *fact bases*, each with it's own list of facts.
+- Multiple *fact bases*, each with its own list of facts.
 - Both *forward-chaining* rules and *backward-chaining* rules.
-- Multiple *rule bases*, each with it's own list of forward-chaining
+- Multiple *rule bases*, each with its own list of forward-chaining
   and/or backward-chaining rules.
 - Rule base inheritance -- *activating* the derived rule base 
   includes the rules from the base rule base.

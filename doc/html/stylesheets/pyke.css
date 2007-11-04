@@ -56,17 +56,39 @@
 @import url(rest.css);
 @import url(test.css);
 
-table {
-    border-collapse: collapse;
+body {
+    background-color: #E0E3D8;
+    color: #000000;
+    margin: 0;
 }
 
-table, tbody, tr, th, td {
-    border: 0;
+a {
+    color: #545D4D;
+}
+
+a:hover {
+    color: #9AA690;
+}
+
+#copyright {
+    background-color: #67735D;
+    text-align: center;
+    color: #fff;
+    font-size: 10px;
+    padding: 5px 0 5px 0;
 }
 
 #page-table {
-    width: 100%;
-    margin: 0 0 0 0;
+    font-family: arial, helvetica, geneva, sans-serif; 
+    width: 90%;
+    height: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: 1px solid #67735D;
+}
+
+#foot1 {
+    background-color: #86947A;
 }
 
 #header1, #header, #page-table, #header2, .head,
@@ -79,12 +101,29 @@ table, tbody, tr, th, td {
     bottom: 0px;
 }
 
+#crumb-line {
+    color: #fff;
+}
+
+#crumb-line a {
+    color: #fff;
+    text-decoration: none;
+}
+
+#crumb-line a:hover {
+    color: #000;
+    background-color: #EEE;
+}
+
+
 #header {
-    background-color: #318;
+    height: 77px;
+    background-color: #B4C0AA;
+    background-image: url(../images/header.gif);
+    background-position: 3px 0px;
+    background-repeat: no-repeat;
     text-align: center;
-    padding: 10px;
     color: silver;
-    font-family: Helvetica, Arial, sans-serif;
     font-size:31pt;
 }
 
@@ -96,14 +135,16 @@ table, tbody, tr, th, td {
 #header a:hover{background:none;}
 
 #crumb-left, #crumb-line, #crumb-right {
-    background-color:#c99;
+    background-color:#67735D;
     padding:3px;
 }
 
+
 #nav {
     text-align:left;
-    font-size:11pt;
-    font-weight:bold;
+    font-size:10pt;
+    font-weight: bold;
+    padding-left: 8px;
 }
 #nav ul {
     margin:0;
@@ -113,55 +154,66 @@ table, tbody, tr, th, td {
     display:inline;
     list-style:none;
     margin:0;
-    padding:2px;
+    padding:0;
 }
 
 #left-nav, #right-nav, #crumb-left, #crumb-right, #final-left, #final-right {
-    width: 200px;
     vertical-align: top;
 }
 
-#left-nav, #right-nav {
-    padding-top: 110px;
+#left-nav {
+    padding: 40px 10px 0 10px;
+    border-right: 1px solid #67735D;
+    border-left: 1px solid #67735D;
+    width: 160px;
+    background-color: #CFD8C8;
+}
+
+#left-nav a {
+    color: #606B57;
+    font-size: 14px;
+    line-height: 27px;
+    padding: 4px;
+}
+
+#left-nav a:hover {
+    background-color: #E2E2E2;
+    padding: 4px;
+}
+
+#right-nav {
+    padding: 40px 10px 0 10px;
+    border-right: 1px solid #67735D;
+    border-left: 1px solid #67735D;
+    width: 170px;
+    background-color: #DEE5D9;
+    font-size: 13px;
+    line-height: 17px;
 }
 
 /* #left-nav, #right-nav, #left-nav-div, #right-nav-div { */
-#left-nav-div, #right-nav-div {
+#left-nav-div {
+    height: 300px;
     top: 0px;
     bottom: 0px;
     padding-top: 0px;
     padding-bottom: 0px;
-    border-top: 0px;
-    border-bottom: 0px;
-    align: left;
+    text-align: left;
     margin-top: 0px;
     margin-bottom: 0px;
 }
 
-/*
-#crumb-left, #left-nav, #final-left {
-    border-right: 2px solid blue;
+#left-nav-div {
+ /* padding-right: 4px; */
 }
 
-#crumb-right, #right-nav, #final-right {
-    border-left: 2px solid blue;
-}
-*/
-
-#left-nav-div, #icons {
-    padding-left: 5px;
-    padding-right: 8px;
-    /* border-right: 2px solid black; */
+#icons {
+    padding: 80px 8px 20px 0;
+    font-size: 12px;
 }
 
-#right-nav-div {
-    padding-left: 8px;
-    padding-right: 8px;
-    /* border-left: 2px solid black; */
-}
-
-#right-nav ul {
-    padding-left: 16px;
+#icons a {
+    padding: 0;
 }
 
 #icons {
@@ -170,11 +222,23 @@ table, tbody, tr, th, td {
 
 #main, #main-td, .document {
     vertical-align: top;
+    line-height: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
+    font-size: 13px;
+}
+
+#document {
+    width: 100%;
 }
 
 pre.literal-block, pre.doctest-block {
-    margin-left: 5%;
-    margin-right: 10%;
+ /* margin: 1%; */
+    background-color: #eeeeee;
+    font-size: 11px;            /* was 11px */
+    line-height: 1.6;
+    border: thin black solid;
+    padding: 5px;               /* was 5px */
 }
 
 /* div around each directory in left nav */
@@ -192,19 +256,54 @@ pre.literal-block, pre.doctest-block {
 }
 
 #return-to-top {
-    float: left;
+    padding: 20px 0 15px 15px;
+    font-size: 12px;
 }
 
 #last-modified {
-    float: right;
+    text-align: center;
+    color: #000;
+    font-size: 10px;
+    padding: 7px 0 6px 0;
+}
+
+p {
+    margin: 10px 0 20px 0;
 }
 
 #right-nav h3 {
-    font-size:15pt;
+    font-family: Times New Roman;
+    font-size:18px;
+    color: #00478E;
     font-weight:bold;
     margin-top: 0;
     margin-bottom: 0;
 }
+
+#right-nav-div {
+    padding-right: 8px;
+    /* border-left: 2px solid black; */
+}
+
+.right-item {
+    padding-top: 10px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.right-item p {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+/* FIX: not needed anymore
+#right-nav ul {
+    padding-left: 6px;
+}
 #right-nav li {
     margin-top: 10px;
 }
+*/

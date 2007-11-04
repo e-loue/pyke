@@ -11,6 +11,8 @@ Default cascading style sheet for the HTML output of Docutils.
 /* "! important" is used here to override other ``margin-top`` and
    ``margin-bottom`` styles that are later in the stylesheet or 
    more specific.  See http://www.w3.org/TR/CSS1#the-cascade */
+
+
 .first {
   margin-top: 0 ! important }
 
@@ -131,10 +133,27 @@ h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
   margin-top: 0.4em }
 
 h1.title {
-  text-align: center }
+  text-align: center;
+  font-family: Times New Roman;
+  margin-top: 3px;
+  margin-bottom: 0;
+  color: #00478E;
+  line-height: 30px;
+  font-style: italic;
+  }
 
 h2.subtitle {
-  text-align: center }
+  font-family: Times New Roman;
+  text-align: center;
+  font-size: 18px;
+  color: #00478E;
+  margin: 0;
+   }
+
+
+h2 {
+font-size:	18px;
+}
 
 hr.docutils {
   width: 75% }
@@ -209,9 +228,10 @@ pre.line-block {
   font-size: 100% }
 
 pre.literal-block, pre.doctest-block {
-  margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
+  margin: 1%;
+  background-color: #eeeeee;
+  font-size: 11px;
+  }
 
 span.classifier {
   font-family: sans-serif ;

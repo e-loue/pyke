@@ -6,8 +6,15 @@ http://www.456bereastreet.com/lab/developing_with_web_standards/csslayout/2-col/
 @import url('pysrc.css');
 
 p, td, li, ul, ol, h1, h2, h3, h4, h5, h6  {
-    font-family: Georgia, "New Century Schoolbook", Times, serif;
+   font-family: arial, helvetica, geneva, sans-serif; 
 }
+
+body {
+background-color: #E0E3D8;
+color: #000000;
+margin: 0;
+}
+
 
 #the-whole-page {
     margin:0px;
@@ -59,7 +66,8 @@ p, td, li, ul, ol, h1, h2, h3, h4, h5, h6  {
     font-weight:normal;
 }
 
-a:hover {background:yellow;}
+
+
 a[name]:hover {background: none;}
 
 

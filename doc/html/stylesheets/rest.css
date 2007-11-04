@@ -18,7 +18,7 @@ and ``default.css`` revision 3442
 
 em, i {
   /* Typically serif fonts have much nicer italics */
-  font-family: Times New Roman, Times, serif;
+ font-family: arial, helvetica, geneva, sans-serif; 
 }
 
 a.target {
@@ -32,6 +32,12 @@ a.toc-backref {
 
 a.toc-backref:hover {
   background: none ! important
+}
+
+body {
+background-color: #E0E3D8;
+color: #000000;
+margin: 0;
 }
 
 div.attention, div.caution, div.danger, div.error, div.hint,
@@ -54,7 +60,8 @@ div.attention p.admonition-title, div.caution p.admonition-title,
 div.danger p.admonition-title, div.error p.admonition-title,
 div.warning p.admonition-title {
   color: #cc0000;
-  font-family: sans-serif;
+  /* font-family was misspelled here... */
+  font-family: arial, helvetica, geneva, sans-serif; 
   text-align: center;
   background-color: #999999;
   display: block;

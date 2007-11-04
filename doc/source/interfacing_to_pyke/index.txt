@@ -1,5 +1,5 @@
 restindex
-    crumb: Interfacing to Pyke
+    crumb: Interfacing to PyKE
     page-description:
         How to integrate pyke into your python program.
     /description
@@ -10,6 +10,6 @@ restindex
 /restindex
 
 =====================
-Interfacing to Pyke
+Interfacing to PyKE
 =====================
 
