@@ -56,10 +56,17 @@
 @import url(rest.css);
 @import url(test.css);
 
+table {
+    border-collapse: collapse;
+}
+
+table, tbody, tr, th, td {
+    border: 0;
+}
+
 #page-table {
     width: 100%;
     margin: 0 0 0 0;
-    border-collapse: collapse;
 }
 
 #header1, #header, #page-table, #header2, .head,

@@ -62,6 +62,7 @@ tokens = tuple(x.upper() + '_TOK' for x in keywords) + (
     'CODE_TOK',
   # 'DATE_TOK',		# FIX: Add the definition for this!
     'DEINDENT_TOK',
+    'IDENTIFIER_TOK',
     'INDENT_TOK',
   # 'LB_TOK',
   # 'LC_TOK',
@@ -73,7 +74,6 @@ tokens = tuple(x.upper() + '_TOK' for x in keywords) + (
   # 'RC_TOK',
     'RP_TOK',
     'STRING_TOK',
-    'SYMBOL_TOK',
 )
 
 literals = '*:,!.='
@@ -302,7 +302,7 @@ def t_PATTERN_VAR_TOK(t):
     t.value = "'" + t.value[1:] + "'"
     return t
 
-def t_SYMBOL_TOK(t):
+def t_IDENTIFIER_TOK(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
     if t.value in keywords: t.type = t.value.upper() + '_TOK'
     return t

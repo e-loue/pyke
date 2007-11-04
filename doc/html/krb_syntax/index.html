@@ -50,6 +50,116 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="krb-syntax">
 <h1 class="title">KRB Syntax</h1>
+<p>This section describes the syntax for defining rules in the KRB files.</p>
+<div class="section">
+<h1><a id="legend" name="legend">Legend</a></h1>
+<p>To describe this syntax, the following punctuation is used:</p>
+<dl class="docutils">
+<dt>'<em>any_chars</em>'</dt>
+<dd>required punctuation or keyword: <em>any_chars</em></dd>
+<dt><em>a</em> | <em>b</em></dt>
+<dd>alternation: <em>a</em> or <em>b</em></dd>
+<dt>[<em>a</em>]</dt>
+<dd>optional <em>a</em></dd>
+<dt>{<em>a</em>}</dt>
+<dd>one or more <em>a</em>'s.  If <em>a</em> ends in a comma, the last comma is optional.</dd>
+<dt>NL</dt>
+<dd>means one or more newlines</dd>
+</dl>
+</div>
+<div class="section">
+<h1><a id="lexical-structure" name="lexical-structure">Lexical Structure</a></h1>
+<p>The KRB lexical structure is much like python.  Like python, indenting is
+significant.  It uses the same commenting, line continuation and literal
+formats for strings and numbers (except complex numbers).  It also uses the
+same rules for forming identifiers.</p>
+<p>The two notable exceptions to python conventions are:</p>
+<ol class="arabic simple">
+<li>Identifiers may be used as strings, without requiring quotes.<ul>
+<li><tt class="docutils literal"><span class="pre">foobar</span></tt> is the same as <tt class="docutils literal"><span class="pre">'foobar'</span></tt></li>
+</ul>
+</li>
+<li>Singleton tuples do not require a trailing comma.<ul>
+<li><tt class="docutils literal"><span class="pre">(1)</span></tt> is the same as <tt class="docutils literal"><span class="pre">(1,)</span></tt></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section">
+<h1><a id="keywords" name="keywords">Keywords</a></h1>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="38%" />
+<col width="31%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>as</td>
+<td>foreach</td>
+<td>taking</td>
+</tr>
+<tr><td>assert</td>
+<td>in</td>
+<td>True</td>
+</tr>
+<tr><td>bc_extras</td>
+<td>None</td>
+<td>use</td>
+</tr>
+<tr><td>check</td>
+<td>plan_extras</td>
+<td>when</td>
+</tr>
+<tr><td>extending</td>
+<td>python</td>
+<td>with</td>
+</tr>
+<tr><td>False</td>
+<td>step</td>
+<td>without</td>
+</tr>
+<tr><td>fc_extras</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h1><a id="syntax-of-the-entire-krb-file" name="syntax-of-the-entire-krb-file">Syntax of the Entire KRB File</a></h1>
+<pre class="literal-block">
+file ::= [NL]
+
+         ['extending' IDENTIFIER ['without' {IDENTIFIER,}] NL]
+
+         [{fc_rule}
+          ['fc_extras' NL INDENT
+             {&lt;python_statement&gt; NL}
+           DEINDENT]]
+
+         [{bc_rule}
+          ['bc_extras' NL INDENT
+             {&lt;python_statement&gt; NL}
+           DEINDENT]
+          ['plan_extras' NL INDENT
+             {&lt;python_statement&gt; NL}
+           DEINDENT]]
+</pre>
+<p>The KRB file has three optional parts.</p>
+<div class="section">
+<h2><a id="extending-clause" name="extending-clause">Extending clause</a></h2>
+<p>The optional <tt class="docutils literal"><span class="pre">extending</span></tt> clause, if used, is the first line of the file.
+This defines the parent rule base that this rule base inherits from.  It
+may also specify a list of backward chaining goal names to excluded from
+this inheritance.</p>
+</div>
+<div class="section">
+<h2><a id="forward-chaining-section" name="forward-chaining-section">Forward Chaining Section</a></h2>
+</div>
+<div class="section">
+<h2><a id="backward-chaining-section" name="backward-chaining-section">Backward Chaining Section</a></h2>
+</div>
+</div>
 </div>
 
             </div>
@@ -67,7 +177,7 @@
           <td id="final-stuff">
             <div id="end">
                 <div id="return-to-top"><a href="#startcontent">Return to Top</a></div>
-                <div id="last-modified"><small>Page last modified Wed Oct 31 16:49:18 2007.</small></div>
+                <div id="last-modified"><small>Page last modified Sun Nov  4 08:17:44 2007.</small></div>
             </div>
           </td>
           <td id="final-right"></td>

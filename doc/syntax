@@ -5,7 +5,8 @@
                    -- if it ends in a comma, the last comma is optional
 NL_TOK          -- means one or more newlines
 
-file ::= [NL_TOK] ['extending' SYMBOL_TOK ['without' {SYMBOL_TOK,}] NL_TOK]
+file ::= [NL_TOK]
+         ['extending' IDENTIFIER_TOK ['without' {IDENTIFIER_TOK,}] NL_TOK]
 	 [{fc_rule}
           ['fc_extras' NL_TOK INDENT_TOK
              {<python_statement> NL_TOK} DEINDENT_TOK]]
@@ -15,17 +16,20 @@ file ::= [NL_TOK] ['extending' SYMBOL_TOK ['without' {SYMBOL_TOK,}] NL_TOK]
           ['plan_extras' NL_TOK INDENT_TOK
              {<python_statement> NL_TOK} DEINDENT_TOK]]
 
-fc_rule ::= SYMBOL_TOK ':' NL_TOK INDENT_TOK [fc_foreach] fc_assert DEINDENT_TOK
+fc_rule ::= IDENTIFIER_TOK ':' NL_TOK INDENT_TOK
+               [fc_foreach]
+               fc_assert
+            DEINDENT_TOK
 
 fc_foreach ::= 'foreach' NL_TOK INDENT_TOK {fc_premise NL_TOK} DEINDENT_TOK
 
 fc_premise ::= fact_pattern
 	     | python_premise
 
-fact_pattern ::= SYMBOL_TOK '.' SYMBOL_TOK '(' [{pattern,}] ')'
+fact_pattern ::= IDENTIFIER_TOK '.' IDENTIFIER_TOK '(' [{pattern,}] ')'
 
 pattern ::= NONE_TOK | TRUE_TOK | FALSE_TOK
-          | NUMBER_TOK | SYMBOL_TOK | STRING_TOK | variable
+          | NUMBER_TOK | IDENTIFIER_TOK | STRING_TOK | variable
           | '(' [{pattern,}] ['*' variable] ')'
 
 variable ::= PATTERN_VAR_TOK | ANONYMOUS_VAR_TOK
@@ -40,9 +44,9 @@ assertion ::= fact_pattern
             | 'python' ':' NL_TOK INDENT_TOK
                 {python_statement NL_TOK} DEINDENT_TOK
 
-bc_rule ::= SYMBOL_TOK ':' NL_TOK INDENT_TOK use [when] [with] DEINDENT_TOK
+bc_rule ::= IDENTIFIER_TOK ':' NL_TOK INDENT_TOK use [when] [with] DEINDENT_TOK
 
-use ::= 'use' SYMBOL_TOK '(' {pattern,} ')'
+use ::= 'use' IDENTIFIER_TOK '(' {pattern,} ')'
 		['taking' '(' <python_arg_spec> ')'] NL_TOK
 
 when ::= 'when' NL_TOK INDENT_TOK {bc_premise NL_TOK} DEINDENT_TOK
@@ -53,7 +57,7 @@ bc_premise ::= ['!'] goal_name '(' {pattern,} ')' plan_spec
 goal_name ::= name '.' name
 	    | name
 
-name ::= SYMBOL_TOK
+name ::= IDENTIFIER_TOK
        | PATTERN_VAR_TOK
 
 plan_spec ::= step_opt NL_TOK

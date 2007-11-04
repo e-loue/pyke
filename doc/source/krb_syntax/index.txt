@@ -1,7 +1,7 @@
 restindex
-    crumb: .krb Syntax
+    crumb: KRB Syntax
     page-description:
-        Syntax of the knowledge rule base (.krb) files, which is where you
+        Syntax of the knowledge rule base (KRB) files, which is where you
         write your rules.
     /description
     format: rest
@@ -11,6 +11,95 @@ restindex
 /restindex
 
 ===================
-.krb Syntax
+KRB Syntax
 ===================
 
+This section describes the syntax for defining rules in the KRB files.
+
+Legend
+==============
+
+To describe this syntax, the following punctuation is used:
+
+'*any_chars*'
+   required punctuation or keyword: *any_chars*
+*a* | *b*
+   alternation: *a* or *b*
+[*a*]
+   optional *a*
+{*a*}
+   one or more *a*'s.  If *a* ends in a comma, the last comma is optional.
+NL
+   means one or more newlines
+
+Lexical Structure
+=======================
+
+The KRB lexical structure is much like python.  Like python, indenting is
+significant.  It uses the same commenting, line continuation and literal
+formats for strings and numbers (except complex numbers).  It also uses the
+same rules for forming identifiers.
+
+The two notable exceptions to python conventions are:
+
+#. Identifiers may be used as strings, without requiring quotes.
+
+   - ``foobar`` is the same as ``'foobar'``
+
+#. Singleton tuples do not require a trailing comma.
+
+   - ``(1)`` is the same as ``(1,)``
+
+
+Keywords
+==================
+
+=========  ===========  =========
+as         foreach      taking 
+assert     in           True 
+bc_extras  None         use 
+check      plan_extras  when 
+extending  python       with 
+False      step         without 
+fc_extras                       
+=========  ===========  =========
+
+
+
+Syntax of the Entire KRB File
+===================================
+
+::
+
+    file ::= [NL]
+
+             ['extending' IDENTIFIER ['without' {IDENTIFIER,}] NL]
+
+             [{fc_rule}
+              ['fc_extras' NL INDENT
+                 {<python_statement> NL}
+               DEINDENT]]
+
+             [{bc_rule}
+              ['bc_extras' NL INDENT
+                 {<python_statement> NL}
+               DEINDENT]
+              ['plan_extras' NL INDENT
+                 {<python_statement> NL}
+               DEINDENT]]
+
+The KRB file has three optional parts.
+
+Extending clause
+-----------------
+
+The optional ``extending`` clause, if used, is the first line of the file.
+This defines the parent rule base that this rule base inherits from.  It
+may also specify a list of backward chaining goal names to excluded from
+this inheritance.
+
+Forward Chaining Section
+--------------------------
+
+Backward Chaining Section
+--------------------------

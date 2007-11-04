@@ -5,30 +5,30 @@ file : ('file', parent,
 parent : None
        | ('parent', extending_symbol, (without_symbols))
 
-fc_rule: ('fc_rule', name, (fc_predicate), (assertion))
+fc_rule: ('fc_rule', name, (fc_premise), (assertion))
 
-fc_predicate : ('fc_predicate', kb_name, entity_name, (pattern))
-             | python_predicate
+fc_premise : ('fc_premise', kb_name, entity_name, (pattern))
+           | python_premise
 
 assertion : ('assert', kb_name, entity_name, (pattern))
           | ('python_assertion', python_code)
 
-python_predicate : ('python_eq', pattern, python_code)
-                 | ('python_in', pattern, python_code)
-                 | ('python_check', python_code)
+python_premise : ('python_eq', pattern, python_code)
+               | ('python_in', pattern, python_code)
+               | ('python_check', python_code)
 
 counting : ('counting', quoted_pattern_var_name,
                         <from>python_code_opt, <by>python_code_opt)
 
-bc_rule: ('bc_rule', name, goal, (bc_predicate), (python_code),
+bc_rule: ('bc_rule', name, goal, (bc_premise), (python_code),
                      (plan_vars_needed))
 
-goal : ('goal', <entity_name>SYMBOL, (pattern), <taking>(python_line))
+goal : ('goal', <entity_name>IDENTIFIER, (pattern), <taking>(python_line))
 
-bc_predicate : ('bc_predicate', <required>_bool,
-                                <kb>name_opt, <entity>name, (pattern),
-                                plan_spec_opt)
-             | python_predicate
+bc_premise : ('bc_premise', <required>_bool,
+                            <kb>name_opt, <entity>name, (pattern),
+                            plan_spec_opt)
+           | python_premise
 
 name : quoted_STRING
      | "context.lookup_data('PATTERN_VAR_NAME')"

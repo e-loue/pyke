@@ -47,7 +47,7 @@ def p_file_bc(p):
     p[0] = ('file', p[2], ((), ()), p[3])
 
 def p_parent(p):
-    ''' parent_opt : EXTENDING_TOK SYMBOL_TOK without_opt nls
+    ''' parent_opt : EXTENDING_TOK IDENTIFIER_TOK without_opt nls
     '''
     p[0] = ('parent', p[2], tuple(p[3]))
 
@@ -100,7 +100,7 @@ def p_none(p):
     p[0] = None
 
 def p_fc_rule(p):
-    ''' fc_rule : SYMBOL_TOK ':' NL_TOK INDENT_TOK foreach_opt ASSERT_TOK NL_TOK INDENT_TOK assertions DEINDENT_TOK DEINDENT_TOK
+    ''' fc_rule : IDENTIFIER_TOK ':' NL_TOK INDENT_TOK foreach_opt ASSERT_TOK NL_TOK INDENT_TOK assertions DEINDENT_TOK DEINDENT_TOK
     '''
     p[0] = ('fc_rule', p[1], p[5], tuple(p[9]))
 
@@ -110,7 +110,7 @@ def p_foreach(p):
     p[0] = tuple(p[4])
 
 def p_fc_premise(p):
-    ''' fc_premise : SYMBOL_TOK '.' SYMBOL_TOK LP_TOK patterns_opt RP_TOK nls
+    ''' fc_premise : IDENTIFIER_TOK '.' IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK nls
     '''
     p[0] = ('fc_premise', p[1], p[3], tuple(p[5]))
 
@@ -130,7 +130,7 @@ def p_python_check(p):
     p[0] = ('python_check', p[3])
 
 def p_assertion(p):
-    ''' assertion : SYMBOL_TOK '.' SYMBOL_TOK LP_TOK patterns_opt RP_TOK NL_TOK
+    ''' assertion : IDENTIFIER_TOK '.' IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK NL_TOK
     '''
     p[0] = ('assert', p[1], p[3], tuple(p[5]))
 
@@ -140,7 +140,7 @@ def p_python_assertion(p):
     p[0] = ('python_assertion', p[4])
 
 def p_bc_rule(p):
-    ''' bc_rule : SYMBOL_TOK ':' NL_TOK INDENT_TOK USE_TOK goal when_opt with_opt DEINDENT_TOK
+    ''' bc_rule : IDENTIFIER_TOK ':' NL_TOK INDENT_TOK USE_TOK goal when_opt with_opt DEINDENT_TOK
     '''
     p[0] = ('bc_rule', p[1], p[6], tuple(p[7]), tuple(p[8][0]), tuple(p[8][1]))
 
@@ -155,12 +155,12 @@ def p_bc_rules_section(p):
     p[0] = (tuple(p[1]), p[2], p[3])
 
 def p_goal(p):
-    ''' goal : SYMBOL_TOK LP_TOK patterns_opt RP_TOK taking_opt nls
+    ''' goal : IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK taking_opt nls
     '''
     p[0] = ('goal', p[1], tuple(p[3]), p[5])
 
 def p_name_sym(p):
-    ''' name : SYMBOL_TOK
+    ''' name : IDENTIFIER_TOK
     '''
     p[0] = repr(p[1])
 
@@ -283,7 +283,7 @@ def p_taking(p):
     p[0] = p[len(p)-1][0]
 
 def p_quoted_last(p):
-    ''' data : SYMBOL_TOK
+    ''' data : IDENTIFIER_TOK
     '''
     p[0] = "'" + p[len(p)-1] + "'"
 
@@ -306,7 +306,7 @@ def p_start_list(p):
         fc_rules : fc_rule
         patterns : pattern
         patterns_proper : pattern_proper
-	without_names : SYMBOL_TOK
+	without_names : IDENTIFIER_TOK
     '''
     p[0] = [p[1]]
 
@@ -336,7 +336,7 @@ def p_append_list(p):
 	fc_rules : fc_rules fc_rule
         patterns : patterns ',' pattern
         patterns_proper : patterns_proper ',' pattern
-	without_names : without_names ',' SYMBOL_TOK
+	without_names : without_names ',' IDENTIFIER_TOK
     '''
     p[1].append(p[len(p)-1])
     p[0] = p[1]

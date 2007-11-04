@@ -62,7 +62,8 @@
                 <div class="document" id="rules">
 <h1 class="title">Rules</h1>
 <p>Rules have two parts to them: an <strong>if</strong> part (the <em>premises</em>),
-and a <strong>then</strong> part (the <em>conclusions</em>).</p>
+and a <strong>then</strong> part (the <em>conclusions</em>).  (Though pyke uses different
+names for these).</p>
 <p>Each of these <strong>if</strong> and <strong>then</strong> parts contain one or more facts represented
 by <em>patterns</em>.
 Logically, the rule says that if <strong>all</strong> of the premises in the <strong>if</strong> part of
@@ -75,9 +76,18 @@ whether the rule is a <em>forward-chaining</em> or <em>backward-chaining</em> ru
 Pyke processes forward-chaining rules and backward-chaining rules in two
 distinct phases:</p>
 <ul class="simple">
-<li>All forward-chaining rules are processed when a rule base is <em>activated</em>.</li>
+<li>All forward-chaining rules are processed when a rule base is <em>activated</em>.<ul>
+<li>These rules assert new facts, and can activate more specific rule
+bases.</li>
+</ul>
+</li>
 <li>Backward-chaining rules are processed when your program asks pyke to
-prove a specific goal.</li>
+<em>prove</em> a specific <em>goal</em>.<ul>
+<li>These rules don't assert new facts or activate more specific rule
+bases.  But they do have the ability to assemble python functions into
+a customized call graph to meet a specific need.</li>
+</ul>
+</li>
 </ul>
 </div>
 
@@ -101,7 +111,7 @@ prove a specific goal.</li>
           <td id="final-stuff">
             <div id="end">
                 <div id="return-to-top"><a href="#startcontent">Return to Top</a></div>
-                <div id="last-modified"><small>Page last modified Wed Oct 31 16:58:12 2007.</small></div>
+                <div id="last-modified"><small>Page last modified Fri Nov  2 14:47:05 2007.</small></div>
             </div>
           </td>
           <td id="final-right"></td>
