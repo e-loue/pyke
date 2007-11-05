@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-    <title>Knowledge Bases</title>
+    <title>Special</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="../../stylesheets/pyke.css" type="text/css" />
 </head>
@@ -20,7 +20,9 @@
 <li>&gt;</li>
 <li><a href="../index.html">Overview</a></li>
 <li>&gt;</li>
-<li>Knowledge Bases</li>
+<li><a href="index.html">Knowledge Bases</a></li>
+<li>&gt;</li>
+<li>Special</li>
 
               </ul>
             </div>
@@ -64,31 +66,61 @@
           <td id="main-td">
             <div id="main">
                 <a name="startcontent" id="startcontent"></a>
-                <div class="document" id="knowledge-bases">
-<h1 class="title">Knowledge Bases</h1>
-<p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are organized
-into named repositories called <em>knowledge bases</em>.  A knowledge base is like
-a directory for files on disk, except that knowledge bases may not be
-nested.  Therefore, facts and goals always have a two-level name.</p>
-<p>Here are some examples of facts you might see in a web server application:</p>
+                <div class="document" id="special">
+<h1 class="title">Special</h1>
+<p>Other knowledge bases may be created that act in different ways when they
+are asked to lookup facts or prove goals.  Pyke includes one of these
+named <em>special</em>.  Each entity in this knowledge
+base is a python function that does something &quot;special&quot; when run.</p>
+<p>Currently, it has only one special function:</p>
 <pre class="literal-block">
-header.cookie('session=123456789;remember=the_alamo')
-cookie.session(123456789)
-cookie.remember(the_alamo)
-header.accept_encoding(gzip)
-header.accept_encoding(deflate)
-request.path('/my/site.html')
-request.path_segment(0, my)
-request.path_segment(1, 'site.html')
-request.path_segment(-2, my)
-request.path_segment(-1, 'site.html')
+special.claim_goal()
 </pre>
-<p>Note that three different knowledge bases are shown here:
-<tt class="docutils literal"><span class="pre">header</span></tt>, <tt class="docutils literal"><span class="pre">cookie</span></tt>, and <tt class="docutils literal"><span class="pre">request</span></tt>; each with multiple facts.</p>
-<p>There are different types of knowledge bases.  Those that contain facts are
-called <em>fact bases</em>.  Those that contain rules are called <em>rule bases</em>.
-All knowledge bases share the same name space; so that no two of them,
-regardless of their type, may have the same name.</p>
+<p>This acts like the prolog <tt class="docutils literal"><span class="pre">cut</span></tt> operator.</p>
+<p>In general there are multiple rules that might be used to try to prove any
+goal.  They are each tried in the order that they appear in the .krb file.
+If one rule fails, the next rule is tried.  The goal itself doesn't fail
+until all of the rules for it have failed.</p>
+<p>But if one of these rules executes <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> in its <tt class="docutils literal"><span class="pre">when</span></tt>
+clause, none of the rest of the rules will be tried for this goal.
+Thus, when <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is backtracked over, the goal fails
+immediately without trying any more rules for it.</p>
+<p>This ends up acting like an &quot;else&quot;.  You place it in the <tt class="docutils literal"><span class="pre">when</span></tt> clause
+after the premises that show that this rule <strong>must</strong> be
+the correct one to use.  Then the subsequent rules will only be tried if
+these premises fail, such that <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is never executed.</p>
+<p>This means that you don't need to
+add extra premises in each subsequent rule to make sure that these premises
+have <strong>not</strong> occurred.</p>
+<p>Suppose I want to translate a number, N, into the phrase &quot;N dogs&quot;.  I could
+use the following rules:</p>
+<pre class="literal-block">
+one_dog:
+    use n_dogs(1, '1 dog')
+    when
+        special.claim_goal()
+
+n_dogs:
+    use n_dogs($n, $phrase)
+    when
+        $phrase = &quot;%d dogs&quot; % $n
+</pre>
+<p>The <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> prevents the second rule from being used when
+<em>n</em> is 1, as that rule would be incorrect.  Without the
+<tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt>, I would have to write:</p>
+<pre class="literal-block">
+one_dog:
+    use n_dogs(1, '1 dog')
+
+n_dogs:
+    use n_dogs($n, $phrase)
+    when
+        check $n != 1
+        $phrase = &quot;%d dogs&quot; % $n
+</pre>
+<p>This is a simple example where it is easy to add the check in the second
+rule.  But in general, it is difficult to prove that something is <strong>not</strong>
+true, making <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> indispensable.</p>
 </div>
 
                 <div id="return-to-top"><a href="#">Return to Top</a></div>
