@@ -6,16 +6,12 @@ restindex
     section-pages: , overview/index, krb_syntax/index, interfacing_to_pyke
     template: template.txt
     template-encoding: utf8
-    page-title: Welcome to PyKE!
     include: No
 /restindex
 
 =========================
-Welcome to PyKE
+Welcome to Pyke
 =========================
--------------------------
-Python Knowledge Engine
--------------------------
 
 Pyke is a knowledge-based inference engine written in 100% python that can:
 

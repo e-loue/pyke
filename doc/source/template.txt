@@ -41,7 +41,7 @@
             </div>
             <div id="icons">
                 <div id="project-page">
-                  <a href="http://sourceforge.net/projects/pyke/">PyKE Project Page</a>
+                  <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
                 Hosted by: <br />
                 <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
@@ -59,11 +59,11 @@
             <div id="right-nav-div">
                 <#
                     print_details(default_section,
-                                  page_title='<h3>Pages:</h3>',
+                                  page_title='<h3>More:</h3>',
                                   subsection_title='<h3>Sub Sections:</h3>',
                                   item_wrapper='%s',
                                   item='<div class="right-item">%s</div>',
-                                  description='%s'
+                                  split=False
                                   )
                 #>
             </div>
@@ -80,7 +80,9 @@
     </tfoot>
   </table>
 
-  <div id="last-modified">Page last modified <% modtime %>.</div>
+  <div id="last-modified">
+    Page last modified <% formattime(t=modified, format="%a, %b %d %Y") %>.
+  </div>
 
 </body>
 </html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Using Pyke</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="stylesheets/pyke.css" type="text/css" />
+</head>
+<body>
+  <table id="page-table">
+    <thead class="head">
+        <tr id="header1"><th id="header" colspan="3">
+            &nbsp;
+        </th></tr>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <li><a href="index.html">Home</a></li>
+<li>&gt;</li>
+<li>Using Pyke</li>
+
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
+    </thead>
+
+    <tbody id="body">
+        <tr id="body-tr">
+          <td id="left-nav">
+            <div id="left-nav-div">
+              
+<div class="title-nav"><a href="index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="overview/index.html">Overview</a></div>
+<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="interfacing_to_pyke.html">Using Pyke</a></div>
+</div>
+
+            </div>
+            <div id="icons">
+                <div id="project-page">
+                  <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
+                </div>
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+            </div>
+          </td>
+          <td id="main-td">
+            <div id="main">
+                <a name="startcontent" id="startcontent"></a>
+                <div class="document" id="using-pyke">
+<h1 class="title">Using Pyke</h1>
+<div class="section">
+<h1><a id="system-requirements" name="system-requirements">System Requirements</a></h1>
+<p>Pyke is 100% python, so it should run on any platform supported by python.
+You'll need:</p>
+<ul class="simple">
+<li><a class="reference" href="http://python.org">Python 2.5</a></li>
+<li><a class="reference" href="http://www.dabeaz.com/ply/">PLY 2.3</a></li>
+</ul>
+</div>
+<div class="section">
+<h1><a id="subversion-directories" name="subversion-directories">Subversion Directories</a></h1>
+<p>To check out the entire project (including the example and this documentation)
+into a directory called <em>foobar</em>:</p>
+<pre class="literal-block">
+$ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/trunk foobar
+</pre>
+<p>Anybody can check out the code, but only project members may do
+<tt class="docutils literal"><span class="pre">commits</span></tt>.  Send me an email if you'd like to lend a hand!</p>
+<p>You'll see the following directories.  You can also use <tt class="docutils literal"><span class="pre">svn</span></tt> to check these
+out individually by simply adding the directory name onto the end of the url in
+the example above and changing the directory that you want it to go into.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">doc</span></tt><ul>
+<li>See <span class="target" id="documentation">Documentation</span>, below.</li>
+</ul>
+</li>
+<li><tt class="docutils literal"><span class="pre">examples</span></tt><ul>
+<li>Currently, there is only one example: <em>family_relations</em>.  Look at the
+<tt class="docutils literal"><span class="pre">README</span></tt> file there to see how to run it.</li>
+</ul>
+</li>
+<li><tt class="docutils literal"><span class="pre">pyke</span></tt><ul>
+<li>This is the top-level python package directory for the python sources.
+This needs to be in a directory on your PYTHONPATH.
+The sources for the compiler is in the <tt class="docutils literal"><span class="pre">compiler</span></tt> subdirectory,
+which is expected to be a subpackage of <tt class="docutils literal"><span class="pre">pyke</span></tt>.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section">
+<h1><a id="id1" name="id1">Documentation</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">doc/html</span></tt> directory in subversion contains all of these documents.
+You can browse these on your hard drive if you'd like.</p>
+<p>If you want to regenerate these documents, you'll also need:</p>
+<ul class="simple">
+<li><a class="reference" href="http://sourceforge.net/projects/rest2web">Rest2web</a></li>
+<li><a class="reference" href="http://sourceforge.net/projects/docutils">Docutils</a></li>
+</ul>
+<p>The sources for the documentation are in <tt class="docutils literal"><span class="pre">doc/sources</span></tt>.</p>
+<p>To regenerate the documentation, in the <tt class="docutils literal"><span class="pre">doc</span></tt> directory run:</p>
+<pre class="literal-block">
+$ r2w r2w.ini
+</pre>
+<p>This will regenerate the files in <tt class="docutils literal"><span class="pre">doc/html</span></tt>, except for those in
+<tt class="docutils literal"><span class="pre">doc/html/stylesheets</span></tt> and those in <tt class="docutils literal"><span class="pre">doc/html/images</span></tt>.  I've gone ahead
+and placed the generated html files in subversion so that you can checkout
+the documentation without having to run <tt class="docutils literal"><span class="pre">r2w</span></tt>.</p>
+</div>
+</div>
+
+                <div id="return-to-top"><a href="#">Return to Top</a></div>
+            </div>
+          </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <h3>More:</h3>
+<div class="right-item"><a href="overview/index.html">Overview</a><p>So what is all this knowledge-base, inferencing and automatic program
+generation stuff anyway?</p>
+</div>
+<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
+write your rules.</p>
+</div>
+<div class="right-item"><a href="interfacing_to_pyke.html">Using Pyke</a><p>How to install and integrate pyke into your python program.</p>
+</div>
+
+            </div>
+          </td>
+        </tr>
+    </tbody>
+
+    <tfoot id="foot">
+        <tr id="foot2">
+          <td id="copyright" colspan="3">
+            Copyright &copy; 2007 Bruce Frederiksen
+          </td>
+        </tr>
+    </tfoot>
+  </table>
+
+  <div id="last-modified">
+    Page last modified Mon, Nov 05 2007.
+  </div>
+
+</body>
+</html>

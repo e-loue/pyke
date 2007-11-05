@@ -1,5 +1,5 @@
 restindex
-    crumb: Interfacing to Pyke
+    crumb: Using Pyke
     page-description:
         How to install and integrate pyke into your python program.
     /description
@@ -9,9 +9,9 @@ restindex
     include: yes
 /restindex
 
-=====================
-Interfacing to PyKE
-=====================
+===================================
+Using Pyke
+===================================
 
 System Requirements
 ====================
