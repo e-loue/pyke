@@ -48,7 +48,7 @@ def load(paths = ('.',), load_fc = True, load_bc = True):
     if isinstance(paths, types.StringTypes): paths = (paths,)
     compile_list = _get_compile_list(paths)
     if compile_list:
-        status = os.system("python -m pyke.compiler %s" % 
+        status = os.system("python2.5 -m pyke.compiler %s" % 
                            ' '.join(compile_list))
         if status != 0:
             raise SyntaxError("Errors encountered trying to compile")

@@ -35,6 +35,7 @@
 <div class="title-nav"><a href="index.html">Home</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="overview/index.html">Overview</a></div>
 <div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="interfacing_to_pyke.html">Using Pyke</a></div>
 </div>
 
@@ -53,64 +54,157 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="using-pyke">
 <h1 class="title">Using Pyke</h1>
+<p>There isn't that much to using pyke.  All necessary functions are provided
+directly by the pyke package:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; import pyke
+</pre>
+</blockquote>
 <div class="section">
-<h1><a id="system-requirements" name="system-requirements">System Requirements</a></h1>
-<p>Pyke is 100% python, so it should run on any platform supported by python.
-You'll need:</p>
-<ul class="simple">
-<li><a class="reference" href="http://python.org">Python 2.5</a></li>
-<li><a class="reference" href="http://www.dabeaz.com/ply/">PLY 2.3</a></li>
-</ul>
+<h1><a id="initializing-pyke" name="initializing-pyke">Initializing Pyke</a></h1>
+<p>There are two functions to initialize pyke:</p>
+<dl class="docutils">
+<dt>load(paths = ('.',), load_fc = True, load_bc = True)</dt>
+<dd>The <tt class="docutils literal"><span class="pre">load</span></tt> function may only be called once.  It expects either a single
+directory or a sequence directories.  It recursively walks each directory
+looking for .krb files.  Each .krb file that it finds is compiled, if out
+of date, and then the resulting python modules imported.  This causes all
+of the rule bases to be loaded.</dd>
+<dt>add_universal_fact(kb_name, fact_name, args)</dt>
+<dd>The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per fact.  These facts
+are never deleted and apply to all <em>cases</em>.</dd>
+</dl>
 </div>
 <div class="section">
-<h1><a id="subversion-directories" name="subversion-directories">Subversion Directories</a></h1>
-<p>To check out the entire project (including the example and this documentation)
-into a directory called <em>foobar</em>:</p>
-<pre class="literal-block">
-$ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/trunk foobar
-</pre>
-<p>Anybody can check out the code, but only project members may do
-<tt class="docutils literal"><span class="pre">commits</span></tt>.  Send me an email if you'd like to lend a hand!</p>
-<p>You'll see the following directories.  You can also use <tt class="docutils literal"><span class="pre">svn</span></tt> to check these
-out individually by simply adding the directory name onto the end of the url in
-the example above and changing the directory that you want it to go into.</p>
-<ul class="simple">
-<li><tt class="docutils literal"><span class="pre">doc</span></tt><ul>
-<li>See <span class="target" id="documentation">Documentation</span>, below.</li>
-</ul>
-</li>
-<li><tt class="docutils literal"><span class="pre">examples</span></tt><ul>
-<li>Currently, there is only one example: <em>family_relations</em>.  Look at the
-<tt class="docutils literal"><span class="pre">README</span></tt> file there to see how to run it.</li>
-</ul>
-</li>
-<li><tt class="docutils literal"><span class="pre">pyke</span></tt><ul>
-<li>This is the top-level python package directory for the python sources.
-This needs to be in a directory on your PYTHONPATH.
-The sources for the compiler is in the <tt class="docutils literal"><span class="pre">compiler</span></tt> subdirectory,
-which is expected to be a subpackage of <tt class="docutils literal"><span class="pre">pyke</span></tt>.</li>
-</ul>
-</li>
-</ul>
+<h1><a id="setting-up-each-case" name="setting-up-each-case">Setting up Each Case</a></h1>
+<p>Pyke is designed to be run multiple times for multiple <em>cases</em>.  In
+general each case has its own set of starting facts and may use different
+rule bases, depending on the situation.</p>
+<p>Three functions initialize each case:</p>
+<dl class="docutils">
+<dt>reset()</dt>
+<dd>The <tt class="docutils literal"><span class="pre">reset</span></tt> function is called once to delete all of the case specific
+facts from the last case.  It also deactivates all rule bases.</dd>
+<dt>assert_(kb_name, fact_name, args)</dt>
+<dd>Call <tt class="docutils literal"><span class="pre">assert_</span></tt> (or the equivalent, <tt class="docutils literal"><span class="pre">add_case_specific_fact</span></tt>,
+see <a class="reference" href="#other-functions">Other Functions</a>, below) for each starting fact for this case.</dd>
+<dt>activate(*rb_names)</dt>
+<dd>Then call <tt class="docutils literal"><span class="pre">activate</span></tt> to activate the appropriate rule bases.  This may
+be called more than once, if desired, or it can simply take multiple
+arguments.</dd>
+</dl>
+<p>Pyke is now ready to prove goals for this case!</p>
 </div>
 <div class="section">
-<h1><a id="id1" name="id1">Documentation</a></h1>
-<p>The <tt class="docutils literal"><span class="pre">doc/html</span></tt> directory in subversion contains all of these documents.
-You can browse these on your hard drive if you'd like.</p>
-<p>If you want to regenerate these documents, you'll also need:</p>
-<ul class="simple">
-<li><a class="reference" href="http://sourceforge.net/projects/rest2web">Rest2web</a></li>
-<li><a class="reference" href="http://sourceforge.net/projects/docutils">Docutils</a></li>
-</ul>
-<p>The sources for the documentation are in <tt class="docutils literal"><span class="pre">doc/sources</span></tt>.</p>
-<p>To regenerate the documentation, in the <tt class="docutils literal"><span class="pre">doc</span></tt> directory run:</p>
-<pre class="literal-block">
-$ r2w r2w.ini
+<h1><a id="proving-goals" name="proving-goals">Proving Goals</a></h1>
+<p>Two functions are provided that cover the easy cases.  More general
+functions are provided in <a class="reference" href="#other-functions">Other Functions</a>, below.</p>
+<dl class="docutils">
+<dt>prove_1(kb_name, entity_name, fixed_args, num_returns)</dt>
+<dd>Returns the first proof as two results: a tuple whose len == num_returns
+containing the returned values, and a plan.  The plan is None if no plan
+was generated.  Raises pyke.CanNotProve if no proof is found.</dd>
+<dt>prove_n(kb_name, entity_name, fixed_args, num_returns)</dt>
+<dd>This is a generator yielding two results: a tuple whose len == num_returns,
+and a plan, for each possible proof.  Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>, the plan is None
+if no plan was generated.</dd>
+</dl>
+<div class="section">
+<h2><a id="running-and-pickling-plans" name="running-and-pickling-plans">Running and Pickling Plans</a></h2>
+<p>Once you've obtained a <em>plan</em> from <tt class="docutils literal"><span class="pre">prove_1</span></tt> or <tt class="docutils literal"><span class="pre">prove_n</span></tt>, you just call
+it like a normal python function.  The arguments required are simply those
+specified, if any, in the <tt class="docutils literal"><span class="pre">taking</span></tt> clause of the rule proving the top-level
+goal.</p>
+<p>You may call the plan function any number of times.  You may even pickle
+the plan for later use.  But the plans are constructed out of
+<a class="reference" href="http://docs.python.org/lib/module-functools.html">functools.partial</a> functions, so you need to register this with <a class="reference" href="http://docs.python.org/lib/module-copyreg.html">copy_reg</a>
+before pickling the plan:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; import copy_reg
+&gt;&gt;&gt; import functools
+&gt;&gt;&gt; copy_reg.pickle(functools.partial,
+...                 lambda p: (functools.partial, (p.func,) + p.args))
 </pre>
-<p>This will regenerate the files in <tt class="docutils literal"><span class="pre">doc/html</span></tt>, except for those in
-<tt class="docutils literal"><span class="pre">doc/html/stylesheets</span></tt> and those in <tt class="docutils literal"><span class="pre">doc/html/images</span></tt>.  I've gone ahead
-and placed the generated html files in subversion so that you can checkout
-the documentation without having to run <tt class="docutils literal"><span class="pre">r2w</span></tt>.</p>
+</blockquote>
+<p>The program that unpickles the plan does not have to import any pyke
+modules to be able to run the plans.  Just unpickle and call it.</p>
+</div>
+</div>
+<div class="section">
+<h1><a id="other-functions" name="other-functions">Other Functions</a></h1>
+<p>There are a few more functions that may be useful in special situations.</p>
+<p>The first two of these provide more general access to the fact lookup and
+goal proof mechanisms.  The catch is that you must first convert <strong>all</strong>
+arguments into patterns and create a <em>context</em> for these patterns.  This is
+discussed <a class="reference" href="#creating-your-own-patterns">below</a>.</p>
+<dl class="docutils">
+<dt>lookup(kb_name, entity_name, pattern_context, patterns)</dt>
+<dd>This is a generator that binds patterns to successive facts.  Yields None
+for each successful match.</dd>
+<dt>prove(kb_name, entity_name, pattern_context, patterns)</dt>
+<dd>A generator that binds patterns to successive proofs.  Yields a
+<em>prototype_plan</em> or None for each successful match.  To turn the
+prototype_plan into a python function, call create_plan() on it.
+This returns the plan function.</dd>
+</dl>
+<p>The remaining functions are:</p>
+<dl class="docutils">
+<dt>add_case_specific_fact(kb_name, fact_name, args)</dt>
+<dd>This is an alternate to the <tt class="docutils literal"><span class="pre">assert_</span></tt> function.</dd>
+<dt>get_kb(kb_name)</dt>
+<dd>Finds and returns the knowledge base by the name <tt class="docutils literal"><span class="pre">kb_name</span></tt>.  Raises
+KeyError if not found.  Note that for rule bases, this returns the
+active rule base where <tt class="docutils literal"><span class="pre">kb_name</span></tt> is the rule base category name.
+Thus, not all rule bases are accessable through this call.</dd>
+<dt>get_rb(rb_name)</dt>
+<dd>Finds and returns the rule base by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
+KeyError if not found.  This works for any rule base, whether it is
+active or not.</dd>
+<dt>init()</dt>
+<dd>This is called once automatically for you by the <tt class="docutils literal"><span class="pre">load</span></tt> function.
+You shouldn't have to call it yourself.  If you don't have any rule
+bases this isn't necessary anyway.</dd>
+</dl>
+<div class="section">
+<h2><a id="creating-your-own-patterns" name="creating-your-own-patterns">Creating Your Own Patterns</a></h2>
+<p>You'll need two more pyke modules to create your own patterns and contexts:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; from pyke import pattern, contexts
+</pre>
+</blockquote>
+<p>There are four kinds of patterns:</p>
+<dl class="docutils">
+<dt>pattern.pattern_literal(data)</dt>
+<dd>This matches the <tt class="docutils literal"><span class="pre">data</span></tt> provided.</dd>
+<dt>pattern.pattern_tuple((elements), rest_var = None)</dt>
+<dd>This matches a tuple.  <tt class="docutils literal"><span class="pre">Elements</span></tt> must each be a pattern and must
+match the first <em>n</em> elements of the tuple.  <tt class="docutils literal"><span class="pre">Rest_var</span></tt> must be a
+variable (or anonymous).  It will match the rest of the tuple and is
+always bound to a (possibly empty) tuple.</dd>
+<dt>contexts.variable(name)</dt>
+<dd>This will match anything the first time it is encountered.  But then
+must match the first value each additional time it is encountered.
+Calling the constructor twice with the same name produces the same
+variable and must match the same value in all of the places that it is
+used.</dd>
+<dt>contexts.anonymous()</dt>
+<dd>This will match anything each time it is encountered.
+Calling the constructor twice is not a problem.</dd>
+</dl>
+<p>Finally, to create a <em>pattern context</em>, you need:</p>
+<pre class="literal-block">
+contexts.simple_context()
+</pre>
+<p>You'll need to save this context to lookup your variable values after each
+proof is yielded. This is done by either:</p>
+<pre class="literal-block">
+some_context.lookup_data(variable_name)
+some_variable.as_data(some_context)
+</pre>
+</div>
 </div>
 </div>
 
@@ -126,7 +220,9 @@ generation stuff anyway?</p>
 <div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
 write your rules.</p>
 </div>
-<div class="right-item"><a href="interfacing_to_pyke.html">Using Pyke</a><p>How to install and integrate pyke into your python program.</p>
+<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
+</div>
+<div class="right-item"><a href="interfacing_to_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
 </div>
 
             </div>

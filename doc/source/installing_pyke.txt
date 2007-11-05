@@ -1,0 +1,76 @@
+restindex
+    crumb: Installing Pyke
+    page-description:
+        System Requirements and installing pyke.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+===================================
+Installing Pyke
+===================================
+
+System Requirements
+====================
+
+Pyke is 100% python, so it should run on any platform supported by python.
+You'll need:
+
+* `Python 2.5 <http://python.org>`_
+* `PLY 2.3 <http://www.dabeaz.com/ply/>`_
+
+Subversion Directories
+==========================
+
+To check out the entire project (including the example and this documentation)
+into a directory called *foobar*::
+
+    $ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/trunk foobar
+
+Anybody can check out the code, but only project members may do
+``commits``.  Send me an email if you'd like to lend a hand!
+
+You'll see the following directories.  You can also use ``svn`` to check these
+out individually by simply adding the directory name onto the end of the url in
+the example above and changing the directory that you want it to go into.
+
+* ``doc``
+
+  - See `Documentation`_, below.
+
+* ``examples``
+
+  - Currently, there is only one example: *family_relations*.  Look at the
+    ``README`` file there to see how to run it.
+
+* ``pyke``
+  
+  - This is the top-level python package directory for the python sources.
+    This needs to be in a directory on your PYTHONPATH.
+    The sources for the compiler is in the ``compiler`` subdirectory,
+    which is expected to be a subpackage of ``pyke``.
+
+Documentation
+=================
+
+The ``doc/html`` directory in subversion contains all of these documents.
+You can browse these on your hard drive if you'd like.
+
+If you want to regenerate these documents, you'll also need:
+
+* `Rest2web <http://sourceforge.net/projects/rest2web>`_
+* `Docutils <http://sourceforge.net/projects/docutils>`_
+
+The sources for the documentation are in ``doc/sources``.
+
+To regenerate the documentation, in the ``doc`` directory run::
+
+    $ r2w r2w.ini
+
+This will regenerate the files in ``doc/html``, except for those in
+``doc/html/stylesheets`` and those in ``doc/html/images``.  I've gone ahead
+and placed the generated html files in subversion so that you can checkout
+the documentation without having to run ``r2w``.

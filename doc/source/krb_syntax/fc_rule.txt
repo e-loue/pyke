@@ -43,8 +43,8 @@ The ``for_each`` clause is::
 
     fact_pattern ::= IDENTIFIER '.' IDENTIFIER '(' [{pattern,}] ')'
 
-``Pattern`` and ``python_premise`` are defined `here <pattern.html>` and
-`here <python_premise.html>`.
+``Pattern`` and ``python_premise`` are defined `here <pattern.html>`__ and
+`here <python_premise.html>`__.
 
 The ``assert`` clause is::
 

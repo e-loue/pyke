@@ -67,8 +67,8 @@ base category* or a *fact base*.  If a *rule base category* name is used,
 the currently *active* rule base for that category is used to prove the
 premise.
 
-``Pattern`` and ``python_premise`` are defined `here <pattern.html>` and
-`here <python_premise.html>`.
+``Pattern`` and ``python_premise`` are defined `here <pattern.html>`__ and
+`here <python_premise.html>`__.
 
 ::
 

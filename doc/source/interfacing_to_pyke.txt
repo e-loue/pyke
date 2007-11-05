@@ -1,7 +1,7 @@
 restindex
     crumb: Using Pyke
     page-description:
-        How to install and integrate pyke into your python program.
+        How your python program uses pyke.
     /description
     format: rest
     encoding: utf8
@@ -13,64 +13,157 @@ restindex
 Using Pyke
 ===================================
 
-System Requirements
-====================
+There isn't that much to using pyke.  All necessary functions are provided
+directly by the pyke package:
 
-Pyke is 100% python, so it should run on any platform supported by python.
-You'll need:
+    >>> import pyke
 
-* `Python 2.5 <http://python.org>`_
-* `PLY 2.3 <http://www.dabeaz.com/ply/>`_
+Initializing Pyke
+===============================
 
-Subversion Directories
-==========================
+There are two functions to initialize pyke:
 
-To check out the entire project (including the example and this documentation)
-into a directory called *foobar*::
+load(paths = ('.',), load_fc = True, load_bc = True)
+    The ``load`` function may only be called once.  It expects either a single
+    directory or a sequence directories.  It recursively walks each directory
+    looking for .krb files.  Each .krb file that it finds is compiled, if out
+    of date, and then the resulting python modules imported.  This causes all
+    of the rule bases to be loaded.
+add_universal_fact(kb_name, fact_name, args)
+    The ``add_universal_fact`` function is called once per fact.  These facts
+    are never deleted and apply to all *cases*.
 
-    $ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/trunk foobar
+Setting up Each Case
+===========================
 
-Anybody can check out the code, but only project members may do
-``commits``.  Send me an email if you'd like to lend a hand!
+Pyke is designed to be run multiple times for multiple *cases*.  In
+general each case has its own set of starting facts and may use different
+rule bases, depending on the situation.
 
-You'll see the following directories.  You can also use ``svn`` to check these
-out individually by simply adding the directory name onto the end of the url in
-the example above and changing the directory that you want it to go into.
+Three functions initialize each case:
 
-* ``doc``
+reset()
+    The ``reset`` function is called once to delete all of the case specific
+    facts from the last case.  It also deactivates all rule bases.
+assert_(kb_name, fact_name, args)
+    Call ``assert_`` (or the equivalent, ``add_case_specific_fact``,
+    see `Other Functions`_, below) for each starting fact for this case.
+activate(\*rb_names)
+    Then call ``activate`` to activate the appropriate rule bases.  This may
+    be called more than once, if desired, or it can simply take multiple
+    arguments.
 
-  - See _`Documentation`, below.
+Pyke is now ready to prove goals for this case!
 
-* ``examples``
+Proving Goals
+======================
 
-  - Currently, there is only one example: *family_relations*.  Look at the
-    ``README`` file there to see how to run it.
+Two functions are provided that cover the easy cases.  More general
+functions are provided in `Other Functions`_, below.
 
-* ``pyke``
-  
-  - This is the top-level python package directory for the python sources.
-    This needs to be in a directory on your PYTHONPATH.
-    The sources for the compiler is in the ``compiler`` subdirectory,
-    which is expected to be a subpackage of ``pyke``.
+prove_1(kb_name, entity_name, fixed_args, num_returns)
+    Returns the first proof as two results: a tuple whose len == num_returns
+    containing the returned values, and a plan.  The plan is None if no plan
+    was generated.  Raises pyke.CanNotProve if no proof is found.
+prove_n(kb_name, entity_name, fixed_args, num_returns)
+    This is a generator yielding two results: a tuple whose len == num_returns,
+    and a plan, for each possible proof.  Like ``prove_1``, the plan is None
+    if no plan was generated.
 
-Documentation
-=================
+Running and Pickling Plans
+----------------------------
 
-The ``doc/html`` directory in subversion contains all of these documents.
-You can browse these on your hard drive if you'd like.
+Once you've obtained a *plan* from ``prove_1`` or ``prove_n``, you just call
+it like a normal python function.  The arguments required are simply those
+specified, if any, in the ``taking`` clause of the rule proving the top-level
+goal.
 
-If you want to regenerate these documents, you'll also need:
+You may call the plan function any number of times.  You may even pickle
+the plan for later use.  But the plans are constructed out of
+`functools.partial`_ functions, so you need to register this with copy_reg_
+before pickling the plan:
 
-* `Rest2web <http://sourceforge.net/projects/rest2web>`_
-* `Docutils <http://sourceforge.net/projects/docutils>`_
+    >>> import copy_reg
+    >>> import functools
+    >>> copy_reg.pickle(functools.partial,
+    ...                 lambda p: (functools.partial, (p.func,) + p.args))
 
-The sources for the documentation are in ``doc/sources``.
+The program that unpickles the plan does not have to import any pyke
+modules to be able to run the plans.  Just unpickle and call it.
 
-To regenerate the documentation, in the ``doc`` directory run::
+Other Functions
+========================
 
-    $ r2w r2w.ini
+There are a few more functions that may be useful in special situations.
 
-This will regenerate the files in ``doc/html``, except for those in
-``doc/html/stylesheets`` and those in ``doc/html/images``.  I've gone ahead
-and placed the generated html files in subversion so that you can checkout
-the documentation without having to run ``r2w``.
+The first two of these provide more general access to the fact lookup and
+goal proof mechanisms.  The catch is that you must first convert **all**
+arguments into patterns and create a *context* for these patterns.  This is
+discussed below_.
+
+lookup(kb_name, entity_name, pattern_context, patterns)
+    This is a generator that binds patterns to successive facts.  Yields None
+    for each successful match.
+prove(kb_name, entity_name, pattern_context, patterns)
+    A generator that binds patterns to successive proofs.  Yields a
+    *prototype_plan* or None for each successful match.  To turn the
+    prototype_plan into a python function, call create_plan() on it.
+    This returns the plan function.
+
+The remaining functions are:
+
+add_case_specific_fact(kb_name, fact_name, args)
+    This is an alternate to the ``assert_`` function.
+get_kb(kb_name)
+    Finds and returns the knowledge base by the name ``kb_name``.  Raises
+    KeyError if not found.  Note that for rule bases, this returns the
+    active rule base where ``kb_name`` is the rule base category name.
+    Thus, not all rule bases are accessable through this call.
+get_rb(rb_name)
+    Finds and returns the rule base by the name ``rb_name``.  Raises
+    KeyError if not found.  This works for any rule base, whether it is
+    active or not.
+init()
+    This is called once automatically for you by the ``load`` function.
+    You shouldn't have to call it yourself.  If you don't have any rule
+    bases this isn't necessary anyway.
+
+Creating Your Own Patterns
+----------------------------------
+
+You'll need two more pyke modules to create your own patterns and contexts:
+
+    >>> from pyke import pattern, contexts
+
+There are four kinds of patterns:
+
+pattern.pattern_literal(data)
+    This matches the ``data`` provided.
+pattern.pattern_tuple((elements), rest_var = None)
+    This matches a tuple.  ``Elements`` must each be a pattern and must
+    match the first *n* elements of the tuple.  ``Rest_var`` must be a
+    variable (or anonymous).  It will match the rest of the tuple and is
+    always bound to a (possibly empty) tuple.
+contexts.variable(name)
+    This will match anything the first time it is encountered.  But then
+    must match the first value each additional time it is encountered.
+    Calling the constructor twice with the same name produces the same
+    variable and must match the same value in all of the places that it is
+    used.
+contexts.anonymous()
+    This will match anything each time it is encountered.
+    Calling the constructor twice is not a problem.
+
+Finally, to create a *pattern context*, you need::
+
+    contexts.simple_context()
+
+You'll need to save this context to lookup your variable values after each
+proof is yielded. This is done by either::
+
+    some_context.lookup_data(variable_name)
+    some_variable.as_data(some_context)
+
+.. _below:             `Creating Your Own Patterns`_
+.. _functools.partial: http://docs.python.org/lib/module-functools.html
+.. _copy_reg:          http://docs.python.org/lib/module-copyreg.html
