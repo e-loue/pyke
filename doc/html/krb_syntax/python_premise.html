@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-    <title>Interfacing to PyKE</title>
+    <title>Python Premise Syntax</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="../stylesheets/pyke.css" type="text/css" />
 </head>
@@ -18,7 +18,9 @@
               <ul>
                   <li><a href="../index.html">Home</a></li>
 <li>&gt;</li>
-<li>Interfacing to PyKE</li>
+<li><a href="index.html">KRB Syntax</a></li>
+<li>&gt;</li>
+<li>Python Premise</li>
 
               </ul>
             </div>
@@ -34,8 +36,14 @@
               
 <div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="../overview/index.html">Overview</a></div>
-<div class="normal-nav"><a href="../krb_syntax/index.html">KRB Syntax</a></div>
-<div class="normal-nav"><a href="index.html">Interfacing to PyKE</a></div>
+
+<div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
+<div class="normal-nav"><a href="pattern.html">Pattern</a></div>
+<div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
+<div class="normal-nav"><a href="bc_rule.html">Bc_rule</a></div>
+</div>
+<div class="normal-nav"><a href="../interfacing_to_pyke/index.html">Interfacing to PyKE</a></div>
 <div class="normal-nav"><a href="../pyke_internals/index.html">Internals</a></div>
 </div>
 
@@ -52,8 +60,33 @@
           <td id="main-td">
             <div id="main">
                 <a name="startcontent" id="startcontent"></a>
-                <div class="document" id="interfacing-to-pyke">
-<h1 class="title">Interfacing to PyKE</h1>
+                <div class="document" id="python-premise-syntax">
+<h1 class="title">Python Premise Syntax</h1>
+<pre class="literal-block">
+python_premise ::= pattern '=' python_exp
+                 | pattern 'in' python_exp
+                 | 'check' python_exp
+</pre>
+<p>Each of these clauses results in a python expression being executed.  Their
+meaning is as follows:</p>
+<dl class="docutils">
+<dt>pattern '=' python_exp</dt>
+<dd><em>python_exp</em> is evaluated and the result matched
+with <em>pattern</em>.  If the result does not match,
+the clause fails and backtracking is initiated.
+The clause always fails on backtracking.</dd>
+<dt>pattern 'in' python_exp</dt>
+<dd><em>python_exp</em> is evaluated and the first element
+from the resulting <em>iterable</em> is matched
+with <em>pattern</em>.  On backtracking, successive
+elements from the result are matched with
+<em>pattern</em>.</dd>
+<dt>'check' python_exp</dt>
+<dd><em>python_exp</em> is evaluated.  If the result is
+(python) <em>true</em>, the clause succeeds, otherwise
+it fails.  The clause always fails on
+backtracking.</dd>
+</dl>
 </div>
 
                 <div id="return-to-top"><a href="#">Return to Top</a></div>
@@ -61,7 +94,16 @@
           </td>
           <td id="right-nav">
             <div id="right-nav-div">
-                
+                <h3>Pages:</h3>
+<div class="right-item"><a href="fc_rule.html">Fc_rule Syntax</a><p>The syntax of a forward-chaining rule.</p>
+</div>
+<div class="right-item"><a href="pattern.html">Pattern Syntax</a><p>The syntax of a pattern used to match data values.</p>
+</div>
+<div class="right-item"><a href="python_premise.html">Python Premise Syntax</a><p>The syntax of a python premise.</p>
+</div>
+<div class="right-item"><a href="bc_rule.html">Bc_rule Syntax</a><p>The syntax of a backward-chaining rule.</p>
+</div>
+
             </div>
           </td>
         </tr>
@@ -76,7 +118,7 @@
     </tfoot>
   </table>
 
-  <div id="last-modified">Page last modified Sun Nov  4 11:26:53 2007.</div>
+  <div id="last-modified">Page last modified Mon Nov  5 10:36:59 2007.</div>
 
 </body>
 </html>

@@ -1,0 +1,32 @@
+restindex
+    crumb: Pattern
+    page-description:
+        The syntax of a pattern used to match data values.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+=============================================
+Pattern Syntax
+=============================================
+
+::
+
+    pattern ::= 'None' | 'True' | 'False'
+              | NUMBER | IDENTIFIER | STRING | variable
+              | '(' [{pattern,}] ['*' variable] ')'
+
+    variable ::= '$'IDENTIFIER | '$_'
+
+The variable must not have a space between the ``$`` and the
+``IDENTIFIER``.
+
+The ``$_`` variable is the *anonymous* variable.  It acts like a "don't
+care".  Technically, this means that multiple uses of ``$_`` may stand for
+multiple values.
+
+The ``*variable`` at the end of a tuple pattern will match the rest of the
+tuple.  Thus, ``variable`` is always bound to a (possibly empty) tuple.

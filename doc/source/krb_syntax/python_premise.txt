@@ -1,0 +1,41 @@
+restindex
+    crumb: Python Premise
+    page-description:
+        The syntax of a python premise.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+=============================================
+Python Premise Syntax
+=============================================
+
+::
+
+    python_premise ::= pattern '=' python_exp
+                     | pattern 'in' python_exp
+                     | 'check' python_exp
+
+Each of these clauses results in a python expression being executed.  Their
+meaning is as follows:
+
+pattern '=' python_exp
+    *python_exp* is evaluated and the result matched
+    with *pattern*.  If the result does not match,
+    the clause fails and backtracking is initiated.
+    The clause always fails on backtracking.
+pattern 'in' python_exp
+    *python_exp* is evaluated and the first element
+    from the resulting *iterable* is matched
+    with *pattern*.  On backtracking, successive
+    elements from the result are matched with
+    *pattern*.
+'check' python_exp
+    *python_exp* is evaluated.  If the result is
+    (python) *true*, the clause succeeds, otherwise
+    it fails.  The clause always fails on
+    backtracking.
+

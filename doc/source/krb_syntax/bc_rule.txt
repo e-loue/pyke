@@ -1,0 +1,114 @@
+restindex
+    crumb: Bc_rule
+    page-description:
+        The syntax of a backward-chaining rule.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+=============================================
+Bc_rule Syntax
+=============================================
+
+Backward-chaining rules have four parts:
+
+#. A unique name.  (This name is used as the corresponding function name in
+   the generated <rb_name>_bc.py file).
+#. A ``use`` clause.  This identifies the *goal* that this rule is trying
+   to prove.
+#. An optional ``when`` clause.  If this clause is not used, the only
+   requirement for the rule to succeed is that the ``use`` clause patterns
+   match the goal.
+   If the clause is used, the rule succeeds for each
+   combination of true premises.
+#. An optional ``with`` clause.  This contains the python
+   statements that make up the *plan* for this rule.  These may
+   include pattern variables whose values will be substituted into the
+   statements at run time.
+
+::
+
+    bc_rule ::= IDENTIFIER ':' NL INDENT
+                    use
+                    [when]
+                    [with]
+                DEINDENT
+
+    use ::= 'use' IDENTIFIER '(' {pattern,} ')'
+            ['taking' '(' <python_arg_spec> ')'] NL
+
+The ``taking`` clause is used to define parameters to the *plan* function.
+Do **not** use ``$`` with these parameters.
+
+::
+
+    when ::= 'when' NL INDENT
+                 {bc_premise NL}
+             DEINDENT
+
+    bc_premise ::= ['!'] goal_name '(' {pattern,} ')' plan_spec
+                 | python_premise
+
+    goal_name ::= name '.' name
+                | name
+
+    name ::= IDENTIFIER
+           | '$'IDENTIFIER
+
+If a single *name* is used in the *bc_premise*, the rule base name of the
+top-level inherited rule base for this file is assumed.  This is the of the
+*rule base category*.
+
+If two *names* are used in the *bc_premise*, the first may name a *rule
+base category* or a *fact base*.  If a *rule base category* name is used,
+the currently *active* rule base for that category is used to prove the
+premise.
+
+``Pattern`` and ``python_premise`` are defined `here <pattern.html>` and
+`here <python_premise.html>`.
+
+::
+
+    plan_spec ::= step_opt NL
+                | step_opt NL INDENT
+                      {<python_statement> NL}
+                  DEINDENT
+                | 'as' '$'IDENTIFIER NL
+
+    step_opt ::=
+               | 'step' NUMBER
+
+A *plan_spec* is required for all premises that return *plans*.  This shows
+how to call their *plan* functions.  The *plan* function itself is
+indicated by ``$$`` in the *python_statement*.  The result of this function
+may be assigned to a python variable, but not a ``$`` pattern variable.
+Parameters from the ``taking`` clause may be passed to the *plan function*.
+
+With multiple premises, the *plan_specs* without ``step`` clauses are
+executed first in the order that they appear.  Then the *plan_specs* for
+with ``step`` clauses are executed in ascending sequence by the NUMBER in
+the ``step`` clause.  The NUMBER may be negative or a float.
+
+If the ``as`` clause is used, the *plan function* is bound to the
+pattern variable as a function.  This allows you to run the function (or
+not) as you please.  The parameters required are defined in the ``taking``
+clause of the rule used to prove the premise.
+
+::
+
+    with ::= 'with' NL INDENT
+                 {<python_statement> NL}
+             DEINDENT
+
+The *python_statements* are included in the *plan* function after the
+functions calls from all of the *plan_specs* in the ``when`` clause.  If
+the ``with`` clause is omitted, but the ``when`` clause has *plan_specs*
+(except for the ``as`` spec), a plan function is still generated for this
+rule.
+
+The *python_statements* are not parsed.  They are simply scanned for ``$``
+pattern variables that don't occur in string literals or comments.
+

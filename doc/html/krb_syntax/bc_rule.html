@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Bc_rule Syntax</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../stylesheets/pyke.css" type="text/css" />
+</head>
+<body>
+  <table id="page-table">
+    <thead class="head">
+        <tr id="header1"><th id="header" colspan="3">
+            &nbsp;
+        </th></tr>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <li><a href="../index.html">Home</a></li>
+<li>&gt;</li>
+<li><a href="index.html">KRB Syntax</a></li>
+<li>&gt;</li>
+<li>Bc_rule</li>
+
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
+    </thead>
+
+    <tbody id="body">
+        <tr id="body-tr">
+          <td id="left-nav">
+            <div id="left-nav-div">
+              
+<div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../overview/index.html">Overview</a></div>
+
+<div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
+<div class="normal-nav"><a href="pattern.html">Pattern</a></div>
+<div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
+<div class="normal-nav"><a href="bc_rule.html">Bc_rule</a></div>
+</div>
+<div class="normal-nav"><a href="../interfacing_to_pyke/index.html">Interfacing to PyKE</a></div>
+<div class="normal-nav"><a href="../pyke_internals/index.html">Internals</a></div>
+</div>
+
+            </div>
+            <div id="icons">
+                <div id="project-page">
+                  <a href="http://sourceforge.net/projects/pyke/">PyKE Project Page</a>
+                </div>
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+            </div>
+          </td>
+          <td id="main-td">
+            <div id="main">
+                <a name="startcontent" id="startcontent"></a>
+                <div class="document" id="bc-rule-syntax">
+<h1 class="title">Bc_rule Syntax</h1>
+<p>Backward-chaining rules have four parts:</p>
+<ol class="arabic simple">
+<li>A unique name.  (This name is used as the corresponding function name in
+the generated &lt;rb_name&gt;_bc.py file).</li>
+<li>A <tt class="docutils literal"><span class="pre">use</span></tt> clause.  This identifies the <em>goal</em> that this rule is trying
+to prove.</li>
+<li>An optional <tt class="docutils literal"><span class="pre">when</span></tt> clause.  If this clause is not used, the rule
+always succeeds.  If the clause is used, the rule succeeds for each
+combination of true premises.</li>
+<li>An optional <tt class="docutils literal"><span class="pre">with</span></tt> clause.  This contains the python
+statements that make up the <em>plan</em> for this rule.  These may
+include pattern variables whose values will be substituted into the
+statements at run time.</li>
+</ol>
+<pre class="literal-block">
+bc_rule ::= IDENTIFIER ':' NL INDENT
+                use
+                [when]
+                [with]
+            DEINDENT
+
+use ::= 'use' IDENTIFIER '(' {pattern,} ')'
+        ['taking' '(' &lt;python_arg_spec&gt; ')'] NL
+</pre>
+<p>The <tt class="docutils literal"><span class="pre">taking</span></tt> clause is used to define parameters to the <em>plan</em> function.
+Do <strong>not</strong> use <tt class="docutils literal"><span class="pre">$</span></tt> with these parameters.</p>
+<pre class="literal-block">
+when ::= 'when' NL INDENT
+             {bc_premise NL}
+         DEINDENT
+
+bc_premise ::= ['!'] goal_name '(' {pattern,} ')' plan_spec
+             | python_premise
+
+goal_name ::= name '.' name
+            | name
+
+name ::= IDENTIFIER
+       | '$'IDENTIFIER
+</pre>
+<p>If a single <em>name</em> is used in the <em>bc_premise</em>, the rule base name of the
+top-level inherited rule base for this file is assumed.  This is the of the
+<em>rule base category</em>.</p>
+<p>If two <em>names</em> are used in the <em>bc_premise</em>, the first may name a <em>rule
+base category</em> or a <em>fact base</em>.  If a <em>rule base category</em> name is used,
+the currently <em>active</em> rule base for that category is used to prove the
+premise.</p>
+<p><tt class="docutils literal"><span class="pre">Pattern</span></tt> and <tt class="docutils literal"><span class="pre">python_premise</span></tt> are defined <cite>here &lt;pattern.html&gt;</cite> and
+<cite>here &lt;python_premise.html&gt;</cite>.</p>
+<pre class="literal-block">
+plan_spec ::= step_opt NL
+            | step_opt NL INDENT
+                  {&lt;python_statement&gt; NL}
+              DEINDENT
+            | 'as' '$'IDENTIFIER NL
+
+step_opt ::=
+           | 'step' NUMBER
+</pre>
+<p>A <em>plan_spec</em> is required for all premises that return <em>plans</em>.  This shows
+how to call their <em>plan</em> functions.  The <em>plan</em> function itself is
+indicated by <tt class="docutils literal"><span class="pre">$$</span></tt> in the <em>python_statement</em>.  The result of this function
+may be assigned to a python variable, but not a <tt class="docutils literal"><span class="pre">$</span></tt> pattern variable.
+Parameters from the <tt class="docutils literal"><span class="pre">taking</span></tt> clause may be passed to the <em>plan function</em>.</p>
+<p>With multiple premises, the <em>plan_specs</em> without <tt class="docutils literal"><span class="pre">step</span></tt> clauses are
+executed first in the order that they appear.  Then the <em>plan_specs</em> for
+with <tt class="docutils literal"><span class="pre">step</span></tt> clauses are executed in ascending sequence by the NUMBER in
+the <tt class="docutils literal"><span class="pre">step</span></tt> clause.  The NUMBER may be negative or a float.</p>
+<p>If the <tt class="docutils literal"><span class="pre">as</span></tt> clause is used, the <em>plan function</em> is bound to the
+pattern variable as a function.  This allows you to run the function (or
+not) as you please.  The parameters required are defined in the <tt class="docutils literal"><span class="pre">taking</span></tt>
+clause of the rule used to prove the premise.</p>
+<pre class="literal-block">
+with ::= 'with' NL INDENT
+             {&lt;python_statement&gt; NL}
+         DEINDENT
+</pre>
+<p>The <em>python_statements</em> are included in the <em>plan</em> function after the
+functions calls from all of the <em>plan_specs</em> in the <tt class="docutils literal"><span class="pre">when</span></tt> clause.  If
+the <tt class="docutils literal"><span class="pre">with</span></tt> clause is omitted, but the <tt class="docutils literal"><span class="pre">when</span></tt> clause has <em>plan_specs</em>
+(except for the <tt class="docutils literal"><span class="pre">as</span></tt> spec), a plan function is still generated for this
+rule.</p>
+<p>The <em>python_statements</em> are not parsed.  They are simply scanned for <tt class="docutils literal"><span class="pre">$</span></tt>
+pattern variables that don't occur in string literals or comments.</p>
+</div>
+
+                <div id="return-to-top"><a href="#">Return to Top</a></div>
+            </div>
+          </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <h3>Pages:</h3>
+<div class="right-item"><a href="fc_rule.html">Fc_rule Syntax</a><p>The syntax of a forward-chaining rule.</p>
+</div>
+<div class="right-item"><a href="pattern.html">Pattern Syntax</a><p>The syntax of a pattern used to match data values.</p>
+</div>
+<div class="right-item"><a href="python_premise.html">Python Premise Syntax</a><p>The syntax of a python premise.</p>
+</div>
+<div class="right-item"><a href="bc_rule.html">Bc_rule Syntax</a><p>The syntax of a backward-chaining rule.</p>
+</div>
+
+            </div>
+          </td>
+        </tr>
+    </tbody>
+
+    <tfoot id="foot">
+        <tr id="foot2">
+          <td id="copyright" colspan="3">
+            Copyright &copy; 2007 Bruce Frederiksen
+          </td>
+        </tr>
+    </tfoot>
+  </table>
+
+  <div id="last-modified">Page last modified Mon Nov  5 10:31:06 2007.</div>
+
+</body>
+</html>

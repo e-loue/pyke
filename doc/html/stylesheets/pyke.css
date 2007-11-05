@@ -61,11 +61,19 @@
 @import url("rest.css");
 @import url("pysrc.css");
 
+table {
+    border-collapse: collapse;
+}
+
 p, td, li, ul, ol, h1, h2, h3, h4, h5, h6  {
     font-family: arial, helvetica, geneva, sans-serif; 
 }
 
-#main h2, #main h3, #main p, #main h4 {
+#main h1, #main h2, #main h3, #main h4, #main dl, #main p {
+    padding:0 10px;
+}
+
+#main h1 {
     padding:0 10px;
 }
 
@@ -81,7 +89,9 @@ p, td, li, ul, ol, h1, h2, h3, h4, h5, h6  {
 
 #main a.toc-backref {border-bottom: none;}
 
-a[name]:hover {background: none;}
+#main h1 {
+    font-size: 19pt;
+}
 
 .title {
     text-align: center;
@@ -90,8 +100,10 @@ a[name]:hover {background: none;}
     margin: 20px auto;
 }
 
-.title h1 {
-    font-size:30pt;
+#main h1.title {
+    padding-top: 2px;
+    padding-bottom: 16px;
+    font-size: 20pt;
 }
 
 .title img {
@@ -112,7 +124,7 @@ a {
     color: #545D4D;
 }
 
-a:hover {
+a[href]:hover {
     color: #9AA690;
 }
 
@@ -179,7 +191,7 @@ a:hover {
     margin: 15px auto 10px;
 }
 
-#header a:hover{background:none;}
+/* #header a[href]:hover{background:none;} */
 
 #crumb-left, #crumb-line, #crumb-right {
     background-color:#67735D;
@@ -259,14 +271,15 @@ a:hover {
 #icons {
     padding: 80px 8px 20px 0;
     font-size: 12px;
+    margin-top: 55px;
 }
 
 #icons a {
     padding: 0;
 }
 
-#icons {
-    margin-top: 55px;
+#project-page {
+    margin-bottom: 15px;
 }
 
 #main-td { 

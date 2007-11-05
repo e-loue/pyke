@@ -4,6 +4,7 @@ restindex
         Syntax of the knowledge rule base (KRB) files, which is where you
         write your rules.
     /description
+    section-pages: , fc_rule, pattern, python_premise, bc_rule
     format: rest
     encoding: utf8
     output-encoding: utf8
@@ -88,18 +89,48 @@ Syntax of the Entire KRB File
                  {<python_statement> NL}
                DEINDENT]]
 
-The KRB file has three optional parts.
+The KRB file has three optional parts.  It must contain at least one rule
+(either forward-chaining or backward-chaining).
+
+The filename (minus the .krb extension) is the name of the rule base.  This
+must be a legal python identifier.
 
 Extending clause
 -----------------
 
 The optional ``extending`` clause, if used, is the first line of the file.
 This defines the parent rule base that this rule base inherits from.  It
-may also specify a list of backward chaining goal names to excluded from
+may also specify a list of backward chaining goal names to be excluded from
 this inheritance.
 
 Forward Chaining Section
 --------------------------
 
+If the krb file contains any forward-chaining rules, a python source file will
+be created named <rb_name>_fc.py, where <rb_name> is the rule base name.
+
+The syntax of a forward-chaining rule (fc_rule) is defined elsewhere.
+
+The ``fc_extras`` can only be used if there are forward-chaining rules.
+This allows you to add other python code (for example, ``import`` statements)
+to the generated python source file.
+
 Backward Chaining Section
 --------------------------
+
+If the krb file contains any backward-chaining rules, a python source file will
+be created named <rb_name>_bc.py, where <rb_name> is the rule base name.
+
+The syntax of a backward-chaining rule (bc_rule) is defined elsewhere.
+
+The ``bc_extras`` can only be used if there are backward-chaining rules.
+This allows you to add other python code (for example, ``import`` statements)
+to the generated python source file.
+
+In addition, if any of the backward-chaining rules have plan code (for
+example, a ``with`` clause or subgoals in the ``when`` clause that produce
+plans), a python source file will be created name <rb_name>_plans.py, where
+<rb_name> is the rule base name.
+
+You use the ``plan_extras`` to include arbitrary python code in this plans
+file.

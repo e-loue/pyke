@@ -1,0 +1,59 @@
+restindex
+    crumb: Fc_rule
+    page-description:
+        The syntax of a forward-chaining rule.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+=============================================
+Fc_rule Syntax
+=============================================
+
+Forward-chaining rules have three parts:
+
+#. A unique name.  (This name is used as the corresponding function name in
+   the generated <rb_name>_fc.py file).
+#. An optional ``foreach`` clause.  If this clause is not used, the rule is
+   always fired once.  If the clause is used, the rule is fired for each
+   combination of true premises.
+#. An ``assert`` clause.  This lists new facts to assert, and/or python
+   statements to execute each time the rule is fired.  Each of these may
+   include pattern variables whose values will be substituted into the
+   statements.
+
+::
+
+    fc_rule ::= IDENTIFIER ':' NL INDENT
+                   [fc_foreach]
+                   fc_assert
+                DEINDENT
+
+The ``for_each`` clause is::
+
+    fc_foreach ::= 'foreach' NL INDENT
+                       {fc_premise NL}
+                   DEINDENT
+
+    fc_premise ::= fact_pattern
+                 | python_premise
+
+    fact_pattern ::= IDENTIFIER '.' IDENTIFIER '(' [{pattern,}] ')'
+
+``Pattern`` and ``python_premise`` are defined `here <pattern.html>` and
+`here <python_premise.html>`.
+
+The ``assert`` clause is::
+
+    fc_assert ::= 'assert' NL INDENT
+                      {assertion NL}
+                  DEINDENT
+
+    assertion ::= fact_pattern
+                | 'python' ':' NL INDENT
+                      {python_statement NL}
+                  DEINDENT
+
