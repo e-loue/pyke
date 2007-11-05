@@ -68,8 +68,10 @@
 the generated &lt;rb_name&gt;_bc.py file).</li>
 <li>A <tt class="docutils literal"><span class="pre">use</span></tt> clause.  This identifies the <em>goal</em> that this rule is trying
 to prove.</li>
-<li>An optional <tt class="docutils literal"><span class="pre">when</span></tt> clause.  If this clause is not used, the rule
-always succeeds.  If the clause is used, the rule succeeds for each
+<li>An optional <tt class="docutils literal"><span class="pre">when</span></tt> clause.  If this clause is not used, the only
+requirement for the rule to succeed is that the <tt class="docutils literal"><span class="pre">use</span></tt> clause patterns
+match the goal.
+If the clause is used, the rule succeeds for each
 combination of true premises.</li>
 <li>An optional <tt class="docutils literal"><span class="pre">with</span></tt> clause.  This contains the python
 statements that make up the <em>plan</em> for this rule.  These may
@@ -177,7 +179,7 @@ pattern variables that don't occur in string literals or comments.</p>
     </tfoot>
   </table>
 
-  <div id="last-modified">Page last modified Mon Nov  5 10:31:06 2007.</div>
+  <div id="last-modified">Page last modified Mon Nov  5 11:05:45 2007.</div>
 
 </body>
 </html>

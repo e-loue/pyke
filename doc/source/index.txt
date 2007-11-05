@@ -3,7 +3,7 @@ restindex
     format: rest
     encoding: utf8
     output-encoding: utf8
-    section-pages: , overview/index, krb_syntax/index, interfacing_to_pyke/index, pyke_internals/index
+    section-pages: , overview/index, krb_syntax/index, interfacing_to_pyke
     template: template.txt
     template-encoding: utf8
     page-title: Welcome to PyKE!

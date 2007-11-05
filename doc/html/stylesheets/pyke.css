@@ -242,7 +242,7 @@ a[href]:hover {
 }
 
 #right-nav {
-    padding: 40px 10px 0 10px;
+    padding: 10px 10px 0 10px;
     border-right: 1px solid #67735D;
     border-left: 1px solid #67735D;
     width: 170px;
@@ -343,7 +343,7 @@ p {
     font-size:18px;
     color: #00478E;
     font-weight:bold;
-    margin-top: 0;
+    margin-top: 30px;
     margin-bottom: 0;
 }
 
