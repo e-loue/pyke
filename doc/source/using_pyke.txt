@@ -62,11 +62,11 @@ Two functions are provided that cover the easy cases.  More general
 functions are provided in `Other Functions`_, below.
 
 prove_1(kb_name, entity_name, fixed_args, num_returns)
-    Returns the first proof as two results: a tuple whose len == num_returns
+    Returns the first proof as two results: a tuple whose length == num_returns
     containing the returned values, and a plan_.  The plan_ is None if no plan_
     was generated.  Raises pyke.CanNotProve if no proof is found.
 prove_n(kb_name, entity_name, fixed_args, num_returns)
-    This is a generator yielding two results: a tuple whose len == num_returns,
+    This is a generator yielding two results: a tuple whose length == num_returns,
     and a plan_, for each possible proof.  Like ``prove_1``, the plan_ is None
     if no plan_ was generated.
 
@@ -118,7 +118,7 @@ get_kb(kb_name)
     Finds and returns the `knowledge base`_ by the name ``kb_name``.  Raises
     KeyError if not found.  Note that for `rule bases`_, this returns the
     active `rule base`_ where ``kb_name`` is the `rule base category`_ name.
-    Thus, not all `rule bases`_ are accessable through this call.
+    Thus, not all `rule bases`_ are accessible through this call.
 get_rb(rb_name)
     Finds and returns the `rule base`_ by the name ``rb_name``.  Raises
     KeyError if not found.  This works for any `rule base`_, whether it is
@@ -184,4 +184,4 @@ proof is yielded. This is done by either::
 .. _rule base category:
        overview/knowledge_bases/rule_bases.html#rule-base-categories
 .. _rule bases: `rule base`_
-.. _taking clause: krb_syntax/bc_rule.html#FIX
+.. _taking clause: krb_syntax/bc_rule.html#taking-clause

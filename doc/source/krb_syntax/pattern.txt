@@ -24,7 +24,7 @@ Pattern
               | '(' [{pattern,}] ['*' variable] ')'
 
 IDENTIFIER acts like STRING here, meaning that it is taken as a literal
-value.  All variables in patterns must be preceeded by a ``$``.
+value.  All variables in patterns must be preceded by a ``$``.
 
 Pyke does not currently support complex NUMBERS (for no good reason -- email
 me if you need them).

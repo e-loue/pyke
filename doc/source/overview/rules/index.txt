@@ -55,7 +55,7 @@ depending on the rule's type.
 .. _backward-chaining: backward_chaining.html
 .. _facts: ../knowledge_bases/fact_bases.html#facts
 .. _forward-chaining: forward_chaining.html
-.. _goals: FIX
+.. _goals: ../../krb_syntax/bc_rule.html#use-clause
 .. _patterns: ../../krb_syntax/pattern.html
 .. _plan: ../plans.html
 .. _prove: ../../using_pyke.html#proving-goals

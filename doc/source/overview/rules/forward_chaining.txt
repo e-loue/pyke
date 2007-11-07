@@ -88,7 +88,7 @@ new fact_ to be asserted_.  (But not the same value as the ``$father`` used
 on lines 9 or 11, because those are in a different rule_).
 
 After the ``son_of`` rule, the ``daughter_of`` rule is run for all
-``family.daugher_of`` facts.
+``family.daughter_of`` facts.
 
 Then the ``grand_parent_and_child`` rule_ is run for all combinations of
 ``family.child_parent`` facts_ that satisfy the two patterns_ on lines 15 and
