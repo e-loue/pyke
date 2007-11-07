@@ -7,22 +7,29 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
+    initialheaderlevel: 3
 /restindex
 
 =============================================
 Plans and Automatic Program Generation
 =============================================
 
-Once you understand how backward-chaining works, it is relatively easy to
+Once you understand how backward-chaining_ works, it is relatively easy to
 do automatic program generation.
 
-The way this is done is by attaching python functions to the
-backward-chaining rules.  These functions are written at the end of each
-rule in the .krb file.  They don't affect how the rules run, but are
-gathered up to form a call graph that is returned along with the pattern
-variable bindings that prove the top-level goal.
+Adding Plans to Backward-Chaining Rules
+============================================
 
-Consider a small rule base to construct programs to transfer money between
+The way this is done is by attaching python functions to the
+backward-chaining_ rules_.  These functions are written at the end of each
+rule_ in the `.krb file`_.  They don't affect how the rules_ run, but are
+gathered up to form a call graph that is returned along with the `pattern
+variable`_ bindings that prove_ the top-level goal.
+
+Example
+===============
+
+Consider a small `rule base`_ to construct programs to transfer money between
 bank accounts.  Each *from_acct* and *to_acct* takes one of two forms:
 
 #. (name, account_type)
@@ -88,7 +95,10 @@ Here's the example rule base::
     41      with
     42          print "get", amount, "from bank", $bank, "acct", $who, $acct_type
 
-The plan is created as a byproduct of proving the goal:
+Running the Example
+========================
+
+The plan is created as a byproduct of proving_ the goal:
 
     >>> import pyke
     >>> pyke.load('examples')
@@ -110,6 +120,10 @@ The program may be used multiple times:
     >>> plan1(50)
     withdraw 50 from bruce checking
     deposit 50 to bruce savings
+
+Notice the strings: ``bruce``, ``checking`` and ``savings`` in the output.
+These were specified as `pattern variables`_ in the code and are cooked
+into the plan along with the function call graph.
 
 Let's create another program:
 
@@ -137,3 +151,24 @@ And the final use case:
     deposit 200 to central_accts ach_send_acct
     send 200 to bank my_other_bank acct bruce savings
 
+Conclusion
+==============
+
+So you can see that it quite easy to use pyke to automatically combine
+python functions into programs!
+
+It also allows data within each python function to
+be specified using a `pattern variable`_ so that pyke can customize these
+values to match the specific situation.
+
+.. _backward-chaining: rules/backward_chaining.html
+..  _.krb file: ../krb_syntax/index.html
+.. _pattern: ../krb_syntax/pattern.html
+.. _patterns: pattern_
+.. _pattern variable: patterns_
+.. _pattern variables: `pattern variable`_
+.. _prove: ../using_pyke.html#proving-goals
+.. _proving: prove_
+.. _rule: rules/index.html
+.. _rules: rule_
+.. _rule base: knowledge_bases/rule_bases.html

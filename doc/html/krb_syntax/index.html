@@ -34,6 +34,8 @@
               
 <div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="../overview/index.html">Overview</a></div>
+<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
 
 <div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
@@ -41,8 +43,6 @@
 <div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 <div class="normal-nav"><a href="bc_rule.html">Bc_rule</a></div>
 </div>
-<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
-<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
 </div>
 
             </div>
@@ -60,7 +60,7 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="krb-syntax">
 <h1 class="title">KRB Syntax</h1>
-<p>This section describes the syntax for defining rules in the KRB files.</p>
+<p>This section describes the syntax for defining <a class="reference" href="../overview/rules/index.html">rules</a> in the KRB files.</p>
 <div class="section">
 <h1><a id="legend" name="legend">Legend</a></h1>
 <p>To describe this syntax, the following punctuation is used:</p>
@@ -155,45 +155,50 @@ file ::= [NL]
              {&lt;python_statement&gt; NL}
            DEINDENT]]
 </pre>
-<p>The KRB file has three optional parts.  It must contain at least one rule
-(either forward-chaining or backward-chaining).</p>
-<p>The filename (minus the .krb extension) is the name of the rule base.  This
-must be a legal python identifier.</p>
+<p>The KRB file has three optional parts.  It must contain at least one <a class="reference" href="../overview/rules/index.html">rule</a>
+(either <a class="reference" href="../overview/rules/forward_chaining.html">forward-chaining</a> or <a class="reference" href="../overview/rules/backward_chaining.html">backward-chaining</a>).</p>
+<p>The filename (minus the .krb extension) is the name of the <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a>.
+This must be a legal python identifier.</p>
 <div class="section">
 <h2><a id="extending-clause" name="extending-clause">Extending clause</a></h2>
 <p>The optional <tt class="docutils literal"><span class="pre">extending</span></tt> clause, if used, is the first line of the file.
-This defines the parent rule base that this rule base inherits from.  It
-may also specify a list of backward chaining goal names to be excluded from
-this inheritance.</p>
+This defines the parent <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> that this <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> <a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-inheritance">inherits</a> from.
+It may also specify a list of <a class="reference" href="../overview/rules/backward_chaining.html">backward-chaining</a> goal names to be excluded
+from this inheritance.</p>
 </div>
 <div class="section">
-<h2><a id="forward-chaining-section" name="forward-chaining-section">Forward Chaining Section</a></h2>
-<p>If the krb file contains any forward-chaining rules, a python source file will
-be created named &lt;rb_name&gt;_fc.py, where &lt;rb_name&gt; is the rule base name.</p>
-<p>The syntax of a forward-chaining rule (fc_rule) is defined elsewhere.</p>
-<p>The <tt class="docutils literal"><span class="pre">fc_extras</span></tt> can only be used if there are forward-chaining rules.
+<h2><a id="forward-chaining-section" name="forward-chaining-section">Forward-Chaining Section</a></h2>
+<p>If the krb file contains any <a class="reference" href="../overview/rules/forward_chaining.html">forward-chaining</a> <a class="reference" href="../overview/rules/index.html">rules</a>, a python source file
+will be created named &lt;rb_name&gt;_fc.py, where &lt;rb_name&gt; is the <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a>
+name.</p>
+<p>The syntax of a <a class="reference" href="../overview/rules/forward_chaining.html">forward-chaining</a> <a class="reference" href="../overview/rules/index.html">rule</a> (<a class="reference" href="fc_rule.html">fc_rule</a>) is defined <a class="reference" href="fc_rule.html">elsewhere</a>.</p>
+<p>The <tt class="docutils literal"><span class="pre">fc_extras</span></tt> can only be used if there are <a class="reference" href="../overview/rules/forward_chaining.html">forward-chaining</a> <a class="reference" href="../overview/rules/index.html">rules</a>.
 This allows you to add other python code (for example, <tt class="docutils literal"><span class="pre">import</span></tt> statements)
 to the generated python source file.</p>
 </div>
 <div class="section">
-<h2><a id="backward-chaining-section" name="backward-chaining-section">Backward Chaining Section</a></h2>
-<p>If the krb file contains any backward-chaining rules, a python source file will
-be created named &lt;rb_name&gt;_bc.py, where &lt;rb_name&gt; is the rule base name.</p>
-<p>The syntax of a backward-chaining rule (bc_rule) is defined elsewhere.</p>
-<p>The <tt class="docutils literal"><span class="pre">bc_extras</span></tt> can only be used if there are backward-chaining rules.
+<h2><a id="backward-chaining-section" name="backward-chaining-section">Backward-Chaining Section</a></h2>
+<p>If the krb file contains any <a class="reference" href="../overview/rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../overview/rules/index.html">rules</a>, a python source file
+will be created named &lt;rb_name&gt;_bc.py, where &lt;rb_name&gt; is the <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a>
+name.</p>
+<p>The syntax of a <a class="reference" href="../overview/rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../overview/rules/index.html">rule</a> (<a class="reference" href="bc_rule.html">bc_rule</a>) is defined <a class="reference" href="bc_rule.html">elsewhere</a>.</p>
+<p>The <tt class="docutils literal"><span class="pre">bc_extras</span></tt> can only be used if there are <a class="reference" href="../overview/rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../overview/rules/index.html">rules</a>.
 This allows you to add other python code (for example, <tt class="docutils literal"><span class="pre">import</span></tt> statements)
 to the generated python source file.</p>
-<p>In addition, if any of the backward-chaining rules have plan code (for
+<p>In addition, if any of the <a class="reference" href="../overview/rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../overview/rules/index.html">rules</a> have <a class="reference" href="../overview/plans.html">plan</a> code (for
 example, a <tt class="docutils literal"><span class="pre">with</span></tt> clause or subgoals in the <tt class="docutils literal"><span class="pre">when</span></tt> clause that produce
-plans), a python source file will be created name &lt;rb_name&gt;_plans.py, where
-&lt;rb_name&gt; is the rule base name.</p>
+<a class="reference" href="../overview/plans.html">plans</a>), a python source file will be created name &lt;rb_name&gt;_plans.py, where
+&lt;rb_name&gt; is the <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> name.</p>
 <p>You use the <tt class="docutils literal"><span class="pre">plan_extras</span></tt> to include arbitrary python code in this plans
 file.</p>
 </div>
 </div>
 </div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
@@ -223,7 +228,7 @@ file.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Nov 05 2007.
+    Page last modified Wed, Nov 07 2007.
   </div>
 
 </body>

@@ -1,12 +1,13 @@
 restindex
     crumb: Fact Bases
     page-description:
-        Explanation of fact bases and facts.
+        Explanation of facts and fact bases.
     /description
     format: rest
     encoding: utf8
     output-encoding: utf8
     include: yes
+    initialheaderlevel: 1
 /restindex
 
 =============================================
@@ -19,15 +20,17 @@ automatically as new facts are asserted.
 Facts
 ================================
 
-Think of a "fact" as a simple statement.  It has a name and a set of
+Think of a fact as a simple statement.  It has a name and a set of
 arguments.  The arguments may be:
 
 - strings
+
   - proper identifiers don't need quotes: ``Fred`` is the same as ``'Fred'``
+
 - numbers
-- None
-- True/False
+- None, True or False
 - tuples of any of these (including nested tuples)
+
   - singleton tuples don't require a comma: ``(1)`` is the same as ``(1,)``
 
 Duplicate facts are not allowed.  An attempt to assert a fact that already
@@ -41,18 +44,24 @@ Case Specific Facts
 ---------------------
 
 Most facts are case specific facts.  This means that they will be deleted
-when a reset is done to prepare for another run of the inference engine.
+when a reset_ is done to prepare for another run of the inference engine.
 Case specific facts are asserted through either::
 
     pyke.assert_(kb_name, fact_name, arguments)
     pyke.add_case_specific_fact(kb_name, fact_name, arguments)
 
-They may also be asserted by forward-chaining rules.
+They may also be asserted by forward-chaining_ rules.
 
 Universal Facts
 ---------------------
 
-Universal facts are never deleted, specifically, when a reset is done.  Add
+Universal facts are never deleted, specifically, when a reset_ is done.  Add
 universal facts by calling::
 
     pyke.add_universal_fact(kb_name, fact_name, arguments)
+
+Typically, all universal facts are added once at `program startup`_.
+
+.. _forward-chaining: ../rules/forward_chaining.html
+.. _program startup: ../../using_pyke.html#initializing-pyke
+.. _reset: ../../using_pyke.html#setting-up-each-case

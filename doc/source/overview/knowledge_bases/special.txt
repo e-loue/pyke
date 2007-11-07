@@ -13,12 +13,12 @@ restindex
 Special
 =============================================
 
-Other knowledge bases may be created that act in different ways when they
-are asked to lookup facts or prove goals.  Pyke includes one of these
-named *special*.  Each entity in this knowledge
+Other kinds of knowledge bases may be created that act in different ways
+when they are asked to lookup facts or prove goals.  Pyke includes one of
+these named *special*.  Each entity in this knowledge
 base is a python function that does something "special" when run.
 
-Currently, it has only one special function::
+Currently, there is only one special function::
 
     special.claim_goal()
 
@@ -29,22 +29,23 @@ goal.  They are each tried in the order that they appear in the .krb file.
 If one rule fails, the next rule is tried.  The goal itself doesn't fail
 until all of the rules for it have failed.
 
-But if one of these rules executes ``special.claim_goal()`` in its ``when``
-clause, none of the rest of the rules will be tried for this goal.
-Thus, when ``special.claim_goal()`` is backtracked over, the goal fails
-immediately without trying any more rules for it.
-
-This ends up acting like an "else".  You place it in the ``when`` clause 
-after the premises that show that this rule **must** be
-the correct one to use.  Then the subsequent rules will only be tried if
-these premises fail, such that ``special.claim_goal()`` is never executed.
-
-This means that you don't need to 
-add extra premises in each subsequent rule to make sure that these premises
-have **not** occurred.
+Example
+===============
 
 Suppose I want to translate a number, N, into the phrase "N dogs".  I could
 use the following rules::
+
+    one_dog:
+        use n_dogs(1, '1 dog')
+
+    n_dogs:
+        use n_dogs($n, $phrase)
+        when
+            $phrase = "%d dogs" % $n
+
+The problem here is that both rules might be used with ``n`` is 1, but the
+second rule isn't appropriate in this case.  ``Special.claim_goal()`` may
+be used to fix this, as follows::
 
     one_dog:
         use n_dogs(1, '1 dog')
@@ -57,8 +58,26 @@ use the following rules::
             $phrase = "%d dogs" % $n
 
 The ``special.claim_goal()`` prevents the second rule from being used when
-*n* is 1, as that rule would be incorrect.  Without the
-``special.claim_goal()``, I would have to write::
+``n`` is 1.
+
+Explanation
+=================================
+
+When a rule executes ``special.claim_goal()`` in its ``when``
+clause, none of the rest of the rules will be tried for that goal.
+Thus, when ``special.claim_goal()`` is backtracked over, the goal fails
+immediately without trying any more rules for it.
+
+This ends up acting like an "else".  You place it in the ``when`` clause 
+after the premises that show that this rule **must** be
+the correct one to use.  Then the subsequent rules will only be tried if
+these premises fail, such that ``special.claim_goal()`` is never executed.
+
+This means that you don't need to 
+add extra premises in each subsequent rule to make sure that these premises
+have **not** occurred.
+
+Without the ``special.claim_goal()``, I would have to write::
 
     one_dog:
         use n_dogs(1, '1 dog')

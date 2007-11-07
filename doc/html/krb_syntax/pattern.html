@@ -36,6 +36,8 @@
               
 <div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="../overview/index.html">Overview</a></div>
+<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
 
 <div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
@@ -43,8 +45,6 @@
 <div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 <div class="normal-nav"><a href="bc_rule.html">Bc_rule</a></div>
 </div>
-<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
-<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
 </div>
 
             </div>
@@ -62,23 +62,46 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="pattern-syntax">
 <h1 class="title">Pattern Syntax</h1>
+<div class="section">
+<h2><a id="pattern" name="pattern">Pattern</a></h2>
 <pre class="literal-block">
 pattern ::= 'None' | 'True' | 'False'
           | NUMBER | IDENTIFIER | STRING | variable
           | '(' [{pattern,}] ['*' variable] ')'
-
+</pre>
+<p>IDENTIFIER acts like STRING here, meaning that it is taken as a literal
+value.  All variables in patterns must be preceeded by a <tt class="docutils literal"><span class="pre">$</span></tt>.</p>
+<p>Pyke does not currently support complex NUMBERS (for no good reason -- email
+me if you need them).</p>
+</div>
+<div class="section">
+<h2><a id="pattern-variable" name="pattern-variable">Pattern Variable</a></h2>
+<p>Pattern variables are simply called <em>variable</em> in the syntax:</p>
+<pre class="literal-block">
 variable ::= '$'IDENTIFIER | '$_'
 </pre>
-<p>The variable must not have a space between the <tt class="docutils literal"><span class="pre">$</span></tt> and the
-<tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.</p>
+<p>The variable must not have a space between the <tt class="docutils literal"><span class="pre">$</span></tt> and the <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.</p>
+</div>
+<div class="section">
+<h2><a id="anonymous-variable" name="anonymous-variable">Anonymous Variable</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">$_</span></tt> variable is the <em>anonymous</em> variable.  It acts like a &quot;don't
 care&quot;.  Technically, this means that multiple uses of <tt class="docutils literal"><span class="pre">$_</span></tt> may stand for
 multiple values.</p>
+</div>
+<div class="section">
+<h2><a id="rest-variable" name="rest-variable">Rest Variable</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">*variable</span></tt> at the end of a tuple pattern will match the rest of the
 tuple.  Thus, <tt class="docutils literal"><span class="pre">variable</span></tt> is always bound to a (possibly empty) tuple.</p>
+<p>The syntax is taken from rest parameter syntax in python function definitions.
+The difference here is that the variable needs a <tt class="docutils literal"><span class="pre">$</span></tt> on it.</p>
+<p>You may use either a named variable or an anonymous variable here.</p>
+</div>
 </div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
@@ -108,7 +131,7 @@ tuple.  Thus, <tt class="docutils literal"><span class="pre">variable</span></tt
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Nov 05 2007.
+    Page last modified Wed, Nov 07 2007.
   </div>
 
 </body>

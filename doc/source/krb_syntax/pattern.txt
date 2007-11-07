@@ -7,11 +7,15 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
+    initialheaderlevel: 2
 /restindex
 
 =============================================
 Pattern Syntax
 =============================================
+
+Pattern
+============
 
 ::
 
@@ -19,14 +23,35 @@ Pattern Syntax
               | NUMBER | IDENTIFIER | STRING | variable
               | '(' [{pattern,}] ['*' variable] ')'
 
+IDENTIFIER acts like STRING here, meaning that it is taken as a literal
+value.  All variables in patterns must be preceeded by a ``$``.
+
+Pyke does not currently support complex NUMBERS (for no good reason -- email
+me if you need them).
+
+Pattern Variable
+===================
+
+Pattern variables are simply called *variable* in the syntax::
+
     variable ::= '$'IDENTIFIER | '$_'
 
-The variable must not have a space between the ``$`` and the
-``IDENTIFIER``.
+The variable must not have a space between the ``$`` and the ``IDENTIFIER``.
+
+Anonymous Variable
+====================
 
 The ``$_`` variable is the *anonymous* variable.  It acts like a "don't
 care".  Technically, this means that multiple uses of ``$_`` may stand for
 multiple values.
 
+Rest Variable
+================
+
 The ``*variable`` at the end of a tuple pattern will match the rest of the
 tuple.  Thus, ``variable`` is always bound to a (possibly empty) tuple.
+
+The syntax is taken from rest parameter syntax in python function definitions.
+The difference here is that the variable needs a ``$`` on it.
+
+You may use either a named variable or an anonymous variable here.

@@ -7,15 +7,19 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
+    initialheaderlevel: 3
 /restindex
 
 =============================================
 Backward Chaining
 =============================================
 
-Backward chaining rules are processed when your program asks pyke to prove
-a specific *goal*.  Pyke will only use activated rule bases to do the
+Backward chaining rules_ are processed when your program asks pyke to prove_
+a specific *goal*.  Pyke will only use activated_ `rule bases`_ to do the
 proof.
+
+Example
+=================
 
 Consider this example::
 
@@ -54,30 +58,39 @@ Consider this example::
     28          child_parent($parent, $gg_parent, ($prefix1, *$rest_prefixes),
     29                       $_, $gg_parent_type)
 
-These rules draw the same conclusions as the *forward-chaining* example;
+Identifying Backward-Chaining Rules
+=====================================
+
+These rules_ draw the same conclusions as the forward-chaining_ example_;
 but you'll notice three differences:
 
-#. The rule's **if** and **then** parts are reversed.
-#. The rules use different keywords: ``use`` for the **then** clause
+#. The `rule's`_ **if** and **then** parts are reversed.
+#. The rules_ use different keywords: ``use`` for the **then** clause
    and ``when`` for the **if** clause.
-#. The facts established by backward-chaining do not have a knowledge
+#. The facts_ established by backward-chaining do not have a knowledge
    base name prefix.  In this case, the knowledge base name defaults to
-   the rule base category of this rule base (it's root rule base name).
+   the `rule base category`_ of this `rule base`_ (it's root rule base name).
 
-These rules are not used until you ask pyke to prove a goal.
+How Backward-Chaining Rules are Run
+====================================
+
+These rules_ are not used until you ask pyke to prove_ a goal.
 
 The easiest way
-to do this is with ``pyke.prove_1`` or ``pyke.prove_n``.  ``Prove_1`` only
+to do this is with pyke.prove_1_ or pyke.prove_n_.  Prove_1_ only
 returns the first proof found and then stops (or raises pyke.CanNotProve).
-``Prove_n`` is a generator that generates all possible proofs (which, in
+Prove_n_ is a generator that generates all possible proofs (which, in
 some cases, might be infinite).  In both cases, you pass a tuple of
 arguments and the number of variable arguments as the last two parameters.
 The total number of arguments for the goal is the sum of the length of the
 actual arguments that you pass plus the number of variable arguments that you
 specify.
+
 Both functions return the variable bindings for the number of variable
-arguments you specified as a tuple, along with the plan (to be discussed
-later).
+arguments you specified as a tuple, along with the plan_.
+
+Running the Example
+========================
 
     >>> import pyke
     >>> pyke.load('examples')
@@ -97,41 +110,69 @@ later).
 
 Pyke performs the proof by:
 
-#. Checking to see if the goal is simply a known fact.
+#. Checking to see if the goal is simply a known fact_.
    If so, it has a proof!
-#. Look for the first backward-chaining rule that concludes the goal
+#. Look for the first backward-chaining rule_ that concludes the goal
    in its ``use`` clause.
 
    * If not found, the goal fails.
    * If found, try to recursively prove all of the subgoals in the
-     rule's ``when`` clause.
+     `rule's`_ ``when`` clause.
 
      * If this succeeds, the goal is proven.
      * If this fails, go back to step 2 and look for the next rule
        that concludes the goal in its ``use`` clause.
 
-Note how the rules are combined in the opposite direction from
-forward-chaining rules.  Here the first rule's **if** (``when``) clause is
-linked backwards to the next rule's **then** (``use``) clause.  This is why
-these rules are called *backward-chaining* rules.
+Backward-Chaining Defined
+==============================
 
-Also note that while processing each subgoal within a rule's ``when`` clause:
+Note how the rules_ are combined in the opposite direction from
+forward-chaining_ rules_.  Here the first `rule's`_ **if** (``when``) clause is
+linked backwards to the next rule's **then** (``use``) clause.
+
+This is why these rules are called *backward-chaining* rules.  This is also
+referred to as *goal directed*, since the inferencing is driven by the final
+goal.
+
+Backtracking
+=====================
+
+Also note that while processing each subgoal within a `rule's`_ ``when`` clause:
 
 * If pyke succeeds at proving the subgoal:
 
   * Pyke will proceed to the next subgoal within the ``when`` clause.
-  * If pyke reaches the end of the ``when`` clause, the rule succeeds.
+  * If pyke reaches the end of the ``when`` clause, the rule_ succeeds.
 
 * If pyke fails at proving the subgoal:
 
   * Pyke will back up to the prior subgoal within the ``when`` clause
     and try to find another proof for it.  The process starts over
-    from this prior subgoal.
-  * If pyke reaches the beginning of the ``when`` clause, the rule
+    from this prior subgoal, going forward or backing up depending on
+    whether another proof can be found.
+  * If pyke reaches the beginning of the ``when`` clause, the rule_
     fails.
 
-Thus, execution within each rule's ``when`` clause proceeds both forwards
+Thus, execution within each `rule's`_ ``when`` clause proceeds both forwards
 and backwards up and down the list of subgoals, depending on whether each
 subgoal succeeds or fails.  The process of backing up in the ``when``
 clause to try alternate subproofs is called *backtracking*.
 
+
+.. _activated: ../../using_pyke.html#setting-up-each-case
+.. _example: forward_chaining.html#example
+.. _fact: ../knowledge_bases/fact_bases.html#facts
+.. _facts: fact_
+.. _forward-chaining: forward_chaining.html
+.. _plan: ../plans.html
+.. _prove: ../../using_pyke.html#proving-goals
+.. _prove_1: prove_
+.. _prove_n: `prove_1`_
+.. _pyke.prove_1: `prove_1`_
+.. _pyke.prove_n: `prove_n`_
+.. _rule: index.html
+.. _rule base: ../knowledge_bases/rule_bases.html
+.. _rule base category: ../knowledge_bases/rule_bases.html#rule-base-categories
+.. _rule bases: `rule base`_
+.. _rules: rule_
+.. _rule's: rule_

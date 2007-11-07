@@ -32,9 +32,9 @@
               
 <div class="title-nav"><a href="index.html">Home</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="overview/index.html">Overview</a></div>
-<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
 </div>
 
             </div>
@@ -73,19 +73,22 @@ want the inferencing capability by itself.</li>
 </ul>
 </li>
 </ul>
-<p>The knowledge engine supports:</p>
+<div class="section">
+<h2><a id="the-knowledge-engine-supports" name="the-knowledge-engine-supports">The knowledge engine supports:</a></h2>
 <ul class="simple">
 <li>Multiple <em>fact bases</em>, each with its own list of facts.</li>
 <li>Both <em>forward-chaining</em> rules and <em>backward-chaining</em> rules.</li>
 <li>Multiple <em>rule bases</em>, each with its own list of forward-chaining
 and/or backward-chaining rules.</li>
 <li>Rule base inheritance -- <em>activating</em> the derived rule base
-includes the rules from the base rule base.</li>
+includes the rules from the parent rule base.</li>
 <li>The inference rules are compiled into python functions, allowing
 python code snippets to be used within the rules.
 This greatly enhances the expressiveness of the rules.</li>
 </ul>
-<p>The automatic program generation:</p>
+</div>
+<div class="section">
+<h2><a id="automatic-program-generation" name="automatic-program-generation">Automatic program generation:</a></h2>
 <ul class="simple">
 <li>Calls the generated python programs <em>plans</em>.</li>
 <li>Plans may be run multiple times without needing to rerun the inference
@@ -95,22 +98,53 @@ in later runs of the same program.</li>
 <li>No pyke modules are required to run the plans.</li>
 </ul>
 </div>
+<div class="section">
+<h2><a id="potential-pyke-applications" name="potential-pyke-applications">Potential pyke applications:</a></h2>
+<ul class="simple">
+<li>Complicated decision making applications.</li>
+<li>The back-end (code generation and optimization) of compilers.
+Pyke is used as the back-end of its own
+compiler that translates rules into python code.</li>
+<li>Automatic SQL statement generation.</li>
+<li>Automatic HTML generation and automatic HTML template processing.</li>
+<li>Automatic program builder to reuse a common set of functions for many
+different specific situations.  This could also easily
+incorporate a new custom function into a much larger program, where the use
+of the custom function might influence the choice of other standard
+functions in other parts of the program.</li>
+<li>The control module for a web framework tool.</li>
+<li>A high-level planner to automatically distribute the
+modules of a large system over several computers in a distributed system
+to meet specific performance and capacity goals.  This could be used to
+automatically scale the same system code from a small one program,
+one computer system
+to much larger distributed systems to meet a wide range of performance
+goals.</li>
+<li>Diagnosis systems, including automated customer service systems.</li>
+<li>Program or library customization for specific uses.</li>
+</ul>
+</div>
+</div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
             <div id="right-nav-div">
                 <h3>More:</h3>
-<div class="right-item"><a href="overview/index.html">Overview</a><p>So what is all this knowledge-base, inferencing and automatic program
-generation stuff anyway?</p>
-</div>
-<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
-write your rules.</p>
+<div class="right-item"><a href="overview/index.html">Overview</a><p>The big picture of
+what all this knowledge-base, inferencing and automatic program
+generation stuff means and how it works.</p>
 </div>
 <div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
 </div>
 <div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
+</div>
+<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
+write your rules.</p>
 </div>
 
             </div>
@@ -128,7 +162,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Nov 05 2007.
+    Page last modified Tue, Nov 06 2007.
   </div>
 
 </body>

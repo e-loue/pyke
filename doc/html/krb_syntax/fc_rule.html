@@ -36,6 +36,8 @@
               
 <div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="../overview/index.html">Overview</a></div>
+<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
 
 <div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
@@ -43,8 +45,6 @@
 <div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 <div class="normal-nav"><a href="bc_rule.html">Bc_rule</a></div>
 </div>
-<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
-<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
 </div>
 
             </div>
@@ -62,17 +62,13 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="fc-rule-syntax">
 <h1 class="title">Fc_rule Syntax</h1>
-<p>Forward-chaining rules have three parts:</p>
+<div class="section">
+<h2><a id="fc-rule" name="fc-rule">Fc_rule</a></h2>
+<p><a class="reference" href="../overview/rules/forward_chaining.html">Forward-chaining</a> <a class="reference" href="../overview/rules/index.html">rules</a> have three parts:</p>
 <ol class="arabic simple">
-<li>A unique name.  (This name is used as the corresponding function name in
-the generated &lt;rb_name&gt;_fc.py file).</li>
-<li>An optional <tt class="docutils literal"><span class="pre">foreach</span></tt> clause.  If this clause is not used, the rule is
-always fired once.  If the clause is used, the rule is fired for each
-combination of true premises.</li>
-<li>An <tt class="docutils literal"><span class="pre">assert</span></tt> clause.  This lists new facts to assert, and/or python
-statements to execute each time the rule is fired.  Each of these may
-include pattern variables whose values will be substituted into the
-statements.</li>
+<li>A unique name.</li>
+<li>An optional <tt class="docutils literal"><span class="pre">foreach</span></tt> clause.</li>
+<li>An <tt class="docutils literal"><span class="pre">assert</span></tt> clause.</li>
 </ol>
 <pre class="literal-block">
 fc_rule ::= IDENTIFIER ':' NL INDENT
@@ -80,7 +76,11 @@ fc_rule ::= IDENTIFIER ':' NL INDENT
                fc_assert
             DEINDENT
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">for_each</span></tt> clause is:</p>
+<p>The <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt> uniquely names this <a class="reference" href="../overview/rules/index.html">rule</a> and is used as the corresponding
+python function name in the generated &lt;rb_name&gt;_fc.py file.</p>
+</div>
+<div class="section">
+<h2><a id="foreach-clause" name="foreach-clause">Foreach clause</a></h2>
 <pre class="literal-block">
 fc_foreach ::= 'foreach' NL INDENT
                    {fc_premise NL}
@@ -91,9 +91,13 @@ fc_premise ::= fact_pattern
 
 fact_pattern ::= IDENTIFIER '.' IDENTIFIER '(' [{pattern,}] ')'
 </pre>
-<p><tt class="docutils literal"><span class="pre">Pattern</span></tt> and <tt class="docutils literal"><span class="pre">python_premise</span></tt> are defined <a class="reference" href="pattern.html">here</a> and
-<a class="reference" href="python_premise.html">here</a>.</p>
-<p>The <tt class="docutils literal"><span class="pre">assert</span></tt> clause is:</p>
+<p>Here are links to the definitions for <a class="reference" href="pattern.html">pattern</a> and <a class="reference" href="python_premise.html">python_premise</a>.</p>
+<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause is <strong>not</strong> used, the <a class="reference" href="../overview/rules/index.html">rule</a> is always fired once.</p>
+<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause <strong>is</strong> used, the <a class="reference" href="../overview/rules/index.html">rule</a> is fired for each
+combination of true premises.</p>
+</div>
+<div class="section">
+<h2><a id="assert-clause" name="assert-clause">Assert clause</a></h2>
 <pre class="literal-block">
 fc_assert ::= 'assert' NL INDENT
                   {assertion NL}
@@ -104,9 +108,18 @@ assertion ::= fact_pattern
                   {python_statement NL}
               DEINDENT
 </pre>
+<p>The <tt class="docutils literal"><span class="pre">assert</span></tt> clause lists new <a class="reference" href="../overview/knowledge_bases/fact_bases.html#facts">facts</a> to assert, and/or python
+statements to execute each time the <a class="reference" href="../overview/rules/index.html">rule</a> is fired.  Each of these may
+include <a class="reference" href="pattern.html#pattern-variable">pattern variables</a> which should also appear in the <tt class="docutils literal"><span class="pre">foreach</span></tt>
+clause where they are bound to a value.  These values will then be substituted
+into the <a class="reference" href="../overview/knowledge_bases/fact_bases.html#facts">facts</a> and python statements.</p>
+</div>
 </div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
@@ -136,7 +149,7 @@ assertion ::= fact_pattern
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Nov 05 2007.
+    Page last modified Wed, Nov 07 2007.
   </div>
 
 </body>

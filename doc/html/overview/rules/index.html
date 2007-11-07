@@ -45,9 +45,9 @@
 </div>
 <div class="normal-nav"><a href="../plans.html">Plans</a></div>
 </div>
-<div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 </div>
 
             </div>
@@ -65,37 +65,45 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="rules">
 <h1 class="title">Rules</h1>
+<div class="section">
+<h1><a id="premises-and-conclusions" name="premises-and-conclusions">Premises and Conclusions</a></h1>
 <p>Rules have two parts to them: an <strong>if</strong> part (the <em>premises</em>),
 and a <strong>then</strong> part (the <em>conclusions</em>).  (Though pyke uses different
-names for these).</p>
-<p>Each of these <strong>if</strong> and <strong>then</strong> parts contain one or more facts represented
-by <em>patterns</em>.
-Logically, the rule says that if <strong>all</strong> of the premises in the <strong>if</strong> part of
-the rule are true, then each of the conclusions in the <strong>then</strong> part of the
-rule must also be true.</p>
-<p>Rules are specified individually within a rule base.  They are not nested
-or explicitly linked to each other.  So the question is how does pyke combine
-these rules in order to accomplish some larger task?  The answer depends on
-whether the rule is a <em>forward-chaining</em> or <em>backward-chaining</em> rule.
-Pyke processes forward-chaining rules and backward-chaining rules in two
-distinct phases:</p>
+names for these).
+Each of these <strong>if</strong> and <strong>then</strong> parts contain one or more <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a> or <a class="reference" href="FIX">goals</a>
+represented by <a class="reference" href="../../krb_syntax/pattern.html">patterns</a>.</p>
+<p>Logically, the rule says that if <strong>all</strong> of the <em>premises</em> in the <strong>if</strong> part
+of the rule are true, then each of the <em>conclusions</em> in the <strong>then</strong> part
+of the rule must also be true.</p>
+</div>
+<div class="section">
+<h1><a id="inferencing" name="inferencing">Inferencing</a></h1>
+<p>Rules are specified individually within a <a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a>.  They are not nested
+or explicitly linked to each other.  So pyke must automatically figure out
+how to combine these rules to accomplish some larger task.  This is called
+<em>inferencing</em> and there are two different approaches that pyke uses,
+depending on the rule's type.</p>
 <ul class="simple">
-<li>All forward-chaining rules are processed when a rule base is <em>activated</em>.<ul>
-<li>These rules assert new facts, and can activate more specific rule
-bases.</li>
+<li>All <a class="reference" href="forward_chaining.html">forward-chaining</a> rules are processed when a <a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a> is <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a>.<ul>
+<li><a class="reference" href="forward_chaining.html">Forward-chaining</a> rules may <a class="reference" href="../../using_pyke.html#setting-up-each-case">assert</a> new facts, and <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific
+<a class="reference" href="../knowledge_bases/rule_bases.html">rule bases</a>.</li>
 </ul>
 </li>
-<li>Backward-chaining rules are processed when your program asks pyke to
-<em>prove</em> a specific <em>goal</em>.<ul>
-<li>These rules don't assert new facts or activate more specific rule
+<li><a class="reference" href="backward_chaining.html">Backward-chaining</a> rules are processed when your program asks pyke to
+<a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a specific <em>goal</em>.<ul>
+<li>These rules don't <a class="reference" href="../../using_pyke.html#setting-up-each-case">assert</a> new facts or <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific rule
 bases.  But they do have the ability to assemble python functions into
-a customized call graph to meet a specific need.</li>
+a customized call graph or program, called a <a class="reference" href="../plans.html">plan</a>, to meet a specific need.</li>
 </ul>
 </li>
 </ul>
 </div>
+</div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
@@ -121,7 +129,7 @@ a customized call graph to meet a specific need.</li>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Nov 02 2007.
+    Page last modified Tue, Nov 06 2007.
   </div>
 
 </body>

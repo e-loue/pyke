@@ -26,7 +26,7 @@ def file(rule, arg_patterns, arg_context):
                   helpers.bc_head(context.lookup_data('rb_name'))):
             context.end_save_all_undo()
             flag_3 = False
-            for x_3 in prove('compiler', 'rule_decl', context,
+            for x_3 in prove(rule.rule_base.root_name, 'rule_decl', context,
                            (rule.pattern(2),
                             rule.pattern(3),
                             rule.pattern(4),)):
@@ -34,14 +34,14 @@ def file(rule, arg_patterns, arg_context):
               assert x_3 is None, \
                 "%(rule_name)s: got unexpected plan from when clause 3"
               flag_4 = False
-              for x_4 in prove('compiler', 'fc_rules', context,
+              for x_4 in prove(rule.rule_base.root_name, 'fc_rules', context,
                              (rule.pattern(5),
                               rule.pattern(6),)):
                 flag_4 = True
                 assert x_4 is None, \
                   "%(rule_name)s: got unexpected plan from when clause 4"
                 flag_5 = False
-                for x_5 in prove('compiler', 'bc_rules', context,
+                for x_5 in prove(rule.rule_base.root_name, 'bc_rules', context,
                                (rule.pattern(2),
                                 rule.pattern(7),
                                 rule.pattern(8),
@@ -204,14 +204,14 @@ def fc_rules1(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'fc_rule', context,
+        for x_1 in prove(rule.rule_base.root_name, 'fc_rule', context,
                        (rule.pattern(0),
                         rule.pattern(1),)):
           flag_1 = True
           assert x_1 is None, \
             "%(rule_name)s: got unexpected plan from when clause 1"
           flag_2 = False
-          for x_2 in prove('compiler', 'fc_rules', context,
+          for x_2 in prove(rule.rule_base.root_name, 'fc_rules', context,
                          (rule.pattern(2),
                           rule.pattern(3),)):
             flag_2 = True
@@ -253,7 +253,7 @@ def fc_rule_(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'fc_premises', context,
+        for x_1 in prove(rule.rule_base.root_name, 'fc_premises', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -266,7 +266,7 @@ def fc_rule_(rule, arg_patterns, arg_context):
           assert x_1 is None, \
             "%(rule_name)s: got unexpected plan from when clause 1"
           flag_2 = False
-          for x_2 in prove('compiler', 'assertions', context,
+          for x_2 in prove(rule.rule_base.root_name, 'assertions', context,
                          (rule.pattern(8),
                           rule.pattern(9),
                           rule.pattern(7),
@@ -367,7 +367,7 @@ def fc_premises1(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'fc_premise', context,
+        for x_1 in prove(rule.rule_base.root_name, 'fc_premise', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -381,7 +381,7 @@ def fc_premises1(rule, arg_patterns, arg_context):
           assert x_1 is None, \
             "%(rule_name)s: got unexpected plan from when clause 1"
           flag_2 = False
-          for x_2 in prove('compiler', 'fc_premises', context,
+          for x_2 in prove(rule.rule_base.root_name, 'fc_premises', context,
                          (rule.pattern(0),
                           rule.pattern(2),
                           rule.pattern(9),
@@ -515,7 +515,7 @@ def fc_python_premise(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
-        for x_1 in prove('compiler', 'python_premise', context,
+        for x_1 in prove(rule.rule_base.root_name, 'python_premise', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -581,7 +581,7 @@ def assertions_n(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'assertion', context,
+        for x_1 in prove(rule.rule_base.root_name, 'assertion', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -590,7 +590,7 @@ def assertions_n(rule, arg_patterns, arg_context):
           assert x_1 is None, \
             "%(rule_name)s: got unexpected plan from when clause 1"
           flag_2 = False
-          for x_2 in prove('compiler', 'assertions', context,
+          for x_2 in prove(rule.rule_base.root_name, 'assertions', context,
                          (rule.pattern(4),
                           rule.pattern(5),
                           rule.pattern(3),
@@ -729,7 +729,7 @@ def bc_rules1(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'bc_rule', context,
+        for x_1 in prove(rule.rule_base.root_name, 'bc_rule', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -738,7 +738,7 @@ def bc_rules1(rule, arg_patterns, arg_context):
           assert x_1 is None, \
             "%(rule_name)s: got unexpected plan from when clause 1"
           flag_2 = False
-          for x_2 in prove('compiler', 'bc_rules', context,
+          for x_2 in prove(rule.rule_base.root_name, 'bc_rules', context,
                          (rule.pattern(0),
                           rule.pattern(4),
                           rule.pattern(5),
@@ -794,7 +794,7 @@ def bc_rule_(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'bc_premises', context,
+        for x_1 in prove(rule.rule_base.root_name, 'bc_premises', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -863,7 +863,7 @@ def bc_premises(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'bc_premises1', context,
+        for x_1 in prove(rule.rule_base.root_name, 'bc_premises1', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -977,7 +977,7 @@ def bc_premises1_n(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         flag_1 = False
-        for x_1 in prove('compiler', 'bc_premise', context,
+        for x_1 in prove(rule.rule_base.root_name, 'bc_premise', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),
@@ -997,7 +997,7 @@ def bc_premises1_n(rule, arg_patterns, arg_context):
                   context.lookup_data('clause_num') + 1):
             context.end_save_all_undo()
             flag_3 = False
-            for x_3 in prove('compiler', 'bc_premises1', context,
+            for x_3 in prove(rule.rule_base.root_name, 'bc_premises1', context,
                            (rule.pattern(0),
                             rule.pattern(1),
                             rule.pattern(11),
@@ -1088,7 +1088,7 @@ def bc_premise(rule, arg_patterns, arg_context):
                             arg_patterns)):
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
-                context.lookup_data('kb_name') or "'" + context.lookup_data('rb_name') + "'"):
+                context.lookup_data('kb_name') or "rule.rule_base.root_name"):
           context.end_save_all_undo()
           mark2 = context.mark(True)
           if rule.pattern(1).match_data(context, context,
@@ -1111,7 +1111,7 @@ def bc_premise(rule, arg_patterns, arg_context):
                    'POPINDENT',)):
               context.end_save_all_undo()
               flag_4 = False
-              for x_4 in prove('compiler', 'add_required', context,
+              for x_4 in prove(rule.rule_base.root_name, 'add_required', context,
                              (rule.pattern(3),
                               rule.pattern(4),
                               rule.pattern(5),
@@ -1124,7 +1124,7 @@ def bc_premise(rule, arg_patterns, arg_context):
                 assert x_4 is None, \
                   "%(rule_name)s: got unexpected plan from when clause 4"
                 flag_5 = False
-                for x_5 in prove('compiler', 'gen_plan_lines', context,
+                for x_5 in prove(rule.rule_base.root_name, 'gen_plan_lines', context,
                                (rule.pattern(4),
                                 rule.pattern(5),
                                 rule.pattern(6),
@@ -1265,7 +1265,7 @@ def as_plan(rule, arg_patterns, arg_context):
                context.lookup_data('patterns_in'))):
           context.end_save_all_undo()
           flag_2 = False
-          for x_2 in prove('compiler', 'plan_bindings', context,
+          for x_2 in prove(rule.rule_base.root_name, 'plan_bindings', context,
                          (rule.pattern(1),
                           rule.pattern(2),
                           rule.pattern(3),
@@ -1323,7 +1323,7 @@ def plan_spec(rule, arg_patterns, arg_context):
                context.lookup_data('patterns_in'))):
           context.end_save_all_undo()
           flag_2 = False
-          for x_2 in prove('compiler', 'plan_bindings', context,
+          for x_2 in prove(rule.rule_base.root_name, 'plan_bindings', context,
                          (rule.pattern(1),
                           rule.pattern(2),
                           rule.pattern(3),
@@ -1509,7 +1509,7 @@ def bc_python_premise(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
-        for x_1 in prove('compiler', 'python_premise', context,
+        for x_1 in prove(rule.rule_base.root_name, 'python_premise', context,
                        (rule.pattern(0),
                         rule.pattern(1),
                         rule.pattern(2),

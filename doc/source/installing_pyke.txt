@@ -72,7 +72,7 @@ the example above and changing the directory that you want it to go into.
 * ``pyke``
   
   - This is the top-level python package directory for the python sources.
-    This needs to be in a directory on your PYTHONPATH.
+    This needs to be in a directory on your ``PYTHONPATH``.
     The sources for the compiler is in the ``compiler`` subdirectory,
     which is expected to be a subpackage of ``pyke``.
 
@@ -94,6 +94,6 @@ To regenerate the documentation, in the ``doc`` directory run::
     $ r2w r2w.ini
 
 This will regenerate the files in ``doc/html``, except for those in
-``doc/html/stylesheets`` and those in ``doc/html/images``.  I've gone ahead
+``doc/html/stylesheets`` and ``doc/html/images``.  I've gone ahead
 and placed the generated html files in subversion so that you can checkout
 the documentation without having to run ``r2w``.

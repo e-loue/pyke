@@ -7,39 +7,57 @@ restindex
     format: rest
     encoding: utf8
     output-encoding: utf8
-    include: yes
+    include: yes 
+    initialheaderlevel: 1
 /restindex
 
 =============================================
 Rules
 =============================================
 
+Premises and Conclusions
+=================================
+
 Rules have two parts to them: an **if** part (the *premises*),
 and a **then** part (the *conclusions*).  (Though pyke uses different
 names for these).
+Each of these **if** and **then** parts contain one or more facts_ or goals_
+represented by patterns_.
 
-Each of these **if** and **then** parts contain one or more facts represented
-by *patterns*.
-Logically, the rule says that if **all** of the premises in the **if** part of
-the rule are true, then each of the conclusions in the **then** part of the
-rule must also be true.
+Logically, the rule says that if **all** of the *premises* in the **if** part
+of the rule are true, then each of the *conclusions* in the **then** part
+of the rule must also be true.
 
-Rules are specified individually within a rule base.  They are not nested
-or explicitly linked to each other.  So the question is how does pyke combine
-these rules in order to accomplish some larger task?  The answer depends on
-whether the rule is a *forward-chaining* or *backward-chaining* rule.
-Pyke processes forward-chaining rules and backward-chaining rules in two
-distinct phases:
+Inferencing
+===================================
 
-- All forward-chaining rules are processed when a rule base is *activated*.
+Rules are specified individually within a `rule base`_.  They are not nested
+or explicitly linked to each other.  So pyke must automatically figure out
+how to combine these rules to accomplish some larger task.  This is called
+*inferencing* and there are two different approaches that pyke uses,
+depending on the rule's type.
 
-  - These rules assert new facts, and can activate more specific rule
-    bases.
+- All forward-chaining_ rules are processed when a `rule base`_ is activated_.
 
-- Backward-chaining rules are processed when your program asks pyke to
-  *prove* a specific *goal*.
+  - Forward-chaining_ rules may assert_ new facts, and activate_ more specific
+    `rule bases`_.
 
-  - These rules don't assert new facts or activate more specific rule
+- Backward-chaining_ rules are processed when your program asks pyke to
+  prove_ a specific *goal*.
+
+  - These rules don't assert_ new facts or activate_ more specific rule
     bases.  But they do have the ability to assemble python functions into
-    a customized call graph to meet a specific need.
+    a customized call graph or program, called a plan_, to meet a specific need.
 
+.. _activate: ../../using_pyke.html#setting-up-each-case
+.. _activated: activate_
+.. _assert: activate_
+.. _backward-chaining: backward_chaining.html
+.. _facts: ../knowledge_bases/fact_bases.html#facts
+.. _forward-chaining: forward_chaining.html
+.. _goals: FIX
+.. _patterns: ../../krb_syntax/pattern.html
+.. _plan: ../plans.html
+.. _prove: ../../using_pyke.html#proving-goals
+.. _rule base: ../knowledge_bases/rule_bases.html
+.. _rule bases: `rule base`_

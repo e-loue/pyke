@@ -52,7 +52,10 @@
             <div id="main">
                 <a name="startcontent" id="startcontent"></a>
                 <% body %>
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">

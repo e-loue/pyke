@@ -36,6 +36,8 @@
               
 <div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="../overview/index.html">Overview</a></div>
+<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
 
 <div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
@@ -43,8 +45,6 @@
 <div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 <div class="normal-nav"><a href="bc_rule.html">Bc_rule</a></div>
 </div>
-<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
-<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
 </div>
 
             </div>
@@ -62,21 +62,14 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="bc-rule-syntax">
 <h1 class="title">Bc_rule Syntax</h1>
-<p>Backward-chaining rules have four parts:</p>
+<div class="section">
+<h1><a id="bc-rule" name="bc-rule">Bc_rule</a></h1>
+<p><a class="reference" href="../overview/rules/backward_chaining.html">Backward-chaining</a> <a class="reference" href="../overview/rules/index.html">rules</a> have four parts:</p>
 <ol class="arabic simple">
-<li>A unique name.  (This name is used as the corresponding function name in
-the generated &lt;rb_name&gt;_bc.py file).</li>
-<li>A <tt class="docutils literal"><span class="pre">use</span></tt> clause.  This identifies the <em>goal</em> that this rule is trying
-to prove.</li>
-<li>An optional <tt class="docutils literal"><span class="pre">when</span></tt> clause.  If this clause is not used, the only
-requirement for the rule to succeed is that the <tt class="docutils literal"><span class="pre">use</span></tt> clause patterns
-match the goal.
-If the clause is used, the rule succeeds for each
-combination of true premises.</li>
-<li>An optional <tt class="docutils literal"><span class="pre">with</span></tt> clause.  This contains the python
-statements that make up the <em>plan</em> for this rule.  These may
-include pattern variables whose values will be substituted into the
-statements at run time.</li>
+<li>A unique name.</li>
+<li>A <tt class="docutils literal"><span class="pre">use</span></tt> clause.</li>
+<li>An optional <tt class="docutils literal"><span class="pre">when</span></tt> clause.</li>
+<li>An optional <tt class="docutils literal"><span class="pre">with</span></tt> clause.</li>
 </ol>
 <pre class="literal-block">
 bc_rule ::= IDENTIFIER ':' NL INDENT
@@ -84,12 +77,39 @@ bc_rule ::= IDENTIFIER ':' NL INDENT
                 [when]
                 [with]
             DEINDENT
-
-use ::= 'use' IDENTIFIER '(' {pattern,} ')'
-        ['taking' '(' &lt;python_arg_spec&gt; ')'] NL
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">taking</span></tt> clause is used to define parameters to the <em>plan</em> function.
-Do <strong>not</strong> use <tt class="docutils literal"><span class="pre">$</span></tt> with these parameters.</p>
+<p>The <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt> is the unique name for this <a class="reference" href="../overview/rules/index.html">rule</a> and is used as the
+corresponding python function name in the generated &lt;rb_name&gt;_bc.py file.</p>
+</div>
+<div class="section">
+<h1><a id="use-clause" name="use-clause">Use Clause</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">use</span></tt> clause is the <strong>then</strong> part of the <a class="reference" href="../overview/rules/index.html">rule</a>.  It identifies the
+<em>goal</em> that this <a class="reference" href="../overview/rules/index.html">rule</a> is trying to prove.</p>
+<blockquote>
+<dl class="docutils">
+<dt>use ::= 'use' IDENTIFIER '(' {pattern,} ')'</dt>
+<dd>['taking' '(' &lt;python_arg_spec&gt; ')'] NL</dd>
+</dl>
+</blockquote>
+<p>Notice that it uses a single <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.  The <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> name is implied
+as the <a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name for the <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> containing this <a class="reference" href="../overview/rules/index.html">rule</a>.</p>
+<div class="section">
+<h2><a id="taking-clause" name="taking-clause">Taking Clause</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">use</span></tt> clause also defines parameters to the <a class="reference" href="../overview/plans.html">plan</a> function (if one is
+used for this <a class="reference" href="../overview/rules/index.html">rule</a>) with the optional <tt class="docutils literal"><span class="pre">taking</span></tt> sub-clause.</p>
+<p>The <em>python_arg_spec</em> is not parsed by pyke, but simply copied to the
+output <a class="reference" href="../overview/plans.html">plan</a> function.  Do <strong>not</strong> use <tt class="docutils literal"><span class="pre">$</span></tt> with these parameters.</p>
+</div>
+</div>
+<div class="section">
+<h1><a id="when-clause" name="when-clause">When Clause</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">when</span></tt> clause is the <strong>if</strong> part of the <a class="reference" href="../overview/rules/index.html">rule</a>.  It defines the
+premises that must be true for this rule to succeed.</p>
+<p>If the <tt class="docutils literal"><span class="pre">when</span></tt> clause is omitted, the only
+requirement for the <a class="reference" href="../overview/rules/index.html">rule</a> to succeed is that the <tt class="docutils literal"><span class="pre">use</span></tt> clause
+<a class="reference" href="pattern.html">patterns</a> match the goal.</p>
+<p>If the <tt class="docutils literal"><span class="pre">when</span></tt> clause is used, the <a class="reference" href="../overview/rules/index.html">rule</a> succeeds for each
+combination of true premises.</p>
 <pre class="literal-block">
 when ::= 'when' NL INDENT
              {bc_premise NL}
@@ -104,15 +124,23 @@ goal_name ::= name '.' name
 name ::= IDENTIFIER
        | '$'IDENTIFIER
 </pre>
-<p>If a single <em>name</em> is used in the <em>bc_premise</em>, the rule base name of the
-top-level inherited rule base for this file is assumed.  This is the of the
-<em>rule base category</em>.</p>
-<p>If two <em>names</em> are used in the <em>bc_premise</em>, the first may name a <em>rule
-base category</em> or a <em>fact base</em>.  If a <em>rule base category</em> name is used,
-the currently <em>active</em> rule base for that category is used to prove the
-premise.</p>
-<p><tt class="docutils literal"><span class="pre">Pattern</span></tt> and <tt class="docutils literal"><span class="pre">python_premise</span></tt> are defined <a class="reference" href="pattern.html">here</a> and
-<a class="reference" href="python_premise.html">here</a>.</p>
+<p>If a single <em>name</em> is used in the <em>bc_premise</em>,
+the <a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> for the current <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> is assumed.</p>
+<p>If two <em>names</em> are used in the <em>bc_premise</em>, the first may name a <a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-categories">rule
+base category</a> or a <a class="reference" href="../overview/knowledge_bases/fact_bases.html">fact base</a>.</p>
+<p>If a <a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name is used (or assumed),
+the currently <a class="reference" href="../using_pyke.html#setting-up-each-case">active</a> <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> for that <a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-categories">category</a> is used to prove the
+premise.  Note that if the <a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name is omitted, and
+therefore assumed to be the current <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base's</a> <a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>,
+the current <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> may not be the <a class="reference" href="../using_pyke.html#setting-up-each-case">active</a> <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> for that
+<a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-categories">category</a>.  It could be the case, that a derived <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> is the
+<a class="reference" href="../using_pyke.html#setting-up-each-case">active</a> <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a>.  In that case, the derived <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> is used to
+prove the premise.</p>
+<p>Here are the links to the definitions for <a class="reference" href="pattern.html">pattern</a> and <a class="reference" href="python_premise.html">python_premise</a>.</p>
+<div class="section">
+<h2><a id="plan-spec" name="plan-spec">Plan_spec</a></h2>
+<p>A <em>plan_spec</em> is required for all premises that return <a class="reference" href="../overview/plans.html">plans</a>.
+This shows what to do with the returned <a class="reference" href="../overview/plans.html">plan</a> function:</p>
 <pre class="literal-block">
 plan_spec ::= step_opt NL
             | step_opt NL INDENT
@@ -123,34 +151,54 @@ plan_spec ::= step_opt NL
 step_opt ::=
            | 'step' NUMBER
 </pre>
-<p>A <em>plan_spec</em> is required for all premises that return <em>plans</em>.  This shows
-how to call their <em>plan</em> functions.  The <em>plan</em> function itself is
-indicated by <tt class="docutils literal"><span class="pre">$$</span></tt> in the <em>python_statement</em>.  The result of this function
-may be assigned to a python variable, but not a <tt class="docutils literal"><span class="pre">$</span></tt> pattern variable.
-Parameters from the <tt class="docutils literal"><span class="pre">taking</span></tt> clause may be passed to the <em>plan function</em>.</p>
+<p>The <a class="reference" href="../overview/plans.html">plan</a> function itself is indicated by <tt class="docutils literal"><span class="pre">$$</span></tt> in the <em>python_statement</em>.
+The result of this function
+may be assigned to a python variable, but not a <a class="reference" href="pattern.html#pattern-variable">pattern variable</a>
+(<tt class="docutils literal"><span class="pre">$variable</span></tt>).
+Parameters from the <tt class="docutils literal"><span class="pre">taking</span></tt> clause may be passed to the <a class="reference" href="../overview/plans.html">plan</a> function.</p>
 <p>With multiple premises, the <em>plan_specs</em> without <tt class="docutils literal"><span class="pre">step</span></tt> clauses are
-executed first in the order that they appear.  Then the <em>plan_specs</em> for
+executed first in the order that they appear.  Then the <em>plan_specs</em>
 with <tt class="docutils literal"><span class="pre">step</span></tt> clauses are executed in ascending sequence by the NUMBER in
-the <tt class="docutils literal"><span class="pre">step</span></tt> clause.  The NUMBER may be negative or a float.</p>
-<p>If the <tt class="docutils literal"><span class="pre">as</span></tt> clause is used, the <em>plan function</em> is bound to the
-pattern variable as a function.  This allows you to run the function (or
-not) as you please.  The parameters required are defined in the <tt class="docutils literal"><span class="pre">taking</span></tt>
-clause of the rule used to prove the premise.</p>
+the <tt class="docutils literal"><span class="pre">step</span></tt> clause.  It is permissible for the NUMBER to be negative or a
+float.</p>
+<p>If the <tt class="docutils literal"><span class="pre">as</span></tt> clause is used, the <a class="reference" href="../overview/plans.html">plan</a> function is bound to the
+<a class="reference" href="pattern.html#pattern-variable">pattern variable</a> as a python function.  This allows you to call the
+function (or not) as you please.  The parameters required are defined in
+the <tt class="docutils literal"><span class="pre">taking</span></tt> clause of the <a class="reference" href="../overview/rules/index.html">rule</a> used to prove the premise.</p>
+</div>
+</div>
+<div class="section">
+<h1><a id="with-clause" name="with-clause">With Clause</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">with</span></tt> clause contains python
+statements for the <a class="reference" href="../overview/plans.html">plan</a> produced by this <a class="reference" href="../overview/rules/index.html">rule</a>.  These python statements may
+include <a class="reference" href="pattern.html#pattern-variable">pattern variables</a> whose values will be substituted into the
+statements when finalizing the final <a class="reference" href="../overview/plans.html">plan</a>.</p>
 <pre class="literal-block">
 with ::= 'with' NL INDENT
              {&lt;python_statement&gt; NL}
          DEINDENT
 </pre>
-<p>The <em>python_statements</em> are included in the <em>plan</em> function after the
-functions calls from all of the <em>plan_specs</em> in the <tt class="docutils literal"><span class="pre">when</span></tt> clause.  If
-the <tt class="docutils literal"><span class="pre">with</span></tt> clause is omitted, but the <tt class="docutils literal"><span class="pre">when</span></tt> clause has <em>plan_specs</em>
-(except for the <tt class="docutils literal"><span class="pre">as</span></tt> spec), a plan function is still generated for this
-rule.</p>
+<p>These <em>python_statements</em> are included in the <a class="reference" href="../overview/plans.html">plan</a> function after the
+calls to all of the subordinate <a class="reference" href="../overview/plans.html">plan</a> functions from all of the <em>plan_specs</em>
+in the <tt class="docutils literal"><span class="pre">when</span></tt> clause.</p>
+<p>If the <tt class="docutils literal"><span class="pre">with</span></tt> clause is omitted, but the <tt class="docutils literal"><span class="pre">when</span></tt> clause has <em>plan_specs</em>
+(excluding <tt class="docutils literal"><span class="pre">as</span></tt> specs), a <a class="reference" href="../overview/plans.html">plan</a> function is still generated for this
+<a class="reference" href="../overview/rules/index.html">rule</a> so that the subordinate <a class="reference" href="../overview/plans.html">plan</a> functions may still be called.</p>
 <p>The <em>python_statements</em> are not parsed.  They are simply scanned for <tt class="docutils literal"><span class="pre">$</span></tt>
-pattern variables that don't occur in string literals or comments.</p>
+<a class="reference" href="pattern.html#pattern-variable">pattern variables</a> that don't occur in string literals or comments.
+The resulting <a class="reference" href="../overview/plans.html">plan</a> will substitute the values bound to these <a class="reference" href="pattern.html#pattern-variable">variables</a>
+into the code.</p>
+<p>But note that this substitution isn't done until after the entire
+top-level goal has been proven.  So it is permissible to use
+unbound <a class="reference" href="pattern.html#pattern-variable">pattern variables</a>, so long as they will be bound to values by
+subsequent <a class="reference" href="../overview/rules/index.html">rules</a>.</p>
+</div>
 </div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
@@ -180,7 +228,7 @@ pattern variables that don't occur in string literals or comments.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Nov 05 2007.
+    Page last modified Wed, Nov 07 2007.
   </div>
 
 </body>

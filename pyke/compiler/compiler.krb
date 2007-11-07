@@ -265,7 +265,7 @@ bc_premise:
                    $plan_var_names_in, $plan_var_names_out,
                    $plan_lines, $fn_head, $fn_tail)
     when
-        $kb_name2 = $kb_name or "'" + $rb_name + "'"
+        $kb_name2 = $kb_name or "rule.rule_base.root_name"
         ($pat_nums, $patterns_out1) = \
             helpers.merge_patterns($arg_patterns, $patterns_in)
         $fn_head1 = helpers.splice(

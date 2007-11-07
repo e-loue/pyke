@@ -3,10 +3,11 @@ restindex
     format: rest
     encoding: utf8
     output-encoding: utf8
-    section-pages: , overview/index, krb_syntax/index, installing_pyke, using_pyke
+    section-pages: , overview/index, installing_pyke, using_pyke, krb_syntax/index
     template: template.txt
     template-encoding: utf8
     include: No
+    initialheaderlevel: 2
 /restindex
 
 =========================
@@ -34,18 +35,20 @@ Pyke is a knowledge-based inference engine written in 100% python that can:
     want the inferencing capability by itself.
 
 The knowledge engine supports:
+========================================
 
 - Multiple *fact bases*, each with its own list of facts.
 - Both *forward-chaining* rules and *backward-chaining* rules.
 - Multiple *rule bases*, each with its own list of forward-chaining
   and/or backward-chaining rules.
 - Rule base inheritance -- *activating* the derived rule base 
-  includes the rules from the base rule base.
+  includes the rules from the parent rule base.
 - The inference rules are compiled into python functions, allowing 
   python code snippets to be used within the rules.
   This greatly enhances the expressiveness of the rules.
 
-The automatic program generation:
+Automatic program generation:
+========================================
 
 - Calls the generated python programs *plans*.
 - Plans may be run multiple times without needing to rerun the inference
@@ -53,4 +56,29 @@ The automatic program generation:
 - Plans may be pickled and cached to disk to be used by other programs or
   in later runs of the same program.
 - No pyke modules are required to run the plans.
+
+Potential pyke applications:
+========================================
+
+- Complicated decision making applications.
+- The back-end (code generation and optimization) of compilers.
+  Pyke is used as the back-end of its own
+  compiler that translates rules into python code.
+- Automatic SQL statement generation.
+- Automatic HTML generation and automatic HTML template processing.
+- Automatic program builder to reuse a common set of functions for many
+  different specific situations.  This could also easily
+  incorporate a new custom function into a much larger program, where the use
+  of the custom function might influence the choice of other standard
+  functions in other parts of the program.
+- The control module for a web framework tool.
+- A high-level planner to automatically distribute the
+  modules of a large system over several computers in a distributed system
+  to meet specific performance and capacity goals.  This could be used to
+  automatically scale the same system code from a small one program,
+  one computer system
+  to much larger distributed systems to meet a wide range of performance
+  goals.
+- Diagnosis systems, including automated customer service systems.
+- Program or library customization for specific uses.
 

@@ -1,8 +1,9 @@
 restindex
     crumb: Overview
     page-description:
-        So what is all this knowledge-base, inferencing and automatic program
-        generation stuff anyway?
+        The big picture of 
+        what all this knowledge-base, inferencing and automatic program
+        generation stuff means and how it works.
     /description
     section-pages: , knowledge_bases/index, rules/index, plans
     format: rest
@@ -15,19 +16,29 @@ restindex
 Overview
 ==================
 
-Pyke is an inference engine that applies *rules* to *facts* to establish
-additional facts (through forward-chaining rules), and/or to prove *goals*
+Pyke is an inference engine that applies rules_ to facts_ to establish
+additional facts (through forward-chaining_ rules), and/or to prove *goals*
 and optionally assemble python functions
-into customized call graphs, called *plans* (through backward-chaining rules).
+into customized call graphs, called plans_ (through backward-chaining_ rules).
 
-Pyke may then be reset, deleting the last set of facts, so that the cycle
-may be repeated using the same set of rules.
+Pyke may then be reset_, deleting the last set of facts, so that the cycle
+may be repeated.  For each cycle a different rule base may be activated_.
 
-The plan capability allow the postponement of code execution until the
+The plan_ capability allows the postponement of code execution until the
 top-level goal has been completely proven.  This shields the code from
-blind alleys and backtracking within the rules.
+blind alleys and backtracking_ within the rules.
 
-Once a plan has been created, it may be executed multiple times with different
-arguments.  It may also be pickled,
+Once a plan_ has been created, it may be executed multiple times with different
+arguments.  It may also be pickled_,
 and later run again without requiring any pyke modules.
 
+.. _activated: ../using_pyke.html#setting-up-each-case
+.. _backtracking: rules/backward_chaining.html#backtracking
+.. _backward-chaining: rules/backward_chaining.html
+.. _facts: knowledge_bases/fact_bases.html#facts
+.. _forward-chaining: rules/forward_chaining.html
+.. _pickled: plans.html#running-and-pickling-plans
+.. _plan: plans.html
+.. _plans: plan_
+.. _reset: activated_
+.. _rules: rules/index.html

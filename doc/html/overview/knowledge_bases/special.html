@@ -48,9 +48,9 @@
 <div class="normal-nav"><a href="../rules/index.html">Rules</a></div>
 <div class="normal-nav"><a href="../plans.html">Plans</a></div>
 </div>
-<div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 </div>
 
             </div>
@@ -68,11 +68,11 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="special">
 <h1 class="title">Special</h1>
-<p>Other knowledge bases may be created that act in different ways when they
-are asked to lookup facts or prove goals.  Pyke includes one of these
-named <em>special</em>.  Each entity in this knowledge
+<p>Other kinds of knowledge bases may be created that act in different ways
+when they are asked to lookup facts or prove goals.  Pyke includes one of
+these named <em>special</em>.  Each entity in this knowledge
 base is a python function that does something &quot;special&quot; when run.</p>
-<p>Currently, it has only one special function:</p>
+<p>Currently, there is only one special function:</p>
 <pre class="literal-block">
 special.claim_goal()
 </pre>
@@ -81,19 +81,22 @@ special.claim_goal()
 goal.  They are each tried in the order that they appear in the .krb file.
 If one rule fails, the next rule is tried.  The goal itself doesn't fail
 until all of the rules for it have failed.</p>
-<p>But if one of these rules executes <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> in its <tt class="docutils literal"><span class="pre">when</span></tt>
-clause, none of the rest of the rules will be tried for this goal.
-Thus, when <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is backtracked over, the goal fails
-immediately without trying any more rules for it.</p>
-<p>This ends up acting like an &quot;else&quot;.  You place it in the <tt class="docutils literal"><span class="pre">when</span></tt> clause
-after the premises that show that this rule <strong>must</strong> be
-the correct one to use.  Then the subsequent rules will only be tried if
-these premises fail, such that <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is never executed.</p>
-<p>This means that you don't need to
-add extra premises in each subsequent rule to make sure that these premises
-have <strong>not</strong> occurred.</p>
+<div class="section">
+<h1><a id="example" name="example">Example</a></h1>
 <p>Suppose I want to translate a number, N, into the phrase &quot;N dogs&quot;.  I could
 use the following rules:</p>
+<pre class="literal-block">
+one_dog:
+    use n_dogs(1, '1 dog')
+
+n_dogs:
+    use n_dogs($n, $phrase)
+    when
+        $phrase = &quot;%d dogs&quot; % $n
+</pre>
+<p>The problem here is that both rules might be used with <tt class="docutils literal"><span class="pre">n</span></tt> is 1, but the
+second rule isn't appropriate in this case.  <tt class="docutils literal"><span class="pre">Special.claim_goal()</span></tt> may
+be used to fix this, as follows:</p>
 <pre class="literal-block">
 one_dog:
     use n_dogs(1, '1 dog')
@@ -106,8 +109,22 @@ n_dogs:
         $phrase = &quot;%d dogs&quot; % $n
 </pre>
 <p>The <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> prevents the second rule from being used when
-<em>n</em> is 1, as that rule would be incorrect.  Without the
-<tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt>, I would have to write:</p>
+<tt class="docutils literal"><span class="pre">n</span></tt> is 1.</p>
+</div>
+<div class="section">
+<h1><a id="explanation" name="explanation">Explanation</a></h1>
+<p>When a rule executes <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> in its <tt class="docutils literal"><span class="pre">when</span></tt>
+clause, none of the rest of the rules will be tried for that goal.
+Thus, when <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is backtracked over, the goal fails
+immediately without trying any more rules for it.</p>
+<p>This ends up acting like an &quot;else&quot;.  You place it in the <tt class="docutils literal"><span class="pre">when</span></tt> clause
+after the premises that show that this rule <strong>must</strong> be
+the correct one to use.  Then the subsequent rules will only be tried if
+these premises fail, such that <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is never executed.</p>
+<p>This means that you don't need to
+add extra premises in each subsequent rule to make sure that these premises
+have <strong>not</strong> occurred.</p>
+<p>Without the <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt>, I would have to write:</p>
 <pre class="literal-block">
 one_dog:
     use n_dogs(1, '1 dog')
@@ -122,14 +139,18 @@ n_dogs:
 rule.  But in general, it is difficult to prove that something is <strong>not</strong>
 true, making <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> indispensable.</p>
 </div>
+</div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
             <div id="right-nav-div">
                 <h3>More:</h3>
-<div class="right-item"><a href="fact_bases.html">Fact Bases</a><p>Explanation of fact bases and facts.</p>
+<div class="right-item"><a href="fact_bases.html">Fact Bases</a><p>Explanation of facts and fact bases.</p>
 </div>
 <div class="right-item"><a href="rule_bases.html">Rule Bases</a><p>Explanation of rule bases, overview of .krb files and how these files
 are of compiled and loaded into your python program.</p>
@@ -152,7 +173,7 @@ are of compiled and loaded into your python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Nov 05 2007.
+    Page last modified Tue, Nov 06 2007.
   </div>
 
 </body>

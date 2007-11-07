@@ -46,9 +46,9 @@
 <div class="normal-nav"><a href="../rules/index.html">Rules</a></div>
 <div class="normal-nav"><a href="../plans.html">Plans</a></div>
 </div>
-<div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 </div>
 
             </div>
@@ -83,21 +83,30 @@ request.path_segment(1, 'site.html')
 request.path_segment(-2, my)
 request.path_segment(-1, 'site.html')
 </pre>
-<p>Note that three different knowledge bases are shown here:
-<tt class="docutils literal"><span class="pre">header</span></tt>, <tt class="docutils literal"><span class="pre">cookie</span></tt>, and <tt class="docutils literal"><span class="pre">request</span></tt>; each with multiple facts.</p>
-<p>There are different types of knowledge bases.  Those that contain facts are
-called <em>fact bases</em>.  Those that contain rules are called <em>rule bases</em>.
-All knowledge bases share the same name space; so that no two of them,
+<p>Note that three different knowledge bases (all <a class="reference" href="fact_bases.html">fact bases</a>) are shown here
+named <tt class="docutils literal"><span class="pre">header</span></tt>, <tt class="docutils literal"><span class="pre">cookie</span></tt>, and <tt class="docutils literal"><span class="pre">request</span></tt>; each with multiple facts.</p>
+<p>There are different types of knowledge bases.</p>
+<ul class="simple">
+<li>Those that contain facts are called <a class="reference" href="fact_bases.html">fact bases</a>.</li>
+<li>Those that contain rules are called <a class="reference" href="rule_bases.html">rule bases</a>.</li>
+<li>It is also possible to create other kinds of knowledge bases that lookup
+facts and prove goals in different ways.  The only one of these in pyke
+is the <a class="reference" href="special.html">special</a> knowledge base.</li>
+</ul>
+<p>All knowledge bases share the same name space; so that no two of them,
 regardless of their type, may have the same name.</p>
 </div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
             <div id="right-nav-div">
                 <h3>More:</h3>
-<div class="right-item"><a href="fact_bases.html">Fact Bases</a><p>Explanation of fact bases and facts.</p>
+<div class="right-item"><a href="fact_bases.html">Fact Bases</a><p>Explanation of facts and fact bases.</p>
 </div>
 <div class="right-item"><a href="rule_bases.html">Rule Bases</a><p>Explanation of rule bases, overview of .krb files and how these files
 are of compiled and loaded into your python program.</p>
@@ -120,7 +129,7 @@ are of compiled and loaded into your python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Nov 05 2007.
+    Page last modified Tue, Nov 06 2007.
   </div>
 
 </body>

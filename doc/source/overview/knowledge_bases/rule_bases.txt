@@ -8,44 +8,67 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
+    initialheaderlevel: 1
 /restindex
 
 =============================================
 Rule Bases
 =============================================
 
-Rule bases are collections of rules.  A single rule base may contain both
-forward-chaining and backward-chaining rules.
+Rule bases are collections of rules_.  A single rule base may contain both
+forward-chaining_ and backward-chaining_ rules.
 
-Rule bases are created by writing a *knowledge rule base* (or .krb) file
-with your favorite text editor.  Place all of your .krb files into a
-directory structure.  Then ``load`` this directory in your python program.
+Rule bases are created by writing a *knowledge rule base* (or `.krb`_) file
+with your favorite text editor.  Place all of your `.krb files`_ into a
+directory structure.  Then load_ this directory in your python program.
 
-The ``load`` will walk the directory structure recursively and
-automatically compile any .krb files that have changed into python source
+The load_ will walk the directory structure recursively and
+automatically compile any `.krb files`_ that have changed into python source
 files.  These python modules are then automatically imported to define the
 rule base.
 
-The name of each rule base is the filename of the .krb file (with the .krb
+The name of each rule base is the filename of the `.krb file`_ (with the .krb
 suffix removed).  This must be a legal python identifier.
 
-Inheritance, Rule Base Categories and Rule Base Activation
-============================================================
+Rule Base Activation
+=======================
 
-Loading the rule bases only makes the rule bases available for use.  It
-does not automatically activate any rule bases.  This must be done by your
-python program.  Your program may decide to activate different rule bases
-in different situations.
+Loading_ the rule bases only makes the rule bases available for use.  It
+does not automatically activate_ any rule bases.  This must be done by your
+python program.  Your program may decide to activate_ different rule bases
+in different situations.  Additionally,
+forward-chaining_ rules_ may be used to activate_ more specific rule bases,
+based on their inferencing.
 
-Rule bases use single inheritance to inherit the rules from another rule
-base.  This can go on to any depth.
+
+Rule Base Inheritance
+========================
+
+Rule bases use single inheritance to inherit_ the rules_ from another rule
+base.  This can go on to any depth.  Both forward-chaining_ and
+backward-chaining_ rules_ are inherited_.
+
+Rule Base Categories
+========================
 
 Each root rule base implicitly defines a *rule base category*.
-Each rule base category may only have one active rule base.  Once one rule
-base has been activated in a rule base category, only children of the rule
-base may be activated from that point on.  Because these children inherit
-the rules of the currently active rule base; activating rule bases 
-only adds new rules, and doesn't take any away.
+Each rule base category may only have one active rule base.  Once a rule
+base has been activated_ in a rule base category, only children of the
+currently active rule base may be activated_ from that point on.
+Because these children inherit_ the rules_ of the currently active rule base;
+activating_ rule bases only adds new rules_, and doesn't take any away.
 
-Forward-chaining rules may be used to activate more specific rule bases,
-based on their inferencing.
+.. _activate: ../../using_pyke.html#setting-up-each-case
+.. _activated: activate_
+.. _activating: activate_
+.. _backward-chaining: ../rules/backward_chaining.html
+.. _forward-chaining: ../rules/forward_chaining.html
+.. _inherit: ../../krb_syntax/index.html#extending-clause
+.. _inherits: inherit_
+.. _inherited: inherit_
+.. _.krb: ../../krb_syntax/index.html
+.. _.krb file: `.krb`_
+.. _.krb files: `.krb`_
+.. _load: ../../using_pyke.html#initializing-pyke
+.. _loading: load_
+.. _rules: ../rules/index.html

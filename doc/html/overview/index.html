@@ -39,9 +39,9 @@
 <div class="normal-nav"><a href="rules/index.html">Rules</a></div>
 <div class="normal-nav"><a href="plans.html">Plans</a></div>
 </div>
-<div class="normal-nav"><a href="../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../krb_syntax/index.html">KRB Syntax</a></div>
 </div>
 
             </div>
@@ -59,21 +59,24 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="overview">
 <h1 class="title">Overview</h1>
-<p>Pyke is an inference engine that applies <em>rules</em> to <em>facts</em> to establish
-additional facts (through forward-chaining rules), and/or to prove <em>goals</em>
+<p>Pyke is an inference engine that applies <a class="reference" href="rules/index.html">rules</a> to <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> to establish
+additional facts (through <a class="reference" href="rules/forward_chaining.html">forward-chaining</a> rules), and/or to prove <em>goals</em>
 and optionally assemble python functions
-into customized call graphs, called <em>plans</em> (through backward-chaining rules).</p>
-<p>Pyke may then be reset, deleting the last set of facts, so that the cycle
-may be repeated using the same set of rules.</p>
-<p>The plan capability allow the postponement of code execution until the
+into customized call graphs, called <a class="reference" href="plans.html">plans</a> (through <a class="reference" href="rules/backward_chaining.html">backward-chaining</a> rules).</p>
+<p>Pyke may then be <a class="reference" href="../using_pyke.html#setting-up-each-case">reset</a>, deleting the last set of facts, so that the cycle
+may be repeated.  For each cycle a different rule base may be <a class="reference" href="../using_pyke.html#setting-up-each-case">activated</a>.</p>
+<p>The <a class="reference" href="plans.html">plan</a> capability allows the postponement of code execution until the
 top-level goal has been completely proven.  This shields the code from
-blind alleys and backtracking within the rules.</p>
-<p>Once a plan has been created, it may be executed multiple times with different
-arguments.  It may also be pickled,
+blind alleys and <a class="reference" href="rules/backward_chaining.html#backtracking">backtracking</a> within the rules.</p>
+<p>Once a <a class="reference" href="plans.html">plan</a> has been created, it may be executed multiple times with different
+arguments.  It may also be <a class="reference" href="plans.html#running-and-pickling-plans">pickled</a>,
 and later run again without requiring any pyke modules.</p>
 </div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
@@ -102,7 +105,7 @@ into named repositories called <em>knowledge bases</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Nov 05 2007.
+    Page last modified Tue, Nov 06 2007.
   </div>
 
 </body>

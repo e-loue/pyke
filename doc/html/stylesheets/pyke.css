@@ -77,20 +77,42 @@ p, td, li, ul, ol, h1, h2, h3, h4, h5, h6  {
     padding:0 10px;
 }
 
-#main a { 
+#main a[href] { 
     font-weight:bold;
     border-bottom: 1px dotted black;
     text-decoration: none;
 }
 
+/****
 #main h2 a {border-bottom: none;}
 #main h3 a {border-bottom: none;}
 #main h4 a {border-bottom: none;}
+ ****/
 
 #main a.toc-backref {border-bottom: none;}
 
+#main h1, #main h2, #main h3, #main h4, #main h5 {
+    color: #545D4D;
+}
+
+#main h1.title, #main h2.subtitle {
+    color: #00478E;
+}
+
 #main h1 {
-    font-size: 19pt;
+    font-size: 22px;
+}
+
+#main h2 {
+    font-size: 20px;
+}
+
+#main h3 {
+    font-size: 18px;
+}
+
+#main h4 {
+    font-size: 16px;
 }
 
 .title {
@@ -120,12 +142,18 @@ body {
  /* min-width:850px; */
 }
 
-a {
+a[href] {
     color: #545D4D;
 }
 
-a[href]:hover {
-    color: #9AA690;
+#main a[href]:visited {
+    color: #9080A0;
+    border-bottom: 1px dotted #98A;
+}
+
+#main a[href]:hover {
+    /* background-color: #d8d8d8; */
+    background-color: #e8e0ff;
 }
 
 #copyright {
@@ -230,15 +258,27 @@ a[href]:hover {
 }
 
 #left-nav a {
-    color: #606B57;
     font-size: 14px;
     line-height: 27px;
     padding: 4px;
 }
 
+#left-nav a, #right-nav a {
+    color: #606B57;
+}
+
+/* #left-nav a:visited, #right-nav a:visited { */
+#right-nav a:visited {
+    color: #809B87;
+}
+
 #left-nav a:hover {
     background-color: #E2E2E2;
     padding: 4px;
+}
+
+#right-nav a:hover {
+    background-color: #f2f2f2;
 }
 
 #right-nav {
@@ -290,9 +330,9 @@ a[href]:hover {
 #main, #main-td, .document {
     vertical-align: top;
     line-height: 20px;
+    font-size: 13px;
     padding-right: 10px;
     padding-left: 10px;
-    font-size: 13px;
 }
 
 #document {
@@ -335,7 +375,11 @@ pre.literal-block, pre.doctest-block {
 }
 
 p {
-    margin: 10px 0 20px 0;
+    margin: 0px 0 15px 0;
+}
+
+ol.simple, ul.simple {
+    margin-bottom: 18px;
 }
 
 #right-nav h3 {

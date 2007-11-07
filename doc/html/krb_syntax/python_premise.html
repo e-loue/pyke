@@ -36,6 +36,8 @@
               
 <div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="../overview/index.html">Overview</a></div>
+<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
 
 <div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
@@ -43,8 +45,6 @@
 <div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 <div class="normal-nav"><a href="bc_rule.html">Bc_rule</a></div>
 </div>
-<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
-<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
 </div>
 
             </div>
@@ -70,26 +70,33 @@ python_premise ::= pattern '=' python_exp
 <p>Each of these clauses results in a python expression being executed.  Their
 meaning is as follows:</p>
 <dl class="docutils">
-<dt>pattern '=' python_exp</dt>
+<dt><a class="reference" href="pattern.html">pattern</a> '=' python_exp</dt>
 <dd><em>python_exp</em> is evaluated and the result matched
-with <em>pattern</em>.  If the result does not match,
-the clause fails and backtracking is initiated.
-The clause always fails on backtracking.</dd>
-<dt>pattern 'in' python_exp</dt>
-<dd><em>python_exp</em> is evaluated and the first element
+with <a class="reference" href="pattern.html">pattern</a>.  If the result does not match,
+the clause fails and <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a> is initiated.
+The clause always fails on <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a>, meaning that it only produces
+a single result (contrasted with <tt class="docutils literal"><span class="pre">in</span></tt>).</dd>
+<dt><a class="reference" href="pattern.html">pattern</a> 'in' python_exp</dt>
+<dd><p class="first"><em>python_exp</em> is evaluated and the first element
 from the resulting <em>iterable</em> is matched
-with <em>pattern</em>.  On backtracking, successive
+with <a class="reference" href="pattern.html">pattern</a>.  On <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a>, successive
 elements from the result are matched with
-<em>pattern</em>.</dd>
+<a class="reference" href="pattern.html">pattern</a>.  When the result is exhausted, the clause fails.</p>
+<p class="last">This has the effect of offering each element of the result, one at a
+time, to the subsequent premise clauses.  Each element is thus acted on
+individually.</p>
+</dd>
 <dt>'check' python_exp</dt>
 <dd><em>python_exp</em> is evaluated.  If the result is
-(python) <em>true</em>, the clause succeeds, otherwise
-it fails.  The clause always fails on
-backtracking.</dd>
+python &quot;true&quot; the clause succeeds, otherwise
+it fails.  The clause always fails on <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a>.</dd>
 </dl>
 </div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
@@ -119,7 +126,7 @@ backtracking.</dd>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Nov 05 2007.
+    Page last modified Wed, Nov 07 2007.
   </div>
 
 </body>

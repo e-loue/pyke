@@ -47,9 +47,9 @@
 </div>
 <div class="normal-nav"><a href="../plans.html">Plans</a></div>
 </div>
-<div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 </div>
 
             </div>
@@ -67,11 +67,13 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="forward-chaining">
 <h1 class="title">Forward Chaining</h1>
-<p>Forward chaining rules are processed automatically as each rule base is
-<em>activated</em>.</p>
-<p>When a rule base is activated, all of its forward-chaining rules (and then,
-its inherited forward-chaining rules) are run in the order that they appear
-in the .krb file.</p>
+<p>Forward chaining <a class="reference" href="index.html">rules</a> are processed automatically as each <a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a> is
+<a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a>.</p>
+<p>When a <a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a> is <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a>, all of its forward-chaining <a class="reference" href="index.html">rules</a> (and then,
+its <a class="reference" href="../knowledge_bases/rule_bases.html#rule-base-inheritance">inherited</a> forward-chaining <a class="reference" href="index.html">rules</a>) are run in the order that they appear
+in the <a class="reference" href="../../krb_syntax/index.html">.krb file</a>.</p>
+<div class="section">
+<h3><a id="example" name="example">Example</a></h3>
 <p>Consider this example:</p>
 <pre class="literal-block">
  1  son_of:
@@ -109,38 +111,55 @@ in the .krb file.</p>
 30                              (great, $prefix1, *$rest_prefixes),
 31                              $gg_child_type, $gg_parent_type)
 </pre>
-<p>Note that the keyword <tt class="docutils literal"><span class="pre">foreach</span></tt> is used for the <strong>if</strong> part of each rule
-and the keyword <tt class="docutils literal"><span class="pre">assert</span></tt> is used for the <strong>then</strong> part of each rule.
-The use of these keywords is what identifies these rules as
-forward-chaining rules.</p>
-<p>Starting off with a set of <tt class="docutils literal"><span class="pre">family.son_of</span></tt> and <tt class="docutils literal"><span class="pre">family.daughter_of</span></tt> facts,
-these rules will figure out, and assert, all <tt class="docutils literal"><span class="pre">family.child_parent</span></tt>
+</div>
+<div class="section">
+<h3><a id="identifying-forward-chaining-rules" name="identifying-forward-chaining-rules">Identifying Forward-Chaining Rules</a></h3>
+<p>Note that the keyword <tt class="docutils literal"><span class="pre">foreach</span></tt> is used for the <strong>if</strong> part of each <a class="reference" href="index.html">rule</a>
+and the keyword <tt class="docutils literal"><span class="pre">assert</span></tt> is used for the <strong>then</strong> part of each <a class="reference" href="index.html">rule</a>.
+The use of these keywords is what identifies these <a class="reference" href="index.html">rules</a> as
+forward-chaining <a class="reference" href="index.html">rules</a>.</p>
+</div>
+<div class="section">
+<h3><a id="how-forward-chaining-rules-are-run" name="how-forward-chaining-rules-are-run">How Forward-Chaining Rules are Run</a></h3>
+<p>Starting off with a set of <tt class="docutils literal"><span class="pre">family.son_of</span></tt> and <tt class="docutils literal"><span class="pre">family.daughter_of</span></tt> <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a>,
+these <a class="reference" href="index.html">rules</a> will figure out, and <a class="reference" href="../../using_pyke.html#setting-up-each-case">assert</a>, all <tt class="docutils literal"><span class="pre">family.child_parent</span></tt>
 relationships.</p>
-<p>The rules are run in order.  First the <tt class="docutils literal"><span class="pre">son_of</span></tt> rule is run.  For each match
-of facts to the pattern <tt class="docutils literal"><span class="pre">family.son_of($son,</span> <span class="pre">$father,</span> <span class="pre">$mother)</span></tt> it asserts
-two additional <tt class="docutils literal"><span class="pre">family.child_parent</span></tt> facts.</p>
-<p>Note that <tt class="docutils literal"><span class="pre">$son</span></tt>, <tt class="docutils literal"><span class="pre">$father</span></tt> and <tt class="docutils literal"><span class="pre">$mother</span></tt> are pattern variables.
+<p>The <a class="reference" href="index.html">rules</a> are run in order.  First the <tt class="docutils literal"><span class="pre">son_of</span></tt> <a class="reference" href="index.html">rule</a> is run.  For each
+match of <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a> to the <a class="reference" href="../../krb_syntax/pattern.html">pattern</a> <tt class="docutils literal"><span class="pre">family.son_of($son,</span> <span class="pre">$father,</span> <span class="pre">$mother)</span></tt>
+it <a class="reference" href="../../using_pyke.html#setting-up-each-case">asserts</a> two additional <tt class="docutils literal"><span class="pre">family.child_parent</span></tt> <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a>.</p>
+<p>Note that <tt class="docutils literal"><span class="pre">$son</span></tt>, <tt class="docutils literal"><span class="pre">$father</span></tt> and <tt class="docutils literal"><span class="pre">$mother</span></tt> are <a class="reference" href="../../krb_syntax/pattern.html">pattern variables</a>.
 These can match any value, but once matched they have the same value for
-the rest of that rule invocation.  Thus, the value the <tt class="docutils literal"><span class="pre">$son</span></tt> is bound to
-on line 3, will be the same value used on lines 5 and 6 for <tt class="docutils literal"><span class="pre">$son</span></tt> in the
-new facts to be asserted.</p>
+the rest of that <a class="reference" href="index.html">rule</a> invocation.  Thus, the value <tt class="docutils literal"><span class="pre">$father</span></tt> is bound to
+on line 3, will be the same value used on line 5 for <tt class="docutils literal"><span class="pre">$father</span></tt> in the
+new <a class="reference" href="../knowledge_bases/fact_bases.html#facts">fact</a> to be <a class="reference" href="../../using_pyke.html#setting-up-each-case">asserted</a>.  (But not the same value as the <tt class="docutils literal"><span class="pre">$father</span></tt> used
+on lines 9 or 11, because those are in a different <a class="reference" href="index.html">rule</a>).</p>
 <p>After the <tt class="docutils literal"><span class="pre">son_of</span></tt> rule, the <tt class="docutils literal"><span class="pre">daughter_of</span></tt> rule is run for all
 <tt class="docutils literal"><span class="pre">family.daugher_of</span></tt> facts.</p>
-<p>Then the <tt class="docutils literal"><span class="pre">grand_parent_and_child</span></tt> rule is run for all combinations of
-<tt class="docutils literal"><span class="pre">family.child_parent</span></tt> facts that satisfy the two patterns on lines 15 and
-17.  This rule asserts the grand-child/grand-parent relationships.  You'll
-notice that it uses the <tt class="docutils literal"><span class="pre">$_</span></tt> pattern variable.  This is called the
-<em>anonymous</em> variable.  It is different than other pattern variables in that
+<p>Then the <tt class="docutils literal"><span class="pre">grand_parent_and_child</span></tt> <a class="reference" href="index.html">rule</a> is run for all combinations of
+<tt class="docutils literal"><span class="pre">family.child_parent</span></tt> <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a> that satisfy the two <a class="reference" href="../../krb_syntax/pattern.html">patterns</a> on lines 15 and
+17.  This <a class="reference" href="index.html">rule</a> <a class="reference" href="../../using_pyke.html#setting-up-each-case">asserts</a> the grand-child/grand-parent relationships.  You'll
+notice that it uses the <tt class="docutils literal"><span class="pre">$_</span></tt> <a class="reference" href="../../krb_syntax/pattern.html">pattern variable</a>.  This is called the
+<em>anonymous</em> variable.  It is different than other <a class="reference" href="../../krb_syntax/pattern.html">pattern variables</a> in that
 each use of <tt class="docutils literal"><span class="pre">$_</span></tt> can match a different value.</p>
 <p>Finally, the <tt class="docutils literal"><span class="pre">great_grand_parent_and_child</span></tt> rule is run.  As this rule
-asserts new facts, those facts may be used by the same rule to produce even
-more great, great... <tt class="docutils literal"><span class="pre">family.child_parent</span></tt> relationships.</p>
-<p>Thus, even though pyke runs the rules in order, it will go back and rerun
-prior rules if a new fact is asserted that matches any of the prior rule's
-premises.  This forms an implicit linkage from one rule's <strong>then</strong>
-(<tt class="docutils literal"><span class="pre">assert</span></tt>) clause
-to another rule's <strong>if</strong> (<tt class="docutils literal"><span class="pre">foreach</span></tt>) clause.  This is what the term
-<em>forward-chaining</em> refers to.</p>
+<a class="reference" href="../../using_pyke.html#setting-up-each-case">asserts</a> new <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a>, those <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a> may be used by the same <a class="reference" href="index.html">rule</a> to produce
+even more great, great... <tt class="docutils literal"><span class="pre">family.child_parent</span></tt> relationships.</p>
+</div>
+<div class="section">
+<h3><a id="forward-chaining-defined" name="forward-chaining-defined">Forward-Chaining Defined</a></h3>
+<p>Thus, even though pyke runs the <a class="reference" href="index.html">rules</a> in order, it will go back and rerun
+prior <a class="reference" href="index.html">rules</a> if a new <a class="reference" href="../knowledge_bases/fact_bases.html#facts">fact</a> is <a class="reference" href="../../using_pyke.html#setting-up-each-case">asserted</a> that matches any of the prior
+<a class="reference" href="index.html">rule's</a> premises in its <tt class="docutils literal"><span class="pre">foreach</span></tt> clause.  This forms an implicit linkage
+from one <a class="reference" href="index.html">rule's</a> <strong>then</strong> (<tt class="docutils literal"><span class="pre">assert</span></tt>) clause
+to another <a class="reference" href="index.html">rule's</a> <strong>if</strong> (<tt class="docutils literal"><span class="pre">foreach</span></tt>) clause.</p>
+<p>This is what the term
+<em>forward-chaining</em> refers to, since the linkage proceeds in a logically
+forward direction.  This is also referred to as <em>data driven</em>, since the
+initial data (<a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a>) drive the inferencing.</p>
+<p>The forward-chaining continues until no more <a class="reference" href="index.html">rules</a> can be fired.</p>
+</div>
+<div class="section">
+<h3><a id="running-the-example" name="running-the-example">Running the Example</a></h3>
 <p>These rules could be run as follows:</p>
 <blockquote>
 <pre class="doctest-block">
@@ -169,8 +188,12 @@ son_of('bruce', 'thomas', 'norma')
 </pre>
 </blockquote>
 </div>
+</div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
@@ -196,7 +219,7 @@ son_of('bruce', 'thomas', 'norma')
   </table>
 
   <div id="last-modified">
-    Page last modified Wed, Oct 31 2007.
+    Page last modified Tue, Nov 06 2007.
   </div>
 
 </body>

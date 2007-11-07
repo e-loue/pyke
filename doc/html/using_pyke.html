@@ -34,9 +34,9 @@
               
 <div class="title-nav"><a href="index.html">Home</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="overview/index.html">Overview</a></div>
-<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
 </div>
 
             </div>
@@ -54,8 +54,8 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="using-pyke">
 <h1 class="title">Using Pyke</h1>
-<p>There isn't that much to using pyke.  All necessary functions are provided
-directly by the pyke package:</p>
+<p>There isn't that much to using pyke.  Generally, all the functions you need
+are provided directly by the <tt class="docutils literal"><span class="pre">pyke</span></tt> package:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; import pyke
@@ -68,30 +68,30 @@ directly by the pyke package:</p>
 <dt>load(paths = ('.',), load_fc = True, load_bc = True)</dt>
 <dd>The <tt class="docutils literal"><span class="pre">load</span></tt> function may only be called once.  It expects either a single
 directory or a sequence directories.  It recursively walks each directory
-looking for .krb files.  Each .krb file that it finds is compiled, if out
-of date, and then the resulting python modules imported.  This causes all
-of the rule bases to be loaded.</dd>
+looking for <a class="reference" href="krb_syntax/index.html">.krb files</a>.  Each <a class="reference" href="krb_syntax/index.html">.krb file</a> that it finds is compiled,
+if out of date, and then the resulting python modules imported.
+This causes all of the <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a> to be loaded.</dd>
 <dt>add_universal_fact(kb_name, fact_name, args)</dt>
-<dd>The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per fact.  These facts
+<dd>The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">fact</a>.  These <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">facts</a>
 are never deleted and apply to all <em>cases</em>.</dd>
 </dl>
 </div>
 <div class="section">
 <h1><a id="setting-up-each-case" name="setting-up-each-case">Setting up Each Case</a></h1>
 <p>Pyke is designed to be run multiple times for multiple <em>cases</em>.  In
-general each case has its own set of starting facts and may use different
-rule bases, depending on the situation.</p>
+general each case has its own set of starting <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">facts</a> and may use different
+<a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a>, depending on the situation.</p>
 <p>Three functions initialize each case:</p>
 <dl class="docutils">
 <dt>reset()</dt>
-<dd>The <tt class="docutils literal"><span class="pre">reset</span></tt> function is called once to delete all of the case specific
-facts from the last case.  It also deactivates all rule bases.</dd>
+<dd>The <tt class="docutils literal"><span class="pre">reset</span></tt> function is called once to delete all of the <a class="reference" href="overview/knowledge_bases/fact_bases.html#case-specific-facts">case specific
+facts</a> from the last run.  It also deactivates all <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a>.</dd>
 <dt>assert_(kb_name, fact_name, args)</dt>
 <dd>Call <tt class="docutils literal"><span class="pre">assert_</span></tt> (or the equivalent, <tt class="docutils literal"><span class="pre">add_case_specific_fact</span></tt>,
-see <a class="reference" href="#other-functions">Other Functions</a>, below) for each starting fact for this case.</dd>
+see <a class="reference" href="#other-functions">Other Functions</a>, below) for each starting <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">fact</a> for this case.</dd>
 <dt>activate(*rb_names)</dt>
-<dd>Then call <tt class="docutils literal"><span class="pre">activate</span></tt> to activate the appropriate rule bases.  This may
-be called more than once, if desired, or it can simply take multiple
+<dd>Then call <tt class="docutils literal"><span class="pre">activate</span></tt> to activate the appropriate <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a>.  This
+may be called more than once, if desired, or it can simply take multiple
 arguments.</dd>
 </dl>
 <p>Pyke is now ready to prove goals for this case!</p>
@@ -103,23 +103,23 @@ functions are provided in <a class="reference" href="#other-functions">Other Fun
 <dl class="docutils">
 <dt>prove_1(kb_name, entity_name, fixed_args, num_returns)</dt>
 <dd>Returns the first proof as two results: a tuple whose len == num_returns
-containing the returned values, and a plan.  The plan is None if no plan
+containing the returned values, and a <a class="reference" href="overview/plans.html">plan</a>.  The <a class="reference" href="overview/plans.html">plan</a> is None if no <a class="reference" href="overview/plans.html">plan</a>
 was generated.  Raises pyke.CanNotProve if no proof is found.</dd>
 <dt>prove_n(kb_name, entity_name, fixed_args, num_returns)</dt>
 <dd>This is a generator yielding two results: a tuple whose len == num_returns,
-and a plan, for each possible proof.  Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>, the plan is None
-if no plan was generated.</dd>
+and a <a class="reference" href="overview/plans.html">plan</a>, for each possible proof.  Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>, the <a class="reference" href="overview/plans.html">plan</a> is None
+if no <a class="reference" href="overview/plans.html">plan</a> was generated.</dd>
 </dl>
 <div class="section">
 <h2><a id="running-and-pickling-plans" name="running-and-pickling-plans">Running and Pickling Plans</a></h2>
-<p>Once you've obtained a <em>plan</em> from <tt class="docutils literal"><span class="pre">prove_1</span></tt> or <tt class="docutils literal"><span class="pre">prove_n</span></tt>, you just call
+<p>Once you've obtained a <a class="reference" href="overview/plans.html">plan</a> from <tt class="docutils literal"><span class="pre">prove_1</span></tt> or <tt class="docutils literal"><span class="pre">prove_n</span></tt>, you just call
 it like a normal python function.  The arguments required are simply those
-specified, if any, in the <tt class="docutils literal"><span class="pre">taking</span></tt> clause of the rule proving the top-level
+specified, if any, in the <a class="reference" href="krb_syntax/bc_rule.html#FIX">taking clause</a> of the <a class="reference" href="overview/rules/index.html">rule</a> proving the top-level
 goal.</p>
-<p>You may call the plan function any number of times.  You may even pickle
-the plan for later use.  But the plans are constructed out of
+<p>You may call the <a class="reference" href="overview/plans.html">plan</a> function any number of times.  You may even pickle
+the <a class="reference" href="overview/plans.html">plan</a> for later use.  But the <a class="reference" href="overview/plans.html">plans</a> are constructed out of
 <a class="reference" href="http://docs.python.org/lib/module-functools.html">functools.partial</a> functions, so you need to register this with <a class="reference" href="http://docs.python.org/lib/module-copyreg.html">copy_reg</a>
-before pickling the plan:</p>
+before pickling the <a class="reference" href="overview/plans.html">plan</a>:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; import copy_reg
@@ -128,54 +128,54 @@ before pickling the plan:</p>
 ...                 lambda p: (functools.partial, (p.func,) + p.args))
 </pre>
 </blockquote>
-<p>The program that unpickles the plan does not have to import any pyke
-modules to be able to run the plans.  Just unpickle and call it.</p>
+<p>The program that unpickles the <a class="reference" href="overview/plans.html">plan</a> does not have to import any pyke
+modules to be able to run the <a class="reference" href="overview/plans.html">plans</a>.  Just unpickle and call it.</p>
 </div>
 </div>
 <div class="section">
 <h1><a id="other-functions" name="other-functions">Other Functions</a></h1>
 <p>There are a few more functions that may be useful in special situations.</p>
-<p>The first two of these provide more general access to the fact lookup and
+<p>The first two of these provide more general access to the <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">fact</a> lookup and
 goal proof mechanisms.  The catch is that you must first convert <strong>all</strong>
-arguments into patterns and create a <em>context</em> for these patterns.  This is
+arguments into <a class="reference" href="krb_syntax/pattern.html">patterns</a> and create a <em>context</em> for these <a class="reference" href="krb_syntax/pattern.html">patterns</a>.  This is
 discussed <a class="reference" href="#creating-your-own-patterns">below</a>.</p>
 <dl class="docutils">
 <dt>lookup(kb_name, entity_name, pattern_context, patterns)</dt>
-<dd>This is a generator that binds patterns to successive facts.  Yields None
+<dd>This is a generator that binds <a class="reference" href="krb_syntax/pattern.html">patterns</a> to successive <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">facts</a>.  Yields None
 for each successful match.</dd>
 <dt>prove(kb_name, entity_name, pattern_context, patterns)</dt>
-<dd>A generator that binds patterns to successive proofs.  Yields a
+<dd>A generator that binds <a class="reference" href="krb_syntax/pattern.html">patterns</a> to successive proofs.  Yields a
 <em>prototype_plan</em> or None for each successful match.  To turn the
 prototype_plan into a python function, call create_plan() on it.
-This returns the plan function.</dd>
+This returns the <a class="reference" href="overview/plans.html">plan</a> function.</dd>
 </dl>
 <p>The remaining functions are:</p>
 <dl class="docutils">
 <dt>add_case_specific_fact(kb_name, fact_name, args)</dt>
 <dd>This is an alternate to the <tt class="docutils literal"><span class="pre">assert_</span></tt> function.</dd>
 <dt>get_kb(kb_name)</dt>
-<dd>Finds and returns the knowledge base by the name <tt class="docutils literal"><span class="pre">kb_name</span></tt>.  Raises
-KeyError if not found.  Note that for rule bases, this returns the
-active rule base where <tt class="docutils literal"><span class="pre">kb_name</span></tt> is the rule base category name.
-Thus, not all rule bases are accessable through this call.</dd>
+<dd>Finds and returns the <a class="reference" href="overview/knowledge_bases/index.html">knowledge base</a> by the name <tt class="docutils literal"><span class="pre">kb_name</span></tt>.  Raises
+KeyError if not found.  Note that for <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a>, this returns the
+active <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule base</a> where <tt class="docutils literal"><span class="pre">kb_name</span></tt> is the <a class="reference" href="overview/knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name.
+Thus, not all <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a> are accessable through this call.</dd>
 <dt>get_rb(rb_name)</dt>
-<dd>Finds and returns the rule base by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
-KeyError if not found.  This works for any rule base, whether it is
+<dd>Finds and returns the <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule base</a> by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
+KeyError if not found.  This works for any <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule base</a>, whether it is
 active or not.</dd>
 <dt>init()</dt>
 <dd>This is called once automatically for you by the <tt class="docutils literal"><span class="pre">load</span></tt> function.
-You shouldn't have to call it yourself.  If you don't have any rule
-bases this isn't necessary anyway.</dd>
+You shouldn't have to call it yourself.  If you don't have any <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule
+bases</a> this isn't necessary anyway.</dd>
 </dl>
 <div class="section">
 <h2><a id="creating-your-own-patterns" name="creating-your-own-patterns">Creating Your Own Patterns</a></h2>
-<p>You'll need two more pyke modules to create your own patterns and contexts:</p>
+<p>You'll need two more pyke modules to create your own <a class="reference" href="krb_syntax/pattern.html">patterns</a> and contexts:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import pattern, contexts
 </pre>
 </blockquote>
-<p>There are four kinds of patterns:</p>
+<p>There are four kinds of <a class="reference" href="krb_syntax/pattern.html">patterns</a>:</p>
 <dl class="docutils">
 <dt>pattern.pattern_literal(data)</dt>
 <dd>This matches the <tt class="docutils literal"><span class="pre">data</span></tt> provided.</dd>
@@ -192,7 +192,7 @@ variable and must match the same value in all of the places that it is
 used.</dd>
 <dt>contexts.anonymous()</dt>
 <dd>This will match anything each time it is encountered.
-Calling the constructor twice is not a problem.</dd>
+Calling the constructor many times is not a problem.</dd>
 </dl>
 <p>Finally, to create a <em>pattern context</em>, you need:</p>
 <pre class="literal-block">
@@ -208,21 +208,25 @@ some_variable.as_data(some_context)
 </div>
 </div>
 
-                <div id="return-to-top"><a href="#">Return to Top</a></div>
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
             </div>
           </td>
           <td id="right-nav">
             <div id="right-nav-div">
                 <h3>More:</h3>
-<div class="right-item"><a href="overview/index.html">Overview</a><p>So what is all this knowledge-base, inferencing and automatic program
-generation stuff anyway?</p>
-</div>
-<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
-write your rules.</p>
+<div class="right-item"><a href="overview/index.html">Overview</a><p>The big picture of
+what all this knowledge-base, inferencing and automatic program
+generation stuff means and how it works.</p>
 </div>
 <div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
 </div>
 <div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
+</div>
+<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
+write your rules.</p>
 </div>
 
             </div>
@@ -240,7 +244,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Nov 05 2007.
+    Page last modified Tue, Nov 06 2007.
   </div>
 
 </body>

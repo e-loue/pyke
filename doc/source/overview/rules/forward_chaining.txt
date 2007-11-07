@@ -7,18 +7,22 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
+    initialheaderlevel: 3
 /restindex
 
 =============================================
 Forward Chaining
 =============================================
 
-Forward chaining rules are processed automatically as each rule base is
-*activated*.
+Forward chaining rules_ are processed automatically as each `rule base`_ is
+activated_.
 
-When a rule base is activated, all of its forward-chaining rules (and then,
-its inherited forward-chaining rules) are run in the order that they appear
-in the .krb file.
+When a `rule base`_ is activated_, all of its forward-chaining rules_ (and then,
+its inherited_ forward-chaining rules_) are run in the order that they appear
+in the `.krb file`_.
+
+Example
+==============
 
 Consider this example::
 
@@ -57,45 +61,64 @@ Consider this example::
     30                              (great, $prefix1, *$rest_prefixes),
     31                              $gg_child_type, $gg_parent_type)
 
-Note that the keyword ``foreach`` is used for the **if** part of each rule
-and the keyword ``assert`` is used for the **then** part of each rule.
-The use of these keywords is what identifies these rules as
-forward-chaining rules.
+Identifying Forward-Chaining Rules
+======================================
 
-Starting off with a set of ``family.son_of`` and ``family.daughter_of`` facts,
-these rules will figure out, and assert, all ``family.child_parent``
+Note that the keyword ``foreach`` is used for the **if** part of each rule_
+and the keyword ``assert`` is used for the **then** part of each rule_.
+The use of these keywords is what identifies these rules_ as
+forward-chaining rules_.
+
+How Forward-Chaining Rules are Run
+=====================================
+
+Starting off with a set of ``family.son_of`` and ``family.daughter_of`` facts_,
+these rules_ will figure out, and assert_, all ``family.child_parent``
 relationships.
 
-The rules are run in order.  First the ``son_of`` rule is run.  For each match
-of facts to the pattern ``family.son_of($son, $father, $mother)`` it asserts
-two additional ``family.child_parent`` facts.
+The rules_ are run in order.  First the ``son_of`` rule_ is run.  For each
+match of facts_ to the pattern_ ``family.son_of($son, $father, $mother)``
+it asserts_ two additional ``family.child_parent`` facts_.
 
-Note that ``$son``, ``$father`` and ``$mother`` are pattern variables.
+Note that ``$son``, ``$father`` and ``$mother`` are `pattern variables`_.
 These can match any value, but once matched they have the same value for
-the rest of that rule invocation.  Thus, the value the ``$son`` is bound to
-on line 3, will be the same value used on lines 5 and 6 for ``$son`` in the
-new facts to be asserted.
+the rest of that rule_ invocation.  Thus, the value ``$father`` is bound to
+on line 3, will be the same value used on line 5 for ``$father`` in the
+new fact_ to be asserted_.  (But not the same value as the ``$father`` used
+on lines 9 or 11, because those are in a different rule_).
 
 After the ``son_of`` rule, the ``daughter_of`` rule is run for all
 ``family.daugher_of`` facts.
 
-Then the ``grand_parent_and_child`` rule is run for all combinations of
-``family.child_parent`` facts that satisfy the two patterns on lines 15 and
-17.  This rule asserts the grand-child/grand-parent relationships.  You'll
-notice that it uses the ``$_`` pattern variable.  This is called the
-*anonymous* variable.  It is different than other pattern variables in that
+Then the ``grand_parent_and_child`` rule_ is run for all combinations of
+``family.child_parent`` facts_ that satisfy the two patterns_ on lines 15 and
+17.  This rule_ asserts_ the grand-child/grand-parent relationships.  You'll
+notice that it uses the ``$_`` `pattern variable`_.  This is called the
+*anonymous* variable.  It is different than other `pattern variables`_ in that
 each use of ``$_`` can match a different value.
 
 Finally, the ``great_grand_parent_and_child`` rule is run.  As this rule
-asserts new facts, those facts may be used by the same rule to produce even
-more great, great... ``family.child_parent`` relationships.
+asserts_ new facts_, those facts_ may be used by the same rule_ to produce
+even more great, great... ``family.child_parent`` relationships.
 
-Thus, even though pyke runs the rules in order, it will go back and rerun
-prior rules if a new fact is asserted that matches any of the prior rule's
-premises.  This forms an implicit linkage from one rule's **then** 
-(``assert``) clause
-to another rule's **if** (``foreach``) clause.  This is what the term
-*forward-chaining* refers to.
+Forward-Chaining Defined
+============================
+
+Thus, even though pyke runs the rules_ in order, it will go back and rerun
+prior rules_ if a new fact_ is asserted_ that matches any of the prior
+`rule's`_ premises in its ``foreach`` clause.  This forms an implicit linkage
+from one `rule's`_ **then** (``assert``) clause
+to another `rule's`_ **if** (``foreach``) clause.
+
+This is what the term
+*forward-chaining* refers to, since the linkage proceeds in a logically
+forward direction.  This is also referred to as *data driven*, since the
+initial data (facts_) drive the inferencing.
+
+The forward-chaining continues until no more rules_ can be fired.
+
+Running the Example
+===========================
 
 These rules could be run as follows:
 
@@ -122,3 +145,19 @@ These rules could be run as follows:
     son_of('michael', 'bruce', 'marilyn')
     son_of('bruce', 'thomas', 'norma')
 
+.. _activated: ../../using_pyke.html#setting-up-each-case
+.. _assert: activated_
+.. _asserted: assert_
+.. _asserts: assert_
+.. _fact: ../knowledge_bases/fact_bases.html#facts
+.. _facts: fact_
+.. _inherited: ../knowledge_bases/rule_bases.html#rule-base-inheritance
+..  _.krb file: ../../krb_syntax/index.html
+.. _pattern variable: patterns_
+.. _pattern variables: `pattern variable`_
+.. _pattern: ../../krb_syntax/pattern.html
+.. _patterns: pattern_
+.. _rule: index.html
+.. _rules: rule_
+.. _rule's: rule_
+.. _rule base: ../knowledge_bases/rule_bases.html
