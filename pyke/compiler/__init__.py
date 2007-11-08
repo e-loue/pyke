@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from __future__ import with_statement, absolute_import, division
+from __future__ import with_statement
 import contextlib
 import os.path
 import re
@@ -108,7 +108,7 @@ def compile(filename):
     plan_path = base_path + '_plans.py'
     try:
         ast = krbparser.parse(filename)
-        sys.stderr.write("got ast\n")
+        #sys.stderr.write("got ast\n")
         # dump(ast)
         # sys.stderr.write('\n\n')
         pyke.reset()
@@ -135,7 +135,7 @@ def compile(filename):
             #    sys.stderr.write("  " + repr(line) + "\n")
             write_file(plan_lines, plan_path)
         elif os.path.lexists(plan_path): os.remove(plan_path)
-        sys.stderr.write("done!\n")
+        #sys.stderr.write("done!\n")
     except:
         if os.path.lexists(fc_path) and not no_nuke: os.remove(fc_path)
         if os.path.lexists(bc_path) and not no_nuke: os.remove(bc_path)

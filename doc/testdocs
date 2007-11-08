@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# testdocs
+#
+# no arguments.
+#
+# run in doc directory to test all .txt files.
+# 
+# exit status > 0 if errors found.
+
+ERRORFILES="/tmp/testdocs.$$"
+export PYTHONPATH="examples:$PYTHONPATH"
+
+> $ERRORFILES
+NUM_ERRORS=0
+
+for f in `find source -name '*.txt'`
+do
+    #echo Testing "$f"
+    if ! python2.5 -m testdocs "$f"
+    then
+        echo "$f" >> $ERRORFILES
+        NUM_ERRORS=$(($NUM_ERRORS + 1))
+    fi
+done
+
+if [ $NUM_ERRORS -eq 0 ]
+then
+    echo "No Errors!"
+    rm -f $ERRORFILES
+else
+    echo "********** ERRORS ************* $NUM_ERRORS files had errors:"
+    cat $ERRORFILES
+    rm -f $ERRORFILES
+    exit $NUM_ERRORS
+fi

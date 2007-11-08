@@ -24,7 +24,7 @@
 """ See http://www.dabeaz.com/ply/ply.html for syntax of grammer definitions.
 """ 
 
-from __future__ import with_statement, absolute_import, division
+from __future__ import with_statement
 from pyke import tmp_itertools as itertools
 import contextlib
 from ply import yacc
@@ -377,7 +377,7 @@ def p_error(p):
     raise SyntaxError("%s(%d): syntax error at token %s" %
                           (scanner.lexer.filename, scanner.lexer.lineno, p))
 
-parser = yacc.yacc(write_tables=0, debug=1)
+parser = yacc.yacc(write_tables=0, debug=0)
 
 def parse(filename, debug = 0):
     with contextlib.closing(file(filename)) as f:

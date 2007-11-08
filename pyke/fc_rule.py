@@ -50,7 +50,6 @@
 
 '''
 
-from __future__ import with_statement, absolute_import, division
 from pyke import contexts, knowledge_base
 import itertools
 

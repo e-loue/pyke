@@ -84,7 +84,6 @@
 
 '''
 
-from __future__ import with_statement, absolute_import, division
 from pyke import tmp_itertools as itertools
 from pyke import knowledge_base, contexts
 

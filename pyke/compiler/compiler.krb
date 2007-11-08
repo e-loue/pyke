@@ -27,16 +27,17 @@ file:
                        ($bc_rules, $bc_extra_lines, $plan_extra_lines)),
                 $fc_lines, $bc_lines, $plan_lines)
     when
-        $lines1 = helpers.plan_head1($rb_name)
+        $fc_head = helpers.fc_head($rb_name)
         $bc_head = helpers.bc_head($rb_name)
         !rule_decl($rb_name, $parent, $decl_line)
         !fc_rules($fc_rules, $fc_funs_lines)
         !bc_rules($rb_name, $bc_rules, $bc_plan_lines, $bc_bc_lines)
-        $fc_lines = ($lines1 + ($decl_line,) + $fc_funs_lines + ("",) +
+        $fc_lines = ($fc_head + ($decl_line,) + $fc_funs_lines + ("",) +
                      $fc_extra_lines) \
                         if $fc_funs_lines \
                         else ()
-        $plan_lines = ($bc_plan_lines + ("",) + $plan_extra_lines) \
+        $plan_lines = (("# %s_plans.py" % $rb_name,) +
+                       $bc_plan_lines + ("",) + $plan_extra_lines) \
                         if $bc_plan_lines \
                         else ()
         $bc_lines = ($bc_head + (("import %s_plans" % $rb_name, "") 

@@ -24,7 +24,7 @@
 """ See http://www.dabeaz.com/ply/ply.html for syntax of grammer definitions.
 """
 
-from __future__ import with_statement, absolute_import, division
+from __future__ import with_statement
 import contextlib
 from ply import lex
 
@@ -186,15 +186,6 @@ def t_code_plan(t):
                           "'when' clause" % (t.lexer.filename, t.lexer.lineno))
     current_line += pattern_var_format % current_plan_name
     plan_vars_needed.append(current_plan_name)
-
-def t_code_fail(t):
-    r'fail\b'
-    global current_line
-    if not pattern_var_format:
-        raise SyntaxError("%s(%d): 'fail' only allowed in backward chaining "
-                          "rules" % (t.lexer.filename, t.lexer.lineno))
-    if debug: print "scanner saw 'fail'"
-    current_line += 'return'
 
 def t_code_pattern_var(t):
     r'\$[a-zA-Z_][a-zA-Z0-9_]*\b'

@@ -1,7 +1,0 @@
-- 'fail' can be used as a statement in python code.  It causes the current
-  rule to fail immediately without backtracking within that rule, but will
-  still try other rules for the same goal.
-  
-  Contrast this to special.cut() which succeeds the first time, but causes
-  both the current rule to fail without further backtracking in that rule
-  as well preventing other rules for the same goal to be tried.

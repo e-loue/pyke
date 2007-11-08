@@ -152,7 +152,6 @@
         KeyError: '$_ not bound in <__main__.simple_context object at ...>'
 """
 
-from __future__ import with_statement, absolute_import, division
 import sys
 
 from pyke import pattern, unique

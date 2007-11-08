@@ -21,8 +21,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from __future__ import with_statement, absolute_import, division
-
 Knowledge_bases = {}
 
 def get(kb_name, new_class = None):

@@ -21,13 +21,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from __future__ import with_statement, absolute_import, division
-
-def plan_head1(rb_name):
+def fc_head(rb_name):
     return (
-        "# %s.py" % rb_name,
+        "# %s_fc.py" % rb_name,
         "",
-        "from __future__ import with_statement, absolute_import, division",
         "from pyke import contexts, pattern, fc_rule, rule_base",
         "from pyke import lookup, assert_",
         "",
@@ -37,7 +34,6 @@ def bc_head(rb_name):
     return (
         "# %s_bc.py" % rb_name,
         "",
-        "from __future__ import with_statement, absolute_import, division",
         "from pyke import tmp_itertools as itertools",
         "from pyke import rule_base, contexts, pattern, bc_rule",
         "from pyke import prove",

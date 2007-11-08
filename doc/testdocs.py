@@ -21,14 +21,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-class unique(object):
-    def __init__(self, name): self.name = name
-    def __repr__(self): return "<unique %s>" % self.name
+import sys
+import doctest
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
+def test(filepath):
+    print "Testing", filepath
+    sys.exit(doctest.testfile(filepath)[0])
 
 if __name__ == "__main__":
-    test()
+    test(sys.argv[1])

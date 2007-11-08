@@ -33,8 +33,6 @@ class special_knowledge_base(knowledge_base.knowledge_base):
 	    raise KeyError("%s.%s already exists" % (self.name, fn.name))
 	self.entity_lists[fn.name] = fn
 
-Special = special_knowledge_base()
-
 class special_fn(knowledge_base.knowledge_entity_list):
     def __init__(self, name):
 	super(special_fn, self).__init__(name)
@@ -53,4 +51,13 @@ class claim_goal(special_fn):
 	yield
 	raise rule_base.StopProof
 
-claim_goal()
+def test():
+    import doctest
+    import sys
+    sys.exit(doctest.testmod()[0])
+
+if __name__ == "__main__":
+    test()
+else:
+    Special = special_knowledge_base()
+    claim_goal()

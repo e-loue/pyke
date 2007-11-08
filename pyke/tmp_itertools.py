@@ -44,3 +44,11 @@ repeat = itertools.repeat
 starmap = itertools.starmap
 takewhile = itertools.takewhile
 tee = itertools.tee
+
+def test():
+    import doctest
+    import sys
+    sys.exit(doctest.testmod()[0])
+
+if __name__ == "__main__":
+    test()
