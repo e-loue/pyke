@@ -14,7 +14,8 @@ restindex
 Welcome to Pyke
 =========================
 
-Pyke is a knowledge-based inference engine written in 100% python that can:
+Pyke is a knowledge-based inference engine (expert system) written in
+100% python that can:
 
 - Do both forward-chaining (data driven) and
   backward-chaining (goal directed) inferencing.
@@ -81,4 +82,7 @@ Potential pyke applications:
   goals.
 - Diagnosis systems, including automated customer service systems.
 - Program or library customization for specific uses.
+- In addition to being able to build programs, pyke can instantiate,
+  configure and interconnect a network of objects to meet a specific need
+  or situation.
 
