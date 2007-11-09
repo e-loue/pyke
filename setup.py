@@ -32,7 +32,7 @@ setup(
         backward-chaining rules.
     """,
     download_url =
-        "http://sourceforge.net/project/platformdownload.php?group_id=207724",
+        "http://downloads.sourceforge.net/pyke/pyke-0.1.alpha1-py2.5.egg?modtime=1194563824&big_mirror=0",
     classifiers = [
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
