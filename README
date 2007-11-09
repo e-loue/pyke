@@ -1,0 +1,142 @@
+Pyke: Python Knowledge Engine
+
+Version: 0.1.alpha1
+
+Both forward-chaining and backward-chaining rules (which may include python
+code) are compiled into python. Can also automatically assemble python
+programs out of python functions which are attached to backward-chaining
+rules.
+
+COPYRIGHT AND LICENSE:
+
+This is published under the MIT License.  The copyright and license are in
+the file "copyright_license".
+
+DOCUMENTATION:
+
+The documentation is at:
+
+    http://pyke.sourceforge.net
+
+You can download a copy of this documentation to your hard drive:
+
+    pyke_doc_html-0.1.alpha1.zip
+
+See the end of this file for how to regenerate the html files.
+
+
+INSTALLATION:
+
+Pyke requires python 2.5 (or later 2.x release).  Check with:
+
+    $ python2.5 --version
+ or $ python --version
+
+You can download this at:
+
+    http://www.python.org
+
+To install pyke with easy_install, at the shell prompt just type:
+
+    $ easy_install-2.5 pyke
+
+If you don't have easy_install, you should install it:
+
+    download: http://peak.telecommunity.com/dist/ez_setup.py
+    then (as root) run: $ python2.5 ez_setup.py
+
+Otherwise, you'll also need ply 2.3 from:
+
+    http://www.dabeaz.com/ply/
+
+This can be checked as follows:
+
+    $ python2.5
+    >>> from ply import lex
+    >>> lex.__version__
+
+Then you got two choices for pyke:
+
+    pyke-0.1.alpha1-py2.5.egg
+    pyke-0.1.alpha1.linux-i686.tar.gz
+
+
+SOURCE DISTRIBUTION:
+
+The pyke source distribution is the file:
+
+    pyke-0.1.alpha1.tar.gz
+
+This contains the pyke source code, documentation (both source and html), and
+examples (currently only one example).
+
+
+TO INSTALL FROM THE SOURCES:
+
+    $ python2.5 setup.py install
+
+
+RUNNING DOCTESTS:
+
+To run doctests on all *.py files in the pyke directory, cd to the pyke
+directory and:
+
+    $ ./testpyke
+
+
+COMPILING THE COMPILER.KRB FILE:
+
+You may want to edit the pyke/compiler/__init__.py file to set "nonuke" to
+True first so that compiler_bc.py doesn't get deleted if there are syntax
+errors in compiler.krb.  If you accidently delete compiler_bc.py, you'll
+have to download a new copy of it because you need it to compile itself!
+
+In pyke/compiler:
+
+    $ python2.5
+    >>> from pyke import compiler
+    >>> compiler.compile('compiler.krb')
+
+
+EXAMPLES:
+
+Currently there is only one example.  Read its README file for how to run it.
+
+
+COMPILING THE DOCUMENTATION:
+
+To compile the documentation into html, you'll need docutils and rest2web.
+If you're running linux, your distro may have packages for these already.
+Or you can:
+
+    $ easy_install-2.5 rest2web
+
+I used version 0.4.1 of docutils and 0.5.0 of rest2web.  I don't know if
+earlier versions work OK or not.
+
+To check your versions:
+
+    $ python2.5
+    >>> import docutils
+    >>> docutils.__version__
+    >>> import rest2web
+    >>> rest2web.__version__
+
+If your linux distro doesn't have packages for these, and you don't want to
+use easy_install, you can get them at:
+
+    http://sourceforge.net/projects/docutils
+    http://sourceforge.net/projects/rest2web
+
+To regenerate the html, cd to the doc directory and:
+
+    $ r2w r2w.ini
+
+This regenerates everything from doc/source into doc/html.  It takes about
+2 seconds to run.
+
+If you want to run doctest on all of the *.txt files in doc/source,
+cd to doc and:
+
+    $ ./testdocs
+
