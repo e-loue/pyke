@@ -15,8 +15,8 @@ setup(
     install_requires = ['ply>=2.3'],
     extras_require = {
         'regen_docs': ["rest2web>=0.5"],
-    }
-    #dependency_links = ['http://www.dabeaz.com/ply/'],
+    },
+    dependency_links = ['http://www.dabeaz.com/ply/'],
 
     # Metadata for upload to PyPI
     author = "Bruce Frederiksen",
@@ -31,7 +31,8 @@ setup(
         python programs out of python functions which are attached to
         backward-chaining rules.
     """,
-    #download_url = "",
+    download_url =
+        "http://sourceforge.net/project/platformdownload.php?group_id=207724",
     classifiers = [
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
