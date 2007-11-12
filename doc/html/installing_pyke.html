@@ -60,6 +60,22 @@
                 <div class="document" id="installing-pyke">
 <h1 class="title">Installing Pyke</h1>
 <div class="section">
+<h1><a id="index-to-this-page" name="index-to-this-page">Index to This Page</a></h1>
+<ul class="simple">
+<li><a class="reference" href="#licensing">Licensing</a></li>
+<li><a class="reference" href="#system-requirements">System Requirements</a></li>
+<li><a class="reference" href="#installation">Installation</a><ul>
+<li><a class="reference" href="#installing-the-executables">Installing the Executables</a></li>
+<li><a class="reference" href="#installing-the-sources">Installing the Sources</a></li>
+<li><a class="reference" href="#installing-the-example">Installing the Example</a></li>
+<li><a class="reference" href="#installing-the-html-documentation">Installing the HTML Documentation</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#subversion-directories">Subversion Directories</a></li>
+<li><a class="reference" href="#documentation">Documentation</a></li>
+</ul>
+</div>
+<div class="section">
 <h1><a id="licensing" name="licensing">Licensing</a></h1>
 <p>This software is licensed under the MIT license:</p>
 <blockquote>
@@ -86,8 +102,39 @@ THE SOFTWARE.</p>
 You'll need:</p>
 <ul class="simple">
 <li><a class="reference" href="http://python.org">Python 2.5</a></li>
-<li><a class="reference" href="http://www.dabeaz.com/ply/">PLY 2.3</a></li>
+<li><a class="reference" href="http://www.dabeaz.com/ply/">PLY 2.3</a> (<a class="reference" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a> automatically installs this)</li>
 </ul>
+</div>
+<div class="section">
+<h1><a id="installation" name="installation">Installation</a></h1>
+<div class="section">
+<h2><a id="installing-the-executables" name="installing-the-executables">Installing the Executables</a></h2>
+<p>Pyke is registered on <a class="reference" href="http://pypi.python.org/pypi">pypi</a>, so once you have <a class="reference" href="http://python.org">python 2.5</a> with
+<a class="reference" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a> you can just type (you'll probably need root permission):</p>
+<pre class="literal-block">
+$ easy_install-2.5 pyke
+</pre>
+<p>This will automatically install <a class="reference" href="http://www.dabeaz.com/ply/">PLY 2.3</a> too.</p>
+</div>
+<div class="section">
+<h2><a id="installing-the-sources" name="installing-the-sources">Installing the Sources</a></h2>
+<p>The source code for the latest release can be found on the <a class="reference" href="http://sourceforge.net/project/showfiles.php?group_id=207724">pyke project
+download page</a> as <tt class="docutils literal"><span class="pre">pyke-&lt;release&gt;.tar.gz</span></tt>.</p>
+<p>If you want the latest developer version, read <a class="reference" href="#subversion-directories">Subversion Directories</a>,
+below.</p>
+</div>
+<div class="section">
+<h2><a id="installing-the-example" name="installing-the-example">Installing the Example</a></h2>
+<p>At this point, there is a single example that is contained in the source
+directory.  There is a README file that explains how to run it.</p>
+</div>
+<div class="section">
+<h2><a id="installing-the-html-documentation" name="installing-the-html-documentation">Installing the HTML Documentation</a></h2>
+<p>If you'd like to view the html documentation from you hard drive,
+it is in the source directory (doc/html), or you can download just the
+documentation itself as <tt class="docutils literal"><span class="pre">pyke_doc_html-&lt;release&gt;.zip</span></tt> file from the
+<a class="reference" href="http://sourceforge.net/project/showfiles.php?group_id=207724">pyke project download page</a>.</p>
+</div>
 </div>
 <div class="section">
 <h1><a id="subversion-directories" name="subversion-directories">Subversion Directories</a></h1>
@@ -126,7 +173,7 @@ which is expected to be a subpackage of <tt class="docutils literal"><span class
 You can browse these on your hard drive if you'd like.</p>
 <p>If you want to regenerate these documents, you'll also need:</p>
 <ul class="simple">
-<li><a class="reference" href="http://sourceforge.net/projects/rest2web">Rest2web</a></li>
+<li><a class="reference" href="http://sourceforge.net/projects/rest2web">Rest2web</a>, which requires:</li>
 <li><a class="reference" href="http://sourceforge.net/projects/docutils">Docutils</a></li>
 </ul>
 <p>The sources for the documentation are in <tt class="docutils literal"><span class="pre">doc/sources</span></tt>.</p>
@@ -177,7 +224,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Nov 08 2007.
+    Page last modified Mon, Nov 12 2007.
   </div>
 
 </body>

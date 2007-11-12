@@ -97,22 +97,25 @@ p, td, li, ul, ol, h1, h2, h3, h4, h5, h6  {
 
 #main h1.title, #main h2.subtitle {
     color: #00478E;
+    text-decoration: none;
 }
 
 #main h1 {
-    font-size: 22px;
+    font-size: 25px;
+    text-decoration: underline;
+    /* border-bottom: 1px solid #00478E; */
 }
 
 #main h2 {
-    font-size: 20px;
+    font-size: 21px;
 }
 
 #main h3 {
-    font-size: 18px;
+    font-size: 17px;
 }
 
 #main h4 {
-    font-size: 16px;
+    font-size: 13px;
 }
 
 .title {
