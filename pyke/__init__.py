@@ -21,6 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import sys
 import types
 import os
 import os.path
@@ -47,8 +48,8 @@ def load(paths = ('.',), load_fc = True, load_bc = True):
     if isinstance(paths, types.StringTypes): paths = (paths,)
     compile_list = _get_compile_list(paths)
     if compile_list:
-        status = os.system("python2.5 -m pyke.compiler %s" % 
-                           ' '.join(compile_list))
+        status = os.system("%s -m pyke.compiler %s" % 
+                           (sys.executable, ' '.join(compile_list)))
         if status != 0:
             raise SyntaxError("Errors encountered trying to compile")
         _check_list(compile_list)
@@ -173,7 +174,6 @@ def prove_1(kb_name, entity_name, fixed_args, num_returns):
 
 def test():
     import doctest
-    import sys
     sys.exit(doctest.testmod()[0])
 
 if __name__ == "__main__":
