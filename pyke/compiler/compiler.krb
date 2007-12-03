@@ -298,7 +298,7 @@ no_plan:
     when
         $fn_head = ('assert x_%d is None, \\' % $clause_num,
                     ('INDENT', 2),
-                    '"%(rb_name).%(rule_name)s: got unexpected plan from '
+                    '"%(rb_name)s.%(rule_name)s: got unexpected plan from '
                      'when clause %(clause_num)d"' %
                      {'clause_num': $clause_num,
                       'rb_name': $rb_name,
@@ -338,7 +338,7 @@ plan_bindings:
     when
         $fn_head = ('assert x_%d is not None, \\' % $clause_num,
                     ('INDENT', 2),
-                    '"%(rb_name).%(rule_name)s: expected plan from '
+                    '"%(rb_name)s.%(rule_name)s: expected plan from '
                      'when clause %(clause_num)d"' %
                      {'clause_num': $clause_num,
                       'rb_name': $rb_name,
@@ -348,7 +348,7 @@ plan_bindings:
                     "if not rule.pattern(%d).match_data(context, context, "
                      "x_%d):" % ($pat_num, $clause_num),
                     ('INDENT', 2),
-                    'raise AssertionError("%(rb_name).%(rule_name)s: '
+                    'raise AssertionError("%(rb_name)s.%(rule_name)s: '
                      'plan match to $%(plan_var_name)s failed in '
                      'when clause %(clause_num)d")' %
                      {'clause_num': $clause_num,

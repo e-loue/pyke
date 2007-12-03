@@ -31,14 +31,14 @@ def file(rule, arg_patterns, arg_context):
                             rule.pattern(4),)):
               flag_3 = True
               assert x_3 is None, \
-                "%(rule_name)s: got unexpected plan from when clause 3"
+                "compiler.file: got unexpected plan from when clause 3"
               flag_4 = False
               for x_4 in prove(rule.rule_base.root_name, 'fc_rules', context,
                              (rule.pattern(5),
                               rule.pattern(6),)):
                 flag_4 = True
                 assert x_4 is None, \
-                  "%(rule_name)s: got unexpected plan from when clause 4"
+                  "compiler.file: got unexpected plan from when clause 4"
                 flag_5 = False
                 for x_5 in prove(rule.rule_base.root_name, 'bc_rules', context,
                                (rule.pattern(2),
@@ -47,7 +47,7 @@ def file(rule, arg_patterns, arg_context):
                                 rule.pattern(9),)):
                   flag_5 = True
                   assert x_5 is None, \
-                    "%(rule_name)s: got unexpected plan from when clause 5"
+                    "compiler.file: got unexpected plan from when clause 5"
                   mark6 = context.mark(True)
                   if rule.pattern(10).match_data(context, context,
                           (context.lookup_data('fc_head') + (context.lookup_data('decl_line'),) + context.lookup_data('fc_funs_lines') + ("",) +
@@ -209,14 +209,14 @@ def fc_rules1(rule, arg_patterns, arg_context):
                         rule.pattern(1),)):
           flag_1 = True
           assert x_1 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 1"
+            "compiler.fc_rules1: got unexpected plan from when clause 1"
           flag_2 = False
           for x_2 in prove(rule.rule_base.root_name, 'fc_rules', context,
                          (rule.pattern(2),
                           rule.pattern(3),)):
             flag_2 = True
             assert x_2 is None, \
-              "%(rule_name)s: got unexpected plan from when clause 2"
+              "compiler.fc_rules1: got unexpected plan from when clause 2"
             mark3 = context.mark(True)
             if rule.pattern(4).match_data(context, context,
                     context.lookup_data('fc_lines') + context.lookup_data('lines_rest')):
@@ -264,7 +264,7 @@ def fc_rule_(rule, arg_patterns, arg_context):
                         rule.pattern(7),)):
           flag_1 = True
           assert x_1 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 1"
+            "compiler.fc_rule_: got unexpected plan from when clause 1"
           flag_2 = False
           for x_2 in prove(rule.rule_base.root_name, 'assertions', context,
                          (rule.pattern(8),
@@ -273,7 +273,7 @@ def fc_rule_(rule, arg_patterns, arg_context):
                           rule.pattern(10),)):
             flag_2 = True
             assert x_2 is None, \
-              "%(rule_name)s: got unexpected plan from when clause 2"
+              "compiler.fc_rule_: got unexpected plan from when clause 2"
             mark3 = context.mark(True)
             if rule.pattern(11).match_data(context, context,
                     helpers.splice(
@@ -379,7 +379,7 @@ def fc_premises1(rule, arg_patterns, arg_context):
                         rule.pattern(8),)):
           flag_1 = True
           assert x_1 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 1"
+            "compiler.fc_premises1: got unexpected plan from when clause 1"
           flag_2 = False
           for x_2 in prove(rule.rule_base.root_name, 'fc_premises', context,
                          (rule.pattern(0),
@@ -392,7 +392,7 @@ def fc_premises1(rule, arg_patterns, arg_context):
                           rule.pattern(13),)):
             flag_2 = True
             assert x_2 is None, \
-              "%(rule_name)s: got unexpected plan from when clause 2"
+              "compiler.fc_premises1: got unexpected plan from when clause 2"
             mark3 = context.mark(True)
             if rule.pattern(14).match_data(context, context,
                     helpers.splice(context.lookup_data('fn_head1'), context.lookup_data('fn_head2'))):
@@ -523,7 +523,7 @@ def fc_python_premise(rule, arg_patterns, arg_context):
                         rule.pattern(4),
                         rule.pattern(5),)):
           assert x_1 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 1"
+            "compiler.fc_python_premise: got unexpected plan from when clause 1"
           yield
     finally:
       context.done()
@@ -588,7 +588,7 @@ def assertions_n(rule, arg_patterns, arg_context):
                         rule.pattern(3),)):
           flag_1 = True
           assert x_1 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 1"
+            "compiler.assertions_n: got unexpected plan from when clause 1"
           flag_2 = False
           for x_2 in prove(rule.rule_base.root_name, 'assertions', context,
                          (rule.pattern(4),
@@ -597,7 +597,7 @@ def assertions_n(rule, arg_patterns, arg_context):
                           rule.pattern(6),)):
             flag_2 = True
             assert x_2 is None, \
-              "%(rule_name)s: got unexpected plan from when clause 2"
+              "compiler.assertions_n: got unexpected plan from when clause 2"
             mark3 = context.mark(True)
             if rule.pattern(7).match_data(context, context,
                     helpers.splice(context.lookup_data('fn_lines1'), context.lookup_data('fn_lines2'))):
@@ -736,7 +736,7 @@ def bc_rules1(rule, arg_patterns, arg_context):
                         rule.pattern(3),)):
           flag_1 = True
           assert x_1 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 1"
+            "compiler.bc_rules1: got unexpected plan from when clause 1"
           flag_2 = False
           for x_2 in prove(rule.rule_base.root_name, 'bc_rules', context,
                          (rule.pattern(0),
@@ -745,7 +745,7 @@ def bc_rules1(rule, arg_patterns, arg_context):
                           rule.pattern(6),)):
             flag_2 = True
             assert x_2 is None, \
-              "%(rule_name)s: got unexpected plan from when clause 2"
+              "compiler.bc_rules1: got unexpected plan from when clause 2"
             mark3 = context.mark(True)
             if rule.pattern(7).match_data(context, context,
                     context.lookup_data('bc_plan_lines') + context.lookup_data('plan_lines_rest')):
@@ -805,7 +805,7 @@ def bc_rule_(rule, arg_patterns, arg_context):
                         rule.pattern(7),)):
           flag_1 = True
           assert x_1 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 1"
+            "compiler.bc_rule_: got unexpected plan from when clause 1"
           mark2 = context.mark(True)
           if rule.pattern(8).match_data(context, context,
                   \
@@ -877,7 +877,7 @@ def bc_premises(rule, arg_patterns, arg_context):
                         rule.pattern(10),)):
           flag_1 = True
           assert x_1 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 1"
+            "compiler.bc_premises: got unexpected plan from when clause 1"
           mark2 = context.mark(True)
           if rule.pattern(11).match_data(context, context,
                   helpers.list_format(context.lookup_data('patterns'), '(', '))')):
@@ -991,7 +991,7 @@ def bc_premises1_n(rule, arg_patterns, arg_context):
                         rule.pattern(10),)):
           flag_1 = True
           assert x_1 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 1"
+            "compiler.bc_premises1_n: got unexpected plan from when clause 1"
           mark2 = context.mark(True)
           if rule.pattern(11).match_data(context, context,
                   context.lookup_data('clause_num') + 1):
@@ -1011,7 +1011,7 @@ def bc_premises1_n(rule, arg_patterns, arg_context):
                             rule.pattern(17),)):
               flag_3 = True
               assert x_3 is None, \
-                "%(rule_name)s: got unexpected plan from when clause 3"
+                "compiler.bc_premises1_n: got unexpected plan from when clause 3"
               mark4 = context.mark(True)
               if rule.pattern(18).match_data(context, context,
                       context.lookup_data('plan_lines1') + context.lookup_data('plan_lines2')):
@@ -1122,7 +1122,7 @@ def bc_premise(rule, arg_patterns, arg_context):
                               rule.pattern(9),)):
                 flag_4 = True
                 assert x_4 is None, \
-                  "%(rule_name)s: got unexpected plan from when clause 4"
+                  "compiler.bc_premise: got unexpected plan from when clause 4"
                 flag_5 = False
                 for x_5 in prove(rule.rule_base.root_name, 'gen_plan_lines', context,
                                (rule.pattern(4),
@@ -1137,7 +1137,7 @@ def bc_premise(rule, arg_patterns, arg_context):
                                 rule.pattern(16),)):
                   flag_5 = True
                   assert x_5 is None, \
-                    "%(rule_name)s: got unexpected plan from when clause 5"
+                    "compiler.bc_premise: got unexpected plan from when clause 5"
                   mark6 = context.mark(True)
                   if rule.pattern(17).match_data(context, context,
                           helpers.merge_patterns(context.lookup_data('plan_vars_needed'),
@@ -1220,7 +1220,7 @@ def no_plan(rule, arg_patterns, arg_context):
         if rule.pattern(0).match_data(context, context,
                 ('assert x_%d is None, \\' % context.lookup_data('clause_num'),
                ('INDENT', 2),
-               '"%(rb_name).%(rule_name)s: got unexpected plan from '
+               '"%(rb_name)s.%(rule_name)s: got unexpected plan from '
                'when clause %(clause_num)d"' %
                {'clause_num': context.lookup_data('clause_num'),
                'rb_name': context.lookup_data('rb_name'),
@@ -1275,7 +1275,7 @@ def as_plan(rule, arg_patterns, arg_context):
                           rule.pattern(7),)):
             flag_2 = True
             assert x_2 is None, \
-              "%(rule_name)s: got unexpected plan from when clause 2"
+              "compiler.as_plan: got unexpected plan from when clause 2"
             yield
           if not flag_2:
             raise AssertionError("compiler.as_plan: 'when' clause 2 failed")
@@ -1333,7 +1333,7 @@ def plan_spec(rule, arg_patterns, arg_context):
                           rule.pattern(7),)):
             flag_2 = True
             assert x_2 is None, \
-              "%(rule_name)s: got unexpected plan from when clause 2"
+              "compiler.plan_spec: got unexpected plan from when clause 2"
             yield
           if not flag_2:
             raise AssertionError("compiler.plan_spec: 'when' clause 2 failed")
@@ -1378,7 +1378,7 @@ def plan_bindings(rule, arg_patterns, arg_context):
         if rule.pattern(0).match_data(context, context,
                 ('assert x_%d is not None, \\' % context.lookup_data('clause_num'),
                ('INDENT', 2),
-               '"%(rb_name).%(rule_name)s: expected plan from '
+               '"%(rb_name)s.%(rule_name)s: expected plan from '
                'when clause %(clause_num)d"' %
                {'clause_num': context.lookup_data('clause_num'),
                'rb_name': context.lookup_data('rb_name'),
@@ -1388,7 +1388,7 @@ def plan_bindings(rule, arg_patterns, arg_context):
                "if not rule.pattern(%d).match_data(context, context, "
                "x_%d):" % (context.lookup_data('pat_num'), context.lookup_data('clause_num')),
                ('INDENT', 2),
-               'raise AssertionError("%(rb_name).%(rule_name)s: '
+               'raise AssertionError("%(rb_name)s.%(rule_name)s: '
                'plan match to $%(plan_var_name)s failed in '
                'when clause %(clause_num)d")' %
                {'clause_num': context.lookup_data('clause_num'),
@@ -1517,7 +1517,7 @@ def bc_python_premise(rule, arg_patterns, arg_context):
                         rule.pattern(4),
                         rule.pattern(5),)):
           assert x_1 is None, \
-            "%(rule_name)s: got unexpected plan from when clause 1"
+            "compiler.bc_python_premise: got unexpected plan from when clause 1"
           yield
     finally:
       context.done()

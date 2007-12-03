@@ -96,7 +96,9 @@ def cprint2(obj, maxdepth):
 	import traceback
 	if isinstance(obj, types.InstanceType): obj_type = obj.__class__
 	else: obj_type = type(obj)
-	return "While trying to cprint a %s, got: %s" % (obj_type, traceback.format_exception_only(exc_type, exc_value))
+	return "While trying to cprint a %s, got: %s" % \
+                   (obj_type,
+                    traceback.format_exception_only(exc_type, exc_value))
 
 str_chk = re.compile('[a-zA-Z_][a-zA-Z0-9_]*$')
 
