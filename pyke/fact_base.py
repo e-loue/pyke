@@ -107,13 +107,13 @@ class fact_base(knowledge_base.knowledge_base):
 class fact_list(knowledge_base.knowledge_entity_list):
     def __init__(self, name):
         super(fact_list, self).__init__(name)
-	self.universal_facts = set()		# (arg...)
-	self.case_specific_facts = set()	# (arg...)
+	self.universal_facts = []		# [(arg...)...]
+	self.case_specific_facts = []   	# [(arg...)...]
 	self.hashes = {}	# (len, (index...)): (other_indices,
 				#	{(arg...): [other_args_from_factn...]})
 	self.fc_rule_refs = []	# (fc_rule, foreach_index)
     def reset(self):
-	self.case_specific_facts.clear()
+	self.case_specific_facts = []
 	self.hashes.clear()
 	self.fc_rule_refs = []
     def dump_universal_facts(self):
@@ -173,11 +173,11 @@ class fact_list(knowledge_base.knowledge_entity_list):
 	return new_entry
     def add_universal_fact(self, args):
 	if args not in self.universal_facts:
-	    self.universal_facts.add(args)
+	    self.universal_facts.append(args)
 	    self.add_args(args)
     def add_case_specific_fact(self, args):
 	if args not in self.case_specific_facts:
-	    self.case_specific_facts.add(args)
+	    self.case_specific_facts.append(args)
 	    self.add_args(args)
 	    for fc_rule, foreach_index in self.fc_rule_refs:
 		fc_rule.new_fact(args, foreach_index)
