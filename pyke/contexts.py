@@ -186,8 +186,8 @@ class simple_context(object):
                 if self.save_all_undo_count:
                     self.undo_list.append((var_name, self))
 	    else:
-		self.undo_list.append((var_name, var_context))
 		var_context.bind(var_name, var_context, val, val_context)
+		self.undo_list.append((var_name, var_context))
     def is_bound(self, var):
 	val, where = var, self
 	while where is not None and isinstance(val, variable):
