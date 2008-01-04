@@ -77,36 +77,130 @@
 <a class="reference" href="../rules/forward_chaining.html">forward-chaining</a> and <a class="reference" href="../rules/backward_chaining.html">backward-chaining</a> rules.</p>
 <p>Rule bases are created by writing a <em>knowledge rule base</em> (or <a class="reference" href="../../krb_syntax/index.html">.krb</a>) file
 with your favorite text editor.  Place all of your <a class="reference" href="../../krb_syntax/index.html">.krb files</a> into a
-directory structure.  Then <a class="reference" href="../../using_pyke.html#initializing-pyke">load</a> this directory in your python program.</p>
+directory structure.  Then <a class="reference" href="../../using_pyke.html#initializing-pyke">load</a> this directory into your python program.</p>
 <p>The <a class="reference" href="../../using_pyke.html#initializing-pyke">load</a> will walk the directory structure recursively and
-automatically compile any <a class="reference" href="../../krb_syntax/index.html">.krb files</a> that have changed into python source
-files.  These python modules are then automatically imported to define the
-rule base.</p>
+automatically compile any <a class="reference" href="../../krb_syntax/index.html">.krb files</a> into python source files.  These
+python modules are then automatically imported to define the rule base.
+Subsequent <a class="reference" href="../../using_pyke.html#initializing-pyke">loads</a> only recompile <a class="reference" href="../../krb_syntax/index.html">.krb files</a> that have changed since the
+last time they were compiled.</p>
 <p>The name of each rule base is the filename of the <a class="reference" href="../../krb_syntax/index.html">.krb file</a> (with the .krb
 suffix removed).  This must be a legal python identifier.</p>
+<p>In addition, each directory name within the directory structure <a class="reference" href="../../using_pyke.html#initializing-pyke">loaded</a>
+becomes a python package (to facilitate importing the generated python modules)
+and must also be a legal python identifier.</p>
 <div class="section">
-<h1><a id="rule-base-activation" name="rule-base-activation">Rule Base Activation</a></h1>
-<p><a class="reference" href="../../using_pyke.html#initializing-pyke">Loading</a> the rule bases only makes the rule bases available for use.  It
-does not automatically <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> any rule bases.  This must be done by your
-python program.  Your program may decide to <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> different rule bases
-in different situations.  Additionally,
-<a class="reference" href="../rules/forward_chaining.html">forward-chaining</a> <a class="reference" href="../rules/index.html">rules</a> may be used to <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific rule bases,
-based on their inferencing.</p>
-</div>
-<div class="section">
-<h1><a id="rule-base-inheritance" name="rule-base-inheritance">Rule Base Inheritance</a></h1>
-<p>Rule bases use single inheritance to <a class="reference" href="../../krb_syntax/index.html#extending-clause">inherit</a> the <a class="reference" href="../rules/index.html">rules</a> from another rule
-base.  This can go on to any depth.  Both <a class="reference" href="../rules/forward_chaining.html">forward-chaining</a> and
-<a class="reference" href="../rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../rules/index.html">rules</a> are <a class="reference" href="../../krb_syntax/index.html#extending-clause">inherited</a>.</p>
+<h1><a id="managing-multiple-rule-bases" name="managing-multiple-rule-bases">Managing Multiple Rule Bases</a></h1>
+<p>There are two reasons to have more than one rule base (i.e., more than one
+<a class="reference" href="../../krb_syntax/index.html">.krb file</a>):</p>
+<ol class="arabic">
+<li><p class="first">To divide a large set of rules into human manageable units.</p>
+<p>In this case, you want pyke to use all of the rule bases combined.</p>
+</li>
+<li><p class="first">To enable your python program to choose between different rule bases
+that are tailored to different specific situations.</p>
+<p>For example, you may have rules governing the automatic generation of
+SQL statements.  Some of these rules may vary depending upon the target
+database (e.g., mysql, postgresql, oracle).</p>
+<p>In this case, you want to be able to tell pyke which of several mutually
+exclusive rule bases to use on each invocation.  You would never use
+more than one of these rule bases at the same time.</p>
+</li>
+</ol>
+<p>These goals are met by three capabilities:</p>
 </div>
 <div class="section">
 <h1><a id="rule-base-categories" name="rule-base-categories">Rule Base Categories</a></h1>
-<p>Each root rule base implicitly defines a <em>rule base category</em>.
-Each rule base category may only have one active rule base.  Once a rule
-base has been <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a> in a rule base category, only children of the
+<p>Rule bases are grouped into categories.  Each rule base category only gets
+to have <strong>one</strong> <a class="reference" href="#rule-base-activation">active</a> rule base.</p>
+<p>Thus, you place rule bases that you want to have active simultaneously into
+<em>different</em> rule base categories; and place rule bases that are mutually
+exclusive to each other (e.g., the <tt class="docutils literal"><span class="pre">mysql</span></tt>, <tt class="docutils literal"><span class="pre">postgresql</span></tt> and <tt class="docutils literal"><span class="pre">oracle</span></tt>
+rule bases) into the <em>same</em> rule base category.</p>
+<p>Each rule base category has a unique name.  This is the knowledge base name
+used within the <a class="reference" href="../../krb_syntax/index.html">.krb files</a>.  For example, the name <em>database</em> in
+<tt class="docutils literal"><span class="pre">database.insert(...)</span></tt>.</p>
+</div>
+<div class="section">
+<h1><a id="rule-base-inheritance" name="rule-base-inheritance">Rule Base Inheritance</a></h1>
+<p>The rule bases within the same <a class="reference" href="#rule-base-categories">category</a> share rules amongst themselves
+through rule base inheritance.</p>
+<p>Rule bases use single inheritance to <a class="reference" href="../../krb_syntax/index.html#extending-clause">inherit</a> the <a class="reference" href="../rules/index.html">rules</a> from another rule
+base.  This can go on to any depth.  Both <a class="reference" href="../rules/forward_chaining.html">forward-chaining</a> and
+<a class="reference" href="../rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../rules/index.html">rules</a> are <a class="reference" href="../../krb_syntax/index.html#extending-clause">inherited</a>.</p>
+<p>This allows mutually exclusive rule bases to share common rules in a parent
+rule base without having to duplicate these rules amongst themselves.</p>
+<p>Here is the definition, then, of a <a class="reference" href="#rule-base-categories">rule base category</a>:</p>
+<blockquote>
+<p>Each root rule base (through rule base inheritance) defines a unique
+<a class="reference" href="#rule-base-categories">rule base category</a>.  All rule bases derived (directly or indirectly)
+from that root rule base are in the same <a class="reference" href="#rule-base-categories">rule base category</a>.</p>
+<p>The name of the <a class="reference" href="#rule-base-categories">rule base category</a> is simply the name of its root
+rule base.</p>
+</blockquote>
+<p>So, for our database example, we'd have a root rule base called
+<tt class="docutils literal"><span class="pre">database.krb</span></tt> and it would have derived rule bases called <tt class="docutils literal"><span class="pre">mysql.krb</span></tt>,
+<tt class="docutils literal"><span class="pre">postgresql.krb</span></tt> and <tt class="docutils literal"><span class="pre">oracle.krb</span></tt>.  (Note that each of these
+<a class="reference" href="../../krb_syntax/index.html">.krb files</a> may be placed anywhere you want them within the directory
+structure that you <a class="reference" href="../../using_pyke.html#initializing-pyke">load</a> -- in other words, the <a class="reference" href="../../using_pyke.html#initializing-pyke">loaded</a> directory structure
+does not need to match the rule base inheritance structure).</p>
+<p>All of these <a class="reference" href="../../krb_syntax/index.html">.krb files</a> are within the <tt class="docutils literal"><span class="pre">database</span></tt> <a class="reference" href="#rule-base-categories">rule base category</a>,
+and only one of them may be <a class="reference" href="#rule-base-activation">active</a> at any point in time.</p>
+<p>In all of these <a class="reference" href="../../krb_syntax/index.html">.krb files</a>, if the first name (the knowledge base
+name) is omitted, it defaults to the <a class="reference" href="#rule-base-categories">rule base category</a> of that rule base
+(in this case, <em>database</em>).  Thus, <tt class="docutils literal"><span class="pre">insert(...)</span></tt> would mean
+<tt class="docutils literal"><span class="pre">database.insert(...)</span></tt> in all of these <a class="reference" href="../../krb_syntax/index.html">.krb files</a> because they are
+all in the <tt class="docutils literal"><span class="pre">database</span></tt> <a class="reference" href="#rule-base-categories">rule base category</a>.</p>
+<p>All <a class="reference" href="../../krb_syntax/index.html">.krb files</a> in other <a class="reference" href="#rule-base-categories">rule base categories</a> must explicitly use the
+knowledge base name <em>database</em> to refer to <a class="reference" href="../rules/backward_chaining.html">goals</a> within this <a class="reference" href="#rule-base-categories">rule base
+category</a>, for example, <tt class="docutils literal"><span class="pre">database.insert(...)</span></tt>.</p>
+<p>In this way, all of the <a class="reference" href="../rules/index.html">rules</a> will work no matter which rule base is
+active within the database <a class="reference" href="#rule-base-categories">category</a>.</p>
+<div class="section">
+<h2><a id="rule-inheritance" name="rule-inheritance">Rule Inheritance</a></h2>
+<p>There is an important difference between how <a class="reference" href="../rules/backward_chaining.html">backward-chaining</a> rule
+inheritance works within pyke rule bases and how method inheritance works
+within python classes:</p>
+<ul>
+<li><p class="first">When a derived class in python defines a method by the same name as a
+method in its parent class, the derived method <em>overrides</em> the parent
+method.  I.e., only the derived method is used when a call is made
+to it.</p>
+</li>
+<li><p class="first">In contrast, when a derived rule base in pyke defines a
+<a class="reference" href="../rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../rules/index.html">rule</a> for a
+goal that also has <a class="reference" href="../rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../rules/index.html">rules</a> defined for it in the
+parent rule base, the derived <a class="reference" href="../rules/index.html">rule</a> <em>extends</em> the set of <a class="reference" href="../rules/index.html">rules</a> that may
+be used to try to prove this <a class="reference" href="../rules/backward_chaining.html">goal</a>.  All of the derived <a class="reference" href="../rules/index.html">rules</a> will
+be tried before any of the parent <a class="reference" href="../rules/index.html">rules</a> are tried.</p>
+<p>If you don't want the parent <a class="reference" href="../rules/index.html">rules</a> to be used for a particular <a class="reference" href="../rules/backward_chaining.html">goal</a>,
+you must list that <a class="reference" href="../rules/backward_chaining.html">goal</a> name in the <tt class="docutils literal"><span class="pre">without</span></tt> clause of the <a class="reference" href="../../krb_syntax/index.html#extending-clause">extending</a>
+statement at the beginning of the derived rule base.</p>
+</li>
+<li><p class="first">All <a class="reference" href="../rules/forward_chaining.html">forward-chaining</a> <a class="reference" href="../rules/index.html">rules</a> in the parent rule base are always
+included in the derived rule base.  The <tt class="docutils literal"><span class="pre">without</span></tt> clause only
+applies to <a class="reference" href="../rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../rules/index.html">rules</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section">
+<h1><a id="rule-base-activation" name="rule-base-activation">Rule Base Activation</a></h1>
+<p><a class="reference" href="../../using_pyke.html#initializing-pyke">Loading</a> the rule bases only makes the rule bases available for use.  It
+does not automatically <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> any rule bases.  This must be done
+explicitly by your python program.  Your program may decide to <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a>
+different rule bases in different situations.</p>
+<p>Additionally, <a class="reference" href="../rules/forward_chaining.html">forward-chaining</a> <a class="reference" href="../rules/index.html">rules</a> may be used to <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific
+rule bases, based on their inferencing; but once a rule
+base has been <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a> in a <a class="reference" href="#rule-base-categories">rule base category</a>, only children of the
 currently active rule base may be <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a> from that point on.
 Because these children <a class="reference" href="../../krb_syntax/index.html#extending-clause">inherit</a> the <a class="reference" href="../rules/index.html">rules</a> of the currently active rule base;
-<a class="reference" href="../../using_pyke.html#setting-up-each-case">activating</a> rule bases only adds new <a class="reference" href="../rules/index.html">rules</a>, and doesn't take any away.</p>
+<a class="reference" href="../../using_pyke.html#setting-up-each-case">activating</a> rule bases only adds new <a class="reference" href="../rules/index.html">rules</a>, and doesn't take any away.
+Thus, any <a class="reference" href="../rules/forward_chaining.html">forward-chaining</a> <a class="reference" href="../rules/index.html">rule</a> run during the <a class="reference" href="../../using_pyke.html#setting-up-each-case">activation</a> of the first rule
+base are not invalidated by <a class="reference" href="../../using_pyke.html#setting-up-each-case">activating</a> the second rule base.</p>
+<p>In our database example, your program could <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> the root <tt class="docutils literal"><span class="pre">database</span></tt>
+rule base and let the <a class="reference" href="../rules/forward_chaining.html">forward-chaining</a> <a class="reference" href="../rules/index.html">rules</a> within the <tt class="docutils literal"><span class="pre">database</span></tt> rule
+base figure out which derived rule base to <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> depending on the
+particular database in use at the time the program is run.</p>
 </div>
 </div>
 
@@ -122,7 +216,7 @@ Because these children <a class="reference" href="../../krb_syntax/index.html#ex
 <div class="right-item"><a href="fact_bases.html">Fact Bases</a><p>Explanation of facts and fact bases.</p>
 </div>
 <div class="right-item"><a href="rule_bases.html">Rule Bases</a><p>Explanation of rule bases, overview of .krb files and how these files
-are of compiled and loaded into your python program.</p>
+are compiled and loaded into your python program.</p>
 </div>
 <div class="right-item"><a href="special.html">Special</a><p>Explanation of the special knowledge base.</p>
 </div>
@@ -142,7 +236,7 @@ are of compiled and loaded into your python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Nov 08 2007.
+    Page last modified Thu, Jan 03 2008.
   </div>
 
 </body>

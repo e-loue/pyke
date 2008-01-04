@@ -45,12 +45,21 @@ Initializing Pyke
 
 There are two functions to initialize pyke:
 
-load(paths = ('.',), load_fc = True, load_bc = True)
+load(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb', load_fc = True, load_bc = True)
     The ``load`` function may only be called once.  It expects either a single
-    directory or a sequence directories.  It recursively walks each directory
+    directory or a sequence of directories.  It recursively walks each directory
     looking for `.krb files`_.  Each `.krb file`_ that it finds is compiled,
     if out of date, and then the resulting python modules imported.
-    This causes all of the `rule bases`_ to be loaded.
+    This causes all of the `rule bases`_ to be loaded and made ready to
+    *activate* (see below).
+
+    All generated python files are placed in a mirror directory structure
+    under the *gen_root_dir* directory in *gen_dir*.  Thus, by default,
+    this mirrored directory structure would be rooted under the
+    "./compiled_krb" directory.  You probably want to add "compiled_krb" to
+    your subversion *global-ignores* option.  *Gen_dir*, *gen_root_dir*
+    and the mirrored directory structure will be created automatically if
+    any of them do not already exist.
 add_universal_fact(kb_name, fact_name, args)
     The ``add_universal_fact`` function is called once per fact_.  These facts_
     are never deleted and apply to all *cases*.

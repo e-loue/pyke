@@ -24,7 +24,7 @@ restindex
     crumb: Rule Bases
     page-description:
         Explanation of rule bases, overview of .krb files and how these files
-        are of compiled and loaded into your python program.
+        are compiled and loaded into your python program.
     /description
     format: rest
     encoding: utf8
@@ -42,49 +42,165 @@ forward-chaining_ and backward-chaining_ rules.
 
 Rule bases are created by writing a *knowledge rule base* (or `.krb`_) file
 with your favorite text editor.  Place all of your `.krb files`_ into a
-directory structure.  Then load_ this directory in your python program.
+directory structure.  Then load_ this directory into your python program.
 
 The load_ will walk the directory structure recursively and
-automatically compile any `.krb files`_ that have changed into python source
-files.  These python modules are then automatically imported to define the
-rule base.
+automatically compile any `.krb files`_ into python source files.  These
+python modules are then automatically imported to define the rule base.
+Subsequent loads_ only recompile `.krb files`_ that have changed since the
+last time they were compiled.
 
 The name of each rule base is the filename of the `.krb file`_ (with the .krb
 suffix removed).  This must be a legal python identifier.
 
-Rule Base Activation
+In addition, each directory name within the directory structure loaded_
+becomes a python package (to facilitate importing the generated python modules)
+and must also be a legal python identifier.
+
+Managing Multiple Rule Bases
+===============================
+
+There are two reasons to have more than one rule base (i.e., more than one
+`.krb file`_):
+
+#. To divide a large set of rules into human manageable units.
+
+   In this case, you want pyke to use all of the rule bases combined.
+
+#. To enable your python program to choose between different rule bases
+   that are tailored to different specific situations.
+
+   For example, you may have rules governing the automatic generation of
+   SQL statements.  Some of these rules may vary depending upon the target
+   database (e.g., mysql, postgresql, oracle).
+
+   In this case, you want to be able to tell pyke which of several mutually
+   exclusive rule bases to use on each invocation.  You would never use
+   more than one of these rule bases at the same time.
+
+These goals are met by three capabilities:
+
+Rule Base Categories
 =======================
 
-Loading_ the rule bases only makes the rule bases available for use.  It
-does not automatically activate_ any rule bases.  This must be done by your
-python program.  Your program may decide to activate_ different rule bases
-in different situations.  Additionally,
-forward-chaining_ rules_ may be used to activate_ more specific rule bases,
-based on their inferencing.
+Rule bases are grouped into categories.  Each rule base category only gets
+to have **one** active_ rule base.
 
+Thus, you place rule bases that you want to have active simultaneously into
+*different* rule base categories; and place rule bases that are mutually
+exclusive to each other (e.g., the ``mysql``, ``postgresql`` and ``oracle``
+rule bases) into the *same* rule base category.
+
+Each rule base category has a unique name.  This is the knowledge base name
+used within the `.krb files`_.  For example, the name *database* in
+``database.insert(...)``.
 
 Rule Base Inheritance
-========================
+=========================
+
+The rule bases within the same category_ share rules amongst themselves
+through rule base inheritance.
 
 Rule bases use single inheritance to inherit_ the rules_ from another rule
 base.  This can go on to any depth.  Both forward-chaining_ and
 backward-chaining_ rules_ are inherited_.
 
-Rule Base Categories
-========================
+This allows mutually exclusive rule bases to share common rules in a parent
+rule base without having to duplicate these rules amongst themselves.
 
-Each root rule base implicitly defines a *rule base category*.
-Each rule base category may only have one active rule base.  Once a rule
-base has been activated_ in a rule base category, only children of the
+Here is the definition, then, of a `rule base category`_:
+
+    Each root rule base (through rule base inheritance) defines a unique
+    `rule base category`_.  All rule bases derived (directly or indirectly)
+    from that root rule base are in the same `rule base category`_.
+
+    The name of the `rule base category`_ is simply the name of its root
+    rule base.
+
+So, for our database example, we'd have a root rule base called
+``database.krb`` and it would have derived rule bases called ``mysql.krb``,
+``postgresql.krb`` and ``oracle.krb``.  (Note that each of these
+`.krb files`_ may be placed anywhere you want them within the directory
+structure that you load_ -- in other words, the loaded_ directory structure
+does not need to match the rule base inheritance structure).
+
+All of these `.krb files`_ are within the ``database`` `rule base category`_,
+and only one of them may be active_ at any point in time.
+
+In all of these `.krb files`_, if the first name (the knowledge base
+name) is omitted, it defaults to the `rule base category`_ of that rule base
+(in this case, *database*).  Thus, ``insert(...)`` would mean
+``database.insert(...)`` in all of these `.krb files`_ because they are
+all in the ``database`` `rule base category`_.
+
+All `.krb files`_ in other `rule base categories`_ must explicitly use the
+knowledge base name *database* to refer to goals_ within this `rule base
+category`_, for example, ``database.insert(...)``.
+
+In this way, all of the rules_ will work no matter which rule base is
+active within the database category_.
+
+Rule Inheritance
+--------------------
+
+There is an important difference between how backward-chaining_ rule
+inheritance works within pyke rule bases and how method inheritance works
+within python classes:
+
+* When a derived class in python defines a method by the same name as a
+  method in its parent class, the derived method *overrides* the parent
+  method.  I.e., only the derived method is used when a call is made
+  to it.
+
+* In contrast, when a derived rule base in pyke defines a
+  backward-chaining_ rule_ for a
+  goal that also has backward-chaining_ rules_ defined for it in the
+  parent rule base, the derived rule_ *extends* the set of rules_ that may
+  be used to try to prove this goal_.  All of the derived rules_ will
+  be tried before any of the parent rules_ are tried.
+
+  If you don't want the parent rules_ to be used for a particular goal_,
+  you must list that goal_ name in the ``without`` clause of the extending_
+  statement at the beginning of the derived rule base.
+ 
+* All forward-chaining_ rules_ in the parent rule base are always
+  included in the derived rule base.  The ``without`` clause only
+  applies to backward-chaining_ rules_.
+
+Rule Base Activation
+=====================
+
+Loading_ the rule bases only makes the rule bases available for use.  It
+does not automatically activate_ any rule bases.  This must be done
+explicitly by your python program.  Your program may decide to activate_
+different rule bases in different situations.
+
+Additionally, forward-chaining_ rules_ may be used to activate_ more specific
+rule bases, based on their inferencing; but once a rule
+base has been activated_ in a `rule base category`_, only children of the
 currently active rule base may be activated_ from that point on.
 Because these children inherit_ the rules_ of the currently active rule base;
 activating_ rule bases only adds new rules_, and doesn't take any away.
+Thus, any forward-chaining_ rule_ run during the activation_ of the first rule
+base are not invalidated by activating_ the second rule base.
+
+In our database example, your program could activate_ the root ``database``
+rule base and let the forward-chaining_ rules_ within the ``database`` rule
+base figure out which derived rule base to activate_ depending on the
+particular database in use at the time the program is run.
+
 
 .. _activate: ../../using_pyke.html#setting-up-each-case
 .. _activated: activate_
 .. _activating: activate_
+.. _activation: activate_
+.. _active: `Rule Base Activation`_
 .. _backward-chaining: ../rules/backward_chaining.html
+.. _category: `Rule Base Categories`_
+.. _extending: ../../krb_syntax/index.html#extending-clause
 .. _forward-chaining: ../rules/forward_chaining.html
+.. _goal: backward-chaining_
+.. _goals: goal_
 .. _inherit: ../../krb_syntax/index.html#extending-clause
 .. _inherits: inherit_
 .. _inherited: inherit_
@@ -92,5 +208,9 @@ activating_ rule bases only adds new rules_, and doesn't take any away.
 .. _.krb file: `.krb`_
 .. _.krb files: `.krb`_
 .. _load: ../../using_pyke.html#initializing-pyke
+.. _loaded: load_
 .. _loading: load_
-.. _rules: ../rules/index.html
+.. _loads: load_
+.. _Rule Base Category: `Rule Base Categories`_
+.. _rule: ../rules/index.html
+.. _rules: rule_

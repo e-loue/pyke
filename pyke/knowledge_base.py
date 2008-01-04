@@ -21,14 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-Knowledge_bases = {}
-
-def get(kb_name, new_class = None):
-    ans = Knowledge_bases.get(kb_name)
-    if ans is None:
-        if new_class: ans = new_class(kb_name)
-        else: raise KeyError("knowledge_base: %s not found" % kb_name)
-    return ans
+import pyke
 
 class knowledge_base(object):
     ''' This object is a master repository for knowledge entities of different
@@ -42,9 +35,12 @@ class knowledge_base(object):
     def __init__(self, name, entity_list_type = None, register = True):
 	self.name = name
 	if register:
-	    if name in Knowledge_bases:
+	    if name in pyke.Knowledge_bases:
 		raise AssertionError("knowledge_base %s already exists" % name)
-	    Knowledge_bases[name] = self
+            if name in pyke.Rule_bases:
+                raise AssertionError("name clash between fact_base '%s' and "
+                                     "rule_base '%s'" % (name, name))
+	    pyke.Knowledge_bases[name] = self
 	self.entity_lists = {}		# {name: entity_list}
 	self.entity_list_type = entity_list_type
 	self.initialized = False	# used by self.init2

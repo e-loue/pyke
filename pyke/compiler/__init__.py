@@ -95,14 +95,33 @@ def dump(ast, f = sys.stderr, need_nl = False, indent = 0):
 
 Name_test = re.compile(r'[a-zA-Z_][a-zA-Z0-9_]*$')
 
-def compile(filename):
+def make_package_dirs(base_dir, package_path):
+    if len(package_path) > 1: make_package_dirs(base_dir, package_path[:-1])
+    full_package_path = os.path.join(base_dir, os.path.join(*package_path))
+    if not os.path.exists(full_package_path): os.mkdir(full_package_path)
+    init_file_path = os.path.join(full_package_path, '__init__.py')
+    if not os.path.exists(init_file_path): open(init_file_path, 'w').close()
+    return full_package_path
+
+def get_base_path(filename, gen_dir, gen_root_pkg):
+    if not os.path.exists(gen_dir): os.makedirs(gen_dir)
+    path, name = os.path.split(filename[:-4])
+    if path == '' or path == '.':
+        package_dir = gen_root_pkg
+    else:
+        package_dir = os.path.join(gen_root_pkg, path)
+    return os.path.join(make_package_dirs(gen_dir,
+                                          package_dir.split(os.path.sep)),
+                        name)
+
+def compile(gen_dir, gen_root_pkg, filename):
     rb_name = os.path.basename(filename)
     if not rb_name.endswith('.krb'):
         raise ValueError("compile: filename, %s, must end with .krb" % filename)
     rb_name = rb_name[:-4]
     if not Name_test.match(rb_name):
         raise ValueError("compile: %s illegal as python identifier" % rb_name)
-    base_path = filename[:-4]
+    base_path = get_base_path(filename, gen_dir, gen_root_pkg)
     fc_path = base_path + '_fc.py'
     bc_path = base_path + '_bc.py'
     plan_path = base_path + '_plans.py'
@@ -162,11 +181,16 @@ def write_file2(lines, f, indents):
 
 def main():
     import sys
-    if len(sys.argv) > 1:
-        for filename in sys.argv[1:]: compile(filename)
-    else:
+    if len(sys.argv) >= 4:
+        for filename in sys.argv[3:]:
+            compile(sys.argv[1], sys.argv[2], filename)
+    elif len(sys.argv) <= 1:
         import doctest
         sys.exit(doctest.testmod()[0])
+    else:
+        sys.stderr.write('usage: pyke.compiler gen_dir gen_root_dir '
+                                'krb_file...\n')
+        sys.exit(2)
 
 if __name__ == "__main__":
     main()

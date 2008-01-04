@@ -31,6 +31,7 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
+    initialheaderlevel: 2
 /restindex
 
 ====================
@@ -66,8 +67,12 @@ There are different types of knowledge bases.
   facts and prove goals in different ways.  The only one of these in pyke
   is the special_ knowledge base.
 
-All knowledge bases share the same name space; so that no two of them,
-regardless of their type, may have the same name.
+NOTES
+------------
+
+* All knowledge bases share the same name space.
+
+  * So no two of them, regardless of their type, may have the same name.
 
 .. _fact bases: fact_bases.html
 .. _special: special.html

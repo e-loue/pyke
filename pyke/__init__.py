@@ -27,40 +27,63 @@ import os
 import os.path
 import imp
 
-# Must include 'special' here to get it to load and be available to the rules.
-from pyke import (knowledge_base, rule_base, fact_base, pattern, contexts,
-                  condensedPrint, special)
+from pyke import contexts
 
 class CanNotProve(StandardError):
     pass
 
-get_kb = knowledge_base.get
-get_rb = rule_base.get
-init = rule_base.init
-reset = rule_base.reset
+Knowledge_bases = {}
+Rule_bases = {}
 
+_Variables = tuple(contexts.variable('ans_%d' % i) for i in range(100))
 _Load_done = False
 
-def load(paths = ('.',), load_fc = True, load_bc = True):
+def get_kb(kb_name, new_class = None):
+    ans = Knowledge_bases.get(kb_name)
+    if ans is None:
+        if new_class: ans = new_class(kb_name)
+        else: raise KeyError("knowledge_base: %s not found" % kb_name)
+    return ans
+
+def get_rb(rb_name):
+    ans = Rule_bases.get(rb_name)
+    if ans is None: raise KeyError("rule_base: %s not found" % rb_name)
+    return ans
+
+def init():
+    for kb in Knowledge_bases.itervalues(): kb.init2()
+    for rb in Rule_bases.itervalues(): rb.init2()
+
+def reset():
+    for rb in Rule_bases.itervalues(): rb.reset()
+    for kb in Knowledge_bases.itervalues(): kb.reset()
+
+def load(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb',
+         load_fc = True, load_bc = True):
     global _Load_done
     assert not _Load_done, "pyke.load may only be called once"
     _Load_done = True
     if isinstance(paths, types.StringTypes): paths = (paths,)
-    compile_list = _get_compile_list(paths)
+    compile_list = _get_compile_list(paths, gen_dir, gen_root_dir)
     if compile_list:
-        status = os.system("%s -m pyke.compiler %s" % 
-                           (sys.executable, ' '.join(compile_list)))
+        status = os.system("%s -m pyke.compiler %s %s %s" % 
+                           (sys.executable, gen_dir, gen_root_dir,
+                            ' '.join(compile_list)))
         if status != 0:
             raise SyntaxError("Errors encountered trying to compile")
-        _check_list(compile_list)
-    _load_path(paths, load_fc, load_bc)
+        _check_list(compile_list, gen_dir, gen_root_dir)
+    _load_path(paths, gen_dir, gen_root_dir, load_fc, load_bc)
     init()
 
 def _raise_exc(exc): raise exc
 
-def _needs_compiling(filename):
+def _get_base_path(filename, gen_dir, gen_root_dir):
+    if filename.startswith('.' + os.path.sep): filename = filename[2:]
+    return os.path.join(gen_dir, gen_root_dir, filename[:-4])
+
+def _needs_compiling(filename, gen_dir, gen_root_dir):
     source_mtime = os.stat(filename).st_mtime
-    base = filename[:-4]
+    base = _get_base_path(filename, gen_dir, gen_root_dir)
     try:
         ok = os.stat(base + '_fc.py').st_mtime > source_mtime
     except OSError:
@@ -72,55 +95,81 @@ def _needs_compiling(filename):
             if ok is None: ok = False
     return not ok
 
-def _get_compile_list(paths):
+def _get_compile_list(paths, gen_dir, gen_root_dir):
     ans = []
     for path in paths:
         for dirpath, dirnames, filenames in os.walk(path, onerror=_raise_exc):
             for filename in filenames:
                 if filename.endswith('.krb') and \
-                   _needs_compiling(os.path.join(dirpath, filename)):
+                   _needs_compiling(os.path.join(dirpath, filename),
+                                    gen_dir, gen_root_dir):
                     ans.append(os.path.join(dirpath, filename))
     return ans
 
-def _check_list(compile_list):
+def _check_list(compile_list, gen_dir, gen_root_dir):
     for filename in compile_list:
-        if _needs_compiling(filename):
+        if _needs_compiling(filename, gen_dir, gen_root_dir):
             raise AssertionError("%s didn't compile correctly" % filename)
 
-def _load_path(paths, load_fc, load_bc):
+def _load_path(paths, gen_dir, gen_root_dir, load_fc, load_bc):
     for path in paths:
         for dirpath, dirnames, filenames in os.walk(path, onerror=_raise_exc):
             for filename in filenames:
                 if filename.endswith('.krb'):
                     _load_file(os.path.join(dirpath, filename),
-                               load_fc, load_bc)
+                               gen_dir, gen_root_dir, load_fc, load_bc)
 
-def _load_file(filename, load_fc, load_bc):
-    base = filename[:-4]
+def _load_file(filename, gen_dir, gen_root_dir, load_fc, load_bc):
+    base = _get_base_path(filename, gen_dir, gen_root_dir)
+    path, basename = os.path.split(base)
+    if path.startswith('.' + os.path.sep): path = path[2:]
+    if path == '.' or path == '':
+        path = ''
+        package_path = ()
+    else:
+        package_path = tuple(path.split(os.path.sep))
     if load_fc:
         try:
             os.stat(base + '_fc.py')
-            _import(base + '_fc')
+            _import(package_path + (basename + '_fc',))
         except OSError:
             pass
     if load_bc:
         try:
             os.stat(base + '_bc.py')
-            _import(base + '_bc')
+            _import(package_path + (basename + '_bc',))
         except OSError:
             pass
+
+""" ******* for testing:
+def trace_import(*args, **kws):
+    if args[0].endswith('_plans'):
+        sys.stderr.write("import: ")
+        if kws: sys.stderr.write("kws.keys(): %s " % (str(kws.keys()),))
+        for arg in args:
+            if isinstance(arg, dict):
+                if '__name__' in arg:
+                    sys.stderr.write('%s[%d] ' % (arg['__name__'], len(arg)))
+                else:
+                    sys.stderr.write(str(len(arg)) + ' ')
+            else:
+                sys.stderr.write(str(arg) + ' ')
+        sys.stderr.write('\n')
+    return old_import(*args)
+
+import __builtin__
+old_import = __builtin__.__import__
+#print "__builtin__:", __builtin__, "old_import:", old_import
+__builtin__.__import__ = trace_import
+********* end testing """
 
 def _import(modulepath):
     ''' modulepath does not include .py
     '''
-    name = os.path.basename(modulepath)
-    path = os.path.dirname(modulepath)
-    #print "modulepath", modulepath, "name", name, "path", path
-    file, pathname, description = imp.find_module(name, [path])
-    try:
-        imp.load_module(name, file, pathname, description)
-    finally:
-        if file is not None: file.close()
+    mod = __import__('.'.join(modulepath))
+    for comp in modulepath[1:]:
+        mod = getattr(mod, comp)
+    return mod
 
 def add_universal_fact(kb_name, fact_name, args):
     return get_kb(kb_name, fact_base.fact_base) \
@@ -143,8 +192,6 @@ def lookup(kb_name, entity_name, pat_context, patterns):
 def prove(kb_name, entity_name, pat_context, patterns):
     return get_kb(kb_name).prove(pat_context, pat_context,
                                  entity_name, patterns)
-
-_Variables = tuple(contexts.variable('ans_%d' % i) for i in range(100))
 
 def prove_n(kb_name, entity_name, fixed_args, num_returns):
     ''' Generates: a tuple of len == num_returns, and a plan (or None).
@@ -170,7 +217,17 @@ def prove_1(kb_name, entity_name, fixed_args, num_returns):
     except StopIteration:
         raise CanNotProve("Can not prove %s.%s%s" %
                               (kb_name, entity_name,
-                               condensedPrint.cprint(fixed_args + vars)))
+                               condensedPrint.cprint(fixed_args + 
+                                                     _Variables[:num_returns])))
+
+
+# This has to come after Knowledge_bases and Rule_bases are initialized for
+# initialization code in special.
+#
+# Must include 'special' here to get it to load and be available to the rules.
+#
+from pyke import (fact_base, pattern, condensedPrint, special)
+
 
 def test():
     import doctest

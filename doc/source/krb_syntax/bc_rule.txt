@@ -55,7 +55,10 @@ Backward-chaining_ rules_ have four parts:
                 DEINDENT
 
 The ``IDENTIFIER`` is the unique name for this rule_ and is used as the
-corresponding python function name in the generated <rb_name>_bc.py file.
+corresponding python function name in the generated <rb_name>_bc.py file
+and also for the python function name of the plan function (if any)
+associated with the rule.  This name will show up in stack traces
+associated with exceptions raised during the inferencing or plan execution.
 
 Use Clause
 ============
@@ -67,7 +70,8 @@ The ``use`` clause is the **then** part of the rule_.  It identifies the
             ['taking' '(' <python_arg_spec> ')'] NL
 
 Notice that it uses a single ``IDENTIFIER``.  The `rule base`_ name is implied
-as the `rule base category`_ name for the `rule base`_ containing this rule_.
+as the `rule base category`_ name (the name of the root rule base) for the
+`rule base`_ containing this rule_.
 
 Taking Clause
 ----------------
@@ -76,7 +80,8 @@ The ``use`` clause also defines parameters to the plan_ function (if one is
 used for this rule_) with the optional ``taking`` sub-clause.
 
 The *python_arg_spec* is not parsed by pyke, but simply copied to the
-output plan_ function.  Do **not** use ``$`` with these parameters.
+output plan_ function.  Do **not** use ``$`` with these parameter names (or
+default values).
 
 When Clause
 ==============
@@ -88,7 +93,7 @@ If the ``when`` clause is omitted, the only
 requirement for the rule_ to succeed is that the ``use`` clause
 patterns_ match the goal.
 
-If the ``when`` clause is used, the rule_ succeeds for each
+If the ``when`` clause is specified, the rule_ succeeds for each
 combination of true premises.
 
 ::
@@ -97,11 +102,8 @@ combination of true premises.
                  {bc_premise NL}
              DEINDENT
 
-    bc_premise ::= ['!'] goal_name '(' {pattern,} ')' plan_spec
+    bc_premise ::= ['!'] [ name '.' ] name '(' {pattern,} ')' [ plan_spec ]
                  | python_premise
-
-    goal_name ::= name '.' name
-                | name
 
     name ::= IDENTIFIER
            | '$'IDENTIFIER
@@ -109,11 +111,13 @@ combination of true premises.
 Here are the links to the definitions for pattern_ and python_premise_.
 
 If the *bc_premise* includes the ``!``, an exception will be raised if the
-premise fails.  This can help in debugging.  Note that this does not apply
-when backtracking_.
+premise fails on the first try.  This can help in debugging.  Note that this
+does not apply when the premise fails on backtracking_ (in which case it
+has already succeeded at least once).
 
 If a single *name* is used in the *bc_premise*,
-the `rule base category`_ for the current `rule base`_ is assumed.
+the `rule base category`_ for the current `rule base`_ (the root rule base
+name) is assumed.
 
 If two *names* are used in the *bc_premise*, the first may name a `rule
 base category`_ or a `fact base`_.
@@ -122,50 +126,63 @@ If a `rule base category`_ name is used (or assumed),
 the currently active_ `rule base`_ for that category_ is used to prove the
 premise.  Note that if the `rule base category`_ name is omitted, and
 therefore assumed to be the current `rule base's`_ `rule base category`_,
-the current `rule base`_ may not be the active_ `rule base`_ for that
-category_.  It could be the case, that a derived `rule base`_ is the
+the current `rule base`_ does not have to be the active_ `rule base`_ for that
+category_.  It could be the case that a derived `rule base`_ is the
 active_ `rule base`_.  In that case, the derived `rule base`_ is used to
-prove the premise. 
+prove the premise.
 
 Plan_spec
 ------------
 
-A *plan_spec* is required for all premises that return plans_.
-This shows what to do with the returned plan_ function::
+A *plan_spec* is required for all premises that return subordinate plans_.
+These show what this rule's plan_ function should do with each of the
+subordinate plan_ functions.
 
-    plan_spec ::= step_opt NL
-                | step_opt NL INDENT
+Thus, a rule's plan_ function is composed first of the collected
+python_statements taken from its plan_specs (as described below), followed by
+the python_statements within its *with* clause (if any).  The inclusion of
+any plan_spec with a python_statement will cause a plan_ function to be
+generated for this rule_, even if the rule_ lacks a ``with`` clause.
+
+::
+
+    plan_spec ::= [ 'step' NUMBER ] NL INDENT
                       {<python_statement> NL}
                   DEINDENT
                 | 'as' '$'IDENTIFIER NL
 
-    step_opt ::=
-               | 'step' NUMBER
-
-The plan_ function itself is indicated by ``$$`` in the *python_statement*.
+Within each python_statement, the subordinate plan_ function is indicated by
+``$$``.
 The result of this function
 may be assigned to a python variable, but not a `pattern variable`_
 (``$variable``).
-Parameters from the ``taking`` clause may be passed to the plan_ function.
+Parameters from the rule's ``taking`` clause may be passed on to the
+subordinate plan_ functions.
 
-With multiple premises, the *plan_specs* without ``step`` clauses are
-executed first in the order that they appear.  Then the *plan_specs*
-with ``step`` clauses are executed in ascending sequence by the NUMBER in
-the ``step`` clause.  It is permissible for the NUMBER to be negative or a
-float.
+When multiple premises have python_statements in their *plan_specs*, the
+python_statements in plan_specs *without* a ``step`` clause are executed first
+in the order that they appear in this rule's ``when`` clause.
+
+Then the python_statements in plan_specs
+*with* a ``step`` clause are executed in ascending NUMBER sequence.
+It is permissible for the NUMBER to be negative or a float.
 
 If the ``as`` clause is used, the plan_ function is bound to the
-`pattern variable`_ as a python function.  This allows you to call the
-function (or not) as you please.  The parameters required are defined in
-the ``taking`` clause of the rule_ used to prove the premise.
+`pattern variable`_ as a python function, but not automatically executed.
+This allows you to call the function (or not) when and as many times as you
+please.
+The parameters
+required are defined in the ``taking`` clause of the rule_ used to prove the
+premise.
 
 With Clause
 ==============
 
 The ``with`` clause contains python
-statements for the plan_ produced by this rule_.  These python statements may
+statements to include in the plan_ produced by this rule_.  These python
+statements may
 include `pattern variables`_ whose values will be substituted into the
-statements when finalizing the final plan_.
+statements when finalizing the final top-level plan_.
 
 ::
 
@@ -173,23 +190,28 @@ statements when finalizing the final plan_.
                  {<python_statement> NL}
              DEINDENT
 
-These *python_statements* are included in the plan_ function after the
-calls to all of the subordinate plan_ functions from all of the *plan_specs*
-in the ``when`` clause.
+These *python_statements* are included in the rule's plan_ function after
+all of the automatic calls to the subordinate plan_ functions from the
+*plan_specs* in the ``when`` clause.
 
 If the ``with`` clause is omitted, but the ``when`` clause has *plan_specs*
-(excluding ``as`` specs), a plan_ function is still generated for this
-rule_ so that the subordinate plan_ functions may still be called.
+(excluding *as* specs), a plan_ function is still generated for this
+rule_ so that the subordinate plan_ functions are still called.
 
 The *python_statements* are not parsed.  They are simply scanned for ``$``
 `pattern variables`_ that don't occur in string literals or comments.
 The resulting plan_ will substitute the values bound to these variables_
 into the code.
 
-But note that this substitution isn't done until after the entire
-top-level goal has been proven.  So it is permissible to use
-unbound `pattern variables`_, so long as they will be bound to values by
-subsequent rules_.
+All `pattern variables`_ used in *python_statements* (both in the
+``plan_specs`` and the ``when`` clause) must be bound to a value.  This
+value is a constant value that never changes for this plan_.
+
+But note that this `pattern variable`_ substitution isn't done until
+*after* the entire top-level goal has been proven.  So it is permissible to use
+unbound `pattern variables`_, so long as they will become bound to values by
+subsequent rules_ required to prove higher-level goals before the top-level
+goal has been proven.
 
 .. _active: ../using_pyke.html#setting-up-each-case
 .. _backward-chaining: ../overview/rules/backward_chaining.html

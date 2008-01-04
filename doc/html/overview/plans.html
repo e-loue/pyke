@@ -70,9 +70,10 @@
 do automatic program generation.</p>
 <div class="section">
 <h3><a id="adding-plans-to-backward-chaining-rules" name="adding-plans-to-backward-chaining-rules">Adding Plans to Backward-Chaining Rules</a></h3>
-<p>The way this is done is by attaching python functions to the
-<a class="reference" href="rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="rules/index.html">rules</a>.  These functions are written at the end of each
-<a class="reference" href="rules/index.html">rule</a> in the <a class="reference" href="../krb_syntax/index.html">.krb file</a>.  They don't affect how the <a class="reference" href="rules/index.html">rules</a> run, but are
+<p>The way this is done is by attaching python functions to
+<a class="reference" href="rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="rules/index.html">rules</a>.  These functions are written in the <em>with</em>
+clause at the end of each <a class="reference" href="rules/index.html">rule</a> in the <a class="reference" href="../krb_syntax/index.html">.krb file</a>.  They don't affect how
+the <a class="reference" href="rules/index.html">rules</a> run to prove a goal, but are
 gathered up to form a call graph that is returned along with the <a class="reference" href="../krb_syntax/pattern.html">pattern
 variable</a> bindings that <a class="reference" href="../using_pyke.html#proving-goals">prove</a> the top-level goal.</p>
 </div>
@@ -144,6 +145,32 @@ bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two fo
 41      with
 42          print &quot;get&quot;, amount, &quot;from bank&quot;, $bank, &quot;acct&quot;, $who, $acct_type
 </pre>
+<div class="section">
+<h4><a id="how-the-plan-functions-are-generated-for-this-example" name="how-the-plan-functions-are-generated-for-this-example">How the Plan Functions are Generated for This Example</a></h4>
+<p>Each of these <a class="reference" href="rules/index.html">rules</a> will have a plan function generated for it.  These plan
+functions are generated with the same name as the <a class="reference" href="rules/index.html">rule</a> name.  Thus, the
+name of the generated python plan function for the first rule would be
+&quot;transfer1&quot;.</p>
+<p>The plan function generated for the first rule consists of two lines taken
+from lines 5 and 7 of this example.  The $$ in each of these lines will
+be expanded to the subordinate plan function returned from the proof of
+&quot;withdraw($from_acct)&quot; and &quot;deposit($to_acct)&quot; respectfully.  The generated
+plan function will be defined to take an &quot;amount&quot; parameter because of the
+<em>taking</em> clause on line 2.  This parameter is passed on to each of the
+subordinate plan functions in lines 5 and 7.</p>
+<p>The plan function generated for the &quot;withdraw&quot; rule on line 13 will have
+the single line taken from line 16 in the <em>with</em> clause.  The &quot;$who&quot; and
+&quot;$acct_type&quot; <a class="reference" href="../krb_syntax/pattern.html">pattern variables</a> will be expanded to constant values taken
+from the values bound to these <a class="reference" href="../krb_syntax/pattern.html">pattern variables</a> after the top-level
+(transfer) goal has been proven.</p>
+<p>Finally, the plan function generated for the &quot;transfer_ach1&quot; rule on line
+21 will have three lines: two from the <em>when</em> clause (lines 25 and 27)
+followed by one from the <em>with</em> clause (line 29).  These lines will be
+generated at the same indent level in the plan function even though they
+are at different indent levels in the <a class="reference" href="../krb_syntax/index.html">.krb file</a>.</p>
+<p>For more detailed information about the options available for plans in the
+<a class="reference" href="../krb_syntax/index.html">.krb file</a>, see <a class="reference" href="../krb_syntax/bc_rule.html">Bc_rule Syntax</a>.</p>
+</div>
 </div>
 <div class="section">
 <h3><a id="running-the-example" name="running-the-example">Running the Example</a></h3>
@@ -160,7 +187,23 @@ bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two fo
 </pre>
 </blockquote>
 <p><tt class="docutils literal"><span class="pre">plan1</span></tt> is now a program to transfer X amount
-from 'bruce', 'checking' to 'bruce', 'savings'.</p>
+from 'bruce', 'checking' to 'bruce', 'savings'.  Using the above rule names
+as function names, plan1 looks like this:</p>
+<pre class="literal-block">
+       +-----------+
+       | transfer1 |
+       +-----+-----+
+            / \
+      +----+   +----+
+      |             |
+      V             V
++----------+   +---------+
+| withdraw |   | deposit |
++----------+   +---------+
+</pre>
+<p>And can be called like a standard function, passing the parameters
+specified in the <em>taking</em> clause of the rules for the top-level goal
+(transfer):</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; plan1(100)
@@ -179,38 +222,81 @@ deposit 50 to bruce savings
 <p>Notice the strings: <tt class="docutils literal"><span class="pre">bruce</span></tt>, <tt class="docutils literal"><span class="pre">checking</span></tt> and <tt class="docutils literal"><span class="pre">savings</span></tt> in the output.
 These were specified as <a class="reference" href="../krb_syntax/pattern.html">pattern variables</a> in the code and are cooked
 into the plan along with the function call graph.</p>
-<p>Let's create another program:</p>
+<p>Let's create a second program:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; no_vars, plan2 = pyke.prove_1('plan_example', 'transfer',
-...                               (('my_other_bank', 'bruce', 'checking'),
-...                                ('bruce', 'savings')),
+...                               (('bruce', 'checking'),
+...                                ('my_other_bank', 'bruce', 'savings')),
 ...                               0)
 </pre>
 </blockquote>
 <p><tt class="docutils literal"><span class="pre">plan2</span></tt> is now a program to transfer X amount
-from 'my_other_bank', 'bruce', 'checking' to 'bruce', 'savings'.</p>
+from 'my_other_bank', 'bruce', 'checking' to 'bruce', 'savings'.
+Plan2 looks like this:</p>
+<pre class="literal-block">
+       +-----------+
+       | transfer2 |
+       +-----+-----+
+             |
+             V
+     +---------------+
+     | transfer_ach1 |
+     +-------+-------+
+            / \
+      +----+   +----+
+      |             |
+      V             V
++----------+   +---------+
+| withdraw |   | deposit |
++----------+   +---------+
+</pre>
+<p>And is run just like plan1, but produces different results:</p>
 <blockquote>
 <pre class="doctest-block">
-&gt;&gt;&gt; plan2(150)
-get 150 from bank my_other_bank acct bruce checking
-withdraw 150 from central_accts ach_recv_acct
-deposit 150 to bruce savings
+&gt;&gt;&gt; plan2(200)
+withdraw 200 from bruce checking
+deposit 200 to central_accts ach_send_acct
+send 200 to bank my_other_bank acct bruce savings
 </pre>
 </blockquote>
 <p>And the final use case:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; no_vars, plan3 = pyke.prove_1('plan_example', 'transfer',
-...                               (('bruce', 'checking'),
-...                                ('my_other_bank', 'bruce', 'savings')),
+...                               (('my_other_bank', 'bruce', 'checking'),
+...                                ('bruce', 'savings')),
 ...                               0)
-&gt;&gt;&gt; plan3(200)
-withdraw 200 from bruce checking
-deposit 200 to central_accts ach_send_acct
-send 200 to bank my_other_bank acct bruce savings
+&gt;&gt;&gt; plan3(150)
+get 150 from bank my_other_bank acct bruce checking
+withdraw 150 from central_accts ach_recv_acct
+deposit 150 to bruce savings
 </pre>
 </blockquote>
+<p>Plan3 looks like this:</p>
+<pre class="literal-block">
+              +-----------+
+              | transfer2 |
+              +-----+-----+
+                    |
+                    V
+            +---------------+
+            | transfer_ach2 |
+            +-------+-------+
+                   /|\
+      +-----------+ | +-----------+
+      |             |             |
+      V             V             V
++---------+   +----------+   +---------+
+| get_ach |   | withdraw |   | deposit |
++---------+   +----------+   +---------+
+</pre>
+<p>Note that the same <em>transfer2</em> function is calling two different functions
+(<em>transfer_ach1</em> and <em>transfer_ach2</em>) in plan2 and plan3.  This shows how
+different functions may be chosen based on the <a class="reference" href="rules/index.html">rule</a> inferencing.  Also
+note that after the generation of plan3, plan2 is still valid; both may
+still be called successfully, resulting in different calls from the initial
+<em>transfer2</em> function.</p>
 </div>
 <div class="section">
 <h3><a id="conclusion" name="conclusion">Conclusion</a></h3>
@@ -254,7 +340,7 @@ into named repositories called <em>knowledge bases</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Nov 08 2007.
+    Page last modified Fri, Jan 04 2008.
   </div>
 
 </body>
