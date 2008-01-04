@@ -1,0 +1,14 @@
+cd doc/html
+find . -name .svn -prune -o -print | cpio -oH ustar > /tmp/pyke.html.tar
+scp /tmp/pyke.html.tar mtnyogi@shell.sourceforge.net:
+ssh -l mtnyogi shell.sourceforge.net
+cd /home/groups/p/py/pyke
+mkdir htdocs.new
+chmod g+w htdocs.new
+cd htdocs.new
+tar xf ~/pyke.html.tar
+cd ..
+mv htdocs htdocs.old
+mv htdocs.new htdocs
+<test new site>
+rm -rf htdocs.old
