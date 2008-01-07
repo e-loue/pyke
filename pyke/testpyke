@@ -13,7 +13,7 @@ ERRORFILES="/tmp/testdocs.$$"
 > $ERRORFILES
 NUM_ERRORS=0
 
-for f in `find . -name '*.py'`
+for f in `find . -name '*.py' ! -name '*_[bf]c.py'`
 do
     echo Testing "$f"
     if ! python2.5 "$f"

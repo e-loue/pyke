@@ -46,7 +46,7 @@ class stopIterator(object):
 		self.iterator = None
 	raise StopIteration
 
-class rule_base(pyke.knowledge_base.knowledge_base):
+class rule_base(knowledge_base.knowledge_base):
     def __init__(self, name, parent = None, exclude_list = ()):
 	super(rule_base, self).__init__(name, rule_list, False)
 	if name in pyke.Rule_bases:
@@ -58,9 +58,18 @@ class rule_base(pyke.knowledge_base.knowledge_base):
 	self.fc_rules = []
 	self.parent = parent
 	self.exclude_set = frozenset(exclude_list)
+        self.rules = {}         # {name: rule}
     def add_fc_rule(self, fc_rule):
+        if fc_rule.name in self.rules:
+            raise AssertionError("%s rule_base: duplicate rule name: %s" %
+                                 (self.name, fc_rule.name))
+        self.rules[fc_rule.name] = fc_rule
 	self.fc_rules.append(fc_rule)
     def add_bc_rule(self, bc_rule):
+        if bc_rule.name in self.rules:
+            raise AssertionError("%s rule_base: duplicate rule name: %s" %
+                                 (self.name, bc_rule.name))
+        self.rules[bc_rule.name] = bc_rule
 	self.get_entity_list(bc_rule.goal_name).add_bc_rule(bc_rule)
     def init2(self):
 	if not self.initialized:
@@ -121,7 +130,7 @@ class rule_base(pyke.knowledge_base.knowledge_base):
 			   lambda rl: rl.prove(bindings, pat_context, patterns),
 			   self.gen_rule_lists_for(goal_name))))
 
-class rule_list(pyke.knowledge_base.knowledge_entity_list):
+class rule_list(knowledge_base.knowledge_entity_list):
     def __init__(self, name):
 	self.name = name
 	self.bc_rules = []
