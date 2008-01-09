@@ -26,6 +26,7 @@ import types
 import os
 import os.path
 import imp
+import re
 
 from pyke import contexts
 
@@ -61,8 +62,12 @@ def reset():
 def load(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb',
          load_fc = True, load_bc = True):
     global _Load_done
-    assert not _Load_done, "pyke.load may only be called once"
+    if _Load_done: raise AssertionError("pyke.load may only be called once")
     _Load_done = True
+    if not Name_test.match(gen_root_dir):
+        raise ValueError("pyke.load: "
+                         "gen_root_dir (%s) must be a legal python identifier" %
+                             (gen_root_dir,))
     if isinstance(paths, types.StringTypes): paths = (paths,)
     compile_list = _get_compile_list(paths, gen_dir, gen_root_dir)
     if compile_list:
@@ -72,18 +77,79 @@ def load(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb',
         if status != 0:
             raise SyntaxError("Errors encountered trying to compile")
         _check_list(compile_list, gen_dir, gen_root_dir)
-    _load_path(paths, gen_dir, gen_root_dir, load_fc, load_bc)
+    _load_paths(paths, gen_dir, gen_root_dir, load_fc, load_bc)
     init()
 
 def _raise_exc(exc): raise exc
 
-def _get_base_path(filename, gen_dir, gen_root_dir):
-    if filename.startswith('.' + os.path.sep): filename = filename[2:]
-    return os.path.join(gen_dir, gen_root_dir, filename[:-4])
+def _make_package_dirs(base_dir, package_path):
+    ''' Creates directories in package_path, relative to base_dir, and makes
+        sure that each one has an __init__.py file in it.
+
+        Package_path is a sequence of path components.
+
+        Returns the full path (base_dir/package_path)
+    '''
+    if len(package_path) > 1: _make_package_dirs(base_dir, package_path[:-1])
+    full_package_path = os.path.join(base_dir, os.path.join(*package_path))
+    if not os.path.exists(full_package_path): os.mkdir(full_package_path)
+    init_file_path = os.path.join(full_package_path, '__init__.py')
+    if not os.path.exists(init_file_path): open(init_file_path, 'w').close()
+    return full_package_path
+
+Name_test = re.compile(r'[a-zA-Z_][a-zA-Z0-9_]*$')
+Bad_name_char = re.compile('[^a-zA-Z0-9_]')
+
+def _doctor_names(path):
+    ''' Convert all path components into legal path names.
+        Return converted result.
+    '''
+    def fix_component(c):
+        if c[0] in '0123456789': c = '_' + c
+        return Bad_name_char.sub('_', c)
+    if not path: return []
+    return [fix_component(component) for component in path.split(os.path.sep)]
+
+def _get_base_path(filename, gen_dir, gen_root_dir, makedirs = False):
+    if makedirs and not os.path.exists(gen_dir): os.makedirs(gen_dir)
+    fn_dirname, fn_name = os.path.split(filename)
+    fndrive, fnpath = os.path.splitdrive(os.path.abspath(fn_dirname))
+    # convert "c:\a\b\c" to "\c_drive\a\b\c"
+    if fndrive:
+        fn_boguspath = '%s%s_drive%s' % (os.path.sep, fndrive, fnpath)
+    else:
+        fn_boguspath = fnpath
+    #print "fn_boguspath:", fn_boguspath
+    gendrive, genpath = os.path.splitdrive(os.path.abspath(gen_dir))
+    if gendrive:
+        gen_boguspath = '%s%s_drive%s' % (os.path.sep, gendrive, genpath)
+    else:
+        gen_boguspath = genpath
+    #print "gen_boguspath:", gen_boguspath
+    # find commonprefix to last common path component
+    # unfortunately, os.path.commonprefix(['a/ba/c', 'a/bb/d']) gives 'a/b'!
+    commonprefix = os.path.commonprefix([fn_boguspath, gen_boguspath])
+    assert commonprefix and commonprefix[0] == os.path.sep
+    #print "commonprefix:", commonprefix
+    if commonprefix == fn_boguspath:
+        skip_len = len(commonprefix)
+    elif commonprefix == gen_boguspath: 
+        skip_len = len(commonprefix) + 1
+    else:
+        skip_len = commonprefix.rindex(os.path.sep) + 1
+    fn_unique_tail = fn_boguspath[skip_len:]
+    #print "fn_unique_tail:", fn_unique_tail
+    assert not fn_unique_tail or fn_unique_tail[0] != os.path.sep
+    package_list = [gen_root_dir] + _doctor_names(fn_unique_tail)
+    if makedirs:
+        path = _make_package_dirs(gen_dir, package_list)
+    else:
+        path = os.path.join(gen_dir, *package_list)
+    return os.path.join(path, fn_name[:-4]), package_list
 
 def _needs_compiling(filename, gen_dir, gen_root_dir):
     source_mtime = os.stat(filename).st_mtime
-    base = _get_base_path(filename, gen_dir, gen_root_dir)
+    base, ignore = _get_base_path(filename, gen_dir, gen_root_dir)
     try:
         ok = os.stat(base + '_fc.py').st_mtime > source_mtime
     except OSError:
@@ -111,7 +177,9 @@ def _check_list(compile_list, gen_dir, gen_root_dir):
         if _needs_compiling(filename, gen_dir, gen_root_dir):
             raise AssertionError("%s didn't compile correctly" % filename)
 
-def _load_path(paths, gen_dir, gen_root_dir, load_fc, load_bc):
+def _load_paths(paths, gen_dir, gen_root_dir, load_fc, load_bc):
+    if ('' if gen_dir == '.' else os.path.abspath(gen_dir)) not in sys.path:
+        sys.path.append(os.path.abspath(gen_dir))
     for path in paths:
         for dirpath, dirnames, filenames in os.walk(path, onerror=_raise_exc):
             for filename in filenames:
@@ -120,24 +188,18 @@ def _load_path(paths, gen_dir, gen_root_dir, load_fc, load_bc):
                                gen_dir, gen_root_dir, load_fc, load_bc)
 
 def _load_file(filename, gen_dir, gen_root_dir, load_fc, load_bc):
-    base = _get_base_path(filename, gen_dir, gen_root_dir)
-    path, basename = os.path.split(base)
-    if path.startswith('.' + os.path.sep): path = path[2:]
-    if path == '.' or path == '':
-        path = ''
-        package_path = ()
-    else:
-        package_path = tuple(path.split(os.path.sep))
+    base, package_list = _get_base_path(filename, gen_dir, gen_root_dir)
+    base_modulename = os.path.basename(base)
     if load_fc:
         try:
             os.stat(base + '_fc.py')
-            _import(package_path + (basename + '_fc',))
+            _import(package_list + [base_modulename + '_fc'])
         except OSError:
             pass
     if load_bc:
         try:
             os.stat(base + '_bc.py')
-            _import(package_path + (basename + '_bc',))
+            _import(package_list + [base_modulename + '_bc'])
         except OSError:
             pass
 
@@ -166,6 +228,7 @@ __builtin__.__import__ = trace_import
 def _import(modulepath):
     ''' modulepath does not include .py
     '''
+    #print "_import:", modulepath
     mod = __import__('.'.join(modulepath))
     for comp in modulepath[1:]:
         mod = getattr(mod, comp)

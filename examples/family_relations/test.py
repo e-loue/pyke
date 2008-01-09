@@ -36,6 +36,12 @@ import family
 #import example_bc
 import pyke
 
+#import os.path
+#pyke.load(os.path.abspath('.'), '/tmp')
+#pyke.load(os.path.abspath('.'), 'subdir')
+#pyke.load(os.path.abspath('.'))
+#pyke.load('.', 'subdir')
+#pyke.load('.', '/tmp')
 pyke.load('.')
 
 # To be able to pickle plans.  (Not needed to unpickle).
