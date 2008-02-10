@@ -94,17 +94,18 @@ def goal(rb_name, rule_name, (goal, goal_name, pattern_args, using),
             if len(using) == 1:
                 def_head = using[0]
             else:
-                def_head = splice(using[0],
-                                  (('INDENT', 4),),
-                                  tuple(using[1:]),
-                                  'POPINDENT')
-        plan_lines = splice(
-                       "",
-                       def_head,
-                       (('INDENT', 2),),
-                       pred_plan_lines,
-                       python_lines,
-                       'POPINDENT')
+                def_head = (using[0],
+                            ('INDENT', 4),
+                            tuple(using[1:]),
+                            "POPINDENT",
+                           )
+        plan_lines = ("",
+                      def_head,
+                      ('INDENT', 2),
+                      pred_plan_lines,
+                      python_lines,
+                      "POPINDENT",
+                     )
     goal_decl_lines = (
         "",
         "bc_rule.bc_rule('%s', This_rule_base, '%s'," % (rule_name, goal_name),
@@ -113,6 +114,59 @@ def goal(rb_name, rule_name, (goal, goal_name, pattern_args, using),
     ) + list_format(pattern_args, "(", "),")
     return plan_lines, goal_fn_head, goal_fn_tail, goal_decl_lines
 
+def add_start(l, start):
+    '''
+        >>> add_start(('a', 'b', 'c'), '^')
+        (0, ['^a', 'b', 'c'])
+        >>> add_start(('POPINDENT', ('INDENT', 2), ((('b',), 'c'),),), '^')
+        (2, ['POPINDENT', ('INDENT', 2), ((('^b',), 'c'),)])
+        >>> add_start((('POPINDENT', ('INDENT', 2)), ((('b',), 'c'),),), '^')
+        (1, [('POPINDENT', ('INDENT', 2)), ((('^b',), 'c'),)])
+        >>> add_start(('POPINDENT', ('INDENT', 2)), '^')
+        (0, ['^', 'POPINDENT', ('INDENT', 2)])
+    '''
+    ans = list(l)
+    for first, x in enumerate(ans):
+        if x != 'POPINDENT' and \
+           not (isinstance(x, (tuple, list)) and x[0] == 'INDENT'):
+            if not isinstance(x, (tuple, list)):
+                ans[first] = start + ans[first]
+                return first, ans
+            f, x2 = add_start(x, start)
+            if len(x) == len(x2):
+                ans[first] = tuple(x2)
+                return first, ans
+    first = 0
+    ans.insert(first, start)
+    return first, ans
+
+def add_end(l, end):
+    '''
+        >>> add_end(('a', 'b', 'c'), '^')
+        (2, ['a', 'b', 'c^'])
+        >>> add_end(((((('b',), 'c'),),), 'POPINDENT', ('INDENT', 2)), '^')
+        (0, [(((('b',), 'c^'),),), 'POPINDENT', ('INDENT', 2)])
+        >>> add_end((((('b',), 'c'),), ('POPINDENT', ('INDENT', 2))), '^')
+        (0, [((('b',), 'c^'),), ('POPINDENT', ('INDENT', 2))])
+        >>> add_end(('POPINDENT', ('INDENT', 2)), '^')
+        (2, ['POPINDENT', ('INDENT', 2), '^'])
+    '''
+    ans = list(l)
+    for last in range(len(ans) - 1, -1, -1):
+        x = ans[last]
+        if x != 'POPINDENT' and \
+           not (isinstance(x, (tuple, list)) and x[0] == 'INDENT'):
+            if not isinstance(x, (tuple, list)):
+                ans[last] += end
+                return last, ans
+            e, x2 = add_end(x, end)
+            if len(x) == len(x2):
+                ans[last] = tuple(x2)
+                return last, ans
+    last = len(ans)
+    ans.insert(last, end)
+    return last, ans
+
 def add_brackets(l, start = '(', end = ')'):
     '''
         >>> add_brackets(('a', 'b', 'c'))
@@ -120,25 +174,9 @@ def add_brackets(l, start = '(', end = ')'):
         >>> add_brackets(('(a', ('INDENT', 1), 'b', 'c)', 'POPINDENT'))
         ('((a', ('INDENT', 1), ('INDENT', 1), 'b', 'c))', 'POPINDENT', 'POPINDENT')
     '''
-    if not l: return (start + end,)
-    ans = list(l)
-    for first, x in enumerate(ans):
-        if x != 'POPINDENT' and \
-           not (isinstance(x, (tuple, list)) and x[0] == 'INDENT'):
-            ans[first] = start + ans[first]
-            break
-    else:
-        first = 0
-        ans.insert(first, start)
-    for last in range(len(ans) - 1, -1, -1):
-        x = ans[last]
-        if x != 'POPINDENT' and \
-           not (isinstance(x, (tuple, list)) and x[0] == 'INDENT'):
-            ans[last] += end
-            break
-    else:
-        last = len(ans)
-        ans.insert(last, end)
+    if not l: return start + end
+    first, ans = add_start(l, start)
+    last, ans = add_end(ans, end)
     if last > first:
         ans.insert(last + 1, "POPINDENT")
         ans.insert(first + 1, ("INDENT", 1))
@@ -167,13 +205,6 @@ def merge_patterns(patterns, pattern_list):
         pat_num, pattern_list = merge_pattern(pat, pattern_list)
         pat_nums.append(pat_num)
     return tuple(pat_nums), pattern_list
-
-def splice(*args):
-    ans = []
-    for arg in args:
-        if isinstance(arg, (tuple, list)): ans.extend(arg)
-        else: ans.append(arg)
-    return tuple(ans)
 
 def test():
     import doctest
