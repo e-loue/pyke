@@ -120,18 +120,19 @@ def compile(gen_dir, gen_root_pkg, filename):
                 pyke.prove_1('compiler', 'compile', (rb_name, ast), 3)
         if fc_lines:
             sys.stderr.write("writing %s\n" % fc_path)
-            write_file(fc_lines, fc_path)
+            write_file(fc_lines + ("Krb_filename = '%s'" % filename,), fc_path)
         elif os.path.lexists(fc_path): os.remove(fc_path)
         if bc_lines:
             sys.stderr.write("writing %s\n" % bc_path)
-            write_file(bc_lines, bc_path)
+            write_file(bc_lines + ("Krb_filename = '%s'" % filename,), bc_path)
         elif os.path.lexists(bc_path): os.remove(bc_path)
         if plan_lines:
             sys.stderr.write("writing %s\n" % plan_path)
             #sys.stderr.write("plan_lines:\n")
             #for line in plan_lines:
             #    sys.stderr.write("  " + repr(line) + "\n")
-            write_file(plan_lines, plan_path)
+            write_file(plan_lines + ("Krb_filename = '%s'" % filename,),
+                       plan_path)
         elif os.path.lexists(plan_path): os.remove(plan_path)
         #sys.stderr.write("done!\n")
     except:
@@ -143,9 +144,15 @@ def compile(gen_dir, gen_root_pkg, filename):
 def write_file(lines, filename):
     with contextlib.closing(file(filename, 'w')) as f:
         indents = [0]
-        write_file2(lines, f, indents)
+        lineno_map = []
+        write_file2(lines, f, indents, lineno_map, 0)
+        if lineno_map:
+            f.write("Krb_lineno_map = (\n")
+            for map_entry in lineno_map:
+                f.write("    %s,\n" % str(map_entry))
+            f.write(")\n")
 
-def write_file2(lines, f, indents):
+def write_file2(lines, f, indents, lineno_map, lineno, starting_lineno = None):
     for line in lines:
         if line == 'POPINDENT':
             assert len(indents) > 1
@@ -153,10 +160,26 @@ def write_file2(lines, f, indents):
         elif isinstance(line, tuple):
             if len(line) == 2 and line[0] == 'INDENT':
                 indents.append(indents[-1] + line[1])
+            elif len(line) == 2 and line[0] == 'STARTING_LINENO':
+                assert starting_lineno is None, \
+                       "missing ENDING_LINENO for STARTING_LINENO %d" % \
+                           starting_lineno[1]
+                starting_lineno = line[1], lineno + 1
+            elif len(line) == 2 and line[0] == 'ENDING_LINENO':
+                assert starting_lineno is not None, \
+                       "missing STARTING_LINENO for ENDING_LINENO %d" % \
+                           line[1]
+                lineno_map.append(((starting_lineno[1], lineno),
+                                   (starting_lineno[0], line[1])))
+                starting_lineno = None
             else:
-                write_file2(line, f, indents)
+                lineno, starting_lineno = \
+                    write_file2(line, f, indents, lineno_map, lineno,
+                                starting_lineno)
         else:
             f.write(' ' * indents[-1] + line + '\n')
+            lineno += 1
+    return lineno, starting_lineno
 
 def main():
     if len(sys.argv) >= 4:

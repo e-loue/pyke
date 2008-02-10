@@ -112,32 +112,32 @@ def p_foreach(p):
 def p_fc_premise(p):
     ''' fc_premise : IDENTIFIER_TOK '.' IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK nls
     '''
-    p[0] = ('fc_premise', p[1], p[3], tuple(p[5]))
+    p[0] = ('fc_premise', p[1], p[3], tuple(p[5]), p.lineno(1), p.lineno(6))
 
 def p_python_eq(p):
     ''' python_premise : pattern start_python_code '=' python_rule_code nls
     '''
-    p[0] = ('python_eq', p[1], p[4])
+    p[0] = ('python_eq', p[1], p[4], p.linespan(1)[0], p.linespan(4)[1])
 
 def p_python_in(p):
     ''' python_premise : pattern start_python_code IN_TOK python_rule_code nls
     '''
-    p[0] = ('python_in', p[1], p[4])
+    p[0] = ('python_in', p[1], p[4], p.linespan(1)[0], p.linespan(4)[1])
 
 def p_python_check(p):
     ''' python_premise : start_python_code CHECK_TOK python_rule_code nls
     '''
-    p[0] = ('python_check', p[3])
+    p[0] = ('python_check', p[3], p.lineno(2), p.linespan(3)[1])
 
 def p_assertion(p):
     ''' assertion : IDENTIFIER_TOK '.' IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK NL_TOK
     '''
-    p[0] = ('assert', p[1], p[3], tuple(p[5]))
+    p[0] = ('assert', p[1], p[3], tuple(p[5]), p.lineno(1), p.lineno(6))
 
 def p_python_assertion(p):
     ''' assertion : PYTHON_TOK ':' nls start_python_assertion INDENT_TOK python_rule_code nls DEINDENT_TOK
     '''
-    p[0] = ('python_assertion', p[4])
+    p[0] = ('python_assertion', p[4], p.lineno(1), p.linespan(6)[1])
 
 def p_bc_rule(p):
     ''' bc_rule : IDENTIFIER_TOK ':' NL_TOK INDENT_TOK USE_TOK goal when_opt with_opt DEINDENT_TOK
@@ -157,7 +157,7 @@ def p_bc_rules_section(p):
 def p_goal(p):
     ''' goal : IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK taking_opt nls
     '''
-    p[0] = ('goal', p[1], tuple(p[3]), p[5])
+    p[0] = ('goal', p[1], tuple(p[3]), p[5], p.lineno(1), p.lineno(4))
 
 def p_name_sym(p):
     ''' name : IDENTIFIER_TOK
@@ -172,22 +172,26 @@ def p_name_pat_var(p):
 def p_bc_premise1(p):
     ''' bc_premise : name LP_TOK patterns_opt RP_TOK plan_spec
     '''
-    p[0] = ('bc_premise', False, None, p[1], tuple(p[3]), p[5])
+    p[0] = ('bc_premise', False, None, p[1], tuple(p[3]), p[5],
+            p.linespan(1)[0], p.lineno(4))
 
 def p_bc_premise2(p):
     ''' bc_premise : '!' name LP_TOK patterns_opt RP_TOK plan_spec
     '''
-    p[0] = ('bc_premise', True, None, p[2], tuple(p[4]), p[6])
+    p[0] = ('bc_premise', True, None, p[2], tuple(p[4]), p[6],
+            p.lineno(1), p.lineno(5))
 
 def p_bc_premise3(p):
     ''' bc_premise : name '.' name LP_TOK patterns_opt RP_TOK plan_spec
     '''
-    p[0] = ('bc_premise', False, p[1], p[3], tuple(p[5]), p[7])
+    p[0] = ('bc_premise', False, p[1], p[3], tuple(p[5]), p[7],
+            p.linespan(1)[0], p.lineno(6))
 
 def p_bc_premise4(p):
     ''' bc_premise : '!' name '.' name LP_TOK patterns_opt RP_TOK plan_spec
     '''
-    p[0] = ('bc_premise', True, p[2], p[4], tuple(p[6]), p[8])
+    p[0] = ('bc_premise', True, p[2], p[4], tuple(p[6]), p[8],
+            p.lineno(1), p.lineno(7))
 
 def p_as(p):
     ''' plan_spec : AS_TOK PATTERN_VAR_TOK nls
@@ -385,7 +389,8 @@ def parse(filename, debug = 0):
         scanner.lexer.filename = filename
         scanner.debug = debug
         #parser.restart()
-        return parser.parse(f.read(), lexer=scanner.lexer, debug=debug)
+        return parser.parse(f.read(), lexer=scanner.lexer, tracking=True,
+                            debug=debug)
 
 def run(filename):
     print "answer is", parse(filename)

@@ -135,15 +135,18 @@ fc_premises1:
 
 fc_premise:
     use fc_premise($rule_name, $clause_num, $next_clause_num,
-                   (fc_premise, $kb_name, $entity_name, $arg_patterns),
+                   (fc_premise, $kb_name, $entity_name, $arg_patterns,
+                       $start_lineno, $end_lineno),
                    $fn_head, ('POPINDENT',), $decl_lines,
                    $patterns_in, $patterns_in)
     when
         $fn_head = ("for dummy in (None,) if index == %d else \\" % $clause_num,
                     ('INDENT', 2),
                     ('INDENT', 11),
+                    ('STARTING_LINENO', $start_lineno),
                     "lookup('%s', '%s', context, rule.foreach_patterns(%d)):" %
-                        ($kb_name, $entity_name, $clause_num),
+                            ($kb_name, $entity_name, $clause_num),
+                    ('ENDING_LINENO', $end_lineno),
                     'POPINDENT',)
         $next_clause_num = $clause_num + 1
         $decl_lines = ("('%s', '%s'," % ($kb_name, $entity_name),
@@ -173,23 +176,30 @@ assertions_n:
         !assertions($rest_assertions, $fn_lines2, $patterns_out1, $patterns_out)
 
 assertion:
-    use assertion(('assert', $kb_name, $entity_name, $patterns),
+    use assertion(('assert', $kb_name, $entity_name, $patterns,
+                       $start_lineno, $end_lineno),
                   $fn_lines, $patterns_in, $patterns_out)
     when
         ($pat_nums, $patterns_out) = \
             helpers.merge_patterns($patterns, $patterns_in)
-        $fn_lines = ("assert_('%s', '%s'," % ($kb_name, $entity_name),
+        $fn_lines = (('STARTING_LINENO', $start_lineno),
+                     "assert_('%s', '%s'," % ($kb_name, $entity_name),
                      ('INDENT', 8),
                      helpers.list_format(
                        ("rule.pattern(%d).as_data(context)" % pat_num
                         for pat_num in $pat_nums),
-                       '(', '))'),
+                       '(', ')),'),
+                     ('ENDING_LINENO', $end_lineno),
                      "POPINDENT",
                     )
 
 python_assertion:
-    use assertion((python_assertion, ($python_code, $_)),
-                  $python_code, $patterns_in, $patterns_in)
+    use assertion((python_assertion, ($python_code, $_),
+                      $start_lineno, $end_lineno),
+                  (('STARTING_LINENO', $start_lineno),
+                   $python_code,
+                   ('ENDING_LINENO', $end_lineno)),
+                  $patterns_in, $patterns_in)
 
 bc_rules0:
     use bc_rules($_, (), (), (), ())
@@ -275,7 +285,8 @@ bc_premises1_n:
 bc_premise:
     use bc_premise($rb_name, $rule_name, $clause_num,
                    (bc_premise, $required, $kb_name, $entity_name,
-                                  $arg_patterns, $plan_spec),
+                                  $arg_patterns, $plan_spec,
+                                  $start_lineno, $end_lineno),
                    $patterns_in, $patterns_out,
                    $plan_var_names_in, $plan_var_names_out,
                    $plan_lines, $fn_head, $fn_tail)
@@ -283,7 +294,8 @@ bc_premise:
         $kb_name2 = $kb_name or "rule.rule_base.root_name"
         ($pat_nums, $patterns_out1) = \
             helpers.merge_patterns($arg_patterns, $patterns_in)
-        $fn_head1 = ("for x_%(clause_num)d in "
+        $fn_head1 = (('STARTING_LINENO', $start_lineno),
+                     "for x_%(clause_num)d in "
                        "prove(%(kb_name)s, %(entity_name)s, context," %
                          {'clause_num': $clause_num,
                           'kb_name': $kb_name2,
@@ -302,7 +314,7 @@ bc_premise:
                         $fn_head3, $fn_tail3, $plan_lines, $plan_vars_needed)
         ($_, $plan_var_names_out) = helpers.merge_patterns($plan_vars_needed,
                                                            $plan_var_names_in)
-        $fn_head = $fn_head2 + $fn_head3
+        $fn_head = $fn_head2 + $fn_head3 + (('ENDING_LINENO', $end_lineno),)
         $fn_tail = $fn_tail3 + $fn_tail2
 
 no_plan:
@@ -406,7 +418,8 @@ bc_python_premise:
 
 python_eq:
     use python_premise($clause_num,
-                       (python_eq, $pattern, ($python_code, $_)),
+                       (python_eq, $pattern, ($python_code, $_),
+                        $start_lineno, $end_lineno),
                        $patterns_in, $patterns_out, $fn_head, $fn_tail)
     when
         ($pat_num, $patterns_out) = \
@@ -417,7 +430,9 @@ python_eq:
                        $pat_num,
                     ('INDENT', 2),
                     ('INDENT', 5),
+                    ('STARTING_LINENO', $start_lineno),
                     $python_code2,
+                    ('ENDING_LINENO', $end_lineno),
                     "POPINDENT",
                     "context.end_save_all_undo()",
                    )
@@ -427,7 +442,8 @@ python_eq:
 
 python_in:
     use python_premise($clause_num,
-                       (python_in, $pattern, ($python_code, $_)),
+                       (python_in, $pattern, ($python_code, $_),
+                        $start_lineno, $end_lineno),
                        $patterns_in, $patterns_out, $fn_head, $fn_tail)
     when
         ($pat_num, $patterns_out) = \
@@ -436,7 +452,9 @@ python_in:
         $fn_head = ("for python_ans in \\",
                     ('INDENT', 2),
                     ('INDENT', 2),
+                    ('STARTING_LINENO', $start_lineno),
                     $python_code2,
+                    ('ENDING_LINENO', $end_lineno),
                     'POPINDENT',
                     "mark%d = context.mark(True)" % $clause_num,
                     "if rule.pattern(%d).match_data(context, context, "
@@ -451,13 +469,18 @@ python_in:
 
 python_check:
     use python_premise($clause_num,
-                       (python_check, ($python_code, $_)),
+                       (python_check, ($python_code, $_),
+                        $start_lineno, $end_lineno),
                        $patterns_in, $patterns_in,
                        $fn_head, ('POPINDENT',))
     when
         $python_code2 = $python_code[:-1] + ($python_code[-1] + ':',)
-        $fn_head = ("if " + $python_code2[0].strip(),
+        $fn_head = (('STARTING_LINENO', $start_lineno),
+                    "if " + $python_code2[0].strip(),
+                    ('INDENT', 3),
                     $python_code2[1:],
+                    'POPINDENT',
+                    ('ENDING_LINENO', $end_lineno),
                     ('INDENT', 2),
                    )
 

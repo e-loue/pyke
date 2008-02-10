@@ -7,15 +7,19 @@ parent : None
 
 fc_rule: ('fc_rule', name, (fc_premise), (assertion))
 
-fc_premise : ('fc_premise', kb_name, entity_name, (pattern))
+fc_premise : ('fc_premise', kb_name, entity_name, (pattern),
+              starting_lineno, ending_lineno)
            | python_premise
 
-assertion : ('assert', kb_name, entity_name, (pattern))
-          | ('python_assertion', python_code)
+assertion : ('assert', kb_name, entity_name, (pattern),
+             starting_lineno, ending_lineno)
+          | ('python_assertion', python_code, starting_lineno, ending_lineno)
 
-python_premise : ('python_eq', pattern, python_code)
-               | ('python_in', pattern, python_code)
-               | ('python_check', python_code)
+python_premise : ('python_eq', pattern, python_code,
+                  starting_lineno, ending_lineno)
+               | ('python_in', pattern, python_code,
+                  starting_lineno, ending_lineno)
+               | ('python_check', python_code, starting_lineno, ending_lineno)
 
 counting : ('counting', quoted_pattern_var_name,
                         <from>python_code_opt, <by>python_code_opt)
@@ -23,11 +27,12 @@ counting : ('counting', quoted_pattern_var_name,
 bc_rule: ('bc_rule', name, goal, (bc_premise), (python_code),
                      (plan_vars_needed))
 
-goal : ('goal', <entity_name>IDENTIFIER, (pattern), <taking>(python_line))
+goal : ('goal', <entity_name>IDENTIFIER, (pattern), <taking>(python_line),
+        starting_lineno, ending_lineno)
 
 bc_premise : ('bc_premise', <required>_bool,
                             <kb>name_opt, <entity>name, (pattern),
-                            plan_spec_opt)
+                            plan_spec_opt, starting_lineno, ending_lineno)
            | python_premise
 
 name : quoted_STRING

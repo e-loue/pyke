@@ -27,7 +27,6 @@ def fc_head(rb_name):
         "",
         "from pyke import contexts, pattern, fc_rule, rule_base",
         "from pyke import lookup, assert_",
-        "",
     )
 
 def bc_head(rb_name):
@@ -39,7 +38,8 @@ def bc_head(rb_name):
         "from pyke import prove",
     )
 
-def goal(rb_name, rule_name, (goal, goal_name, pattern_args, using),
+def goal(rb_name, rule_name,
+         (goal, goal_name, pattern_args, using, start_lineno, end_lineno),
          pred_plan_lines, python_lines):
     # returns plan_lines, goal_fn_head, goal_fn_tail, goal_decl_lines
     assert goal == 'goal'
@@ -53,6 +53,7 @@ def goal(rb_name, rule_name, (goal, goal_name, pattern_args, using),
         "context = contexts.bc_context(rule)",
         "try:",
         ("INDENT", 2),
+        ("STARTING_LINENO", start_lineno),
         "if all(itertools.imap(lambda pat, arg:",
         ("INDENT", 2),
         ("INDENT", 20),
@@ -64,6 +65,7 @@ def goal(rb_name, rule_name, (goal, goal_name, pattern_args, using),
         "POPINDENT",
         "patterns,",
         "arg_patterns)):",
+        ("ENDING_LINENO", end_lineno),
         "POPINDENT",
     )
     goal_fn_tail = (
