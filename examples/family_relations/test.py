@@ -37,12 +37,14 @@ import family
 import pyke
 
 #import os.path
-#pyke.load(os.path.abspath('.'), '/tmp')
-#pyke.load(os.path.abspath('.'), 'subdir')
-#pyke.load(os.path.abspath('.'))
-#pyke.load('.', 'subdir')
-#pyke.load('.', '/tmp')
-pyke.load('.')
+#engine = pyke.engine(os.path.abspath('.'), '/tmp')
+#engine = pyke.engine(os.path.abspath('.'), 'subdir')
+#engine = pyke.engine(os.path.abspath('.'))
+#engine = pyke.engine('.', 'subdir')
+#engine = pyke.engine('.', '/tmp')
+engine = pyke.engine('.')
+
+family.init(engine)
 
 # To be able to pickle plans.  (Not needed to unpickle).
 copy_reg.pickle(functools.partial,
@@ -50,9 +52,9 @@ copy_reg.pickle(functools.partial,
 
 def test():
     global plan
-    pyke.reset()
+    engine.reset()
 
-    #family = pyke.get_kb('family')
+    #family = engine.get_kb('family')
 
     #print "family: universal_facts:"
     #family.dump_universal_facts()
@@ -62,7 +64,7 @@ def test():
     #family.dump_specific_facts()
     #print
 
-    pyke.activate('example')
+    engine.activate('example')
 
     #print "family: universal_facts:"
     #family.dump_universal_facts()
@@ -74,7 +76,7 @@ def test():
 
     test_pickle = False
     print "doing proof"
-    for (ans,), plan in pyke.prove_n('example', 'how_related', ('bruce',), 1):
+    for (ans,), plan in engine.prove_n('example', 'how_related', ('bruce',), 1):
 	#print "prove:", ans
         print "bruce,", ans
 	#print "plan:", plan

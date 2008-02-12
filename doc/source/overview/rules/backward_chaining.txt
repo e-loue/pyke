@@ -98,8 +98,8 @@ How Backward-Chaining Rules are Run
 
 These rules_ are not used until you ask pyke to prove_ a goal.
 
-The easiest way
-to do this is with pyke.prove_1_ or pyke.prove_n_.  Prove_1_ only
+The easiest way to do this is with
+*some_engine*.prove_1_ or *some_engine*.prove_n_.  Prove_1_ only
 returns the first proof found and then stops (or raises pyke.CanNotProve).
 Prove_n_ is a generator that generates all possible proofs (which, in
 some cases, might be infinite).  In both cases, you pass a tuple of
@@ -115,13 +115,13 @@ Running the Example
 ========================
 
     >>> import pyke
-    >>> pyke.load('examples')
-    >>> pyke.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
-    >>> pyke.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
-    >>> pyke.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
-    >>> pyke.activate('bc_example')
-    >>> for vars, no_plan in pyke.prove_n('bc_example', 'child_parent',
-    ...                                   ('michael',), 4):
+    >>> engine = pyke.engine('examples')
+    >>> engine.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
+    >>> engine.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
+    >>> engine.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
+    >>> engine.activate('bc_example')
+    >>> for vars, no_plan in engine.prove_n('bc_example', 'child_parent',
+    ...                                     ('michael',), 4):
     ...     print vars
     ('bruce', (), 'son', 'father')
     ('marilyn', (), 'son', 'mother')

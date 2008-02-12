@@ -1,5 +1,3 @@
-- create an alpha release
-- indent body "prove(...)" in "for x_%d in prove(...)" by 2 more spaces
 - add ability to use pattern variables for kb_name and fact_name in assertions
 - add python if statements to bc_predicates
 - add ability to use normal python variables

@@ -132,7 +132,7 @@ relationships.</p>
 <p>The <a class="reference" href="index.html">rules</a> are run in order.  First the <tt class="docutils literal"><span class="pre">son_of</span></tt> <a class="reference" href="index.html">rule</a> is run.  For each
 match of <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a> to the <a class="reference" href="../../krb_syntax/pattern.html">pattern</a> <tt class="docutils literal"><span class="pre">family.son_of($son,</span> <span class="pre">$father,</span> <span class="pre">$mother)</span></tt>
 it <a class="reference" href="../../using_pyke.html#setting-up-each-case">asserts</a> two additional <tt class="docutils literal"><span class="pre">family.child_parent</span></tt> <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a>.</p>
-<p>Note that <tt class="docutils literal"><span class="pre">$son</span></tt>, <tt class="docutils literal"><span class="pre">$father</span></tt> and <tt class="docutils literal"><span class="pre">$mother</span></tt> are <a class="reference" href="../../krb_syntax/pattern.html">pattern variables</a>.
+<p>Note that <tt class="docutils literal"><span class="pre">$son</span></tt>, <tt class="docutils literal"><span class="pre">$father</span></tt> and <tt class="docutils literal"><span class="pre">$mother</span></tt> are <a class="reference" href="../../krb_syntax/pattern.html#pattern-variable">pattern variables</a>.
 These can match any value, but once matched they have the same value for
 the rest of that <a class="reference" href="index.html">rule</a> invocation.  Thus, the value <tt class="docutils literal"><span class="pre">$father</span></tt> is bound to
 on line 3, will be the same value used on line 5 for <tt class="docutils literal"><span class="pre">$father</span></tt> in the
@@ -143,8 +143,8 @@ on lines 9 or 11, because those are in a different <a class="reference" href="in
 <p>Then the <tt class="docutils literal"><span class="pre">grand_parent_and_child</span></tt> <a class="reference" href="index.html">rule</a> is run for all combinations of
 <tt class="docutils literal"><span class="pre">family.child_parent</span></tt> <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a> that satisfy the two <a class="reference" href="../../krb_syntax/pattern.html">patterns</a> on lines 15 and
 17.  This <a class="reference" href="index.html">rule</a> <a class="reference" href="../../using_pyke.html#setting-up-each-case">asserts</a> the grand-child/grand-parent relationships.  You'll
-notice that it uses the <tt class="docutils literal"><span class="pre">$_</span></tt> <a class="reference" href="../../krb_syntax/pattern.html">pattern variable</a>.  This is called the
-<em>anonymous</em> variable.  It is different than other <a class="reference" href="../../krb_syntax/pattern.html">pattern variables</a> in that
+notice that it uses the <tt class="docutils literal"><span class="pre">$_</span></tt> <a class="reference" href="../../krb_syntax/pattern.html#pattern-variable">pattern variable</a>.  This is called the
+<em>anonymous</em> variable.  It is different than other <a class="reference" href="../../krb_syntax/pattern.html#pattern-variable">pattern variables</a> in that
 each use of <tt class="docutils literal"><span class="pre">$_</span></tt> can match a different value.</p>
 <p>Finally, the <tt class="docutils literal"><span class="pre">great_grand_parent_and_child</span></tt> rule is run.  As this rule
 <a class="reference" href="../../using_pyke.html#setting-up-each-case">asserts</a> new <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a>, those <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a> may be used by the same <a class="reference" href="index.html">rule</a> to produce
@@ -169,12 +169,12 @@ initial data (<a class="reference" href="../knowledge_bases/fact_bases.html#fact
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; import pyke
-&gt;&gt;&gt; pyke.load('examples')
-&gt;&gt;&gt; pyke.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
-&gt;&gt;&gt; pyke.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
-&gt;&gt;&gt; pyke.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
-&gt;&gt;&gt; pyke.activate('fc_example')     # This is where the rules are run!
-&gt;&gt;&gt; pyke.get_kb('family').dump_specific_facts()
+&gt;&gt;&gt; engine = pyke.engine('examples')
+&gt;&gt;&gt; engine.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
+&gt;&gt;&gt; engine.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
+&gt;&gt;&gt; engine.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
+&gt;&gt;&gt; engine.activate('fc_example')     # This is where the rules are run!
+&gt;&gt;&gt; engine.get_kb('family').dump_specific_facts()
 child_parent('michael', 'bruce', (), 'son', 'father')
 child_parent('michael', 'marilyn', (), 'son', 'mother')
 child_parent('bruce', 'thomas', (), 'son', 'father')
@@ -224,7 +224,7 @@ son_of('bruce', 'thomas', 'norma')
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Dec 03 2007.
+    Page last modified Tue, Feb 12 2008.
   </div>
 
 </body>

@@ -50,7 +50,6 @@
 
 '''
 
-import pyke
 from pyke import contexts
 
 import itertools
@@ -76,7 +75,8 @@ class fc_rule(rule):
     def register_rule(self):
 	for i, (kb_name, fact_name, arg_patterns) \
 	 in enumerate(self.foreach_facts):
-	    pyke.get_kb(kb_name).add_fc_rule_ref(fact_name, self, i)
+	    self.rule_base.engine.get_kb(kb_name) \
+                .add_fc_rule_ref(fact_name, self, i)
     def reset(self):
 	self.ran = False
     def run(self):

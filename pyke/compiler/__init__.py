@@ -44,8 +44,6 @@ from pyke.compiler import krbparser
 #from pyke import contexts
 #contexts.debug = ('patterns_out1', 'patterns_out',)
 
-pyke.init()
-
 Ast_names = frozenset((
     'file',
     'parent',
@@ -92,7 +90,12 @@ def dump(ast, f = sys.stderr, need_nl = False, indent = 0):
     f.write(')')
     return did_nl
 
-def compile(gen_dir, gen_root_pkg, filename):
+def compile(gen_dir, gen_root_pkg, filenames):
+    engine = pyke.engine(compiler_bc)
+    for filename in filenames:
+        compile_file(engine, gen_dir, gen_root_pkg, filename)
+
+def compile_file(engine, gen_dir, gen_root_pkg, filename):
     rb_name = os.path.basename(filename)
     if not rb_name.endswith('.krb'):
         raise ValueError("compile: filename, %s, must end with .krb" % filename)
@@ -109,29 +112,32 @@ def compile(gen_dir, gen_root_pkg, filename):
         #sys.stderr.write("got ast\n")
         # dump(ast)
         # sys.stderr.write('\n\n')
-        pyke.reset()
+        engine.reset()
         if use_test:
-            pyke.activate('compiler_test')
+            engine.activate('compiler_test')
             (fc_lines, bc_lines, plan_lines), plan = \
-                pyke.prove_1('compiler_test', 'compile', (rb_name, ast), 3)
+                engine.prove_1('compiler_test', 'compile', (rb_name, ast), 3)
         else:
-            pyke.activate('compiler')
+            engine.activate('compiler')
             (fc_lines, bc_lines, plan_lines), plan = \
-                pyke.prove_1('compiler', 'compile', (rb_name, ast), 3)
+                engine.prove_1('compiler', 'compile', (rb_name, ast), 3)
+        krb_filename = os.path.abspath(filename)
         if fc_lines:
             sys.stderr.write("writing %s\n" % fc_path)
-            write_file(fc_lines + ("Krb_filename = '%s'" % filename,), fc_path)
+            write_file(fc_lines + ("Krb_filename = '%s'" % krb_filename,),
+                       fc_path)
         elif os.path.lexists(fc_path): os.remove(fc_path)
         if bc_lines:
             sys.stderr.write("writing %s\n" % bc_path)
-            write_file(bc_lines + ("Krb_filename = '%s'" % filename,), bc_path)
+            write_file(bc_lines + ("Krb_filename = '%s'" % krb_filename,),
+                       bc_path)
         elif os.path.lexists(bc_path): os.remove(bc_path)
         if plan_lines:
             sys.stderr.write("writing %s\n" % plan_path)
             #sys.stderr.write("plan_lines:\n")
             #for line in plan_lines:
             #    sys.stderr.write("  " + repr(line) + "\n")
-            write_file(plan_lines + ("Krb_filename = '%s'" % filename,),
+            write_file(plan_lines + ("Krb_filename = '%s'" % krb_filename,),
                        plan_path)
         elif os.path.lexists(plan_path): os.remove(plan_path)
         #sys.stderr.write("done!\n")
@@ -181,17 +187,10 @@ def write_file2(lines, f, indents, lineno_map, lineno, starting_lineno = None):
             lineno += 1
     return lineno, starting_lineno
 
-def main():
-    if len(sys.argv) >= 4:
-        for filename in sys.argv[3:]:
-            compile(sys.argv[1], sys.argv[2], filename)
-    elif len(sys.argv) <= 1:
-        import doctest
-        sys.exit(doctest.testmod()[0])
-    else:
-        sys.stderr.write('usage: pyke.compiler gen_dir gen_root_dir '
-                                'krb_file...\n')
-        sys.exit(2)
+
+def test():
+    import doctest
+    sys.exit(doctest.testmod()[0])
 
 if __name__ == "__main__":
-    main()
+    test()

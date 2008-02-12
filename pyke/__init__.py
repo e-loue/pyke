@@ -25,60 +25,113 @@ import sys
 import types
 import os
 import os.path
-import imp
 import re
 
-from pyke import contexts
+from pyke import (condensedPrint, contexts, pattern,
+                  fact_base, rule_base, special)
 
 class CanNotProve(StandardError):
     pass
 
-Knowledge_bases = {}
-Rule_bases = {}
+Name_test = re.compile(r'[a-zA-Z_][a-zA-Z0-9_]*$')
+Bad_name_char = re.compile('[^a-zA-Z0-9_]')
 
-_Variables = tuple(contexts.variable('ans_%d' % i) for i in range(100))
-_Load_done = False
+class engine(object):
+    _Variables = tuple(contexts.variable('ans_%d' % i) for i in range(100))
+    
+    def __init__(self, paths = ('.',),
+                 gen_dir = '.', gen_root_dir = 'compiled_krb',
+                 load_fc = True, load_bc = True):
+        if not Name_test.match(gen_root_dir):
+            raise ValueError(
+                "engine.__init__: gen_root_dir (%s) must be a legal python "
+                "identifier" % (gen_root_dir,))
+        self.knowledge_bases = {}
+        self.rule_bases = {}
+        special.create_for(self)
+        if paths != '*test*':
+            if isinstance(paths, types.ModuleType):
+                # secret hook for the compiler to initialize itself (so the
+                # compiled python module can be in an egg).
+                paths.populate(self)
+            else:
+                if isinstance(paths, types.StringTypes): paths = (paths,)
+                compile_list = _get_compile_list(paths, gen_dir, gen_root_dir)
+                if compile_list:
+                    import pyke.compiler
+                    pyke.compiler.compile(gen_dir, gen_root_dir, compile_list)
+                    _check_list(compile_list, gen_dir, gen_root_dir)
+                _load_paths(self, paths, gen_dir, gen_root_dir,
+                            load_fc, load_bc, compile_list)
+        for kb in self.knowledge_bases.itervalues(): kb.init2()
+        for rb in self.rule_bases.itervalues(): rb.init2()
+    def reset(self):
+        for rb in self.rule_bases.itervalues(): rb.reset()
+        for kb in self.knowledge_bases.itervalues(): kb.reset()
+    def get_kb(self, kb_name, _new_class = None):
+        ans = self.knowledge_bases.get(kb_name)
+        if ans is None:
+            if _new_class: ans = _new_class(self, kb_name)
+            else: raise KeyError("knowledge_base: %s not found" % kb_name)
+        return ans
+    def get_rb(self, rb_name):
+        ans = self.rule_bases.get(rb_name)
+        if ans is None: raise KeyError("rule_base: %s not found" % rb_name)
+        return ans
+    def get_create(self, rb_name, parent = None, exclude_list = ()):
+        ans = self.rule_bases.get(rb_name)
+        if ans is None:
+            ans = rule_base.rule_base(self, rb_name, parent, exclude_list)
+        elif ans.parent != parent or ans.exclude_set != frozenset(exclude_list):
+            raise AssertionError("duplicate rule_base: %s" % rb_name)
+        return ans
 
-def get_kb(kb_name, new_class = None):
-    ans = Knowledge_bases.get(kb_name)
-    if ans is None:
-        if new_class: ans = new_class(kb_name)
-        else: raise KeyError("knowledge_base: %s not found" % kb_name)
-    return ans
+    def add_universal_fact(self, kb_name, fact_name, args):
+        return self.get_kb(kb_name, fact_base.fact_base) \
+                   .add_universal_fact(fact_name, args)
+    def add_case_specific_fact(self, kb_name, fact_name, args):
+        return self.get_kb(kb_name, fact_base.fact_base) \
+                   .add_case_specific_fact(fact_name, args)
+    def assert_(self, kb_name, entity_name, args):
+        return self.get_kb(kb_name, fact_base.fact_base) \
+                   .assert_(entity_name, args)
 
-def get_rb(rb_name):
-    ans = Rule_bases.get(rb_name)
-    if ans is None: raise KeyError("rule_base: %s not found" % rb_name)
-    return ans
+    def activate(self, *rb_names):
+        for rb_name in rb_names: self.get_rb(rb_name).activate()
 
-def init():
-    for kb in Knowledge_bases.itervalues(): kb.init2()
-    for rb in Rule_bases.itervalues(): rb.init2()
+    def lookup(self, kb_name, entity_name, pat_context, patterns):
+        return self.get_kb(kb_name).lookup(pat_context, pat_context,
+                                           entity_name, patterns)
 
-def reset():
-    for rb in Rule_bases.itervalues(): rb.reset()
-    for kb in Knowledge_bases.itervalues(): kb.reset()
-
-def load(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb',
-         load_fc = True, load_bc = True):
-    global _Load_done
-    if _Load_done: raise AssertionError("pyke.load may only be called once")
-    _Load_done = True
-    if not Name_test.match(gen_root_dir):
-        raise ValueError("pyke.load: "
-                         "gen_root_dir (%s) must be a legal python identifier" %
-                             (gen_root_dir,))
-    if isinstance(paths, types.StringTypes): paths = (paths,)
-    compile_list = _get_compile_list(paths, gen_dir, gen_root_dir)
-    if compile_list:
-        status = os.system("%s -m pyke.compiler %s %s %s" % 
-                           (sys.executable, gen_dir, gen_root_dir,
-                            ' '.join(compile_list)))
-        if status != 0:
-            raise SyntaxError("Errors encountered trying to compile")
-        _check_list(compile_list, gen_dir, gen_root_dir)
-    _load_paths(paths, gen_dir, gen_root_dir, load_fc, load_bc)
-    init()
+    def prove(self, kb_name, entity_name, pat_context, patterns):
+        return self.get_kb(kb_name).prove(pat_context, pat_context,
+                                          entity_name, patterns)
+    def prove_n(self, kb_name, entity_name, fixed_args, num_returns):
+        ''' Generates: a tuple of len == num_returns, and a plan (or None).
+        '''
+        context = contexts.simple_context()
+        vars = self._Variables[:num_returns]
+        try:
+            for plan in self.prove(kb_name, entity_name, context,
+                                   tuple(pattern.pattern_literal(arg)
+                                         for arg in fixed_args) + vars):
+                ans = tuple(context.lookup_data(var.name) for var in vars)
+                if plan: plan = plan.create_plan()
+                yield ans, plan
+        finally:
+            context.done()
+    def prove_1(self, kb_name, entity_name, fixed_args, num_returns):
+        ''' Returns a tuple of len == num_returns, and a plan (or None).
+        '''
+        try:
+            # All we need is the first one!
+            return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
+                       .next()
+        except StopIteration:
+            raise CanNotProve("Can not prove %s.%s%s" %
+                               (kb_name, entity_name,
+                                 condensedPrint.cprint(
+                                   fixed_args + self._Variables[:num_returns])))
 
 def _raise_exc(exc): raise exc
 
@@ -96,9 +149,6 @@ def _make_package_dirs(base_dir, package_path):
     init_file_path = os.path.join(full_package_path, '__init__.py')
     if not os.path.exists(init_file_path): open(init_file_path, 'w').close()
     return full_package_path
-
-Name_test = re.compile(r'[a-zA-Z_][a-zA-Z0-9_]*$')
-Bad_name_char = re.compile('[^a-zA-Z0-9_]')
 
 def _doctor_names(path):
     ''' Convert all path components into legal path names.
@@ -172,36 +222,42 @@ def _get_compile_list(paths, gen_dir, gen_root_dir):
                     ans.append(os.path.join(dirpath, filename))
     return ans
 
-def _check_list(compile_list, gen_dir, gen_root_dir):
-    for filename in compile_list:
-        if _needs_compiling(filename, gen_dir, gen_root_dir):
-            raise AssertionError("%s didn't compile correctly" % filename)
-
-def _load_paths(paths, gen_dir, gen_root_dir, load_fc, load_bc):
+def _load_paths(engine, paths, gen_dir, gen_root_dir, load_fc, load_bc,
+                compile_list):
     if ('' if gen_dir == '.' else os.path.abspath(gen_dir)) not in sys.path:
         sys.path.append(os.path.abspath(gen_dir))
     for path in paths:
         for dirpath, dirnames, filenames in os.walk(path, onerror=_raise_exc):
             for filename in filenames:
                 if filename.endswith('.krb'):
-                    _load_file(os.path.join(dirpath, filename),
-                               gen_dir, gen_root_dir, load_fc, load_bc)
+                    _load_file(engine, os.path.join(dirpath, filename),
+                               gen_dir, gen_root_dir, load_fc, load_bc,
+                               compile_list)
 
-def _load_file(filename, gen_dir, gen_root_dir, load_fc, load_bc):
+def _load_file(engine, filename, gen_dir, gen_root_dir, load_fc, load_bc,
+               compile_list):
     base, package_list = _get_base_path(filename, gen_dir, gen_root_dir)
     base_modulename = os.path.basename(base)
-    if load_fc:
+    def load_module(type):
         try:
-            os.stat(base + '_fc.py')
-            _import(package_list + [base_modulename + '_fc'])
+            os.stat(base + type + '.py')
+            module_path = package_list + [base_modulename + type]
+            full_module_name = '.'.join(module_path)
+            #print "loading:", full_module_name
+            if full_module_name in sys.modules:
+                #print "already imported"
+                module = sys.modules[full_module_name]
+                if filename in compile_list:
+                    module = reload(module)
+                    #print module
+            else:
+                #print "needs import"
+                module = _import(module_path)
+            module.populate(engine)
         except OSError:
             pass
-    if load_bc:
-        try:
-            os.stat(base + '_bc.py')
-            _import(package_list + [base_modulename + '_bc'])
-        except OSError:
-            pass
+    if load_fc: load_module('_fc')
+    if load_bc: load_module('_bc')
 
 """ ******* for testing:
 def trace_import(*args, **kws):
@@ -234,63 +290,10 @@ def _import(modulepath):
         mod = getattr(mod, comp)
     return mod
 
-def add_universal_fact(kb_name, fact_name, args):
-    return get_kb(kb_name, fact_base.fact_base) \
-               .add_universal_fact(fact_name, args)
-
-def add_case_specific_fact(kb_name, fact_name, args):
-    return get_kb(kb_name, fact_base.fact_base) \
-               .add_case_specific_fact(fact_name, args)
-
-def activate(*rb_names):
-    for rb_name in rb_names: get_rb(rb_name).activate()
-
-def assert_(kb_name, entity_name, args):
-    return get_kb(kb_name, fact_base.fact_base).assert_(entity_name, args)
-
-def lookup(kb_name, entity_name, pat_context, patterns):
-    return get_kb(kb_name).lookup(pat_context, pat_context,
-                                  entity_name, patterns)
-
-def prove(kb_name, entity_name, pat_context, patterns):
-    return get_kb(kb_name).prove(pat_context, pat_context,
-                                 entity_name, patterns)
-
-def prove_n(kb_name, entity_name, fixed_args, num_returns):
-    ''' Generates: a tuple of len == num_returns, and a plan (or None).
-    '''
-    context = contexts.simple_context()
-    vars = _Variables[:num_returns]
-    try:
-        for plan in prove(kb_name, entity_name, context,
-                          tuple(pattern.pattern_literal(arg)
-                                for arg in fixed_args) + vars):
-            ans = tuple(context.lookup_data(var.name) for var in vars)
-            if plan: plan = plan.create_plan()
-            yield ans, plan
-    finally:
-        context.done()
-
-def prove_1(kb_name, entity_name, fixed_args, num_returns):
-    ''' Returns a tuple of len == num_returns, and a plan (or None).
-    '''
-    try:
-        # All we need is the first one!
-        return prove_n(kb_name, entity_name, fixed_args, num_returns).next()
-    except StopIteration:
-        raise CanNotProve("Can not prove %s.%s%s" %
-                              (kb_name, entity_name,
-                               condensedPrint.cprint(fixed_args + 
-                                                     _Variables[:num_returns])))
-
-
-# This has to come after Knowledge_bases and Rule_bases are initialized for
-# initialization code in special.
-#
-# Must include 'special' here to get it to load and be available to the rules.
-#
-from pyke import (fact_base, pattern, condensedPrint, special)
-
+def _check_list(compile_list, gen_dir, gen_root_dir):
+    for filename in compile_list:
+        if _needs_compiling(filename, gen_dir, gen_root_dir):
+            raise AssertionError("%s didn't compile correctly" % filename)
 
 def test():
     import doctest

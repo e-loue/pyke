@@ -35,34 +35,63 @@ restindex
 Using Pyke
 ===================================
 
-There isn't that much to using pyke.  Generally, all the functions you need
-are provided directly by the ``pyke`` package:
-
-    >>> import pyke
+This describes how to use pyke from within your python program.
 
 Initializing Pyke
 ===============================
 
-There are two functions to initialize pyke:
+There are two steps to initializing a pyke engine:
 
-load(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb', load_fc = True, load_bc = True)
-    The ``load`` function may only be called once.  It expects either a single
-    directory or a sequence of directories.  It recursively walks each directory
-    looking for `.krb files`_.  Each `.krb file`_ that it finds is compiled,
-    if out of date, and then the resulting python modules imported.
+pyke.engine(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb', load_fc = True, load_bc = True)
+    The pyke inference engine is offered
+    as a class so that you can instantiate multiple copies of it with different
+    rule bases to accomplish different tasks.
+    Once you have a pyke.engine object; generally, all of
+    the functions that you need are provided directly by this object:
+
+    >>> import pyke
+    >>> my_engine = pyke.engine('examples')
+
+    This expects either a single directory or a sequence of directories as
+    the ``paths`` argument.
+    It recursively walks each directory looking for `.krb files`_.
+    Each `.krb file`_ that it finds is compiled, if out of date, and then
+    the resulting python modules imported (depending on ``load_fc`` and
+    ``load_bc``).
     This causes all of the `rule bases`_ to be loaded and made ready to
     *activate* (see below).
 
     All generated python files are placed in a mirror directory structure
     under the *gen_root_dir* directory in *gen_dir*.  Thus, by default,
     this mirrored directory structure would be rooted under the
-    "./compiled_krb" directory.  You probably want to add "compiled_krb" to
-    your subversion *global-ignores* option.  *Gen_dir*, *gen_root_dir*
+    "./compiled_krb" directory.  You probably want to add ``compiled_krb`` to
+    your subversion ``global-ignores`` option.  *Gen_dir*, *gen_root_dir*
     and the mirrored directory structure will be created automatically if
     any of them do not already exist.
-add_universal_fact(kb_name, fact_name, args)
+
+    If you change some of the .krb files, you can create a new engine
+    object to compile and reload the generated python modules without
+    restarting your program.  But note that you'll need to rerun your
+    ``add_universal_fact`` calls.
+*some_engine*.add_universal_fact(kb_name, fact_name, arguments)
     The ``add_universal_fact`` function is called once per fact_.  These facts_
     are never deleted and apply to all *cases*.
+    
+    >>> my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas', 'norma'))
+
+    Multiple facts with the same name are allowed.
+
+    >>> my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce', 'marilyn'))
+
+    But duplicate facts (with the same arguments) are silently ignored.
+
+    >>> my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce', 'marilyn'))
+    >>> my_engine.get_kb('family').dump_universal_facts()
+    son_of('bruce', 'thomas', 'norma')
+    son_of('david', 'bruce', 'marilyn')
+
+    These facts are accessed as *kb_name.fact_name(arguments)* within the
+    .krb files.
 
 Setting up Each Case
 ===========================
@@ -73,18 +102,47 @@ general each case has its own set of starting facts_ and may use different
 
 Three functions initialize each case:
 
-reset()
+*some_engine*.reset()
     The ``reset`` function is called once to delete all of the `case specific
     facts`_ from the last run.  It also deactivates all `rule bases`_.
-assert_(kb_name, fact_name, args)
+*some_engine*.assert_(kb_name, fact_name, arguments)
     Call ``assert_`` (or the equivalent, ``add_case_specific_fact``,
     see `Other Functions`_, below) for each starting fact_ for this case.
-activate(\*rb_names)
+    Like universal facts, you may have multiple facts with the same name so
+    long as they have different arguments.
+
+    >>> my_engine.assert_('family', 'daughter_of', ('marilyn', 'arthur', 'kathleen'))
+    >>> my_engine.assert_('family', 'daughter_of', ('sue', 'arthur', 'kathleen'))
+    >>> my_engine.assert_('family', 'daughter_of', ('sue', 'arthur', 'kathleen'))
+
+    Duplicates with universal facts are also ignored.
+
+    >>> my_engine.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
+    >>> my_engine.get_kb('family').dump_specific_facts()
+    daughter_of('marilyn', 'arthur', 'kathleen')
+    daughter_of('sue', 'arthur', 'kathleen')
+    >>> my_engine.get_kb('family').dump_universal_facts()
+    son_of('bruce', 'thomas', 'norma')
+    son_of('david', 'bruce', 'marilyn')
+
+    There is no difference within the .krb files of how universal facts
+    verses specific facts are used.  The only difference between the two
+    types of facts is that the specific facts are deleted when a reset is
+    done.
+
+    >>> my_engine.reset()
+    >>> my_engine.get_kb('family').dump_specific_facts()
+    >>> my_engine.get_kb('family').dump_universal_facts()
+    son_of('bruce', 'thomas', 'norma')
+    son_of('david', 'bruce', 'marilyn')
+*some_engine*.activate(\*rb_names)
     Then call ``activate`` to activate the appropriate `rule bases`_.  This
     may be called more than once, if desired, or it can simply take multiple
     arguments.
 
-Pyke is now ready to prove goals for this case!
+    >>> my_engine.activate('bc_example')
+
+Your pyke engine is now ready to prove goals for this case!
 
 Proving Goals
 ======================
@@ -92,14 +150,53 @@ Proving Goals
 Two functions are provided that cover the easy cases.  More general
 functions are provided in `Other Functions`_, below.
 
-prove_1(kb_name, entity_name, fixed_args, num_returns)
-    Returns the first proof as two results: a tuple whose length == num_returns
-    containing the returned values, and a plan_.  The plan_ is None if no plan_
-    was generated.  Raises pyke.CanNotProve if no proof is found.
-prove_n(kb_name, entity_name, fixed_args, num_returns)
-    This is a generator yielding two results: a tuple whose length == num_returns,
+*some_engine*.prove_1(kb_name, entity_name, fixed_args, num_returns)
+    ``Kb_name`` may name either a fact_base_ or an activated
+    `rule base category`_.  The ``entity_name`` is the fact_name for fact_bases,
+    or the name of the `backward chaining`_ goal for `rule bases`_.
+    The ``fixed_args`` are a tuple of python values.  These form the first
+    group of arguments to the proof.  ``Num_returns`` specifies the number of
+    additional `pattern variables`_ to be appended to the arguments for the
+    proof.  The bindings of these pattern variables will be returned as the
+    answer for the proof.  For example:
+
+        *some_engine*.prove_1(*some_rule_base_category*, *some_goal*, (1, 2, 3), 2)
+
+    Proves the goal:
+
+        *some_rule_base_category.some_goal* (1, 2, 3, $ans_0, $ans_1)
+
+    And will return the bindings for ``$ans_0`` and ``$ans_1`` produced by
+    the proof.
+
+    Returns the first proof found as a 2-tuple: a tuple of the bindings for
+    the ``num_returns`` pattern variables, and a plan_.  The plan_ is ``None``
+    if no plan_ was generated; otherwise, it is a python function as
+    described below__.
+
+.. __: #running-and-pickling-plans
+
+    >>> my_engine.prove_1('bc_example', 'child_parent', ('david', 'norma'), 3)
+    ((('grand',), 'son', 'mother'), None)
+
+    Raises ``pyke.CanNotProve`` if no proof is found.
+
+    >>> my_engine.prove_1('bc_example', 'bogus', ('david', 'norma'), 3)
+    Traceback (most recent call last):
+        ...
+    CanNotProve: Can not prove bc_example.bogus(david, norma, $ans_0, $ans_1, $ans_2)
+
+*some_engine*.prove_n(kb_name, entity_name, fixed_args, num_returns)
+    This is a generator yielding 2-tuples, a tuple whose length == num_returns
     and a plan_, for each possible proof.  Like ``prove_1``, the plan_ is None
     if no plan_ was generated.
+
+    >>> for ans in my_engine.prove_n('bc_example', 'child_parent', ('david',), 4):
+    ...     print ans
+    (('bruce', (), 'son', 'father'), None)
+    (('marilyn', (), 'son', 'mother'), None)
+    (('thomas', ('grand',), 'son', 'father'), None)
+    (('norma', ('grand',), 'son', 'mother'), None)
 
 Running and Pickling Plans
 ----------------------------
@@ -119,8 +216,9 @@ before pickling the plan_:
     >>> copy_reg.pickle(functools.partial,
     ...                 lambda p: (functools.partial, (p.func,) + p.args))
 
-The program that unpickles the plan_ does not have to import any pyke
-modules to be able to run the plans_.  Just unpickle and call it.
+No special code is required to unpickle a plan_.  Also, the program that
+unpickles the plan_ does not have to import any pyke modules to be able
+to run the plan_.  Just unpickle and call it.
 
 Other Functions
 ========================
@@ -132,32 +230,28 @@ goal proof mechanisms.  The catch is that you must first convert **all**
 arguments into patterns_ and create a *context* for these patterns_.  This is
 discussed below_.
 
-lookup(kb_name, entity_name, pattern_context, patterns)
+*some_engine*.lookup(kb_name, entity_name, pattern_context, patterns)
     This is a generator that binds patterns_ to successive facts_.  Yields None
     for each successful match.
-prove(kb_name, entity_name, pattern_context, patterns)
+*some_engine*.prove(kb_name, entity_name, pattern_context, patterns)
     A generator that binds patterns_ to successive proofs.  Yields a
-    *prototype_plan* or None for each successful match.  To turn the
-    prototype_plan into a python function, call create_plan() on it.
+    *prototype_plan* or ``None`` for each successful match.  To turn the
+    prototype_plan into a python function, use *prototype_plan*.create_plan().
     This returns the plan_ function.
 
 The remaining functions are:
 
-add_case_specific_fact(kb_name, fact_name, args)
+*some_engine*.add_case_specific_fact(kb_name, fact_name, args)
     This is an alternate to the ``assert_`` function.
-get_kb(kb_name)
+*some_engine*.get_kb(kb_name)
     Finds and returns the `knowledge base`_ by the name ``kb_name``.  Raises
     KeyError if not found.  Note that for `rule bases`_, this returns the
     active `rule base`_ where ``kb_name`` is the `rule base category`_ name.
     Thus, not all `rule bases`_ are accessible through this call.
-get_rb(rb_name)
+*some_engine*.get_rb(rb_name)
     Finds and returns the `rule base`_ by the name ``rb_name``.  Raises
     KeyError if not found.  This works for any `rule base`_, whether it is
     active or not.
-init()
-    This is called once automatically for you by the ``load`` function.
-    You shouldn't have to call it yourself.  If you don't have any `rule
-    bases`_ this isn't necessary anyway.
 
 Creating Your Own Patterns
 ----------------------------------
@@ -185,27 +279,30 @@ contexts.anonymous()
     This will match anything each time it is encountered.
     Calling the constructor many times is not a problem.
 
-Finally, to create a *pattern context*, you need::
+Finally, to create a *pattern context*, you need:
 
     contexts.simple_context()
 
 You'll need to save this context to lookup your variable values after each
-proof is yielded. This is done by either::
+proof is yielded. This is done by either:
 
-    some_context.lookup_data(variable_name)
-    some_variable.as_data(some_context)
+    | *some_context*.lookup_data(*variable_name*)
+    | *some_variable*.as_data(*some_context*)
 
+.. _backward chaining: overview/rules/backward_chaining.html
 .. _below: `Creating Your Own Patterns`_
 .. _case specific facts:
         overview/knowledge_bases/fact_bases.html#case-specific-facts
 .. _copy_reg: http://docs.python.org/lib/module-copyreg.html
 .. _fact: overview/knowledge_bases/fact_bases.html#facts
+.. _fact_base: overview/knowledge_bases/fact_bases.html
 .. _facts: fact_
 .. _functools.partial: http://docs.python.org/lib/module-functools.html
 .. _knowledge base: overview/knowledge_bases/index.html
 .. _.krb file: krb_syntax/index.html
 .. _.krb files: `.krb file`_
 .. _pattern: krb_syntax/pattern.html
+.. _pattern variables: krb_syntax/pattern.html#pattern-variable
 .. _patterns: pattern_
 .. _plan: overview/plans.html
 .. _plans: plan_

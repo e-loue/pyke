@@ -36,8 +36,11 @@ file:
         $fc_lines = ($fc_head,
                      $fc_fun_lines,
                      "",
+                     "def populate(engine):",
+                     ('INDENT', 2),
                      $decl_line,
                      $fc_init_lines,
+                     'POPINDENT',
                      "",
                      $fc_extra_lines,
                      ) \
@@ -53,8 +56,11 @@ file:
                           else ()),
                      $bc_bc_fun_lines,
                      "",
+                     "def populate(engine):",
+                     ('INDENT', 2),
                      $decl_line,
                      $bc_bc_init_lines,
+                     'POPINDENT',
                      "",
                      $bc_extra_lines) \
                         if $bc_bc_fun_lines \
@@ -63,12 +69,12 @@ file:
 rule_decl:
     use rule_decl($rb_name, None, $decl_line)
     when
-        $decl_line = "This_rule_base = rule_base.get_create('%s')" % $rb_name
+        $decl_line = "This_rule_base = engine.get_create('%s')" % $rb_name
 
 rule_decl_with_parent:
     use rule_decl($rb_name, (parent, $parent, $excluded_symbols), $decl_line)
     when
-        $decl_line = "This_rule_base = rule_base.get_create('%s', '%s', %s)" % \
+        $decl_line = "This_rule_base = engine.get_create('%s', '%s', %s)" % \
                          ($rb_name, $parent,
                           tuple(repr(sym) for sym in $excluded_symbols))
 
@@ -95,6 +101,7 @@ fc_rule_:
         $fc_fun = ("",
                    "def %s(rule, context = None, index = None):" % $rule_name,
                    ("INDENT", 2),
+                   "engine = rule.rule_base.engine",
                    "if context is None: context = contexts.simple_context()",
                    "try:",
                    ("INDENT", 2),
@@ -144,7 +151,8 @@ fc_premise:
                     ('INDENT', 2),
                     ('INDENT', 11),
                     ('STARTING_LINENO', $start_lineno),
-                    "lookup('%s', '%s', context, rule.foreach_patterns(%d)):" %
+                    "engine.lookup('%s', '%s', context, "
+                        "rule.foreach_patterns(%d)):" %
                             ($kb_name, $entity_name, $clause_num),
                     ('ENDING_LINENO', $end_lineno),
                     'POPINDENT',)
@@ -183,8 +191,8 @@ assertion:
         ($pat_nums, $patterns_out) = \
             helpers.merge_patterns($patterns, $patterns_in)
         $fn_lines = (('STARTING_LINENO', $start_lineno),
-                     "assert_('%s', '%s'," % ($kb_name, $entity_name),
-                     ('INDENT', 8),
+                     "engine.assert_('%s', '%s'," % ($kb_name, $entity_name),
+                     ('INDENT', 15),
                      helpers.list_format(
                        ("rule.pattern(%d).as_data(context)" % pat_num
                         for pat_num in $pat_nums),
@@ -296,12 +304,12 @@ bc_premise:
             helpers.merge_patterns($arg_patterns, $patterns_in)
         $fn_head1 = (('STARTING_LINENO', $start_lineno),
                      "for x_%(clause_num)d in "
-                       "prove(%(kb_name)s, %(entity_name)s, context," %
+                       "engine.prove(%(kb_name)s, %(entity_name)s, context," %
                          {'clause_num': $clause_num,
                           'kb_name': $kb_name2,
                           'entity_name': $entity_name},
                      ('INDENT', 2),
-                     ('INDENT', 13),
+                     ('INDENT', 22),
                      helpers.list_format(('rule.pattern(%d)' % pat_num
                                           for pat_num in $pat_nums),
                                          '(', ')):'),

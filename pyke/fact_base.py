@@ -25,7 +25,9 @@
     A fact_base is one of the kinds of knowledge_bases (see also, rule_base
     and special).
 
-        >>> fb = fact_base('fb_name')
+        >>> import pyke
+        >>> engine = pyke.engine('*test*')
+        >>> fb = fact_base(engine, 'fb_name')
         >>> fb
         <fact_base fb_name>
         >>> fb.dump_universal_facts()
@@ -89,8 +91,8 @@ from pyke import knowledge_base, contexts
 
 class fact_base(knowledge_base.knowledge_base):
     ''' Not much to fact_bases.  The real work is done in fact_list! '''
-    def __init__(self, name):
-	super(fact_base, self).__init__(name, fact_list)
+    def __init__(self, engine, name):
+	super(fact_base, self).__init__(engine, name, fact_list)
     def dump_universal_facts(self):
 	for fl_name in sorted(self.entity_lists.iterkeys()):
             self.entity_lists[fl_name].dump_universal_facts()
@@ -172,11 +174,14 @@ class fact_list(knowledge_base.knowledge_entity_list):
 					   if i not in indices))
 	return new_entry
     def add_universal_fact(self, args):
+	assert args not in self.case_specific_facts, \
+               "add_universal_fact: fact already present as specific fact"
 	if args not in self.universal_facts:
 	    self.universal_facts.append(args)
 	    self.add_args(args)
     def add_case_specific_fact(self, args):
-	if args not in self.case_specific_facts:
+	if args not in self.universal_facts and \
+           args not in self.case_specific_facts:
 	    self.case_specific_facts.append(args)
 	    self.add_args(args)
 	    for fc_rule, foreach_index in self.fc_rule_refs:

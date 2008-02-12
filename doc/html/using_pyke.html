@@ -59,35 +59,60 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="using-pyke">
 <h1 class="title">Using Pyke</h1>
-<p>There isn't that much to using pyke.  Generally, all the functions you need
-are provided directly by the <tt class="docutils literal"><span class="pre">pyke</span></tt> package:</p>
-<blockquote>
-<pre class="doctest-block">
-&gt;&gt;&gt; import pyke
-</pre>
-</blockquote>
+<p>This describes how to use pyke from within your python program.</p>
 <div class="section">
 <h1><a id="initializing-pyke" name="initializing-pyke">Initializing Pyke</a></h1>
-<p>There are two functions to initialize pyke:</p>
+<p>There are two steps to initializing a pyke engine:</p>
 <dl class="docutils">
-<dt>load(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb', load_fc = True, load_bc = True)</dt>
-<dd><p class="first">The <tt class="docutils literal"><span class="pre">load</span></tt> function may only be called once.  It expects either a single
-directory or a sequence of directories.  It recursively walks each directory
-looking for <a class="reference" href="krb_syntax/index.html">.krb files</a>.  Each <a class="reference" href="krb_syntax/index.html">.krb file</a> that it finds is compiled,
-if out of date, and then the resulting python modules imported.
+<dt>pyke.engine(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb', load_fc = True, load_bc = True)</dt>
+<dd><p class="first">The pyke inference engine is offered
+as a class so that you can instantiate multiple copies of it with different
+rule bases to accomplish different tasks.
+Once you have a pyke.engine object; generally, all of
+the functions that you need are provided directly by this object:</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; import pyke
+&gt;&gt;&gt; my_engine = pyke.engine('examples')
+</pre>
+<p>This expects either a single directory or a sequence of directories as
+the <tt class="docutils literal"><span class="pre">paths</span></tt> argument.
+It recursively walks each directory looking for <a class="reference" href="krb_syntax/index.html">.krb files</a>.
+Each <a class="reference" href="krb_syntax/index.html">.krb file</a> that it finds is compiled, if out of date, and then
+the resulting python modules imported (depending on <tt class="docutils literal"><span class="pre">load_fc</span></tt> and
+<tt class="docutils literal"><span class="pre">load_bc</span></tt>).
 This causes all of the <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a> to be loaded and made ready to
 <em>activate</em> (see below).</p>
-<p class="last">All generated python files are placed in a mirror directory structure
+<p>All generated python files are placed in a mirror directory structure
 under the <em>gen_root_dir</em> directory in <em>gen_dir</em>.  Thus, by default,
 this mirrored directory structure would be rooted under the
-&quot;./compiled_krb&quot; directory.  You probably want to add &quot;compiled_krb&quot; to
-your subversion <em>global-ignores</em> option.  <em>Gen_dir</em>, <em>gen_root_dir</em>
+&quot;./compiled_krb&quot; directory.  You probably want to add <tt class="docutils literal"><span class="pre">compiled_krb</span></tt> to
+your subversion <tt class="docutils literal"><span class="pre">global-ignores</span></tt> option.  <em>Gen_dir</em>, <em>gen_root_dir</em>
 and the mirrored directory structure will be created automatically if
 any of them do not already exist.</p>
+<p class="last">If you change some of the .krb files, you can create a new engine
+object to compile and reload the modules without restarting your program.
+But note that you'll need to rerun your <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> calls.</p>
 </dd>
-<dt>add_universal_fact(kb_name, fact_name, args)</dt>
-<dd>The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">fact</a>.  These <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">facts</a>
-are never deleted and apply to all <em>cases</em>.</dd>
+<dt><em>some_engine</em>.add_universal_fact(kb_name, fact_name, arguments)</dt>
+<dd><p class="first">The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">fact</a>.  These <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">facts</a>
+are never deleted and apply to all <em>cases</em>.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas', 'norma'))
+</pre>
+<p>Multiple facts with the same name are allowed.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce', 'marilyn'))
+</pre>
+<p>But duplicate facts (with the same arguments) are silently ignored.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce', 'marilyn'))
+&gt;&gt;&gt; my_engine.get_kb('family').dump_universal_facts()
+son_of('bruce', 'thomas', 'norma')
+son_of('david', 'bruce', 'marilyn')
+</pre>
+<p class="last">These facts are accessed as <em>kb_name.fact_name(arguments)</em> within the
+.krb files.</p>
+</dd>
 </dl>
 </div>
 <div class="section">
@@ -97,32 +122,106 @@ general each case has its own set of starting <a class="reference" href="overvie
 <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a>, depending on the situation.</p>
 <p>Three functions initialize each case:</p>
 <dl class="docutils">
-<dt>reset()</dt>
+<dt><em>some_engine</em>.reset()</dt>
 <dd>The <tt class="docutils literal"><span class="pre">reset</span></tt> function is called once to delete all of the <a class="reference" href="overview/knowledge_bases/fact_bases.html#case-specific-facts">case specific
 facts</a> from the last run.  It also deactivates all <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a>.</dd>
-<dt>assert_(kb_name, fact_name, args)</dt>
-<dd>Call <tt class="docutils literal"><span class="pre">assert_</span></tt> (or the equivalent, <tt class="docutils literal"><span class="pre">add_case_specific_fact</span></tt>,
-see <a class="reference" href="#other-functions">Other Functions</a>, below) for each starting <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">fact</a> for this case.</dd>
-<dt>activate(*rb_names)</dt>
-<dd>Then call <tt class="docutils literal"><span class="pre">activate</span></tt> to activate the appropriate <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a>.  This
+<dt><em>some_engine</em>.assert_(kb_name, fact_name, arguments)</dt>
+<dd><p class="first">Call <tt class="docutils literal"><span class="pre">assert_</span></tt> (or the equivalent, <tt class="docutils literal"><span class="pre">add_case_specific_fact</span></tt>,
+see <a class="reference" href="#other-functions">Other Functions</a>, below) for each starting <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">fact</a> for this case.
+Like universal facts, you may have multiple facts with the same name so
+long as they have different arguments.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.assert_('family', 'daughter_of', ('marilyn', 'arthur', 'kathleen'))
+&gt;&gt;&gt; my_engine.assert_('family', 'daughter_of', ('sue', 'arthur', 'kathleen'))
+&gt;&gt;&gt; my_engine.assert_('family', 'daughter_of', ('sue', 'arthur', 'kathleen'))
+</pre>
+<p>Duplicates with universal facts are also ignored.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
+&gt;&gt;&gt; my_engine.get_kb('family').dump_specific_facts()
+daughter_of('marilyn', 'arthur', 'kathleen')
+daughter_of('sue', 'arthur', 'kathleen')
+&gt;&gt;&gt; my_engine.get_kb('family').dump_universal_facts()
+son_of('bruce', 'thomas', 'norma')
+son_of('david', 'bruce', 'marilyn')
+</pre>
+<p>There is no difference within the .krb files of how universal facts
+verses specific facts are used.  The only difference between the two
+types of facts is that the specific facts are deleted when a reset is
+done.</p>
+<pre class="last doctest-block">
+&gt;&gt;&gt; my_engine.reset()
+&gt;&gt;&gt; my_engine.get_kb('family').dump_specific_facts()
+&gt;&gt;&gt; my_engine.get_kb('family').dump_universal_facts()
+son_of('bruce', 'thomas', 'norma')
+son_of('david', 'bruce', 'marilyn')
+</pre>
+</dd>
+<dt><em>some_engine</em>.activate(*rb_names)</dt>
+<dd><p class="first">Then call <tt class="docutils literal"><span class="pre">activate</span></tt> to activate the appropriate <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a>.  This
 may be called more than once, if desired, or it can simply take multiple
-arguments.</dd>
+arguments.</p>
+<pre class="last doctest-block">
+&gt;&gt;&gt; my_engine.activate('bc_example')
+</pre>
+</dd>
 </dl>
-<p>Pyke is now ready to prove goals for this case!</p>
+<p>Your pyke engine is now ready to prove goals for this case!</p>
 </div>
 <div class="section">
 <h1><a id="proving-goals" name="proving-goals">Proving Goals</a></h1>
 <p>Two functions are provided that cover the easy cases.  More general
 functions are provided in <a class="reference" href="#other-functions">Other Functions</a>, below.</p>
 <dl class="docutils">
-<dt>prove_1(kb_name, entity_name, fixed_args, num_returns)</dt>
-<dd>Returns the first proof as two results: a tuple whose length == num_returns
-containing the returned values, and a <a class="reference" href="overview/plans.html">plan</a>.  The <a class="reference" href="overview/plans.html">plan</a> is None if no <a class="reference" href="overview/plans.html">plan</a>
-was generated.  Raises pyke.CanNotProve if no proof is found.</dd>
-<dt>prove_n(kb_name, entity_name, fixed_args, num_returns)</dt>
-<dd>This is a generator yielding two results: a tuple whose length == num_returns,
+<dt><em>some_engine</em>.prove_1(kb_name, entity_name, fixed_args, num_returns)</dt>
+<dd><p class="first"><tt class="docutils literal"><span class="pre">Kb_name</span></tt> may name either a <a class="reference" href="overview/knowledge_bases/fact_bases.html">fact_base</a> or an activated
+<a class="reference" href="overview/knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>.  The <tt class="docutils literal"><span class="pre">entity_name</span></tt> is the fact_name for fact_bases,
+or the name of the <a class="reference" href="overview/rules/backward_chaining.html">backward chaining</a> goal for <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a>.
+The <tt class="docutils literal"><span class="pre">fixed_args</span></tt> are a tuple of python values.  These form the first
+group of arguments to the proof.  <tt class="docutils literal"><span class="pre">Num_returns</span></tt> specifies the number of
+additional <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a> to be appended to the arguments for the
+proof.  The bindings of these pattern variables will be returned as the
+answer for the proof.  For example:</p>
+<blockquote>
+<em>some_engine</em>.prove_1(<em>some_rule_base_category</em>, <em>some_goal</em>, (1, 2, 3), 2)</blockquote>
+<p>Proves the goal:</p>
+<blockquote>
+<em>some_rule_base_category.some_goal</em> (1, 2, 3, $ans_0, $ans_1)</blockquote>
+<p>And will return the bindings for <tt class="docutils literal"><span class="pre">$ans_0</span></tt> and <tt class="docutils literal"><span class="pre">$ans_1</span></tt> produced by
+the proof.</p>
+<p class="last">Returns the first proof found as a 2-tuple: a tuple of the bindings for
+the <tt class="docutils literal"><span class="pre">num_returns</span></tt> pattern variables, and a <a class="reference" href="overview/plans.html">plan</a>.  The <a class="reference" href="overview/plans.html">plan</a> is <tt class="docutils literal"><span class="pre">None</span></tt>
+if no <a class="reference" href="overview/plans.html">plan</a> was generated; otherwise, it is a python function as
+described <a class="reference" href="#running-and-pickling-plans">below</a>.</p>
+</dd>
+</dl>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.prove_1('bc_example', 'child_parent', ('david', 'norma'), 3)
+((('grand',), 'son', 'mother'), None)
+</pre>
+<p>Raises <tt class="docutils literal"><span class="pre">pyke.CanNotProve</span></tt> if no proof is found.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.prove_1('bc_example', 'bogus', ('david', 'norma'), 3)
+Traceback (most recent call last):
+    ...
+CanNotProve: Can not prove bc_example.bogus(david, norma, $ans_0, $ans_1, $ans_2)
+</pre>
+</blockquote>
+<dl class="docutils">
+<dt><em>some_engine</em>.prove_n(kb_name, entity_name, fixed_args, num_returns)</dt>
+<dd><p class="first">This is a generator yielding 2-tuples, a tuple whose length == num_returns
 and a <a class="reference" href="overview/plans.html">plan</a>, for each possible proof.  Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>, the <a class="reference" href="overview/plans.html">plan</a> is None
-if no <a class="reference" href="overview/plans.html">plan</a> was generated.</dd>
+if no <a class="reference" href="overview/plans.html">plan</a> was generated.</p>
+<pre class="last doctest-block">
+&gt;&gt;&gt; for ans in my_engine.prove_n('bc_example', 'child_parent', ('david',), 4):
+...     print ans
+(('bruce', (), 'son', 'father'), None)
+(('marilyn', (), 'son', 'mother'), None)
+(('thomas', ('grand',), 'son', 'father'), None)
+(('norma', ('grand',), 'son', 'mother'), None)
+</pre>
+</dd>
 </dl>
 <div class="section">
 <h2><a id="running-and-pickling-plans" name="running-and-pickling-plans">Running and Pickling Plans</a></h2>
@@ -142,8 +241,9 @@ before pickling the <a class="reference" href="overview/plans.html">plan</a>:</p
 ...                 lambda p: (functools.partial, (p.func,) + p.args))
 </pre>
 </blockquote>
-<p>The program that unpickles the <a class="reference" href="overview/plans.html">plan</a> does not have to import any pyke
-modules to be able to run the <a class="reference" href="overview/plans.html">plans</a>.  Just unpickle and call it.</p>
+<p>No special code is required to unpickle a <a class="reference" href="overview/plans.html">plan</a>.  Also, the program that
+unpickles the <a class="reference" href="overview/plans.html">plan</a> does not have to import any pyke modules to be able
+to run the <a class="reference" href="overview/plans.html">plan</a>.  Just unpickle and call it.</p>
 </div>
 </div>
 <div class="section">
@@ -154,32 +254,28 @@ goal proof mechanisms.  The catch is that you must first convert <strong>all</st
 arguments into <a class="reference" href="krb_syntax/pattern.html">patterns</a> and create a <em>context</em> for these <a class="reference" href="krb_syntax/pattern.html">patterns</a>.  This is
 discussed <a class="reference" href="#creating-your-own-patterns">below</a>.</p>
 <dl class="docutils">
-<dt>lookup(kb_name, entity_name, pattern_context, patterns)</dt>
+<dt><em>some_engine</em>.lookup(kb_name, entity_name, pattern_context, patterns)</dt>
 <dd>This is a generator that binds <a class="reference" href="krb_syntax/pattern.html">patterns</a> to successive <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">facts</a>.  Yields None
 for each successful match.</dd>
-<dt>prove(kb_name, entity_name, pattern_context, patterns)</dt>
+<dt><em>some_engine</em>.prove(kb_name, entity_name, pattern_context, patterns)</dt>
 <dd>A generator that binds <a class="reference" href="krb_syntax/pattern.html">patterns</a> to successive proofs.  Yields a
-<em>prototype_plan</em> or None for each successful match.  To turn the
-prototype_plan into a python function, call create_plan() on it.
+<em>prototype_plan</em> or <tt class="docutils literal"><span class="pre">None</span></tt> for each successful match.  To turn the
+prototype_plan into a python function, use <em>prototype_plan</em>.create_plan().
 This returns the <a class="reference" href="overview/plans.html">plan</a> function.</dd>
 </dl>
 <p>The remaining functions are:</p>
 <dl class="docutils">
-<dt>add_case_specific_fact(kb_name, fact_name, args)</dt>
+<dt><em>some_engine</em>.add_case_specific_fact(kb_name, fact_name, args)</dt>
 <dd>This is an alternate to the <tt class="docutils literal"><span class="pre">assert_</span></tt> function.</dd>
-<dt>get_kb(kb_name)</dt>
+<dt><em>some_engine</em>.get_kb(kb_name)</dt>
 <dd>Finds and returns the <a class="reference" href="overview/knowledge_bases/index.html">knowledge base</a> by the name <tt class="docutils literal"><span class="pre">kb_name</span></tt>.  Raises
 KeyError if not found.  Note that for <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a>, this returns the
 active <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule base</a> where <tt class="docutils literal"><span class="pre">kb_name</span></tt> is the <a class="reference" href="overview/knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name.
 Thus, not all <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a> are accessible through this call.</dd>
-<dt>get_rb(rb_name)</dt>
+<dt><em>some_engine</em>.get_rb(rb_name)</dt>
 <dd>Finds and returns the <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule base</a> by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
 KeyError if not found.  This works for any <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule base</a>, whether it is
 active or not.</dd>
-<dt>init()</dt>
-<dd>This is called once automatically for you by the <tt class="docutils literal"><span class="pre">load</span></tt> function.
-You shouldn't have to call it yourself.  If you don't have any <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule
-bases</a> this isn't necessary anyway.</dd>
 </dl>
 <div class="section">
 <h2><a id="creating-your-own-patterns" name="creating-your-own-patterns">Creating Your Own Patterns</a></h2>
@@ -209,15 +305,16 @@ used.</dd>
 Calling the constructor many times is not a problem.</dd>
 </dl>
 <p>Finally, to create a <em>pattern context</em>, you need:</p>
-<pre class="literal-block">
-contexts.simple_context()
-</pre>
+<blockquote>
+contexts.simple_context()</blockquote>
 <p>You'll need to save this context to lookup your variable values after each
 proof is yielded. This is done by either:</p>
-<pre class="literal-block">
-some_context.lookup_data(variable_name)
-some_variable.as_data(some_context)
-</pre>
+<blockquote>
+<div class="line-block">
+<div class="line"><em>some_context</em>.lookup_data(<em>variable_name</em>)</div>
+<div class="line"><em>some_variable</em>.as_data(<em>some_context</em>)</div>
+</div>
+</blockquote>
 </div>
 </div>
 </div>
@@ -258,7 +355,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Jan 04 2008.
+    Page last modified Tue, Feb 12 2008.
   </div>
 
 </body>

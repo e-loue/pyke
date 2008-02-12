@@ -145,12 +145,12 @@ Running the Example
 These rules could be run as follows:
 
     >>> import pyke
-    >>> pyke.load('examples')
-    >>> pyke.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
-    >>> pyke.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
-    >>> pyke.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
-    >>> pyke.activate('fc_example')     # This is where the rules are run!
-    >>> pyke.get_kb('family').dump_specific_facts()
+    >>> engine = pyke.engine('examples')
+    >>> engine.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
+    >>> engine.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
+    >>> engine.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
+    >>> engine.activate('fc_example')     # This is where the rules are run!
+    >>> engine.get_kb('family').dump_specific_facts()
     child_parent('michael', 'bruce', (), 'son', 'father')
     child_parent('michael', 'marilyn', (), 'son', 'mother')
     child_parent('bruce', 'thomas', (), 'son', 'father')
@@ -175,7 +175,7 @@ These rules could be run as follows:
 .. _facts: fact_
 .. _inherited: ../knowledge_bases/rule_bases.html#rule-base-inheritance
 ..  _.krb file: ../../krb_syntax/index.html
-.. _pattern variable: patterns_
+.. _pattern variable: ../../krb_syntax/pattern.html#pattern-variable
 .. _pattern variables: `pattern variable`_
 .. _pattern: ../../krb_syntax/pattern.html
 .. _patterns: pattern_

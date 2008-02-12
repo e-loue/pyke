@@ -155,12 +155,12 @@ Running the Example
 The plan is created as a byproduct of proving_ the goal:
 
     >>> import pyke
-    >>> pyke.load('examples')
-    >>> pyke.activate('plan_example')
-    >>> no_vars, plan1 = pyke.prove_1('plan_example', 'transfer',
-    ...                               (('bruce', 'checking'),
-    ...                                ('bruce', 'savings')),
-    ...                               0)
+    >>> engine = pyke.engine('examples')
+    >>> engine.activate('plan_example')
+    >>> no_vars, plan1 = engine.prove_1('plan_example', 'transfer',
+    ...                                 (('bruce', 'checking'),
+    ...                                  ('bruce', 'savings')),
+    ...                                 0)
 
 ``plan1`` is now a program to transfer X amount
 from 'bruce', 'checking' to 'bruce', 'savings'.  Using the above rule names
@@ -197,10 +197,10 @@ into the plan along with the function call graph.
 
 Let's create a second program:
 
-    >>> no_vars, plan2 = pyke.prove_1('plan_example', 'transfer',
-    ...                               (('bruce', 'checking'),
-    ...                                ('my_other_bank', 'bruce', 'savings')),
-    ...                               0)
+    >>> no_vars, plan2 = engine.prove_1('plan_example', 'transfer',
+    ...                                 (('bruce', 'checking'),
+    ...                                  ('my_other_bank', 'bruce', 'savings')),
+    ...                                 0)
 
 ``plan2`` is now a program to transfer X amount
 from 'my_other_bank', 'bruce', 'checking' to 'bruce', 'savings'.
@@ -231,10 +231,10 @@ And is run just like plan1, but produces different results:
 
 And the final use case:
 
-    >>> no_vars, plan3 = pyke.prove_1('plan_example', 'transfer',
-    ...                               (('my_other_bank', 'bruce', 'checking'),
-    ...                                ('bruce', 'savings')),
-    ...                               0)
+    >>> no_vars, plan3 = engine.prove_1('plan_example', 'transfer',
+    ...                                 (('my_other_bank', 'bruce', 'checking'),
+    ...                                  ('bruce', 'savings')),
+    ...                                 0)
     >>> plan3(150)
     get 150 from bank my_other_bank acct bruce checking
     withdraw 150 from central_accts ach_recv_acct
@@ -280,7 +280,7 @@ values to match the specific situation.
 ..  _.krb file: ../krb_syntax/index.html
 .. _pattern: ../krb_syntax/pattern.html
 .. _patterns: pattern_
-.. _pattern variable: patterns_
+.. _pattern variable: ../krb_syntax/pattern.html#pattern-variable
 .. _pattern variables: `pattern variable`_
 .. _prove: ../using_pyke.html#proving-goals
 .. _proving: prove_

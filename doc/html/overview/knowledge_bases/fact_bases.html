@@ -102,8 +102,8 @@ dictionaries, lists and user-defined objects are not allowed as arguments.</p>
 when a <a class="reference" href="../../using_pyke.html#setting-up-each-case">reset</a> is done to prepare for another run of the inference engine.
 Case specific facts are asserted through either:</p>
 <pre class="literal-block">
-pyke.assert_(kb_name, fact_name, arguments)
-pyke.add_case_specific_fact(kb_name, fact_name, arguments)
+*some_engine*.assert_(kb_name, fact_name, arguments)
+*some_engine*.add_case_specific_fact(kb_name, fact_name, arguments)
 </pre>
 <p>They may also be asserted by <a class="reference" href="../rules/forward_chaining.html">forward-chaining</a> rules.</p>
 </div>
@@ -112,7 +112,7 @@ pyke.add_case_specific_fact(kb_name, fact_name, arguments)
 <p>Universal facts are never deleted, specifically, when a <a class="reference" href="../../using_pyke.html#setting-up-each-case">reset</a> is done.  Add
 universal facts by calling:</p>
 <pre class="literal-block">
-pyke.add_universal_fact(kb_name, fact_name, arguments)
+*some_engine*.add_universal_fact(kb_name, fact_name, arguments)
 </pre>
 <p>Typically, all universal facts are added once at <a class="reference" href="../../using_pyke.html#initializing-pyke">program startup</a>.</p>
 </div>
@@ -151,7 +151,7 @@ are compiled and loaded into your python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Nov 08 2007.
+    Page last modified Mon, Feb 11 2008.
   </div>
 
 </body>

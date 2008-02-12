@@ -22,15 +22,7 @@
 # THE SOFTWARE.
 
 from pyke import tmp_itertools as itertools
-import pyke
 from pyke import knowledge_base
-
-def get_create(rb_name, parent = None, exclude_list = ()):
-    ans = pyke.Rule_bases.get(rb_name)
-    if ans is None: ans = rule_base(rb_name, parent, exclude_list)
-    elif ans.parent != parent or ans.exclude_set != frozenset(exclude_list):
-        raise AssertionError("duplicate rule_base: %s" % rb_name)
-    return ans
 
 class StopProof(Exception): pass
 
@@ -47,14 +39,14 @@ class stopIterator(object):
 	raise StopIteration
 
 class rule_base(knowledge_base.knowledge_base):
-    def __init__(self, name, parent = None, exclude_list = ()):
-	super(rule_base, self).__init__(name, rule_list, False)
-	if name in pyke.Rule_bases:
+    def __init__(self, engine, name, parent = None, exclude_list = ()):
+	super(rule_base, self).__init__(engine, name, rule_list, False)
+	if name in engine.rule_bases:
 	    raise AssertionError("rule_base %s already exists" % name)
-	if name in pyke.Knowledge_bases:
+	if name in engine.knowledge_bases:
 	    raise AssertionError("name clash between rule_base '%s' and "
                                  "fact_base '%s'" % (name, name))
-	pyke.Rule_bases[name] = self
+	engine.rule_bases[name] = self
 	self.fc_rules = []
 	self.parent = parent
 	self.exclude_set = frozenset(exclude_list)
@@ -75,7 +67,7 @@ class rule_base(knowledge_base.knowledge_base):
 	if not self.initialized:
 	    self.initialized = True
 	    if self.parent:
-		parent = pyke.Rule_bases.get(self.parent)
+		parent = self.engine.rule_bases.get(self.parent)
 		if parent is None:
 		    raise KeyError("rule_base %s: parent %s not found" % \
 				   (self.name, self.parent))
@@ -103,17 +95,17 @@ class rule_base(knowledge_base.knowledge_base):
 	    if not rb.parent: break
 	    rb = rb.parent
     def activate(self):
-	current_rb = pyke.Knowledge_bases.get(self.root_name)
+	current_rb = self.engine.knowledge_bases.get(self.root_name)
 	if current_rb:
 	    assert self.derived_from(current_rb), \
 		   "%s.activate(): not derived from current rule_base, %s" % \
 		   (self.name, current_rb.name)
-	pyke.Knowledge_bases[self.root_name] = self
+	self.engine.knowledge_bases[self.root_name] = self
 	self.register_fc_rules(current_rb)
 	self.run_fc_rules(current_rb)
     def reset(self):
-        if self.root_name in pyke.Knowledge_bases:
-            del pyke.Knowledge_bases[self.root_name]
+        if self.root_name in self.engine.knowledge_bases:
+            del self.engine.knowledge_bases[self.root_name]
     def gen_rule_lists_for(self, goal_name):
 	rule_base = self
 	while True:

@@ -21,8 +21,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import pyke
-
 class knowledge_base(object):
     ''' This object is a master repository for knowledge entities of different
 	names.  These knowledge entities could be facts or rules.  The
@@ -32,15 +30,16 @@ class knowledge_base(object):
 	In the syntax: "name1.name2(arg_pattern...)", the knowledge_base name
 	is "name1".
     '''
-    def __init__(self, name, entity_list_type = None, register = True):
+    def __init__(self, engine, name, entity_list_type = None, register = True):
+        self.engine = engine
 	self.name = name
 	if register:
-	    if name in pyke.Knowledge_bases:
+	    if name in engine.knowledge_bases:
 		raise AssertionError("knowledge_base %s already exists" % name)
-            if name in pyke.Rule_bases:
+            if name in engine.rule_bases:
                 raise AssertionError("name clash between fact_base '%s' and "
                                      "rule_base '%s'" % (name, name))
-	    pyke.Knowledge_bases[name] = self
+	    engine.knowledge_bases[name] = self
 	self.entity_lists = {}		# {name: entity_list}
 	self.entity_list_type = entity_list_type
 	self.initialized = False	# used by self.init2

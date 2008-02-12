@@ -74,7 +74,7 @@ do automatic program generation.</p>
 <a class="reference" href="rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="rules/index.html">rules</a>.  These functions are written in the <em>with</em>
 clause at the end of each <a class="reference" href="rules/index.html">rule</a> in the <a class="reference" href="../krb_syntax/index.html">.krb file</a>.  They don't affect how
 the <a class="reference" href="rules/index.html">rules</a> run to prove a goal, but are
-gathered up to form a call graph that is returned along with the <a class="reference" href="../krb_syntax/pattern.html">pattern
+gathered up to form a call graph that is returned along with the <a class="reference" href="../krb_syntax/pattern.html#pattern-variable">pattern
 variable</a> bindings that <a class="reference" href="../using_pyke.html#proving-goals">prove</a> the top-level goal.</p>
 </div>
 <div class="section">
@@ -160,8 +160,8 @@ plan function will be defined to take an &quot;amount&quot; parameter because of
 subordinate plan functions in lines 5 and 7.</p>
 <p>The plan function generated for the &quot;withdraw&quot; rule on line 13 will have
 the single line taken from line 16 in the <em>with</em> clause.  The &quot;$who&quot; and
-&quot;$acct_type&quot; <a class="reference" href="../krb_syntax/pattern.html">pattern variables</a> will be expanded to constant values taken
-from the values bound to these <a class="reference" href="../krb_syntax/pattern.html">pattern variables</a> after the top-level
+&quot;$acct_type&quot; <a class="reference" href="../krb_syntax/pattern.html#pattern-variable">pattern variables</a> will be expanded to constant values taken
+from the values bound to these <a class="reference" href="../krb_syntax/pattern.html#pattern-variable">pattern variables</a> after the top-level
 (transfer) goal has been proven.</p>
 <p>Finally, the plan function generated for the &quot;transfer_ach1&quot; rule on line
 21 will have three lines: two from the <em>when</em> clause (lines 25 and 27)
@@ -178,12 +178,12 @@ are at different indent levels in the <a class="reference" href="../krb_syntax/i
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; import pyke
-&gt;&gt;&gt; pyke.load('examples')
-&gt;&gt;&gt; pyke.activate('plan_example')
-&gt;&gt;&gt; no_vars, plan1 = pyke.prove_1('plan_example', 'transfer',
-...                               (('bruce', 'checking'),
-...                                ('bruce', 'savings')),
-...                               0)
+&gt;&gt;&gt; engine = pyke.engine('examples')
+&gt;&gt;&gt; engine.activate('plan_example')
+&gt;&gt;&gt; no_vars, plan1 = engine.prove_1('plan_example', 'transfer',
+...                                 (('bruce', 'checking'),
+...                                  ('bruce', 'savings')),
+...                                 0)
 </pre>
 </blockquote>
 <p><tt class="docutils literal"><span class="pre">plan1</span></tt> is now a program to transfer X amount
@@ -220,15 +220,15 @@ deposit 50 to bruce savings
 </pre>
 </blockquote>
 <p>Notice the strings: <tt class="docutils literal"><span class="pre">bruce</span></tt>, <tt class="docutils literal"><span class="pre">checking</span></tt> and <tt class="docutils literal"><span class="pre">savings</span></tt> in the output.
-These were specified as <a class="reference" href="../krb_syntax/pattern.html">pattern variables</a> in the code and are cooked
+These were specified as <a class="reference" href="../krb_syntax/pattern.html#pattern-variable">pattern variables</a> in the code and are cooked
 into the plan along with the function call graph.</p>
 <p>Let's create a second program:</p>
 <blockquote>
 <pre class="doctest-block">
-&gt;&gt;&gt; no_vars, plan2 = pyke.prove_1('plan_example', 'transfer',
-...                               (('bruce', 'checking'),
-...                                ('my_other_bank', 'bruce', 'savings')),
-...                               0)
+&gt;&gt;&gt; no_vars, plan2 = engine.prove_1('plan_example', 'transfer',
+...                                 (('bruce', 'checking'),
+...                                  ('my_other_bank', 'bruce', 'savings')),
+...                                 0)
 </pre>
 </blockquote>
 <p><tt class="docutils literal"><span class="pre">plan2</span></tt> is now a program to transfer X amount
@@ -263,10 +263,10 @@ send 200 to bank my_other_bank acct bruce savings
 <p>And the final use case:</p>
 <blockquote>
 <pre class="doctest-block">
-&gt;&gt;&gt; no_vars, plan3 = pyke.prove_1('plan_example', 'transfer',
-...                               (('my_other_bank', 'bruce', 'checking'),
-...                                ('bruce', 'savings')),
-...                               0)
+&gt;&gt;&gt; no_vars, plan3 = engine.prove_1('plan_example', 'transfer',
+...                                 (('my_other_bank', 'bruce', 'checking'),
+...                                  ('bruce', 'savings')),
+...                                 0)
 &gt;&gt;&gt; plan3(150)
 get 150 from bank my_other_bank acct bruce checking
 withdraw 150 from central_accts ach_recv_acct
@@ -303,7 +303,7 @@ still be called successfully, resulting in different calls from the initial
 <p>So you can see that it quite easy to use pyke to automatically combine
 python functions into programs!</p>
 <p>It also allows data within each python function to
-be specified using a <a class="reference" href="../krb_syntax/pattern.html">pattern variable</a> so that pyke can customize these
+be specified using a <a class="reference" href="../krb_syntax/pattern.html#pattern-variable">pattern variable</a> so that pyke can customize these
 values to match the specific situation.</p>
 </div>
 </div>
@@ -340,7 +340,7 @@ into named repositories called <em>knowledge bases</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Jan 04 2008.
+    Page last modified Tue, Feb 12 2008.
   </div>
 
 </body>

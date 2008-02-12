@@ -131,8 +131,8 @@ the <a class="reference" href="../knowledge_bases/rule_bases.html#rule-base-cate
 <div class="section">
 <h3><a id="how-backward-chaining-rules-are-run" name="how-backward-chaining-rules-are-run">How Backward-Chaining Rules are Run</a></h3>
 <p>These <a class="reference" href="index.html">rules</a> are not used until you ask pyke to <a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a goal.</p>
-<p>The easiest way
-to do this is with <a class="reference" href="../../using_pyke.html#proving-goals">pyke.prove_1</a> or <a class="reference" href="../../using_pyke.html#proving-goals">pyke.prove_n</a>.  <a class="reference" href="../../using_pyke.html#proving-goals">Prove_1</a> only
+<p>The easiest way to do this is with
+<em>some_engine</em>.prove_1_ or <em>some_engine</em>.prove_n_.  <a class="reference" href="../../using_pyke.html#proving-goals">Prove_1</a> only
 returns the first proof found and then stops (or raises pyke.CanNotProve).
 <a class="reference" href="../../using_pyke.html#proving-goals">Prove_n</a> is a generator that generates all possible proofs (which, in
 some cases, might be infinite).  In both cases, you pass a tuple of
@@ -148,13 +148,13 @@ arguments you specified as a tuple, along with the <a class="reference" href="..
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; import pyke
-&gt;&gt;&gt; pyke.load('examples')
-&gt;&gt;&gt; pyke.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
-&gt;&gt;&gt; pyke.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
-&gt;&gt;&gt; pyke.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
-&gt;&gt;&gt; pyke.activate('bc_example')
-&gt;&gt;&gt; for vars, no_plan in pyke.prove_n('bc_example', 'child_parent',
-...                                   ('michael',), 4):
+&gt;&gt;&gt; engine = pyke.engine('examples')
+&gt;&gt;&gt; engine.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
+&gt;&gt;&gt; engine.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
+&gt;&gt;&gt; engine.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
+&gt;&gt;&gt; engine.activate('bc_example')
+&gt;&gt;&gt; for vars, no_plan in engine.prove_n('bc_example', 'child_parent',
+...                                     ('michael',), 4):
 ...     print vars
 ('bruce', (), 'son', 'father')
 ('marilyn', (), 'son', 'mother')
@@ -246,7 +246,7 @@ clause to try alternate subproofs is called <em>backtracking</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Nov 08 2007.
+    Page last modified Mon, Feb 11 2008.
   </div>
 
 </body>

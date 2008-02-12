@@ -25,8 +25,7 @@ def fc_head(rb_name):
     return (
         "# %s_fc.py" % rb_name,
         "",
-        "from pyke import contexts, pattern, fc_rule, rule_base",
-        "from pyke import lookup, assert_",
+        "from pyke import contexts, pattern, fc_rule",
     )
 
 def bc_head(rb_name):
@@ -34,8 +33,7 @@ def bc_head(rb_name):
         "# %s_bc.py" % rb_name,
         "",
         "from pyke import tmp_itertools as itertools",
-        "from pyke import rule_base, contexts, pattern, bc_rule",
-        "from pyke import prove",
+        "from pyke import contexts, pattern, bc_rule",
     )
 
 def goal(rb_name, rule_name,
@@ -47,6 +45,7 @@ def goal(rb_name, rule_name,
         "",
         "def %s(rule, arg_patterns, arg_context):" % rule_name,
         ("INDENT", 2),
+        "engine = rule.rule_base.engine",
         "patterns = rule.goal_arg_patterns()",
         "if len(arg_patterns) == len(patterns):",
         ("INDENT", 2),
