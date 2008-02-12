@@ -90,8 +90,9 @@ your subversion <tt class="docutils literal"><span class="pre">global-ignores</s
 and the mirrored directory structure will be created automatically if
 any of them do not already exist.</p>
 <p class="last">If you change some of the .krb files, you can create a new engine
-object to compile and reload the modules without restarting your program.
-But note that you'll need to rerun your <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> calls.</p>
+object to compile and reload the generated python modules without
+restarting your program.  But note that you'll need to rerun your
+<tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> calls.</p>
 </dd>
 <dt><em>some_engine</em>.add_universal_fact(kb_name, fact_name, arguments)</dt>
 <dd><p class="first">The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">fact</a>.  These <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">facts</a>
@@ -244,6 +245,55 @@ before pickling the <a class="reference" href="overview/plans.html">plan</a>:</p
 <p>No special code is required to unpickle a <a class="reference" href="overview/plans.html">plan</a>.  Also, the program that
 unpickles the <a class="reference" href="overview/plans.html">plan</a> does not have to import any pyke modules to be able
 to run the <a class="reference" href="overview/plans.html">plan</a>.  Just unpickle and call it.</p>
+</div>
+<div class="section">
+<h2><a id="krb-traceback" name="krb-traceback">Krb_traceback</a></h2>
+<p>A handy traceback module is provided to convert python functions, lines and
+line numbers to the <a class="reference" href="krb_syntax/index.html">.krb file</a> rule names, lines and line numbers in python
+traceback.  This makes it much easier to read the tracebacks that occur
+during proofs.</p>
+<p>The krb_traceback module has exactly the same functions as the standard
+python <a class="reference" href="http://docs.python.org/lib/module-traceback.html">traceback</a> module, but they convert the generated python function
+information into <a class="reference" href="krb_syntax/index.html">.krb file</a> information.  They also delete the
+intervening python functions between subgoal proofs.</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; import sys
+&gt;&gt;&gt; import pyke
+&gt;&gt;&gt; from pyke import krb_traceback
+&gt;&gt;&gt;
+&gt;&gt;&gt; my_engine = pyke.engine('examples')
+&gt;&gt;&gt; my_engine.activate('error_test')
+&gt;&gt;&gt; try:
+...     my_engine.prove_1('error_test', 'goal', (), 0)
+... except:
+...     krb_traceback.print_exc(None, sys.stdout)    # sys.stdout needed for doctest
+Traceback (most recent call last):
+  File &quot;&lt;doctest using_pyke.txt[27]&gt;&quot;, line 2, in &lt;module&gt;
+    my_engine.prove_1('error_test', 'goal', (), 0)
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/__init__.py&quot;, line 128, in prove_1
+    return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/__init__.py&quot;, line 117, in prove_n
+    for arg in fixed_args) + vars):
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/rule_base.py&quot;, line 36, in next
+    return self.iterator.next()
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/tmp_itertools.py&quot;, line 32, in chain
+    for x in iterable: yield x
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/tmp_itertools.py&quot;, line 32, in chain
+    for x in iterable: yield x
+  File &quot;/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb&quot;, line 26, in rule1
+    goal2()
+  File &quot;/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb&quot;, line 31, in rule2
+    goal3()
+  File &quot;/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb&quot;, line 36, in rule3
+    goal4()
+  File &quot;/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb&quot;, line 41, in rule4
+    check $bar &gt; 0
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/contexts.py&quot;, line 209, in lookup_data
+    raise KeyError(&quot;$%s not bound&quot; % var_name)
+KeyError: '$bar not bound'
+</pre>
+</blockquote>
 </div>
 </div>
 <div class="section">

@@ -135,6 +135,7 @@ Three functions initialize each case:
     >>> my_engine.get_kb('family').dump_universal_facts()
     son_of('bruce', 'thomas', 'norma')
     son_of('david', 'bruce', 'marilyn')
+
 *some_engine*.activate(\*rb_names)
     Then call ``activate`` to activate the appropriate `rule bases`_.  This
     may be called more than once, if desired, or it can simply take multiple
@@ -219,6 +220,54 @@ before pickling the plan_:
 No special code is required to unpickle a plan_.  Also, the program that
 unpickles the plan_ does not have to import any pyke modules to be able
 to run the plan_.  Just unpickle and call it.
+
+Krb_traceback
+---------------
+
+A handy traceback module is provided to convert python functions, lines and
+line numbers to the `.krb file`_ rule names, lines and line numbers in python
+traceback.  This makes it much easier to read the tracebacks that occur
+during proofs.
+
+The krb_traceback module has exactly the same functions as the standard
+python traceback_ module, but they convert the generated python function
+information into `.krb file`_ information.  They also delete the
+intervening python functions between subgoal proofs.
+
+    >>> import sys
+    >>> import pyke
+    >>> from pyke import krb_traceback
+    >>>
+    >>> my_engine = pyke.engine('examples')
+    >>> my_engine.activate('error_test')
+    >>> try:
+    ...     my_engine.prove_1('error_test', 'goal', (), 0)
+    ... except:
+    ...     krb_traceback.print_exc(None, sys.stdout)    # sys.stdout needed for doctest
+    Traceback (most recent call last):
+      File "<doctest using_pyke.txt[27]>", line 2, in <module>
+        my_engine.prove_1('error_test', 'goal', (), 0)
+      File "/home/bruce/python/workareas/sf.trunk/pyke/__init__.py", line 128, in prove_1
+        return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
+      File "/home/bruce/python/workareas/sf.trunk/pyke/__init__.py", line 117, in prove_n
+        for arg in fixed_args) + vars):
+      File "/home/bruce/python/workareas/sf.trunk/pyke/rule_base.py", line 36, in next
+        return self.iterator.next()
+      File "/home/bruce/python/workareas/sf.trunk/pyke/tmp_itertools.py", line 32, in chain
+        for x in iterable: yield x
+      File "/home/bruce/python/workareas/sf.trunk/pyke/tmp_itertools.py", line 32, in chain
+        for x in iterable: yield x
+      File "/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb", line 26, in rule1
+        goal2()
+      File "/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb", line 31, in rule2
+        goal3()
+      File "/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb", line 36, in rule3
+        goal4()
+      File "/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb", line 41, in rule4
+        check $bar > 0
+      File "/home/bruce/python/workareas/sf.trunk/pyke/contexts.py", line 209, in lookup_data
+        raise KeyError("$%s not bound" % var_name)
+    KeyError: '$bar not bound'
 
 Other Functions
 ========================
@@ -313,3 +362,4 @@ proof is yielded. This is done by either:
        overview/knowledge_bases/rule_bases.html#rule-base-categories
 .. _rule bases: `rule base`_
 .. _taking clause: krb_syntax/bc_rule.html#taking-clause
+.. _traceback: http://docs.python.org/lib/module-traceback.html

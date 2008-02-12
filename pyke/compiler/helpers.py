@@ -37,7 +37,7 @@ def bc_head(rb_name):
     )
 
 def goal(rb_name, rule_name,
-         (goal, goal_name, pattern_args, using, start_lineno, end_lineno),
+         (goal, goal_name, pattern_args, taking, start_lineno, end_lineno),
          pred_plan_lines, python_lines):
     # returns plan_lines, goal_fn_head, goal_fn_tail, goal_decl_lines
     assert goal == 'goal'
@@ -77,27 +77,41 @@ def goal(rb_name, rule_name,
         "POPINDENT",
         "POPINDENT",
     )
-    if not using and not pred_plan_lines and not python_lines:
+    if not taking and not pred_plan_lines and not python_lines:
         plan_fn_name = "None"
         plan_lines = ()
     else:
         plan_fn_name = "%s_plans.%s" % (rb_name, rule_name)
         def_start = "def %s" % rule_name
-        using = [line.strip() for line in using if line.strip()]
-        if not using:
+        taking = [line.strip() for line in taking if line.strip()]
+        if not taking:
             def_head = def_start + '(context):'
         else:
-            if using[0][0] != '(' or using[-1][-1] != ')':
-                raise SyntaxError("%s.%s: using clause missing parenthesis" %
-                                      (rb_name, rule_name))
-            using[0] = def_start + "(context, " + using[0][1:]
-            using[-1] += ':'
-            if len(using) == 1:
-                def_head = using[0]
+            if taking[0][0] != '(' or taking[-1][-1] != ')':
+                from pyke.compiler import scanner
+                end = scanner.lexer.lexpos
+                taking_start = scanner.lexer.lexdata.rfind('taking', 0, end)
+                if taking_start < 0:
+                    raise SyntaxError("'taking' clause: missing parenthesis",
+                                      scanner.syntaxerror_params())
+                taking_start += len('taking')
+                while taking_start < len(scanner.lexdata) and \
+                      scanner.lexdata[taking_start].isspace():
+                    taking_start += 1
+                lineno = scanner.lexer.lineno - \
+                         scanner.lexer.lexdata.count('\n', taking_start,
+                                                     scanner.lexer.lexpos)
+                raise SyntaxError("'taking' clause: missing parenthesis",
+                                  scanner.syntaxerror_params(taking_start,
+                                                             lineno))
+            taking[0] = def_start + "(context, " + taking[0][1:]
+            taking[-1] += ':'
+            if len(taking) == 1:
+                def_head = taking[0]
             else:
-                def_head = (using[0],
+                def_head = (taking[0],
                             ('INDENT', 4),
-                            tuple(using[1:]),
+                            tuple(taking[1:]),
                             "POPINDENT",
                            )
         plan_lines = ("",

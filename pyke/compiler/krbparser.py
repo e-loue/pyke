@@ -28,8 +28,9 @@ from __future__ import with_statement
 from pyke import tmp_itertools as itertools
 import contextlib
 from ply import yacc
-from pyke.compiler.scanner import tokens
 from pyke.compiler import scanner
+
+tokens = scanner.tokens
 
 def p_file(p):
     ''' file : nls_opt parent_opt fc_rules bc_rules_opt
@@ -377,14 +378,15 @@ def p_tuple(p):
     ''' data : LP_TOK data_list comma_opt RP_TOK '''
     p[0] = '(' + ' '.join(str(x) + ',' for x in p[2]) + ')'
 
-def p_error(p):
-    raise SyntaxError("%s(%d): syntax error at token %s" %
-                          (scanner.lexer.filename, scanner.lexer.lineno, p))
+def p_error(t):
+    raise SyntaxError("invalid syntax",
+                      scanner.syntaxerror_params(t.lexpos, t.lineno))
 
 parser = yacc.yacc(write_tables=0, debug=0)
 
 def parse(filename, debug = 0):
     with contextlib.closing(file(filename)) as f:
+        scanner.init()
         scanner.lexer.lineno = 1
         scanner.lexer.filename = filename
         scanner.debug = debug

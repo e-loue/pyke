@@ -124,8 +124,8 @@ def t_indent_sp(t):
     if indent < current_indent:
 	if indent > 0 and indent not in indent_levels:
 	    raise SyntaxError(
-		      "%d: deindent doesn't match any previous indent level" %
-			  t.lexer.lineno)
+		      "deindent doesn't match any previous indent level",
+                      syntaxerror_params(t.lexpos))
 	t.type = 'DEINDENT_TOK'
 	del indent_levels[-1]
 	if indent < (indent_levels[-1] if indent_levels else 0):
@@ -139,9 +139,6 @@ def t_indent_sp(t):
     # else indent == current_indent
     t.lexer.begin('INITIAL')
     if debug: print "no indent: indent_levels", indent_levels
-
-code = []
-code_indent_level = 0
 
 def start_code(plan_name = None, multiline = False,
                var_format = "context['%s']"):
@@ -182,8 +179,9 @@ def t_code_plan(t):
     if debug:
         print "scanner saw '$$', current_plan_name is", current_plan_name
     if not current_plan_name:
-        raise SyntaxError("%s(%d): $$ only allowed in plan_specs within the "
-                          "'when' clause" % (t.lexer.filename, t.lexer.lineno))
+        raise SyntaxError("'$$' only allowed in plan_specs within the "
+                          "'when' clause",
+                          syntaxerror_params(t.lexpos))
     current_line += pattern_var_format % current_plan_name
     plan_vars_needed.append(current_plan_name)
 
@@ -191,8 +189,8 @@ def t_code_pattern_var(t):
     r'\$[a-zA-Z_][a-zA-Z0-9_]*\b'
     global current_line
     if not pattern_var_format:
-        raise SyntaxError("%s(%d): $<name> only allowed in backward chaining "
-                          "rules" % (t.lexer.filename, t.lexer.lineno))
+        raise SyntaxError("$<name> only allowed in backward chaining rules",
+                          syntaxerror_params(t.lexpos))
     current_line += pattern_var_format % t.value[1:]
     plan_vars_needed.append(t.value[1:])
     if debug: print "scanner saw pattern_var:", t.value
@@ -216,8 +214,8 @@ def t_code_close(t):
     r'[]})]'
     global current_line, code_nesting_level
     if code_nesting_level <= 0:
-        raise SyntaxError("%s(%d): unmatched %s" %
-                              (t.lexer.filename, t.lexer.lineno, repr(t.value)))
+        raise SyntaxError("unmatched %s" % repr(t.value),
+                          syntaxerror_params(t.lexpos))
     code_nesting_level -= 1
     current_line += t.value
 
@@ -366,8 +364,8 @@ def t_RP_TOK(t):
     return t
 
 def t_ANY_error(t):
-    raise SyntaxError("%s(%d): illegal character %s\n" %
-                         (t.lexer.filename, t.lexer.lineno, repr(t.value[0])))
+    raise SyntaxError("illegal character %s" % repr(t.value[0]),
+                      syntaxerror_params(t.lexpos))
 
 # helper functions:
 
@@ -474,6 +472,34 @@ def tokenize(filename = 'test'):
     with contextlib.closing(file(filename)) as f:
 	for t in token_iterator(f.read()):
 	    print t
+
+def syntaxerror_params(pos = None, lineno = None):
+    '''
+        Returns (filename, lineno, column, line) for use in as the second
+        argument to SyntaxError exceptions.
+    '''
+    if pos is None: pos = lexer.lexpos
+    start = pos
+    if lineno is None: lineno = lexer.lineno
+    while start > 0 and lexer.lexdata[start] in '\r\n':
+        start -= 1
+    end = start
+    print "pos", pos, "lineno", lineno, "start", start
+    start = max(lexer.lexdata.rfind('\r', 0, start),
+                lexer.lexdata.rfind('\n', 0, start)) + 1
+    column = pos - start + 1
+    end1 = lexer.lexdata.find('\r', end)
+    end2 = lexer.lexdata.find('\n', end)
+    if end1 < 0: end = end2
+    elif end2 < 0: end = end1
+    else: end = min(end1, end2)
+    print "start", start, "column", column, "end", end
+    return (lexer.filename, lineno, column, lexer.lexdata[start:end])
+
+def init():
+    global indent_levels, nesting_level
+    indent_levels = []
+    nesting_level = 0
 
 def test():
     import doctest

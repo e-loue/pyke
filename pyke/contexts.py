@@ -77,10 +77,10 @@
 
         >>> A_context.lookup(A_pattern)
         (123, None)
-        >>> B_context.lookup(A_pattern)         # doctest: +ELLIPSIS
+        >>> B_context.lookup(A_pattern)
         Traceback (most recent call last):
             ...
-        KeyError: '$foo not bound in <__main__.simple_context object at ...>'
+        KeyError: '$foo not bound'
 
     This is done by using the current rule's context as a controlling context
     for all the bindings that occur within that rule.  If the binding is for
@@ -89,10 +89,10 @@
     method on its context which undoes all of the bindings in its undo_list.
 
         >>> B_context.done()
-        >>> A_context.lookup(A_pattern)         # doctest: +ELLIPSIS
+        >>> A_context.lookup(A_pattern)
         Traceback (most recent call last):
             ...
-        KeyError: '$foo not bound in <__main__.simple_context object at ...>'
+        KeyError: '$foo not bound'
 
     Thus, in binding a variable to a value, there are three contexts
     involved:
@@ -122,10 +122,10 @@
         >>> b_var
         $b_var
         >>> B_context.bind(b_var.name, B_context, a_var, A_context)
-        >>> B_context.lookup(b_var)             # doctest: +ELLIPSIS
+        >>> B_context.lookup(b_var)
         Traceback (most recent call last):
             ...
-        KeyError: '$a_var not bound in <__main__.simple_context object at ...>'
+        KeyError: '$a_var not bound'
         >>> ans = B_context.lookup(b_var, True)
         >>> ans                                 # doctest: +ELLIPSIS
         ($a_var, <__main__.simple_context object at ...>)
@@ -146,10 +146,10 @@
         >>> anonymous()
         $_
         >>> A_context.bind('_', A_context, 567)
-        >>> A_context.lookup_data('_')             # doctest: +ELLIPSIS
+        >>> A_context.lookup_data('_')
         Traceback (most recent call last):
             ...
-        KeyError: '$_ not bound in <__main__.simple_context object at ...>'
+        KeyError: '$_ not bound'
 """
 
 import sys
@@ -206,7 +206,7 @@ class simple_context(object):
 	    if val is not _Not_found: return val
 	binding = self.bindings.get(var_name)
 	if binding is None:
-	    raise KeyError("$%s not bound in %s" % (var_name, self))
+	    raise KeyError("$%s not bound" % var_name)
 	val, context = binding
 	if context is not None:
 	    val = val.as_data(context, final)
@@ -227,7 +227,7 @@ class simple_context(object):
 	else:
 	    return val, where
 	if allow_variable_in_ans: return val, where
-	raise KeyError("%s not bound in %s" % (str(val), str(where)))
+	raise KeyError("%s not bound" % str(val))
     def mark(self, save_all_undo = False):
         if save_all_undo: self.save_all_undo_count += 1
 	return len(self.undo_list)
@@ -319,13 +319,13 @@ class anonymous(variable):
 	super(anonymous, self).__init__('_')
     def lookup(self, my_context, allow_variable_in_ans = False):
 	if allow_variable_in_ans: return self, my_context
-	raise KeyError("$%s not bound in %s" % (self.name, my_context.name()))
+	raise KeyError("$%s not bound" % self.name)
     def match_data(self, bindings, my_context, data):
 	return True
     def match_pattern(self, bindings, my_context, pattern_b, b_context):
 	return True
     def as_data(self, my_context, final = None):
-	raise KeyError("$%s not bound in %s" % (self.name, my_context.name()))
+	raise KeyError("$%s not bound" % self.name)
     def is_data(self, my_context):
 	return False
 

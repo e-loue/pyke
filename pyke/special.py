@@ -38,11 +38,11 @@ class special_fn(knowledge_base.knowledge_entity_list):
 	super(special_fn, self).__init__(name)
 	special_base.add_fn(self)
     def lookup(self, bindings, pat_context, patterns):
-	raise SyntaxError("special.%s may not be used in forward chaining "
-			  "rules" % self.name)
+	raise AssertionError("special.%s may not be used in forward chaining "
+			     "rules" % self.name)
     def prove(self, bindings, pat_context, patterns):
-	raise SyntaxError("special.%s may not be used in backward chaining "
-			  "rules" % self.name)
+	raise AssertionError("special.%s may not be used in backward chaining "
+			     "rules" % self.name)
 
 class claim_goal(special_fn):
     def __init__(self, special_base):

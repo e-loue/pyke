@@ -72,11 +72,11 @@ class engine(object):
         ans = self.knowledge_bases.get(kb_name)
         if ans is None:
             if _new_class: ans = _new_class(self, kb_name)
-            else: raise KeyError("knowledge_base: %s not found" % kb_name)
+            else: raise KeyError("knowledge_base %s not found" % kb_name)
         return ans
     def get_rb(self, rb_name):
         ans = self.rule_bases.get(rb_name)
-        if ans is None: raise KeyError("rule_base: %s not found" % rb_name)
+        if ans is None: raise KeyError("rule_base %s not found" % rb_name)
         return ans
     def get_create(self, rb_name, parent = None, exclude_list = ()):
         ans = self.rule_bases.get(rb_name)
