@@ -24,6 +24,8 @@ FILES TO CHANGE:
     - pyke/__init__.py
         - line 36: version = '0.1.alpha2'
 
+COMMIT SVN UPDATES
+
 BUILD RELEASE
 
 $ rm -rf build
@@ -31,3 +33,30 @@ $ python setup.py bdist_egg sdist
 $ ./make_doc_tarball dist/pyke_doc_html-0.1.alpha2.tar.gz
 
 TAG RELEASE
+
+$ svn copy https://pyke.svn.sourceforge.net/svnroot/pyke/trunk \
+           https://pyke.svn.sourceforge.net/svnroot/pyke/tags/0.1.alpha2
+
+UPLOAD DIST FILES TO SOURCEFORGE:
+
+$ cd dist
+$ ftp upload.sourceforge.net
+Name: anonymous
+Password: mtnyogi
+ftp> binary
+ftp> cd incoming
+ftp> mput *
+ftp> quit
+
+Go to: Admin -> File Releases
+Click on "Add Release", Enter: 0.1.alpha2
+Follow the rest of the instructions there...
+    Pick "Platform Independant" for all of the files.
+    Pick ".zip" for the .egg file.
+    Pick "Source .gz" for the source .gz file.
+    Pick ".gz" for the doc .gz file.
+
+UPDATE PYPI LINK:
+
+$ python setup.py register
+
