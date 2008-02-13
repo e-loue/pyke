@@ -33,6 +33,8 @@ from pyke import (condensedPrint, contexts, pattern,
 class CanNotProve(StandardError):
     pass
 
+version = '0.1.alpha2'
+
 Name_test = re.compile(r'[a-zA-Z_][a-zA-Z0-9_]*$')
 Bad_name_char = re.compile('[^a-zA-Z0-9_]')
 

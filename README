@@ -1,6 +1,6 @@
 Pyke: Python Knowledge Engine
 
-Version: 0.1.alpha1
+Version: 0.1.alpha2
 
 Both forward-chaining and backward-chaining rules (which may include python
 code) are compiled into python. Can also automatically assemble python
@@ -20,7 +20,7 @@ The documentation is at:
 
 You can download a copy of this documentation to your hard drive:
 
-    pyke_doc_html-0.1.alpha1.zip
+    pyke_doc_html-0.1.alpha2.tar.gz
 
 See the end of this file for how to regenerate the html files.
 
@@ -57,15 +57,14 @@ This can be checked as follows:
 
 Then you got two choices for pyke:
 
-    pyke-0.1.alpha1-py2.5.egg
-    pyke-0.1.alpha1.linux-i686.tar.gz
+    pyke-0.1.alpha2-py2.5.egg
 
 
 SOURCE DISTRIBUTION:
 
 The pyke source distribution is the file:
 
-    pyke-0.1.alpha1.tar.gz
+    pyke-0.1.alpha2.tar.gz
 
 This contains the pyke source code, documentation (both source and html), and
 examples (currently only one example).
@@ -86,16 +85,13 @@ directory and:
 
 COMPILING THE COMPILER.KRB FILE:
 
-You may want to edit the pyke/compiler/__init__.py file to set "nonuke" to
-True first so that compiler_bc.py doesn't get deleted if there are syntax
-errors in compiler.krb.  If you accidently delete compiler_bc.py, you'll
-have to download a new copy of it because you need it to compile itself!
-
 In pyke/compiler:
 
     $ python2.5
     >>> from pyke import compiler
-    >>> compiler.compile('compiler.krb')
+    >>> compiler.compile('.', 'compiled_krb', ('compiler.krb',))
+    $ cp compiled_krb/compiler_bc.py .
+    $ rm -rf compiled_krb
 
 
 EXAMPLES:

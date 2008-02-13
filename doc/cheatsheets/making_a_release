@@ -1,0 +1,33 @@
+All code/doc changes should be committed.
+
+To get the svn revision of the previous release:
+
+$ svn log https://pyke.svn.sourceforge.net/svnroot/pyke/tags
+
+Do "svn log" to see what's changed:
+
+$ svn log -r 48:HEAD https://pyke.svn.sourceforge.net/svnroot/pyke/trunk
+
+Write: RELEASE_NOTES-0.1.alpha2
+
+FILES TO CHANGE:
+    - README
+        Read through to see if anything has changed.  The following lines
+        will always change:
+        - line  3: Version: 0.1.alpha2
+        - line 23:     pyke_doc_html-0.1.alpha2.tar.gz
+        - line 60:     pyke-0.1.alpha2-py2.5.egg
+        - line 67:     pyke-0.1.alpha2.tar.gz
+    - setup.py
+        - line 11:     version = "0.1.alpha2",
+        - line 35:         "http://downloads.sourceforge.net/..."
+    - pyke/__init__.py
+        - line 36: version = '0.1.alpha2'
+
+BUILD RELEASE
+
+$ rm -rf build
+$ python setup.py bdist_egg sdist
+$ ./make_doc_tarball dist/pyke_doc_html-0.1.alpha2.tar.gz
+
+TAG RELEASE
