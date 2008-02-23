@@ -37,6 +37,7 @@
 <div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
 <div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="logic_tricks.html">Logic Tricks</a></div>
 </div>
 
             </div>
@@ -271,9 +272,9 @@ intervening python functions between subgoal proofs.</p>
 Traceback (most recent call last):
   File &quot;&lt;doctest using_pyke.txt[27]&gt;&quot;, line 2, in &lt;module&gt;
     my_engine.prove_1('error_test', 'goal', (), 0)
-  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/__init__.py&quot;, line 128, in prove_1
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/__init__.py&quot;, line 130, in prove_1
     return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
-  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/__init__.py&quot;, line 117, in prove_n
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/__init__.py&quot;, line 119, in prove_n
     for arg in fixed_args) + vars):
   File &quot;/home/bruce/python/workareas/sf.trunk/pyke/rule_base.py&quot;, line 36, in next
     return self.iterator.next()
@@ -389,6 +390,8 @@ generation stuff means and how it works.</p>
 <div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
 write your rules.</p>
 </div>
+<div class="right-item"><a href="logic_tricks.html">Logic Tricks</a><p>How to accomplish different logic operations with rules.</p>
+</div>
 
             </div>
           </td>
@@ -405,7 +408,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, Feb 12 2008.
+    Page last modified Fri, Feb 22 2008.
   </div>
 
 </body>

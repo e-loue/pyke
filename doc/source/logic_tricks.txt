@@ -1,0 +1,157 @@
+.. $Id$
+.. 
+.. Copyright © 2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Logic Tricks
+    page-description:
+        How to accomplish different logic operations with rules.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+/restindex
+
+===================================
+Logic Tricks
+===================================
+
+This describes how to accomplish different logic operations with rules.
+
+X OR Y
+===========
+
+For example: check for text_x($arg) OR test_y($arg).
+
+Create a separate subgoal for the OR case, let's call it ``or_goal``.  Then use
+a separate rule for each OR clause::
+
+    or_goal_test_x:
+        use or_goal($arg)
+        when
+            test_x($arg)
+
+    or_goal_test_y:
+        use or_goal($arg)
+        when
+            test_y($arg)
+
+Then you'd use ``or_goal($arg)`` where you wanted the *OR* clause.
+
+This can go on for any number of OR-ed clauses by just adding more rules for
+``or_goal``.
+
+IF X THEN Y
+=============
+
+For example: if test_x($arg) then test_y($arg).
+
+What this means is that test_y($arg) must be true if test_x($arg) is true.
+But if test_x($arg) is not true, then test_y($arg) doesn't matter and ``if
+test_x($arg) then test_y($arg)`` is true.
+
+Create a new subgoal, let's call it ``if_x_then_y``.  Use two rules::
+
+    if_x_then_y_if:
+        use if_x_then_y($arg)
+        when
+            test_x($arg)            # if this fails, the next rule will be used
+            special.claim_goal()    # don't use any other rules for if_x_then_y
+            test_y($arg)            # if this fails, the next rule will not be used, so if_x_then_y will fail.
+
+    if_x_then_y_else:
+        use if_x_then_y($_)         # this rule is only used if test_x($arg) fails
+
+NOT X
+==========================
+
+For example: not test_x($arg)
+
+You have to be careful about *not* logic because it can mean different things.
+In this example, if we try ``not test_x($arg)`` and ``$arg`` is unbound what
+should happen?  Should it generate all of the different values for ``$arg``
+for which ``test_x($arg)`` fails?  This generally isn't very practical!
+
+The other interpretation is that there is **no** possible binding for ``$arg``
+that makes ``test_x($arg)`` true.  In this example, ``not test_x($arg)`` would
+then be false, because there is some ``$arg`` value that makes ``test_x($arg)``
+true.
+
+This second interpretation can be implemented by creating a new subgoal, let's
+say ``not_test_x`` and using a pair of rules::
+
+    not_test_x_fail:
+        use not_test_x($arg)
+        when
+            test_x($arg)            # if there is any way for test_x($arg) to be true
+            special.claim_goal()    # don't use any other rules for not_test_x
+            check False             # and cause this rule to fail, which causes the not_test_x goal to fail
+
+    not_test_x_success:
+        use not_test_x($_)          # this rule only runs if test_x($arg) fails, above
+
+EXISTS X SUCH THAT Y
+===============================================================
+
+For example: there exists a ``$x`` from ``generate_x($x)``, where
+``test_y($x)`` is true.
+
+This doesn't require a new subgoal.  You can just use the following two
+clauses in place of the ``exists`` test::
+
+    generate_x($x)
+    test_y($x)          # if this fails, it will backtrack and try the next value from generate_x($x)
+
+FOR ALL X, Y
+===============================================================
+
+For example: for all $x from generate_x($x), test_y($x) is true
+
+Rethink this as a combination of two negatives on ``exists``, above: there
+does *not* ``exist`` an ``$x`` from ``generate_x($x)`` where ``test_y($x)`` is
+*not* true.  Then combine the ``not`` trick with the ``exists`` trick.
+This needs a new subgoal, we'll call it ``for_all_x``::
+
+    for_all_x_failure:
+        use for_all_x()
+        when
+            generate_x($x)          # these two lines are the exists trick
+            not_test_y($x)
+            special.claim_goal()    # don't use any other rules for for_all_x
+            check False             # and cause this rule to fail, which causes the for_all_x goal to fail
+
+    for_all_x_success:
+        use for_all_x()             # we only make it here if all generated $x values have test_y($x) true
+
+Then you also need to create rules for the ``not_test_y`` goal using the
+``not`` trick, above::
+
+    not_test_y_fail:
+        use not_test_y($x)
+        when
+            test_y($x)              # if there is any way for test_y($x) to be true
+            special.claim_goal()    # don't use any other rules for not_test_y
+            check False             # and cause this rule to fail, which causes the not_test_y goal to fail
+
+    not_test_y_success:
+        use not_test_y($_)          # this rule only runs if test_y($x) fails, above
+

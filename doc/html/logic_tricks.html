@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Logic Tricks</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="stylesheets/pyke.css" type="text/css" />
+</head>
+<body>
+  <table id="page-table">
+    <thead class="head">
+        <tr id="header1"><th id="header" colspan="3">
+            &nbsp;
+        </th></tr>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <li><a href="index.html">Home</a></li>
+<li>&gt;</li>
+<li>Logic Tricks</li>
+
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
+    </thead>
+
+    <tbody id="body">
+        <tr id="body-tr">
+          <td id="left-nav">
+            <div id="left-nav-div">
+              
+<div class="title-nav"><a href="index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="overview/index.html">Overview</a></div>
+<div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="logic_tricks.html">Logic Tricks</a></div>
+</div>
+
+            </div>
+            <div id="icons">
+                <div id="project-page">
+                  <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
+                </div>
+                Please Make a Donation:<br />
+                <a href="http://sourceforge.net/donate/index.php?group_id=207724">
+                  <img src="http://images.sourceforge.net/images/project-support.jpg"
+                       width="88" height="32" border="0"
+                       alt="Support This Project" /> </a> <br /><br />
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+            </div>
+          </td>
+          <td id="main-td">
+            <div id="main">
+                <a name="startcontent" id="startcontent"></a>
+                <div class="document" id="logic-tricks">
+<h1 class="title">Logic Tricks</h1>
+<p>This describes how to accomplish different logic operations with rules.</p>
+<div class="section">
+<h1><a id="x-or-y" name="x-or-y">X OR Y</a></h1>
+<p>For example: check for text_x($arg) OR test_y($arg).</p>
+<p>Create a separate subgoal for the OR case, let's call it <tt class="docutils literal"><span class="pre">or_goal</span></tt>.  Then use
+a separate rule for each OR clause:</p>
+<pre class="literal-block">
+or_goal_test_x:
+    use or_goal($arg)
+    when
+        test_x($arg)
+
+or_goal_test_y:
+    use or_goal($arg)
+    when
+        test_y($arg)
+</pre>
+<p>Then you'd use <tt class="docutils literal"><span class="pre">or_goal($arg)</span></tt> where you wanted the <em>OR</em> clause.</p>
+<p>This can go on for any number of OR-ed clauses by just adding more rules for
+<tt class="docutils literal"><span class="pre">or_goal</span></tt>.</p>
+</div>
+<div class="section">
+<h1><a id="if-x-then-y" name="if-x-then-y">IF X THEN Y</a></h1>
+<p>For example: if test_x($arg) then test_y($arg).</p>
+<p>What this means is that test_y($arg) must be true if test_x($arg) is true.
+But if test_x($arg) is not true, then test_y($arg) doesn't matter and <tt class="docutils literal"><span class="pre">if</span>
+<span class="pre">test_x($arg)</span> <span class="pre">then</span> <span class="pre">test_y($arg)</span></tt> is true.</p>
+<p>Create a new subgoal, let's call it <tt class="docutils literal"><span class="pre">if_x_then_y</span></tt>.  Use two rules:</p>
+<pre class="literal-block">
+if_x_then_y_if:
+    use if_x_then_y($arg)
+    when
+        test_x($arg)            # if this fails, the next rule will be used
+        special.claim_goal()    # don't use any other rules for if_x_then_y
+        test_y($arg)            # if this fails, the next rule will not be used, so if_x_then_y will fail.
+
+if_x_then_y_else:
+    use if_x_then_y($_)         # this rule is only used if test_x($arg) fails
+</pre>
+</div>
+<div class="section">
+<h1><a id="not-x" name="not-x">NOT X</a></h1>
+<p>For example: not test_x($arg)</p>
+<p>You have to be careful about <em>not</em> logic because it can mean different things.
+In this example, if we try <tt class="docutils literal"><span class="pre">not</span> <span class="pre">test_x($arg)</span></tt> and <tt class="docutils literal"><span class="pre">$arg</span></tt> is unbound what
+should happen?  Should it generate all of the different values for <tt class="docutils literal"><span class="pre">$arg</span></tt>
+for which <tt class="docutils literal"><span class="pre">test_x($arg)</span></tt> fails?  This generally isn't very practical!</p>
+<p>The other interpretation is that there is <strong>no</strong> possible binding for <tt class="docutils literal"><span class="pre">$arg</span></tt>
+that makes <tt class="docutils literal"><span class="pre">test_x($arg)</span></tt> true.  In this example, <tt class="docutils literal"><span class="pre">not</span> <span class="pre">test_x($arg)</span></tt> would
+then be false, because there is some <tt class="docutils literal"><span class="pre">$arg</span></tt> value that makes <tt class="docutils literal"><span class="pre">test_x($arg)</span></tt>
+true.</p>
+<p>This second interpretation can be implemented by creating a new subgoal, let's
+say <tt class="docutils literal"><span class="pre">not_test_x</span></tt> and using a pair of rules:</p>
+<pre class="literal-block">
+not_test_x_fail:
+    use not_test_x($arg)
+    when
+        test_x($arg)            # if there is any way for test_x($arg) to be true
+        special.claim_goal()    # don't use any other rules for not_test_x
+        check False             # and cause this rule to fail, which causes the not_test_x goal to fail
+
+not_test_x_success:
+    use not_test_x($_)          # this rule only runs if test_x($arg) fails, above
+</pre>
+</div>
+<div class="section">
+<h1><a id="exists-x-such-that-y" name="exists-x-such-that-y">EXISTS X SUCH THAT Y</a></h1>
+<p>For example: there exists a <tt class="docutils literal"><span class="pre">$x</span></tt> from <tt class="docutils literal"><span class="pre">generate_x($x)</span></tt>, where
+<tt class="docutils literal"><span class="pre">test_y($x)</span></tt> is true.</p>
+<p>This doesn't require a new subgoal.  You can just use the following two
+clauses in place of the <tt class="docutils literal"><span class="pre">exists</span></tt> test:</p>
+<pre class="literal-block">
+generate_x($x)
+test_y($x)          # if this fails, it will backtrack and try the next value from generate_x($x)
+</pre>
+</div>
+<div class="section">
+<h1><a id="for-all-x-y" name="for-all-x-y">FOR ALL X, Y</a></h1>
+<p>For example: for all $x from generate_x($x), test_y($x) is true</p>
+<p>Rethink this as a combination of two negatives on <tt class="docutils literal"><span class="pre">exists</span></tt>, above: there
+does <em>not</em> <tt class="docutils literal"><span class="pre">exist</span></tt> an <tt class="docutils literal"><span class="pre">$x</span></tt> from <tt class="docutils literal"><span class="pre">generate_x($x)</span></tt> where <tt class="docutils literal"><span class="pre">test_y($x)</span></tt> is
+<em>not</em> true.  Then combine the <tt class="docutils literal"><span class="pre">not</span></tt> trick with the <tt class="docutils literal"><span class="pre">exists</span></tt> trick.
+This needs a new subgoal, we'll call it <tt class="docutils literal"><span class="pre">for_all_x</span></tt>:</p>
+<pre class="literal-block">
+for_all_x_failure:
+    use for_all_x()
+    when
+        generate_x($x)          # these two lines are the exists trick
+        not_test_y($x)
+        special.claim_goal()    # don't use any other rules for for_all_x
+        check False             # and cause this rule to fail, which causes the for_all_x goal to fail
+
+for_all_x_success:
+    use for_all_x()             # we only make it here if all generated $x values have test_y($x) true
+</pre>
+<p>Then you also need to create rules for the <tt class="docutils literal"><span class="pre">not_test_y</span></tt> goal using the
+<tt class="docutils literal"><span class="pre">not</span></tt> trick, above:</p>
+<pre class="literal-block">
+not_test_y_fail:
+    use not_test_y($x)
+    when
+        test_y($x)              # if there is any way for test_y($x) to be true
+        special.claim_goal()    # don't use any other rules for not_test_y
+        check False             # and cause this rule to fail, which causes the not_test_y goal to fail
+
+not_test_y_success:
+    use not_test_y($_)          # this rule only runs if test_y($x) fails, above
+</pre>
+</div>
+</div>
+
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
+            </div>
+          </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <h3>More:</h3>
+<div class="right-item"><a href="overview/index.html">Overview</a><p>The big picture of
+what all this knowledge-base, inferencing and automatic program
+generation stuff means and how it works.</p>
+</div>
+<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
+</div>
+<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
+</div>
+<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
+write your rules.</p>
+</div>
+<div class="right-item"><a href="logic_tricks.html">Logic Tricks</a><p>How to accomplish different logic operations with rules.</p>
+</div>
+
+            </div>
+          </td>
+        </tr>
+    </tbody>
+
+    <tfoot id="foot">
+        <tr id="foot2">
+          <td id="copyright" colspan="3">
+            Copyright &copy; 2007 Bruce Frederiksen
+          </td>
+        </tr>
+    </tfoot>
+  </table>
+
+  <div id="last-modified">
+    Page last modified Fri, Feb 22 2008.
+  </div>
+
+</body>
+</html>

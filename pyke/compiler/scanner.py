@@ -171,7 +171,7 @@ def t_code_comment(t):
     r'[ \t\f\r]*\#.*'
     global current_line
     if debug: print "scanner saw comment:", t.value
-    current_line += t.value
+    #current_line += t.value
 
 def t_code_plan(t):
     r'\$\$'

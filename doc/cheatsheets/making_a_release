@@ -51,6 +51,9 @@ ftp> quit
 Go to: Admin -> File Releases
 Click on "Add Release", Enter: 0.1.alpha2
 Follow the rest of the instructions there...
+    After you've selected the files to include, you have to go through
+    settings for each file ONE AT A TIME.  (Each file has its own Update
+    button which erases any information you've entered for subsequent files).
     Pick "Platform Independant" for all of the files.
     Pick ".zip" for the .egg file.
     Pick "Source .gz" for the source .gz file.
@@ -60,3 +63,6 @@ UPDATE PYPI LINK:
 
 $ python setup.py register
 
+CREATE NEWS ANNOUNCEMENT ON SOURCEFORGE
+
+Go to: Admin -> News

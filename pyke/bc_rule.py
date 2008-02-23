@@ -22,68 +22,7 @@
 # THE SOFTWARE.
 
 import functools
-from pyke import fc_rule
-
-class immutable_dict(dict):
-    ''' >>> im = immutable_dict((('a', 1), ('b', 2)))
-        >>> len(im)
-        2
-        >>> im['a']
-        1
-        >>> im['b']
-        2
-        >>> tuple(sorted(im.keys()))
-        ('a', 'b')
-        >>> tuple(sorted(im.values()))
-        (1, 2)
-        >>> 'a' in im
-        True
-        >>> 'c' in im
-        False
-        >>> del im['a']
-        Traceback (most recent call last):
-            ...
-        TypeError: del (a) not allowed on plan context
-        >>> im['a'] = 3
-        Traceback (most recent call last):
-            ...
-        TypeError: not allowed to change pattern variables (a) in plan
-        >>> im.clear()
-        Traceback (most recent call last):
-            ...
-        TypeError: clear not allowed on plan context
-        >>> im.pop('a')
-        Traceback (most recent call last):
-            ...
-        TypeError: pop (a) not allowed on plan context
-        >>> im.popitem()
-        Traceback (most recent call last):
-            ...
-        TypeError: popitem not allowed on plan context
-        >>> im.setdefault('a', [])
-        Traceback (most recent call last):
-            ...
-        TypeError: setdefault (a) not allowed on plan context
-        >>> im.update({'c': 3})
-        Traceback (most recent call last):
-            ...
-        TypeError: update not allowed on plan context
-    '''
-    def __delitem__(self, key):
-        raise TypeError("del (%s) not allowed on plan context" % key)
-    def __setitem__(self, key, value):
-        raise TypeError("not allowed to change pattern variables (%s) in plan" %
-                            key)
-    def clear(self):
-        raise TypeError("clear not allowed on plan context")
-    def pop(self, key, default = None):
-        raise TypeError("pop (%s) not allowed on plan context" % key)
-    def popitem(self):
-        raise TypeError("popitem not allowed on plan context")
-    def setdefault(self, key, default = None):
-        raise TypeError("setdefault (%s) not allowed on plan context" % key)
-    def update(self, dict2 = None, **kwargs):
-        raise TypeError("update not allowed on plan context")
+from pyke import fc_rule, immutable_dict
 
 class bc_rule(fc_rule.rule):
     ''' This represents a single backward-chaining rule.  Most of its
@@ -102,10 +41,9 @@ class bc_rule(fc_rule.rule):
 	return self.goal_arg_pats
     def make_plan(self, context, final):
 	return functools.partial(self.plan_fn,
-				 immutable_dict((var_name,
-                                                 context.lookup_data(var_name,
-								     final))
-                                                for var_name in self.plan_vars))
+                   immutable_dict.immutable_dict(
+                       (var_name, context.lookup_data(var_name, final))
+                       for var_name in self.plan_vars))
 
 def test():
     import doctest
