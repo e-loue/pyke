@@ -32,6 +32,8 @@ class special_knowledge_base(knowledge_base.knowledge_base):
 	if fn.name in self.entity_lists:
 	    raise KeyError("%s.%s already exists" % (self.name, fn.name))
 	self.entity_lists[fn.name] = fn
+    def print_stats(self, f):
+        pass
 
 class special_fn(knowledge_base.knowledge_entity_list):
     def __init__(self, special_base, name):

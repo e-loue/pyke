@@ -69,8 +69,8 @@ class pattern_tuple(pattern):
 	for x, y in itertools.izip(self.elements, data):
 	    if not x.match_data(bindings, my_context, y): return False
 	if self.rest_var is not None:
-	    bindings.bind(self.rest_var.name, my_context,
-			  tuple(data[len(self.elements):]))
+            return self.rest_var.match_data(bindings, my_context,
+                                            tuple(data[len(self.elements):]))
 	return True
     def simple_match_pattern(self, bindings, my_context, pattern_b, b_context):
 	return self, my_context
@@ -83,17 +83,17 @@ class pattern_tuple(pattern):
 	    return self.match_data(bindings, my_context, pattern_b)
 	assert isinstance(pattern_b, pattern_tuple), "Internal logic error"
 
-	if pattern_b.rest_var is None and \
-	       len(self.elements) > len(pattern_b.elements) or \
-	   self.rest_var is None and \
-	       len(self.elements) < len(pattern_b.elements):
+	my_len = len(self.elements)
+	b_len = len(pattern_b.elements)
+	if pattern_b.rest_var is None and my_len > b_len or \
+	   self.rest_var is None and my_len < b_len:
 	    return False
 	for x, y in itertools.izip(self.elements, pattern_b.elements):
 	    if not x.match_pattern(bindings, my_context, y, b_context):
 		return False
-	my_len = len(self.elements)
-	b_len = len(pattern_b.elements)
 	if my_len <= b_len and self.rest_var is not None:
+            # This is where the two rest_vars are bound together if my_len ==
+            # b_len.
 	    tail_val, tail_context = pattern_b._tail(my_len, b_context)
 	    if tail_context is None:
 		if not self.rest_var.match_data(bindings, my_context, tail_val):

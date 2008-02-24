@@ -21,72 +21,108 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+'''
+    This example shows how people are related.  The primary data (facts) that
+    are used to figure everything out are in family.py.
+
+    There are three independent rule bases that all do the same thing.  The
+    fc_example rule base only uses forward-chaining rules.  The bc_example
+    rule base only uses backward-chaining rules.  And the example rule base
+    uses all three (though, there isn't really a need for plans, so the plans
+    are pretty contrived).
+
+    One the pyke engine is created, all the rule bases loaded and all the
+    primary data established as universal facts; there are three functions
+    that can be used to run each of the three rule bases: fc_test, bc_test,
+    and test.
+'''
+
 from __future__ import with_statement
-import cPickle as pickle
-import copy_reg
 import contextlib
-import functools
+import sys
 
-# This causes the family universal facts to be loaded as a byproduct of the
-# import.
-import family
-
-#import example
-#import example_fc
-#import example_bc
 import pyke
+from pyke import krb_traceback
 
-#import os.path
-#engine = pyke.engine(os.path.abspath('.'), '/tmp')
-#engine = pyke.engine(os.path.abspath('.'), 'subdir')
-#engine = pyke.engine(os.path.abspath('.'))
-#engine = pyke.engine('.', 'subdir')
-#engine = pyke.engine('.', '/tmp')
+# Compile and load .krb files in '.' directory (recursively).
 engine = pyke.engine('.')
 
+# This loads the family universal facts.
+import family
 family.init(engine)
 
-# To be able to pickle plans.  (Not needed to unpickle).
-copy_reg.pickle(functools.partial,
-		lambda p: (functools.partial, (p.func,) + p.args))
+def fc_test(name = 'bruce'):
+    '''
+        This function runs the forward-chaining example (fc_example.krb).
+    '''
+    engine.reset()      # Allows us to run tests multiple times.
 
-def test():
-    global plan
-    engine.reset()
+    engine.activate('fc_example')  # Runs all applicable forward-chaining rules.
 
-    #family = engine.get_kb('family')
+    print "doing proof"
+    for (person2, relationship), plan \
+     in engine.prove_n('family', 'how_related', (name,), 2):
+        print "%s, %s are %s" % (name, person2, relationship)
+    print
+    print "done"
+    engine.print_stats()
 
-    #print "family: universal_facts:"
-    #family.dump_universal_facts()
-    #print
+def bc_test(name = 'bruce'):
+    engine.reset()      # Allows us to run tests multiple times.
 
-    #print "family: case_specific_facts:"
-    #family.dump_specific_facts()
-    #print
+    engine.activate('bc_example')
 
+    print "doing proof"
+    try:
+        for (person2, relationship), plan \
+         in engine.prove_n('bc_example', 'how_related', (name,), 2):
+            print "%s, %s are %s" % (name, person2, relationship)
+    except StandardError:
+        # This converts stack frames of generated python functions back to the
+        # .krb file.
+        krb_traceback.print_exc()
+        sys.exit(1)
+    print
+    print "done"
+    engine.print_stats()
+
+def bc2_test(name = 'bruce'):
+    engine.reset()      # Allows us to run tests multiple times.
+
+    engine.activate('bc2_example')
+
+    print "doing proof"
+    try:
+        for (person2, relationship), plan \
+         in engine.prove_n('bc2_example', 'how_related', (name,), 2):
+            print "%s, %s are %s" % (name, person2, relationship)
+    except StandardError:
+        # This converts stack frames of generated python functions back to the
+        # .krb file.
+        krb_traceback.print_exc()
+        sys.exit(1)
+    print
+    print "done"
+    engine.print_stats()
+
+def test(name = 'bruce'):
+    engine.reset()      # Allows us to run tests multiple times.
+
+    # Also runs all applicable forward-chaining rules.
     engine.activate('example')
 
-    #print "family: universal_facts:"
-    #family.dump_universal_facts()
-    #print
-
-    #print "family: case_specific_facts:"
-    #family.dump_specific_facts()
-    #print
-
-    test_pickle = False
     print "doing proof"
-    for (ans,), plan in engine.prove_n('example', 'how_related', ('bruce',), 1):
-	#print "prove:", ans
-        print "bruce,", ans
-	#print "plan:", plan
-	if test_pickle:
-	    print "pickling plan"
-	    with contextlib.closing(file('plan_pickle', 'w')) as f:
-		pickle.dump(plan, f)
-	#print "executing plan"
-	print "plan ->", plan()
+    try:
+        # In this case, the relationship is returned when you run the plan.
+        for (person2,), plan \
+         in engine.prove_n('example', 'how_related', (name,), 1):
+            print "%s, %s are %s" % (name, person2, plan())
+    except StandardError:
+        # This converts stack frames of generated python functions back to the
+        # .krb file.
+        krb_traceback.print_exc()
+        sys.exit(1)
     print
-
     print "done"
+    engine.print_stats()
 

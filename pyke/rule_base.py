@@ -76,6 +76,7 @@ class rule_base(knowledge_base.knowledge_base):
 		self.root_name = self.parent.root_name
 	    else:
 		self.root_name = self.name
+            self.reset()
     def derived_from(self, rb):
 	parent = self.parent
 	while parent:
@@ -106,6 +107,13 @@ class rule_base(knowledge_base.knowledge_base):
     def reset(self):
         if self.root_name in self.engine.knowledge_bases:
             del self.engine.knowledge_bases[self.root_name]
+        for fc_rule in self.fc_rules: fc_rule.reset()
+        self.num_fc_rules_triggered = 0
+        self.num_fc_rules_rerun = 0
+        self.num_prove_calls = 0
+        self.num_bc_rules_matched = 0
+        self.num_bc_rule_successes = 0
+        self.num_bc_rule_failures = 0
     def gen_rule_lists_for(self, goal_name):
 	rule_base = self
 	while True:
@@ -116,11 +124,24 @@ class rule_base(knowledge_base.knowledge_base):
 	    else:
 		break
     def prove(self, bindings, pat_context, goal_name, patterns):
+        self.num_prove_calls += 1
 	return stopIterator(
 		   itertools.chain(
 		       itertools.imap(
 			   lambda rl: rl.prove(bindings, pat_context, patterns),
 			   self.gen_rule_lists_for(goal_name))))
+    def print_stats(self, f):
+        f.write("%s: %d fc_rules, %d triggered, %d rerun\n" %
+                (self.name, len(self.fc_rules), self.num_fc_rules_triggered,
+                 self.num_fc_rules_rerun))
+        num_bc_rules = sum(rule_list.num_bc_rules()
+                             for rule_list in self.entity_lists.itervalues())
+        f.write("%s: %d bc_rules, %d goals, %d rules matched, %d successes, "
+                "%d failures\n" %
+                (self.name, num_bc_rules, self.num_prove_calls,
+                 self.num_bc_rules_matched, self.num_bc_rule_successes,
+                 self.num_bc_rule_failures))
+        if self.parent: self.parent.print_stats(f)
 
 class rule_list(knowledge_base.knowledge_entity_list):
     def __init__(self, name):
@@ -135,6 +156,8 @@ class rule_list(knowledge_base.knowledge_entity_list):
 	"""
 	return itertools.chain(bc_rule.bc_fn(bc_rule, patterns, pat_context)
                                for bc_rule in self.bc_rules)
+    def num_bc_rules(self):
+        return len(self.bc_rules)
 
 def test():
     import doctest

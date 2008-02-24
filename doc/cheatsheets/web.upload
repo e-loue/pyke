@@ -7,3 +7,5 @@ chmod g+w html
 mv htdocs htdocs.old; mv html htdocs
 <test new site>
 rm -rf htdocs.old
+cd
+rm pyke.html.tar

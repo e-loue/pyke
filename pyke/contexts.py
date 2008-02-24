@@ -34,6 +34,7 @@
         >>> var.name
         'foo'
         >>> c.bind(var.name, c, 123)
+        True
         >>> c.lookup(var)
         (123, None)
         >>> c.lookup_data(var.name)
@@ -107,6 +108,7 @@
     easily from python code without needing the variable objects.
 
         >>> A_context.bind('foo', A_context, 123)
+        True
         >>> A_context.lookup_data('foo')
         123
     
@@ -122,6 +124,7 @@
         >>> b_var
         $b_var
         >>> B_context.bind(b_var.name, B_context, a_var, A_context)
+        True
         >>> B_context.lookup(b_var)
         Traceback (most recent call last):
             ...
@@ -146,6 +149,7 @@
         >>> anonymous()
         $_
         >>> A_context.bind('_', A_context, 567)
+        False
         >>> A_context.lookup_data('_')
         Traceback (most recent call last):
             ...
@@ -168,26 +172,34 @@ class simple_context(object):
         self.save_all_undo_count = 0
     def bind(self, var_name, var_context, val, val_context = None):
 	""" val_context must be None iff val is not a pattern.
+            Returns True if a new binding was created.
 	"""
 	assert not isinstance(val, pattern.pattern) \
 		   if val_context is None \
 		   else isinstance(val, pattern.pattern)
-	if var_name != '_':
-	    if var_context is self:
-		assert var_name not in self.bindings
-                if var_name in debug:
-                    if val_context:
-                        sys.stderr.write("binding %s in %s to %s in %s\n" %
-                            (var_name, var_context, val, val_context))
-                    else:
-                        sys.stderr.write("binding %s in %s to %s\n" %
-                            (var_name, var_context, val))
-		self.bindings[var_name] = (val, val_context)
-                if self.save_all_undo_count:
-                    self.undo_list.append((var_name, self))
-	    else:
-		var_context.bind(var_name, var_context, val, val_context)
-		self.undo_list.append((var_name, var_context))
+	if var_name == '_': return False
+        if var_context is self:
+            assert var_name not in self.bindings
+            if val_context is not None:
+                val, val_context = val_context.lookup(val, True)
+            if val_context == var_context and isinstance(val, variable) and \
+               val.name == var_name:
+                # binding $x to $x; no binding necessary!
+                return False
+            if var_name in debug:
+                if val_context:
+                    sys.stderr.write("binding %s in %s to %s in %s\n" %
+                        (var_name, var_context, val, val_context))
+                else:
+                    sys.stderr.write("binding %s in %s to %s\n" %
+                        (var_name, var_context, val))
+            self.bindings[var_name] = (val, val_context)
+            if self.save_all_undo_count:
+                self.undo_list.append((var_name, self))
+            return True
+        ans = var_context.bind(var_name, var_context, val, val_context)
+        if ans: self.undo_list.append((var_name, var_context))
+        return ans
     def is_bound(self, var):
 	val, where = var, self
 	while where is not None and isinstance(val, variable):

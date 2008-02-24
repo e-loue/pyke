@@ -91,6 +91,7 @@ class fc_rule(rule):
 					  pat.match_data(context, context, arg),
 				      arg_patterns,
 				      fact_args)):
+                    self.rule_base.num_fc_rules_rerun += 1
 		    self.rule_fn(self, context, n)
 		context.done()
     def foreach_patterns(self, foreach_index):

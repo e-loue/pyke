@@ -1,0 +1,206 @@
+# $Id$
+# 
+# Copyright © 2007 Bruce Frederiksen
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+
+father_son:
+    use child_parent($child, $father, father, son)
+    when
+	family.son_of($child, $father, $mother)
+
+mother_son:
+    use child_parent($child, $mother, mother, son)
+    when
+	family.son_of($child, $father, $mother)
+
+father_daughter:
+    use child_parent($child, $father, father, daughter)
+    when
+	family.daughter_of($child, $father, $mother)
+
+mother_daughter:
+    use child_parent($child, $mother, mother, daughter)
+    when
+	family.daughter_of($child, $father, $mother)
+
+# Establish sibling relationships:
+brothers:
+    use siblings($brother1, $brother2, brother, brother)
+    when
+	family.son_of($brother1, $father, $mother)
+	family.son_of($brother2, $father, $mother)
+	check $brother1 != $brother2
+
+sisters:
+    use siblings($sister1, $sister2, sister, sister)
+    when
+	family.daughter_of($sister1, $father, $mother)
+	family.daughter_of($sister2, $father, $mother)
+	check $sister1 != $sister2
+
+brother_sister:
+    use siblings($sister, $brother, brother, sister)
+    when
+	family.daughter_of($sister, $father, $mother)
+	family.son_of($brother, $father, $mother)
+
+sister_brother:
+    use siblings($brother, $sister, sister, brother)
+    when
+	family.son_of($brother, $father, $mother)
+	family.daughter_of($sister, $father, $mother)
+
+as_au_brother_uncle:
+    use as_au(brother, uncle)
+
+as_au_sister_aunt:
+    use as_au(sister, aunt)
+
+as_nn_son_nephew:
+    use as_nn(son, nephew)
+
+as_nn_daughter_niece:
+    use as_nn(daughter, niece)
+
+niece_or_nephew_and_aunt_or_uncle:
+    use nn_au($nn, $au, $greats, $au_type, $nn_type)
+    when
+	child_parent($nn, $parent, $depth, $_, $child_type)
+	siblings($parent, $au, $sibling_type, $_)
+	as_au($sibling_type, $au_type)
+	as_nn($child_type, $nn_type)
+        $greats = ('great',) * len($depth)
+
+# Note that these family.child_parent have an extra argument to handle
+# ('grand',), ('great', 'grand'), etc.
+parent_and_child:
+    use child_parent($child, $parent, (), $parent_type, $child_type)
+    when
+	child_parent($child, $parent, $parent_type, $child_type)
+
+grand_parent_and_child:
+    # Note that a comma is not required (but is allowed) for singleton
+    # tuples in .krb files; in this case, "(grand)".
+    use child_parent($child, $grand_parent, (grand), $parent_type, $child_type)
+    when
+	child_parent($child, $parent, $_, $child_type)
+	child_parent($parent, $grand_parent, $parent_type, $_)
+
+great_grand_parent_and_child:
+    use child_parent($child, $grand_parent, (great, $a, *$b),
+                     $parent_type, $child_type)
+    when
+	child_parent($child, $grand_child, $_, $child_type)
+        # We use "($a, *$b)" in the next premise so that it won't match ().
+	child_parent($grand_child, $grand_parent, ($a, *$b), $parent_type, $_)
+
+first_cousins:
+    use cousins($cousin1, $cousin2, 1)
+    when
+	child_parent($cousin1, $sibling1, $_, $_)
+	siblings($sibling1, $sibling2, $_, $_)
+	child_parent($cousin2, $sibling2, $_, $_)
+
+nth_cousins:
+    use cousins($next_cousin1, $next_cousin2, $next_n)
+    when
+	child_parent($next_cousin1, $cousin1, $_, $_)
+	cousins($cousin1, $cousin2, $n)
+	child_parent($next_cousin2, $cousin2, $_, $_)
+	$next_n = $n + 1
+
+how_related_child_parent:
+    use how_related($person1, $person2, $relationship)
+    when
+	child_parent($person1, $person2, $prefix, $p2_type, $p1_type)
+	$relationship = add_prefix($prefix, $p1_type, $p2_type)
+
+how_related_parent_child:
+    use how_related($person1, $person2, $relationship)
+    when
+        # Note that for how_related(Fixed_name, $variable) that this
+        # subgoal is run "in reverse":
+        #     child_parent($variable, Fixed_name, ...)
+        # This is very inefficient the way the following rules were written:
+        #         grand_parent_and_child
+        #     and great_grand_parent_and_child
+        # It is left as an exercise for the reader to determine how to improve
+        # these rules.  Here's a way to check whether a pattern variable is
+        # bound (only 'variable_name' changes with different variables).  This
+        # only checks the top-level binding.  It does not check whether
+        # subordinate variables in tuples are bound:
+        #     check context.is_bound(contexts.variable('variable_name'))
+	child_parent($person2, $person1, $prefix, $p1_type, $p2_type)
+	$relationship = add_prefix($prefix, $p1_type, $p2_type)
+
+how_related_siblings:
+    use how_related($person1, $person2, ($p1_type, $p2_type))
+    when
+	siblings($person1, $person2, $p2_type, $p1_type)
+
+how_related_nn_au:
+    use how_related($person1, $person2, $relationship)
+    when
+	nn_au($person1, $person2, $prefix, $p2_type, $p1_type)
+	$relationship = add_prefix($prefix, $p1_type, $p2_type)
+
+how_related_au_nn:
+    use how_related($person1, $person2, $relationship)
+    when
+        # Here is another case where how_related(Fixed_name, $variable) is
+        # very inefficient because of the way the
+        # great_niece_or_nephew_and_aunt_or_uncle rule is written.
+	nn_au($person2, $person1, $prefix, $p1_type, $p2_type)
+	$relationship = add_prefix($prefix, $p1_type, $p2_type)
+
+how_related_cousins:
+    use how_related($cousin1, $cousin2, ($nth, cousins))
+    when
+	cousins($cousin1, $cousin2, $n)
+        $nth = nth($n)
+
+how_related_removed_cousins:
+    use how_related($removed_cousin1, $cousin2, ($nth, cousins, $r1, removed))
+    when
+        child_parent($removed_cousin1, $cousin1, $grand, $_, $_)
+	cousins($cousin1, $cousin2, $n)
+        $nth = nth($n)
+        $r1 = len($grand) + 1
+
+how_related_cousins_removed:
+    use how_related($cousin1, $removed_cousin2, ($nth, cousins, $r1, removed))
+    when
+	cousins($cousin1, $cousin2, $n)
+        child_parent($removed_cousin2, $cousin2, $grand, $_, $_)
+        $nth = nth($n)
+        $r1 = len($grand) + 1
+
+
+bc_extras
+    def nth(n):
+        if n % 10 not in (1, 2, 3) or 10 < n % 100 < 20: return "%dth" % n
+        if n % 10 == 1: return "%dst" % n
+        if n % 10 == 2: return "%dnd" % n
+        if n % 10 == 3: return "%drd" % n
+
+    def add_prefix(prefix, x, y):
+        if not prefix: return (x, y)
+	return (prefix + (x,), prefix + (y,))

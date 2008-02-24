@@ -81,71 +81,69 @@ facts_for_bc_rules:
 	family.as_nn(daughter, niece)
 
 niece_or_nephew_and_aunt_or_uncle:
-    use nn_au($nn, $au, $greats, $au_type, $nn_type)
-    when
-	child_parent($nn, $parent, $depth, $_, $child_type)
+    foreach
+	family.child_parent($nn, $parent, $depth, $_, $child_type)
 	family.siblings($parent, $au, $sibling_type, $_)
 	family.as_au($sibling_type, $au_type)
 	family.as_nn($child_type, $nn_type)
         $greats = ('great',) * len($depth)
+    assert
+        family.nn_au($nn, $au, $greats, $au_type, $nn_type)
 
-# Note that these are example.child_parent (the subgoal), which are different
-# than family.child_parent (that facts).  These include an extra argument to
-# handle ('grand',), ('great', 'grand'), etc.
+# Note that these family.child_parent have an extra argument to handle
+# ('grand',), ('great', 'grand'), etc.
 parent_and_child:
-    use child_parent($child, $parent, (), $parent_type, $child_type)
-    when
+    foreach
 	family.child_parent($child, $parent, $parent_type, $child_type)
+    assert
+        family.child_parent($child, $parent, (), $parent_type, $child_type)
 
 grand_parent_and_child:
-    # Note that a comma is not required (but is allowed) for singleton tuples
-    # in .krb files; in this case, "(grand)".
-    use child_parent($child, $grand_parent, (grand),
-                     $parent_type, $child_type)
-    when
+    foreach
 	family.child_parent($child, $parent, $_, $child_type)
 	family.child_parent($parent, $grand_parent, $parent_type, $_)
+    assert
+        # Note that a comma is not required (but is allowed) for singleton
+        # tuples in .krb files; in this case, "(grand)".
+        family.child_parent($child, $grand_parent, (grand),
+                            $parent_type, $child_type)
 
 great_grand_parent_and_child:
-    use child_parent($child, $grand_parent, (great, $a, *$b),
-                     $parent_type, $child_type)
-    when
+    foreach
 	family.child_parent($child, $grand_child, $_, $child_type)
         # We use "($a, *$b)" in the next premise so that it won't match ().
-	child_parent($grand_child, $grand_parent, ($a, *$b), $parent_type, $_)
-
-great_niece_or_nephew_and_aunt_or_uncle:
-    use nn_au($younger, $elder, (great, *$greats), $au_type, $nn_type)
-    when
-	family.child_parent($younger, $parent, $_, $younger_type)
-	nn_au($parent, $elder, $greats, $au_type, $_)
-	family.as_nn($younger_type, $nn_type)
+	family.child_parent($grand_child, $grand_parent, ($a, *$b),
+                            $parent_type, $_)
+    assert
+        family.child_parent($child, $grand_parent, (great, $a, *$b),
+                            $parent_type, $child_type)
 
 first_cousins:
-    use cousins($cousin1, $cousin2, 1)
-    when
+    foreach
 	family.child_parent($cousin1, $sibling1, $_, $_)
 	family.siblings($sibling1, $sibling2, $_, $_)
 	family.child_parent($cousin2, $sibling2, $_, $_)
+    assert
+        family.cousins($cousin1, $cousin2, 1)
 
 nth_cousins:
-    use cousins($next_cousin1, $next_cousin2, $next_n)
-    when
+    foreach
 	family.child_parent($next_cousin1, $cousin1, $_, $_)
-	cousins($cousin1, $cousin2, $n)
+	family.cousins($cousin1, $cousin2, $n)
 	family.child_parent($next_cousin2, $cousin2, $_, $_)
 	$next_n = $n + 1
+    assert
+        family.cousins($next_cousin1, $next_cousin2, $next_n)
 
 how_related_child_parent:
-    use how_related($person1, $person2)
-    when
-	child_parent($person1, $person2, $prefix, $p2_type, $p1_type)
-	add_prefix($prefix)
-	    return $$($p1_type, $p2_type)
+    foreach
+	family.child_parent($person1, $person2, $prefix, $p2_type, $p1_type)
+	$relationship = add_prefix($prefix, $p1_type, $p2_type)
+    assert
+        family.how_related($person1, $person2, $relationship)
 
 how_related_parent_child:
-    use how_related($person1, $person2)
-    when
+    foreach
         # Note that for how_related(Fixed_name, $variable) that this
         # subgoal is run "in reverse":
         #     child_parent($variable, Fixed_name, ...)
@@ -158,110 +156,69 @@ how_related_parent_child:
         # only checks the top-level binding.  It does not check whether
         # subordinate variables in tuples are bound:
         #     check context.is_bound(contexts.variable('variable_name'))
-	child_parent($person2, $person1, $prefix, $p1_type, $p2_type)
-	add_prefix($prefix)
-	    return $$($p1_type, $p2_type)
+	family.child_parent($person2, $person1, $prefix, $p1_type, $p2_type)
+	$relationship = add_prefix($prefix, $p1_type, $p2_type)
+    assert
+        family.how_related($person1, $person2, $relationship)
 
 how_related_siblings:
-    use how_related($person1, $person2)
-    when
+    foreach
 	family.siblings($person1, $person2, $p2_type, $p1_type)
-    with
-	return $p1_type + ', ' + $p2_type
+    assert
+        family.how_related($person1, $person2, ($p1_type, $p2_type))
 
 how_related_nn_au:
-    use how_related($person1, $person2)
-    when
-	nn_au($person1, $person2, $prefix, $p2_type, $p1_type)
-	add_prefix($prefix)
-	    return $$($p1_type, $p2_type)
+    foreach
+	family.nn_au($person1, $person2, $prefix, $p2_type, $p1_type)
+	$relationship = add_prefix($prefix, $p1_type, $p2_type)
+    assert
+        family.how_related($person1, $person2, $relationship)
 
 how_related_au_nn:
-    use how_related($person1, $person2)
-    when
+    foreach
         # Here is another case where how_related(Fixed_name, $variable) is
         # very inefficient because of the way the
         # great_niece_or_nephew_and_aunt_or_uncle rule is written.
-	nn_au($person2, $person1, $prefix, $p1_type, $p2_type)
-	add_prefix($prefix)
-	    return $$($p1_type, $p2_type)
+	family.nn_au($person2, $person1, $prefix, $p1_type, $p2_type)
+	$relationship = add_prefix($prefix, $p1_type, $p2_type)
+    assert
+        family.how_related($person1, $person2, $relationship)
 
 how_related_cousins:
-    use how_related($cousin1, $cousin2)
-    when
-	cousins($cousin1, $cousin2, $n)
-        nth_cousin($n)
-	    return $$()
+    foreach
+	family.cousins($cousin1, $cousin2, $n)
+        $nth = nth($n)
+    assert
+        family.how_related($cousin1, $cousin2, ($nth, cousins))
 
 how_related_removed_cousins:
-    use how_related($removed_cousin1, $cousin2)
-    when
-        child_parent($removed_cousin1, $cousin1, $grand, $_, $_)
-	cousins($cousin1, $cousin2, $n)
-        nth_cousin($n)
-	    nth_cousin = $$()   # Note that this is assigning to a standard
-                                # python variable, NOT a pattern variable!
-        $r1 = len($grand) + 1   # While this is assigning to a pattern variable.
-    with
-        return "%s, %d removed" % (nth_cousin, $r1)     # Use of both variables.
+    foreach
+        family.child_parent($removed_cousin1, $cousin1, $grand, $_, $_)
+	family.cousins($cousin1, $cousin2, $n)
+        $nth = nth($n)
+        $r1 = len($grand) + 1
+    assert
+        family.how_related($removed_cousin1, $cousin2,
+                           ($nth, cousins, $r1, removed))
 
 how_related_cousins_removed:
-    use how_related($cousin1, $removed_cousin2)
-    when
-	cousins($cousin1, $cousin2, $n)
-        child_parent($removed_cousin2, $cousin2, $grand, $_, $_)
-        nth_cousin($n)
-	    nth_cousin = $$()
+    foreach
+	family.cousins($cousin1, $cousin2, $n)
+        family.child_parent($removed_cousin2, $cousin2, $grand, $_, $_)
+        $nth = nth($n)
         $r1 = len($grand) + 1
-    with
-        return "%s, %d removed" % (nth_cousin, $r1)
+    assert
+        family.how_related($cousin1, $removed_cousin2,
+                           ($nth, cousins, $r1, removed))
 
-# The nth_cousin goal codes the numbers: 1 is "1st", 2 is "2nd", etc.
-nth_cousin_th:
-    use nth_cousin($n)
-    when
-        check $n % 10 not in (1, 2, 3) or 10 < $n % 100 < 20
-        special.claim_goal()
-    with
-        return "%dth cousins" % $n
 
-nth_cousin_1:
-    use nth_cousin($n)
-    when
-        check $n % 10 == 1      # except 11, which is caught above
-        special.claim_goal()
-    with
-        return "%dst cousins" % $n
+fc_extras
+    def nth(n):
+        if n % 10 not in (1, 2, 3) or 10 < n % 100 < 20: return "%dth" % n
+        if n % 10 == 1: return "%dst" % n
+        if n % 10 == 2: return "%dnd" % n
+        if n % 10 == 3: return "%drd" % n
 
-nth_cousin_2:
-    use nth_cousin($n)
-    when
-        check $n % 10 == 2      # except 12, which is caught above
-        special.claim_goal()
-    with
-        return "%dnd cousins" % $n
-
-nth_cousin_3:
-    use nth_cousin($n)
-    when
-        check $n % 10 == 3      # except 13, which is caught above
-        special.claim_goal()
-    with
-        return "%drd cousins" % $n
-
-# The add_prefix goal adds ('great', 'grand') prefixes passed to the goal to
-# the two plan function arguments (x and y) to make a string (when the plan is
-# run).
-add_empty_prefix:
-    # Empty prefix just uses x and y.
-    use add_prefix(()) taking (x, y)
-    when
-	special.claim_goal()
-    with
-	return x + ', ' + y
-
-add_prefix:
-    use add_prefix($prefix) taking (x, y)
-    with
-	pre = ' '.join($prefix) + ' '
-	return pre + x + ', ' + pre + y
+    def add_prefix(prefix, x, y):
+        if not prefix: return (x, y)
+	return (prefix + (x,), prefix + (y,))
