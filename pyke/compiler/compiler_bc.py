@@ -14,6 +14,7 @@ def file(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 helpers.fc_head(context.lookup_data('rb_name'))):
@@ -89,6 +90,7 @@ def file(rule, arg_patterns, arg_context):
                                                      if context.lookup_data('bc_bc_fun_lines') \
                                                      else ()):
                         context.end_save_all_undo()
+                        rule.rule_base.num_bc_rule_successes += 1
                         yield
                       else: context.end_save_all_undo()
                       context.undo_to_mark(mark8)
@@ -106,6 +108,7 @@ def file(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -120,13 +123,16 @@ def rule_decl(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 "This_rule_base = engine.get_create('%s')" % context.lookup_data('rb_name')):
           context.end_save_all_undo()
+          rule.rule_base.num_bc_rule_successes += 1
           yield
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -141,15 +147,18 @@ def rule_decl_with_parent(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 "This_rule_base = engine.get_create('%s', '%s', %s)" % \
                                         (context.lookup_data('rb_name'), context.lookup_data('parent'),
                tuple(repr(sym) for sym in context.lookup_data('excluded_symbols')))):
           context.end_save_all_undo()
+          rule.rule_base.num_bc_rule_successes += 1
           yield
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -164,7 +173,10 @@ def fc_rules0(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
+        rule.rule_base.num_bc_rule_successes += 1
         yield
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -179,6 +191,7 @@ def fc_rules1(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
         for x_1 in engine.prove(rule.rule_base.root_name, 'fc_rule', context,
                                 (rule.pattern(0),
@@ -195,11 +208,13 @@ def fc_rules1(rule, arg_patterns, arg_context):
             flag_2 = True
             assert x_2 is None, \
               "compiler.fc_rules1: got unexpected plan from when clause 2"
+            rule.rule_base.num_bc_rule_successes += 1
             yield
           if not flag_2:
             raise AssertionError("compiler.fc_rules1: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.fc_rules1: 'when' clause 1 failed")
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -214,6 +229,7 @@ def fc_rule_(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
         for x_1 in engine.prove(rule.rule_base.root_name, 'fc_premises', context,
                                 (rule.pattern(0),
@@ -247,6 +263,7 @@ def fc_rule_(rule, arg_patterns, arg_context):
                    ("INDENT", 2),
                    context.lookup_data('prem_fn_head'),
                    context.lookup_data('asserts_fn_lines'),
+                   "rule.rule_base.num_fc_rules_triggered += 1",
                    context.lookup_data('prem_fn_tail'),
                    "POPINDENT",
                    "finally:",
@@ -267,6 +284,7 @@ def fc_rule_(rule, arg_patterns, arg_context):
                      "POPINDENT",
                      )):
                 context.end_save_all_undo()
+                rule.rule_base.num_bc_rule_successes += 1
                 yield
               else: context.end_save_all_undo()
               context.undo_to_mark(mark4)
@@ -276,6 +294,7 @@ def fc_rule_(rule, arg_patterns, arg_context):
             raise AssertionError("compiler.fc_rule_: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.fc_rule_: 'when' clause 1 failed")
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -290,7 +309,10 @@ def fc_premises0(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
+        rule.rule_base.num_bc_rule_successes += 1
         yield
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -305,6 +327,7 @@ def fc_premises1(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
         for x_1 in engine.prove(rule.rule_base.root_name, 'fc_premise', context,
                                 (rule.pattern(0),
@@ -336,6 +359,7 @@ def fc_premises1(rule, arg_patterns, arg_context):
             if rule.pattern(14).match_data(context, context,
                     context.lookup_data('decl_lines1') + context.lookup_data('decl_lines2')):
               context.end_save_all_undo()
+              rule.rule_base.num_bc_rule_successes += 1
               yield
             else: context.end_save_all_undo()
             context.undo_to_mark(mark3)
@@ -343,6 +367,7 @@ def fc_premises1(rule, arg_patterns, arg_context):
             raise AssertionError("compiler.fc_premises1: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.fc_premises1: 'when' clause 1 failed")
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -357,6 +382,7 @@ def fc_premise(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 ("for dummy in (None,) if index == %d else \\" % context.lookup_data('clause_num'),
@@ -381,6 +407,7 @@ def fc_premise(rule, arg_patterns, arg_context):
                    "POPINDENT",
                    )):
               context.end_save_all_undo()
+              rule.rule_base.num_bc_rule_successes += 1
               yield
             else: context.end_save_all_undo()
             context.undo_to_mark(mark3)
@@ -388,6 +415,7 @@ def fc_premise(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -402,6 +430,7 @@ def fc_python_premise(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         for x_1 in engine.prove(rule.rule_base.root_name, 'python_premise', context,
                                 (rule.pattern(0),
                                  rule.pattern(1),
@@ -411,7 +440,9 @@ def fc_python_premise(rule, arg_patterns, arg_context):
                                  rule.pattern(5),)):
           assert x_1 is None, \
             "compiler.fc_python_premise: got unexpected plan from when clause 1"
+          rule.rule_base.num_bc_rule_successes += 1
           yield
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -426,7 +457,10 @@ def assertions_0(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
+        rule.rule_base.num_bc_rule_successes += 1
         yield
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -441,6 +475,7 @@ def assertions_n(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
         for x_1 in engine.prove(rule.rule_base.root_name, 'assertion', context,
                                 (rule.pattern(0),
@@ -459,11 +494,13 @@ def assertions_n(rule, arg_patterns, arg_context):
             flag_2 = True
             assert x_2 is None, \
               "compiler.assertions_n: got unexpected plan from when clause 2"
+            rule.rule_base.num_bc_rule_successes += 1
             yield
           if not flag_2:
             raise AssertionError("compiler.assertions_n: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.assertions_n: 'when' clause 1 failed")
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -478,6 +515,7 @@ def assertion(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 \
@@ -496,11 +534,13 @@ def assertion(rule, arg_patterns, arg_context):
                  "POPINDENT",
                  )):
             context.end_save_all_undo()
+            rule.rule_base.num_bc_rule_successes += 1
             yield
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -515,7 +555,10 @@ def python_assertion(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
+        rule.rule_base.num_bc_rule_successes += 1
         yield
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -530,7 +573,10 @@ def bc_rules0(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
+        rule.rule_base.num_bc_rule_successes += 1
         yield
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -545,6 +591,7 @@ def bc_rules1(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
         for x_1 in engine.prove(rule.rule_base.root_name, 'bc_rule', context,
                                 (rule.pattern(0),
@@ -569,6 +616,7 @@ def bc_rules1(rule, arg_patterns, arg_context):
             if rule.pattern(9).match_data(context, context,
                     context.lookup_data('bc_plan1') + context.lookup_data('plan_rest')):
               context.end_save_all_undo()
+              rule.rule_base.num_bc_rule_successes += 1
               yield
             else: context.end_save_all_undo()
             context.undo_to_mark(mark3)
@@ -576,6 +624,7 @@ def bc_rules1(rule, arg_patterns, arg_context):
             raise AssertionError("compiler.bc_rules1: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.bc_rules1: 'when' clause 1 failed")
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -590,6 +639,7 @@ def bc_rule_(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
         for x_1 in engine.prove(rule.rule_base.root_name, 'bc_premises', context,
                                 (rule.pattern(0),
@@ -613,8 +663,10 @@ def bc_rule_(rule, arg_patterns, arg_context):
             if rule.pattern(9).match_data(context, context,
                     (context.lookup_data('goal_fn_head'),
                    context.lookup_data('prem_fn_head'),
+                   'rule.rule_base.num_bc_rule_successes += 1',
                    'yield context' if context.lookup_data('plan_lines') else 'yield',
                    context.lookup_data('prem_fn_tail'),
+                   'rule.rule_base.num_bc_rule_failures += 1',
                    context.lookup_data('goal_fn_tail'),
                    )):
               context.end_save_all_undo()
@@ -625,6 +677,7 @@ def bc_rule_(rule, arg_patterns, arg_context):
                      "POPINDENT",
                      )):
                 context.end_save_all_undo()
+                rule.rule_base.num_bc_rule_successes += 1
                 yield
               else: context.end_save_all_undo()
               context.undo_to_mark(mark4)
@@ -634,6 +687,7 @@ def bc_rule_(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
         if not flag_1:
           raise AssertionError("compiler.bc_rule_: 'when' clause 1 failed")
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -648,6 +702,7 @@ def bc_premises(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
         for x_1 in engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
                                 (rule.pattern(0),
@@ -684,6 +739,7 @@ def bc_premises(rule, arg_patterns, arg_context):
                      if step is not None),
                      key=lambda (step, lines): step))))))):
                 context.end_save_all_undo()
+                rule.rule_base.num_bc_rule_successes += 1
                 yield
               else: context.end_save_all_undo()
               context.undo_to_mark(mark4)
@@ -693,6 +749,7 @@ def bc_premises(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
         if not flag_1:
           raise AssertionError("compiler.bc_premises: 'when' clause 1 failed")
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -707,7 +764,10 @@ def bc_premises1_0(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
+        rule.rule_base.num_bc_rule_successes += 1
         yield
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -722,6 +782,7 @@ def bc_premises1_n(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
         for x_1 in engine.prove(rule.rule_base.root_name, 'bc_premise', context,
                                 (rule.pattern(0),
@@ -770,6 +831,7 @@ def bc_premises1_n(rule, arg_patterns, arg_context):
                   if rule.pattern(20).match_data(context, context,
                           context.lookup_data('fn_tail2') + context.lookup_data('fn_tail1')):
                     context.end_save_all_undo()
+                    rule.rule_base.num_bc_rule_successes += 1
                     yield
                   else: context.end_save_all_undo()
                   context.undo_to_mark(mark6)
@@ -783,6 +845,7 @@ def bc_premises1_n(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
         if not flag_1:
           raise AssertionError("compiler.bc_premises1_n: 'when' clause 1 failed")
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -797,6 +860,7 @@ def bc_premise(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 context.lookup_data('kb_name') or "rule.rule_base.root_name"):
@@ -863,6 +927,7 @@ def bc_premise(rule, arg_patterns, arg_context):
                       if rule.pattern(19).match_data(context, context,
                               context.lookup_data('fn_tail3') + context.lookup_data('fn_tail2')):
                         context.end_save_all_undo()
+                        rule.rule_base.num_bc_rule_successes += 1
                         yield
                       else: context.end_save_all_undo()
                       context.undo_to_mark(mark8)
@@ -880,6 +945,7 @@ def bc_premise(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -894,6 +960,7 @@ def no_plan(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 ('assert x_%d is None, \\' % context.lookup_data('clause_num'),
@@ -905,9 +972,11 @@ def no_plan(rule, arg_patterns, arg_context):
                'rule_name': context.lookup_data('rule_name')},
                'POPINDENT',)):
           context.end_save_all_undo()
+          rule.rule_base.num_bc_rule_successes += 1
           yield
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -922,6 +991,7 @@ def as_plan(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 \
@@ -940,11 +1010,13 @@ def as_plan(rule, arg_patterns, arg_context):
             flag_2 = True
             assert x_2 is None, \
               "compiler.as_plan: got unexpected plan from when clause 2"
+            rule.rule_base.num_bc_rule_successes += 1
             yield
           if not flag_2:
             raise AssertionError("compiler.as_plan: 'when' clause 2 failed")
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -959,6 +1031,7 @@ def plan_spec(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 \
@@ -977,11 +1050,13 @@ def plan_spec(rule, arg_patterns, arg_context):
             flag_2 = True
             assert x_2 is None, \
               "compiler.plan_spec: got unexpected plan from when clause 2"
+            rule.rule_base.num_bc_rule_successes += 1
             yield
           if not flag_2:
             raise AssertionError("compiler.plan_spec: 'when' clause 2 failed")
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -996,6 +1071,7 @@ def plan_bindings(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 ('assert x_%d is not None, \\' % context.lookup_data('clause_num'),
@@ -1024,11 +1100,13 @@ def plan_bindings(rule, arg_patterns, arg_context):
           if rule.pattern(1).match_data(context, context,
                   ("context.undo_to_mark(mark%d)" % context.lookup_data('clause_num'),)):
             context.end_save_all_undo()
+            rule.rule_base.num_bc_rule_successes += 1
             yield
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -1043,7 +1121,10 @@ def not_required(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
+        rule.rule_base.num_bc_rule_successes += 1
         yield
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -1058,6 +1139,7 @@ def required(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 ("flag_%d = False" % context.lookup_data('clause_num'),
@@ -1075,11 +1157,13 @@ def required(rule, arg_patterns, arg_context):
                  "POPINDENT",
                  )):
             context.end_save_all_undo()
+            rule.rule_base.num_bc_rule_successes += 1
             yield
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -1094,6 +1178,7 @@ def bc_python_premise(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         for x_1 in engine.prove(rule.rule_base.root_name, 'python_premise', context,
                                 (rule.pattern(0),
                                  rule.pattern(1),
@@ -1103,7 +1188,9 @@ def bc_python_premise(rule, arg_patterns, arg_context):
                                  rule.pattern(5),)):
           assert x_1 is None, \
             "compiler.bc_python_premise: got unexpected plan from when clause 1"
+          rule.rule_base.num_bc_rule_successes += 1
           yield
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -1118,6 +1205,7 @@ def python_eq(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 \
@@ -1147,6 +1235,7 @@ def python_eq(rule, arg_patterns, arg_context):
                      "else: context.end_save_all_undo()",
                      "context.undo_to_mark(mark%d)" % context.lookup_data('clause_num'),)):
                 context.end_save_all_undo()
+                rule.rule_base.num_bc_rule_successes += 1
                 yield
               else: context.end_save_all_undo()
               context.undo_to_mark(mark4)
@@ -1156,6 +1245,7 @@ def python_eq(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -1170,6 +1260,7 @@ def python_in(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 \
@@ -1202,6 +1293,7 @@ def python_in(rule, arg_patterns, arg_context):
                      "context.undo_to_mark(mark%d)" % context.lookup_data('clause_num'),
                      'POPINDENT',)):
                 context.end_save_all_undo()
+                rule.rule_base.num_bc_rule_successes += 1
                 yield
               else: context.end_save_all_undo()
               context.undo_to_mark(mark4)
@@ -1211,6 +1303,7 @@ def python_in(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -1225,6 +1318,7 @@ def python_check(rule, arg_patterns, arg_context):
                                                 arg, arg_context),
                             patterns,
                             arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 context.lookup_data('python_code')[:-1] + (context.lookup_data('python_code')[-1] + ':',)):
@@ -1240,11 +1334,13 @@ def python_check(rule, arg_patterns, arg_context):
                  ('INDENT', 2),
                  )):
             context.end_save_all_undo()
+            rule.rule_base.num_bc_rule_successes += 1
             yield
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
 
@@ -1776,106 +1872,106 @@ from pyke.compiler import helpers
 Krb_filename = '/home/bruce/python/workareas/sf.trunk/pyke/compiler/compiler.krb'
 Krb_lineno_map = (
     ((12, 16), (24, 28)),
-    ((19, 19), (30, 30)),
-    ((23, 23), (31, 31)),
-    ((26, 32), (32, 32)),
-    ((34, 40), (33, 33)),
-    ((42, 50), (34, 35)),
-    ((53, 65), (36, 48)),
-    ((69, 72), (49, 52)),
-    ((76, 90), (53, 67)),
-    ((118, 122), (70, 70)),
-    ((125, 125), (72, 72)),
-    ((139, 143), (75, 75)),
-    ((146, 148), (77, 79)),
-    ((162, 166), (82, 82)),
-    ((177, 181), (85, 87)),
-    ((183, 189), (89, 89)),
-    ((191, 197), (90, 90)),
-    ((212, 216), (93, 94)),
-    ((218, 229), (96, 98)),
-    ((231, 238), (99, 100)),
-    ((241, 257), (101, 117)),
-    ((261, 268), (118, 125)),
-    ((288, 292), (128, 128)),
-    ((303, 307), (131, 133)),
-    ((309, 321), (135, 137)),
-    ((323, 334), (138, 140)),
-    ((337, 337), (141, 141)),
-    ((355, 359), (144, 148)),
-    ((362, 370), (150, 158)),
-    ((374, 374), (159, 159)),
-    ((378, 382), (160, 164)),
-    ((400, 404), (167, 170)),
-    ((405, 413), (172, 174)),
-    ((424, 428), (177, 177)),
-    ((439, 443), (180, 181)),
-    ((445, 452), (183, 183)),
-    ((454, 461), (184, 184)),
-    ((476, 480), (187, 189)),
-    ((483, 484), (191, 192)),
-    ((488, 497), (193, 202)),
-    ((513, 517), (205, 210)),
-    ((528, 532), (213, 213)),
-    ((543, 547), (216, 219)),
-    ((549, 557), (221, 221)),
-    ((559, 567), (222, 223)),
-    ((570, 570), (224, 224)),
-    ((588, 592), (227, 229)),
-    ((594, 605), (231, 233)),
-    ((608, 610), (234, 236)),
-    ((614, 619), (237, 242)),
-    ((623, 626), (243, 246)),
-    ((646, 650), (249, 251)),
-    ((652, 666), (253, 255)),
-    ((669, 669), (256, 256)),
-    ((673, 676), (257, 260)),
-    ((680, 685), (261, 266)),
-    ((705, 709), (269, 271)),
-    ((720, 724), (274, 278)),
-    ((726, 740), (280, 283)),
-    ((743, 743), (284, 284)),
-    ((746, 760), (285, 288)),
-    ((763, 763), (289, 289)),
-    ((767, 767), (290, 290)),
-    ((771, 771), (291, 291)),
-    ((795, 799), (294, 300)),
-    ((802, 802), (302, 302)),
-    ((806, 807), (303, 304)),
-    ((811, 823), (305, 317)),
-    ((826, 837), (318, 319)),
-    ((839, 852), (320, 322)),
-    ((855, 856), (323, 324)),
-    ((860, 860), (325, 325)),
-    ((864, 864), (326, 326)),
-    ((892, 896), (329, 331)),
-    ((899, 906), (333, 340)),
-    ((920, 924), (343, 347)),
-    ((927, 929), (349, 351)),
-    ((932, 942), (352, 353)),
-    ((957, 961), (356, 361)),
-    ((964, 966), (363, 365)),
-    ((969, 979), (366, 367)),
-    ((994, 998), (370, 371)),
-    ((1001, 1021), (373, 393)),
-    ((1025, 1025), (394, 394)),
-    ((1041, 1045), (397, 398)),
-    ((1056, 1060), (401, 402)),
-    ((1063, 1066), (404, 407)),
-    ((1070, 1076), (408, 414)),
-    ((1092, 1096), (417, 421)),
-    ((1097, 1105), (423, 425)),
-    ((1116, 1120), (428, 431)),
-    ((1123, 1124), (433, 434)),
-    ((1128, 1128), (435, 435)),
-    ((1132, 1142), (436, 446)),
-    ((1146, 1148), (447, 449)),
-    ((1168, 1172), (452, 455)),
-    ((1175, 1176), (457, 458)),
-    ((1180, 1180), (459, 459)),
-    ((1184, 1196), (460, 472)),
-    ((1200, 1203), (473, 476)),
-    ((1223, 1227), (479, 483)),
-    ((1230, 1230), (485, 485)),
-    ((1234, 1241), (486, 493)),
+    ((20, 20), (30, 30)),
+    ((24, 24), (31, 31)),
+    ((27, 33), (32, 32)),
+    ((35, 41), (33, 33)),
+    ((43, 51), (34, 35)),
+    ((54, 66), (36, 48)),
+    ((70, 73), (49, 52)),
+    ((77, 91), (53, 67)),
+    ((121, 125), (70, 70)),
+    ((129, 129), (72, 72)),
+    ((145, 149), (75, 75)),
+    ((153, 155), (77, 79)),
+    ((171, 175), (82, 82)),
+    ((189, 193), (85, 87)),
+    ((196, 202), (89, 89)),
+    ((204, 210), (90, 90)),
+    ((227, 231), (93, 94)),
+    ((234, 245), (96, 98)),
+    ((247, 254), (99, 100)),
+    ((257, 274), (101, 118)),
+    ((278, 285), (119, 126)),
+    ((307, 311), (129, 129)),
+    ((325, 329), (132, 134)),
+    ((332, 344), (136, 138)),
+    ((346, 357), (139, 141)),
+    ((360, 360), (142, 142)),
+    ((380, 384), (145, 149)),
+    ((388, 396), (151, 159)),
+    ((400, 400), (160, 160)),
+    ((404, 408), (161, 165)),
+    ((428, 432), (168, 171)),
+    ((434, 442), (173, 175)),
+    ((455, 459), (178, 178)),
+    ((473, 477), (181, 182)),
+    ((480, 487), (184, 184)),
+    ((489, 496), (185, 185)),
+    ((513, 517), (188, 190)),
+    ((521, 522), (192, 193)),
+    ((526, 535), (194, 203)),
+    ((553, 557), (206, 211)),
+    ((571, 575), (214, 214)),
+    ((589, 593), (217, 220)),
+    ((596, 604), (222, 222)),
+    ((606, 614), (223, 224)),
+    ((617, 617), (225, 225)),
+    ((637, 641), (228, 230)),
+    ((644, 655), (232, 234)),
+    ((658, 660), (235, 237)),
+    ((664, 671), (238, 245)),
+    ((675, 678), (246, 249)),
+    ((700, 704), (252, 254)),
+    ((707, 721), (256, 258)),
+    ((724, 724), (259, 259)),
+    ((728, 731), (260, 263)),
+    ((735, 740), (264, 269)),
+    ((762, 766), (272, 274)),
+    ((780, 784), (277, 281)),
+    ((787, 801), (283, 286)),
+    ((804, 804), (287, 287)),
+    ((807, 821), (288, 291)),
+    ((824, 824), (292, 292)),
+    ((828, 828), (293, 293)),
+    ((832, 832), (294, 294)),
+    ((858, 862), (297, 303)),
+    ((866, 866), (305, 305)),
+    ((870, 871), (306, 307)),
+    ((875, 887), (308, 320)),
+    ((890, 901), (321, 322)),
+    ((903, 916), (323, 325)),
+    ((919, 920), (326, 327)),
+    ((924, 924), (328, 328)),
+    ((928, 928), (329, 329)),
+    ((958, 962), (332, 334)),
+    ((966, 973), (336, 343)),
+    ((989, 993), (346, 350)),
+    ((997, 999), (352, 354)),
+    ((1002, 1012), (355, 356)),
+    ((1029, 1033), (359, 364)),
+    ((1037, 1039), (366, 368)),
+    ((1042, 1052), (369, 370)),
+    ((1069, 1073), (373, 374)),
+    ((1077, 1097), (376, 396)),
+    ((1101, 1101), (397, 397)),
+    ((1119, 1123), (400, 401)),
+    ((1137, 1141), (404, 405)),
+    ((1145, 1148), (407, 410)),
+    ((1152, 1158), (411, 417)),
+    ((1176, 1180), (420, 424)),
+    ((1182, 1190), (426, 428)),
+    ((1203, 1207), (431, 434)),
+    ((1211, 1212), (436, 437)),
+    ((1216, 1216), (438, 438)),
+    ((1220, 1230), (439, 449)),
+    ((1234, 1236), (450, 452)),
+    ((1258, 1262), (455, 458)),
+    ((1266, 1267), (460, 461)),
+    ((1271, 1271), (462, 462)),
+    ((1275, 1287), (463, 475)),
+    ((1291, 1294), (476, 479)),
+    ((1316, 1320), (482, 486)),
+    ((1324, 1324), (488, 488)),
+    ((1328, 1335), (489, 496)),
 )

@@ -276,7 +276,7 @@ Traceback (most recent call last):
     return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
   File &quot;/home/bruce/python/workareas/sf.trunk/pyke/__init__.py&quot;, line 119, in prove_n
     for arg in fixed_args) + vars):
-  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/rule_base.py&quot;, line 36, in next
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/rule_base.py&quot;, line 37, in next
     return self.iterator.next()
   File &quot;/home/bruce/python/workareas/sf.trunk/pyke/tmp_itertools.py&quot;, line 32, in chain
     for x in iterable: yield x
@@ -290,7 +290,7 @@ Traceback (most recent call last):
     goal4()
   File &quot;/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb&quot;, line 41, in rule4
     check $bar &gt; 0
-  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/contexts.py&quot;, line 209, in lookup_data
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/contexts.py&quot;, line 221, in lookup_data
     raise KeyError(&quot;$%s not bound&quot; % var_name)
 KeyError: '$bar not bound'
 </pre>
@@ -327,6 +327,14 @@ Thus, not all <a class="reference" href="overview/knowledge_bases/rule_bases.htm
 <dd>Finds and returns the <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule base</a> by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
 KeyError if not found.  This works for any <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule base</a>, whether it is
 active or not.</dd>
+<dt><em>some_engine</em>.print_stats([f = sys.stdout])</dt>
+<dd>Prints a brief set of statistics for each knowledge base to file <tt class="docutils literal"><span class="pre">f</span></tt>.
+These are reset by the <tt class="docutils literal"><span class="pre">reset</span></tt> function.  This will show how many facts
+were asserted, and counts of how many forward-chaining rules were triggered
+and rerun, as well as counts of how many backward-chaining goals were tried,
+and how many backward-chaining rules matched, succeeded and failed.
+Note that one backward-chaining rule may succeed many times through
+backtracking.</dd>
 </dl>
 <div class="section">
 <h2><a id="creating-your-own-patterns" name="creating-your-own-patterns">Creating Your Own Patterns</a></h2>
@@ -408,7 +416,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Feb 22 2008.
+    Page last modified Sun, Feb 24 2008.
   </div>
 
 </body>

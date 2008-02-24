@@ -27,7 +27,8 @@ from pyke import knowledge_base
 class StopProof(Exception): pass
 
 class stopIterator(object):
-    def __init__(self, iterator):
+    def __init__(self, rule_base, iterator):
+        self.rule_base = rule_base
 	self.iterator = iter(iterator)
     def __iter__(self): return self
     def next(self):
@@ -36,6 +37,7 @@ class stopIterator(object):
 		return self.iterator.next()
 	    except StopProof:
 		self.iterator = None
+                self.rule_base.num_bc_rule_failures += 1
 	raise StopIteration
 
 class rule_base(knowledge_base.knowledge_base):
@@ -125,7 +127,7 @@ class rule_base(knowledge_base.knowledge_base):
 		break
     def prove(self, bindings, pat_context, goal_name, patterns):
         self.num_prove_calls += 1
-	return stopIterator(
+	return stopIterator(self,
 		   itertools.chain(
 		       itertools.imap(
 			   lambda rl: rl.prove(bindings, pat_context, patterns),
@@ -136,10 +138,11 @@ class rule_base(knowledge_base.knowledge_base):
                  self.num_fc_rules_rerun))
         num_bc_rules = sum(rule_list.num_bc_rules()
                              for rule_list in self.entity_lists.itervalues())
-        f.write("%s: %d bc_rules, %d goals, %d rules matched, %d successes, "
-                "%d failures\n" %
+        f.write("%s: %d bc_rules, %d goals, %d rules matched\n" %
                 (self.name, num_bc_rules, self.num_prove_calls,
-                 self.num_bc_rules_matched, self.num_bc_rule_successes,
+                 self.num_bc_rules_matched))
+        f.write("%s  %d successes, %d failures\n" %
+                (' ' * len(self.name), self.num_bc_rule_successes,
                  self.num_bc_rule_failures))
         if self.parent: self.parent.print_stats(f)
 

@@ -107,6 +107,7 @@ fc_rule_:
                    ("INDENT", 2),
                    $prem_fn_head,
                    $asserts_fn_lines,
+                   "rule.rule_base.num_fc_rules_triggered += 1",
                    $prem_fn_tail,
                    "POPINDENT",
                    "finally:",
@@ -236,8 +237,10 @@ bc_rule_:
                          $prem_plan_lines, $python_lines)
         $bc_fun_lines = ($goal_fn_head,
                          $prem_fn_head,
+                         'rule.rule_base.num_bc_rule_successes += 1',
                          'yield context' if $plan_lines else 'yield',
                          $prem_fn_tail,
+                         'rule.rule_base.num_bc_rule_failures += 1',
                          $goal_fn_tail,
                         )
         $bc_init_lines = ($goal_decl_lines,

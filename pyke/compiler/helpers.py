@@ -66,6 +66,7 @@ def goal(rb_name, rule_name,
         "arg_patterns)):",
         ("ENDING_LINENO", end_lineno),
         "POPINDENT",
+        "rule.rule_base.num_bc_rules_matched += 1",
     )
     goal_fn_tail = (
         "POPINDENT",

@@ -105,13 +105,16 @@ class fact_base(knowledge_base.knowledge_base):
 	self.get_entity_list(fact_name).add_case_specific_fact(args)
     def assert_(self, fact_name, args):
 	self.add_case_specific_fact(fact_name, args)
-    def print_stats(self, f):
-        num_universal = num_case_specific = num_fact_lists = 0
+    def get_stats(self):
+        num_fact_lists = num_universal = num_case_specific = 0
         for fact_list in self.entity_lists.itervalues():
             universal, case_specific = fact_list.get_stats()
             num_universal += universal
             num_case_specific += case_specific
             num_fact_lists += 1
+        return num_fact_lists, num_universal, num_case_specific
+    def print_stats(self, f):
+        num_fact_lists, num_universal, num_case_specific = self.get_stats()
         f.write("%s: %d fact names, %d universal facts, "
                 "%d case_specific facts\n" %
                 (self.name, num_fact_lists, num_universal, num_case_specific))

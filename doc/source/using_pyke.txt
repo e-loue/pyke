@@ -251,7 +251,7 @@ intervening python functions between subgoal proofs.
         return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
       File "/home/bruce/python/workareas/sf.trunk/pyke/__init__.py", line 119, in prove_n
         for arg in fixed_args) + vars):
-      File "/home/bruce/python/workareas/sf.trunk/pyke/rule_base.py", line 36, in next
+      File "/home/bruce/python/workareas/sf.trunk/pyke/rule_base.py", line 37, in next
         return self.iterator.next()
       File "/home/bruce/python/workareas/sf.trunk/pyke/tmp_itertools.py", line 32, in chain
         for x in iterable: yield x
@@ -301,6 +301,14 @@ The remaining functions are:
     Finds and returns the `rule base`_ by the name ``rb_name``.  Raises
     KeyError if not found.  This works for any `rule base`_, whether it is
     active or not.
+*some_engine*.print_stats([f = sys.stdout])
+    Prints a brief set of statistics for each knowledge base to file ``f``.
+    These are reset by the ``reset`` function.  This will show how many facts
+    were asserted, and counts of how many forward-chaining rules were triggered
+    and rerun, as well as counts of how many backward-chaining goals were tried,
+    and how many backward-chaining rules matched, succeeded and failed.
+    Note that one backward-chaining rule may succeed many times through
+    backtracking.
 
 Creating Your Own Patterns
 ----------------------------------

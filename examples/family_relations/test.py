@@ -25,21 +25,23 @@
     This example shows how people are related.  The primary data (facts) that
     are used to figure everything out are in family.py.
 
-    There are three independent rule bases that all do the same thing.  The
+    There are four independent rule bases that all do the same thing.  The
     fc_example rule base only uses forward-chaining rules.  The bc_example
-    rule base only uses backward-chaining rules.  And the example rule base
-    uses all three (though, there isn't really a need for plans, so the plans
-    are pretty contrived).
+    rule base only uses backward-chaining rules.  The bc2_example rule base
+    also only uses backward-chaining rules, but with a few optimizations that
+    make it run 100 times faster than bc_example.  And the example rule base
+    uses all three (though it's a poor use of plans).
 
-    One the pyke engine is created, all the rule bases loaded and all the
-    primary data established as universal facts; there are three functions
+    Once the pyke engine is created, all the rule bases loaded and all the
+    primary data established as universal facts; there are five functions
     that can be used to run each of the three rule bases: fc_test, bc_test,
-    and test.
+    bc2_test, test and general.
 '''
 
 from __future__ import with_statement
 import contextlib
 import sys
+import time
 
 import pyke
 from pyke import krb_traceback
@@ -51,78 +53,156 @@ engine = pyke.engine('.')
 import family
 family.init(engine)
 
-def fc_test(name = 'bruce'):
+def fc_test(person1 = 'bruce'):
     '''
         This function runs the forward-chaining example (fc_example.krb).
     '''
     engine.reset()      # Allows us to run tests multiple times.
 
+    start_time = time.time()
     engine.activate('fc_example')  # Runs all applicable forward-chaining rules.
+    fc_end_time = time.time()
+    fc_time = fc_end_time - start_time
 
     print "doing proof"
     for (person2, relationship), plan \
-     in engine.prove_n('family', 'how_related', (name,), 2):
-        print "%s, %s are %s" % (name, person2, relationship)
+     in engine.prove_n('family', 'how_related', (person1,), 2):
+        print "%s, %s are %s" % (person1, person2, relationship)
+    prove_time = time.time() - fc_end_time
     print
     print "done"
     engine.print_stats()
+    print "fc time %.2f, %.0f asserts/sec" % \
+          (fc_time, engine.get_kb('family').get_stats()[2] / fc_time)
 
-def bc_test(name = 'bruce'):
+def bc_test(person1 = 'bruce'):
     engine.reset()      # Allows us to run tests multiple times.
 
+    start_time = time.time()
     engine.activate('bc_example')
+    fc_end_time = time.time()
+    fc_time = fc_end_time - start_time
 
     print "doing proof"
     try:
         for (person2, relationship), plan \
-         in engine.prove_n('bc_example', 'how_related', (name,), 2):
-            print "%s, %s are %s" % (name, person2, relationship)
+         in engine.prove_n('bc_example', 'how_related', (person1,), 2):
+            print "%s, %s are %s" % (person1, person2, relationship)
     except StandardError:
         # This converts stack frames of generated python functions back to the
         # .krb file.
         krb_traceback.print_exc()
         sys.exit(1)
+    prove_time = time.time() - fc_end_time
     print
     print "done"
     engine.print_stats()
+    print "bc time %.2f, %.0f goals/sec" % \
+          (prove_time, engine.get_kb('bc_example').num_prove_calls / prove_time)
 
-def bc2_test(name = 'bruce'):
+def bc2_test(person1 = 'bruce'):
     engine.reset()      # Allows us to run tests multiple times.
 
+    start_time = time.time()
     engine.activate('bc2_example')
+    fc_end_time = time.time()
+    fc_time = fc_end_time - start_time
 
     print "doing proof"
     try:
         for (person2, relationship), plan \
-         in engine.prove_n('bc2_example', 'how_related', (name,), 2):
-            print "%s, %s are %s" % (name, person2, relationship)
+         in engine.prove_n('bc2_example', 'how_related', (person1,), 2):
+            print "%s, %s are %s" % (person1, person2, relationship)
     except StandardError:
         # This converts stack frames of generated python functions back to the
         # .krb file.
         krb_traceback.print_exc()
         sys.exit(1)
+    prove_time = time.time() - fc_end_time
     print
     print "done"
     engine.print_stats()
+    print "bc time %.2f, %.0f goals/sec" % \
+          (prove_time,
+           engine.get_kb('bc2_example').num_prove_calls / prove_time)
 
-def test(name = 'bruce'):
+def test(person1 = 'bruce'):
     engine.reset()      # Allows us to run tests multiple times.
 
     # Also runs all applicable forward-chaining rules.
+    start_time = time.time()
     engine.activate('example')
+    fc_end_time = time.time()
+    fc_time = fc_end_time - start_time
 
     print "doing proof"
     try:
         # In this case, the relationship is returned when you run the plan.
         for (person2,), plan \
-         in engine.prove_n('example', 'how_related', (name,), 1):
-            print "%s, %s are %s" % (name, person2, plan())
+         in engine.prove_n('example', 'how_related', (person1,), 1):
+            print "%s, %s are %s" % (person1, person2, plan())
     except StandardError:
         # This converts stack frames of generated python functions back to the
         # .krb file.
         krb_traceback.print_exc()
         sys.exit(1)
+    prove_time = time.time() - fc_end_time
     print
     print "done"
     engine.print_stats()
+    print "fc time %.2f, %.0f asserts/sec" % \
+          (fc_time, engine.get_kb('family').get_stats()[2] / fc_time)
+    print "bc time %.2f, %.0f goals/sec" % \
+          (prove_time, engine.get_kb('example').num_prove_calls / prove_time)
+    print "total time %.2f" % (fc_time + prove_time)
 
+# Need some extra goodies for general()...
+from pyke import contexts, pattern
+
+def general(person1 = None, person2 = None, relationship = None):
+
+    engine.reset()      # Allows us to run tests multiple times.
+
+    start_time = time.time()
+    engine.activate('bc2_example')      # same rule base as bc2_test()
+    fc_end_time = time.time()
+    fc_time = fc_end_time - start_time
+
+    print "doing proof"
+    top_context = contexts.simple_context()
+    if person1: arg1 = pattern.pattern_literal(person1)
+    else: arg1 = contexts.variable('person1')
+    if person2: arg2 = pattern.pattern_literal(person2)
+    else: arg2 = contexts.variable('person2')
+    if relationship: arg3 = make_pattern(relationship)
+    else: arg3 = contexts.variable('relationship')
+    try:
+        for prototype_plan \
+         in engine.prove('bc2_example', 'how_related', top_context,
+                         (arg1, arg2, arg3)):
+            print "%s, %s are %s" % (arg1.as_data(top_context),
+                                     arg2.as_data(top_context),
+                                     arg3.as_data(top_context))
+    except StandardError:
+        # This converts stack frames of generated python functions back to the
+        # .krb file.
+        krb_traceback.print_exc()
+        sys.exit(1)
+    prove_time = time.time() - fc_end_time
+    print
+    print "done"
+    engine.print_stats()
+    print "bc time %.2f, %.0f goals/sec" % \
+          (prove_time,
+           engine.get_kb('bc2_example').num_prove_calls / prove_time)
+
+import types
+
+def make_pattern(x):
+    if isinstance(x, types.StringTypes):
+        if x[0] == '$': return contexts.variable(x[1:])
+        return pattern.pattern_literal(x)
+    if isinstance(x, (tuple, list)):
+        return pattern.pattern_tuple(tuple(make_pattern(element)
+                                             for element in x))
+    return pattern.pattern_literal(x)
