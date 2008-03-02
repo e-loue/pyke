@@ -154,6 +154,8 @@
         Traceback (most recent call last):
             ...
         KeyError: '$_ not bound'
+        >>> A_context.lookup_data('_', True)
+        '$_'
 """
 
 import sys
@@ -208,7 +210,7 @@ class simple_context(object):
 	    val, where = ans
 	# where is None or not isinstance(val, variable)
 	return where is None or val.is_data(where)
-    def lookup_data(self, var_name, final = None):
+    def lookup_data(self, var_name, allow_vars = False, final = None):
 	""" Converts the answer into data only (without any patterns in it).
 	    If there are unbound variables anywhere in the data, a KeyError is
 	    generated.
@@ -218,10 +220,11 @@ class simple_context(object):
 	    if val is not _Not_found: return val
 	binding = self.bindings.get(var_name)
 	if binding is None:
+            if allow_vars: return "$" + var_name
 	    raise KeyError("$%s not bound" % var_name)
 	val, context = binding
 	if context is not None:
-	    val = val.as_data(context, final)
+	    val = val.as_data(context, allow_vars, final)
 	if final is not None:
 	    if isinstance(val, bc_context): val = val.create_plan(final)
 	    final[var_name, self] = val
@@ -319,8 +322,8 @@ class variable(pattern.pattern):
 	if var_context is None:
 	    return pattern_b.match_data(bindings, b_context, var)
 	return var.match_pattern(bindings, var_context, pattern_b, b_context)
-    def as_data(self, my_context, final = None):
-	return my_context.lookup_data(self.name, final)
+    def as_data(self, my_context, allow_vars = False, final = None):
+	return my_context.lookup_data(self.name, allow_vars, final)
     def is_data(self, my_context):
 	return my_context.is_bound(self)
 
@@ -336,7 +339,8 @@ class anonymous(variable):
 	return True
     def match_pattern(self, bindings, my_context, pattern_b, b_context):
 	return True
-    def as_data(self, my_context, final = None):
+    def as_data(self, my_context, allow_vars = False, final = None):
+        if allow_vars: return "$_"
 	raise KeyError("$%s not bound" % self.name)
     def is_data(self, my_context):
 	return False

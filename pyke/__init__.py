@@ -137,6 +137,10 @@ class engine(object):
     def print_stats(self, f = sys.stdout):
         for kb in sorted(self.knowledge_bases.values(), key=lambda kb: kb.name):
             kb.print_stats(f)
+    def trace(self, rb_name, rule_name):
+        self.get_rb(rb_name).trace(rule_name)
+    def untrace(self, rb_name, rule_name):
+        self.get_rb(rb_name).untrace(rule_name)
 
 def _raise_exc(exc): raise exc
 
@@ -243,7 +247,7 @@ def _load_file(engine, filename, gen_dir, gen_root_dir, load_fc, load_bc,
                compile_list):
     base, package_list = _get_base_path(filename, gen_dir, gen_root_dir)
     base_modulename = os.path.basename(base)
-    def load_module(type):
+    def load_module(type, do_import=True):
         try:
             os.stat(base + type + '.py')
             module_path = package_list + [base_modulename + type]
@@ -255,14 +259,16 @@ def _load_file(engine, filename, gen_dir, gen_root_dir, load_fc, load_bc,
                 if filename in compile_list:
                     module = reload(module)
                     #print module
-            else:
+            elif do_import:
                 #print "needs import"
                 module = _import(module_path)
-            module.populate(engine)
+            if do_import: module.populate(engine)
         except OSError:
             pass
     if load_fc: load_module('_fc')
-    if load_bc: load_module('_bc')
+    if load_bc:
+        load_module('_plans', False)
+        load_module('_bc')
 
 """ ******* for testing:
 def trace_import(*args, **kws):

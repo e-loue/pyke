@@ -1,0 +1,11 @@
+1	Stanley Kramer
+2	James Cameron
+3	Richard Lester
+4	Nora Ephron
+5	Norman Jewison
+6	Val Guest
+7	Ken Hughes
+8	John Huston
+9	Joseph McGrath
+10	Robert Parrish
+11	Richard Talmadge

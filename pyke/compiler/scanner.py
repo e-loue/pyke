@@ -484,7 +484,7 @@ def syntaxerror_params(pos = None, lineno = None):
     while start > 0 and lexer.lexdata[start] in '\r\n':
         start -= 1
     end = start
-    print "pos", pos, "lineno", lineno, "start", start
+    if debug: print "pos", pos, "lineno", lineno, "start", start
     start = max(lexer.lexdata.rfind('\r', 0, start),
                 lexer.lexdata.rfind('\n', 0, start)) + 1
     column = pos - start + 1
@@ -493,7 +493,7 @@ def syntaxerror_params(pos = None, lineno = None):
     if end1 < 0: end = end2
     elif end2 < 0: end = end1
     else: end = min(end1, end2)
-    print "start", start, "column", column, "end", end
+    if debug: print "start", start, "column", column, "end", end
     return (lexer.filename, lineno, column, lexer.lexdata[start:end])
 
 def init():

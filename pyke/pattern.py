@@ -44,7 +44,7 @@ class pattern_literal(pattern):
 	if isinstance(pattern_b, pattern_literal):
 	    return self.literal == pattern_b.literal
 	return pattern_b.match_data(bindings, b_context, self.literal)
-    def as_data(self, my_context, final = None):
+    def as_data(self, my_context, allow_vars = False, final = None):
 	return self.literal
     def is_data(self, my_context):
 	return True
@@ -59,6 +59,7 @@ class pattern_tuple(pattern):
         return isinstance(b, pattern_tuple) and \
                self.elements == b.elements and self.rest_var == b.rest_var
     def match_data(self, bindings, my_context, data):
+        if isinstance(data, types.StringTypes): return False
 	try:
 	    data = tuple(data)
 	except TypeError:
@@ -113,12 +114,14 @@ class pattern_tuple(pattern):
 							tail_val, tail_context):
 		    return False
 	return True
-    def as_data(self, my_context, final = None):
-	ans = tuple(x.as_data(my_context, final) for x in self.elements)
+    def as_data(self, my_context, allow_vars = False, final = None):
+	ans = tuple(x.as_data(my_context, allow_vars, final)
+                    for x in self.elements)
 	if self.rest_var is None:
 	    return ans
-	else:
-	    return ans + my_context.lookup_data(self.rest_var.name, final)
+        rest = my_context.lookup_data(self.rest_var.name, allow_vars, final)
+        if isinstance(rest, tuple): return ans + rest
+        return ans + ('*' + rest,)
     def _tail(self, n, my_context):
 	""" Return a copy of myself with the first n elements removed.
 	"""

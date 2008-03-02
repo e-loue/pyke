@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# load_tables
+
+usage() {
+    echo "usage: load_tables" >&2
+    exit 2
+}
+
+[ $# -eq 0 ] || usage
+
+set -e
+
+mysqlimport --user=movie_admin --password=admin_pw --delete --local movie_db \
+    genre.txt movie.txt director.txt movie_director_link.txt catalog.txt

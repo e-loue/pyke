@@ -145,6 +145,14 @@ class rule_base(knowledge_base.knowledge_base):
                 (' ' * len(self.name), self.num_bc_rule_successes,
                  self.num_bc_rule_failures))
         if self.parent: self.parent.print_stats(f)
+    def trace(self, rule_name):
+        for rule_list in self.entity_lists.itervalues():
+            if rule_list.trace(rule_name): return
+        raise KeyError("trace: rule %s not found" % rule_name)
+    def untrace(self, rule_name):
+        for rule_list in self.entity_lists.itervalues():
+            if rule_list.untrace(rule_name): return
+        raise KeyError("untrace: rule %s not found" % rule_name)
 
 class rule_list(knowledge_base.knowledge_entity_list):
     def __init__(self, name):
@@ -161,6 +169,18 @@ class rule_list(knowledge_base.knowledge_entity_list):
                                for bc_rule in self.bc_rules)
     def num_bc_rules(self):
         return len(self.bc_rules)
+    def trace(self, rule_name):
+        for bc_rule in self.bc_rules:
+            if bc_rule.name == rule_name:
+                bc_rule.trace()
+                return True
+        return False
+    def untrace(self, rule_name):
+        for bc_rule in self.bc_rules:
+            if bc_rule.name == rule_name:
+                bc_rule.untrace()
+                return True
+        return False
 
 def test():
     import doctest

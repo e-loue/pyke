@@ -1,0 +1,346 @@
+# database.krb
+
+get_data:
+    # $starting_data is a tuple of table_names that we will have ids for.
+    # $needed_data is a tuple describing the data that should be returned (as
+    # a dict).  It is composed of the following:
+    #     column_name
+    #         -- binds a single (unique) value to column_name
+    #     (name, (options), needed_data...)
+    #         -- binds a tuple of dictionaries to name
+    #         -- options can be:
+    #               (by table_name)
+    #                   -- table_name is "1" table in the many_to_1 link
+    #               (order_by 'asc'/'desc'|column_name...)
+    #         -- needed_data can only be a column_name at this point
+    #            (no nested multirow queries)
+    use get_data($starting_data, $needed_data) \
+        taking(db_cursor, starting_data)
+    when
+        check print_msg("get_data: starting_data: %s" % str($starting_data))
+        check print_msg("get_data: needed_data: %s" % str($needed_data))
+        !get_data2($starting_data, $needed_data, (), $unique_queries)
+            # This does the multi-row queries
+            ans = {}
+            $$(db_cursor, starting_data, ans)
+        !process_unique_queries($unique_queries)
+            $$(db_cursor, starting_data, ans)
+            return ans
+
+get_data2_done:
+    use get_data2($_, (), $unique_in, $unique_in) \
+        taking (db_cursor, starting_data, dict)
+    with
+        pass
+
+get_data2_multi:
+    use get_data2($starting_data, (($row_name, $options, *$multi_data), *$rest),
+                  $unique_in, $unique_out) \
+        taking (db_cursor, starting_data, dict)
+    when
+        check print_msg("get_data2 multi: starting_data: %s" % str($starting_data))
+        check print_msg("get_data2 multi: row_name: %s" % str($row_name))
+        special.claim_goal()
+        !get_multi($starting_data, $options, $multi_data, $multi_plan)
+        !get_data2($starting_data, $rest, $unique_in, $unique_out)
+            $$(db_cursor, starting_data, dict)
+    with
+        dict[$row_name] = $multi_plan(db_cursor, starting_data)
+
+get_data2_unique:
+    use get_data2($starting_data, ($unique_data, *$rest),
+                  $unique_in, $unique_out) \
+        taking (db_cursor, starting_data, dict)
+    when
+        check print_msg("get_data2 unique: starting_data: %s" % str($starting_data))
+        check print_msg("get_data2 unique: unique_data: %s" % str($unique_data))
+        get_unique($starting_data, $unique_data, $unique_out1)
+        get_data2($starting_data, $rest, ($unique_out1, *$unique_in),
+                  $unique_out)
+            $$(db_cursor, starting_data, dict)
+
+get_unique_direct:
+    # $unique_out is a tuple of:
+    #     from clause, which is a tuple starting with table_name_a followed by:
+    #         (table_name_b, from_table, from_columns, b_columns)...
+    #     select clause, which is a column_name
+    #     name bindings, which is a string
+    use get_unique($starting_data, $column, ($from_clause, $column, $column))
+    when
+        lookup_column($column, $starting_data, $from_clause)
+        special.claim_goal()
+
+get_unique_indirect:
+    use get_unique($starting_data, $column, ($from_clause, $column, $column))
+    when
+        lookup_indirect(1, $column, $starting_data, $from_clause)
+
+lookup_column:
+    use lookup_column($column, $starting_data, ($table))
+    when
+        find_columns($column, $starting_data, (), $tables)
+        unique_table($column, $tables, $table)
+
+unique_table_success:
+    use unique_table($_, ($table), $table)
+    when
+        special.claim_goal()
+
+unique_table_not_found:
+    use unique_table($column, (), $_)
+    when
+        special.claim_goal()
+        check False
+
+unique_table_dups:
+    use unique_table($column, $tables, $_)
+    when
+        check print_fail("duplicate column %s, found in %s" %
+                         ($column, $tables))
+
+find_columns_done:
+    use find_columns($_, (), $tables_in, $tables_in)
+
+find_columns_in_next:
+    use find_columns($column, ($table, *$rest), $tables_in, $tables_out)
+    when
+        schema.column($table, $column, $_, $_, $_, $_, $_)
+        special.claim_goal()
+        !find_columns($column, $rest, ($table, *$tables_in), $tables_out)
+
+find_columns_not_in_next:
+    use find_columns($column, ($_, *$rest), $tables_in, $tables_out)
+    when
+        !find_columns($column, $rest, $tables_in, $tables_out)
+
+lookup_indirect:
+    use lookup_indirect($depth, $column, $starting_data, $from_clause)
+    when
+        check print_msg("lookup_indirect: "
+                        "find_depth(%s, %s, %s, _, _, _)" %
+                        ($depth, $column, $starting_data))
+        !find_depth($depth, $column, $starting_data, $got_depth, (), $tables)
+        check print_msg("lookup_indirect: "
+                        "lookup_indirect2(%s, %s, %s, %s, %s, _)" %
+                        ($depth, $column, $starting_data, $got_depth, $tables))
+        lookup_indirect2($depth, $column, $starting_data, $got_depth, $tables,
+                         $from_clause)
+
+lookup_indirect2_success:
+    use lookup_indirect2($_, $_, $_, $_, ($from_clause), $from_clause)
+    when
+        special.claim_goal()
+
+lookup_indirect2_next_depth:
+    use lookup_indirect2($depth, $column, $starting_data, True, (),
+                         $from_clause)
+    when
+        special.claim_goal()
+        $depth2 = $depth + 1
+        lookup_indirect($depth2, $column, $starting_data, $from_clause)
+
+lookup_indirect2_dups:
+    use lookup_indirect2($_, $column, $_, True, $froms, $_)
+    when
+        check print_fail("duplicate tables for %s: %s" %
+                         ($column, tuple(from_[0] for from_ in $froms)))
+
+find_depth_done:
+    use find_depth($depth, $column, (), False, $tables_in, $tables_in)
+
+find_depth_step:
+    use find_depth($depth, $column, ($table, *$rest), $got_depth,
+                   $tables_in, $tables_out)
+    when
+        ($got_depth1, $from) = find_depth1(engine, $depth, $column, $table)
+        find_depth2($depth, $column, $table, $rest, $got_depth1, $from,
+                    $got_depth, $tables_in, $tables_out)
+
+find_depth2_false:
+    use find_depth2($depth, $column, $table, $rest, False, (),
+                    $got_depth, $tables_in, $tables_out)
+    when
+        special.claim_goal()
+        find_depth($depth, $column, $rest, $got_depth, $tables_in, $tables_out)
+
+find_depth2_true:
+    use find_depth2($depth, $column, $table, $rest, True, $froms,
+                    True, $tables_in, $tables_out)
+    when
+        special.claim_goal()
+        $tables_in2 = $froms + $tables_in
+        find_depth($depth, $column, $rest, $_, $tables_in2, $tables_out)
+
+process_unique_queries_done:
+    use process_unique_queries(()) taking(db_cursor, starting_data, dict)
+    with
+        pass
+
+process_unique_queries_step:
+    use process_unique_queries((($from, $select, $key), *$rest)) \
+        taking(db_cursor, starting_data, dict)
+    when
+        $select2 = "%s.%s" % (($from[0] if len($from) == 1 else $from[-1][0]),
+                              $select)
+        check print_msg("process_unique_queries_step: "
+                        "process_query(%s, %s, _, _)" % 
+                        (($from, ($select2,), ($key,)), $rest))
+        process_query(($from, ($select2), ($key)), $rest, $unrelated_queries,
+                      $combined_query)
+        check print_msg("process_unique_queries_step: combined_query is: %s" %
+                        str($combined_query))
+        run_query($combined_query)
+            $$(db_cursor, starting_data, dict)
+        process_unique_queries($unrelated_queries)
+            $$(db_cursor, starting_data, dict)
+
+process_query_done_n:
+    use process_query($query, (), (), $query)
+    when
+        special.claim_goal()
+
+process_query_match_n:
+    use process_query((($table1, *$joins1), $select_columns1, $dict_keys1),
+                      ((($table1, *$joins2), $select_column2, $dict_key2),
+                       *$rest),
+                      $unrelated_queries,
+                      $combined_query)
+    when
+        special.claim_goal()
+        check print_msg("merge_joins(%s, %s, $merged_join)" % 
+                        ($joins1, $joins2))
+        merge_joins($joins1, $joins2, $merged_join)
+        $select2 = "%s.%s" % (($table1 if not $joins2 else $joins2[-1][0]),
+                              $select_column2)
+        process_query((($table1, *$merged_join),
+                           ($select2, *$select_columns1),
+                           ($dict_key2, *$dict_keys1)),
+                      $rest, $unrelated_queries, $combined_query)
+
+process_query_match:
+    use process_query($query1, ($unrelated_query1, *$rest),
+                      ($unrelated_query1, *$unrelated_queries), $combined_query)
+    when
+        process_query($query1, $rest, $unrelated_queries, $combined_query)
+
+merge_join_match:
+    use merge_joins(($first_join, *$rest_joins1), ($first_join, *$rest_joins2),
+                    ($first_join, *$merged_joins))
+    when
+        special.claim_goal()
+        merge_joins($rest_joins1, $rest_joins2, $merged_joins)
+
+merge_join_no_match:
+    use merge_joins($joins1, $joins2, $merged_joins)
+    when
+        $merged_joins = $joins1 + $joins2
+
+run_query:
+    use run_query((($table1, *$joins1), $select_columns, $dict_keys)) \
+        taking(db_cursor, starting_data, dict)
+    when
+        check print_msg("make_from_clause(%s, %s, $from_clause)" % 
+                        ($table1, $joins1))
+        !make_from_clause($table1, $joins1, $from_clause)
+    with
+        sql_command = "select %s\n  from %s\n where %s.id = %%(id)s" % \
+                          (', '.join($select_columns), $from_clause, $table1)
+        db_cursor.execute(sql_command, {'id': starting_data[$table1]})
+        assert db_cursor.rowcount == 1, \
+            'expected unique row, got %d rows from "%s"' % \
+              (db_cursor.rowcount, sql_command)
+        dict.update(zip($dict_keys, db_cursor.fetchone()))
+
+make_from_clause_done:
+    use make_from_clause($from_in, (), $from_in)
+
+make_from_clause_next:
+    use make_from_clause($from_in,
+                         (($table2, $from_table, $from_cols, $to_cols), *$rest),
+                         $from_clause)
+    when
+        $from1 = "%s\n           inner join %s on (%s)" % \
+                   ($from_in, $table2,
+                    ' AND '.join("%s.%s = %s.%s" %
+                                    ($from_table, from_col, $table2, to_col)
+                                 for from_col, to_col
+                                 in zip($from_cols, $to_cols)))
+        make_from_clause($from1, $rest, $from_clause)
+
+get_multi:
+    use get_multi($starting_data, $options, $multi_data, $plan)
+    when
+        $by = dict($options).get('by')
+        $order_by = dict($options).get('order_by')
+        get_multi2($starting_data, $multi_data, $by, $order_by, $plan)
+
+get_multi2_no_by:
+    use get_multi2($starting_data, $multi_data, None, $order_by, $plan)
+    when
+        special.claim_goal()
+        $unique_table in $starting_data
+        get_multi3($unique_table, $multi_data, $order_by, $plan)
+
+get_multi2_by:
+    use get_multi2($starting_data, $multi_data, $by, $order_by, $plan)
+    when
+        check $by in $starting_data
+        get_multi3($by, $multi_data, $order_by, $plan)
+
+get_multi3:
+    use get_multi3($unique_table, $multi_data, $order_by, $plan)
+    when
+        schema.many_to_1($multi_table, $unique_table, ($multi_link_column), $_)
+        get_data2(($multi_table), $multi_data, (), $unique_queries) as $ignore
+        process_multi_queries($unique_queries, $combined_query)
+        run_multi_query($unique_table, $combined_query, $multi_link_column,
+                        $order_by) as $plan
+
+process_multi_queries_done:
+    use process_multi_queries((), ())
+
+process_multi_queries_step:
+    use process_multi_queries((($from, $select, $key), *$rest), $combined_query)
+    when
+        $select2 = "%s.%s" % (($from[0] if len($from) == 1 else $from[-1][0]),
+                              $select)
+        process_query(($from, ($select2), ($key)), $rest, (), $combined_query)
+
+run_multi_query:
+    use run_multi_query($unique_table,
+                        (($table1, *$joins1), $select_columns, $dict_keys),
+                        $multi_link_column, $order_by) \
+        taking (db_cursor, starting_data)
+    when
+        !make_from_clause($table1, $joins1, $from_clause)
+    with
+        # FIX: Add order_by
+        db_cursor.execute("select %s\n  from %s\n where %s.%s = %%(id)s" %
+                            (', '.join($select_columns), $from_clause,
+                             $table1, $multi_link_column),
+                          {'id': starting_data[$unique_table]})
+        ans = []
+        for row in db_cursor.fetchall():
+            ans.append(dict(zip($dict_keys, row)))
+        return tuple(ans)
+
+bc_extras
+    def find_depth1(engine, depth, column, table):
+        got_depth = False
+        ans_joins = []
+        for (to_table, joins), bogus_plan1 \
+         in engine.prove_n("schema", "links_to", (depth, table), 2):
+            got_depth = True
+            for bogus_vars, bogus_plan1 \
+             in engine.prove_n("schema", "column", (to_table, column), 5):
+                ans_joins.append((table,) + joins)
+        return got_depth, tuple(ans_joins)
+
+    def print_fail(msg):
+        print msg
+        return False
+
+    def print_msg(msg):
+        print msg
+        return True
+
