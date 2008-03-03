@@ -221,6 +221,25 @@ No special code is required to unpickle a plan_.  Also, the program that
 unpickles the plan_ does not have to import any pyke modules to be able
 to run the plan_.  Just unpickle and call it.
 
+Tracing Rules
+-------------
+
+Individual rules may be traced to aid in debugging.  The ``trace`` function
+takes two arguments: the rule base name, and the name of the rule to trace:
+
+    >>> my_engine.trace('bc_example', 'grand_parent_and_child')
+    >>> my_engine.prove_1('bc_example', 'child_parent', ('david', 'norma'), 3)
+    bc_example.grand_parent_and_child('david', 'norma', '$ans_0', '$ans_1', '$ans_2')
+    bc_example.grand_parent_and_child succeeded with ('david', 'norma', ('grand',), 'son', 'mother')
+    ((('grand',), 'son', 'mother'), None)
+
+This can be done either before or after rule base activation and will remain
+in effect until you call ``untrace``:
+
+    >>> my_engine.untrace('bc_example', 'grand_parent_and_child')
+    >>> my_engine.prove_1('bc_example', 'child_parent', ('david', 'norma'), 3)
+    ((('grand',), 'son', 'mother'), None)
+
 Krb_traceback
 ---------------
 
@@ -245,7 +264,7 @@ intervening python functions between subgoal proofs.
     ... except:
     ...     krb_traceback.print_exc(None, sys.stdout)    # sys.stdout needed for doctest
     Traceback (most recent call last):
-      File "<doctest using_pyke.txt[27]>", line 2, in <module>
+      File "<doctest using_pyke.txt[31]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
       File "/home/bruce/python/workareas/sf.trunk/pyke/__init__.py", line 130, in prove_1
         return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
@@ -265,7 +284,7 @@ intervening python functions between subgoal proofs.
         goal4()
       File "/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb", line 41, in rule4
         check $bar > 0
-      File "/home/bruce/python/workareas/sf.trunk/pyke/contexts.py", line 221, in lookup_data
+      File "/home/bruce/python/workareas/sf.trunk/pyke/contexts.py", line 224, in lookup_data
         raise KeyError("$%s not bound" % var_name)
     KeyError: '$bar not bound'
 

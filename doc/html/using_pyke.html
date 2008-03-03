@@ -248,6 +248,29 @@ unpickles the <a class="reference" href="overview/plans.html">plan</a> does not 
 to run the <a class="reference" href="overview/plans.html">plan</a>.  Just unpickle and call it.</p>
 </div>
 <div class="section">
+<h2><a id="tracing-rules" name="tracing-rules">Tracing Rules</a></h2>
+<p>Individual rules may be traced to aid in debugging.  The <tt class="docutils literal"><span class="pre">trace</span></tt> function
+takes two arguments: the rule base name, and the name of the rule to trace:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.trace('bc_example', 'grand_parent_and_child')
+&gt;&gt;&gt; my_engine.prove_1('bc_example', 'child_parent', ('david', 'norma'), 3)
+bc_example.grand_parent_and_child('david', 'norma', '$ans_0', '$ans_1', '$ans_2')
+bc_example.grand_parent_and_child succeeded with ('david', 'norma', ('grand',), 'son', 'mother')
+((('grand',), 'son', 'mother'), None)
+</pre>
+</blockquote>
+<p>This can be done either before or after rule base activation and will remain
+in effect until you call <tt class="docutils literal"><span class="pre">untrace</span></tt>:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.untrace('bc_example', 'grand_parent_and_child')
+&gt;&gt;&gt; my_engine.prove_1('bc_example', 'child_parent', ('david', 'norma'), 3)
+((('grand',), 'son', 'mother'), None)
+</pre>
+</blockquote>
+</div>
+<div class="section">
 <h2><a id="krb-traceback" name="krb-traceback">Krb_traceback</a></h2>
 <p>A handy traceback module is provided to convert python functions, lines and
 line numbers to the <a class="reference" href="krb_syntax/index.html">.krb file</a> rule names, lines and line numbers in python
@@ -270,7 +293,7 @@ intervening python functions between subgoal proofs.</p>
 ... except:
 ...     krb_traceback.print_exc(None, sys.stdout)    # sys.stdout needed for doctest
 Traceback (most recent call last):
-  File &quot;&lt;doctest using_pyke.txt[27]&gt;&quot;, line 2, in &lt;module&gt;
+  File &quot;&lt;doctest using_pyke.txt[31]&gt;&quot;, line 2, in &lt;module&gt;
     my_engine.prove_1('error_test', 'goal', (), 0)
   File &quot;/home/bruce/python/workareas/sf.trunk/pyke/__init__.py&quot;, line 130, in prove_1
     return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
@@ -290,7 +313,7 @@ Traceback (most recent call last):
     goal4()
   File &quot;/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb&quot;, line 41, in rule4
     check $bar &gt; 0
-  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/contexts.py&quot;, line 221, in lookup_data
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/contexts.py&quot;, line 224, in lookup_data
     raise KeyError(&quot;$%s not bound&quot; % var_name)
 KeyError: '$bar not bound'
 </pre>
@@ -416,7 +439,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Sun, Feb 24 2008.
+    Page last modified Mon, Mar 03 2008.
   </div>
 
 </body>
