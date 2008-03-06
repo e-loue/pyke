@@ -33,8 +33,6 @@ from pyke import (condensedPrint, contexts, pattern,
 class CanNotProve(StandardError):
     pass
 
-version = '0.1.alpha2'
-
 Name_test = re.compile(r'[a-zA-Z_][a-zA-Z0-9_]*$')
 Bad_name_char = re.compile('[^a-zA-Z0-9_]')
 
@@ -89,12 +87,24 @@ class engine(object):
         return ans
 
     def add_universal_fact(self, kb_name, fact_name, args):
+        if isinstance(args, types.StringTypes):
+            raise TypeError("engine.add_universal_fact: "
+                            "illegal args type, %s" % type(args))
+        args = tuple(args)
         return self.get_kb(kb_name, fact_base.fact_base) \
                    .add_universal_fact(fact_name, args)
     def add_case_specific_fact(self, kb_name, fact_name, args):
+        if isinstance(args, types.StringTypes):
+            raise TypeError("engine.add_case_specific_fact: "
+                            "illegal args type, %s" % type(args))
+        args = tuple(args)
         return self.get_kb(kb_name, fact_base.fact_base) \
                    .add_case_specific_fact(fact_name, args)
     def assert_(self, kb_name, entity_name, args):
+        if isinstance(args, types.StringTypes):
+            raise TypeError("engine.assert_: "
+                            "illegal args type, %s" % type(args))
+        args = tuple(args)
         return self.get_kb(kb_name, fact_base.fact_base) \
                    .assert_(entity_name, args)
 
@@ -117,8 +127,10 @@ class engine(object):
             for plan in self.prove(kb_name, entity_name, context,
                                    tuple(pattern.pattern_literal(arg)
                                          for arg in fixed_args) + vars):
-                ans = tuple(context.lookup_data(var.name) for var in vars)
-                if plan: plan = plan.create_plan()
+                final = {}
+                ans = tuple(context.lookup_data(var.name, final = final)
+                            for var in vars)
+                if plan: plan = plan.create_plan(final)
                 yield ans, plan
         finally:
             context.done()

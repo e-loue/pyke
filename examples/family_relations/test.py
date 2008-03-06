@@ -43,11 +43,10 @@ import contextlib
 import sys
 import time
 
-import pyke
-from pyke import krb_traceback
+from pyke import knowledge_engine, krb_traceback
 
 # Compile and load .krb files in '.' directory (recursively).
-engine = pyke.engine('.')
+engine = knowledge_engine.engine('.')
 
 # This loads the family universal facts.
 import family

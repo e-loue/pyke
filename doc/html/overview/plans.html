@@ -178,8 +178,8 @@ are at different indent levels in the <a class="reference" href="../krb_syntax/i
 <p>The plan is created as a byproduct of <a class="reference" href="../using_pyke.html#proving-goals">proving</a> the goal:</p>
 <blockquote>
 <pre class="doctest-block">
-&gt;&gt;&gt; import pyke
-&gt;&gt;&gt; engine = pyke.engine('examples')
+&gt;&gt;&gt; from pyke import knowledge_engine
+&gt;&gt;&gt; engine = knowledge_engine.engine('examples')
 &gt;&gt;&gt; engine.activate('plan_example')
 &gt;&gt;&gt; no_vars, plan1 = engine.prove_1('plan_example', 'transfer',
 ...                                 (('bruce', 'checking'),
@@ -341,7 +341,7 @@ into named repositories called <em>knowledge bases</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, Feb 12 2008.
+    Page last modified Wed, Mar 05 2008.
   </div>
 
 </body>

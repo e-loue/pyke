@@ -1,0 +1,68 @@
+NOTE: This example is only a proof-of-concept and is not intended for
+      production use!
+
+This example provides automatically generates programs to render HTMLTemplates
+(http://freespace.virgin.net/hamish.sanderson/htmltemplate.html).
+
+It uses the sqlgen example on the back-end to generate and run SQL statements.
+You'll need to first set up the sqlgen example database before using this
+example.  Check there for the movie_db schema.
+
+This is also an example of using multiple rule bases (its own rule base, and
+the sqlgen rule base).
+
+This example is not sophisticated enough to cache the plans returned from
+pyke.  It just runs pyke for every request.
+
+To run this example:
+
+    >>> import simple_server
+    >>> simple_server.run()
+
+Then point your browser at:
+
+    http://localhost:8080/1/movie.html
+
+The "1" is the movie id and "movie.html" is the name of the HTMLTemplate you
+want to use.
+
+web.krb
+    This uses backward-chaining to build a program to fill an HTMLTemplate.
+
+    The top-level goal is:
+
+        process() taking (db_cursor)
+
+    The plan returned from this goal returns a three tuple:
+
+        http_status, header_list, html_document
+
+wsgi_app.py
+    The WSGI front-end that drives pyke.  This takes the WSGI environ and
+    establishes some of the interesting values as facts, then does the
+    "process" goal above.  The plan returned is run to produce the WSGI
+    output.
+
+simple_server.py
+    This is just a simple driver to run the wsgi_app as a local http server
+    (default port 8080).
+
+test.py
+    This is a test driver to let you type goals in and run them to debug the
+    rules.
+
+    Test functions:
+
+        init()
+            Creates a pyke engine and calls load_mysql_schema.load_schema.
+        run()
+            Loops on "goal: " prompt.  Type a goal, or trace/untrace rule_name.
+            Empty string terminates the loop.  When the plan is returned,
+            it enters a loop prompting for a python expression to run the plan
+            (the plan is in a variable called "plan").  An empty line
+            terminates the plan loop.
+
+movie.html
+movie2.html
+    Two very simple html templates that you can play with.
+

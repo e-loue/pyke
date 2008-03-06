@@ -1,0 +1,164 @@
+# $Id$
+# coding=utf-8
+#
+# Copyright © 2008 Bruce Frederiksen
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+process_retrieval:
+    use process() taking (db_cursor)
+    when
+        format_retrieval($needed_data, $starting_data, $starting_data_plan) \
+                step -1
+            return $$(data)
+        !database.get_data($starting_data, $needed_data)
+            data = $$(db_cursor, $starting_data_plan())
+
+format_retrieval:
+    use format_retrieval($needed_data, $starting_data, $starting_data_plan) \
+        taking (data)
+    when
+        !get_context($starting_data, $template_name) as $starting_data_plan
+        $template = get_template($template_name)
+        !render_template($template, $needed_data, $render_fn)
+    with
+        return '200 OK', [('Content-Type', 'text/html')], \
+               $template.render($render_fn, data)
+
+get_context:
+    use get_context((movie), $template_name)
+    when
+        !request.path_info($path)
+        ($movie_id, $template_name) = $path.lstrip('/').split('/')
+    with
+        return {'movie': int($movie_id)}
+
+render_template:
+    use render_template($template, $needed_data, $render_fn)
+    when
+        $structure = structure($template)
+        !render_template2($structure, (), $needed_data) as $render_fn
+
+render_template2_done:
+    use render_template2((), $needed_data_in, $needed_data_in) \
+        taking (template, data)
+    with
+        pass
+
+render_template2_del:
+    use render_template2(((del, $_), *$rest),
+                         $needed_data_in, $needed_data_out) \
+        taking (template, data)
+    when
+        !render_template2($rest, $needed_data_in, $needed_data_out)
+            $$(template, data)
+
+render_template2_sep:
+    use render_template2(((sep, $_), *$rest),
+                         $needed_data_in, $needed_data_out) \
+        taking (template, data)
+    when
+        !render_template2($rest, $needed_data_in, $needed_data_out)
+            $$(template, data)
+
+render_template2_con:
+    use render_template2(((con, $name), *$rest),
+                         $needed_data_in, $needed_data_out) \
+        taking (template, data)
+    when
+        check $name.find('.') == -1
+        special.claim_goal()
+        $needed_data2 = $needed_data_in if $name in $needed_data_in \
+                                        else ($name,) + $needed_data_in
+        !render_template2($rest, $needed_data2, $needed_data_out)
+            $$(template, data)
+    with
+        getattr(template, $name).content = str(data[$name])
+
+render_template2_con_dot:
+    use render_template2(((con, $name), *$rest),
+                         $needed_data_in, $needed_data_out) \
+        taking (template, data)
+    when
+        $real_name = $name.split('.')[0]
+        $needed_data2 = $needed_data_in if $real_name in $needed_data_in \
+                                        else ($real_name,) + $needed_data_in
+        !render_template2($rest, $needed_data2, $needed_data_out)
+            $$(template, data)
+    with
+        getattr(template, $name).content = str(data[$real_name])
+
+render_template2_rep:
+    use render_template2(((rep, $name, *$children), *$rest),
+                         $needed_data_in, $needed_data_out) \
+        taking (template, data)
+    when
+        !render_template2($children, (), $child_data) as $detail_fun
+        !render_template2($rest, (($name, (), *$child_data), *$needed_data_in),
+                                 $needed_data_out)
+            $$(template, data)
+    with
+        getattr(template, $name).repeat($detail_fun, data[$name])
+
+bc_extras
+    import sys
+    import StringIO
+    import HTMLTemplate
+
+    def renderFun(template, render_fn, data):
+        render_fn(template, data)
+
+    def get_template(template_name):
+        f = file(template_name)
+        try:
+            return HTMLTemplate.Template(renderFun, f.read())
+        finally:
+            f.close()
+
+    # Kludge!  HTMLTemplate needs methods to query the structure...
+    def structure(template):
+        try:
+            stdout_save = sys.stdout 
+            sys.stdout = StringIO.StringIO()
+            template.structure()
+            lines = sys.stdout.getvalue().split('\n')
+        finally:
+            sys.stdout.close()
+            sys.stdout = stdout_save
+        return get_info(lines, '\t')[1]
+
+    def get_info(lines, prefix, start = 0):
+        '''
+            Returns next_index, structure.
+        '''
+        ans = []
+        while start < len(lines):
+            line = lines[start]
+            if line and not line.startswith('---') and line != 'tem:':
+                if not line.startswith(prefix): break
+                if len(line) > len(prefix) and line[len(prefix)] == '\t':
+                    start, children = get_info(lines, prefix + '\t', start)
+                    ans[-1] = tuple(ans[-1]) + children
+                    continue
+                else:
+                    ans.append(tuple(line.strip().split(':')))
+            start += 1
+        #print "get_info -> %d, %s" % (start, tuple(ans))
+        return start, tuple(ans)
+

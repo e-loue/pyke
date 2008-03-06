@@ -40,17 +40,17 @@ This describes how to use pyke from within your python program.
 Initializing Pyke
 ===============================
 
-There are two steps to initializing a pyke engine:
+There are two steps to initializing a pyke knowledge engine:
 
-pyke.engine(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb', load_fc = True, load_bc = True)
+knowledge_engine.engine(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb', load_fc = True, load_bc = True)
     The pyke inference engine is offered
     as a class so that you can instantiate multiple copies of it with different
     rule bases to accomplish different tasks.
-    Once you have a pyke.engine object; generally, all of
+    Once you have a knowledge_engine.engine object; generally, all of
     the functions that you need are provided directly by this object:
 
-    >>> import pyke
-    >>> my_engine = pyke.engine('examples')
+    >>> from pyke import knowledge_engine
+    >>> my_engine = knowledge_engine.engine('examples')
 
     This expects either a single directory or a sequence of directories as
     the ``paths`` argument.
@@ -180,7 +180,7 @@ functions are provided in `Other Functions`_, below.
     >>> my_engine.prove_1('bc_example', 'child_parent', ('david', 'norma'), 3)
     ((('grand',), 'son', 'mother'), None)
 
-    Raises ``pyke.CanNotProve`` if no proof is found.
+    Raises ``knowledge_engine.CanNotProve`` if no proof is found.
 
     >>> my_engine.prove_1('bc_example', 'bogus', ('david', 'norma'), 3)
     Traceback (most recent call last):
@@ -254,10 +254,10 @@ information into `.krb file`_ information.  They also delete the
 intervening python functions between subgoal proofs.
 
     >>> import sys
-    >>> import pyke
+    >>> from pyke import knowledge_engine
     >>> from pyke import krb_traceback
     >>>
-    >>> my_engine = pyke.engine('examples')
+    >>> my_engine = knowledge_engine.engine('examples')
     >>> my_engine.activate('error_test')
     >>> try:
     ...     my_engine.prove_1('error_test', 'goal', (), 0)
@@ -266,9 +266,9 @@ intervening python functions between subgoal proofs.
     Traceback (most recent call last):
       File "<doctest using_pyke.txt[31]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
-      File "/home/bruce/python/workareas/sf.trunk/pyke/__init__.py", line 130, in prove_1
+      File "/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py", line 142, in prove_1
         return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
-      File "/home/bruce/python/workareas/sf.trunk/pyke/__init__.py", line 119, in prove_n
+      File "/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py", line 129, in prove_n
         for arg in fixed_args) + vars):
       File "/home/bruce/python/workareas/sf.trunk/pyke/rule_base.py", line 37, in next
         return self.iterator.next()

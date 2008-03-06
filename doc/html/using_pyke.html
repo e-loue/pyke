@@ -63,17 +63,17 @@
 <p>This describes how to use pyke from within your python program.</p>
 <div class="section">
 <h1><a id="initializing-pyke" name="initializing-pyke">Initializing Pyke</a></h1>
-<p>There are two steps to initializing a pyke engine:</p>
+<p>There are two steps to initializing a pyke knowledge engine:</p>
 <dl class="docutils">
-<dt>pyke.engine(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb', load_fc = True, load_bc = True)</dt>
+<dt>knowledge_engine.engine(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb', load_fc = True, load_bc = True)</dt>
 <dd><p class="first">The pyke inference engine is offered
 as a class so that you can instantiate multiple copies of it with different
 rule bases to accomplish different tasks.
-Once you have a pyke.engine object; generally, all of
+Once you have a knowledge_engine.engine object; generally, all of
 the functions that you need are provided directly by this object:</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; import pyke
-&gt;&gt;&gt; my_engine = pyke.engine('examples')
+&gt;&gt;&gt; from pyke import knowledge_engine
+&gt;&gt;&gt; my_engine = knowledge_engine.engine('examples')
 </pre>
 <p>This expects either a single directory or a sequence of directories as
 the <tt class="docutils literal"><span class="pre">paths</span></tt> argument.
@@ -202,7 +202,7 @@ described <a class="reference" href="#running-and-pickling-plans">below</a>.</p>
 &gt;&gt;&gt; my_engine.prove_1('bc_example', 'child_parent', ('david', 'norma'), 3)
 ((('grand',), 'son', 'mother'), None)
 </pre>
-<p>Raises <tt class="docutils literal"><span class="pre">pyke.CanNotProve</span></tt> if no proof is found.</p>
+<p>Raises <tt class="docutils literal"><span class="pre">knowledge_engine.CanNotProve</span></tt> if no proof is found.</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; my_engine.prove_1('bc_example', 'bogus', ('david', 'norma'), 3)
 Traceback (most recent call last):
@@ -283,10 +283,10 @@ intervening python functions between subgoal proofs.</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; import sys
-&gt;&gt;&gt; import pyke
+&gt;&gt;&gt; from pyke import knowledge_engine
 &gt;&gt;&gt; from pyke import krb_traceback
 &gt;&gt;&gt;
-&gt;&gt;&gt; my_engine = pyke.engine('examples')
+&gt;&gt;&gt; my_engine = knowledge_engine.engine('examples')
 &gt;&gt;&gt; my_engine.activate('error_test')
 &gt;&gt;&gt; try:
 ...     my_engine.prove_1('error_test', 'goal', (), 0)
@@ -295,9 +295,9 @@ intervening python functions between subgoal proofs.</p>
 Traceback (most recent call last):
   File &quot;&lt;doctest using_pyke.txt[31]&gt;&quot;, line 2, in &lt;module&gt;
     my_engine.prove_1('error_test', 'goal', (), 0)
-  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/__init__.py&quot;, line 130, in prove_1
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py&quot;, line 142, in prove_1
     return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
-  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/__init__.py&quot;, line 119, in prove_n
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py&quot;, line 129, in prove_n
     for arg in fixed_args) + vars):
   File &quot;/home/bruce/python/workareas/sf.trunk/pyke/rule_base.py&quot;, line 37, in next
     return self.iterator.next()
@@ -439,7 +439,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Mar 03 2008.
+    Page last modified Wed, Mar 05 2008.
   </div>
 
 </body>

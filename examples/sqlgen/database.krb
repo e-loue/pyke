@@ -37,8 +37,8 @@ get_data:
     use get_data($starting_data, $needed_data) \
         taking(db_cursor, starting_data)
     when
-        check print_msg("get_data: starting_data: %s" % str($starting_data))
-        check print_msg("get_data: needed_data: %s" % str($needed_data))
+        #check print_msg("get_data: starting_data: %s" % str($starting_data))
+        #check print_msg("get_data: needed_data: %s" % str($needed_data))
         !get_data2($starting_data, $needed_data, (), $unique_queries)
             # This does the multi-row queries
             ans = {}
@@ -58,8 +58,9 @@ get_data2_multi:
                   $unique_in, $unique_out) \
         taking (db_cursor, starting_data, dict)
     when
-        check print_msg("get_data2 multi: starting_data: %s" % str($starting_data))
-        check print_msg("get_data2 multi: row_name: %s" % str($row_name))
+        #check print_msg("get_data2 multi: starting_data: %s" % 
+        #                str($starting_data))
+        #check print_msg("get_data2 multi: row_name: %s" % str($row_name))
         special.claim_goal()
         !get_multi($starting_data, $options, $multi_data, $multi_plan)
         !get_data2($starting_data, $rest, $unique_in, $unique_out)
@@ -72,8 +73,10 @@ get_data2_unique:
                   $unique_in, $unique_out) \
         taking (db_cursor, starting_data, dict)
     when
-        check print_msg("get_data2 unique: starting_data: %s" % str($starting_data))
-        check print_msg("get_data2 unique: unique_data: %s" % str($unique_data))
+        #check print_msg("get_data2 unique: starting_data: %s" % 
+        #                str($starting_data))
+        #check print_msg("get_data2 unique: unique_data: %s" %
+        #                str($unique_data))
         get_unique($starting_data, $unique_data, $unique_out1)
         get_data2($starting_data, $rest, ($unique_out1, *$unique_in),
                   $unique_out)
@@ -136,13 +139,13 @@ find_columns_not_in_next:
 lookup_indirect:
     use lookup_indirect($depth, $column, $starting_data, $from_clause)
     when
-        check print_msg("lookup_indirect: "
-                        "find_depth(%s, %s, %s, _, _, _)" %
-                        ($depth, $column, $starting_data))
+        #check print_msg("lookup_indirect: "
+        #                "find_depth(%s, %s, %s, _, _, _)" %
+        #                ($depth, $column, $starting_data))
         !find_depth($depth, $column, $starting_data, $got_depth, (), $tables)
-        check print_msg("lookup_indirect: "
-                        "lookup_indirect2(%s, %s, %s, %s, %s, _)" %
-                        ($depth, $column, $starting_data, $got_depth, $tables))
+        #check print_msg("lookup_indirect: "
+        #                "lookup_indirect2(%s, %s, %s, %s, %s, _)" %
+        #                ($depth, $column, $starting_data, $got_depth, $tables))
         lookup_indirect2($depth, $column, $starting_data, $got_depth, $tables,
                          $from_clause)
 
@@ -202,13 +205,13 @@ process_unique_queries_step:
     when
         $select2 = "%s.%s" % (($from[0] if len($from) == 1 else $from[-1][0]),
                               $select)
-        check print_msg("process_unique_queries_step: "
-                        "process_query(%s, %s, _, _)" % 
-                        (($from, ($select2,), ($key,)), $rest))
+        #check print_msg("process_unique_queries_step: "
+        #                "process_query(%s, %s, _, _)" % 
+        #                (($from, ($select2,), ($key,)), $rest))
         process_query(($from, ($select2), ($key)), $rest, $unrelated_queries,
                       $combined_query)
-        check print_msg("process_unique_queries_step: combined_query is: %s" %
-                        str($combined_query))
+        #check print_msg("process_unique_queries_step: combined_query is: %s" %
+        #                str($combined_query))
         run_query($combined_query)
             $$(db_cursor, starting_data, dict)
         process_unique_queries($unrelated_queries)
@@ -227,8 +230,8 @@ process_query_match_n:
                       $combined_query)
     when
         special.claim_goal()
-        check print_msg("merge_joins(%s, %s, $merged_join)" % 
-                        ($joins1, $joins2))
+        #check print_msg("merge_joins(%s, %s, $merged_join)" % 
+        #                ($joins1, $joins2))
         merge_joins($joins1, $joins2, $merged_join)
         $select2 = "%s.%s" % (($table1 if not $joins2 else $joins2[-1][0]),
                               $select_column2)
@@ -259,8 +262,8 @@ run_query:
     use run_query((($table1, *$joins1), $select_columns, $dict_keys)) \
         taking(db_cursor, starting_data, dict)
     when
-        check print_msg("make_from_clause(%s, %s, $from_clause)" % 
-                        ($table1, $joins1))
+        #check print_msg("make_from_clause(%s, %s, $from_clause)" % 
+        #                ($table1, $joins1))
         !make_from_clause($table1, $joins1, $from_clause)
     with
         sql_command = "select %s\n  from %s\n where %s.id = %%(id)s" % \

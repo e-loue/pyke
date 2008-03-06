@@ -144,8 +144,8 @@ Running the Example
 
 These rules could be run as follows:
 
-    >>> import pyke
-    >>> engine = pyke.engine('examples')
+    >>> from pyke import knowledge_engine
+    >>> engine = knowledge_engine.engine('examples')
     >>> engine.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
     >>> engine.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
     >>> engine.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))

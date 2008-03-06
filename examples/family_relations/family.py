@@ -21,7 +21,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import pyke
 
 # family.daughter_of(daughter, father, mother)
 # family.son_of(son, father, mother)

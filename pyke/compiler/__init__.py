@@ -33,7 +33,7 @@ use_test = False
 # (if we don't want to nuke a hand tweaked compiler_bc.py).
 no_nuke = False
 
-import pyke
+from pyke import knowledge_engine
 
 if use_test:
     from pyke.compiler import compiler_test_bc
@@ -91,7 +91,7 @@ def dump(ast, f = sys.stderr, need_nl = False, indent = 0):
     return did_nl
 
 def compile(gen_dir, gen_root_pkg, filenames):
-    engine = pyke.engine(compiler_bc)
+    engine = knowledge_engine.engine(compiler_bc)
     for filename in filenames:
         compile_file(engine, gen_dir, gen_root_pkg, filename)
 
@@ -100,10 +100,10 @@ def compile_file(engine, gen_dir, gen_root_pkg, filename):
     if not rb_name.endswith('.krb'):
         raise ValueError("compile: filename, %s, must end with .krb" % filename)
     rb_name = rb_name[:-4]
-    if not pyke.Name_test.match(rb_name):
+    if not knowledge_engine.Name_test.match(rb_name):
         raise ValueError("compile: %s illegal as python identifier" % rb_name)
     base_path, ignore = \
-        pyke._get_base_path(filename, gen_dir, gen_root_pkg, True)
+        knowledge_engine._get_base_path(filename, gen_dir, gen_root_pkg, True)
     fc_path = base_path + '_fc.py'
     bc_path = base_path + '_bc.py'
     plan_path = base_path + '_plans.py'

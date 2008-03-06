@@ -141,7 +141,7 @@ def t_indent_sp(t):
     if debug: print "no indent: indent_levels", indent_levels
 
 def start_code(plan_name = None, multiline = False,
-               var_format = "context['%s']"):
+               var_format = "(context['%s'])"):
     global current_line, code, current_plan_name, code_indent_level
     global pattern_var_format, plan_vars_needed, code_nesting_level
     pattern_var_format = var_format

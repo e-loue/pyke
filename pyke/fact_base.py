@@ -25,8 +25,8 @@
     A fact_base is one of the kinds of knowledge_bases (see also, rule_base
     and special).
 
-        >>> import pyke
-        >>> engine = pyke.engine('*test*')
+        >>> from pyke import knowledge_engine
+        >>> engine = knowledge_engine.engine('*test*')
         >>> fb = fact_base(engine, 'fb_name')
         >>> fb
         <fact_base fb_name>
