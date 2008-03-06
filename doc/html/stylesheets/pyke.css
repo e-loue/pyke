@@ -127,8 +127,16 @@ p, td, li, ul, ol, h1, h2, h3, h4, h5, h6  {
 
 #main h1.title {
     padding-top: 2px;
-    padding-bottom: 16px;
+    padding-bottom: 0px;
+    margin-bottom: 16px;
     font-size: 20pt;
+}
+
+#main h1.title + h2.subtitle {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: -8px;
+    margin-bottom: 16px;
 }
 
 .title img {

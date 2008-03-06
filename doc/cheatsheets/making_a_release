@@ -2,67 +2,77 @@ All code/doc changes should be committed.
 
 To get the svn revision of the previous release:
 
-$ svn log https://pyke.svn.sourceforge.net/svnroot/pyke/tags
+    $ svn log https://pyke.svn.sourceforge.net/svnroot/pyke/tags
 
 Do "svn log" to see what's changed:
 
-$ svn log -r 48:HEAD https://pyke.svn.sourceforge.net/svnroot/pyke/trunk
+    $ svn log -r 48:HEAD https://pyke.svn.sourceforge.net/svnroot/pyke/trunk
 
-Write: RELEASE_NOTES-0.1.alpha2
+Write: RELEASE_NOTES-0.2
 
 FILES TO CHANGE:
     - README
         Read through to see if anything has changed.  The following lines
         will always change:
-        - line  3: Version: 0.1.alpha2
-        - line 23:     pyke_doc_html-0.1.alpha2.tar.gz
-        - line 60:     pyke-0.1.alpha2-py2.5.egg
-        - line 67:     pyke-0.1.alpha2.tar.gz
+        - line  3: Version: 0.2
+        - line 23:     pyke_doc_html-0.2.tar.gz
+        - line 60:     pyke-0.2-py2.5.egg
+        - line 67:     pyke-0.2.tar.gz
         - line 72: Add any new examples
     - setup.py
-        - line 11:     version = "0.1.alpha2",
+        - line 11:     version = "0.2",
         - line 35:         "http://downloads.sourceforge.net/..."
     - pyke/__init__.py
-        - line 36: version = '0.1.alpha2'
+        - line 36: version = '0.2'
+    - doc/source/index.txt
+        - line 39: Release 0.2
+
+REBUILD DOCUMENTS
+
+    $ cd doc
+    $ r2w r2w.ini
 
 COMMIT SVN UPDATES
 
 BUILD RELEASE
 
-$ rm -rf build
-$ python setup.py bdist_egg sdist
-$ ./make_doc_tarball dist/pyke_doc_html-0.1.alpha2.tar.gz
+    $ rm -rf build
+    $ python setup.py bdist_egg sdist
+    $ ./make_doc_tarball dist/pyke_doc_html-0.2.tar.gz
 
 TAG RELEASE
 
-$ svn copy https://pyke.svn.sourceforge.net/svnroot/pyke/trunk \
-           https://pyke.svn.sourceforge.net/svnroot/pyke/tags/0.1.alpha2
+    $ svn copy https://pyke.svn.sourceforge.net/svnroot/pyke/trunk \
+               https://pyke.svn.sourceforge.net/svnroot/pyke/tags/0.2
 
 UPLOAD DIST FILES TO SOURCEFORGE:
 
-$ cd dist
-$ ftp upload.sourceforge.net
-Name: anonymous
-Password: mtnyogi
-ftp> binary
-ftp> cd incoming
-ftp> mput *
-ftp> quit
+    $ cd dist
+    $ ftp upload.sourceforge.net
+    Name: anonymous
+    Password: mtnyogi
+    ftp> binary
+    ftp> cd incoming
+    ftp> mput *-0.2*
+    ftp> quit
 
-Go to: Admin -> File Releases
-Click on "Add Release", Enter: 0.1.alpha2
-Follow the rest of the instructions there...
-    After you've selected the files to include, you have to go through
-    settings for each file ONE AT A TIME.  (Each file has its own Update
-    button which erases any information you've entered for subsequent files).
-    Pick "Platform Independant" for all of the files.
-    Pick ".zip" for the .egg file.
-    Pick "Source .gz" for the source .gz file.
-    Pick ".gz" for the doc .gz file.
+    Go to: Admin -> File Releases
+    Click on "Add Release", Enter: 0.2
+    Follow the rest of the instructions there...
+        After you've selected the files to include, you have to go through
+        settings for each file ONE AT A TIME.  (Each file has its own Update
+        button which erases any information you've entered for subsequent
+        files).
+
+        Pick "Platform Independant" for all of the files.
+
+        Pick ".zip" for the .egg file.
+        Pick "Source .gz" for the source .gz file.
+        Pick ".gz" for the doc .gz file.
 
 UPDATE PYPI LINK:
 
-$ python setup.py register
+    $ python setup.py register
 
 ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
 
@@ -72,4 +82,8 @@ ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
 
 CREATE NEWS ANNOUNCEMENT ON SOURCEFORGE
 
-Go to: Admin -> News
+    Go to: Admin -> News -> Submit
+
+UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
+
+    see web.upload cheatsheet

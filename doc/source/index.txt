@@ -32,9 +32,12 @@ restindex
     initialheaderlevel: 2
 /restindex
 
-=========================
+=============================
 Welcome to Pyke
-=========================
+=============================
+-----------------------------
+Release 0.2
+-----------------------------
 
 Pyke is a knowledge-based inference engine (expert system) written in
 100% python that can:
