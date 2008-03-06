@@ -1,0 +1,75 @@
+0.2 RELEASE NOTES 3/05/2008
+
+I expect only minor feature enhancements at this point and am focusing now
+on testing.  Often the sources under subversion are more stable than the
+alpha release.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 0.1.alpha2 RELEASE:
+
+The top-level pyke package code has been moved into a standard module called
+knowledge_engine.py.  Therefore, you need to:
+
+    1.  Change all "import pyke" lines to "from pyke import knowledge_engine".
+    2.  Change all "pyke.engine(...)" calls to "knowledge_engine.engine(...)".
+
+
+FEATURE ENHANCEMENTS:
+
+Added the following web pages:
+
+    Logic Tricks
+
+Added the following features:
+
+    - engine.print_stats()
+    - engine.trace and engine.untrace functions to trace backward-chaining
+      rules.
+    - added "allow_vars" parameter to "as_data" methods.
+    - added test.py module to pyke package.  This lets you type in goals and
+      run them interactively to help debug your rules.  Also allows you to
+      test the plan functions returned from goals.
+
+Added the following examples:
+
+    - To family_relations:
+
+        fc_example.krb
+        bc_example.krb
+        bc2_example.krb (a few rule optimizations make it 100 times faster
+                         than bc_example.krb)
+        
+        Many enhancements to test.py, including a "general" function to show
+        how to create your own patterns to prove fully general goals with
+        pattern variables anywhere in the arguments.
+
+    - Added sqlgen example.  This automatically generates sql statements,
+      figuring out how to join tables together to get needed data.  This runs
+      against MySQL and introspects the schema automatically.
+
+    - Added web_framework example.  This uses the HTMLTemplate facility as its
+      templating engine.  It automatically builds the program to render the
+      templates, including using the sqlgen rule base to automatically build
+      the sql statements to retrieve the data needed by the template.
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+#1908852 unpickling a plan causes most of pyke to be imported.
+#1908855 a comment on same line as "check" premise causes syntax errors in
+         generated .py files.
+#1908856 tuple patterns treat strings as tuples
+#1908862 *_plans.py files not reloaded
+#1908867 engine.reset wasn't reseting forward-chaining rules.
+#1908870 variable binding loops were possible.
+#1908875 rest_var in pattern tuple not checked properly.
+#1908877 debug messages are being printed when .krb syntax errors are
+         encountered.
+#1908880 prove_n and prove_1 were not converting prototype plans stored in
+         pattern variables into plan functions.

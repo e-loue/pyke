@@ -18,6 +18,7 @@ FILES TO CHANGE:
         - line 23:     pyke_doc_html-0.1.alpha2.tar.gz
         - line 60:     pyke-0.1.alpha2-py2.5.egg
         - line 67:     pyke-0.1.alpha2.tar.gz
+        - line 72: Add any new examples
     - setup.py
         - line 11:     version = "0.1.alpha2",
         - line 35:         "http://downloads.sourceforge.net/..."
@@ -62,6 +63,12 @@ Follow the rest of the instructions there...
 UPDATE PYPI LINK:
 
 $ python setup.py register
+
+ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
+
+    Admin -> Tracker -> "Tracker Administration" link
+
+    Do: Bugs, Support Requests, and Patches
 
 CREATE NEWS ANNOUNCEMENT ON SOURCEFORGE
 

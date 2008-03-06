@@ -1,6 +1,6 @@
 Pyke: Python Knowledge Engine
 
-Version: 0.1.alpha2
+Version: 0.2
 
 Both forward-chaining and backward-chaining rules (which may include python
 code) are compiled into python. Can also automatically assemble python
@@ -20,7 +20,7 @@ The documentation is at:
 
 You can download a copy of this documentation to your hard drive:
 
-    pyke_doc_html-0.1.alpha2.tar.gz
+    pyke_doc_html-0.2.tar.gz
 
 See the end of this file for how to regenerate the html files.
 
@@ -57,17 +57,40 @@ This can be checked as follows:
 
 Then you got two choices for pyke:
 
-    pyke-0.1.alpha2-py2.5.egg
+    pyke-0.2-py2.5.egg
 
 
 SOURCE DISTRIBUTION:
 
 The pyke source distribution is the file:
 
-    pyke-0.1.alpha2.tar.gz
+    pyke-0.2.tar.gz
 
 This contains the pyke source code, documentation (both source and html), and
-examples (currently only one example).
+examples.
+
+EXAMPLES:
+
+Each example has a README file that explains how to run it.
+
+The family_relations example is a good place to start.  It shows several
+solutions to the same problem.  It also has an example of a few rule
+optimizations that result in a 100 times performance improvement on this
+problem.
+
+The sqlgen example uses MySQL and the python MySQLdb module.  It has a
+function that reads the schema information into pyke facts.  Then the rules in
+database.krb automatically figure out how to join tables together to retrieve
+a list of column names, generate the SQL select statement and return a plan to
+execute this SQL statement and return the results as a dictionary.
+
+The web_framework example uses the sqlgen example.  This demonstrates the use
+of multiple rule bases.  The web_framework is a WSGI application that uses the
+HTMLTemplate package.  It gets the column names from the HTMLTemplate and
+feeds those to the sqlgen example to generate a plan to retrieve the data.  It
+then builds a plan to populate the template and return the finished HTML
+document.  The example includes a wsgiref simple_server setup to run it as an
+http server so that you can access it through your browser.
 
 
 TO INSTALL FROM THE SOURCES:
