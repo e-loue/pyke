@@ -71,6 +71,11 @@ examples.
 
 EXAMPLES:
 
+Pyke examples may be downloaded separately from sourceforge if you've used
+easy_install to install pyke (or installed the .egg file):
+
+    pyke_examples-0.2.tar.gz
+
 Each example has a README file that explains how to run it.
 
 The family_relations example is a good place to start.  It shows several
