@@ -25,7 +25,7 @@ restindex
     format: rest
     encoding: utf8
     output-encoding: utf8
-    section-pages: , overview/index, installing_pyke, using_pyke, krb_syntax/index, logic_tricks
+    section-pages: , overview/index, installing_pyke, using_pyke, krb_syntax/index, logic_tricks, PyCon2008-paper
     template: template.txt
     template-encoding: utf8
     include: No

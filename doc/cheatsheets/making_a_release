@@ -61,6 +61,7 @@ UPLOAD DIST FILES TO SOURCEFORGE:
 
     Go to: Admin -> File Releases
     Click on "Add Release", Enter: 0.2
+    Click "Preserve my pre-formatted text." on the Release Notes.
     Follow the rest of the instructions there...
         After you've selected the files to include, you have to go through
         settings for each file ONE AT A TIME.  (Each file has its own Update

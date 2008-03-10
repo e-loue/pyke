@@ -69,8 +69,8 @@ Most facts are case specific facts.  This means that they will be deleted
 when a reset_ is done to prepare for another run of the inference engine.
 Case specific facts are asserted through either::
 
-    *some_engine*.assert_(kb_name, fact_name, arguments)
-    *some_engine*.add_case_specific_fact(kb_name, fact_name, arguments)
+    some_engine.assert_(kb_name, fact_name, arguments)
+    some_engine.add_case_specific_fact(kb_name, fact_name, arguments)
 
 They may also be asserted by forward-chaining_ rules.
 
@@ -80,7 +80,7 @@ Universal Facts
 Universal facts are never deleted, specifically, when a reset_ is done.  Add
 universal facts by calling::
 
-    *some_engine*.add_universal_fact(kb_name, fact_name, arguments)
+    some_engine.add_universal_fact(kb_name, fact_name, arguments)
 
 Typically, all universal facts are added once at `program startup`_.
 
