@@ -36,10 +36,10 @@ no_nuke = False
 from pyke import knowledge_engine
 
 if use_test:
-    from pyke.compiler import compiler_test_bc
+    from pyke.krb_compiler import compiler_test_bc
 else:
-    from pyke.compiler import compiler_bc
-from pyke.compiler import krbparser
+    from pyke.krb_compiler import compiler_bc
+from pyke.krb_compiler import krbparser
 
 #from pyke import contexts
 #contexts.debug = ('patterns_out1', 'patterns_out',)

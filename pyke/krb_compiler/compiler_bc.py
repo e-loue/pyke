@@ -1868,8 +1868,8 @@ def populate(engine):
                   (contexts.variable('python_code2'),
                    contexts.variable('fn_head'),))
 
-from pyke.compiler import helpers
-Krb_filename = '/home/bruce/python/workareas/sf.trunk/pyke/compiler/compiler.krb'
+from pyke.krb_compiler import helpers
+Krb_filename = '/home/bruce/python/workareas/sf.trunk/pyke/krb_compiler/compiler.krb'
 Krb_lineno_map = (
     ((12, 16), (24, 28)),
     ((20, 20), (30, 30)),

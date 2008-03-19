@@ -1,0 +1,34 @@
+# knapsack.krb
+#
+# Taken from http://www.ise.gmu.edu/~duminda/classes/fall03/set3.ppt
+# pages 19-36.  The final looping on all answers to find the best one is done
+# in python (in test.py).
+
+subseq_done:
+    use subseq((), ())
+
+subseq_1:
+    use subseq(($Item, *$RestX), ($Item, *$RestY))
+    when
+        subseq($RestX, $RestY)
+
+subseq_2:
+    use subseq($X, ($_, *$RestY))
+    when
+        subseq($X, $RestY)
+
+# This was an intermediate rule that's not used in the final solution.
+knapsack_decision:
+    use knapsack_decision($Pantry, $Capacity, $Goal, $Knapsack)
+    when
+        subseq($Knapsack, $Pantry)
+        check sum(map(lambda x: x[1], $Knapsack)) <= $Capacity
+        check sum(map(lambda x: x[2], $Knapsack)) >= $Goal
+
+# We can maximize this in the calling python code.  See test.py
+legal_knapsack:
+    use legal_knapsack($Pantry, $Capacity, $Knapsack)
+    when
+        subseq($Knapsack, $Pantry)
+        check sum(map(lambda x: x[1], $Knapsack)) <= $Capacity
+

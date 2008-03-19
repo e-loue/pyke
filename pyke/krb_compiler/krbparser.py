@@ -28,7 +28,7 @@ from __future__ import with_statement
 from pyke import tmp_itertools as itertools
 import contextlib
 from ply import yacc
-from pyke.compiler import scanner
+from pyke.krb_compiler import scanner
 
 tokens = scanner.tokens
 

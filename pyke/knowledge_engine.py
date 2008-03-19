@@ -58,8 +58,8 @@ class engine(object):
                 if isinstance(paths, types.StringTypes): paths = (paths,)
                 compile_list = _get_compile_list(paths, gen_dir, gen_root_dir)
                 if compile_list:
-                    import pyke.compiler
-                    pyke.compiler.compile(gen_dir, gen_root_dir, compile_list)
+                    from pyke import krb_compiler
+                    krb_compiler.compile(gen_dir, gen_root_dir, compile_list)
                     _check_list(compile_list, gen_dir, gen_root_dir)
                 _load_paths(self, paths, gen_dir, gen_root_dir,
                             load_fc, load_bc, compile_list)

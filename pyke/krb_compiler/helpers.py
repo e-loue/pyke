@@ -89,7 +89,7 @@ def goal(rb_name, rule_name,
             def_head = def_start + '(context):'
         else:
             if taking[0][0] != '(' or taking[-1][-1] != ')':
-                from pyke.compiler import scanner
+                from pyke.krb_compiler import scanner
                 end = scanner.lexer.lexpos
                 taking_start = scanner.lexer.lexdata.rfind('taking', 0, end)
                 if taking_start < 0:
