@@ -496,4 +496,4 @@ python_check:
                    )
 
 bc_extras
-    from pyke.compiler import helpers
+    from pyke.krb_compiler import helpers
