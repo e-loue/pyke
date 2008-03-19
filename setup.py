@@ -9,8 +9,8 @@ from setuptools import setup
 setup(
     name = "pyke",
     version = "0.2",
-    packages = ['pyke', 'pyke.compiler'],
-    package_data = {'pyke.compiler': ['*.krb']},
+    packages = ['pyke', 'pyke.krb_compiler'],
+    package_data = {'pyke.krb_compiler': ['*.krb']},
 
     install_requires = ['ply>=2.3'],
     extras_require = {
