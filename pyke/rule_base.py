@@ -129,9 +129,8 @@ class rule_base(knowledge_base.knowledge_base):
         self.num_prove_calls += 1
         return stopIterator(self,
                    itertools.chain(
-                       itertools.imap(
-                           lambda rl: rl.prove(bindings, pat_context, patterns),
-                           self.gen_rule_lists_for(goal_name))))
+                       rl.prove(bindings, pat_context, patterns)
+                       for rl in self.gen_rule_lists_for(goal_name)))
     def print_stats(self, f):
         f.write("%s: %d fc_rules, %d triggered, %d rerun\n" %
                 (self.name, len(self.fc_rules), self.num_fc_rules_triggered,

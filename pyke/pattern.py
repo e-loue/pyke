@@ -130,14 +130,11 @@ class pattern_tuple(pattern):
             return self.rest_var, my_context
         rest_elements = self.elements[n:]
         if self.rest_var is None and \
-           all(itertools.imap(lambda x: isinstance(x, pattern_literal),
-                              rest_elements)):
+           all(isinstance(x, pattern_literal) for x in rest_elements):
             return tuple(x.literal for x in rest_elements), None
         return pattern_tuple(self.elements[n:], self.rest_var), my_context
     def is_data(self, my_context):
-        arg_test = all(itertools.imap(lambda arg_pat:
-                                          arg_pat.is_data(my_context),
-                                      self.elements))
+        arg_test = all(arg_pat.is_data(my_context) for arg_pat in self.elements)
         if not arg_test or self.rest_var is None: return arg_test
         return self.rest_var.is_data(my_context)
 

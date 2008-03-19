@@ -147,7 +147,8 @@ class engine(object):
                                  condensedPrint.cprint(
                                    fixed_args + self._Variables[:num_returns])))
     def print_stats(self, f = sys.stdout):
-        for kb in sorted(self.knowledge_bases.values(), key=lambda kb: kb.name):
+        for kb \
+         in sorted(self.knowledge_bases.itervalues(), key=lambda kb: kb.name):
             kb.print_stats(f)
     def trace(self, rb_name, rule_name):
         self.get_rb(rb_name).trace(rule_name)
