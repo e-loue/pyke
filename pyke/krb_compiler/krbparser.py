@@ -88,15 +88,15 @@ def p_fifth(p):
 
 def p_none(p):
     ''' comma_opt :
-	comma_opt : ','
+        comma_opt : ','
         data : NONE_TOK
-	nls : NL_TOK
-	nls : nls NL_TOK
-	nls_opt :
-	nls_opt : nls
+        nls : NL_TOK
+        nls : nls NL_TOK
+        nls_opt :
+        nls_opt : nls
         parent_opt :
         plan_spec : nls
-	rest_opt : comma_opt
+        rest_opt : comma_opt
     '''
     p[0] = None
 
@@ -269,10 +269,10 @@ def p_first(p):
     ''' bc_premise : python_premise
         bc_rules_opt : bc_rules_section
         data : NUMBER_TOK
-	data : STRING_TOK
+        data : STRING_TOK
         fc_premise : python_premise
         pattern : pattern_proper
-	pattern_proper : variable
+        pattern_proper : variable
         patterns_opt : patterns comma_opt
     '''
     p[0] = p[1]
@@ -305,25 +305,25 @@ def p_true(p):
 def p_start_list(p):
     ''' assertions : assertion
         bc_premises : bc_premise
-	bc_rules : bc_rule
+        bc_rules : bc_rule
         data_list : data
         fc_premises : fc_premise
         fc_rules : fc_rule
         patterns : pattern
         patterns_proper : pattern_proper
-	without_names : IDENTIFIER_TOK
+        without_names : IDENTIFIER_TOK
     '''
     p[0] = [p[1]]
 
 def p_empty_tuple(p):
     ''' bc_extras_opt :
         data : LP_TOK RP_TOK
-	foreach_opt :
+        foreach_opt :
         patterns_opt :
         plan_extras_opt :
-	taking_opt :
+        taking_opt :
         when_opt :
-	without_opt :
+        without_opt :
     '''
     p[0] = ()
 
@@ -334,14 +334,14 @@ def p_double_empty_tuple(p):
 
 def p_append_list(p):
     ''' assertions : assertions assertion
-	bc_premises : bc_premises inc_plan_vars bc_premise
-	bc_rules : bc_rules bc_rule
+        bc_premises : bc_premises inc_plan_vars bc_premise
+        bc_rules : bc_rules bc_rule
         data_list : data_list ',' data
-	fc_premises : fc_premises fc_premise
-	fc_rules : fc_rules fc_rule
+        fc_premises : fc_premises fc_premise
+        fc_rules : fc_rules fc_rule
         patterns : patterns ',' pattern
         patterns_proper : patterns_proper ',' pattern
-	without_names : without_names ',' IDENTIFIER_TOK
+        without_names : without_names ',' IDENTIFIER_TOK
     '''
     p[1].append(p[len(p)-1])
     p[0] = p[1]

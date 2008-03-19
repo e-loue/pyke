@@ -60,7 +60,7 @@ keywords = frozenset((
 tokens = tuple(x.upper() + '_TOK' for x in keywords) + (
     'ANONYMOUS_VAR_TOK',
     'CODE_TOK',
-  # 'DATE_TOK',		# FIX: Add the definition for this!
+  # 'DATE_TOK',         # FIX: Add the definition for this!
     'DEINDENT_TOK',
     'IDENTIFIER_TOK',
     'INDENT_TOK',
@@ -91,8 +91,8 @@ def t_NL_TOK(t):
     r'(\r)?\n([ \t]*(\#.*)?(\r)?\n)*'
     t.lexer.lineno += t.value.count('\n')
     if nesting_level == 0:
-	t.lexer.begin('indent')
-	t.lexer.skip(-1)	# put the final '\n' back for tp_indent_sp!
+        t.lexer.begin('indent')
+        t.lexer.skip(-1)        # put the final '\n' back for tp_indent_sp!
         return t
 
 indent_levels = []
@@ -109,33 +109,33 @@ def t_indent_sp(t):
     indent = count_indent(t.value[1:])
     current_indent = indent_levels[-1] if indent_levels else 0
     if debug:
-	print "t_indent_sp: t.value", repr(t.value), "indent", indent, \
-	      "current_indent", current_indent, \
-	      "indent_levels", indent_levels, \
-	      "t.lexpos", t.lexpos, \
-	      "t.lexer.lexpos", t.lexer.lexpos, \
-	      "t.lexer.lexdata[]", repr(t.lexer.lexdata[t.lexpos])
+        print "t_indent_sp: t.value", repr(t.value), "indent", indent, \
+              "current_indent", current_indent, \
+              "indent_levels", indent_levels, \
+              "t.lexpos", t.lexpos, \
+              "t.lexer.lexpos", t.lexer.lexpos, \
+              "t.lexer.lexdata[]", repr(t.lexer.lexdata[t.lexpos])
     if indent > current_indent:
-	t.type = 'INDENT_TOK'
-	indent_levels.append(indent)
-	t.lexer.begin('INITIAL')
-	if debug: print "INDENT_TOK: indent_levels", indent_levels
-	return t
+        t.type = 'INDENT_TOK'
+        indent_levels.append(indent)
+        t.lexer.begin('INITIAL')
+        if debug: print "INDENT_TOK: indent_levels", indent_levels
+        return t
     if indent < current_indent:
-	if indent > 0 and indent not in indent_levels:
-	    raise SyntaxError(
-		      "deindent doesn't match any previous indent level",
+        if indent > 0 and indent not in indent_levels:
+            raise SyntaxError(
+                      "deindent doesn't match any previous indent level",
                       syntaxerror_params(t.lexpos))
-	t.type = 'DEINDENT_TOK'
-	del indent_levels[-1]
-	if indent < (indent_levels[-1] if indent_levels else 0):
-	    if debug: print " -- pushing indent back"
-	    t.lexer.skip(-len(t.value))
-	else:
-	    if debug: print " -- doing begin('INITIAL')"
-	    t.lexer.begin('INITIAL')
-	if debug: print "DEINDENT_TOK: indent_levels", indent_levels
-	return t
+        t.type = 'DEINDENT_TOK'
+        del indent_levels[-1]
+        if indent < (indent_levels[-1] if indent_levels else 0):
+            if debug: print " -- pushing indent back"
+            t.lexer.skip(-len(t.value))
+        else:
+            if debug: print " -- doing begin('INITIAL')"
+            t.lexer.begin('INITIAL')
+        if debug: print "DEINDENT_TOK: indent_levels", indent_levels
+        return t
     # else indent == current_indent
     t.lexer.begin('INITIAL')
     if debug: print "no indent: indent_levels", indent_levels
@@ -371,27 +371,27 @@ def t_ANY_error(t):
 
 def count_indent(s):
     r'''
-	>>> count_indent('')
-	0
-	>>> count_indent('   ')
-	3
-	>>> count_indent('\t')
-	8
-	>>> count_indent('\t ')
-	9
-	>>> count_indent('\t\t')
-	16
-	>>> count_indent('   \t')
-	8
-	>>> count_indent('       \t')
-	8
-	>>> count_indent('        \t')
-	16
+        >>> count_indent('')
+        0
+        >>> count_indent('   ')
+        3
+        >>> count_indent('\t')
+        8
+        >>> count_indent('\t ')
+        9
+        >>> count_indent('\t\t')
+        16
+        >>> count_indent('   \t')
+        8
+        >>> count_indent('       \t')
+        8
+        >>> count_indent('        \t')
+        16
     '''
     ans = 0
     for c in s:
-	if c == '\t': ans = (ans + 8) & ~7
-	else: ans += 1
+        if c == '\t': ans = (ans + 8) & ~7
+        else: ans += 1
     return ans
 
 escapes = {
@@ -412,47 +412,47 @@ def unquote(s):
     ans = []
     i = s.find('\\', start)
     while i >= 0:
-	ans.append(s[start:i])
-	e = escapes.get(s[i+1])
-	if e:			# single char escape code
-	    ans.append(e)
-	    start = i + 2
-	elif s[i+1] == '\n':	# ignore \ at end of line
-	    start = i + 2
-	elif s[i+1] == '\r':	# ignore \ at end of line
-	    if s[i+2] == '\n': start = i + 3
-	    else: start = i + 2
-	elif s[i+1:i+3] == 'N{':
-	    end = s.index('}', i + 3)
-	    ans.append(unicodedata.lookup(s[i+3:end]))
-	    start = end + 1
-	elif s[i+1] == 'u':
-	    ans.append(unichr(int(s[i+2:i+6], 16)))
-	    start = i + 6
-	elif s[i+1] == 'U':
-	    ans.append(unichr(int(s[i+2:i+10], 16)))
-	    start = i + 10
-	elif s[i+1] in string.octdigits:
-	    if s[i+2] not in string.octdigits:
-		ans.append(unichr(int(s[i+2:i+3], 8)))
-		start = i + 3
-	    elif s[i+3] not in string.octdigits:
-		ans.append(unichr(int(s[i+2:i+4], 8)))
-		start = i + 4
-	    else:
-		ans.append(unichr(int(s[i+2:i+5], 8)))
-		start = i + 5
-	elif s[i+1] == 'x':
-	    if s[i+3] not in string.hexdigits:
-		ans.append(unichr(int(s[i+2:i+3], 16)))
-		start = i + 3
-	    else:
-		ans.append(unichr(int(s[i+2:i+4], 16)))
-		start = i + 4
-	else:
-	    ans.append(s[i])
-	    start = i + 1
-	i = s.find('\\', start)
+        ans.append(s[start:i])
+        e = escapes.get(s[i+1])
+        if e:                   # single char escape code
+            ans.append(e)
+            start = i + 2
+        elif s[i+1] == '\n':    # ignore \ at end of line
+            start = i + 2
+        elif s[i+1] == '\r':    # ignore \ at end of line
+            if s[i+2] == '\n': start = i + 3
+            else: start = i + 2
+        elif s[i+1:i+3] == 'N{':
+            end = s.index('}', i + 3)
+            ans.append(unicodedata.lookup(s[i+3:end]))
+            start = end + 1
+        elif s[i+1] == 'u':
+            ans.append(unichr(int(s[i+2:i+6], 16)))
+            start = i + 6
+        elif s[i+1] == 'U':
+            ans.append(unichr(int(s[i+2:i+10], 16)))
+            start = i + 10
+        elif s[i+1] in string.octdigits:
+            if s[i+2] not in string.octdigits:
+                ans.append(unichr(int(s[i+2:i+3], 8)))
+                start = i + 3
+            elif s[i+3] not in string.octdigits:
+                ans.append(unichr(int(s[i+2:i+4], 8)))
+                start = i + 4
+            else:
+                ans.append(unichr(int(s[i+2:i+5], 8)))
+                start = i + 5
+        elif s[i+1] == 'x':
+            if s[i+3] not in string.hexdigits:
+                ans.append(unichr(int(s[i+2:i+3], 16)))
+                start = i + 3
+            else:
+                ans.append(unichr(int(s[i+2:i+4], 16)))
+                start = i + 4
+        else:
+            ans.append(s[i])
+            start = i + 1
+        i = s.find('\\', start)
     ans.append(s[start:])
     return ''.join(ans)
 
@@ -461,17 +461,17 @@ lexer = lex.lex(debug=0)
 class token_iterator(object):
     def __init__(self, input):
         lexer.lineno = 1
-	lexer.input(input)
+        lexer.input(input)
     def __iter__(self): return self
     def next(self):
-	t = lex.token()
-	if t: return t
-	raise StopIteration
+        t = lex.token()
+        if t: return t
+        raise StopIteration
 
 def tokenize(filename = 'test'):
     with contextlib.closing(file(filename)) as f:
-	for t in token_iterator(f.read()):
-	    print t
+        for t in token_iterator(f.read()):
+            print t
 
 def syntaxerror_params(pos = None, lineno = None):
     '''

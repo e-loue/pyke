@@ -92,19 +92,19 @@ from pyke import knowledge_base, contexts
 class fact_base(knowledge_base.knowledge_base):
     ''' Not much to fact_bases.  The real work is done in fact_list! '''
     def __init__(self, engine, name):
-	super(fact_base, self).__init__(engine, name, fact_list)
+        super(fact_base, self).__init__(engine, name, fact_list)
     def dump_universal_facts(self):
-	for fl_name in sorted(self.entity_lists.iterkeys()):
+        for fl_name in sorted(self.entity_lists.iterkeys()):
             self.entity_lists[fl_name].dump_universal_facts()
     def dump_specific_facts(self):
-	for fl_name in sorted(self.entity_lists.iterkeys()):
+        for fl_name in sorted(self.entity_lists.iterkeys()):
             self.entity_lists[fl_name].dump_specific_facts()
     def add_universal_fact(self, fact_name, args):
-	self.get_entity_list(fact_name).add_universal_fact(args)
+        self.get_entity_list(fact_name).add_universal_fact(args)
     def add_case_specific_fact(self, fact_name, args):
-	self.get_entity_list(fact_name).add_case_specific_fact(args)
+        self.get_entity_list(fact_name).add_case_specific_fact(args)
     def assert_(self, fact_name, args):
-	self.add_case_specific_fact(fact_name, args)
+        self.add_case_specific_fact(fact_name, args)
     def get_stats(self):
         num_fact_lists = num_universal = num_case_specific = 0
         for fact_list in self.entity_lists.itervalues():
@@ -122,92 +122,92 @@ class fact_base(knowledge_base.knowledge_base):
 class fact_list(knowledge_base.knowledge_entity_list):
     def __init__(self, name):
         super(fact_list, self).__init__(name)
-	self.universal_facts = []		# [(arg...)...]
-	self.case_specific_facts = []   	# [(arg...)...]
-	self.hashes = {}	# (len, (index...)): (other_indices,
-				#	{(arg...): [other_args_from_factn...]})
-	self.fc_rule_refs = []	# (fc_rule, foreach_index)
+        self.universal_facts = []               # [(arg...)...]
+        self.case_specific_facts = []           # [(arg...)...]
+        self.hashes = {}        # (len, (index...)): (other_indices,
+                                #       {(arg...): [other_args_from_factn...]})
+        self.fc_rule_refs = []  # (fc_rule, foreach_index)
     def reset(self):
-	self.case_specific_facts = []
-	self.hashes.clear()
-	self.fc_rule_refs = []
+        self.case_specific_facts = []
+        self.hashes.clear()
+        self.fc_rule_refs = []
     def dump_universal_facts(self):
-	for args in self.universal_facts:
-	    print '%s%s' % (self.name, args)
+        for args in self.universal_facts:
+            print '%s%s' % (self.name, args)
     def dump_specific_facts(self):
-	for args in self.case_specific_facts:
-	    print '%s%s' % (self.name, args)
+        for args in self.case_specific_facts:
+            print '%s%s' % (self.name, args)
     def add_fc_rule_ref(self, fc_rule, foreach_index):
-	self.fc_rule_refs.append((fc_rule, foreach_index))
+        self.fc_rule_refs.append((fc_rule, foreach_index))
     def get_affected_fc_rules(self):
-	return (fc_rule for fc_rule, foreach_index in self.fc_rule_refs)
+        return (fc_rule for fc_rule, foreach_index in self.fc_rule_refs)
     def lookup(self, bindings, pat_context, patterns):
-	""" Binds patterns to successive facts, yielding None for each
-	    successful match.  Undoes bindings upon continuation, so that no
-	    bindings remain at StopIteration.
-	"""
-	indices = tuple(enum for enum in enumerate(patterns)
-			     if enum[1].is_data(pat_context))
-	other_indices, other_arg_lists = \
-	    self._get_hashed(len(patterns),
-			     tuple(index[0] for index in indices),
-			     tuple(index[1].as_data(pat_context)
-				   for index in indices))
-	if other_arg_lists:
-	    for args in other_arg_lists:
+        """ Binds patterns to successive facts, yielding None for each
+            successful match.  Undoes bindings upon continuation, so that no
+            bindings remain at StopIteration.
+        """
+        indices = tuple(enum for enum in enumerate(patterns)
+                             if enum[1].is_data(pat_context))
+        other_indices, other_arg_lists = \
+            self._get_hashed(len(patterns),
+                             tuple(index[0] for index in indices),
+                             tuple(index[1].as_data(pat_context)
+                                   for index in indices))
+        if other_arg_lists:
+            for args in other_arg_lists:
                 mark = bindings.mark(True)
-		if all(itertools.imap(lambda i, arg:
-					  patterns[i].match_data(bindings,
-								 pat_context,
-								 arg),
-				      other_indices,
-				      args)):
+                if all(itertools.imap(lambda i, arg:
+                                          patterns[i].match_data(bindings,
+                                                                 pat_context,
+                                                                 arg),
+                                      other_indices,
+                                      args)):
                     bindings.end_save_all_undo()
-		    yield
+                    yield
                 else:
                     bindings.end_save_all_undo()
-		bindings.undo_to_mark(mark)
+                bindings.undo_to_mark(mark)
     def _get_hashed(self, len, indices, args):
-	ans = self.hashes.get((len, indices))
-	if ans is None: ans = self._hash(len, indices)
-	other_indices, arg_map = ans
-	return other_indices, arg_map.get(args, ())
+        ans = self.hashes.get((len, indices))
+        if ans is None: ans = self._hash(len, indices)
+        other_indices, arg_map = ans
+        return other_indices, arg_map.get(args, ())
     def _hash(self, length, indices):
-	args_hash = {}
-	new_entry = (tuple(i for i in range(length) if i not in indices),
-		     args_hash)
-	self.hashes[length, indices] = new_entry
-	for args in itertools.chain((self.universal_facts,
-				     self.case_specific_facts)):
-	    if len(args) == length:
-		selected_args = tuple(arg for i, arg in enumerate(args)
-					  if i in indices)
-		args_hash.setdefault(selected_args, []) \
-			 .append(tuple(arg for i, arg in enumerate(args)
-					   if i not in indices))
-	return new_entry
+        args_hash = {}
+        new_entry = (tuple(i for i in range(length) if i not in indices),
+                     args_hash)
+        self.hashes[length, indices] = new_entry
+        for args in itertools.chain((self.universal_facts,
+                                     self.case_specific_facts)):
+            if len(args) == length:
+                selected_args = tuple(arg for i, arg in enumerate(args)
+                                          if i in indices)
+                args_hash.setdefault(selected_args, []) \
+                         .append(tuple(arg for i, arg in enumerate(args)
+                                           if i not in indices))
+        return new_entry
     def add_universal_fact(self, args):
-	assert args not in self.case_specific_facts, \
+        assert args not in self.case_specific_facts, \
                "add_universal_fact: fact already present as specific fact"
-	if args not in self.universal_facts:
-	    self.universal_facts.append(args)
-	    self.add_args(args)
+        if args not in self.universal_facts:
+            self.universal_facts.append(args)
+            self.add_args(args)
     def add_case_specific_fact(self, args):
-	if args not in self.universal_facts and \
+        if args not in self.universal_facts and \
            args not in self.case_specific_facts:
-	    self.case_specific_facts.append(args)
-	    self.add_args(args)
-	    for fc_rule, foreach_index in self.fc_rule_refs:
-		fc_rule.new_fact(args, foreach_index)
+            self.case_specific_facts.append(args)
+            self.add_args(args)
+            for fc_rule, foreach_index in self.fc_rule_refs:
+                fc_rule.new_fact(args, foreach_index)
     def add_args(self, args):
-	for (length, indices), (other_indices, arg_map) \
-	 in self.hashes.iteritems():
-	    if length == len(args):
-		selected_args = tuple(arg for i, arg in enumerate(args)
-					  if i in indices)
-		arg_map.setdefault(selected_args, []) \
-		       .append(tuple(arg for i, arg in enumerate(args)
-					 if i not in indices))
+        for (length, indices), (other_indices, arg_map) \
+         in self.hashes.iteritems():
+            if length == len(args):
+                selected_args = tuple(arg for i, arg in enumerate(args)
+                                          if i in indices)
+                arg_map.setdefault(selected_args, []) \
+                       .append(tuple(arg for i, arg in enumerate(args)
+                                         if i not in indices))
     def get_stats(self):
         return len(self.universal_facts), len(self.case_specific_facts)
 

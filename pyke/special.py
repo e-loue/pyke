@@ -27,31 +27,31 @@ from pyke import knowledge_base, rule_base
 
 class special_knowledge_base(knowledge_base.knowledge_base):
     def __init__(self, engine):
-	super(special_knowledge_base, self).__init__(engine, 'special')
+        super(special_knowledge_base, self).__init__(engine, 'special')
     def add_fn(self, fn):
-	if fn.name in self.entity_lists:
-	    raise KeyError("%s.%s already exists" % (self.name, fn.name))
-	self.entity_lists[fn.name] = fn
+        if fn.name in self.entity_lists:
+            raise KeyError("%s.%s already exists" % (self.name, fn.name))
+        self.entity_lists[fn.name] = fn
     def print_stats(self, f):
         pass
 
 class special_fn(knowledge_base.knowledge_entity_list):
     def __init__(self, special_base, name):
-	super(special_fn, self).__init__(name)
-	special_base.add_fn(self)
+        super(special_fn, self).__init__(name)
+        special_base.add_fn(self)
     def lookup(self, bindings, pat_context, patterns):
-	raise AssertionError("special.%s may not be used in forward chaining "
-			     "rules" % self.name)
+        raise AssertionError("special.%s may not be used in forward chaining "
+                             "rules" % self.name)
     def prove(self, bindings, pat_context, patterns):
-	raise AssertionError("special.%s may not be used in backward chaining "
-			     "rules" % self.name)
+        raise AssertionError("special.%s may not be used in backward chaining "
+                             "rules" % self.name)
 
 class claim_goal(special_fn):
     def __init__(self, special_base):
-	super(claim_goal, self).__init__(special_base, 'claim_goal')
+        super(claim_goal, self).__init__(special_base, 'claim_goal')
     def prove(self, bindings, pat_context, patterns):
-	yield
-	raise rule_base.StopProof
+        yield
+        raise rule_base.StopProof
 
 def create_for(engine):
     special_base = special_knowledge_base(engine)
