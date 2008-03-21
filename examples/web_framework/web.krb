@@ -125,7 +125,7 @@ bc_extras
         render_fn(template, data)
 
     def get_template(template_name):
-        f = file(template_name)
+        f = open(template_name)
         try:
             return HTMLTemplate.Template(renderFun, f.read())
         finally:

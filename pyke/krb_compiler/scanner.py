@@ -25,7 +25,6 @@
 """
 
 from __future__ import with_statement
-import contextlib
 from ply import lex
 
 debug=0
@@ -469,7 +468,7 @@ class token_iterator(object):
         raise StopIteration
 
 def tokenize(filename = 'test'):
-    with contextlib.closing(file(filename)) as f:
+    with open(filename) as f:
         for t in token_iterator(f.read()):
             print t
 

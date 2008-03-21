@@ -26,7 +26,6 @@
 
 from __future__ import with_statement
 from pyke import tmp_itertools as itertools
-import contextlib
 from ply import yacc
 from pyke.krb_compiler import scanner
 
@@ -385,7 +384,7 @@ def p_error(t):
 parser = yacc.yacc(write_tables=0, debug=0)
 
 def parse(filename, debug = 0):
-    with contextlib.closing(file(filename)) as f:
+    with open(filename) as f:
         scanner.init()
         scanner.lexer.lineno = 1
         scanner.lexer.filename = filename

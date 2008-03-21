@@ -22,7 +22,6 @@
 # THE SOFTWARE.
 
 from __future__ import with_statement
-import contextlib
 import os.path
 import sys
 
@@ -148,7 +147,7 @@ def compile_file(engine, gen_dir, gen_root_pkg, filename):
         raise
 
 def write_file(lines, filename):
-    with contextlib.closing(file(filename, 'w')) as f:
+    with open(filename, 'w') as f:
         indents = [0]
         lineno_map = []
         write_file2(lines, f, indents, lineno_map, 0)
