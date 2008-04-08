@@ -137,7 +137,7 @@ def p_assertion(p):
 def p_python_assertion(p):
     ''' assertion : PYTHON_TOK ':' nls start_python_assertion INDENT_TOK python_rule_code nls DEINDENT_TOK
     '''
-    p[0] = ('python_assertion', p[4], p.lineno(1), p.linespan(6)[1])
+    p[0] = ('python_assertion', p[6], p.lineno(1), p.linespan(6)[1])
 
 def p_bc_rule(p):
     ''' bc_rule : IDENTIFIER_TOK ':' NL_TOK INDENT_TOK USE_TOK goal when_opt with_opt DEINDENT_TOK

@@ -147,7 +147,7 @@ the example above and changing the directory that you want it to go into.
   
   - This is the top-level python package directory for the python sources.
     This needs to be in a directory on your ``PYTHONPATH``.
-    The sources for the compiler is in the ``compiler`` subdirectory,
+    The sources for the compiler is in the ``krb_compiler`` subdirectory,
     which is expected to be a subpackage of ``pyke``.
 
 Documentation

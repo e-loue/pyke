@@ -113,11 +113,11 @@ directory and:
 
 COMPILING THE COMPILER.KRB FILE:
 
-In pyke/compiler:
+In pyke/krb_compiler:
 
     $ python2.5
-    >>> from pyke import compiler
-    >>> compiler.compile('.', 'compiled_krb', ('compiler.krb',))
+    >>> from pyke import krb_compiler
+    >>> krb_compiler.compile('.', 'compiled_krb', ('compiler.krb',))
     $ cp compiled_krb/compiler_bc.py .
     $ rm -rf compiled_krb
 
