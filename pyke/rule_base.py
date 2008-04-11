@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from pyke import tmp_itertools as itertools
+import itertools
 from pyke import knowledge_base
 
 class StopProof(Exception): pass
@@ -128,7 +128,7 @@ class rule_base(knowledge_base.knowledge_base):
     def prove(self, bindings, pat_context, goal_name, patterns):
         self.num_prove_calls += 1
         return stopIterator(self,
-                   itertools.chain(
+                   itertools.chain.from_iterable(
                        rl.prove(bindings, pat_context, patterns)
                        for rl in self.gen_rule_lists_for(goal_name)))
     def print_stats(self, f):
@@ -164,8 +164,9 @@ class rule_list(knowledge_base.knowledge_entity_list):
             successful match.  Undoes bindings upon continuation, so that no
             bindings remain at StopIteration.
         """
-        return itertools.chain(bc_rule.bc_fn(bc_rule, patterns, pat_context)
-                               for bc_rule in self.bc_rules)
+        return itertools.chain.from_iterable(
+                   bc_rule.bc_fn(bc_rule, patterns, pat_context)
+                   for bc_rule in self.bc_rules)
     def num_bc_rules(self):
         return len(self.bc_rules)
     def trace(self, rule_name):

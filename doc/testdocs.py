@@ -21,12 +21,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import os
+import os.path
 import sys
 import doctest
 
-def test(filepath):
+def test(filepath, chdir=False):
     print "Testing", filepath
-    sys.exit(doctest.testfile(filepath)[0])
+    if chdir:
+        dir, base = os.path.split(filepath)
+        os.chdir(dir)
+    else:
+        dir, base = '', filepath
+    sys.exit(doctest.testfile(base, False)[0])
 
 if __name__ == "__main__":
-    test(sys.argv[1])
+    test(*sys.argv[1:])

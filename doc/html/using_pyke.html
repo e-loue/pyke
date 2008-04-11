@@ -296,15 +296,15 @@ intervening python functions between subgoal proofs.</p>
 Traceback (most recent call last):
   File &quot;&lt;doctest using_pyke.txt[31]&gt;&quot;, line 2, in &lt;module&gt;
     my_engine.prove_1('error_test', 'goal', (), 0)
-  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py&quot;, line 142, in prove_1
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py&quot;, line 154, in prove_1
     return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
-  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py&quot;, line 129, in prove_n
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py&quot;, line 141, in prove_n
     for arg in fixed_args) + vars):
   File &quot;/home/bruce/python/workareas/sf.trunk/pyke/rule_base.py&quot;, line 37, in next
     return self.iterator.next()
-  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/tmp_itertools.py&quot;, line 32, in chain
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py&quot;, line 39, in from_iterable
     for x in iterable: yield x
-  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/tmp_itertools.py&quot;, line 32, in chain
+  File &quot;/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py&quot;, line 39, in from_iterable
     for x in iterable: yield x
   File &quot;/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb&quot;, line 26, in rule1
     goal2()
@@ -442,7 +442,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Wed, Mar 05 2008.
+    Page last modified Thu, Apr 10 2008.
   </div>
 
 </body>

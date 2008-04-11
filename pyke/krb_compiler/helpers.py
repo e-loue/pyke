@@ -32,7 +32,7 @@ def bc_head(rb_name):
     return (
         "# %s_bc.py" % rb_name,
         "",
-        "from pyke import tmp_itertools as itertools",
+        "import itertools",
         "from pyke import contexts, pattern, bc_rule",
     )
 

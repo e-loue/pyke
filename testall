@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# testall
+#
+# no arguments.
+#
+# Runs pyke/testpyke, doc/testdocs (twice) and all *.tst files in their
+# directories.
+# 
+# exit status > 0 if errors found.
+
+ERRORFILES="/tmp/testall.$$"
+
+> $ERRORFILES
+NUM_ERRORS=0
+
+find . -name compiled_krb -exec rm -rf "{}" +
+
+cd pyke
+echo pyke/testpyke
+if ! ./testpyke $ERRORFILES
+then
+    NUM_ERRORS=$(($NUM_ERRORS + $?))
+fi
+
+cd ../doc
+echo doc/testdocs with no doc/compiled_krb
+if ! ./testdocs $ERRORFILES
+then
+    NUM_ERRORS=$(($NUM_ERRORS + $?))
+fi
+echo doc/testdocs with doc/compiled_krb
+if ! ./testdocs $ERRORFILES
+then
+    NUM_ERRORS=$(($NUM_ERRORS + $?))
+fi
+
+cd ../examples
+echo examples/testexamples with no compiled_krb
+if ! ./testexamples $ERRORFILES
+then
+    NUM_ERRORS=$(($NUM_ERRORS + $?))
+fi
+echo examples/testexamples with compiled_krb
+if ! ./testexamples $ERRORFILES
+then
+    NUM_ERRORS=$(($NUM_ERRORS + $?))
+fi
+
+if [ $NUM_ERRORS -eq 0 ]
+then
+    echo "No Errors!"
+    rm -f $ERRORFILES
+else
+    echo "********** ERRORS ************* $NUM_ERRORS files had errors:"
+    cat $ERRORFILES
+    rm -f $ERRORFILES
+    exit $NUM_ERRORS
+fi

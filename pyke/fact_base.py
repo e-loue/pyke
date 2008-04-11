@@ -86,7 +86,7 @@
 
 '''
 
-from pyke import tmp_itertools as itertools
+import itertools
 from pyke import knowledge_base, contexts
 
 class fact_base(knowledge_base.knowledge_base):
@@ -177,8 +177,8 @@ class fact_list(knowledge_base.knowledge_entity_list):
         new_entry = (tuple(i for i in range(length) if i not in indices),
                      args_hash)
         self.hashes[length, indices] = new_entry
-        for args in itertools.chain((self.universal_facts,
-                                     self.case_specific_facts)):
+        for args in itertools.chain(self.universal_facts,
+                                    self.case_specific_facts):
             if len(args) == length:
                 selected_args = tuple(arg for i, arg in enumerate(args)
                                           if i in indices)

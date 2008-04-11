@@ -1,6 +1,6 @@
 # compiler_bc.py
 
-from pyke import tmp_itertools as itertools
+import itertools
 from pyke import contexts, pattern, bc_rule
 
 def file(rule, arg_patterns, arg_context):
@@ -732,12 +732,12 @@ def bc_premises(rule, arg_patterns, arg_context):
               context.end_save_all_undo()
               mark4 = context.mark(True)
               if rule.pattern(13).match_data(context, context,
-                      tuple(itertools.chain(itertools.chain(
-                     ((lines for step, lines in context.lookup_data('plan_lines1') if step is None),
+                      tuple(itertools.chain.from_iterable(itertools.chain(
+                     (lines for step, lines in context.lookup_data('plan_lines1') if step is None),
                      (lines for step, lines
                      in sorted(((step, lines) for step, lines in context.lookup_data('plan_lines1')
                      if step is not None),
-                     key=lambda (step, lines): step))))))):
+                     key=lambda (step, lines): step)))))):
                 context.end_save_all_undo()
                 rule.rule_base.num_bc_rule_successes += 1
                 yield

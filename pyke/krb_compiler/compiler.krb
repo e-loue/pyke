@@ -261,12 +261,12 @@ bc_premises:
                                             for plan_var_name
                                              in $plan_var_names)) +
                        '),',) + $pat_lines
-        $plan_lines = tuple(itertools.chain(itertools.chain(
-            ((lines for step, lines in $plan_lines1 if step is None),
-             (lines for step, lines
-                     in sorted(((step, lines) for step, lines in $plan_lines1
-                                               if step is not None),
-                               key=lambda (step, lines): step))))))
+        $plan_lines = tuple(itertools.chain.from_iterable(itertools.chain(
+            (lines for step, lines in $plan_lines1 if step is None),
+            (lines for step, lines
+                    in sorted(((step, lines) for step, lines in $plan_lines1
+                                              if step is not None),
+                              key=lambda (step, lines): step)))))
 
 bc_premises1_0:
     use bc_premises1($_, $_, $_, (), $patterns, $patterns,

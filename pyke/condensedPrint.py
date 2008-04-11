@@ -40,7 +40,7 @@ def format_len(x):
     if not isinstance(x, (list, tuple)): return len(x)
     if len(x) > 3: sep_len = 2 * (len(x) - 3)
     else: sep_len = 0
-    return reduce(lambda total, next: total + format_len(next), x, 0) + sep_len
+    return sum(map(format_len, x)) + sep_len
 
 def format(x, lenleft, maxlen, maxlines, indent = 0):
     r"""
@@ -53,7 +53,10 @@ def format(x, lenleft, maxlen, maxlines, indent = 0):
     """
     if not isinstance(x, (list, tuple)):
         if len(x) <= lenleft: return x, 0
-        if lenleft >= 5: return x[:lenleft-4] + '...' + x[-1], 0
+        if isinstance(x, types.StringTypes) and x[-1] in "'\"":
+            if lenleft >= 5: return x[:lenleft-4] + '...' + x[-1], 0
+        else:
+            if lenleft >= 4: return x[:lenleft-3] + '...', 0
         return '&', 0
     if len(x) == 0: return '', 0
     if format_len(x) <= lenleft:

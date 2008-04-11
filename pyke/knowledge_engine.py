@@ -27,6 +27,18 @@ import os
 import os.path
 import re
 
+if sys.version_info[0] < 3:
+    import itertools
+    class chain(object):
+        old_chain = itertools.chain
+        def __new__(cls, *args):
+            return cls.old_chain(*args)
+        @staticmethod
+        def from_iterable(i):
+            for iterable in i:
+                for x in iterable: yield x
+    itertools.chain = chain
+
 from pyke import (condensedPrint, contexts, pattern,
                   fact_base, rule_base, special)
 
@@ -246,8 +258,12 @@ def _get_compile_list(paths, gen_dir, gen_root_dir):
 
 def _load_paths(engine, paths, gen_dir, gen_root_dir, load_fc, load_bc,
                 compile_list):
-    if ('' if gen_dir == '.' else os.path.abspath(gen_dir)) not in sys.path:
-        sys.path.append(os.path.abspath(gen_dir))
+    if gen_dir == '.':
+        if '' not in sys.path and os.path.abspath(gen_dir) not in sys.path:
+            sys.path.insert(0, '')
+    else:
+        if os.path.abspath(gen_dir) not in sys.path:
+            sys.path.insert(0, os.path.abspath(gen_dir))
     for path in paths:
         for dirpath, dirnames, filenames in os.walk(path, onerror=_raise_exc):
             for filename in filenames:
@@ -263,21 +279,21 @@ def _load_file(engine, filename, gen_dir, gen_root_dir, load_fc, load_bc,
     def load_module(type, do_import=True):
         try:
             os.stat(base + type + '.py')
-            module_path = package_list + [base_modulename + type]
-            full_module_name = '.'.join(module_path)
-            #print "loading:", full_module_name
-            if full_module_name in sys.modules:
-                #print "already imported"
-                module = sys.modules[full_module_name]
-                if filename in compile_list:
-                    module = reload(module)
-                    #print module
-            elif do_import:
-                #print "needs import"
-                module = _import(module_path)
-            if do_import: module.populate(engine)
         except OSError:
-            pass
+            return
+        module_path = package_list + [base_modulename + type]
+        full_module_name = '.'.join(module_path)
+        #print >> sys.stderr, "loading:", full_module_name
+        if full_module_name in sys.modules:
+            #print "already imported"
+            module = sys.modules[full_module_name]
+            if filename in compile_list:
+                module = reload(module)
+                #print module
+        elif do_import:
+            #print "needs import"
+            module = _import(module_path)
+        if do_import: module.populate(engine)
     if load_fc: load_module('_fc')
     if load_bc:
         load_module('_plans', False)

@@ -25,7 +25,7 @@
 """ 
 
 from __future__ import with_statement
-from pyke import tmp_itertools as itertools
+import itertools
 from ply import yacc
 from pyke.krb_compiler import scanner
 
@@ -362,9 +362,9 @@ def p_pattern_tuple2(p):
 def p_pattern_tuple3(p):
     ''' pattern_proper : LP_TOK data_list ',' patterns_proper rest_opt RP_TOK '''
     p[0] = "pattern.pattern_tuple((%s), %s)" % \
-               (' '.join(itertools.chain((("pattern.pattern_literal(%s)," % str(x)
-                                            for x in p[2]),
-                                          (str(x) + ',' for x in p[4])))),
+               (' '.join(itertools.chain(("pattern.pattern_literal(%s)," % str(x)
+                                           for x in p[2]),
+                                         (str(x) + ',' for x in p[4]))),
                 p[5])
 
 def p_pattern_tuple4(p):
