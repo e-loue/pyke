@@ -2,7 +2,7 @@ NOTE: This example is only a proof-of-concept and is not intended for
       production use!
 
 This example automatically generates programs to render HTMLTemplates
-(http://freespace.virgin.net/hamish.sanderson/htmltemplate.html).
+(http://py-templates.sourceforge.net/htmltemplate/index.html).
 
 It uses the sqlgen example on the back-end to generate and run SQL statements.
 You'll need to first set up the sqlgen example database before using this

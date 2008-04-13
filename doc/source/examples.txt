@@ -1,0 +1,149 @@
+.. $Id$
+.. 
+.. Copyright © 2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Examples
+    page-description:
+        This gives an overview of the examples provided with pyke.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+=============================
+Examples
+=============================
+
+Several examples are included to help you become familiar with pyke.  If you
+did an svn checkout, these should all be included in the ``examples`` directory.
+If you used easy_install for pyke, you'll need to download the pyke_examples
+tar file separately here__.
+
+Each example is in its own sub-directory and has a README file to get you
+started.  They all have `.krb files`_ and a python module to run the example
+that also demonstrates `how to call pyke`_ from your python program.
+
+.. __: http://sourceforge.net/project/showfiles.php?group_id=207724
+
+family_relations
+=================
+
+This is a good basic example to start with.
+
+The family_relations example takes an initial set of facts_ about people::
+
+    son_of(david_r2, david_r, sarah_r)
+    daughter_of(shirley, david_r, sarah_r)
+
+And figures out how any two people are related::
+
+    david_r2, shirley are ('brother', 'sister')
+
+This same problem is solved in four different ways so that you can compare
+them:
+
+- Forward-chaining_ only
+- Backward-chaining_ only
+- Backward-chaining only with a few rule optimizations that make the rules
+  run 100 times faster!
+- A mix of forward-chaining and backward-chaining with some use of plans_ added
+  too.
+
+The test.py program also demonstrates how to use krb_traceback_ and the
+print_stats_ function.
+
+knapsack
+================
+
+At the `PyCon 2008`_ conference, somebody asked about the `knapsack problem`_.
+We found a solution in prolog here__ (starting on page 19), and rewrote it in
+pyke.  This is a quick simple little example.
+
+.. __: http://www.ise.gmu.edu/~duminda/classes/fall03/set3.ppt
+
+sqlgen
+================
+
+Pyke was originally developed as the control component for a web framework.
+This example shows how pyke can automatically generate SQL SELECT statements,
+given a set of tables that the calling program has keys to and a tuple of the
+desired column names.  Column names specified in the top-level tuple are
+expected to produce a single value each.  Nested tuples are used when multiple
+rows are expected.  The column names in nested tuples make up the columns in
+the result rows.
+
+The data model used for the requested columns is that tables inherit the
+columns from tables they link to.  So if there is a 1-many relationship
+between tables A and B (1 A row has many B rows), the B table inherits the
+columns from table A through it's link to table A.  Thus, the pyke rules will
+automatically figure out the table joins.
+
+The program automatically introspects the schema information.  For this
+example, it assumes that `id` is the primary key for each table, and that
+when one table links to another, it uses the target table name as the column
+name.
+
+This example uses MySQL_ and includes the .sql files to create the database,
+tables, and example data.  It lacks more general capabilities that would be
+required for real use, but may serve as a starting point for something more
+complete.
+
+This example also has more elaborate rules than the prior two examples.
+
+web_framework
+================
+
+This example completes the web framework demo by adding rules to automatically
+generate code to render HTMLTemplates_.  This uses the sqlgen example, above,
+to generate the SQL statements.
+
+The HTMLTemplates do not include anything resembling program code in them, so
+that your graphics designers can completely own the html files without the
+developers having to modify them in any way.
+
+Note that the code generated here is fully "cooked" code, custom built for that
+schema and HTML template.  This should run extremely fast because there is
+nothing left at run-time concerning parsing and figuring out the HTML template
+or constructing the SQL statements.  (Though this demo does not cache the
+generated plans_).
+
+The demo is packaged as a WSGI_ application and also demonstrates the use of
+multiple `rule bases`_ by using the sqlgen example.
+
+.. _knapsack problem: http://en.wikipedia.org/wiki/Knapsack_problem
+.. _PyCon 2008: http://us.pycon.org/2008/about/
+.. _.krb files: krb_syntax/index.html
+.. _how to call pyke: using_pyke.html
+.. _facts: overview/knowledge_bases/fact_bases.html#facts
+.. _forward-chaining: overview/rules/forward_chaining.html
+.. _backward-chaining: overview/rules/backward_chaining.html
+.. _plans: overview/plans.html
+.. _krb_traceback: using_pyke.html#krb-traceback
+.. _rule bases: overview/knowledge_bases/rule_bases.html
+.. _print_stats: using_pyke.html#other-functions
+.. _MySQL: http://www.mysql.com/
+.. _WSGI: http://www.python.org/dev/peps/pep-0333/
+.. _HTMLTemplates: 
+       http://py-templates.sourceforge.net/htmltemplate/index.html
