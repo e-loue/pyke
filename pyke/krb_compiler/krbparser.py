@@ -46,10 +46,11 @@ def p_file_bc(p):
     '''
     p[0] = ('file', p[2], ((), ()), p[3])
 
-def p_bogus(p):
-    ''' file : nls_opt parent_opt bc_rules_opt
-    '''
-    p[0] = ('file', p[2], ((), ()), p[3])
+# Uncomment this to generate an error in the grammer.
+#def p_bogus(p):
+#    ''' file : nls_opt parent_opt bc_rules_opt
+#    '''
+#    p[0] = ('file', p[2], ((), ()), p[3])
 
 def p_parent(p):
     ''' parent_opt : EXTENDING_TOK IDENTIFIER_TOK without_opt nls
@@ -418,9 +419,9 @@ def p_error(t):
     raise SyntaxError("invalid syntax",
                       scanner.syntaxerror_params(t.lexpos, t.lineno))
 
+# Use the first line for normal use, the second for testing changes in the
+# grammer (the first line does not report grammer errors!).
 parser = yacc.yacc(write_tables=0, debug=0)
-
-# Use this, instead of above, to check for problems in the grammer:
 #parser = yacc.yacc(write_tables=0)
 
 def parse(filename, debug = 0):
