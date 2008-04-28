@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-process_retrieval:
+process_retrieval
     use process() taking (db_cursor)
     when
         format_retrieval($needed_data, $starting_data, $starting_data_plan) \
@@ -30,7 +30,7 @@ process_retrieval:
         !database.get_data($starting_data, $needed_data)
             data = $$(db_cursor, $starting_data_plan())
 
-format_retrieval:
+format_retrieval
     use format_retrieval($needed_data, $starting_data, $starting_data_plan) \
         taking (data)
     when
@@ -41,7 +41,7 @@ format_retrieval:
         return '200 OK', [('Content-Type', 'text/html')], \
                $template.render($render_fn, data)
 
-get_context:
+get_context
     use get_context((movie), $template_name)
     when
         !request.path_info($path)
@@ -49,19 +49,19 @@ get_context:
     with
         return {'movie': int($movie_id)}
 
-render_template:
+render_template
     use render_template($template, $needed_data, $render_fn)
     when
         $structure = structure($template)
         !render_template2($structure, (), $needed_data) as $render_fn
 
-render_template2_done:
+render_template2_done
     use render_template2((), $needed_data_in, $needed_data_in) \
         taking (template, data)
     with
         pass
 
-render_template2_del:
+render_template2_del
     use render_template2(((del, $_), *$rest),
                          $needed_data_in, $needed_data_out) \
         taking (template, data)
@@ -69,7 +69,7 @@ render_template2_del:
         !render_template2($rest, $needed_data_in, $needed_data_out)
             $$(template, data)
 
-render_template2_sep:
+render_template2_sep
     use render_template2(((sep, $_), *$rest),
                          $needed_data_in, $needed_data_out) \
         taking (template, data)
@@ -77,7 +77,7 @@ render_template2_sep:
         !render_template2($rest, $needed_data_in, $needed_data_out)
             $$(template, data)
 
-render_template2_con:
+render_template2_con
     use render_template2(((con, $name), *$rest),
                          $needed_data_in, $needed_data_out) \
         taking (template, data)
@@ -91,7 +91,7 @@ render_template2_con:
     with
         getattr(template, $name).content = str(data[$name])
 
-render_template2_con_dot:
+render_template2_con_dot
     use render_template2(((con, $name), *$rest),
                          $needed_data_in, $needed_data_out) \
         taking (template, data)
@@ -104,7 +104,7 @@ render_template2_con_dot:
     with
         getattr(template, $name).content = str(data[$real_name])
 
-render_template2_rep:
+render_template2_rep
     use render_template2(((rep, $name, *$children), *$rest),
                          $needed_data_in, $needed_data_out) \
         taking (template, data)

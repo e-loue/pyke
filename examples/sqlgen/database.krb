@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-get_data:
+get_data
     # $starting_data is a tuple of table_names that we will have ids for.
     # $needed_data is a tuple describing the data that should be returned (as
     # a dict).  It is composed of the following:
@@ -47,13 +47,13 @@ get_data:
             $$(db_cursor, starting_data, ans)
             return ans
 
-get_data2_done:
+get_data2_done
     use get_data2($_, (), $unique_in, $unique_in) \
         taking (db_cursor, starting_data, dict)
     with
         pass
 
-get_data2_multi:
+get_data2_multi
     use get_data2($starting_data, (($row_name, $options, *$multi_data), *$rest),
                   $unique_in, $unique_out) \
         taking (db_cursor, starting_data, dict)
@@ -68,7 +68,7 @@ get_data2_multi:
     with
         dict[$row_name] = $multi_plan(db_cursor, starting_data)
 
-get_data2_unique:
+get_data2_unique
     use get_data2($starting_data, ($unique_data, *$rest),
                   $unique_in, $unique_out) \
         taking (db_cursor, starting_data, dict)
@@ -82,7 +82,7 @@ get_data2_unique:
                   $unique_out)
             $$(db_cursor, starting_data, dict)
 
-get_unique_direct:
+get_unique_direct
     # $unique_out is a tuple of:
     #     from clause, which is a tuple starting with table_name_a followed by:
     #         (table_name_b, from_table, from_columns, b_columns)...
@@ -93,50 +93,50 @@ get_unique_direct:
         lookup_column($column, $starting_data, $from_clause)
         special.claim_goal()
 
-get_unique_indirect:
+get_unique_indirect
     use get_unique($starting_data, $column, ($from_clause, $column, $column))
     when
         lookup_indirect(1, $column, $starting_data, $from_clause)
 
-lookup_column:
+lookup_column
     use lookup_column($column, $starting_data, ($table))
     when
         find_columns($column, $starting_data, (), $tables)
         unique_table($column, $tables, $table)
 
-unique_table_success:
+unique_table_success
     use unique_table($_, ($table), $table)
     when
         special.claim_goal()
 
-unique_table_not_found:
+unique_table_not_found
     use unique_table($column, (), $_)
     when
         special.claim_goal()
         check False
 
-unique_table_dups:
+unique_table_dups
     use unique_table($column, $tables, $_)
     when
         check print_fail("duplicate column %s, found in %s" %
                          ($column, $tables))
 
-find_columns_done:
+find_columns_done
     use find_columns($_, (), $tables_in, $tables_in)
 
-find_columns_in_next:
+find_columns_in_next
     use find_columns($column, ($table, *$rest), $tables_in, $tables_out)
     when
         schema.column($table, $column, $_, $_, $_, $_, $_)
         special.claim_goal()
         !find_columns($column, $rest, ($table, *$tables_in), $tables_out)
 
-find_columns_not_in_next:
+find_columns_not_in_next
     use find_columns($column, ($_, *$rest), $tables_in, $tables_out)
     when
         !find_columns($column, $rest, $tables_in, $tables_out)
 
-lookup_indirect:
+lookup_indirect
     use lookup_indirect($depth, $column, $starting_data, $from_clause)
     when
         #check print_msg("lookup_indirect: "
@@ -149,12 +149,12 @@ lookup_indirect:
         lookup_indirect2($depth, $column, $starting_data, $got_depth, $tables,
                          $from_clause)
 
-lookup_indirect2_success:
+lookup_indirect2_success
     use lookup_indirect2($_, $_, $_, $_, ($from_clause), $from_clause)
     when
         special.claim_goal()
 
-lookup_indirect2_next_depth:
+lookup_indirect2_next_depth
     use lookup_indirect2($depth, $column, $starting_data, True, (),
                          $from_clause)
     when
@@ -162,16 +162,16 @@ lookup_indirect2_next_depth:
         $depth2 = $depth + 1
         lookup_indirect($depth2, $column, $starting_data, $from_clause)
 
-lookup_indirect2_dups:
+lookup_indirect2_dups
     use lookup_indirect2($_, $column, $_, True, $froms, $_)
     when
         check print_fail("duplicate tables for %s: %s" %
                          ($column, tuple(from_[0] for from_ in $froms)))
 
-find_depth_done:
+find_depth_done
     use find_depth($depth, $column, (), False, $tables_in, $tables_in)
 
-find_depth_step:
+find_depth_step
     use find_depth($depth, $column, ($table, *$rest), $got_depth,
                    $tables_in, $tables_out)
     when
@@ -179,14 +179,14 @@ find_depth_step:
         find_depth2($depth, $column, $table, $rest, $got_depth1, $from,
                     $got_depth, $tables_in, $tables_out)
 
-find_depth2_false:
+find_depth2_false
     use find_depth2($depth, $column, $table, $rest, False, (),
                     $got_depth, $tables_in, $tables_out)
     when
         special.claim_goal()
         find_depth($depth, $column, $rest, $got_depth, $tables_in, $tables_out)
 
-find_depth2_true:
+find_depth2_true
     use find_depth2($depth, $column, $table, $rest, True, $froms,
                     True, $tables_in, $tables_out)
     when
@@ -194,12 +194,12 @@ find_depth2_true:
         $tables_in2 = $froms + $tables_in
         find_depth($depth, $column, $rest, $_, $tables_in2, $tables_out)
 
-process_unique_queries_done:
+process_unique_queries_done
     use process_unique_queries(()) taking(db_cursor, starting_data, dict)
     with
         pass
 
-process_unique_queries_step:
+process_unique_queries_step
     use process_unique_queries((($from, $select, $key), *$rest)) \
         taking(db_cursor, starting_data, dict)
     when
@@ -217,12 +217,12 @@ process_unique_queries_step:
         process_unique_queries($unrelated_queries)
             $$(db_cursor, starting_data, dict)
 
-process_query_done_n:
+process_query_done_n
     use process_query($query, (), (), $query)
     when
         special.claim_goal()
 
-process_query_match_n:
+process_query_match_n
     use process_query((($table1, *$joins1), $select_columns1, $dict_keys1),
                       ((($table1, *$joins2), $select_column2, $dict_key2),
                        *$rest),
@@ -240,25 +240,25 @@ process_query_match_n:
                            ($dict_key2, *$dict_keys1)),
                       $rest, $unrelated_queries, $combined_query)
 
-process_query_match:
+process_query_match
     use process_query($query1, ($unrelated_query1, *$rest),
                       ($unrelated_query1, *$unrelated_queries), $combined_query)
     when
         process_query($query1, $rest, $unrelated_queries, $combined_query)
 
-merge_join_match:
+merge_join_match
     use merge_joins(($first_join, *$rest_joins1), ($first_join, *$rest_joins2),
                     ($first_join, *$merged_joins))
     when
         special.claim_goal()
         merge_joins($rest_joins1, $rest_joins2, $merged_joins)
 
-merge_join_no_match:
+merge_join_no_match
     use merge_joins($joins1, $joins2, $merged_joins)
     when
         $merged_joins = $joins1 + $joins2
 
-run_query:
+run_query
     use run_query((($table1, *$joins1), $select_columns, $dict_keys)) \
         taking(db_cursor, starting_data, dict)
     when
@@ -274,10 +274,10 @@ run_query:
               (db_cursor.rowcount, sql_command)
         dict.update(zip($dict_keys, db_cursor.fetchone()))
 
-make_from_clause_done:
+make_from_clause_done
     use make_from_clause($from_in, (), $from_in)
 
-make_from_clause_next:
+make_from_clause_next
     use make_from_clause($from_in,
                          (($table2, $from_table, $from_cols, $to_cols), *$rest),
                          $from_clause)
@@ -290,27 +290,27 @@ make_from_clause_next:
                                  in zip($from_cols, $to_cols)))
         make_from_clause($from1, $rest, $from_clause)
 
-get_multi:
+get_multi
     use get_multi($starting_data, $options, $multi_data, $plan)
     when
         $by = dict($options).get('by')
         $order_by = dict($options).get('order_by')
         get_multi2($starting_data, $multi_data, $by, $order_by, $plan)
 
-get_multi2_no_by:
+get_multi2_no_by
     use get_multi2($starting_data, $multi_data, None, $order_by, $plan)
     when
         special.claim_goal()
         $unique_table in $starting_data
         get_multi3($unique_table, $multi_data, $order_by, $plan)
 
-get_multi2_by:
+get_multi2_by
     use get_multi2($starting_data, $multi_data, $by, $order_by, $plan)
     when
         check $by in $starting_data
         get_multi3($by, $multi_data, $order_by, $plan)
 
-get_multi3:
+get_multi3
     use get_multi3($unique_table, $multi_data, $order_by, $plan)
     when
         schema.many_to_1($multi_table, $unique_table, ($multi_link_column), $_)
@@ -319,17 +319,17 @@ get_multi3:
         run_multi_query($unique_table, $combined_query, $multi_link_column,
                         $order_by) as $plan
 
-process_multi_queries_done:
+process_multi_queries_done
     use process_multi_queries((), ())
 
-process_multi_queries_step:
+process_multi_queries_step
     use process_multi_queries((($from, $select, $key), *$rest), $combined_query)
     when
         $select2 = "%s.%s" % (($from[0] if len($from) == 1 else $from[-1][0]),
                               $select)
         process_query(($from, ($select2), ($key)), $rest, (), $combined_query)
 
-run_multi_query:
+run_multi_query
     use run_multi_query($unique_table,
                         (($table1, *$joins1), $select_columns, $dict_keys),
                         $multi_link_column, $order_by) \

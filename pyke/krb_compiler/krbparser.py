@@ -46,6 +46,11 @@ def p_file_bc(p):
     '''
     p[0] = ('file', p[2], ((), ()), p[3])
 
+def p_bogus(p):
+    ''' file : nls_opt parent_opt bc_rules_opt
+    '''
+    p[0] = ('file', p[2], ((), ()), p[3])
+
 def p_parent(p):
     ''' parent_opt : EXTENDING_TOK IDENTIFIER_TOK without_opt nls
     '''
@@ -86,9 +91,12 @@ def p_fifth(p):
     p[0] = p[5]
 
 def p_none(p):
-    ''' comma_opt :
+    ''' bc_require_opt :
+        comma_opt :
         comma_opt : ','
+        colon_opt :
         data : NONE_TOK
+        fc_require_opt :
         nls : NL_TOK
         nls : nls NL_TOK
         nls_opt :
@@ -99,8 +107,17 @@ def p_none(p):
     '''
     p[0] = None
 
+def p_colon_deprication(p):
+    ''' colon_opt : ':'
+    '''
+    if False:
+        import sys
+        sys.stderr.write("%s(%d): use of ':' deprecated\n" %
+                         (scanner.lexer.filename, p.lineno(1)))
+    p[0] = None
+
 def p_fc_rule(p):
-    ''' fc_rule : IDENTIFIER_TOK ':' NL_TOK INDENT_TOK foreach_opt ASSERT_TOK NL_TOK INDENT_TOK assertions DEINDENT_TOK DEINDENT_TOK
+    ''' fc_rule : IDENTIFIER_TOK colon_opt NL_TOK INDENT_TOK foreach_opt ASSERT_TOK NL_TOK INDENT_TOK assertions DEINDENT_TOK DEINDENT_TOK
     '''
     p[0] = ('fc_rule', p[1], p[5], tuple(p[9]))
 
@@ -113,6 +130,16 @@ def p_fc_premise(p):
     ''' fc_premise : IDENTIFIER_TOK '.' IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK nls
     '''
     p[0] = ('fc_premise', p[1], p[3], tuple(p[5]), p.lineno(1), p.lineno(6))
+
+def p_fc_forall(p):
+    ''' fc_premise : FORALL_TOK nls INDENT_TOK fc_premises DEINDENT_TOK fc_require_opt
+    '''
+    p[0] = ('fc_forall', tuple(p[4]), p[6], p.lineno(1), p.linespan(6)[1])
+
+def p_fc_require_opt(p):
+    ''' fc_require_opt : REQUIRE_TOK nls INDENT_TOK fc_premises DEINDENT_TOK
+    '''
+    p[0] = tuple(p[4])
 
 def p_python_eq(p):
     ''' python_premise : pattern start_python_code '=' python_rule_code nls
@@ -135,12 +162,12 @@ def p_assertion(p):
     p[0] = ('assert', p[1], p[3], tuple(p[5]), p.lineno(1), p.lineno(6))
 
 def p_python_assertion(p):
-    ''' assertion : PYTHON_TOK ':' nls start_python_assertion INDENT_TOK python_rule_code nls DEINDENT_TOK
+    ''' assertion : PYTHON_TOK colon_opt nls start_python_assertion INDENT_TOK python_rule_code nls DEINDENT_TOK
     '''
     p[0] = ('python_assertion', p[6], p.lineno(1), p.linespan(6)[1])
 
 def p_bc_rule(p):
-    ''' bc_rule : IDENTIFIER_TOK ':' NL_TOK INDENT_TOK USE_TOK goal when_opt with_opt DEINDENT_TOK
+    ''' bc_rule : IDENTIFIER_TOK colon_opt NL_TOK INDENT_TOK USE_TOK goal when_opt with_opt DEINDENT_TOK
     '''
     p[0] = ('bc_rule', p[1], p[6], tuple(p[7]), tuple(p[8][0]), tuple(p[8][1]))
 
@@ -192,6 +219,16 @@ def p_bc_premise4(p):
     '''
     p[0] = ('bc_premise', True, p[2], p[4], tuple(p[6]), p[8],
             p.lineno(1), p.lineno(7))
+
+def p_bc_forall(p):
+    ''' bc_premise : FORALL_TOK nls INDENT_TOK bc_premises DEINDENT_TOK bc_require_opt
+    '''
+    p[0] = ('bc_forall', tuple(p[4]), p[6], p.lineno(1), p.linespan(6)[1])
+
+def p_bc_require_opt(p):
+    ''' bc_require_opt : REQUIRE_TOK nls INDENT_TOK bc_premises DEINDENT_TOK
+    '''
+    p[0] = tuple(p[4])
 
 def p_as(p):
     ''' plan_spec : AS_TOK PATTERN_VAR_TOK nls
@@ -383,6 +420,9 @@ def p_error(t):
 
 parser = yacc.yacc(write_tables=0, debug=0)
 
+# Use this, instead of above, to check for problems in the grammer:
+#parser = yacc.yacc(write_tables=0)
+
 def parse(filename, debug = 0):
     with open(filename) as f:
         scanner.init()
@@ -393,8 +433,106 @@ def parse(filename, debug = 0):
         return parser.parse(f.read(), lexer=scanner.lexer, tracking=True,
                             debug=debug)
 
-def run(filename):
-    print "answer is", parse(filename)
+def run(filename='TEST/parse_test'):
+    r""" Used for testing.
+
+        >>> import os, os.path
+        >>> run('TEST/parse_test'
+        ...     if os.path.split(os.getcwd())[1] == 'krb_compiler'
+        ...     else 'krb_compiler/TEST/parse_test')
+        ('file',
+         None,
+         ((('fc_rule',
+            'name1',
+            (('fc_premise',
+              'a',
+              'b',
+              ("pattern.pattern_literal('x')", "contexts.variable('b')"),
+              7,
+              7),),
+            (('assert', 'c', 'd', ("contexts.variable('b')",), 9, 9),)),),
+          ()),
+         ((('bc_rule',
+            'name2',
+            ('goal',
+             'x',
+             ('pattern.pattern_literal(1)',
+              "contexts.variable('c')",
+              "pattern.pattern_literal((1, 'b',))",
+              "pattern.pattern_tuple((pattern.pattern_literal(1), pattern.pattern_literal('b'), contexts.variable('c'),), None)"),
+             (' (a, b, c)',),
+             12,
+             12),
+            (('bc_premise',
+              False,
+              "'a'",
+              "'b'",
+              ("pattern.pattern_literal('x')", "contexts.variable('c')"),
+              ('plan_spec',
+               None,
+               'plan#1',
+               ('line1', "line2 (context['d']) end2"),
+               ('d',)),
+              14,
+              14),
+             ('bc_premise',
+              False,
+              None,
+              "'x'",
+              ('pattern.pattern_literal(1)',
+               'pattern.pattern_literal(2)',
+               'pattern.pattern_literal(3)'),
+              ('plan_spec',
+               None,
+               'plan#2',
+               ("some (context['plan'])(stuff) \\",
+                '                and more stuff fail here'),
+               ('plan',)),
+              17,
+              17)),
+            ("a (context['plan']) b",),
+            ('plan',)),
+           ('bc_rule',
+            'name3',
+            ('goal',
+             'x',
+             ('pattern.pattern_literal(1)',
+              "contexts.variable('c')",
+              "pattern.pattern_literal((1, 'b',))",
+              "pattern.pattern_tuple((pattern.pattern_literal(1), pattern.pattern_literal('b'), contexts.variable('c'),), None)"),
+             (),
+             24,
+             24),
+            (('bc_premise',
+              False,
+              "'a'",
+              "'b'",
+              ("pattern.pattern_literal('x')", "contexts.variable('c')"),
+              ('plan_spec',
+               None,
+               'plan#1',
+               ('line1', "line2 (context['d']) end2"),
+               ('d',)),
+              26,
+              26),
+             ('bc_premise',
+              False,
+              None,
+              "'x'",
+              ('pattern.pattern_literal(1)',
+               'pattern.pattern_literal(2)',
+               'pattern.pattern_literal(3)'),
+              ('as', 'foo_fn'),
+              29,
+              29)),
+            (),
+            ())),
+          (),
+          ()))
+
+    """
+    import pprint
+    pprint.pprint(parse(filename))
 
 def test():
     import doctest

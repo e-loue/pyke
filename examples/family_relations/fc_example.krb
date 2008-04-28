@@ -28,14 +28,14 @@
 # time the facts are needed for the same people.  This avoids that.
 #
 # Establish child_parent relationships:
-son_of:
+son_of
     foreach
 	family.son_of($child, $father, $mother)
     assert
 	family.child_parent($child, $father, father, son)
 	family.child_parent($child, $mother, mother, son)
 
-daughter_of:
+daughter_of
     foreach
 	family.daughter_of($child, $father, $mother)
     assert
@@ -43,7 +43,7 @@ daughter_of:
 	family.child_parent($child, $mother, mother, daughter)
 
 # Establish sibling relationships:
-brothers:
+brothers
     foreach
 	family.son_of($brother1, $father, $mother)
 	family.son_of($brother2, $father, $mother)
@@ -51,7 +51,7 @@ brothers:
     assert
 	family.siblings($brother1, $brother2, brother, brother)
 
-sisters:
+sisters
     foreach
 	family.daughter_of($sister1, $father, $mother)
 	family.daughter_of($sister2, $father, $mother)
@@ -59,7 +59,7 @@ sisters:
     assert
 	family.siblings($sister1, $sister2, sister, sister)
 
-brother_and_sister:
+brother_and_sister
     foreach
 	family.son_of($brother, $father, $mother)
 	family.daughter_of($sister, $father, $mother)
@@ -67,7 +67,7 @@ brother_and_sister:
 	family.siblings($brother, $sister, sister, brother)
 	family.siblings($sister, $brother, brother, sister)
 
-facts_for_bc_rules:
+facts_for_bc_rules
     # With no "foreach" clause, this rule will always be triggered just once.
     # These facts could also be universal facts.
     # They translate, for example the first fact means that my parent's
@@ -80,7 +80,7 @@ facts_for_bc_rules:
 	family.as_nn(son, nephew)
 	family.as_nn(daughter, niece)
 
-niece_or_nephew_and_aunt_or_uncle:
+niece_or_nephew_and_aunt_or_uncle
     foreach
 	family.child_parent($nn, $parent, $depth, $_, $child_type)
 	family.siblings($parent, $au, $sibling_type, $_)
@@ -92,13 +92,13 @@ niece_or_nephew_and_aunt_or_uncle:
 
 # Note that these family.child_parent have an extra argument to handle
 # ('grand',), ('great', 'grand'), etc.
-parent_and_child:
+parent_and_child
     foreach
 	family.child_parent($child, $parent, $parent_type, $child_type)
     assert
         family.child_parent($child, $parent, (), $parent_type, $child_type)
 
-grand_parent_and_child:
+grand_parent_and_child
     foreach
 	family.child_parent($child, $parent, $_, $child_type)
 	family.child_parent($parent, $grand_parent, $parent_type, $_)
@@ -108,7 +108,7 @@ grand_parent_and_child:
         family.child_parent($child, $grand_parent, (grand),
                             $parent_type, $child_type)
 
-great_grand_parent_and_child:
+great_grand_parent_and_child
     foreach
 	family.child_parent($child, $grand_child, $_, $child_type)
         # We use "($a, *$b)" in the next premise so that it won't match ().
@@ -118,7 +118,7 @@ great_grand_parent_and_child:
         family.child_parent($child, $grand_parent, (great, $a, *$b),
                             $parent_type, $child_type)
 
-first_cousins:
+first_cousins
     foreach
 	family.child_parent($cousin1, $sibling1, $_, $_)
 	family.siblings($sibling1, $sibling2, $_, $_)
@@ -126,7 +126,7 @@ first_cousins:
     assert
         family.cousins($cousin1, $cousin2, 1)
 
-nth_cousins:
+nth_cousins
     foreach
 	family.child_parent($next_cousin1, $cousin1, $_, $_)
 	family.cousins($cousin1, $cousin2, $n)
@@ -135,14 +135,14 @@ nth_cousins:
     assert
         family.cousins($next_cousin1, $next_cousin2, $next_n)
 
-how_related_child_parent:
+how_related_child_parent
     foreach
 	family.child_parent($person1, $person2, $prefix, $p2_type, $p1_type)
 	$relationship = add_prefix($prefix, $p1_type, $p2_type)
     assert
         family.how_related($person1, $person2, $relationship)
 
-how_related_parent_child:
+how_related_parent_child
     foreach
         # Note that for how_related(Fixed_name, $variable) that this
         # subgoal is run "in reverse":
@@ -161,20 +161,20 @@ how_related_parent_child:
     assert
         family.how_related($person1, $person2, $relationship)
 
-how_related_siblings:
+how_related_siblings
     foreach
 	family.siblings($person1, $person2, $p2_type, $p1_type)
     assert
         family.how_related($person1, $person2, ($p1_type, $p2_type))
 
-how_related_nn_au:
+how_related_nn_au
     foreach
 	family.nn_au($person1, $person2, $prefix, $p2_type, $p1_type)
 	$relationship = add_prefix($prefix, $p1_type, $p2_type)
     assert
         family.how_related($person1, $person2, $relationship)
 
-how_related_au_nn:
+how_related_au_nn
     foreach
         # Here is another case where how_related(Fixed_name, $variable) is
         # very inefficient because of the way the
@@ -184,14 +184,14 @@ how_related_au_nn:
     assert
         family.how_related($person1, $person2, $relationship)
 
-how_related_cousins:
+how_related_cousins
     foreach
 	family.cousins($cousin1, $cousin2, $n)
         $nth = nth($n)
     assert
         family.how_related($cousin1, $cousin2, ($nth, cousins))
 
-how_related_removed_cousins:
+how_related_removed_cousins
     foreach
         family.child_parent($removed_cousin1, $cousin1, $grand, $_, $_)
 	family.cousins($cousin1, $cousin2, $n)
@@ -201,7 +201,7 @@ how_related_removed_cousins:
         family.how_related($removed_cousin1, $cousin2,
                            ($nth, cousins, $r1, removed))
 
-how_related_cousins_removed:
+how_related_cousins_removed
     foreach
 	family.cousins($cousin1, $cousin2, $n)
         family.child_parent($removed_cousin2, $cousin2, $grand, $_, $_)

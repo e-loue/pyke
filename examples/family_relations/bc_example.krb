@@ -21,66 +21,66 @@
 # THE SOFTWARE.
 
 
-father_son:
+father_son
     use child_parent($child, $father, father, son)
     when
 	family.son_of($child, $father, $mother)
 
-mother_son:
+mother_son
     use child_parent($child, $mother, mother, son)
     when
 	family.son_of($child, $father, $mother)
 
-father_daughter:
+father_daughter
     use child_parent($child, $father, father, daughter)
     when
 	family.daughter_of($child, $father, $mother)
 
-mother_daughter:
+mother_daughter
     use child_parent($child, $mother, mother, daughter)
     when
 	family.daughter_of($child, $father, $mother)
 
 # Establish sibling relationships:
-brothers:
+brothers
     use siblings($brother1, $brother2, brother, brother)
     when
 	family.son_of($brother1, $father, $mother)
 	family.son_of($brother2, $father, $mother)
 	check $brother1 != $brother2
 
-sisters:
+sisters
     use siblings($sister1, $sister2, sister, sister)
     when
 	family.daughter_of($sister1, $father, $mother)
 	family.daughter_of($sister2, $father, $mother)
 	check $sister1 != $sister2
 
-brother_sister:
+brother_sister
     use siblings($sister, $brother, brother, sister)
     when
 	family.daughter_of($sister, $father, $mother)
 	family.son_of($brother, $father, $mother)
 
-sister_brother:
+sister_brother
     use siblings($brother, $sister, sister, brother)
     when
 	family.son_of($brother, $father, $mother)
 	family.daughter_of($sister, $father, $mother)
 
-as_au_brother_uncle:
+as_au_brother_uncle
     use as_au(brother, uncle)
 
-as_au_sister_aunt:
+as_au_sister_aunt
     use as_au(sister, aunt)
 
-as_nn_son_nephew:
+as_nn_son_nephew
     use as_nn(son, nephew)
 
-as_nn_daughter_niece:
+as_nn_daughter_niece
     use as_nn(daughter, niece)
 
-niece_or_nephew_and_aunt_or_uncle:
+niece_or_nephew_and_aunt_or_uncle
     use nn_au($nn, $au, $greats, $au_type, $nn_type)
     when
 	child_parent($nn, $parent, $depth, $_, $child_type)
@@ -91,12 +91,12 @@ niece_or_nephew_and_aunt_or_uncle:
 
 # Note that these family.child_parent have an extra argument to handle
 # ('grand',), ('great', 'grand'), etc.
-parent_and_child:
+parent_and_child
     use child_parent($child, $parent, (), $parent_type, $child_type)
     when
 	child_parent($child, $parent, $parent_type, $child_type)
 
-grand_parent_and_child:
+grand_parent_and_child
     # Note that a comma is not required (but is allowed) for singleton
     # tuples in .krb files; in this case, "(grand)".
     use child_parent($child, $grand_parent, (grand), $parent_type, $child_type)
@@ -104,7 +104,7 @@ grand_parent_and_child:
 	child_parent($child, $parent, $_, $child_type)
 	child_parent($parent, $grand_parent, $parent_type, $_)
 
-great_grand_parent_and_child:
+great_grand_parent_and_child
     use child_parent($child, $grand_parent, (great, $a, *$b),
                      $parent_type, $child_type)
     when
@@ -112,14 +112,14 @@ great_grand_parent_and_child:
         # We use "($a, *$b)" in the next premise so that it won't match ().
 	child_parent($grand_child, $grand_parent, ($a, *$b), $parent_type, $_)
 
-first_cousins:
+first_cousins
     use cousins($cousin1, $cousin2, 1)
     when
 	child_parent($cousin1, $sibling1, $_, $_)
 	siblings($sibling1, $sibling2, $_, $_)
 	child_parent($cousin2, $sibling2, $_, $_)
 
-nth_cousins:
+nth_cousins
     use cousins($next_cousin1, $next_cousin2, $next_n)
     when
 	child_parent($next_cousin1, $cousin1, $_, $_)
@@ -127,13 +127,13 @@ nth_cousins:
 	child_parent($next_cousin2, $cousin2, $_, $_)
 	$next_n = $n + 1
 
-how_related_child_parent:
+how_related_child_parent
     use how_related($person1, $person2, $relationship)
     when
 	child_parent($person1, $person2, $prefix, $p2_type, $p1_type)
 	$relationship = add_prefix($prefix, $p1_type, $p2_type)
 
-how_related_parent_child:
+how_related_parent_child
     use how_related($person1, $person2, $relationship)
     when
         # Note that for how_related(Fixed_name, $variable) that this
@@ -151,18 +151,18 @@ how_related_parent_child:
 	child_parent($person2, $person1, $prefix, $p1_type, $p2_type)
 	$relationship = add_prefix($prefix, $p1_type, $p2_type)
 
-how_related_siblings:
+how_related_siblings
     use how_related($person1, $person2, ($p1_type, $p2_type))
     when
 	siblings($person1, $person2, $p2_type, $p1_type)
 
-how_related_nn_au:
+how_related_nn_au
     use how_related($person1, $person2, $relationship)
     when
 	nn_au($person1, $person2, $prefix, $p2_type, $p1_type)
 	$relationship = add_prefix($prefix, $p1_type, $p2_type)
 
-how_related_au_nn:
+how_related_au_nn
     use how_related($person1, $person2, $relationship)
     when
         # Here is another case where how_related(Fixed_name, $variable) is
@@ -171,13 +171,13 @@ how_related_au_nn:
 	nn_au($person2, $person1, $prefix, $p1_type, $p2_type)
 	$relationship = add_prefix($prefix, $p1_type, $p2_type)
 
-how_related_cousins:
+how_related_cousins
     use how_related($cousin1, $cousin2, ($nth, cousins))
     when
 	cousins($cousin1, $cousin2, $n)
         $nth = nth($n)
 
-how_related_removed_cousins:
+how_related_removed_cousins
     use how_related($removed_cousin1, $cousin2, ($nth, cousins, $r1, removed))
     when
         child_parent($removed_cousin1, $cousin1, $grand, $_, $_)
@@ -185,7 +185,7 @@ how_related_removed_cousins:
         $nth = nth($n)
         $r1 = len($grand) + 1
 
-how_related_cousins_removed:
+how_related_cousins_removed
     use how_related($cousin1, $removed_cousin2, ($nth, cousins, $r1, removed))
     when
 	cousins($cousin1, $cousin2, $n)

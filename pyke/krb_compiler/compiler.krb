@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-file:
+file
     use compile($rb_name,
                 (file, $parent,
                        ($fc_rules, $fc_extra_lines),
@@ -66,22 +66,22 @@ file:
                         if $bc_bc_fun_lines \
                         else ()
 
-rule_decl:
+rule_decl
     use rule_decl($rb_name, None, $decl_line)
     when
         $decl_line = "This_rule_base = engine.get_create('%s')" % $rb_name
 
-rule_decl_with_parent:
+rule_decl_with_parent
     use rule_decl($rb_name, (parent, $parent, $excluded_symbols), $decl_line)
     when
         $decl_line = "This_rule_base = engine.get_create('%s', '%s', %s)" % \
                          ($rb_name, $parent,
                           tuple(repr(sym) for sym in $excluded_symbols))
 
-fc_rules0:
+fc_rules0
     use fc_rules((), (), ())
 
-fc_rules1:
+fc_rules1
     use fc_rules(($fc_rule, *$fc_rest),
                  ($fc_fun_1, $fc_funs_rest),
                  ($fc_init_1, $fc_init_rest))
@@ -89,7 +89,7 @@ fc_rules1:
         !fc_rule($fc_rule, $fc_fun_1, $fc_init_1)
         !fc_rules($fc_rest, $fc_funs_rest, $fc_init_rest)
 
-fc_rule_:
+fc_rule_
     use fc_rule((fc_rule, $rule_name, $fc_premises, $assertions),
                 $fc_fun, $fc_init)
     when
@@ -125,10 +125,10 @@ fc_rule_:
                     "POPINDENT",
                    )
 
-fc_premises0:
+fc_premises0
     use fc_premises($_, $_, (), (), (), (), $patterns_in, $patterns_in)
 
-fc_premises1:
+fc_premises1
     use fc_premises($rule_name, $clause_num, ($first_prem, *$rest_prems),
                     ($fn_head1, *$fn_head2), ($fn_tail2, $fn_tail1),
                     $decl_lines, $patterns_in, $patterns_out)
@@ -141,7 +141,7 @@ fc_premises1:
                      $patterns_out1, $patterns_out)
         $decl_lines = $decl_lines1 + $decl_lines2
 
-fc_premise:
+fc_premise
     use fc_premise($rule_name, $clause_num, $next_clause_num,
                    (fc_premise, $kb_name, $entity_name, $arg_patterns,
                        $start_lineno, $end_lineno),
@@ -164,7 +164,7 @@ fc_premise:
                        "POPINDENT",
                       )
 
-fc_python_premise:
+fc_python_premise
     use fc_premise($rule_name, $clause_num, $clause_num,
                    $python_premise,
                    $fn_head, $fn_tail, (),
@@ -174,17 +174,17 @@ fc_python_premise:
                        $patterns_in, $patterns_out,
                        $fn_head, $fn_tail)
 
-assertions_0:
+assertions_0
     use assertions((), (), $patterns_in, $patterns_in)
 
-assertions_n:
+assertions_n
     use assertions(($first_assertion, *$rest_assertions),
                    ($fn_lines1, *$fn_lines2), $patterns_in, $patterns_out)
     when
         !assertion($first_assertion, $fn_lines1, $patterns_in, $patterns_out1)
         !assertions($rest_assertions, $fn_lines2, $patterns_out1, $patterns_out)
 
-assertion:
+assertion
     use assertion(('assert', $kb_name, $entity_name, $patterns,
                        $start_lineno, $end_lineno),
                   $fn_lines, $patterns_in, $patterns_out)
@@ -202,7 +202,7 @@ assertion:
                      "POPINDENT",
                     )
 
-python_assertion:
+python_assertion
     use assertion((python_assertion, ($python_code, $_),
                       $start_lineno, $end_lineno),
                   (('STARTING_LINENO', $start_lineno),
@@ -210,10 +210,10 @@ python_assertion:
                    ('ENDING_LINENO', $end_lineno)),
                   $patterns_in, $patterns_in)
 
-bc_rules0:
+bc_rules0
     use bc_rules($_, (), (), (), ())
 
-bc_rules1:
+bc_rules1
     use bc_rules($rb_name, ($bc_rule, *$bc_rest),
                  $bc_plan_lines,
                  ($bc_bc_fun1, *$bc_bc_funs_rest),
@@ -224,7 +224,7 @@ bc_rules1:
                   $plan_rest, $bc_bc_funs_rest, $bc_bc_init_rest)
         $bc_plan_lines = $bc_plan1 + $plan_rest
 
-bc_rule_:
+bc_rule_
     use bc_rule($rb_name, (bc_rule, $name, $goal, $bc_premises,
                                     $python_lines, $plan_vars_needed),
                 $plan_lines, $bc_fun_lines, $bc_init_lines)
@@ -248,7 +248,7 @@ bc_rule_:
                           "POPINDENT",
                          )
 
-bc_premises:
+bc_premises
     use bc_premises($rb_name, $rule_name, $bc_premises,
                     $plan_vars_needed, $plan_lines, $fn_head, $fn_tail,
                     $decl_lines)
@@ -268,12 +268,12 @@ bc_premises:
                                               if step is not None),
                               key=lambda (step, lines): step)))))
 
-bc_premises1_0:
+bc_premises1_0
     use bc_premises1($_, $_, $_, (), $patterns, $patterns,
                      $plan_var_names, $plan_var_names,
                      (), (), ())
 
-bc_premises1_n:
+bc_premises1_n
     use bc_premises1($rb_name, $rule_name, $clause_num,
                      ($first_prem, *$rest_prems),
                      $patterns_in, $patterns_out,
@@ -293,7 +293,7 @@ bc_premises1_n:
         $fn_head = $fn_head1 + $fn_head2
         $fn_tail = $fn_tail2 + $fn_tail1
 
-bc_premise:
+bc_premise
     use bc_premise($rb_name, $rule_name, $clause_num,
                    (bc_premise, $required, $kb_name, $entity_name,
                                   $arg_patterns, $plan_spec,
@@ -328,7 +328,7 @@ bc_premise:
         $fn_head = $fn_head2 + $fn_head3 + (('ENDING_LINENO', $end_lineno),)
         $fn_tail = $fn_tail3 + $fn_tail2
 
-no_plan:
+no_plan
     use gen_plan_lines($rb_name, $rule_name, $clause_num,
                        None,
                        $patterns_in, $patterns_in, $fn_head, (), (), ())
@@ -342,7 +342,7 @@ no_plan:
                       'rule_name': $rule_name},
                     'POPINDENT',)
 
-as_plan:
+as_plan
     use gen_plan_lines($rb_name, $rule_name, $clause_num,
                        ('as', $pat_var_name),
                        $patterns_in, $patterns_out,
@@ -355,7 +355,7 @@ as_plan:
         !plan_bindings($rb_name, $rule_name, $clause_num, $pat_var_name,
                        $pat_num, $fn_head, $fn_tail)
 
-plan_spec:
+plan_spec
     use gen_plan_lines($rb_name, $rule_name, $clause_num,
                        (plan_spec, $step_num, $plan_var_name,
                                    $python_code, $plan_vars_needed),
@@ -369,7 +369,7 @@ plan_spec:
         !plan_bindings($rb_name, $rule_name, $clause_num, $plan_var_name,
                        $pat_num, $fn_head, $fn_tail)
 
-plan_bindings:
+plan_bindings
     use plan_bindings($rb_name, $rule_name, $clause_num, $plan_var_name,
                       $pat_num, $fn_head, $fn_tail)
     when
@@ -396,11 +396,11 @@ plan_bindings:
                     "context.end_save_all_undo()")
         $fn_tail = ("context.undo_to_mark(mark%d)" % $clause_num,)
 
-not_required:
+not_required
     use add_required(False, $_, $_, $_,
                      $fn_head, $fn_tail, $fn_head, $fn_tail)
 
-required:
+required
     use add_required(True, $rb_name, $rule_name, $clause_num,
                      $fn_head1, $fn_tail1, $fn_head, $fn_tail)
     when
@@ -416,7 +416,7 @@ required:
                     "POPINDENT",
                    )
 
-bc_python_premise:
+bc_python_premise
     use bc_premise($rb_name, $rule_name, $clause_num,
                    $python_premise,
                    $patterns_in, $patterns_out,
@@ -427,7 +427,7 @@ bc_python_premise:
                        $patterns_in, $patterns_out,
                        $fn_head, $fn_tail)
 
-python_eq:
+python_eq
     use python_premise($clause_num,
                        (python_eq, $pattern, ($python_code, $_),
                         $start_lineno, $end_lineno),
@@ -451,7 +451,7 @@ python_eq:
                     "else: context.end_save_all_undo()",
                     "context.undo_to_mark(mark%d)" % $clause_num,)
 
-python_in:
+python_in
     use python_premise($clause_num,
                        (python_in, $pattern, ($python_code, $_),
                         $start_lineno, $end_lineno),
@@ -478,7 +478,7 @@ python_in:
                     "context.undo_to_mark(mark%d)" % $clause_num,
                     'POPINDENT',)
 
-python_check:
+python_check
     use python_premise($clause_num,
                        (python_check, ($python_code, $_),
                         $start_lineno, $end_lineno),

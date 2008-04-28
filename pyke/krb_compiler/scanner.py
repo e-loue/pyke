@@ -42,11 +42,13 @@ keywords = frozenset((
     'extending',
     'False',
     'fc_extras',
+    'forall',
     'foreach',
     'in',
     'None',
     'plan_extras',
     'python',
+    'require',
     'step',
     'taking',
     'True',
@@ -75,7 +77,7 @@ tokens = tuple(x.upper() + '_TOK' for x in keywords) + (
     'STRING_TOK',
 )
 
-literals = '*:,!.='
+literals = '*:,!.='     # FIX: delete ':'
 
 t_ignore = ' \t'
 
@@ -458,6 +460,8 @@ def unquote(s):
 lexer = lex.lex(debug=0)
 
 class token_iterator(object):
+    ''' This is only used for testing the scanner.
+    '''
     def __init__(self, input):
         lexer.lineno = 1
         lexer.input(input)
@@ -467,10 +471,79 @@ class token_iterator(object):
         if t: return t
         raise StopIteration
 
-def tokenize(filename = 'test'):
+def tokenize(s):
+    r'''
+        >>> tokenize("# This is a comment\n# line 2 of comment\n\n"
+        ...          "# comment after blank line\n")
+        LexToken(NL_TOK,'\n# line 2 of comment\n\n# comment after blank line\n',1,19)
+        >>> tokenize('name1\n    forall   foreach\n\nname2')
+        LexToken(IDENTIFIER_TOK,'name1',1,0)
+        LexToken(NL_TOK,'\n',1,5)
+        LexToken(INDENT_TOK,'\n    ',2,5)
+        LexToken(FORALL_TOK,'forall',2,10)
+        LexToken(FOREACH_TOK,'foreach',2,19)
+        LexToken(NL_TOK,'\n\n',2,26)
+        LexToken(DEINDENT_TOK,'\n',4,27)
+        LexToken(IDENTIFIER_TOK,'name2',4,28)
+    '''
+    for t in token_iterator(s):
+        print t
+
+def tokenize_file(filename = 'TEST/scan_test'):
+    r""" Used for testing.
+
+        >>> import os, os.path
+        >>> tokenize_file('TEST/scan_test'
+        ...               if os.path.split(os.getcwd())[1] == 'krb_compiler'
+        ...               else 'krb_compiler/TEST/scan_test')
+        LexToken(NL_TOK,'\n# line 2 of comment\n\n# comment after blank line\n',1,19)
+        LexToken(IDENTIFIER_TOK,'name1',5,68)
+        LexToken(:,':',5,73)
+        LexToken(NL_TOK,'\n',5,74)
+        LexToken(INDENT_TOK,'\n    ',6,74)
+        LexToken(FOREACH_TOK,'foreach',6,79)
+        LexToken(NL_TOK,'\n',6,86)
+        LexToken(INDENT_TOK,'\n\t',7,86)
+        LexToken(LP_TOK,'(',7,88)
+        LexToken(NUMBER_TOK,100,7,89)
+        LexToken(NUMBER_TOK,64,7,93)
+        LexToken(ANONYMOUS_VAR_TOK,'$_',7,98)
+        LexToken(PATTERN_VAR_TOK,"'foo'",7,101)
+        LexToken(NUMBER_TOK,256,8,118)
+        LexToken(NUMBER_TOK,0,8,124)
+        LexToken(RP_TOK,')',8,125)
+        LexToken(NL_TOK,'\n',8,126)
+        LexToken(NUMBER_TOK,3.1400000000000001,9,129)
+        LexToken(NUMBER_TOK,0.98999999999999999,9,134)
+        LexToken(NUMBER_TOK,3.0,10,143)
+        LexToken(NUMBER_TOK,0.29999999999999999,10,146)
+        LexToken(NUMBER_TOK,3,10,149)
+        LexToken(IDENTIFIER_TOK,'e6',10,150)
+        LexToken(NUMBER_TOK,3.0000000000000001e-06,10,153)
+        LexToken(NL_TOK,'\n',10,158)
+        LexToken(DEINDENT_TOK,'\n    ',11,158)
+        LexToken(ASSERT_TOK,'assert',11,163)
+        LexToken(NL_TOK,'\n',11,169)
+        LexToken(INDENT_TOK,'\n\t',12,169)
+        LexToken(STRING_TOK,"'this is a string'",12,172)
+        LexToken(STRING_TOK,'"so is this"',12,191)
+        LexToken(STRING_TOK,"'''\n\tand this \\t too'''",12,204)
+        LexToken(STRING_TOK,"'should be\\\n        able to do this too'",13,229)
+        LexToken(TRUE_TOK,'True',15,278)
+        LexToken(NL_TOK,'\n',15,283)
+        LexToken(!,'!',16,292)
+        LexToken(IDENTIFIER_TOK,'can',16,293)
+        LexToken(IDENTIFIER_TOK,'I',17,311)
+        LexToken(IDENTIFIER_TOK,'do',17,313)
+        LexToken(IDENTIFIER_TOK,'this',17,316)
+        LexToken(NL_TOK,'\n',17,320)
+        LexToken(IDENTIFIER_TOK,'too',18,329)
+        LexToken(NL_TOK,'\n',18,332)
+        LexToken(DEINDENT_TOK,'\n',19,332)
+        LexToken(DEINDENT_TOK,'\n',19,332)
+    """
     with open(filename) as f:
-        for t in token_iterator(f.read()):
-            print t
+        tokenize(f.read())
 
 def syntaxerror_params(pos = None, lineno = None):
     '''
