@@ -156,17 +156,19 @@ class fact_list(knowledge_base.knowledge_entity_list):
         if other_arg_lists:
             for args in other_arg_lists:
                 mark = bindings.mark(True)
-                if all(itertools.imap(lambda i, arg:
-                                          patterns[i].match_data(bindings,
-                                                                 pat_context,
-                                                                 arg),
-                                      other_indices,
-                                      args)):
-                    bindings.end_save_all_undo()
-                    yield
-                else:
-                    bindings.end_save_all_undo()
-                bindings.undo_to_mark(mark)
+                try:
+                    if all(itertools.imap(lambda i, arg:
+                                            patterns[i].match_data(bindings,
+                                                                   pat_context,
+                                                                   arg),
+                                          other_indices,
+                                          args)):
+                        bindings.end_save_all_undo()
+                        yield
+                    else:
+                        bindings.end_save_all_undo()
+                finally:
+                    bindings.undo_to_mark(mark)
     def _get_hashed(self, len, indices, args):
         ans = self.hashes.get((len, indices))
         if ans is None: ans = self._hash(len, indices)

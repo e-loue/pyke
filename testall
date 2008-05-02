@@ -18,32 +18,42 @@ find . -name compiled_krb -exec rm -rf "{}" +
 
 cd pyke
 echo pyke/testpyke
-if ! ./testpyke $ERRORFILES
+if ./testpyke $ERRORFILES
 then
+    :
+else
     NUM_ERRORS=$(($NUM_ERRORS + $?))
 fi
 
 cd ../doc
 echo doc/testdocs with no doc/compiled_krb
-if ! ./testdocs $ERRORFILES
+if ./testdocs $ERRORFILES
 then
+    :
+else
     NUM_ERRORS=$(($NUM_ERRORS + $?))
 fi
 echo doc/testdocs with doc/compiled_krb
-if ! ./testdocs $ERRORFILES
+if ./testdocs $ERRORFILES
 then
+    :
+else
     NUM_ERRORS=$(($NUM_ERRORS + $?))
 fi
 
 cd ../examples
 echo examples/testexamples with no compiled_krb
-if ! ./testexamples $ERRORFILES
+if ./testexamples $ERRORFILES
 then
+    :
+else
     NUM_ERRORS=$(($NUM_ERRORS + $?))
 fi
 echo examples/testexamples with compiled_krb
-if ! ./testexamples $ERRORFILES
+if ./testexamples $ERRORFILES
 then
+    :
+else
     NUM_ERRORS=$(($NUM_ERRORS + $?))
 fi
 

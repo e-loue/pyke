@@ -24,6 +24,14 @@ fc_rule ::= IDENTIFIER_TOK ':' NL_TOK INDENT_TOK
 fc_foreach ::= 'foreach' NL_TOK INDENT_TOK {fc_premise NL_TOK} DEINDENT_TOK
 
 fc_premise ::= fact_pattern
+             | FORALL_TOK NL_TOK
+                 INDENT_TOK
+                    {fc_premise NL_TOK}
+                 DEINDENT_TOK
+               [ REQUIRE_TOK NL_TOK
+                   INDENT_TOK
+                      {fc_premise NL_TOK}
+                   DEINDENT_TOK ]
 	     | python_premise
 
 fact_pattern ::= IDENTIFIER_TOK '.' IDENTIFIER_TOK '(' [{pattern,}] ')'
@@ -51,11 +59,16 @@ use ::= 'use' IDENTIFIER_TOK '(' {pattern,} ')'
 
 when ::= 'when' NL_TOK INDENT_TOK {bc_premise NL_TOK} DEINDENT_TOK
 
-bc_premise ::= ['!'] goal_name '(' {pattern,} ')' plan_spec
+bc_premise ::= ['!'] [ name '.' ] name '(' {pattern,} ')' plan_spec
+             | FORALL_TOK NL_TOK
+                 INDENT_TOK
+                    {bc_premise NL_TOK}
+                 DEINDENT_TOK
+               [ REQUIRE_TOK NL_TOK
+                   INDENT_TOK
+                      {bc_premise NL_TOK}
+                   DEINDENT_TOK ]
 	     | python_premise
-
-goal_name ::= name '.' name
-	    | name
 
 name ::= IDENTIFIER_TOK
        | PATTERN_VAR_TOK

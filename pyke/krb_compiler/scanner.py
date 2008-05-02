@@ -32,6 +32,7 @@ debug=0
 states = (
     ('indent', 'exclusive'),
     ('code', 'exclusive'),
+    ('checknl', 'exclusive'),
 )
 
 keywords = frozenset((
@@ -69,6 +70,7 @@ tokens = tuple(x.upper() + '_TOK' for x in keywords) + (
   # 'LC_TOK',
     'LP_TOK',
     'NL_TOK',
+    'NOT_NL_TOK',
     'NUMBER_TOK',
     'PATTERN_VAR_TOK',
   # 'RB_TOK',
@@ -140,6 +142,24 @@ def t_indent_sp(t):
     # else indent == current_indent
     t.lexer.begin('INITIAL')
     if debug: print "no indent: indent_levels", indent_levels
+
+t_checknl_ignore = ' \t'
+
+def t_checknl_nl(t):
+    # optional comment followed by newline
+    r'(\#.*)?(\r)?\n'
+    t.lexer.lineno += 1
+    t.lexer.begin('indent')
+    t.lexer.skip(-1)        # put the final '\n' back for tp_indent_sp!
+    t.type = 'NL_TOK'
+    return t
+
+def t_checknl_other(t):
+    # something other than newline
+    r'[^\#\r\n]'
+    t.lexer.skip(-1)        # put the final char back!
+    t.type = 'NOT_NL_TOK'
+    return t
 
 def start_code(plan_name = None, multiline = False,
                var_format = "(context['%s'])"):

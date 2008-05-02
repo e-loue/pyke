@@ -162,10 +162,21 @@ def p_assertion(p):
     '''
     p[0] = ('assert', p[1], p[3], tuple(p[5]), p.lineno(1), p.lineno(6))
 
-def p_python_assertion(p):
-    ''' assertion : PYTHON_TOK colon_opt nls start_python_assertion INDENT_TOK python_rule_code nls DEINDENT_TOK
+def p_python_assertion_n(p):
+    ''' assertion : check_nl PYTHON_TOK nls start_python_assertion INDENT_TOK python_rule_code nls DEINDENT_TOK
     '''
-    p[0] = ('python_assertion', p[6], p.lineno(1), p.linespan(6)[1])
+    p[0] = ('python_assertion', p[6], p.lineno(2), p.linespan(6)[1])
+
+def p_python_assertion_1(p):
+    ''' assertion : check_nl PYTHON_TOK start_python_code NOT_NL_TOK python_rule_code nls
+    '''
+    p[0] = ('python_assertion', p[5], p.lineno(2), p.linespan(5)[1])
+
+def p_check_nl(p):
+    ''' check_nl :
+    '''
+    scanner.lexer.begin('checknl')
+    p[0] = None
 
 def p_bc_rule(p):
     ''' bc_rule : IDENTIFIER_TOK colon_opt NL_TOK INDENT_TOK USE_TOK goal when_opt with_opt DEINDENT_TOK
