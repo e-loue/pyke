@@ -165,6 +165,7 @@ def start_code(plan_name = None, multiline = False,
                var_format = "(context['%s'])"):
     global current_line, code, current_plan_name, code_indent_level
     global pattern_var_format, plan_vars_needed, code_nesting_level
+    global code_lineno, code_lexpos
     pattern_var_format = var_format
     plan_vars_needed = []
     current_line = ''
@@ -173,7 +174,14 @@ def start_code(plan_name = None, multiline = False,
     else: code_indent_level = 1000000000
     current_plan_name = plan_name
     code_nesting_level = 0
+    code_lineno = code_lexpos = None
     lexer.begin('code')
+
+def mark(t):
+    global code_lineno, code_lexpos
+    if code_lineno is None:
+        code_lineno = t.lexer.lineno
+        code_lexpos = t.lexpos
 
 # to prevent getting a warning...
 t_code_ignore = ''
@@ -185,6 +193,7 @@ def t_code_string(t):
     r'"([^"\\\n\r]|\\.|\\(\r)?\n)*?"'
     global current_line
     current_line += t.value
+    mark(t)
     if debug: print "scanner saw string:", t.value
     t.lexer.lineno += t.value.count('\n')
 
@@ -197,6 +206,7 @@ def t_code_comment(t):
 def t_code_plan(t):
     r'\$\$'
     global current_line
+    mark(t)
     if debug:
         print "scanner saw '$$', current_plan_name is", current_plan_name
     if not current_plan_name:
@@ -209,6 +219,7 @@ def t_code_plan(t):
 def t_code_pattern_var(t):
     r'\$[a-zA-Z_][a-zA-Z0-9_]*\b'
     global current_line
+    mark(t)
     if not pattern_var_format:
         raise SyntaxError("$<name> only allowed in backward chaining rules",
                           syntaxerror_params(t.lexpos))
@@ -228,12 +239,14 @@ def t_code_continuation(t):
 def t_code_open(t):
     r'[{([]'
     global current_line, code_nesting_level
+    mark(t)
     code_nesting_level += 1
     current_line += t.value
 
 def t_code_close(t):
     r'[]})]'
     global current_line, code_nesting_level
+    mark(t)
     if code_nesting_level <= 0:
         raise SyntaxError("unmatched %s" % repr(t.value),
                           syntaxerror_params(t.lexpos))
@@ -243,12 +256,20 @@ def t_code_close(t):
 def t_code_symbol(t):
     r'''[0-9a-zA-Z_]+'''
     global current_line
+    mark(t)
     current_line += t.value
     if debug: print "scanner saw symbol:", t.value
 
-def t_code_other(t):
-    r'''[^][(){}$\\'"\r\n0-9a-zA-Z_]+'''
+def t_code_space(t):
+    r'''[ \t]+'''
     global current_line
+    current_line += t.value
+    if debug: print "scanner saw space chars:", t.value
+
+def t_code_other(t):
+    r'''[^][(){}$\\'"\r\n0-9a-zA-Z_ \t]+'''
+    global current_line
+    mark(t)
     current_line += t.value
     if debug: print "scanner saw other chars:", t.value
 
@@ -263,10 +284,7 @@ def t_code_NL_TOK(t):
     if indent < code_indent_level and code_nesting_level == 0:
         t.lexer.skip(-len(t.value))
         t.type = 'CODE_TOK'
-        if code_indent_level >= 1000000000:
-            t.value = tuple(code), tuple(plan_vars_needed)
-        else:
-            t.value = tuple(code), tuple(plan_vars_needed)
+        t.value = tuple(code), tuple(plan_vars_needed), code_lineno, code_lexpos
         if debug: print "scanner begin('INITIAL')"
         t.lexer.begin('INITIAL')
         return t

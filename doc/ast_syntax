@@ -44,7 +44,8 @@ name : quoted_STRING
 
 plan_spec : ('as', <unquoted>pattern_var_name)
           | ('plan_spec', <step>NUMBER_opt, <unquoted>plan_var_name,
-                          (python_line), (<unquoted>plan_var_needed))
+                          (python_line), (<unquoted>plan_var_needed),
+                          lineno, lexpos)
 
 pattern : variable
         | "pattern_literal(<data>)"
@@ -56,5 +57,5 @@ variable: "contexts.variable('<var_name>')"
 
 data : None | True | False | NUMBER | quoted_STRING | TUPLE
 
-python_code : ((python_line), (<unquoted>plan_var_needed))
+python_code : ((python_line), (<unquoted>plan_var_needed), lineno, lexpos)
 

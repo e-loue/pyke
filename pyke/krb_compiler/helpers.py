@@ -222,6 +222,9 @@ def merge_patterns(patterns, pattern_list):
         pat_nums.append(pat_num)
     return tuple(pat_nums), pattern_list
 
+def syntax_error(msg, lineno, pos):
+    raise SyntaxError(msg, scanner.syntaxerror_params(pos, lineno))
+
 def test():
     import doctest
     import sys

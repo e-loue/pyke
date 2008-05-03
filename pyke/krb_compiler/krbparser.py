@@ -250,12 +250,13 @@ def p_as(p):
 def p_step_code(p):
     ''' plan_spec : STEP_TOK NUMBER_TOK nls start_python_plan_call INDENT_TOK python_plan_code nls DEINDENT_TOK
     '''
-    p[0] = ('plan_spec', p[2], plan_var, p[6][0], p[6][1])
+    p[0] = ('plan_spec', p[2], plan_var, p[6][0], p[6][1],
+            p.lineno(1), p.lexpos(1))
 
 def p_code(p):
     ''' plan_spec : nls start_python_plan_call INDENT_TOK python_plan_code nls DEINDENT_TOK
     '''
-    p[0] = ('plan_spec', None, plan_var, p[4][0], p[4][1])
+    p[0] = ('plan_spec', None, plan_var, p[4][0], p[4][1], p[4][2], p[4][3])
 
 def p_start_python_code(p):
     ''' start_python_code :
@@ -333,7 +334,7 @@ def p_last(p):
 def p_taking(p):
     ''' taking_opt : start_python_code TAKING_TOK python_rule_code
     '''
-    p[0] = p[len(p)-1][0]
+    p[0] = p[3][0]
 
 def p_quoted_last(p):
     ''' data : IDENTIFIER_TOK
@@ -484,7 +485,9 @@ def run(filename='TEST/parse_test'):
                None,
                'plan#1',
                ('line1', "line2 (context['d']) end2"),
-               ('d',)),
+               ('d',),
+               15,
+               219),
               14,
               14),
              ('bc_premise',
@@ -499,7 +502,9 @@ def run(filename='TEST/parse_test'):
                'plan#2',
                ("some (context['plan'])(stuff) \\",
                 '                and more stuff fail here'),
-               ('plan',)),
+               ('plan',),
+               18,
+               280),
               17,
               17)),
             ("a (context['plan']) b",),
@@ -524,7 +529,9 @@ def run(filename='TEST/parse_test'):
                None,
                'plan#1',
                ('line1', "line2 (context['d']) end2"),
-               ('d',)),
+               ('d',),
+               27,
+               452),
               26,
               26),
              ('bc_premise',

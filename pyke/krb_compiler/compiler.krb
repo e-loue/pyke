@@ -252,7 +252,7 @@ assertion
                     )
 
 python_assertion
-    use assertion((python_assertion, ($python_code, $_),
+    use assertion((python_assertion, ($python_code, $_, $_, $_),
                       $start_lineno, $end_lineno),
                   (('STARTING_LINENO', $start_lineno),
                    $python_code,
@@ -299,10 +299,11 @@ bc_rule_
 
 bc_premises
     use bc_premises($rb_name, $rule_name, $bc_premises,
-                    $plan_vars_needed, $plan_lines, $fn_head, $fn_tail,
-                    $decl_lines)
+                    $plan_vars_needed, $plan_lines,
+                    $fn_head, $fn_tail, $decl_lines)
     when
-        !bc_premises1($rb_name, $rule_name, 1, $bc_premises, (), $patterns,
+        !bc_premises1($rb_name, $rule_name, 1, $bc_premises, None, True,
+                      (), $patterns,
                       $plan_vars_needed, $plan_var_names,
                       $plan_lines1, $fn_head, $fn_tail)
         $pat_lines = helpers.list_format($patterns, '(', '))')
@@ -318,23 +319,25 @@ bc_premises
                               key=lambda (step, lines): step)))))
 
 bc_premises1_0
-    use bc_premises1($_, $_, $_, (), $patterns, $patterns,
+    use bc_premises1($_, $_, $_, (), $_, $_, $patterns, $patterns,
                      $plan_var_names, $plan_var_names,
                      (), (), ())
 
 bc_premises1_n
     use bc_premises1($rb_name, $rule_name, $clause_num,
-                     ($first_prem, *$rest_prems),
+                     ($first_prem, *$rest_prems), $break_cond, $allow_plan,
                      $patterns_in, $patterns_out,
                      $plan_var_names_in, $plan_var_names_out,
                      $plan_lines, $fn_head, $fn_tail)
     when
-        !bc_premise($rb_name, $rule_name, $clause_num, $first_prem,
+        !bc_premise($rb_name, $rule_name, $clause_num,
+                    $first_prem, $break_cond, $allow_plan,
                     $patterns_in, $patterns_out1,
                     $plan_var_names_in, $plan_var_names_out1,
                     $plan_lines1, $fn_head1, $fn_tail1)
         $next_clause_num = $clause_num + 1
-        !bc_premises1($rb_name, $rule_name, $next_clause_num, $rest_prems,
+        !bc_premises1($rb_name, $rule_name, $next_clause_num,
+                      $rest_prems, $break_cond, $allow_plan,
                       $patterns_out1, $patterns_out,
                       $plan_var_names_out1, $plan_var_names_out,
                       $plan_lines2, $fn_head2, $fn_tail2)
@@ -345,9 +348,9 @@ bc_premises1_n
 bc_premise
     use bc_premise($rb_name, $rule_name, $clause_num,
                    (bc_premise, $required, $kb_name, $entity_name,
-                                  $arg_patterns, $plan_spec,
-                                  $start_lineno, $end_lineno),
-                   $patterns_in, $patterns_out,
+                                $arg_patterns, $plan_spec,
+                                $start_lineno, $end_lineno),
+                   $break_cond, $allow_plan, $patterns_in, $patterns_out,
                    $plan_var_names_in, $plan_var_names_out,
                    $plan_lines, $fn_head, $fn_tail)
     when
@@ -369,7 +372,8 @@ bc_premise
                     )
         !add_required($required, $rb_name, $rule_name, $clause_num,
                       $fn_head1, (POPINDENT), $fn_head2, $fn_tail2)
-        !gen_plan_lines($rb_name, $rule_name, $clause_num, $plan_spec,
+        !gen_plan_lines($rb_name, $rule_name, $clause_num,
+                        $plan_spec, $allow_plan,
                         $patterns_out1, $patterns_out,
                         $fn_head3, $fn_tail3, $plan_lines, $plan_vars_needed)
         ($_, $plan_var_names_out) = helpers.merge_patterns($plan_vars_needed,
@@ -379,7 +383,7 @@ bc_premise
 
 no_plan
     use gen_plan_lines($rb_name, $rule_name, $clause_num,
-                       None,
+                       None, $_,
                        $patterns_in, $patterns_in, $fn_head, (), (), ())
     when
         $fn_head = ('assert x_%d is None, \\' % $clause_num,
@@ -393,7 +397,7 @@ no_plan
 
 as_plan
     use gen_plan_lines($rb_name, $rule_name, $clause_num,
-                       ('as', $pat_var_name),
+                       ('as', $pat_var_name), $_,
                        $patterns_in, $patterns_out,
                        $fn_head, $fn_tail,
                        (), ())
@@ -407,8 +411,8 @@ as_plan
 plan_spec
     use gen_plan_lines($rb_name, $rule_name, $clause_num,
                        (plan_spec, $step_num, $plan_var_name,
-                                   $python_code, $plan_vars_needed),
-                       $patterns_in, $patterns_out,
+                                   $python_code, $plan_vars_needed, $_, $_),
+                       True, $patterns_in, $patterns_out,
                        $fn_head, $fn_tail,
                        (($step_num, $python_code),), $plan_vars_needed)
     when
@@ -417,6 +421,14 @@ plan_spec
                                   $patterns_in)
         !plan_bindings($rb_name, $rule_name, $clause_num, $plan_var_name,
                        $pat_num, $fn_head, $fn_tail)
+
+illegal_plan_spec
+    use gen_plan_lines($_, $_, $_,
+                       (plan_spec, $_, $_, $_, $_, $lineno, $lexpos),
+                       False, $_, $_, $_, $_, $_, $_)
+    when
+        $_ = helpers.syntax_error("illegal plan_spec in forall",
+                                  $lineno, $lexpos)
 
 plan_bindings
     use plan_bindings($rb_name, $rule_name, $clause_num, $plan_var_name,
@@ -467,18 +479,18 @@ required
 
 bc_python_premise
     use bc_premise($rb_name, $rule_name, $clause_num,
-                   $python_premise,
+                   $python_premise, $break_cond, $_,
                    $patterns_in, $patterns_out,
                    $plan_var_names, $plan_var_names,
                    (), $fn_head, $fn_tail)
     when
-        python_premise($clause_num, $python_premise, None,
+        python_premise($clause_num, $python_premise, $break_cond,
                        $patterns_in, $patterns_out,
                        $fn_head, $fn_tail)
 
 python_eq
     use python_premise($clause_num,
-                       (python_eq, $pattern, ($python_code, $_),
+                       (python_eq, $pattern, ($python_code, $_, $_, $_),
                         $start_lineno, $end_lineno),
                        $_,
                        $patterns_in, $patterns_out, $fn_head, $fn_tail)
@@ -503,7 +515,7 @@ python_eq
 
 python_in
     use python_premise($clause_num,
-                       (python_in, $pattern, ($python_code, $_),
+                       (python_in, $pattern, ($python_code, $_, $_, $_),
                         $start_lineno, $end_lineno),
                        $break_cond,
                        $patterns_in, $patterns_out, $fn_head, $fn_tail)
@@ -537,7 +549,7 @@ python_in
 
 python_check
     use python_premise($clause_num,
-                       (python_check, ($python_code, $_),
+                       (python_check, ($python_code, $_, $_, $_),
                         $start_lineno, $end_lineno),
                        $_,
                        $patterns_in, $patterns_in,

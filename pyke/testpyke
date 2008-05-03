@@ -25,6 +25,27 @@ done
 
 if [ $NUM_ERRORS -eq 0 ]
 then
+    echo Testing compiler.krb
+    cd krb_compiler
+    rm -rf compiled_krb
+    if python2.5 -c "from pyke import krb_compiler; krb_compiler.compile('.', 'compiled_krb', ('compiler.krb',))"
+    then
+        if diff -q compiler_bc.py compiled_krb/compiler_bc.py
+        then
+            rm -rf compiled_krb
+        else
+            echo "krb_compiler/compiler.krb not compiled!" >> $ERRORFILES
+            NUM_ERRORS=$(($NUM_ERRORS + 1))
+        fi
+    else
+        echo "krb_compiler/compiler.krb" >> $ERRORFILES
+        NUM_ERRORS=$(($NUM_ERRORS + 1))
+    fi
+    cd ..
+fi
+
+if [ $NUM_ERRORS -eq 0 ]
+then
     echo "No Errors!"
     rm -f $ERRORFILES
 else
