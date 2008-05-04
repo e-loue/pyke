@@ -858,23 +858,24 @@ def bc_premises(rule, arg_patterns, arg_context):
                                  rule.pattern(9),
                                  rule.pattern(10),
                                  rule.pattern(11),
-                                 rule.pattern(12),)):
+                                 rule.pattern(12),
+                                 rule.pattern(13),)):
           flag_1 = True
           assert x_1 is None, \
             "compiler.bc_premises: got unexpected plan from when clause 1"
           mark2 = context.mark(True)
-          if rule.pattern(13).match_data(context, context,
+          if rule.pattern(14).match_data(context, context,
                   helpers.list_format(context.lookup_data('patterns'), '(', '))')):
             context.end_save_all_undo()
             mark3 = context.mark(True)
-            if rule.pattern(14).match_data(context, context,
+            if rule.pattern(15).match_data(context, context,
                     ('(' + ' '.join(tuple(repr(plan_var_name) + ','
                    for plan_var_name
                    in context.lookup_data('plan_var_names'))) +
                    '),',) + context.lookup_data('pat_lines')):
               context.end_save_all_undo()
               mark4 = context.mark(True)
-              if rule.pattern(15).match_data(context, context,
+              if rule.pattern(16).match_data(context, context,
                       tuple(itertools.chain.from_iterable(itertools.chain(
                      (lines for step, lines in context.lookup_data('plan_lines1') if step is None),
                      (lines for step, lines
@@ -940,56 +941,52 @@ def bc_premises1_n(rule, arg_patterns, arg_context):
                                  rule.pattern(9),
                                  rule.pattern(10),
                                  rule.pattern(11),
-                                 rule.pattern(12),)):
+                                 rule.pattern(12),
+                                 rule.pattern(13),)):
           flag_1 = True
           assert x_1 is None, \
             "compiler.bc_premises1_n: got unexpected plan from when clause 1"
-          mark2 = context.mark(True)
-          if rule.pattern(13).match_data(context, context,
-                  context.lookup_data('clause_num') + 1):
-            context.end_save_all_undo()
-            flag_3 = False
-            for x_3 in engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
-                                    (rule.pattern(0),
-                                     rule.pattern(1),
-                                     rule.pattern(13),
-                                     rule.pattern(14),
-                                     rule.pattern(4),
-                                     rule.pattern(5),
-                                     rule.pattern(7),
-                                     rule.pattern(15),
-                                     rule.pattern(9),
-                                     rule.pattern(16),
-                                     rule.pattern(17),
-                                     rule.pattern(18),
-                                     rule.pattern(19),)):
-              flag_3 = True
-              assert x_3 is None, \
-                "compiler.bc_premises1_n: got unexpected plan from when clause 3"
+          flag_2 = False
+          for x_2 in engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                                  (rule.pattern(0),
+                                   rule.pattern(1),
+                                   rule.pattern(3),
+                                   rule.pattern(14),
+                                   rule.pattern(15),
+                                   rule.pattern(5),
+                                   rule.pattern(6),
+                                   rule.pattern(8),
+                                   rule.pattern(16),
+                                   rule.pattern(10),
+                                   rule.pattern(17),
+                                   rule.pattern(18),
+                                   rule.pattern(19),
+                                   rule.pattern(20),)):
+            flag_2 = True
+            assert x_2 is None, \
+              "compiler.bc_premises1_n: got unexpected plan from when clause 2"
+            mark3 = context.mark(True)
+            if rule.pattern(21).match_data(context, context,
+                    context.lookup_data('plan_lines1') + context.lookup_data('plan_lines2')):
+              context.end_save_all_undo()
               mark4 = context.mark(True)
-              if rule.pattern(20).match_data(context, context,
-                      context.lookup_data('plan_lines1') + context.lookup_data('plan_lines2')):
+              if rule.pattern(22).match_data(context, context,
+                      context.lookup_data('fn_head1') + context.lookup_data('fn_head2')):
                 context.end_save_all_undo()
                 mark5 = context.mark(True)
-                if rule.pattern(21).match_data(context, context,
-                        context.lookup_data('fn_head1') + context.lookup_data('fn_head2')):
+                if rule.pattern(23).match_data(context, context,
+                        context.lookup_data('fn_tail2') + context.lookup_data('fn_tail1')):
                   context.end_save_all_undo()
-                  mark6 = context.mark(True)
-                  if rule.pattern(22).match_data(context, context,
-                          context.lookup_data('fn_tail2') + context.lookup_data('fn_tail1')):
-                    context.end_save_all_undo()
-                    rule.rule_base.num_bc_rule_successes += 1
-                    yield
-                  else: context.end_save_all_undo()
-                  context.undo_to_mark(mark6)
+                  rule.rule_base.num_bc_rule_successes += 1
+                  yield
                 else: context.end_save_all_undo()
                 context.undo_to_mark(mark5)
               else: context.end_save_all_undo()
               context.undo_to_mark(mark4)
-            if not flag_3:
-              raise AssertionError("compiler.bc_premises1_n: 'when' clause 3 failed")
-          else: context.end_save_all_undo()
-          context.undo_to_mark(mark2)
+            else: context.end_save_all_undo()
+            context.undo_to_mark(mark3)
+          if not flag_2:
+            raise AssertionError("compiler.bc_premises1_n: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.bc_premises1_n: 'when' clause 1 failed")
         rule.rule_base.num_bc_rule_failures += 1
@@ -1010,85 +1007,227 @@ def bc_premise(rule, arg_patterns, arg_context):
         rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
-                context.lookup_data('kb_name') or "rule.rule_base.root_name"):
+                context.lookup_data('clause_num') + 1):
           context.end_save_all_undo()
           mark2 = context.mark(True)
           if rule.pattern(1).match_data(context, context,
-                  \
-                             helpers.merge_patterns(context.lookup_data('arg_patterns'), context.lookup_data('patterns_in'))):
+                  context.lookup_data('kb_name') or "rule.rule_base.root_name"):
             context.end_save_all_undo()
             mark3 = context.mark(True)
             if rule.pattern(2).match_data(context, context,
-                    (('STARTING_LINENO', context.lookup_data('start_lineno')),
-                   "for x_%(clause_num)d in "
-                   "engine.prove(%(kb_name)s, %(entity_name)s, context," %
-                   {'clause_num': context.lookup_data('clause_num'),
-                   'kb_name': context.lookup_data('kb_name2'),
-                   'entity_name': context.lookup_data('entity_name')},
-                   ('INDENT', 2),
-                   ('INDENT', 22),
-                   helpers.list_format(('rule.pattern(%d)' % pat_num
-                   for pat_num in context.lookup_data('pat_nums')),
-                   '(', ')):'),
-                   "POPINDENT",
-                   )):
+                    \
+                               helpers.merge_patterns(context.lookup_data('arg_patterns'), context.lookup_data('patterns_in'))):
               context.end_save_all_undo()
-              flag_4 = False
-              for x_4 in engine.prove(rule.rule_base.root_name, 'add_required', context,
-                                      (rule.pattern(3),
-                                       rule.pattern(4),
-                                       rule.pattern(5),
-                                       rule.pattern(6),
-                                       rule.pattern(2),
-                                       rule.pattern(7),
-                                       rule.pattern(8),
-                                       rule.pattern(9),)):
-                flag_4 = True
-                assert x_4 is None, \
-                  "compiler.bc_premise: got unexpected plan from when clause 4"
+              mark4 = context.mark(True)
+              if rule.pattern(3).match_data(context, context,
+                      (('STARTING_LINENO', context.lookup_data('start_lineno')),
+                     "for x_%(clause_num)d in "
+                     "engine.prove(%(kb_name)s, %(entity_name)s, context," %
+                     {'clause_num': context.lookup_data('clause_num'),
+                     'kb_name': context.lookup_data('kb_name2'),
+                     'entity_name': context.lookup_data('entity_name')},
+                     ('INDENT', 2),
+                     ('INDENT', 22),
+                     helpers.list_format(('rule.pattern(%d)' % pat_num
+                     for pat_num in context.lookup_data('pat_nums')),
+                     '(', ')):'),
+                     "POPINDENT",
+                     )):
+                context.end_save_all_undo()
                 flag_5 = False
-                for x_5 in engine.prove(rule.rule_base.root_name, 'gen_plan_lines', context,
+                for x_5 in engine.prove(rule.rule_base.root_name, 'add_required', context,
                                         (rule.pattern(4),
                                          rule.pattern(5),
                                          rule.pattern(6),
-                                         rule.pattern(10),
-                                         rule.pattern(11),
-                                         rule.pattern(12),
-                                         rule.pattern(13),
-                                         rule.pattern(14),
-                                         rule.pattern(15),
-                                         rule.pattern(16),
-                                         rule.pattern(17),)):
+                                         rule.pattern(7),
+                                         rule.pattern(3),
+                                         rule.pattern(8),
+                                         rule.pattern(9),
+                                         rule.pattern(10),)):
                   flag_5 = True
                   assert x_5 is None, \
                     "compiler.bc_premise: got unexpected plan from when clause 5"
-                  mark6 = context.mark(True)
-                  if rule.pattern(18).match_data(context, context,
-                          helpers.merge_patterns(context.lookup_data('plan_vars_needed'),
-                         context.lookup_data('plan_var_names_in'))):
-                    context.end_save_all_undo()
+                  flag_6 = False
+                  for x_6 in engine.prove(rule.rule_base.root_name, 'gen_plan_lines', context,
+                                          (rule.pattern(5),
+                                           rule.pattern(6),
+                                           rule.pattern(7),
+                                           rule.pattern(11),
+                                           rule.pattern(12),
+                                           rule.pattern(13),
+                                           rule.pattern(14),
+                                           rule.pattern(15),
+                                           rule.pattern(16),
+                                           rule.pattern(17),
+                                           rule.pattern(18),)):
+                    flag_6 = True
+                    assert x_6 is None, \
+                      "compiler.bc_premise: got unexpected plan from when clause 6"
                     mark7 = context.mark(True)
                     if rule.pattern(19).match_data(context, context,
-                            context.lookup_data('fn_head2') + context.lookup_data('fn_head3') + (('ENDING_LINENO', context.lookup_data('end_lineno')),)):
+                            helpers.merge_patterns(context.lookup_data('plan_vars_needed'),
+                           context.lookup_data('plan_var_names_in'))):
                       context.end_save_all_undo()
                       mark8 = context.mark(True)
                       if rule.pattern(20).match_data(context, context,
-                              context.lookup_data('fn_tail3') + context.lookup_data('fn_tail2')):
+                              context.lookup_data('fn_head2') + context.lookup_data('fn_head3') + (('ENDING_LINENO', context.lookup_data('end_lineno')),)):
                         context.end_save_all_undo()
-                        rule.rule_base.num_bc_rule_successes += 1
-                        yield
+                        mark9 = context.mark(True)
+                        if rule.pattern(21).match_data(context, context,
+                                (context.lookup_data('fn_tail3'),
+                               () if context.lookup_data('break_cond') is None
+                               else "if %s: break" % context.lookup_data('break_cond'),
+                               context.lookup_data('fn_tail2'))):
+                          context.end_save_all_undo()
+                          rule.rule_base.num_bc_rule_successes += 1
+                          yield
+                        else: context.end_save_all_undo()
+                        context.undo_to_mark(mark9)
                       else: context.end_save_all_undo()
                       context.undo_to_mark(mark8)
                     else: context.end_save_all_undo()
                     context.undo_to_mark(mark7)
-                  else: context.end_save_all_undo()
-                  context.undo_to_mark(mark6)
+                  if not flag_6:
+                    raise AssertionError("compiler.bc_premise: 'when' clause 6 failed")
                 if not flag_5:
                   raise AssertionError("compiler.bc_premise: 'when' clause 5 failed")
-              if not flag_4:
-                raise AssertionError("compiler.bc_premise: 'when' clause 4 failed")
+              else: context.end_save_all_undo()
+              context.undo_to_mark(mark4)
             else: context.end_save_all_undo()
             context.undo_to_mark(mark3)
+          else: context.end_save_all_undo()
+          context.undo_to_mark(mark2)
+        else: context.end_save_all_undo()
+        context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
+    finally:
+      context.done()
+
+def bc_forall_None(rule, arg_patterns, arg_context):
+  engine = rule.rule_base.engine
+  patterns = rule.goal_arg_patterns()
+  if len(arg_patterns) == len(patterns):
+    context = contexts.bc_context(rule)
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
+        flag_1 = False
+        for x_1 in engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                                (rule.pattern(0),
+                                 rule.pattern(1),
+                                 rule.pattern(2),
+                                 rule.pattern(3),
+                                 rule.pattern(4),
+                                 rule.pattern(5),
+                                 rule.pattern(6),
+                                 rule.pattern(7),
+                                 rule.pattern(8),
+                                 rule.pattern(9),
+                                 rule.pattern(10),
+                                 rule.pattern(11),
+                                 rule.pattern(12),
+                                 rule.pattern(13),)):
+          flag_1 = True
+          assert x_1 is None, \
+            "compiler.bc_forall_None: got unexpected plan from when clause 1"
+          mark2 = context.mark(True)
+          if rule.pattern(14).match_data(context, context,
+                  context.lookup_data('fn_head1') + context.lookup_data('fn_tail')):
+            context.end_save_all_undo()
+            rule.rule_base.num_bc_rule_successes += 1
+            yield
+          else: context.end_save_all_undo()
+          context.undo_to_mark(mark2)
+        if not flag_1:
+          raise AssertionError("compiler.bc_forall_None: 'when' clause 1 failed")
+        rule.rule_base.num_bc_rule_failures += 1
+    finally:
+      context.done()
+
+def bc_forall_require(rule, arg_patterns, arg_context):
+  engine = rule.rule_base.engine
+  patterns = rule.goal_arg_patterns()
+  if len(arg_patterns) == len(patterns):
+    context = contexts.bc_context(rule)
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
+        mark1 = context.mark(True)
+        if rule.pattern(0).match_data(context, context,
+                "forall%d_worked" % context.lookup_data('clause_num')):
+          context.end_save_all_undo()
+          mark2 = context.mark(True)
+          if rule.pattern(1).match_data(context, context,
+                  "not forall%d_worked" % context.lookup_data('clause_num')):
+            context.end_save_all_undo()
+            flag_3 = False
+            for x_3 in engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                                    (rule.pattern(2),
+                                     rule.pattern(3),
+                                     rule.pattern(4),
+                                     rule.pattern(5),
+                                     rule.pattern(6),
+                                     rule.pattern(1),
+                                     rule.pattern(7),
+                                     rule.pattern(8),
+                                     rule.pattern(9),
+                                     rule.pattern(10),
+                                     rule.pattern(11),
+                                     rule.pattern(12),
+                                     rule.pattern(13),
+                                     rule.pattern(14),)):
+              flag_3 = True
+              assert x_3 is None, \
+                "compiler.bc_forall_require: got unexpected plan from when clause 3"
+              flag_4 = False
+              for x_4 in engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                                      (rule.pattern(2),
+                                       rule.pattern(3),
+                                       rule.pattern(5),
+                                       rule.pattern(15),
+                                       rule.pattern(16),
+                                       rule.pattern(0),
+                                       rule.pattern(7),
+                                       rule.pattern(9),
+                                       rule.pattern(17),
+                                       rule.pattern(11),
+                                       rule.pattern(18),
+                                       rule.pattern(12),
+                                       rule.pattern(19),
+                                       rule.pattern(20),)):
+                flag_4 = True
+                assert x_4 is None, \
+                  "compiler.bc_forall_require: got unexpected plan from when clause 4"
+                mark5 = context.mark(True)
+                if rule.pattern(21).match_data(context, context,
+                        ("forall%d_worked = True" % context.lookup_data('clause_num'),
+                       context.lookup_data('fn_head1'),
+                       "forall%d_worked = False" % context.lookup_data('clause_num'),
+                       context.lookup_data('fn_head2'),
+                       ('INDENT', 2),
+                       "forall%d_worked = True" % context.lookup_data('clause_num'),
+                       'POPINDENT',
+                       context.lookup_data('fn_tail2'),
+                       context.lookup_data('fn_tail1'),
+                       "if forall%d_worked:" % context.lookup_data('clause_num'),
+                       ("INDENT", 2))):
+                  context.end_save_all_undo()
+                  rule.rule_base.num_bc_rule_successes += 1
+                  yield
+                else: context.end_save_all_undo()
+                context.undo_to_mark(mark5)
+              if not flag_4:
+                raise AssertionError("compiler.bc_forall_require: 'when' clause 4 failed")
+            if not flag_3:
+              raise AssertionError("compiler.bc_forall_require: 'when' clause 3 failed")
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
@@ -1352,18 +1491,24 @@ def bc_python_premise(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
-        for x_1 in engine.prove(rule.rule_base.root_name, 'python_premise', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),
-                                 rule.pattern(5),
-                                 rule.pattern(6),)):
-          assert x_1 is None, \
-            "compiler.bc_python_premise: got unexpected plan from when clause 1"
-          rule.rule_base.num_bc_rule_successes += 1
-          yield
+        mark1 = context.mark(True)
+        if rule.pattern(0).match_data(context, context,
+                context.lookup_data('clause_num') + 1):
+          context.end_save_all_undo()
+          for x_2 in engine.prove(rule.rule_base.root_name, 'python_premise', context,
+                                  (rule.pattern(1),
+                                   rule.pattern(2),
+                                   rule.pattern(3),
+                                   rule.pattern(4),
+                                   rule.pattern(5),
+                                   rule.pattern(6),
+                                   rule.pattern(7),)):
+            assert x_2 is None, \
+              "compiler.bc_python_premise: got unexpected plan from when clause 2"
+            rule.rule_base.num_bc_rule_successes += 1
+            yield
+        else: context.end_save_all_undo()
+        context.undo_to_mark(mark1)
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -1859,6 +2004,7 @@ def populate(engine):
                   (contexts.variable('rb_name'),
                    contexts.variable('rule_name'),
                    pattern.pattern_literal(1),
+                   contexts.anonymous(),
                    contexts.variable('bc_premises'),
                    pattern.pattern_literal(None),
                    pattern.pattern_literal(True),
@@ -1877,7 +2023,8 @@ def populate(engine):
                   bc_premises1_0, None,
                   (contexts.anonymous(),
                    contexts.anonymous(),
-                   contexts.anonymous(),
+                   contexts.variable('clause_num'),
+                   contexts.variable('clause_num'),
                    pattern.pattern_literal(()),
                    contexts.anonymous(),
                    contexts.anonymous(),
@@ -1896,6 +2043,7 @@ def populate(engine):
                   (contexts.variable('rb_name'),
                    contexts.variable('rule_name'),
                    contexts.variable('clause_num'),
+                   contexts.variable('next_clause_num'),
                    pattern.pattern_tuple((contexts.variable('first_prem'),), contexts.variable('rest_prems')),
                    contexts.variable('break_cond'),
                    contexts.variable('allow_plan'),
@@ -1910,6 +2058,7 @@ def populate(engine):
                   (contexts.variable('rb_name'),
                    contexts.variable('rule_name'),
                    contexts.variable('clause_num'),
+                   contexts.variable('next_clause_num1'),
                    contexts.variable('first_prem'),
                    contexts.variable('break_cond'),
                    contexts.variable('allow_plan'),
@@ -1936,6 +2085,7 @@ def populate(engine):
                   (contexts.variable('rb_name'),
                    contexts.variable('rule_name'),
                    contexts.variable('clause_num'),
+                   contexts.variable('next_clause_num'),
                    pattern.pattern_tuple((pattern.pattern_literal('bc_premise'), contexts.variable('required'), contexts.variable('kb_name'), contexts.variable('entity_name'), contexts.variable('arg_patterns'), contexts.variable('plan_spec'), contexts.variable('start_lineno'), contexts.variable('end_lineno'),), None),
                    contexts.variable('break_cond'),
                    contexts.variable('allow_plan'),
@@ -1947,7 +2097,8 @@ def populate(engine):
                    contexts.variable('fn_head'),
                    contexts.variable('fn_tail'),),
                   (),
-                  (contexts.variable('kb_name2'),
+                  (contexts.variable('next_clause_num'),
+                   contexts.variable('kb_name2'),
                    pattern.pattern_tuple((contexts.variable('pat_nums'), contexts.variable('patterns_out1'),), None),
                    contexts.variable('fn_head1'),
                    contexts.variable('required'),
@@ -1968,6 +2119,79 @@ def populate(engine):
                    pattern.pattern_tuple((contexts.anonymous(), contexts.variable('plan_var_names_out'),), None),
                    contexts.variable('fn_head'),
                    contexts.variable('fn_tail'),))
+  
+  bc_rule.bc_rule('bc_forall_None', This_rule_base, 'bc_premise',
+                  bc_forall_None, None,
+                  (contexts.variable('rb_name'),
+                   contexts.variable('rule_name'),
+                   contexts.variable('clause_num'),
+                   contexts.variable('next_clause_num'),
+                   pattern.pattern_tuple((pattern.pattern_literal('bc_forall'), contexts.variable('bc_premises'), pattern.pattern_literal(None), contexts.anonymous(), contexts.anonymous(),), None),
+                   contexts.anonymous(),
+                   contexts.anonymous(),
+                   contexts.variable('patterns_in'),
+                   contexts.variable('patterns_out'),
+                   contexts.variable('plan_var_names_in'),
+                   contexts.variable('plan_var_names_out'),
+                   contexts.variable('plan_lines'),
+                   contexts.variable('fn_head'),
+                   pattern.pattern_literal(()),),
+                  (),
+                  (contexts.variable('rb_name'),
+                   contexts.variable('rule_name'),
+                   contexts.variable('clause_num'),
+                   contexts.variable('next_clause_num'),
+                   contexts.variable('bc_premises'),
+                   pattern.pattern_literal(None),
+                   pattern.pattern_literal(False),
+                   contexts.variable('patterns_in'),
+                   contexts.variable('patterns_out'),
+                   contexts.variable('plan_var_names_in'),
+                   contexts.variable('plan_var_names_out'),
+                   contexts.variable('plan_lines'),
+                   contexts.variable('fn_head1'),
+                   contexts.variable('fn_tail'),
+                   contexts.variable('fn_head'),))
+  
+  bc_rule.bc_rule('bc_forall_require', This_rule_base, 'bc_premise',
+                  bc_forall_require, None,
+                  (contexts.variable('rb_name'),
+                   contexts.variable('rule_name'),
+                   contexts.variable('clause_num'),
+                   contexts.variable('next_clause_num'),
+                   pattern.pattern_tuple((pattern.pattern_literal('bc_forall'), contexts.variable('premises1'), contexts.variable('require'), contexts.anonymous(), contexts.anonymous(),), None),
+                   contexts.anonymous(),
+                   contexts.anonymous(),
+                   contexts.variable('patterns_in'),
+                   contexts.variable('patterns_out'),
+                   contexts.variable('plan_var_names_in'),
+                   contexts.variable('plan_var_names_out'),
+                   pattern.pattern_literal(()),
+                   contexts.variable('fn_head'),
+                   pattern.pattern_literal(("POPINDENT",)),),
+                  (),
+                  (contexts.variable('break_true'),
+                   contexts.variable('break_false'),
+                   contexts.variable('rb_name'),
+                   contexts.variable('rule_name'),
+                   contexts.variable('clause_num'),
+                   contexts.variable('next_clause_num1'),
+                   contexts.variable('premises1'),
+                   pattern.pattern_literal(False),
+                   contexts.variable('patterns_in'),
+                   contexts.variable('patterns_out1'),
+                   contexts.variable('plan_var_names_in'),
+                   contexts.variable('plan_var_names_out1'),
+                   pattern.pattern_literal(()),
+                   contexts.variable('fn_head1'),
+                   contexts.variable('fn_tail1'),
+                   contexts.variable('next_clause_num'),
+                   contexts.variable('require'),
+                   contexts.variable('patterns_out'),
+                   contexts.variable('plan_var_names_out'),
+                   contexts.variable('fn_head2'),
+                   contexts.variable('fn_tail2'),
+                   contexts.variable('fn_head'),))
   
   bc_rule.bc_rule('no_plan', This_rule_base, 'gen_plan_lines',
                   no_plan, None,
@@ -2092,6 +2316,7 @@ def populate(engine):
                   (contexts.variable('rb_name'),
                    contexts.variable('rule_name'),
                    contexts.variable('clause_num'),
+                   contexts.variable('next_clause_num'),
                    contexts.variable('python_premise'),
                    contexts.variable('break_cond'),
                    contexts.anonymous(),
@@ -2103,7 +2328,8 @@ def populate(engine):
                    contexts.variable('fn_head'),
                    contexts.variable('fn_tail'),),
                   (),
-                  (contexts.variable('clause_num'),
+                  (contexts.variable('next_clause_num'),
+                   contexts.variable('clause_num'),
                    contexts.variable('python_premise'),
                    contexts.variable('break_cond'),
                    contexts.variable('patterns_in'),
@@ -2220,57 +2446,67 @@ Krb_lineno_map = (
     ((805, 812), (287, 294)),
     ((816, 819), (295, 298)),
     ((841, 845), (301, 303)),
-    ((848, 864), (305, 308)),
-    ((867, 867), (309, 309)),
-    ((871, 874), (310, 313)),
-    ((878, 883), (314, 319)),
-    ((905, 909), (322, 324)),
-    ((923, 927), (327, 331)),
-    ((930, 946), (333, 337)),
-    ((949, 949), (338, 338)),
-    ((952, 968), (339, 343)),
-    ((971, 971), (344, 344)),
-    ((975, 975), (345, 345)),
-    ((979, 979), (346, 346)),
-    ((1005, 1009), (349, 355)),
-    ((1013, 1013), (357, 357)),
-    ((1017, 1018), (358, 359)),
-    ((1022, 1034), (360, 372)),
-    ((1037, 1048), (373, 374)),
-    ((1050, 1064), (375, 378)),
-    ((1067, 1068), (379, 380)),
-    ((1072, 1072), (381, 381)),
-    ((1076, 1076), (382, 382)),
-    ((1106, 1110), (385, 387)),
-    ((1114, 1121), (389, 396)),
-    ((1137, 1141), (399, 403)),
-    ((1145, 1147), (405, 407)),
-    ((1150, 1160), (408, 409)),
-    ((1177, 1181), (412, 417)),
-    ((1185, 1187), (419, 421)),
-    ((1190, 1200), (422, 423)),
-    ((1217, 1221), (426, 428)),
-    ((1225, 1226), (430, 431)),
-    ((1242, 1246), (434, 435)),
-    ((1250, 1270), (437, 457)),
-    ((1274, 1274), (458, 458)),
-    ((1292, 1296), (461, 462)),
-    ((1310, 1314), (465, 466)),
-    ((1318, 1321), (468, 471)),
-    ((1325, 1331), (472, 478)),
-    ((1349, 1353), (481, 485)),
-    ((1355, 1364), (487, 489)),
-    ((1377, 1381), (492, 496)),
-    ((1385, 1386), (498, 499)),
-    ((1390, 1390), (500, 500)),
-    ((1394, 1404), (501, 511)),
-    ((1408, 1410), (512, 514)),
-    ((1432, 1436), (517, 521)),
-    ((1440, 1441), (523, 524)),
-    ((1445, 1445), (525, 525)),
-    ((1449, 1461), (526, 538)),
-    ((1465, 1474), (539, 548)),
-    ((1496, 1500), (551, 556)),
-    ((1504, 1504), (558, 558)),
-    ((1508, 1515), (559, 566)),
+    ((848, 865), (305, 308)),
+    ((868, 868), (309, 309)),
+    ((872, 875), (310, 313)),
+    ((879, 884), (314, 319)),
+    ((906, 910), (322, 324)),
+    ((924, 928), (327, 331)),
+    ((931, 948), (333, 337)),
+    ((950, 967), (338, 342)),
+    ((970, 970), (343, 343)),
+    ((974, 974), (344, 344)),
+    ((978, 978), (345, 345)),
+    ((1002, 1006), (348, 354)),
+    ((1010, 1010), (356, 356)),
+    ((1014, 1014), (357, 357)),
+    ((1018, 1019), (358, 359)),
+    ((1023, 1035), (360, 372)),
+    ((1038, 1049), (373, 374)),
+    ((1051, 1065), (375, 378)),
+    ((1068, 1069), (379, 380)),
+    ((1073, 1073), (381, 381)),
+    ((1077, 1080), (382, 385)),
+    ((1112, 1116), (388, 392)),
+    ((1119, 1136), (394, 398)),
+    ((1139, 1139), (399, 399)),
+    ((1157, 1161), (402, 406)),
+    ((1165, 1165), (408, 408)),
+    ((1169, 1169), (409, 409)),
+    ((1172, 1189), (410, 414)),
+    ((1191, 1208), (415, 419)),
+    ((1211, 1221), (420, 430)),
+    ((1245, 1249), (433, 435)),
+    ((1253, 1260), (437, 444)),
+    ((1276, 1280), (447, 451)),
+    ((1284, 1286), (453, 455)),
+    ((1289, 1299), (456, 457)),
+    ((1316, 1320), (460, 465)),
+    ((1324, 1326), (467, 469)),
+    ((1329, 1339), (470, 471)),
+    ((1356, 1360), (474, 476)),
+    ((1364, 1365), (478, 479)),
+    ((1381, 1385), (482, 483)),
+    ((1389, 1409), (485, 505)),
+    ((1413, 1413), (506, 506)),
+    ((1431, 1435), (509, 510)),
+    ((1449, 1453), (513, 514)),
+    ((1457, 1460), (516, 519)),
+    ((1464, 1470), (520, 526)),
+    ((1488, 1492), (529, 533)),
+    ((1496, 1496), (535, 535)),
+    ((1498, 1507), (536, 538)),
+    ((1522, 1526), (541, 545)),
+    ((1530, 1531), (547, 548)),
+    ((1535, 1535), (549, 549)),
+    ((1539, 1549), (550, 560)),
+    ((1553, 1555), (561, 563)),
+    ((1577, 1581), (566, 570)),
+    ((1585, 1586), (572, 573)),
+    ((1590, 1590), (574, 574)),
+    ((1594, 1606), (575, 587)),
+    ((1610, 1619), (588, 597)),
+    ((1641, 1645), (600, 605)),
+    ((1649, 1649), (607, 607)),
+    ((1653, 1660), (608, 615)),
 )

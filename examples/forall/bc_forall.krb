@@ -1,0 +1,14 @@
+# bc_forall.krb
+
+test1
+    use no_step_siblings($child)
+    when
+        family.child_of($child, $father, $mother)
+        forall
+            family.child_of($_, $father, $mother2)
+        require
+            check $mother == $mother2
+        forall
+            family.child_of($_, $father2, $mother)
+        require
+            check $father == $father2

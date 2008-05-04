@@ -302,7 +302,7 @@ bc_premises
                     $plan_vars_needed, $plan_lines,
                     $fn_head, $fn_tail, $decl_lines)
     when
-        !bc_premises1($rb_name, $rule_name, 1, $bc_premises, None, True,
+        !bc_premises1($rb_name, $rule_name, 1, $_, $bc_premises, None, True,
                       (), $patterns,
                       $plan_vars_needed, $plan_var_names,
                       $plan_lines1, $fn_head, $fn_tail)
@@ -319,24 +319,23 @@ bc_premises
                               key=lambda (step, lines): step)))))
 
 bc_premises1_0
-    use bc_premises1($_, $_, $_, (), $_, $_, $patterns, $patterns,
-                     $plan_var_names, $plan_var_names,
+    use bc_premises1($_, $_, $clause_num, $clause_num, (), $_, $_,
+                     $patterns, $patterns, $plan_var_names, $plan_var_names,
                      (), (), ())
 
 bc_premises1_n
-    use bc_premises1($rb_name, $rule_name, $clause_num,
+    use bc_premises1($rb_name, $rule_name, $clause_num, $next_clause_num,
                      ($first_prem, *$rest_prems), $break_cond, $allow_plan,
                      $patterns_in, $patterns_out,
                      $plan_var_names_in, $plan_var_names_out,
                      $plan_lines, $fn_head, $fn_tail)
     when
-        !bc_premise($rb_name, $rule_name, $clause_num,
+        !bc_premise($rb_name, $rule_name, $clause_num, $next_clause_num1,
                     $first_prem, $break_cond, $allow_plan,
                     $patterns_in, $patterns_out1,
                     $plan_var_names_in, $plan_var_names_out1,
                     $plan_lines1, $fn_head1, $fn_tail1)
-        $next_clause_num = $clause_num + 1
-        !bc_premises1($rb_name, $rule_name, $next_clause_num,
+        !bc_premises1($rb_name, $rule_name, $next_clause_num1, $next_clause_num,
                       $rest_prems, $break_cond, $allow_plan,
                       $patterns_out1, $patterns_out,
                       $plan_var_names_out1, $plan_var_names_out,
@@ -346,7 +345,7 @@ bc_premises1_n
         $fn_tail = $fn_tail2 + $fn_tail1
 
 bc_premise
-    use bc_premise($rb_name, $rule_name, $clause_num,
+    use bc_premise($rb_name, $rule_name, $clause_num, $next_clause_num,
                    (bc_premise, $required, $kb_name, $entity_name,
                                 $arg_patterns, $plan_spec,
                                 $start_lineno, $end_lineno),
@@ -354,6 +353,7 @@ bc_premise
                    $plan_var_names_in, $plan_var_names_out,
                    $plan_lines, $fn_head, $fn_tail)
     when
+        $next_clause_num = $clause_num + 1
         $kb_name2 = $kb_name or "rule.rule_base.root_name"
         ($pat_nums, $patterns_out1) = \
             helpers.merge_patterns($arg_patterns, $patterns_in)
@@ -379,7 +379,55 @@ bc_premise
         ($_, $plan_var_names_out) = helpers.merge_patterns($plan_vars_needed,
                                                            $plan_var_names_in)
         $fn_head = $fn_head2 + $fn_head3 + (('ENDING_LINENO', $end_lineno),)
-        $fn_tail = $fn_tail3 + $fn_tail2
+        $fn_tail = ($fn_tail3,
+                    () if $break_cond is None
+                       else "if %s: break" % $break_cond,
+                    $fn_tail2)
+
+bc_forall_None
+    use bc_premise($rb_name, $rule_name, $clause_num, $next_clause_num,
+                   (bc_forall, $bc_premises, None, $_, $_),
+                   $_, $_, $patterns_in, $patterns_out,
+                   $plan_var_names_in, $plan_var_names_out,
+                   $plan_lines, $fn_head, ())
+    when
+        !bc_premises1($rb_name, $rule_name, $clause_num, $next_clause_num,
+                      $bc_premises, None, False,
+                      $patterns_in, $patterns_out,
+                      $plan_var_names_in, $plan_var_names_out,
+                      $plan_lines, $fn_head1, $fn_tail)
+        $fn_head = $fn_head1 + $fn_tail
+
+bc_forall_require
+    use bc_premise($rb_name, $rule_name, $clause_num, $next_clause_num,
+                   (bc_forall, $premises1, $require, $_, $_),
+                   $_, $_, $patterns_in, $patterns_out,
+                   $plan_var_names_in, $plan_var_names_out,
+                   (), $fn_head, ("POPINDENT",))
+    when
+        $break_true = "forall%d_worked" % $clause_num
+        $break_false = "not forall%d_worked" % $clause_num
+        !bc_premises1($rb_name, $rule_name, $clause_num, $next_clause_num1,
+                      $premises1, $break_false, False,
+                      $patterns_in, $patterns_out1,
+                      $plan_var_names_in, $plan_var_names_out1,
+                      (), $fn_head1, $fn_tail1)
+        !bc_premises1($rb_name, $rule_name, $next_clause_num1, $next_clause_num,
+                      $require, $break_true, False,
+                      $patterns_out1, $patterns_out,
+                      $plan_var_names_out1, $plan_var_names_out,
+                      (), $fn_head2, $fn_tail2)
+        $fn_head = ("forall%d_worked = True" % $clause_num,
+                    $fn_head1,
+                    "forall%d_worked = False" % $clause_num,
+                    $fn_head2,
+                    ('INDENT', 2),
+                    "forall%d_worked = True" % $clause_num,
+                    'POPINDENT',
+                    $fn_tail2,
+                    $fn_tail1,
+                    "if forall%d_worked:" % $clause_num,
+                    ("INDENT", 2))
 
 no_plan
     use gen_plan_lines($rb_name, $rule_name, $clause_num,
@@ -436,24 +484,24 @@ plan_bindings
     when
         $fn_head = ('assert x_%d is not None, \\' % $clause_num,
                     ('INDENT', 2),
-                    '"%(rb_name)s.%(rule_name)s: expected plan from '
-                     'when clause %(clause_num)d"' %
-                     {'clause_num': $clause_num,
-                      'rb_name': $rb_name,
-                      'rule_name': $rule_name},
-                    'POPINDENT',
+                      '"%(rb_name)s.%(rule_name)s: expected plan from '
+                       'when clause %(clause_num)d"' %
+                           {'clause_num': $clause_num,
+                            'rb_name': $rb_name,
+                            'rule_name': $rule_name},
+                      'POPINDENT',
                     "mark%d = context.mark(True)" % $clause_num,
                     "if not rule.pattern(%d).match_data(context, context, "
-                     "x_%d):" % ($pat_num, $clause_num),
+                        "x_%d):" % ($pat_num, $clause_num),
                     ('INDENT', 2),
-                    'raise AssertionError("%(rb_name)s.%(rule_name)s: '
-                     'plan match to $%(plan_var_name)s failed in '
-                     'when clause %(clause_num)d")' %
-                     {'clause_num': $clause_num,
-                      'plan_var_name': $plan_var_name,
-                      'rb_name': $rb_name,
-                      'rule_name': $rule_name},
-                    'POPINDENT',
+                      'raise AssertionError("%(rb_name)s.%(rule_name)s: '
+                          'plan match to $%(plan_var_name)s failed in '
+                          'when clause %(clause_num)d")' %
+                              {'clause_num': $clause_num,
+                               'plan_var_name': $plan_var_name,
+                               'rb_name': $rb_name,
+                               'rule_name': $rule_name},
+                      'POPINDENT',
                     "context.end_save_all_undo()")
         $fn_tail = ("context.undo_to_mark(mark%d)" % $clause_num,)
 
@@ -478,12 +526,13 @@ required
                    )
 
 bc_python_premise
-    use bc_premise($rb_name, $rule_name, $clause_num,
+    use bc_premise($rb_name, $rule_name, $clause_num, $next_clause_num,
                    $python_premise, $break_cond, $_,
                    $patterns_in, $patterns_out,
                    $plan_var_names, $plan_var_names,
                    (), $fn_head, $fn_tail)
     when
+        $next_clause_num = $clause_num + 1
         python_premise($clause_num, $python_premise, $break_cond,
                        $patterns_in, $patterns_out,
                        $fn_head, $fn_tail)
