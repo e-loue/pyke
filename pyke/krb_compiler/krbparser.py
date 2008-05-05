@@ -438,8 +438,8 @@ def p_error(t):
 
 # Use the first line for normal use, the second for testing changes in the
 # grammer (the first line does not report grammer errors!).
-#parser = yacc.yacc(write_tables=0, debug=0)
-parser = yacc.yacc(write_tables=0)
+parser = yacc.yacc(write_tables=0, debug=0)
+#parser = yacc.yacc(write_tables=0)
 
 def parse(filename, debug = 0):
     with open(filename) as f:

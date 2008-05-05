@@ -57,6 +57,22 @@ else
     NUM_ERRORS=$(($NUM_ERRORS + $?))
 fi
 
+cd ../Test
+echo Test/testTest with no compiled_krb
+if ./testTest $ERRORFILES
+then
+    :
+else
+    NUM_ERRORS=$(($NUM_ERRORS + $?))
+fi
+echo Test/testTest with compiled_krb
+if ./testTest $ERRORFILES
+then
+    :
+else
+    NUM_ERRORS=$(($NUM_ERRORS + $?))
+fi
+
 if [ $NUM_ERRORS -eq 0 ]
 then
     echo "No Errors!"

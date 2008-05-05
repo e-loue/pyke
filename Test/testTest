@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# testTest [ errorfiles_file ]
+#
+# no arguments.
+#
+# run in Test directory to test all .tst files.
+# 
+# exit status > 0 if errors found.
+
+ERRORFILES="/tmp/testTest.$$"
+
+> $ERRORFILES
+NUM_ERRORS=0
+
+for f in `find . -name .svn -prune -o -name '*.tst' -print`
+do
+    #echo Testing "$f"
+    if ! python2.5 ../doctest_file.py "$f" True
+    then
+        echo "$f" >> $ERRORFILES
+        NUM_ERRORS=$(($NUM_ERRORS + 1))
+    fi
+done
+
+if [ $NUM_ERRORS -eq 0 ]
+then
+    echo "No Errors!"
+    rm -f $ERRORFILES
+else
+    echo "********** ERRORS ************* $NUM_ERRORS files had errors:"
+    cat $ERRORFILES
+    if [ $# -gt 0 ]
+    then
+        sed 's,^,Test/,' $ERRORFILES >> "$1"
+    fi
+    rm -f $ERRORFILES
+    exit $NUM_ERRORS
+fi

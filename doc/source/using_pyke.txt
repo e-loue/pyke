@@ -259,32 +259,32 @@ intervening python functions between subgoal proofs.
     >>>
     >>> my_engine = knowledge_engine.engine('examples')
     >>> my_engine.activate('error_test')
-    >>> try:
+    >>> try:                                            # doctest: +ELLIPSIS
     ...     my_engine.prove_1('error_test', 'goal', (), 0)
     ... except:
-    ...     krb_traceback.print_exc(None, sys.stdout)    # sys.stdout needed for doctest
+    ...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
     Traceback (most recent call last):
       File "<doctest using_pyke.txt[31]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
-      File "/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py", line 154, in prove_1
+      File "...knowledge_engine.py", line 154, in prove_1
         return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
-      File "/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py", line 141, in prove_n
+      File "...knowledge_engine.py", line 141, in prove_n
         for arg in fixed_args) + vars):
-      File "/home/bruce/python/workareas/sf.trunk/pyke/rule_base.py", line 37, in next
+      File "...rule_base.py", line 37, in next
         return self.iterator.next()
-      File "/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py", line 39, in from_iterable
+      File "...knowledge_engine.py", line 39, in from_iterable
         for x in iterable: yield x
-      File "/home/bruce/python/workareas/sf.trunk/pyke/knowledge_engine.py", line 39, in from_iterable
+      File "...knowledge_engine.py", line 39, in from_iterable
         for x in iterable: yield x
-      File "/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb", line 26, in rule1
+      File "...error_test.krb", line 26, in rule1
         goal2()
-      File "/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb", line 31, in rule2
+      File "...error_test.krb", line 31, in rule2
         goal3()
-      File "/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb", line 36, in rule3
+      File "...error_test.krb", line 36, in rule3
         goal4()
-      File "/home/bruce/python/workareas/sf.trunk/doc/examples/error_test.krb", line 41, in rule4
+      File "...error_test.krb", line 41, in rule4
         check $bar > 0
-      File "/home/bruce/python/workareas/sf.trunk/pyke/contexts.py", line 224, in lookup_data
+      File "...contexts.py", line 224, in lookup_data
         raise KeyError("$%s not bound" % var_name)
     KeyError: '$bar not bound'
 
