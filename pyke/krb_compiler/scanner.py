@@ -47,6 +47,7 @@ keywords = frozenset((
     'foreach',
     'in',
     'None',
+    'notany',
     'plan_extras',
     'python',
     'require',

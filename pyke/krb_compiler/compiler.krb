@@ -525,6 +525,36 @@ required
                     "POPINDENT",
                    )
 
+bc_notany_premise
+    use bc_premise($rb_name, $rule_name, $clause_num,
+                   (bc_notany, $bc_premises),
+                   $patterns_in, $patterns_out,
+                   $plan_var_in, $plan_var_out,
+                   $plan_lines, $fn_head, $fn_tail)
+
+    when
+        !bc_premises1($rb_name, $rule_name, 1, $bc_premises, 
+                      $patterns_in, $patterns_out,
+                      $plan_var_in, $plan_var_out, 
+                      $plan_lines, 
+                      $prem_fn_head, $prem_fn_tail)
+                
+        $fn_head_begin = ("def notany_%d(rule, context):" % $clause_num,
+                          ('INDENT', 2))
+                         
+        $fn_head_end = ("POPINDENT",
+                        "mark%d = context.mark(True)" % $clause_num,
+                        "for x_%d in notany_%d(rule, context): " % ($clause_num, $clause_num),
+                        ('INDENT', 2),
+                        "context.undo_to_mark(mark%d)" % $clause_num,
+                        "break",
+                        "POPINDENT",
+                        "else:",
+                        ('INDENT', 2))
+
+        $fn_head = $fn_head_begin + $prem_fn_head + ("yield",) + $prem_fn_tail + $fn_head_end
+        $fn_tail = ("POPINDENT",)
+
 bc_python_premise
     use bc_premise($rb_name, $rule_name, $clause_num, $next_clause_num,
                    $python_premise, $break_cond, $_,

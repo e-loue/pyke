@@ -232,6 +232,11 @@ def p_bc_premise4(p):
     p[0] = ('bc_premise', True, p[2], p[4], tuple(p[6]), p[8],
             p.lineno(1), p.lineno(7))
 
+def p_bc_notany(p):
+    ''' bc_premise : NOTANY_TOK nls INDENT_TOK bc_premises DEINDENT_TOK
+    '''
+    p[0] = ('bc_notany', tuple(p[4]))
+
 def p_bc_forall(p):
     ''' bc_premise : FORALL_TOK nls INDENT_TOK bc_premises DEINDENT_TOK bc_require_opt
     '''
@@ -433,8 +438,8 @@ def p_error(t):
 
 # Use the first line for normal use, the second for testing changes in the
 # grammer (the first line does not report grammer errors!).
-parser = yacc.yacc(write_tables=0, debug=0)
-#parser = yacc.yacc(write_tables=0)
+#parser = yacc.yacc(write_tables=0, debug=0)
+parser = yacc.yacc(write_tables=0)
 
 def parse(filename, debug = 0):
     with open(filename) as f:
