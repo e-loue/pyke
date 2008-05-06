@@ -93,7 +93,7 @@ fc_rule_
     use fc_rule((fc_rule, $rule_name, $fc_premises, $assertions),
                 $fc_fun, $fc_init)
     when
-        !fc_premises($rule_name, 0, $_, $fc_premises, None,
+        !fc_premises($rule_name, 0, $_, $fc_premises, None, False,
                      $prem_fn_head, $prem_fn_tail, $prem_decl_lines,
                      (), $patterns_out1)
         !assertions($assertions, $asserts_fn_lines,
@@ -126,21 +126,21 @@ fc_rule_
                    )
 
 fc_premises0
-    use fc_premises($_, $clause_num, $clause_num, (), $_, (), (), (),
+    use fc_premises($_, $clause_num, $clause_num, (), $_, $_, (), (), (),
                     $patterns_in, $patterns_in)
 
 fc_premises1
     use fc_premises($rule_name, $clause_num, $next_clause_num,
-                    ($first_prem, *$rest_prems), $break_cond,
+                    ($first_prem, *$rest_prems), $break_cond, $multi_match,
                     ($fn_head1, *$fn_head2), ($fn_tail2, *$fn_tail1),
                     $decl_lines, $patterns_in, $patterns_out)
     when
         !fc_premise($rule_name, $clause_num, $next_clause_num1,
-                    $first_prem, $break_cond,
+                    $first_prem, $break_cond, $multi_match,
                     $fn_head1, $fn_tail1, $decl_lines1,
                     $patterns_in, $patterns_out1)
         !fc_premises($rule_name, $next_clause_num1, $next_clause_num,
-                     $rest_prems, $break_cond,
+                     $rest_prems, $break_cond, $multi_match,
                      $fn_head2, $fn_tail2, $decl_lines2,
                      $patterns_out1, $patterns_out)
         $decl_lines = $decl_lines1 + $decl_lines2
@@ -149,9 +149,26 @@ fc_premise
     use fc_premise($rule_name, $clause_num, $next_clause_num,
                    (fc_premise, $kb_name, $entity_name, $arg_patterns,
                        $start_lineno, $end_lineno),
-                   $break_cond,
+                   $break_cond, $multi_match,
                    $fn_head, $fn_tail, $decl_lines,
                    $patterns_in, $patterns_in)
+    when
+        gen_fc_for($kb_name, $entity_name, $start_lineno, $end_lineno,
+                   $multi_match, $clause_num, $fn_head)
+        $fn_tail = (() if $break_cond is None
+                       else "if %s: break" % $break_cond,
+                    'POPINDENT',),
+        $next_clause_num = $clause_num + 1
+        $decl_lines = ("('%s', '%s'," % ($kb_name, $entity_name),
+                       ('INDENT', 1),
+                         helpers.list_format($arg_patterns, '(', '),'),
+                         "%s)," % $multi_match,
+                         "POPINDENT",
+                      )
+
+gen_fc_for_false
+    use gen_fc_for($kb_name, $entity_name, $start_lineno, $end_lineno, False,
+                   $clause_num, $fn_head)
     when
         $fn_head = ("for dummy in (None,) if index == %d else \\" % $clause_num,
                     ('INDENT', 2),
@@ -162,42 +179,44 @@ fc_premise
                                 ($kb_name, $entity_name, $clause_num),
                         ('ENDING_LINENO', $end_lineno),
                         'POPINDENT',)
-        $fn_tail = (  () if $break_cond is None
-                         else "if %s: break" % $break_cond,
-                      'POPINDENT',),
-        $next_clause_num = $clause_num + 1
-        $decl_lines = ("('%s', '%s'," % ($kb_name, $entity_name),
-                       ('INDENT', 1),
-                         helpers.list_format($arg_patterns, '(', ')),'),
-                         "POPINDENT",
-                      )
+
+gen_fc_for_true
+    use gen_fc_for($kb_name, $entity_name, $start_lineno, $end_lineno, True,
+                   $clause_num, $fn_head)
+    when
+        $fn_head = (('STARTING_LINENO', $start_lineno),
+                    "for dummy in engine.lookup('%s', '%s', context, "
+                                                "rule.foreach_patterns(%d)):" %
+                                        ($kb_name, $entity_name, $clause_num),
+                    ('ENDING_LINENO', $end_lineno),
+                    ('INDENT', 2))
 
 fc_forall_None
     use fc_premise($rule_name, $clause_num, $next_clause_num,
-                   (fc_forall, $premises1, None, $_, $_), $_,
+                   (fc_forall, $premises1, None, $_, $_), $_, $_,
                    $fn_head, (), $decl_lines,
                    $patterns_in, $patterns_out)
     when
         !fc_premises($rule_name, $clause_num, $next_clause_num,
-                     $premises1, None,
+                     $premises1, None, True,
                      $fn_head1, $fn_tail1, $decl_lines,
                      $patterns_in, $patterns_out)
         $fn_head = $fn_head1 + $fn_tail1
 
 fc_forall_require
     use fc_premise($rule_name, $clause_num, $next_clause_num,
-                   (fc_forall, $premises1, $require, $start_lineno, $_), $_,
+                   (fc_forall, $premises1, $require, $start_lineno, $_), $_, $_,
                    $fn_head, ("POPINDENT",), $decl_lines,
                    $patterns_in, $patterns_out)
     when
         $break_true = "forall%d_worked" % $start_lineno
         $break_false = "not forall%d_worked" % $start_lineno
         !fc_premises($rule_name, $clause_num, $next_clause_num1,
-                     $premises1, $break_false,
+                     $premises1, $break_false, True,
                      $fn_head1, $fn_tail1, $decl_lines1,
                      $patterns_in, $patterns_out1)
         !fc_premises($rule_name, $next_clause_num1, $next_clause_num,
-                     $require, $break_true,
+                     $require, $break_true, True,
                      $fn_head2, $fn_tail2, $decl_lines2,
                      $patterns_out1, $patterns_out)
         $fn_head = ("forall%d_worked = True" % $start_lineno,
@@ -215,7 +234,7 @@ fc_forall_require
 
 fc_python_premise
     use fc_premise($rule_name, $clause_num, $clause_num,
-                   $python_premise, $break_cond,
+                   $python_premise, $break_cond, $_,
                    $fn_head, $fn_tail, (),
                    $patterns_in, $patterns_out)
     when
