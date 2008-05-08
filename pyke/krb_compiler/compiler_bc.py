@@ -1300,6 +1300,68 @@ def bc_forall_require(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
+def bc_notany(rule, arg_patterns, arg_context):
+  engine = rule.rule_base.engine
+  patterns = rule.goal_arg_patterns()
+  if len(arg_patterns) == len(patterns):
+    context = contexts.bc_context(rule)
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
+        mark1 = context.mark(True)
+        if rule.pattern(0).match_data(context, context,
+                "notany%d_worked" % context.lookup_data('clause_num')):
+          context.end_save_all_undo()
+          mark2 = context.mark(True)
+          if rule.pattern(1).match_data(context, context,
+                  "not notany%d_worked" % context.lookup_data('clause_num')):
+            context.end_save_all_undo()
+            flag_3 = False
+            for x_3 in engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                                    (rule.pattern(2),
+                                     rule.pattern(3),
+                                     rule.pattern(4),
+                                     rule.pattern(5),
+                                     rule.pattern(6),
+                                     rule.pattern(1),
+                                     rule.pattern(7),
+                                     rule.pattern(8),
+                                     rule.pattern(9),
+                                     rule.pattern(10),
+                                     rule.pattern(11),
+                                     rule.pattern(12),
+                                     rule.pattern(13),
+                                     rule.pattern(14),)):
+              flag_3 = True
+              assert x_3 is None, \
+                "compiler.bc_notany: got unexpected plan from when clause 3"
+              mark4 = context.mark(True)
+              if rule.pattern(15).match_data(context, context,
+                      ("notany%d_worked = True" % context.lookup_data('clause_num'),
+                     context.lookup_data('fn_head1'),
+                     "notany%d_worked = False" % context.lookup_data('clause_num'),
+                     context.lookup_data('fn_tail1'),
+                     "if notany%d_worked:" % context.lookup_data('clause_num'),
+                     ("INDENT", 2))        ):
+                context.end_save_all_undo()
+                rule.rule_base.num_bc_rule_successes += 1
+                yield
+              else: context.end_save_all_undo()
+              context.undo_to_mark(mark4)
+            if not flag_3:
+              raise AssertionError("compiler.bc_notany: 'when' clause 3 failed")
+          else: context.end_save_all_undo()
+          context.undo_to_mark(mark2)
+        else: context.end_save_all_undo()
+        context.undo_to_mark(mark1)
+        rule.rule_base.num_bc_rule_failures += 1
+    finally:
+      context.done()
+
 def no_plan(rule, arg_patterns, arg_context):
   engine = rule.rule_base.engine
   patterns = rule.goal_arg_patterns()
@@ -1539,75 +1601,6 @@ def required(rule, arg_patterns, arg_context):
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
-        rule.rule_base.num_bc_rule_failures += 1
-    finally:
-      context.done()
-
-def bc_notany_premise(rule, arg_patterns, arg_context):
-  engine = rule.rule_base.engine
-  patterns = rule.goal_arg_patterns()
-  if len(arg_patterns) == len(patterns):
-    context = contexts.bc_context(rule)
-    try:
-      if all(itertools.imap(lambda pat, arg:
-                              pat.match_pattern(context, context,
-                                                arg, arg_context),
-                            patterns,
-                            arg_patterns)):
-        rule.rule_base.num_bc_rules_matched += 1
-        flag_1 = False
-        for x_1 in engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),
-                                 rule.pattern(5),
-                                 rule.pattern(6),
-                                 rule.pattern(7),
-                                 rule.pattern(8),
-                                 rule.pattern(9),
-                                 rule.pattern(10),)):
-          flag_1 = True
-          assert x_1 is None, \
-            "compiler.bc_notany_premise: got unexpected plan from when clause 1"
-          mark2 = context.mark(True)
-          if rule.pattern(11).match_data(context, context,
-                  ("def notany_%d(rule, context):" % context.lookup_data('clause_num'),
-                 ('INDENT', 2))):
-            context.end_save_all_undo()
-            mark3 = context.mark(True)
-            if rule.pattern(12).match_data(context, context,
-                    ("POPINDENT",
-                   "mark%d = context.mark(True)" % context.lookup_data('clause_num'),
-                   "for x_%d in notany_%d(rule, context): " % (context.lookup_data('clause_num'), context.lookup_data('clause_num')),
-                   ('INDENT', 2),
-                   "context.undo_to_mark(mark%d)" % context.lookup_data('clause_num'),
-                   "break",
-                   "POPINDENT",
-                   "else:",
-                   ('INDENT', 2))):
-              context.end_save_all_undo()
-              mark4 = context.mark(True)
-              if rule.pattern(13).match_data(context, context,
-                      context.lookup_data('fn_head_begin') + context.lookup_data('prem_fn_head') + ("yield",) + context.lookup_data('prem_fn_tail') + context.lookup_data('fn_head_end')):
-                context.end_save_all_undo()
-                mark5 = context.mark(True)
-                if rule.pattern(14).match_data(context, context,
-                        ("POPINDENT",)):
-                  context.end_save_all_undo()
-                  rule.rule_base.num_bc_rule_successes += 1
-                  yield
-                else: context.end_save_all_undo()
-                context.undo_to_mark(mark5)
-              else: context.end_save_all_undo()
-              context.undo_to_mark(mark4)
-            else: context.end_save_all_undo()
-            context.undo_to_mark(mark3)
-          else: context.end_save_all_undo()
-          context.undo_to_mark(mark2)
-        if not flag_1:
-          raise AssertionError("compiler.bc_notany_premise: 'when' clause 1 failed")
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -2366,6 +2359,40 @@ def populate(engine):
                    contexts.variable('fn_tail2'),
                    contexts.variable('fn_head'),))
   
+  bc_rule.bc_rule('bc_notany', This_rule_base, 'bc_premise',
+                  bc_notany, None,
+                  (contexts.variable('rb_name'),
+                   contexts.variable('rule_name'),
+                   contexts.variable('clause_num'),
+                   contexts.variable('next_clause_num'),
+                   pattern.pattern_tuple((pattern.pattern_literal('bc_notany'), contexts.variable('bc_premises'),), None),
+                   contexts.anonymous(),
+                   contexts.anonymous(),
+                   contexts.variable('patterns_in'),
+                   contexts.variable('patterns_out'),
+                   contexts.variable('plan_var_in'),
+                   contexts.variable('plan_var_out'),
+                   pattern.pattern_literal(()),
+                   contexts.variable('fn_head'),
+                   pattern.pattern_literal(("POPINDENT",)),),
+                  (),
+                  (contexts.variable('break_true'),
+                   contexts.variable('break_false'),
+                   contexts.variable('rb_name'),
+                   contexts.variable('rule_name'),
+                   contexts.variable('clause_num'),
+                   contexts.variable('next_clause_num'),
+                   contexts.variable('bc_premises'),
+                   pattern.pattern_literal(False),
+                   contexts.variable('patterns_in'),
+                   contexts.variable('patterns_out'),
+                   contexts.variable('plan_var_in'),
+                   contexts.variable('plan_var_out'),
+                   pattern.pattern_literal(()),
+                   contexts.variable('fn_head1'),
+                   contexts.variable('fn_tail1'),
+                   contexts.variable('fn_head'),))
+  
   bc_rule.bc_rule('no_plan', This_rule_base, 'gen_plan_lines',
                   no_plan, None,
                   (contexts.variable('rb_name'),
@@ -2484,36 +2511,6 @@ def populate(engine):
                   (contexts.variable('fn_head'),
                    contexts.variable('fn_tail'),))
   
-  bc_rule.bc_rule('bc_notany_premise', This_rule_base, 'bc_premise',
-                  bc_notany_premise, None,
-                  (contexts.variable('rb_name'),
-                   contexts.variable('rule_name'),
-                   contexts.variable('clause_num'),
-                   pattern.pattern_tuple((pattern.pattern_literal('bc_notany'), contexts.variable('bc_premises'),), None),
-                   contexts.variable('patterns_in'),
-                   contexts.variable('patterns_out'),
-                   contexts.variable('plan_var_in'),
-                   contexts.variable('plan_var_out'),
-                   contexts.variable('plan_lines'),
-                   contexts.variable('fn_head'),
-                   contexts.variable('fn_tail'),),
-                  (),
-                  (contexts.variable('rb_name'),
-                   contexts.variable('rule_name'),
-                   pattern.pattern_literal(1),
-                   contexts.variable('bc_premises'),
-                   contexts.variable('patterns_in'),
-                   contexts.variable('patterns_out'),
-                   contexts.variable('plan_var_in'),
-                   contexts.variable('plan_var_out'),
-                   contexts.variable('plan_lines'),
-                   contexts.variable('prem_fn_head'),
-                   contexts.variable('prem_fn_tail'),
-                   contexts.variable('fn_head_begin'),
-                   contexts.variable('fn_head_end'),
-                   contexts.variable('fn_head'),
-                   contexts.variable('fn_tail'),))
-  
   bc_rule.bc_rule('bc_python_premise', This_rule_base, 'bc_premise',
                   bc_python_premise, None,
                   (contexts.variable('rb_name'),
@@ -2584,7 +2581,7 @@ def populate(engine):
                    contexts.variable('fn_head'),))
 
 from pyke.krb_compiler import helpers
-Krb_filename = '/home/bruce/python/workareas/sf.trunk/pyke/krb_compiler/compiler.krb'
+Krb_filename = 'D:\Projekte\Pyke\trunk\pyke\krb_compiler\compiler.krb'
 Krb_lineno_map = (
     ((12, 16), (24, 28)),
     ((20, 20), (30, 30)),
@@ -2683,43 +2680,42 @@ Krb_lineno_map = (
     ((1236, 1253), (429, 433)),
     ((1255, 1272), (434, 438)),
     ((1275, 1285), (439, 449)),
-    ((1309, 1313), (452, 454)),
-    ((1317, 1324), (456, 463)),
-    ((1340, 1344), (466, 470)),
-    ((1348, 1350), (472, 474)),
-    ((1353, 1363), (475, 476)),
-    ((1380, 1384), (479, 484)),
-    ((1388, 1390), (486, 488)),
-    ((1393, 1403), (489, 490)),
-    ((1420, 1424), (493, 495)),
-    ((1428, 1429), (497, 498)),
-    ((1445, 1449), (501, 502)),
-    ((1453, 1473), (504, 524)),
-    ((1477, 1477), (525, 525)),
-    ((1495, 1499), (528, 529)),
-    ((1513, 1517), (532, 533)),
-    ((1521, 1524), (535, 538)),
-    ((1528, 1534), (539, 545)),
-    ((1552, 1556), (548, 552)),
-    ((1559, 1573), (555, 559)),
-    ((1576, 1577), (561, 562)),
-    ((1581, 1589), (564, 572)),
-    ((1593, 1593), (574, 574)),
-    ((1597, 1597), (575, 575)),
-    ((1621, 1625), (578, 582)),
-    ((1629, 1629), (584, 584)),
-    ((1631, 1640), (585, 587)),
-    ((1655, 1659), (590, 594)),
-    ((1663, 1664), (596, 597)),
-    ((1668, 1668), (598, 598)),
-    ((1672, 1682), (599, 609)),
-    ((1686, 1688), (610, 612)),
-    ((1710, 1714), (615, 619)),
-    ((1718, 1719), (621, 622)),
-    ((1723, 1723), (623, 623)),
-    ((1727, 1739), (624, 636)),
-    ((1743, 1752), (637, 646)),
-    ((1774, 1778), (649, 654)),
-    ((1782, 1782), (656, 656)),
-    ((1786, 1793), (657, 664)),
+    ((1309, 1313), (452, 456)),
+    ((1317, 1317), (459, 459)),
+    ((1321, 1321), (460, 460)),
+    ((1324, 1341), (461, 465)),
+    ((1344, 1349), (466, 471)),
+    ((1371, 1375), (474, 476)),
+    ((1379, 1386), (478, 485)),
+    ((1402, 1406), (488, 492)),
+    ((1410, 1412), (494, 496)),
+    ((1415, 1425), (497, 498)),
+    ((1442, 1446), (501, 506)),
+    ((1450, 1452), (508, 510)),
+    ((1455, 1465), (511, 512)),
+    ((1482, 1486), (515, 517)),
+    ((1490, 1491), (519, 520)),
+    ((1507, 1511), (523, 524)),
+    ((1515, 1535), (526, 546)),
+    ((1539, 1539), (547, 547)),
+    ((1557, 1561), (550, 551)),
+    ((1575, 1579), (554, 555)),
+    ((1583, 1586), (557, 560)),
+    ((1590, 1596), (561, 567)),
+    ((1614, 1618), (570, 574)),
+    ((1622, 1622), (576, 576)),
+    ((1624, 1633), (577, 579)),
+    ((1648, 1652), (582, 586)),
+    ((1656, 1657), (588, 589)),
+    ((1661, 1661), (590, 590)),
+    ((1665, 1675), (591, 601)),
+    ((1679, 1681), (602, 604)),
+    ((1703, 1707), (607, 611)),
+    ((1711, 1712), (613, 614)),
+    ((1716, 1716), (615, 615)),
+    ((1720, 1732), (616, 628)),
+    ((1736, 1745), (629, 638)),
+    ((1767, 1771), (641, 646)),
+    ((1775, 1775), (648, 648)),
+    ((1779, 1786), (649, 656)),
 )
