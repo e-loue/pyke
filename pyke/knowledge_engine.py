@@ -133,6 +133,10 @@ class engine(object):
     def prove_n(self, kb_name, entity_name, fixed_args, num_returns):
         ''' Generates: a tuple of len == num_returns, and a plan (or None).
         '''
+        if isinstance(fixed_args, types.StringTypes):
+            raise TypeError("engine.prove_n: fixed_args must not be a string, "
+                            "did you forget a , (%(arg)s) => (%(arg)s,)?" %
+                            {'arg': repr(fixed_args)})
         context = contexts.simple_context()
         vars = self._Variables[:num_returns]
         try:

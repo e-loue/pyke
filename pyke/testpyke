@@ -9,6 +9,7 @@
 # exit status > 0 if errors found.
 
 ERRORFILES="/tmp/testpyke.$$"
+TMPFILE="/tmp/testpyke2.$$"
 
 > $ERRORFILES
 NUM_ERRORS=0
@@ -30,12 +31,20 @@ then
     rm -rf compiled_krb
     if python2.5 -c "from pyke import krb_compiler; krb_compiler.compile('.', 'compiled_krb', ('compiler.krb',))"
     then
-        if diff -q compiler_bc.py compiled_krb/compiler_bc.py
+        # Ignore differences in Krb_filename from being compiled on different
+        # boxes...
+        diff compiler_bc.py compiled_krb/compiler_bc.py |
+            sed '
+                /^[0-9]*c[0-9]*$/d
+                /^---$/d
+                /^[<>] Krb_filename = /d
+            ' > $TMPFILE
+        if [ -s $TMPFILE ]
         then
-            rm -rf compiled_krb
-        else
             echo "krb_compiler/compiler.krb not compiled!" >> $ERRORFILES
             NUM_ERRORS=$(($NUM_ERRORS + 1))
+        else
+            rm -rf compiled_krb
         fi
     else
         echo "krb_compiler/compiler.krb" >> $ERRORFILES

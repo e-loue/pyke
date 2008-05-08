@@ -13,9 +13,9 @@ def init(engine):
     add_fact('son_of', 'egon', 'anton', 'brigitte')
     add_fact('son_of', 'ralf', 'anton', 'brigitte')
     add_fact('son_of', 'anton', 'johann', 'maria')
-    add_fact('daugther_of', 'elisabeth', 'johann', 'maria')    
-    add_fact('daugther_of', 'karin', 'karl', 'margit')
-    add_fact('daugther_of', 'sabine', 'karl', 'margit')
+    add_fact('daughter_of', 'elisabeth', 'johann', 'maria')    
+    add_fact('daughter_of', 'karin', 'karl', 'margit')
+    add_fact('daughter_of', 'sabine', 'karl', 'margit')
 
 init(engine)
 
@@ -38,8 +38,9 @@ def bc_test():
         # in engine.prove_n('bc_notany', 'siblings', (), 4):
         #    print "siblings:", sibling1, sibling2
 
+        #engine.trace('bc_notany', 'sister_brother')
         for (sibling, gender1, gender2 ), plan \
-         in engine.prove_n('bc_notany', 'siblings', ('anton'), 3):
+         in engine.prove_n('bc_notany', 'siblings', ('anton',), 3):
             print "siblings:", 'anton', sibling
            
         for (child,), plan \

@@ -32,7 +32,7 @@ else
     cat $ERRORFILES
     if [ $# -gt 0 ]
     then
-        sed 's,^,examples/,' $ERRORFILES >> "$1"
+        sed 's,^\./,examples/,' $ERRORFILES >> "$1"
     fi
     rm -f $ERRORFILES
     exit $NUM_ERRORS
