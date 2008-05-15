@@ -232,6 +232,25 @@ fc_forall_require
                     ("INDENT", 2))
         $decl_lines = $decl_lines1 + $decl_lines2
 
+fc_notany
+    use fc_premise($rule_name, $clause_num, $next_clause_num,
+                   (fc_notany, $premises, $start_lineno), $_, $_,
+                   $fn_head, ("POPINDENT",), $decl_lines,
+                   $patterns_in, $patterns_out)
+    when
+        $break_true = "notany%d_worked" % $start_lineno
+        $break_false = "not notany%d_worked" % $start_lineno
+        !fc_premises($rule_name, $clause_num, $next_clause_num,  
+                     $premises, $break_false, True, 
+                     $fn_head1, $fn_tail1, $decl_lines,
+                     $patterns_in, $patterns_out)
+        $fn_head = ("notany%d_worked = True" % $start_lineno,
+                    $fn_head1,
+                    "notany%d_worked = False" % $start_lineno,
+                    $fn_tail1,
+                    "if notany%d_worked:" % $start_lineno,
+                    ("INDENT", 2))
+
 fc_python_premise
     use fc_premise($rule_name, $clause_num, $clause_num,
                    $python_premise, $break_cond, $_,
@@ -419,13 +438,13 @@ bc_forall_None
 
 bc_forall_require
     use bc_premise($rb_name, $rule_name, $clause_num, $next_clause_num,
-                   (bc_forall, $premises1, $require, $_, $_),
+                   (bc_forall, $premises1, $require, $start_lineno, $_),
                    $_, $_, $patterns_in, $patterns_out,
                    $plan_var_names_in, $plan_var_names_out,
                    (), $fn_head, ("POPINDENT",))
     when
-        $break_true = "forall%d_worked" % $clause_num
-        $break_false = "not forall%d_worked" % $clause_num
+        $break_true = "forall%d_worked" % $start_lineno
+        $break_false = "not forall%d_worked" % $start_lineno
         !bc_premises1($rb_name, $rule_name, $clause_num, $next_clause_num1,
                       $premises1, $break_false, False,
                       $patterns_in, $patterns_out1,
@@ -436,38 +455,38 @@ bc_forall_require
                       $patterns_out1, $patterns_out,
                       $plan_var_names_out1, $plan_var_names_out,
                       (), $fn_head2, $fn_tail2)
-        $fn_head = ("forall%d_worked = True" % $clause_num,
+        $fn_head = ("forall%d_worked = True" % $start_lineno,
                     $fn_head1,
-                    "forall%d_worked = False" % $clause_num,
+                    "forall%d_worked = False" % $start_lineno,
                     $fn_head2,
                     ('INDENT', 2),
-                    "forall%d_worked = True" % $clause_num,
+                    "forall%d_worked = True" % $start_lineno,
                     'POPINDENT',
                     $fn_tail2,
                     $fn_tail1,
-                    "if forall%d_worked:" % $clause_num,
+                    "if forall%d_worked:" % $start_lineno,
                     ("INDENT", 2))
 
 bc_notany
     use bc_premise($rb_name, $rule_name, $clause_num, $next_clause_num,
-                   (bc_notany, $bc_premises),
+                   (bc_notany, $bc_premises, $start_lineno),
                    $_, $_, $patterns_in, $patterns_out,
                    $plan_var_in, $plan_var_out,
                    (), $fn_head, ("POPINDENT",))
 
     when
-        $break_true = "notany%d_worked" % $clause_num
-        $break_false = "not notany%d_worked" % $clause_num
+        $break_true = "notany%d_worked" % $start_lineno
+        $break_false = "not notany%d_worked" % $start_lineno
         !bc_premises1($rb_name, $rule_name, $clause_num, $next_clause_num,  
                       $bc_premises, $break_false, False, 
                       $patterns_in, $patterns_out,
                       $plan_var_in, $plan_var_out, 
                       (), $fn_head1, $fn_tail1)
-        $fn_head = ("notany%d_worked = True" % $clause_num,
+        $fn_head = ("notany%d_worked = True" % $start_lineno,
                     $fn_head1,
-                    "notany%d_worked = False" % $clause_num,
+                    "notany%d_worked = False" % $start_lineno,
                     $fn_tail1,
-                    "if notany%d_worked:" % $clause_num,
+                    "if notany%d_worked:" % $start_lineno,
                     ("INDENT", 2))        
         
 no_plan

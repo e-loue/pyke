@@ -49,7 +49,7 @@ no_uncle_1
 no_uncle_2
 	use child_with_no_uncle($child)
 	when
-		family.daugther_of($child, $father, $mother)
+		family.daughter_of($child, $father, $mother)
 		notany
 			siblings($father, $uncle1, $gender, $_)
 			check $gender == 'brother'
@@ -71,7 +71,7 @@ no_aunt_1
 no_aunt_2
 	use child_with_no_aunt($child)
 	when
-		family.daugther_of($child, $father, $mother)
+		family.daughter_of($child, $father, $mother)
 		notany
 			siblings($father, $aunt1, $gender, $_)
 			check $gender == 'sister'

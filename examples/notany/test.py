@@ -19,15 +19,13 @@ def init(engine):
 
 init(engine)
 
-'''
 def test():
     engine.reset()
     try:
-        engine.activate('fc_notnay')
+        engine.activate('fc_notany')
     except:
         krb_traceback.print_exc()
         sys.exit(1)
-'''
 
 def bc_test():
     engine.reset()
@@ -37,12 +35,7 @@ def bc_test():
         #for (sibling1, sibling2, gender1, gender2 ), plan \
         # in engine.prove_n('bc_notany', 'siblings', (), 4):
         #    print "siblings:", sibling1, sibling2
-
-        #engine.trace('bc_notany', 'sister_brother')
-        for (sibling, gender1, gender2 ), plan \
-         in engine.prove_n('bc_notany', 'siblings', ('anton',), 3):
-            print "siblings:", 'anton', sibling
-           
+  
         for (child,), plan \
          in engine.prove_n('bc_notany', 'child_with_no_aunt', (), 1):
             print child, "has no aunt"

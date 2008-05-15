@@ -132,6 +132,11 @@ def p_fc_premise(p):
     '''
     p[0] = ('fc_premise', p[1], p[3], tuple(p[5]), p.lineno(1), p.lineno(6))
 
+def p_fc_notany(p):
+    ''' fc_premise : NOTANY_TOK nls INDENT_TOK fc_premises DEINDENT_TOK
+    '''
+    p[0] = ('fc_notany', tuple(p[4]), p.lineno(1))
+
 def p_fc_forall(p):
     ''' fc_premise : FORALL_TOK nls INDENT_TOK fc_premises DEINDENT_TOK fc_require_opt
     '''
@@ -235,7 +240,7 @@ def p_bc_premise4(p):
 def p_bc_notany(p):
     ''' bc_premise : NOTANY_TOK nls INDENT_TOK bc_premises DEINDENT_TOK
     '''
-    p[0] = ('bc_notany', tuple(p[4]))
+    p[0] = ('bc_notany', tuple(p[4]), p.lineno(1))
 
 def p_bc_forall(p):
     ''' bc_premise : FORALL_TOK nls INDENT_TOK bc_premises DEINDENT_TOK bc_require_opt
