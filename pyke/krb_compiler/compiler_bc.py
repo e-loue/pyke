@@ -1854,6 +1854,24 @@ def python_check(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
+def python_block(rule, arg_patterns, arg_context):
+  engine = rule.rule_base.engine
+  patterns = rule.goal_arg_patterns()
+  if len(arg_patterns) == len(patterns):
+    context = contexts.bc_context(rule)
+    try:
+      if all(itertools.imap(lambda pat, arg:
+                              pat.match_pattern(context, context,
+                                                arg, arg_context),
+                            patterns,
+                            arg_patterns)):
+        rule.rule_base.num_bc_rules_matched += 1
+        rule.rule_base.num_bc_rule_successes += 1
+        yield
+        rule.rule_base.num_bc_rule_failures += 1
+    finally:
+      context.done()
+
 def populate(engine):
   This_rule_base = engine.get_create('compiler')
   
@@ -2666,6 +2684,18 @@ def populate(engine):
                   (),
                   (contexts.variable('python_code2'),
                    contexts.variable('fn_head'),))
+  
+  bc_rule.bc_rule('python_block', This_rule_base, 'python_premise',
+                  python_block, None,
+                  (contexts.variable('clause_num'),
+                   pattern.pattern_tuple((pattern.pattern_literal('python_block'), pattern.pattern_tuple((contexts.variable('python_code'), contexts.anonymous(), contexts.anonymous(), contexts.anonymous(),), None), contexts.variable('start_lineno'), contexts.variable('end_lineno'),), None),
+                   contexts.anonymous(),
+                   contexts.variable('patterns_in'),
+                   contexts.variable('patterns_in'),
+                   pattern.pattern_tuple((pattern.pattern_tuple((pattern.pattern_literal('STARTING_LINENO'), contexts.variable('start_lineno'),), None), contexts.variable('python_code'), pattern.pattern_tuple((pattern.pattern_literal('ENDING_LINENO'), contexts.variable('end_lineno'),), None),), None),
+                   pattern.pattern_literal(()),),
+                  (),
+                  ())
 
 from pyke.krb_compiler import helpers
 Krb_filename = 'D:\Projekte\Pyke\trunk\pyke\krb_compiler\compiler.krb'
@@ -2810,4 +2840,5 @@ Krb_lineno_map = (
     ((1826, 1830), (660, 665)),
     ((1834, 1834), (667, 667)),
     ((1838, 1845), (668, 675)),
+    ((1863, 1867), (678, 686)),
 )

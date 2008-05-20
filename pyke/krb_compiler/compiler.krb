@@ -674,5 +674,16 @@ python_check
                     ('INDENT', 2),
                    )
 
+python_block
+    use python_premise($clause_num,
+                       (python_block, ($python_code, $_, $_, $_),
+                        $start_lineno, $end_lineno),
+                       $_,
+                       $patterns_in, $patterns_in,
+                       (('STARTING_LINENO', $start_lineno),
+                        $python_code,
+                        ('ENDING_LINENO', $end_lineno)),
+                       ())
+    
 bc_extras
     from pyke.krb_compiler import helpers

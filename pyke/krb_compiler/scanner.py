@@ -164,9 +164,10 @@ def t_checknl_other(t):
 
 def start_code(plan_name = None, multiline = False,
                var_format = "(context['%s'])"):
-    global current_line, code, current_plan_name, code_indent_level
+    global current_line, code, current_plan_name, code__level
     global pattern_var_format, plan_vars_needed, code_nesting_level
     global code_lineno, code_lexpos
+    global code_indent_level
     pattern_var_format = var_format
     plan_vars_needed = []
     current_line = ''

@@ -162,6 +162,16 @@ def p_python_check(p):
     '''
     p[0] = ('python_check', p[3], p.lineno(2), p.linespan(3)[1])
 
+def p_python_block_n(p):
+    ''' python_premise : check_nl PYTHON_TOK nls start_python_assertion INDENT_TOK python_rule_code nls DEINDENT_TOK
+    '''
+    p[0] = ('python_block', p[6], p.lineno(2), p.linespan(6)[1])
+
+def p_python_block_1(p):
+    ''' python_premise : check_nl PYTHON_TOK start_python_code NOT_NL_TOK python_rule_code nls
+    '''
+    p[0] = ('python_block', p[5], p.lineno(2), p.linespan(5)[1])
+
 def p_assertion(p):
     ''' assertion : IDENTIFIER_TOK '.' IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK NL_TOK
     '''

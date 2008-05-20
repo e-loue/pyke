@@ -1,0 +1,45 @@
+# bc_findall.krb
+
+collect_siblings
+    use siblings_of($child, $siblings)
+    when
+        family.child_of($child, $father, $mother)
+        python siblings = []
+        forall
+            family.child_of($sibling, $father, $mother)
+            check $sibling != $child
+            python siblings.append($sibling)
+        $siblings = tuple(siblings)
+
+collect_cousins
+    use cousins_of($child, $cousins)
+    when
+        family.child_of($child, $father, $mother)
+
+        python cousins = []
+        forall
+            siblings_of($father, $father_siblings)            
+            forall
+                $father_sibling in $father_siblings
+                family.child_of($cousin, $father_sibling, $_)
+                python cousins.append($cousin)
+
+            forall
+                $father_sibling in $father_siblings
+                family.child_of($cousin, $_, $father_sibling)
+                python cousins.append($cousin)
+        
+        forall
+            siblings_of($mother, $mother_siblings)
+
+            forall
+                $mother_sibling in $mother_siblings
+                family.child_of($cousin, $_, $mother_sibling)
+                python cousins.append($cousin)
+
+            forall
+                $mother_sibling in $mother_siblings
+                family.child_of($cousin, $mother_sibling, $_)
+                python cousins.append($cousin)
+        
+        $cousins = tuple(cousins)
