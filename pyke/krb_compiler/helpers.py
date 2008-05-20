@@ -21,11 +21,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import pyke
+
 def fc_head(rb_name):
     return (
         "# %s_fc.py" % rb_name,
         "",
         "from pyke import contexts, pattern, fc_rule",
+        "",
+        "version = %s" % repr(pyke.version)
     )
 
 def bc_head(rb_name):
@@ -34,6 +38,15 @@ def bc_head(rb_name):
         "",
         "import itertools",
         "from pyke import contexts, pattern, bc_rule",
+        "",
+        "version = %s" % repr(pyke.version)
+    )
+
+def plan_head(rb_name):
+    return (
+        "# %s_plans.py" % rb_name,
+        "",
+        "version = %s" % repr(pyke.version)
     )
 
 def goal(rb_name, rule_name,

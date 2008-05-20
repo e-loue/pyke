@@ -62,73 +62,75 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="logic-tricks">
 <h1 class="title">Logic Tricks</h1>
-<p>This describes how to accomplish different logic operations with rules.</p>
+<p>This describes how to accomplish different logic operations with <a class="reference" href="overview/rules/index.html">rules</a>.</p>
 <div class="section">
-<h1><a id="x-or-y" name="x-or-y">X OR Y</a></h1>
+<h2><a id="x-or-y" name="x-or-y">X OR Y</a></h2>
 <p>For example: check for text_x($arg) OR test_y($arg).</p>
 <p>Create a separate subgoal for the OR case, let's call it <tt class="docutils literal"><span class="pre">or_goal</span></tt>.  Then use
-a separate rule for each OR clause:</p>
+a separate <a class="reference" href="overview/rules/index.html">rule</a> for each OR clause:</p>
 <pre class="literal-block">
-or_goal_test_x:
+or_goal_test_x
     use or_goal($arg)
     when
         test_x($arg)
 
-or_goal_test_y:
+or_goal_test_y
     use or_goal($arg)
     when
         test_y($arg)
 </pre>
 <p>Then you'd use <tt class="docutils literal"><span class="pre">or_goal($arg)</span></tt> where you wanted the <em>OR</em> clause.</p>
-<p>This can go on for any number of OR-ed clauses by just adding more rules for
+<p>This can go on for any number of OR-ed clauses by just adding more <a class="reference" href="overview/rules/index.html">rules</a> for
 <tt class="docutils literal"><span class="pre">or_goal</span></tt>.</p>
 </div>
 <div class="section">
-<h1><a id="if-x-then-y" name="if-x-then-y">IF X THEN Y</a></h1>
+<h2><a id="if-x-then-y" name="if-x-then-y">IF X THEN Y</a></h2>
 <p>For example: if test_x($arg) then test_y($arg).</p>
 <p>What this means is that test_y($arg) must be true if test_x($arg) is true.
-But if test_x($arg) is not true, then test_y($arg) doesn't matter and <tt class="docutils literal"><span class="pre">if</span>
+But if test_x($arg) is not true, then test_y($arg) doesn't matter so <tt class="docutils literal"><span class="pre">if</span>
 <span class="pre">test_x($arg)</span> <span class="pre">then</span> <span class="pre">test_y($arg)</span></tt> is true.</p>
-<p>Create a new subgoal, let's call it <tt class="docutils literal"><span class="pre">if_x_then_y</span></tt>.  Use two rules:</p>
+<p>Create a new subgoal, let's call it <tt class="docutils literal"><span class="pre">if_x_then_y</span></tt>.  Use two <a class="reference" href="overview/rules/index.html">rules</a>:</p>
 <pre class="literal-block">
-if_x_then_y_if:
+if_x_then_y_if
     use if_x_then_y($arg)
     when
         test_x($arg)            # if this fails, the next rule will be used
         special.claim_goal()    # don't use any other rules for if_x_then_y
         test_y($arg)            # if this fails, the next rule will not be used, so if_x_then_y will fail.
 
-if_x_then_y_else:
+if_x_then_y_else
     use if_x_then_y($_)         # this rule is only used if test_x($arg) fails
 </pre>
 </div>
 <div class="section">
-<h1><a id="not-x" name="not-x">NOT X</a></h1>
+<h2><a id="not-x" name="not-x">NOT X</a></h2>
 <p>For example: not test_x($arg)</p>
 <p>You have to be careful about <em>not</em> logic because it can mean different things.
 In this example, if we try <tt class="docutils literal"><span class="pre">not</span> <span class="pre">test_x($arg)</span></tt> and <tt class="docutils literal"><span class="pre">$arg</span></tt> is unbound what
 should happen?  Should it generate all of the different values for <tt class="docutils literal"><span class="pre">$arg</span></tt>
-for which <tt class="docutils literal"><span class="pre">test_x($arg)</span></tt> fails?  This generally isn't very practical!</p>
+for which <tt class="docutils literal"><span class="pre">test_x($arg)</span></tt> fails?  This generally isn't very practical
+computationally!</p>
 <p>The other interpretation is that there is <strong>no</strong> possible binding for <tt class="docutils literal"><span class="pre">$arg</span></tt>
 that makes <tt class="docutils literal"><span class="pre">test_x($arg)</span></tt> true.  In this example, <tt class="docutils literal"><span class="pre">not</span> <span class="pre">test_x($arg)</span></tt> would
 then be false, because there is some <tt class="docutils literal"><span class="pre">$arg</span></tt> value that makes <tt class="docutils literal"><span class="pre">test_x($arg)</span></tt>
 true.</p>
-<p>This second interpretation can be implemented by creating a new subgoal, let's
-say <tt class="docutils literal"><span class="pre">not_test_x</span></tt> and using a pair of rules:</p>
+<p>This second interpretation can be done using the <a class="reference" href="krb_syntax/bc_rule.html#notany">notany</a> clause.  This can
+be used in both <a class="reference" href="overview/rules/forward_chaining.html">forward chaining</a> and <a class="reference" href="overview/rules/backward_chaining.html">backward chaining</a> <a class="reference" href="overview/rules/index.html">rules</a>:</p>
 <pre class="literal-block">
-not_test_x_fail:
-    use not_test_x($arg)
+your_rule
+    use your_goal($arg)
     when
-        test_x($arg)            # if there is any way for test_x($arg) to be true
-        special.claim_goal()    # don't use any other rules for not_test_x
-        check False             # and cause this rule to fail, which causes the not_test_x goal to fail
-
-not_test_x_success:
-    use not_test_x($_)          # this rule only runs if test_x($arg) fails, above
+        ..
+        notany
+            test_x($arg)
+        ..
 </pre>
+<p>Note that <a class="reference" href="krb_syntax/bc_rule.html#notany">notany</a> will only temporarily bind <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a> while it
+runs, but not leave any of these bindings in place (for the following premise)
+after it's finished.  <a class="reference" href="krb_syntax/bc_rule.html#notany">Notany</a> always fails on <a class="reference" href="overview/rules/backward_chaining.html#backtracking">backtracking</a>.</p>
 </div>
 <div class="section">
-<h1><a id="exists-x-such-that-y" name="exists-x-such-that-y">EXISTS X SUCH THAT Y</a></h1>
+<h2><a id="exists-x-such-that-y" name="exists-x-such-that-y">EXISTS X SUCH THAT Y</a></h2>
 <p>For example: there exists a <tt class="docutils literal"><span class="pre">$x</span></tt> from <tt class="docutils literal"><span class="pre">generate_x($x)</span></tt>, where
 <tt class="docutils literal"><span class="pre">test_y($x)</span></tt> is true.</p>
 <p>This doesn't require a new subgoal.  You can just use the following two
@@ -139,37 +141,73 @@ test_y($x)          # if this fails, it will backtrack and try the next value fr
 </pre>
 </div>
 <div class="section">
-<h1><a id="for-all-x-y" name="for-all-x-y">FOR ALL X, Y</a></h1>
-<p>For example: for all $x from generate_x($x), test_y($x) is true</p>
-<p>Rethink this as a combination of two negatives on <tt class="docutils literal"><span class="pre">exists</span></tt>, above: there
-does <em>not</em> <tt class="docutils literal"><span class="pre">exist</span></tt> an <tt class="docutils literal"><span class="pre">$x</span></tt> from <tt class="docutils literal"><span class="pre">generate_x($x)</span></tt> where <tt class="docutils literal"><span class="pre">test_y($x)</span></tt> is
-<em>not</em> true.  Then combine the <tt class="docutils literal"><span class="pre">not</span></tt> trick with the <tt class="docutils literal"><span class="pre">exists</span></tt> trick.
-This needs a new subgoal, we'll call it <tt class="docutils literal"><span class="pre">for_all_x</span></tt>:</p>
+<h2><a id="for-all-x-y" name="for-all-x-y">FOR ALL X, Y</a></h2>
+<div class="section">
+<h3><a id="for-all-x-y-succeeds" name="for-all-x-y-succeeds">FOR ALL X, Y succeeds</a></h3>
+<p>For example: for all $x from generate_x($x); test_y($x) succeeds</p>
+<p>Use the <a class="reference" href="krb_syntax/bc_rule.html#forall">forall</a> clause:</p>
 <pre class="literal-block">
-for_all_x_failure:
-    use for_all_x()
-    when
-        generate_x($x)          # these two lines are the exists trick
-        not_test_y($x)
-        special.claim_goal()    # don't use any other rules for for_all_x
-        check False             # and cause this rule to fail, which causes the for_all_x goal to fail
-
-for_all_x_success:
-    use for_all_x()             # we only make it here if all generated $x values have test_y($x) true
+forall
+    generate_x($x)
+require
+    test_y($x)
 </pre>
-<p>Then you also need to create rules for the <tt class="docutils literal"><span class="pre">not_test_y</span></tt> goal using the
-<tt class="docutils literal"><span class="pre">not</span></tt> trick, above:</p>
+<p>Note that all <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a> bound in the <a class="reference" href="krb_syntax/bc_rule.html#forall">forall</a> clause are unbound
+before the premise following the <a class="reference" href="krb_syntax/bc_rule.html#forall">forall</a> is run.  In this example, this
+means that <tt class="docutils literal"><span class="pre">$x</span></tt> would not be bound to a value following the <a class="reference" href="krb_syntax/bc_rule.html#forall">forall</a> clause.
+You can use <a class="reference" href="krb_syntax/python_premise.html">python premises</a> to capture the bindings of <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a>
+in the <a class="reference" href="krb_syntax/bc_rule.html#forall">forall</a> clause and make them available to the premises following the
+<a class="reference" href="krb_syntax/bc_rule.html#forall">forall</a>:</p>
 <pre class="literal-block">
-not_test_y_fail:
-    use not_test_y($x)
-    when
-        test_y($x)              # if there is any way for test_y($x) to be true
-        special.claim_goal()    # don't use any other rules for not_test_y
-        check False             # and cause this rule to fail, which causes the not_test_y goal to fail
-
-not_test_y_success:
-    use not_test_y($_)          # this rule only runs if test_y($x) fails, above
+python x_list = []
+forall
+    generate_x($x)
+require
+    test_y($x)
+    python x_list.append($x)
+$xs = tuple(x_list)
 </pre>
+<p>Note that <tt class="docutils literal"><span class="pre">x_list</span></tt> is a python variable -- not a <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variable</a>!  It is
+moved back to <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variable</a> <tt class="docutils literal"><span class="pre">$xs</span></tt> in the final line so that the
+following premises can access it.</p>
+<p><a class="reference" href="krb_syntax/bc_rule.html#forall">Forall</a> always fails on <a class="reference" href="overview/rules/backward_chaining.html#backtracking">backtracking</a>.  Consider these two techniques:</p>
+<pre class="literal-block">
+forall_technique
+    use solve_list($x_list, $x_answers)
+    when
+        python x_answers = []
+        forall
+            $x in $x_list
+        require
+            solve($x, $x_ans)
+            python x_answers.append($x_ans)
+        $x_answers = tuple(x_answers)
+</pre>
+<p>and:</p>
+<pre class="literal-block">
+recursive_technique_done
+    use solve_list((), ())
+
+recursive_technique_more
+    use solve_list(($x1, *$x_rest), ($ans1, *$ans_rest))
+    when
+        solve($x1, $ans1)
+        solve_list($x_rest, $ans_rest)
+</pre>
+<p>The first technique will only find the first solution and then fail on
+<a class="reference" href="overview/rules/backward_chaining.html#backtracking">backtracking</a> (if the invoking goal doesn't like the first solution).
+But the second technique will find other solutions on <a class="reference" href="overview/rules/backward_chaining.html#backtracking">backtracking</a>.</p>
+</div>
+<div class="section">
+<h3><a id="for-all-x-y-fails" name="for-all-x-y-fails">FOR ALL X, Y fails</a></h3>
+<p>For example: for all $x from generate_x($x), not test_y($x)</p>
+<p>In this case, just use the <a class="reference" href="krb_syntax/bc_rule.html#notany">notany</a> clause:</p>
+<pre class="literal-block">
+notany
+    generate_x($x)
+    test_y($x)
+</pre>
+</div>
 </div>
 </div>
 
@@ -215,7 +253,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Feb 22 2008.
+    Page last modified Fri, May 16 2008.
   </div>
 
 </body>

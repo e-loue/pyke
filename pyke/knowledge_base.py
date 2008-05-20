@@ -37,8 +37,9 @@ class knowledge_base(object):
             if name in engine.knowledge_bases:
                 raise AssertionError("knowledge_base %s already exists" % name)
             if name in engine.rule_bases:
-                raise AssertionError("name clash between fact_base '%s' and "
-                                     "rule_base '%s'" % (name, name))
+                raise AssertionError("name clash between %s '%s' and "
+                                     "rule_base '%s'" %
+                                         (self.__class__.__name__, name, name))
             engine.knowledge_bases[name] = self
         self.entity_lists = {}          # {name: entity_list}
         self.entity_list_type = entity_list_type

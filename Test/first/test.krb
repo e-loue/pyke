@@ -1,0 +1,28 @@
+# test.krb
+
+test1
+    foreach
+        family.son_of($child, $father, $mother)
+        first
+            family.son_of($brother, $father, $mother)
+            check $child != $brother
+    assert
+        family.brothers($child, $brother)
+
+test2
+    foreach
+        first
+            family.cousins($a, $c)
+        family.son_of($a, $father, $mother)
+    assert
+        family.nephew_of($c, $father, $mother)
+
+test3
+    foreach
+        family.brothers($a, $b)
+        first
+            family.son_of($c1, $a, $_)
+        first
+            family.son_of($c2, $b, $_)
+    assert
+        family.cousins($c1, $c2)

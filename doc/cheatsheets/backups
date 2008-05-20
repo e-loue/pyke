@@ -1,0 +1,4 @@
+http://sf.net/docs/G01#backup
+
+from emachine:
+    rsync -av pyke.svn.sourceforge.net::svn/pyke/* /home/bruce/Backups/pyke/svn

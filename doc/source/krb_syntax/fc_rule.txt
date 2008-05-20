@@ -47,7 +47,7 @@ Forward-chaining_ rules_ have three parts:
 
 ::
 
-    fc_rule ::= IDENTIFIER ':' NL INDENT
+    fc_rule ::= IDENTIFIER NL INDENT
                    [fc_foreach]
                    fc_assert
                 DEINDENT
@@ -65,6 +65,11 @@ Foreach clause
                    DEINDENT
 
     fc_premise ::= fact_pattern
+                 | 'first' fc_premise
+                 | 'first' NL
+                     INDENT
+                        {fc_premise NL}
+                     DEINDENT
                  | 'forall' NL
                      INDENT
                         {fc_premise NL}
@@ -73,6 +78,10 @@ Foreach clause
                        INDENT
                           {fc_premise NL}
                        DEINDENT ]
+                 | 'notany' NL
+                     INDENT
+                        {fc_premise NL}
+                     DEINDENT
                  | python_premise
 
     fact_pattern ::= IDENTIFIER '.' IDENTIFIER '(' [{pattern,}] ')'
@@ -84,10 +93,21 @@ If the ``foreach`` clause is **not** used, the rule_ is always fired once.
 If the ``foreach`` clause **is** used, the rule_ is fired for each
 combination of true premises.
 
-The ``forall`` clause undoes all pattern variable bindings before the next
-``fc_premise`` is run.  Thus, it can only be used to test values produced by
-prior ``fc_premises``, but not to generate them for subsequent ``fc_premises``.
-If the ``require`` clause is missing, the ``forall`` clause always succeeds.
+The ``first`` clause fails on backtracking so that it only produces one
+result (the first one).  This does not mean that backtracking between
+multiple sub-premises within the ``first`` clause will fail internal to
+``first`` clause, but that once the
+premise following the ``first`` clause is tried, the entire ``first`` clause
+will fail on backtracking.
+
+The ``forall`` and ``notany`` clauses undo all `pattern variable`_ bindings
+before the following ``fc_premise`` is run.  Thus, they can only be used to
+test values produced by prior ``fc_premises``, but not to generate them for
+subsequent ``fc_premises`` (except by using the ``python`` clause, see
+python_premise_).
+
+If the ``require`` clause is missing from the ``forall`` clause, the ``forall``
+clause always succeeds.
 
 Assert clause
 =================
@@ -99,9 +119,9 @@ Assert clause
                   DEINDENT
 
     assertion ::= fact_pattern
-                | 'python' ':' NL INDENT
-                      {python_statement NL}
-                  DEINDENT
+                | python_statements
+
+Here is the link to the definitions of python_statements_.
 
 The ``assert`` clause lists new facts_ to assert, and/or python
 statements to execute each time the rule_ is fired.  Each of these may
@@ -115,5 +135,6 @@ into the facts_ and python statements.
 .. _pattern variable: pattern.html#pattern-variable
 .. _pattern variables: `pattern variable`_
 .. _python_premise: python_premise.html
+.. _python_statements: python_premise.html#python-statements
 .. _rule: ../overview/rules/index.html
 .. _rules: rule_

@@ -24,14 +24,23 @@ fc_rule ::= IDENTIFIER_TOK ':' NL_TOK INDENT_TOK
 fc_foreach ::= 'foreach' NL_TOK INDENT_TOK {fc_premise NL_TOK} DEINDENT_TOK
 
 fc_premise ::= fact_pattern
-             | FORALL_TOK NL_TOK
+             | 'first' fc_premise
+             | 'first' NL_TOK
                  INDENT_TOK
                     {fc_premise NL_TOK}
                  DEINDENT_TOK
-               [ REQUIRE_TOK NL_TOK
+             | 'forall' NL_TOK
+                 INDENT_TOK
+                    {fc_premise NL_TOK}
+                 DEINDENT_TOK
+               [ 'require' NL_TOK
                    INDENT_TOK
                       {fc_premise NL_TOK}
                    DEINDENT_TOK ]
+             | 'notany' NL_TOK
+                 INDENT_TOK
+                    {fc_premise NL_TOK}
+                 DEINDENT_TOK
 	     | python_premise
 
 fact_pattern ::= IDENTIFIER_TOK '.' IDENTIFIER_TOK '(' [{pattern,}] ')'
@@ -45,12 +54,18 @@ variable ::= PATTERN_VAR_TOK | ANONYMOUS_VAR_TOK
 python_premise ::= pattern '=' python_exp
 	         | pattern 'in' python_exp
 	         | 'check' python_exp
+                 | python_statements
+
+python_statements ::= 'python' python_statement
+                    | 'python' NL_TOK
+                        INDENT_TOK
+                            {python_statement NL_TOK}
+                        DEINDENT_TOK
 
 fc_assert ::= 'assert' NL_TOK INDENT_TOK {assertion NL_TOK} DEINDENT_TOK
 
 assertion ::= fact_pattern
-            | 'python' ':' NL_TOK INDENT_TOK
-                {python_statement NL_TOK} DEINDENT_TOK
+            | python_statements
 
 bc_rule ::= IDENTIFIER_TOK ':' NL_TOK INDENT_TOK use [when] [with] DEINDENT_TOK
 
@@ -60,14 +75,23 @@ use ::= 'use' IDENTIFIER_TOK '(' {pattern,} ')'
 when ::= 'when' NL_TOK INDENT_TOK {bc_premise NL_TOK} DEINDENT_TOK
 
 bc_premise ::= ['!'] [ name '.' ] name '(' {pattern,} ')' plan_spec
-             | FORALL_TOK NL_TOK
+             | ['!'] 'first' bc_premise
+             | ['!'] 'first' NL_TOK
                  INDENT_TOK
                     {bc_premise NL_TOK}
                  DEINDENT_TOK
-               [ REQUIRE_TOK NL_TOK
+             | 'forall' NL_TOK
+                 INDENT_TOK
+                    {bc_premise NL_TOK}
+                 DEINDENT_TOK
+               [ 'require' NL_TOK
                    INDENT_TOK
                       {bc_premise NL_TOK}
                    DEINDENT_TOK ]
+             | 'notany' NL_TOK
+                 INDENT_TOK
+                    {fc_premise NL_TOK}
+                 DEINDENT_TOK
 	     | python_premise
 
 name ::= IDENTIFIER_TOK

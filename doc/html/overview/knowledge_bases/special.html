@@ -94,10 +94,10 @@ until all of the rules for it have failed.</p>
 <p>Suppose I want to translate a number, N, into the phrase &quot;N dogs&quot;.  I could
 use the following rules:</p>
 <pre class="literal-block">
-one_dog:
+one_dog
     use n_dogs(1, '1 dog')
 
-n_dogs:
+n_dogs
     use n_dogs($n, $phrase)
     when
         $phrase = &quot;%d dogs&quot; % $n
@@ -106,12 +106,12 @@ n_dogs:
 second rule isn't appropriate in this case.  <tt class="docutils literal"><span class="pre">Special.claim_goal()</span></tt> may
 be used to fix this, as follows:</p>
 <pre class="literal-block">
-one_dog:
+one_dog
     use n_dogs(1, '1 dog')
     when
         special.claim_goal()
 
-n_dogs:
+n_dogs
     use n_dogs($n, $phrase)
     when
         $phrase = &quot;%d dogs&quot; % $n
@@ -134,18 +134,18 @@ add extra premises in each subsequent rule to make sure that these premises
 have <strong>not</strong> occurred.</p>
 <p>Without the <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt>, I would have to write:</p>
 <pre class="literal-block">
-one_dog:
+one_dog
     use n_dogs(1, '1 dog')
 
-n_dogs:
+n_dogs
     use n_dogs($n, $phrase)
     when
         check $n != 1
         $phrase = &quot;%d dogs&quot; % $n
 </pre>
 <p>This is a simple example where it is easy to add the check in the second
-rule.  But in general, it is difficult to prove that something is <strong>not</strong>
-true, making <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> indispensable.</p>
+rule.  But in general, it can be difficult to check for prior conditions,
+especially when many rules are involved that each has its own condition.</p>
 </div>
 </div>
 
@@ -181,7 +181,7 @@ are compiled and loaded into your python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Nov 08 2007.
+    Page last modified Fri, May 16 2008.
   </div>
 
 </body>

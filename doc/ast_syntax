@@ -9,8 +9,10 @@ fc_rule: ('fc_rule', name, (fc_premise), (assertion))
 
 fc_premise : ('fc_premise', kb_name, entity_name, (pattern),
               starting_lineno, ending_lineno)
+           | ('fc_first', (fc_premise), starting_lineno)
            | ('fc_forall', (fc_premise), (fc_premise)_opt,
               starting_lineno, ending_lineno)
+           | ('fc_notany', (fc_premise), starting_lineno)
            | python_premise
 
 assertion : ('assert', kb_name, entity_name, (pattern),
@@ -35,8 +37,10 @@ goal : ('goal', <entity_name>IDENTIFIER, (pattern), <taking>(python_line),
 bc_premise : ('bc_premise', <required>_bool,
                             <kb>name_opt, <entity>name, (pattern),
                             plan_spec_opt, starting_lineno, ending_lineno)
+           | ('bc_first', <required>_bool, (bc_premise), starting_lineno)
            | ('bc_forall', (bc_premise), (bc_premise)_opt,
               starting_lineno, ending_lineno)
+           | ('bc_notany', (bc_premise), starting_lineno)
            | python_premise
 
 name : quoted_STRING

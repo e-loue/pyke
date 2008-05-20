@@ -43,6 +43,7 @@ keywords = frozenset((
     'extending',
     'False',
     'fc_extras',
+    'first',
     'forall',
     'foreach',
     'in',

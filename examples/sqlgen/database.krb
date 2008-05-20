@@ -265,10 +265,10 @@ run_query
         #check print_msg("make_from_clause(%s, %s, $from_clause)" % 
         #                ($table1, $joins1))
         !make_from_clause($table1, $joins1, $from_clause)
+        $sql_command = "select %s\n  from %s\n where %s.id = %%(id)s" % \
+                           (', '.join($select_columns), $from_clause, $table1)
     with
-        sql_command = "select %s\n  from %s\n where %s.id = %%(id)s" % \
-                          (', '.join($select_columns), $from_clause, $table1)
-        db_cursor.execute(sql_command, {'id': starting_data[$table1]})
+        db_cursor.execute($sql_command, {'id': starting_data[$table1]})
         assert db_cursor.rowcount == 1, \
             'expected unique row, got %d rows from "%s"' % \
               (db_cursor.rowcount, sql_command)
@@ -336,16 +336,13 @@ run_multi_query
         taking (db_cursor, starting_data)
     when
         !make_from_clause($table1, $joins1, $from_clause)
-    with
         # FIX: Add order_by
-        db_cursor.execute("select %s\n  from %s\n where %s.%s = %%(id)s" %
-                            (', '.join($select_columns), $from_clause,
-                             $table1, $multi_link_column),
-                          {'id': starting_data[$unique_table]})
-        ans = []
-        for row in db_cursor.fetchall():
-            ans.append(dict(zip($dict_keys, row)))
-        return tuple(ans)
+        $sql_command = "select %s\n  from %s\n where %s.%s = %%(id)s" % \
+                           (', '.join($select_columns), $from_clause,
+                            $table1, $multi_link_column)
+    with
+        db_cursor.execute($sql_command, {'id': starting_data[$unique_table]})
+        return tuple(dict(zip($dict_keys, row)) for row in db_cursor.fetchall())
 
 bc_extras
     def find_depth1(engine, depth, column, table):

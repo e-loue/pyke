@@ -48,7 +48,7 @@ Backward-chaining_ rules_ have four parts:
 
 ::
 
-    bc_rule ::= IDENTIFIER ':' NL INDENT
+    bc_rule ::= IDENTIFIER NL INDENT
                     use
                     [when]
                     [with]
@@ -103,6 +103,19 @@ combination of true premises.
              DEINDENT
 
     bc_premise ::= ['!'] [ name '.' ] name '(' {pattern,} ')' [ plan_spec ]
+                 | ['!'] 'first' bc_premise
+                 | ['!'] 'first' NL INDENT
+                        {bc_premise NL}
+                    DEINDENT
+                 | 'forall' NL INDENT
+                        {bc_premise NL}
+                    DEINDENT
+                    [ 'require' NL INDENT
+                          {bc_premise NL}
+                      DEINDENT ]
+                 | 'notany' NL INDENT
+                        {bc_premise NL}
+                    DEINDENT
                  | python_premise
 
     name ::= IDENTIFIER
@@ -110,10 +123,12 @@ combination of true premises.
 
 Here are the links to the definitions for pattern_ and python_premise_.
 
-If the *bc_premise* includes the ``!``, an exception will be raised if the
-premise fails on the first try.  This can help in debugging.  Note that this
-does not apply when the premise fails on backtracking_ (in which case it
-has already succeeded at least once).
+If the *bc_premise* includes the ``!``, an AssertionError will be raised if the
+premise fails on the first try.  This can help in debugging.
+
+.. Note::
+   This does not apply when the premise fails on backtracking_ (in which case
+   it has already succeeded at least once).
 
 If a single *name* is used in the *bc_premise*,
 the `rule base category`_ for the current `rule base`_ (the root rule base
@@ -130,6 +145,25 @@ the current `rule base`_ does not have to be the active_ `rule base`_ for that
 category_.  It could be the case that a derived `rule base`_ is the
 active_ `rule base`_.  In that case, the derived `rule base`_ is used to
 prove the premise.
+
+First
+------
+
+The ``first`` clause fails on backtracking so that it only produces one
+result (the first one).  This does not mean that backtracking between multiple
+sub-premises within the ``first`` clause will fail internal to ``first``
+clause, but that once the premise
+following the ``first`` clause is tried, the entire ``first`` clause will fail
+on backtracking.
+
+If the ``!`` may used with the ``first`` clause to raise an AssertionError if
+the entire ``first`` clause fails on the first try.
+
+Forall
+-------
+
+Notany
+-------
 
 Plan_spec
 ------------
@@ -174,6 +208,9 @@ please.
 The parameters
 required are defined in the ``taking`` clause of the rule_ used to prove the
 premise.
+
+Note that within a ``forall``, ``require`` or ``notany`` clause, the only
+``plan_spec`` that may be used is the ``as`` clause.
 
 With Clause
 ==============

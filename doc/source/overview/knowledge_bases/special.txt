@@ -57,10 +57,10 @@ Example
 Suppose I want to translate a number, N, into the phrase "N dogs".  I could
 use the following rules::
 
-    one_dog:
+    one_dog
         use n_dogs(1, '1 dog')
 
-    n_dogs:
+    n_dogs
         use n_dogs($n, $phrase)
         when
             $phrase = "%d dogs" % $n
@@ -69,12 +69,12 @@ The problem here is that both rules might be used with ``n`` is 1, but the
 second rule isn't appropriate in this case.  ``Special.claim_goal()`` may
 be used to fix this, as follows::
 
-    one_dog:
+    one_dog
         use n_dogs(1, '1 dog')
         when
             special.claim_goal()
 
-    n_dogs:
+    n_dogs
         use n_dogs($n, $phrase)
         when
             $phrase = "%d dogs" % $n
@@ -101,15 +101,15 @@ have **not** occurred.
 
 Without the ``special.claim_goal()``, I would have to write::
 
-    one_dog:
+    one_dog
         use n_dogs(1, '1 dog')
 
-    n_dogs:
+    n_dogs
         use n_dogs($n, $phrase)
         when
             check $n != 1
             $phrase = "%d dogs" % $n
 
 This is a simple example where it is easy to add the check in the second
-rule.  But in general, it is difficult to prove that something is **not**
-true, making ``special.claim_goal()`` indispensable.
+rule.  But in general, it can be difficult to check for prior conditions,
+especially when many rules are involved that each has its own condition.

@@ -132,6 +132,16 @@ def p_fc_premise(p):
     '''
     p[0] = ('fc_premise', p[1], p[3], tuple(p[5]), p.lineno(1), p.lineno(6))
 
+def p_fc_first_1(p):
+    ''' fc_premise : FIRST_TOK nls INDENT_TOK fc_premises DEINDENT_TOK
+    '''
+    p[0] = ('fc_first', tuple(p[4]), p.lineno(1))
+
+def p_fc_first_n(p):
+    ''' fc_premise : FIRST_TOK fc_premise
+    '''
+    p[0] = ('fc_first', (p[2],), p.lineno(1))
+
 def p_fc_notany(p):
     ''' fc_premise : NOTANY_TOK nls INDENT_TOK fc_premises DEINDENT_TOK
     '''
@@ -246,6 +256,26 @@ def p_bc_premise4(p):
     '''
     p[0] = ('bc_premise', True, p[2], p[4], tuple(p[6]), p[8],
             p.lineno(1), p.lineno(7))
+
+def p_bc_first_1f(p):
+    ''' bc_premise : FIRST_TOK nls INDENT_TOK bc_premises DEINDENT_TOK
+    '''
+    p[0] = ('bc_first', False, tuple(p[4]), p.lineno(1))
+
+def p_bc_first_nf(p):
+    ''' bc_premise : FIRST_TOK bc_premise
+    '''
+    p[0] = ('bc_first', False, (p[2],), p.lineno(1))
+
+def p_bc_first_1t(p):
+    ''' bc_premise : '!' FIRST_TOK nls INDENT_TOK bc_premises DEINDENT_TOK
+    '''
+    p[0] = ('bc_first', True, tuple(p[4]), p.lineno(1))
+
+def p_bc_first_nt(p):
+    ''' bc_premise : '!' FIRST_TOK bc_premise
+    '''
+    p[0] = ('bc_first', True, (p[2],), p.lineno(1))
 
 def p_bc_notany(p):
     ''' bc_premise : NOTANY_TOK nls INDENT_TOK bc_premises DEINDENT_TOK

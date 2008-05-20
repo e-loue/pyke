@@ -79,7 +79,7 @@
 <li>An <tt class="docutils literal"><span class="pre">assert</span></tt> clause.</li>
 </ol>
 <pre class="literal-block">
-fc_rule ::= IDENTIFIER ':' NL INDENT
+fc_rule ::= IDENTIFIER NL INDENT
                [fc_foreach]
                fc_assert
             DEINDENT
@@ -95,6 +95,23 @@ fc_foreach ::= 'foreach' NL INDENT
                DEINDENT
 
 fc_premise ::= fact_pattern
+             | 'first' fc_premise
+             | 'first' NL
+                 INDENT
+                    {fc_premise NL}
+                 DEINDENT
+             | 'forall' NL
+                 INDENT
+                    {fc_premise NL}
+                 DEINDENT
+               [ 'require' NL
+                   INDENT
+                      {fc_premise NL}
+                   DEINDENT ]
+             | 'notany' NL
+                 INDENT
+                    {fc_premise NL}
+                 DEINDENT
              | python_premise
 
 fact_pattern ::= IDENTIFIER '.' IDENTIFIER '(' [{pattern,}] ')'
@@ -103,6 +120,19 @@ fact_pattern ::= IDENTIFIER '.' IDENTIFIER '(' [{pattern,}] ')'
 <p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause is <strong>not</strong> used, the <a class="reference" href="../overview/rules/index.html">rule</a> is always fired once.</p>
 <p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause <strong>is</strong> used, the <a class="reference" href="../overview/rules/index.html">rule</a> is fired for each
 combination of true premises.</p>
+<p>The <tt class="docutils literal"><span class="pre">first</span></tt> clause fails on backtracking so that it only produces one
+result (the first one).  This does not mean that backtracking between
+multiple sub-premises within the <tt class="docutils literal"><span class="pre">first</span></tt> clause will fail internal to
+<tt class="docutils literal"><span class="pre">first</span></tt> clause, but that once the
+premise following the <tt class="docutils literal"><span class="pre">first</span></tt> clause is tried, the entire <tt class="docutils literal"><span class="pre">first</span></tt> clause
+will fail on backtracking.</p>
+<p>The <tt class="docutils literal"><span class="pre">forall</span></tt> and <tt class="docutils literal"><span class="pre">notany</span></tt> clauses undo all <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> bindings
+before the following <tt class="docutils literal"><span class="pre">fc_premise</span></tt> is run.  Thus, they can only be used to
+test values produced by prior <tt class="docutils literal"><span class="pre">fc_premises</span></tt>, but not to generate them for
+subsequent <tt class="docutils literal"><span class="pre">fc_premises</span></tt> (except by using the <tt class="docutils literal"><span class="pre">python</span></tt> clause, see
+<a class="reference" href="python_premise.html">python_premise</a>).</p>
+<p>If the <tt class="docutils literal"><span class="pre">require</span></tt> clause is missing from the <tt class="docutils literal"><span class="pre">forall</span></tt> clause, the <tt class="docutils literal"><span class="pre">forall</span></tt>
+clause always succeeds.</p>
 </div>
 <div class="section">
 <h2><a id="assert-clause" name="assert-clause">Assert clause</a></h2>
@@ -112,10 +142,9 @@ fc_assert ::= 'assert' NL INDENT
               DEINDENT
 
 assertion ::= fact_pattern
-            | 'python' ':' NL INDENT
-                  {python_statement NL}
-              DEINDENT
+            | python_statements
 </pre>
+<p>Here is the link to the definitions of <a class="reference" href="python_premise.html#python-statements">python_statements</a>.</p>
 <p>The <tt class="docutils literal"><span class="pre">assert</span></tt> clause lists new <a class="reference" href="../overview/knowledge_bases/fact_bases.html#facts">facts</a> to assert, and/or python
 statements to execute each time the <a class="reference" href="../overview/rules/index.html">rule</a> is fired.  Each of these may
 include <a class="reference" href="pattern.html#pattern-variable">pattern variables</a> which should also appear in the <tt class="docutils literal"><span class="pre">foreach</span></tt>
@@ -157,7 +186,7 @@ into the <a class="reference" href="../overview/knowledge_bases/fact_bases.html#
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Nov 08 2007.
+    Page last modified Mon, May 19 2008.
   </div>
 
 </body>

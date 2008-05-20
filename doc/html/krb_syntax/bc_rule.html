@@ -80,7 +80,7 @@
 <li>An optional <tt class="docutils literal"><span class="pre">with</span></tt> clause.</li>
 </ol>
 <pre class="literal-block">
-bc_rule ::= IDENTIFIER ':' NL INDENT
+bc_rule ::= IDENTIFIER NL INDENT
                 use
                 [when]
                 [with]
@@ -129,16 +129,32 @@ when ::= 'when' NL INDENT
          DEINDENT
 
 bc_premise ::= ['!'] [ name '.' ] name '(' {pattern,} ')' [ plan_spec ]
+             | ['!'] 'first' bc_premise
+             | ['!'] 'first' NL INDENT
+                    {bc_premise NL}
+                DEINDENT
+             | 'forall' NL INDENT
+                    {bc_premise NL}
+                DEINDENT
+                [ 'require' NL INDENT
+                      {bc_premise NL}
+                  DEINDENT ]
+             | 'notany' NL INDENT
+                    {bc_premise NL}
+                DEINDENT
              | python_premise
 
 name ::= IDENTIFIER
        | '$'IDENTIFIER
 </pre>
 <p>Here are the links to the definitions for <a class="reference" href="pattern.html">pattern</a> and <a class="reference" href="python_premise.html">python_premise</a>.</p>
-<p>If the <em>bc_premise</em> includes the <tt class="docutils literal"><span class="pre">!</span></tt>, an exception will be raised if the
-premise fails on the first try.  This can help in debugging.  Note that this
-does not apply when the premise fails on <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a> (in which case it
-has already succeeded at least once).</p>
+<p>If the <em>bc_premise</em> includes the <tt class="docutils literal"><span class="pre">!</span></tt>, an AssertionError will be raised if the
+premise fails on the first try.  This can help in debugging.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">This does not apply when the premise fails on <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a> (in which case
+it has already succeeded at least once).</p>
+</div>
 <p>If a single <em>name</em> is used in the <em>bc_premise</em>,
 the <a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> for the current <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> (the root rule base
 name) is assumed.</p>
@@ -152,6 +168,23 @@ the current <a class="reference" href="../overview/knowledge_bases/rule_bases.ht
 <a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-categories">category</a>.  It could be the case that a derived <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> is the
 <a class="reference" href="../using_pyke.html#setting-up-each-case">active</a> <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a>.  In that case, the derived <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> is used to
 prove the premise.</p>
+<div class="section">
+<h2><a id="first" name="first">First</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">first</span></tt> clause fails on backtracking so that it only produces one
+result (the first one).  This does not mean that backtracking between multiple
+sub-premises within the <tt class="docutils literal"><span class="pre">first</span></tt> clause will fail internal to <tt class="docutils literal"><span class="pre">first</span></tt>
+clause, but that once the premise
+following the <tt class="docutils literal"><span class="pre">first</span></tt> clause is tried, the entire <tt class="docutils literal"><span class="pre">first</span></tt> clause will fail
+on backtracking.</p>
+<p>If the <tt class="docutils literal"><span class="pre">!</span></tt> may used with the <tt class="docutils literal"><span class="pre">first</span></tt> clause to raise an AssertionError if
+the entire <tt class="docutils literal"><span class="pre">first</span></tt> clause fails on the first try.</p>
+</div>
+<div class="section">
+<h2><a id="forall" name="forall">Forall</a></h2>
+</div>
+<div class="section">
+<h2><a id="notany" name="notany">Notany</a></h2>
+</div>
 <div class="section">
 <h2><a id="plan-spec" name="plan-spec">Plan_spec</a></h2>
 <p>A <em>plan_spec</em> is required for all premises that return subordinate <a class="reference" href="../overview/plans.html">plans</a>.
@@ -188,6 +221,8 @@ please.
 The parameters
 required are defined in the <tt class="docutils literal"><span class="pre">taking</span></tt> clause of the <a class="reference" href="../overview/rules/index.html">rule</a> used to prove the
 premise.</p>
+<p>Note that within a <tt class="docutils literal"><span class="pre">forall</span></tt>, <tt class="docutils literal"><span class="pre">require</span></tt> or <tt class="docutils literal"><span class="pre">notany</span></tt> clause, the only
+<tt class="docutils literal"><span class="pre">plan_spec</span></tt> that may be used is the <tt class="docutils literal"><span class="pre">as</span></tt> clause.</p>
 </div>
 </div>
 <div class="section">
@@ -256,7 +291,7 @@ goal has been proven.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Jan 04 2008.
+    Page last modified Mon, May 19 2008.
   </div>
 
 </body>

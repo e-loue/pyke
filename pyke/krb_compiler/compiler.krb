@@ -29,6 +29,7 @@ file
     when
         $fc_head = helpers.fc_head($rb_name)
         $bc_head = helpers.bc_head($rb_name)
+        $plan_head = helpers.plan_head($rb_name)
         !rule_decl($rb_name, $parent, $decl_line)
         !fc_rules($fc_rules, $fc_fun_lines, $fc_init_lines)
         !bc_rules($rb_name, $bc_rules,
@@ -46,8 +47,10 @@ file
                      ) \
                         if $fc_fun_lines \
                         else ()
-        $plan_lines = (("# %s_plans.py" % $rb_name,) +
-                       $bc_plan_lines + ("",) + $plan_extra_lines) \
+        $plan_lines = ($plan_head,
+                       $bc_plan_lines,
+                       "",
+                       $plan_extra_lines) \
                         if $bc_plan_lines \
                         else ()
         $bc_lines = ($bc_head,
@@ -190,6 +193,20 @@ gen_fc_for_true
                                         ($kb_name, $entity_name, $clause_num),
                     ('ENDING_LINENO', $end_lineno),
                     ('INDENT', 2))
+
+fc_first
+    use fc_premise($rule_name, $clause_num, $next_clause_num,
+                   (fc_first, $premises1, $_), $_, $_,
+                   ($init_worked, $fn_head, $set_worked), $fn_tail,
+                   $decl_lines, $patterns_in, $patterns_out)
+    when
+        $break_cond = "first%d_worked" % $clause_num
+        !fc_premises($rule_name, $clause_num, $next_clause_num,
+                     $premises1, $break_cond, True,
+                     $fn_head, $fn_tail, $decl_lines,
+                     $patterns_in, $patterns_out)
+        $init_worked = "%s = False" % $break_cond
+        $set_worked = "%s = True" % $break_cond
 
 fc_forall_None
     use fc_premise($rule_name, $clause_num, $next_clause_num,
@@ -421,6 +438,24 @@ bc_premise
                     () if $break_cond is None
                        else "if %s: break" % $break_cond,
                     $fn_tail2)
+
+bc_first
+    use bc_premise($rb_name, $rule_name, $clause_num, $next_clause_num,
+                   (bc_first, $required, $bc_premises, $_),
+                   $_, $allow_plan, $patterns_in, $patterns_out,
+                   $plan_var_names_in, $plan_var_names_out,
+                   $plan_lines, ($init_worked, $fn_head, $set_worked), $fn_tail)
+    when
+        $break_cond = "first%d_worked" % $clause_num
+        !bc_premises1($rb_name, $rule_name, $clause_num, $next_clause_num,
+                      $bc_premises, $break_cond, $allow_plan,
+                      $patterns_in, $patterns_out,
+                      $plan_var_names_in, $plan_var_names_out,
+                      $plan_lines, $fn_head1, $fn_tail1)
+        !add_required($required, $rb_name, $rule_name, $clause_num,
+                      $fn_head1, $fn_tail1, $fn_head, $fn_tail)
+        $init_worked = "%s = False" % $break_cond
+        $set_worked = "%s = True" % $break_cond
 
 bc_forall_None
     use bc_premise($rb_name, $rule_name, $clause_num, $next_clause_num,

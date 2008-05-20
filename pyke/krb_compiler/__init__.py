@@ -28,10 +28,6 @@ import sys
 # FIX: Take this out:
 use_test = False
 
-# If set, doesn't delete output files on error
-# (if we don't want to nuke a hand tweaked compiler_bc.py).
-no_nuke = False
-
 from pyke import knowledge_engine
 
 if use_test:
@@ -141,9 +137,9 @@ def compile_file(engine, gen_dir, gen_root_pkg, filename):
         elif os.path.lexists(plan_path): os.remove(plan_path)
         #sys.stderr.write("done!\n")
     except:
-        if os.path.lexists(fc_path) and not no_nuke: os.remove(fc_path)
-        if os.path.lexists(bc_path) and not no_nuke: os.remove(bc_path)
-        if os.path.lexists(plan_path) and not no_nuke: os.remove(plan_path)
+        if os.path.lexists(fc_path): os.remove(fc_path)
+        if os.path.lexists(bc_path): os.remove(bc_path)
+        if os.path.lexists(plan_path): os.remove(plan_path)
         raise
 
 def write_file(lines, filename):

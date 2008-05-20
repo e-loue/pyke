@@ -36,11 +36,15 @@ restindex
 Python Premise Syntax
 =============================================
 
+Python_premise
+================
+
 ::
 
     python_premise ::= pattern '=' python_exp
                      | pattern 'in' python_exp
                      | 'check' python_exp
+                     | python_statements
 
 Each of these clauses results in a python expression being executed.  Their
 meaning is as follows:
@@ -65,6 +69,24 @@ pattern_ 'in' python_exp
     *python_exp* is evaluated.  If the result is
     python "true" the clause succeeds, otherwise
     it fails.  The clause always fails on backtracking_.
+python_statements
+    The python_statements are simply executed.  They always succeed, but fail
+    on backtracking_.
+
+
+Python_statements
+===================
+
+::
+
+    python_statements ::= 'python' python_statement
+                        | 'python' NL INDENT
+                              {python_statement NL}
+                          DEINDENT
+
+This clause allows the inclusion of arbitrary python statements in your
+rules_.
 
 .. _backtracking: ../overview/rules/backward_chaining.html#backtracking
 .. _pattern: pattern.html
+.. _rules: ../overview/rules/index.html

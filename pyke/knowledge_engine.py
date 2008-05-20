@@ -39,6 +39,7 @@ if sys.version_info[0] < 3:
                 for x in iterable: yield x
     itertools.chain = chain
 
+import pyke
 from pyke import (condensedPrint, contexts, pattern,
                   fact_base, rule_base, special)
 
@@ -73,8 +74,17 @@ class engine(object):
                     from pyke import krb_compiler
                     krb_compiler.compile(gen_dir, gen_root_dir, compile_list)
                     _check_list(compile_list, gen_dir, gen_root_dir)
-                _load_paths(self, paths, gen_dir, gen_root_dir,
-                            load_fc, load_bc, compile_list)
+                compile_list2 = _load_paths(self, paths, gen_dir, gen_root_dir,
+                                            load_fc, load_bc, compile_list)
+                if compile_list2:
+                    from pyke import krb_compiler
+                    krb_compiler.compile(gen_dir, gen_root_dir, compile_list2)
+                    _check_list(compile_list2, gen_dir, gen_root_dir)
+                    for full_filename in compile_list2:
+                        if not _load_file(self, full_filename,
+                                          gen_dir, gen_root_dir,
+                                          load_fc, load_bc, compile_list2):
+                            raise AssertionError("version recompile failed")
         for kb in self.knowledge_bases.itervalues(): kb.init2()
         for rb in self.rule_bases.itervalues(): rb.init2()
     def reset(self):
@@ -268,13 +278,18 @@ def _load_paths(engine, paths, gen_dir, gen_root_dir, load_fc, load_bc,
     else:
         if os.path.abspath(gen_dir) not in sys.path:
             sys.path.insert(0, os.path.abspath(gen_dir))
+    ans = []
     for path in paths:
         for dirpath, dirnames, filenames in os.walk(path, onerror=_raise_exc):
             for filename in filenames:
                 if filename.endswith('.krb'):
-                    _load_file(engine, os.path.join(dirpath, filename),
-                               gen_dir, gen_root_dir, load_fc, load_bc,
-                               compile_list)
+                    full_filename = os.path.join(dirpath, filename)
+                    if not _load_file(engine, full_filename,
+                                      gen_dir, gen_root_dir, load_fc, load_bc,
+                                      compile_list):
+                        ans.append(full_filename)
+    #print "_load_paths =>", ans
+    return ans
 
 def _load_file(engine, filename, gen_dir, gen_root_dir, load_fc, load_bc,
                compile_list):
@@ -284,10 +299,11 @@ def _load_file(engine, filename, gen_dir, gen_root_dir, load_fc, load_bc,
         try:
             os.stat(base + type + '.py')
         except OSError:
-            return
+            return True
         module_path = package_list + [base_modulename + type]
         full_module_name = '.'.join(module_path)
         #print >> sys.stderr, "loading:", full_module_name
+        module = None
         if full_module_name in sys.modules:
             #print "already imported"
             module = sys.modules[full_module_name]
@@ -297,11 +313,19 @@ def _load_file(engine, filename, gen_dir, gen_root_dir, load_fc, load_bc,
         elif do_import:
             #print "needs import"
             module = _import(module_path)
+        if module is not None and \
+           (not hasattr(module, 'version') or module.version != pyke.version):
+            #print "load_module(%s, %s) => False" % (filename, type)
+            return False
         if do_import: module.populate(engine)
-    if load_fc: load_module('_fc')
+        #print "load_module(%s, %s) => True" % (filename, type)
+        return True
+    if load_fc:
+        if not load_module('_fc'): return False
     if load_bc:
-        load_module('_plans', False)
-        load_module('_bc')
+        if not load_module('_plans', False): return False
+        if not load_module('_bc'): return False
+    return True
 
 """ ******* for testing:
 def trace_import(*args, **kws):
