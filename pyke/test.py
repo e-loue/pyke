@@ -80,8 +80,8 @@ def parse_identifier(str):
     '''
     if len(str) == 1: return str, ''
     start = 2 if str.startswith('*$') else 1
-    for i in range(2 if str.startswith("*$") else 1, len(str)):
-        if not str[i].isalnum() and str[i] != "_": break
+    for i in range(start, len(str)):
+        if not str[i].isalnum() and str[i] != '_': break
     if str[0] == '*' and (i < 3 or str[1] != '$'): return parse_symbol(str)
     if str[0] == '$' and i < 2: return parse_symbol(str)
     if str[:i] == 'None': return None, str[i:]
@@ -152,18 +152,20 @@ def is_rest_var(data):
 def as_pattern(data):
     if isinstance(data, tuple) and is_pattern(data):
         if is_rest_var(data[-1]):
-            if data[-1] == "*$_":
-                rest_var = contexts.anonymous()
+            name = data[-1][2:]
+            if name[0] == '_':
+                rest_var = contexts.anonymous(name)
             else:
-                rest_var = contexts.variable(data[-1][2:])
+                rest_var = contexts.variable(name)
             return pattern.pattern_tuple(tuple(as_pattern(element)
                                                for element in data[:-1]),
                                          rest_var)
         return pattern.pattern_tuple(tuple(as_pattern(element)
                                            for element in data))
     if isinstance(data, types.StringTypes) and is_pattern(data):
-        if data == "$_": return contexts.anonymous()
-        return contexts.variable(data[1:])
+        name = data[1:]
+        if name[0] == '_': return contexts.anonymous(name)
+        return contexts.variable(name)
     return pattern.pattern_literal(data)
 
 Did_init = False

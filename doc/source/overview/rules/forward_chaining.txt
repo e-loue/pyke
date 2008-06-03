@@ -115,7 +115,7 @@ After the ``son_of`` rule, the ``daughter_of`` rule is run for all
 Then the ``grand_parent_and_child`` rule_ is run for all combinations of
 ``family.child_parent`` facts_ that satisfy the two patterns_ on lines 15 and
 17.  This rule_ asserts_ the grand-child/grand-parent relationships.  You'll
-notice that it uses the ``$_`` `pattern variable`_.  This is called the
+notice that it uses the ``$_`` `pattern variable`_.  This is called an
 *anonymous* variable.  It is different than other `pattern variables`_ in that
 each use of ``$_`` can match a different value.
 

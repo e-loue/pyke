@@ -384,9 +384,10 @@ must match the first value each additional time it is encountered.
 Calling the constructor twice with the same name produces the same
 variable and must match the same value in all of the places that it is
 used.</dd>
-<dt>contexts.anonymous()</dt>
+<dt>contexts.anonymous(name)</dt>
 <dd>This will match anything each time it is encountered.
-Calling the constructor many times is not a problem.</dd>
+Calling the constructor many times with the same name is not a problem.
+The name must start with an underscore.</dd>
 </dl>
 <p>Finally, to create a <em>pattern context</em>, you need:</p>
 <blockquote>
@@ -445,7 +446,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, May 20 2008.
+    Page last modified Tue, Jun 03 2008.
   </div>
 
 </body>

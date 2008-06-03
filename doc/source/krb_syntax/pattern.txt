@@ -56,16 +56,18 @@ Pattern Variable
 
 Pattern variables are simply called *variable* in the syntax::
 
-    variable ::= '$'IDENTIFIER | '$_'
+    variable ::= '$'IDENTIFIER
 
 The variable must not have a space between the ``$`` and the ``IDENTIFIER``.
 
 Anonymous Variable
 ====================
 
-The ``$_`` variable is the *anonymous* variable.  It acts like a "don't
-care".  Technically, this means that multiple uses of ``$_`` may stand for
-multiple values.
+If the pattern variable IDENTIFIER begins with an underscore (_), the variable
+is an *anonymous* variable.  It acts like a "don't care".  Technically, this
+means that multiple uses of the same IDENTIFIER may stand for different
+values.  The name of the IDENTIFIER after the underscore is ignored and may be
+used to document the use of the anonymous variable.
 
 Rest Variable
 ================

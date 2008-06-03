@@ -86,15 +86,17 @@ me if you need them).</p>
 <h2><a id="pattern-variable" name="pattern-variable">Pattern Variable</a></h2>
 <p>Pattern variables are simply called <em>variable</em> in the syntax:</p>
 <pre class="literal-block">
-variable ::= '$'IDENTIFIER | '$_'
+variable ::= '$'IDENTIFIER
 </pre>
 <p>The variable must not have a space between the <tt class="docutils literal"><span class="pre">$</span></tt> and the <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.</p>
 </div>
 <div class="section">
 <h2><a id="anonymous-variable" name="anonymous-variable">Anonymous Variable</a></h2>
-<p>The <tt class="docutils literal"><span class="pre">$_</span></tt> variable is the <em>anonymous</em> variable.  It acts like a &quot;don't
-care&quot;.  Technically, this means that multiple uses of <tt class="docutils literal"><span class="pre">$_</span></tt> may stand for
-multiple values.</p>
+<p>If the pattern variable IDENTIFIER begins with an underscore (_), the variable
+is an <em>anonymous</em> variable.  It acts like a &quot;don't care&quot;.  Technically, this
+means that multiple uses of the same IDENTIFIER may stand for different
+values.  The name of the IDENTIFIER after the underscore is ignored and may be
+used to document the use of the anonymous variable.</p>
 </div>
 <div class="section">
 <h2><a id="rest-variable" name="rest-variable">Rest Variable</a></h2>
@@ -139,7 +141,7 @@ The difference here is that the variable needs a <tt class="docutils literal"><s
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Nov 08 2007.
+    Page last modified Tue, Jun 03 2008.
   </div>
 
 </body>

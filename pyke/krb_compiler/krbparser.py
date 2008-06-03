@@ -362,7 +362,7 @@ def p_pattern_var(p):
 def p_anonymous_var(p):
     ''' variable : ANONYMOUS_VAR_TOK
     '''
-    p[0] = "contexts.anonymous()"
+    p[0] = "contexts.anonymous(%s)" % p[1]
 
 def p_first(p):
     ''' bc_premise : python_premise

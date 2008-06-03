@@ -143,19 +143,19 @@
         >>> type(ans[0])
         <class '__main__.variable'>
 
-    The anonymous variable is simply the one named '_'.  Binding
+    The anonymous variables have names starting with '_'.  Binding
     requests on anonymous variables are silently ignored.
 
-        >>> anonymous()
-        $_
-        >>> A_context.bind('_', A_context, 567)
+        >>> anonymous('_ignored')
+        $_ignored
+        >>> A_context.bind('_bogus', A_context, 567)
         False
-        >>> A_context.lookup_data('_')
+        >>> A_context.lookup_data('_bogus')
         Traceback (most recent call last):
             ...
-        KeyError: '$_ not bound'
-        >>> A_context.lookup_data('_', True)
-        '$_'
+        KeyError: '$_bogus not bound'
+        >>> A_context.lookup_data('_bogus', True)
+        '$_bogus'
 """
 
 import sys
@@ -179,7 +179,7 @@ class simple_context(object):
         assert not isinstance(val, pattern.pattern) \
                    if val_context is None \
                    else isinstance(val, pattern.pattern)
-        if var_name == '_': return False
+        if var_name[0] == '_': return False
         if var_context is self:
             assert var_name not in self.bindings
             if val_context is not None:
@@ -225,9 +225,8 @@ class simple_context(object):
         val, context = binding
         if context is not None:
             val = val.as_data(context, allow_vars, final)
-        if final is not None:
-            if isinstance(val, bc_context): val = val.create_plan(final)
-            final[var_name, self] = val
+        if isinstance(val, bc_context): val = val.create_plan(final)
+        if final is not None: final[var_name, self] = val
         return val
     def lookup(self, var, allow_variable_in_ans = False):
         """ Returns value, val_context.
@@ -328,10 +327,10 @@ class variable(pattern.pattern):
         return my_context.is_bound(self)
 
 class anonymous(variable):
-    def __new__(cls):
-        return super(anonymous, cls).__new__(cls, '_')
-    def __init__(self):
-        super(anonymous, self).__init__('_')
+    #def __new__(cls):
+    #    return super(anonymous, cls).__new__(cls, '_')
+    #def __init__(self):
+    #    super(anonymous, self).__init__('_')
     def lookup(self, my_context, allow_variable_in_ans = False):
         if allow_variable_in_ans: return self, my_context
         raise KeyError("$%s not bound" % self.name)
@@ -340,7 +339,7 @@ class anonymous(variable):
     def match_pattern(self, bindings, my_context, pattern_b, b_context):
         return True
     def as_data(self, my_context, allow_vars = False, final = None):
-        if allow_vars: return "$_"
+        if allow_vars: return "$%s" % self.name
         raise KeyError("$%s not bound" % self.name)
     def is_data(self, my_context):
         return False

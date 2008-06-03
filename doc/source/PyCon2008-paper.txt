@@ -320,7 +320,7 @@ Here's three of the rules::
             check_function($client, D, 2)
 
 Note that pyke uses a ``$`` to indicate pattern variables (anonymous pattern
-variables are indicated as ``$_``).
+variables start with ``$_``).
 
 The ``check_function`` goal checks to see what version of the indicated
 function should be used for this client.  If this is the incorrect version,

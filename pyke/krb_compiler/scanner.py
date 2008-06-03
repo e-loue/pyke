@@ -325,7 +325,8 @@ def t_dqstring(t):
 # end strings
 
 def t_ANONYMOUS_VAR_TOK(t):
-    r'\$_'
+    r'\$_([a-zA-Z_][a-zA-Z0-9_]*)?'
+    t.value = "'" + t.value[1:] + "'"
     return t
 
 def t_PATTERN_VAR_TOK(t):
@@ -548,7 +549,7 @@ def tokenize_file(filename = 'TEST/scan_test'):
         LexToken(LP_TOK,'(',7,88)
         LexToken(NUMBER_TOK,100,7,89)
         LexToken(NUMBER_TOK,64,7,93)
-        LexToken(ANONYMOUS_VAR_TOK,'$_',7,98)
+        LexToken(ANONYMOUS_VAR_TOK,"'_'",7,98)
         LexToken(PATTERN_VAR_TOK,"'foo'",7,101)
         LexToken(NUMBER_TOK,256,8,118)
         LexToken(NUMBER_TOK,0,8,124)

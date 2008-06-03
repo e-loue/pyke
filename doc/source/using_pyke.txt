@@ -351,9 +351,10 @@ contexts.variable(name)
     Calling the constructor twice with the same name produces the same
     variable and must match the same value in all of the places that it is
     used.
-contexts.anonymous()
+contexts.anonymous(name)
     This will match anything each time it is encountered.
-    Calling the constructor many times is not a problem.
+    Calling the constructor many times with the same name is not a problem.
+    The name must start with an underscore.
 
 Finally, to create a *pattern context*, you need:
 

@@ -89,7 +89,7 @@ niece_or_nephew_and_aunt_or_uncle
 	as_nn($child_type, $nn_type)
         $greats = ('great',) * len($depth)
 
-# Note that these family.child_parent have an extra argument to handle
+# Note that these child_parent have an extra argument to handle
 # ('grand',), ('great', 'grand'), etc.
 parent_and_child
     use child_parent($child, $parent, (), $parent_type, $child_type)
