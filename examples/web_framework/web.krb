@@ -22,93 +22,82 @@
 # THE SOFTWARE.
 
 process_retrieval
-    use process() taking (db_cursor)
+    use process($starting_data, $template_name) \
+        taking (db_cursor, starting_data)
     when
-        !format_retrieval($needed_data, $starting_data, $starting_data_plan) \
-                step -1
+        !format_retrieval($starting_data, $template_name, $needed_data) step -1
             return $$(data)
         !database.get_data($starting_data, $needed_data)
-            data = $$(db_cursor, $starting_data_plan())
+            data = $$(db_cursor, starting_data)
 
 format_retrieval
-    use format_retrieval($needed_data, $starting_data, $starting_data_plan) \
+    use format_retrieval($starting_data, $template_name, $needed_data) \
         taking (data)
     when
-        !get_context($starting_data, $template_name) as $starting_data_plan
+        #!get_context($starting_data, $template_name) as $starting_data_plan
         $template = get_template($template_name)
-        !render_template($template, $needed_data, $render_fn)
+        $elements = structure($template)
+        !render_elements($elements, $needed_data) as $render_fn
     with
         return '200 OK', [('Content-Type', 'text/html')], \
                $template.render($render_fn, data)
 
-get_context
-    use get_context((movie), $template_name)
+render_elements
+    use render_elements($elements, $needed_data) \
+        taking (template, data)
     when
-        !request.path_info($path)
-        ($movie_id, $template_name) = $path.lstrip('/').split('/')
+        python needed_data = []
+        python render_fns = []
+        forall
+            $element in $elements
+        require
+            render_element1($element, $needed_data1) as $render_fn
+            python
+                needed_data1 = $needed_data1
+                if needed_data1 and needed_data1 not in needed_data:
+                    needed_data.append(needed_data1)
+                render_fns.append($render_fn)
+        $needed_data = tuple(needed_data)
+        $render_fns = tuple(render_fns)
     with
-        return {'movie': int($movie_id)}
+        for render_fn in $render_fns: render_fn(template, data)
 
-render_template
-    use render_template($template, $needed_data, $render_fn)
-    when
-        $structure = structure($template)
-        !render_template2($structure, $needed_data) as $render_fn
-
-render_template2_done
-    use render_template2((), ()) \
+render_element1_del
+    use render_element1((del, $_), None) \
         taking (template, data)
     with
         pass
 
-render_template2_del
-    use render_template2(((del, $_), *$rest), $needed_data) \
+render_element1_sep
+    use render_element1((sep, $_), None) \
         taking (template, data)
-    when
-        !render_template2($rest, $needed_data)
-            $$(template, data)
+    with
+        pass
 
-render_template2_sep
-    use render_template2(((sep, $_), *$rest), $needed_data) \
-        taking (template, data)
-    when
-        !render_template2($rest, $needed_data)
-            $$(template, data)
-
-render_template2_con
-    use render_template2(((con, $name), *$rest), $needed_data) \
+render_element1_con
+    use render_element1((con, $name), $name) \
         taking (template, data)
     when
         check $name.find('.') == -1
         special.claim_goal()
-        !render_template2($rest, $needed_data1)
-            $$(template, data)
-        $needed_data = $needed_data1 if $name in $needed_data1 \
-                                     else ($name,) + $needed_data1
     with
         getattr(template, $name).content = str(data[$name])
 
-render_template2_con_dot
-    use render_template2(((con, $name), *$rest), $needed_data) \
+render_element1_con_dot
+    use render_element1((con, $name), $real_name) \
         taking (template, data)
     when
         ($real_name, $index) = $name.split('.')
         check $index.isdigit()
-        !render_template2($rest, $needed_data1)
-            $$(template, data)
-        $needed_data = $needed_data1 if $real_name in $needed_data1 \
-                                     else ($real_name,) + $needed_data1
+        special.claim_goal()
     with
         getattr(template, $name).content = str(data[$real_name])
 
-render_template2_rep
-    use render_template2(((rep, $name, *$children), *$rest), $needed_data) \
+render_element1_rep
+    use render_element1((rep, $name, *$children), ($name, (), *$child_data)) \
         taking (template, data)
     when
-        !render_template2($children, $child_data) as $detail_fun
-        !render_template2($rest, $needed_data1)
-            $$(template, data)
-        $needed_data = (($name, ()) + $child_data,) + $needed_data1
+        !render_elements($children, $child_data) as $detail_fun
     with
         getattr(template, $name).repeat($detail_fun, data[$name])
 

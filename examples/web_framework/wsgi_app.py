@@ -68,6 +68,7 @@ def wsgi_app(environ, start_response):
         elif Debug:
             print "skipping %s.%s: got %s from %s" % \
                   (fb_name, fact_name, value, env_var)
+        return value
     
     def add_http(env_var):
         fact_name = env_var[5:].lower()
@@ -80,10 +81,11 @@ def wsgi_app(environ, start_response):
         elif Debug:
             print "skipping header.%s: got %s from %s" % \
                   (fact_name, value, env_var)
+        return value
 
     add_fact("header", "CONTENT_TYPE")
     add_fact("request", "REQUEST_METHOD")
-    add_fact("request", "PATH_INFO")
+    path = add_fact("request", "PATH_INFO")
     add_fact("request", "SCRIPT_NAME")
     add_fact("request", "QUERY_STRING")
     add_fact("request", "REMOTE_ADDR")
@@ -106,15 +108,17 @@ def wsgi_app(environ, start_response):
 
     Engine.activate('database', 'web')
 
+    movie_id, template_name = path.lstrip('/').split('/')
     try:
-        no_vars, plan = Engine.prove_1("web", "process", (), 0)
+        no_vars, plan = \
+            Engine.prove_1("web", "process", (('movie',), template_name), 0)
     except:
         traceback = krb_traceback.format_exc(100)
         Db_connection.rollback()
         start_response('500 Server Error', [('Content-Type', 'text/plain')])
         return traceback
 
-    status, headers, document = plan(Db_cursor)
+    status, headers, document = plan(Db_cursor, {'movie': int(movie_id)})
     start_response(status, headers)
     return document
 
