@@ -24,7 +24,7 @@
 process_retrieval
     use process() taking (db_cursor)
     when
-        format_retrieval($needed_data, $starting_data, $starting_data_plan) \
+        !format_retrieval($needed_data, $starting_data, $starting_data_plan) \
                 step -1
             return $$(data)
         !database.get_data($starting_data, $needed_data)
@@ -53,66 +53,62 @@ render_template
     use render_template($template, $needed_data, $render_fn)
     when
         $structure = structure($template)
-        !render_template2($structure, (), $needed_data) as $render_fn
+        !render_template2($structure, $needed_data) as $render_fn
 
 render_template2_done
-    use render_template2((), $needed_data_in, $needed_data_in) \
+    use render_template2((), ()) \
         taking (template, data)
     with
         pass
 
 render_template2_del
-    use render_template2(((del, $_), *$rest),
-                         $needed_data_in, $needed_data_out) \
+    use render_template2(((del, $_), *$rest), $needed_data) \
         taking (template, data)
     when
-        !render_template2($rest, $needed_data_in, $needed_data_out)
+        !render_template2($rest, $needed_data)
             $$(template, data)
 
 render_template2_sep
-    use render_template2(((sep, $_), *$rest),
-                         $needed_data_in, $needed_data_out) \
+    use render_template2(((sep, $_), *$rest), $needed_data) \
         taking (template, data)
     when
-        !render_template2($rest, $needed_data_in, $needed_data_out)
+        !render_template2($rest, $needed_data)
             $$(template, data)
 
 render_template2_con
-    use render_template2(((con, $name), *$rest),
-                         $needed_data_in, $needed_data_out) \
+    use render_template2(((con, $name), *$rest), $needed_data) \
         taking (template, data)
     when
         check $name.find('.') == -1
         special.claim_goal()
-        $needed_data2 = $needed_data_in if $name in $needed_data_in \
-                                        else ($name,) + $needed_data_in
-        !render_template2($rest, $needed_data2, $needed_data_out)
+        !render_template2($rest, $needed_data1)
             $$(template, data)
+        $needed_data = $needed_data1 if $name in $needed_data1 \
+                                     else ($name,) + $needed_data1
     with
         getattr(template, $name).content = str(data[$name])
 
 render_template2_con_dot
-    use render_template2(((con, $name), *$rest),
-                         $needed_data_in, $needed_data_out) \
+    use render_template2(((con, $name), *$rest), $needed_data) \
         taking (template, data)
     when
-        $real_name = $name.split('.')[0]
-        $needed_data2 = $needed_data_in if $real_name in $needed_data_in \
-                                        else ($real_name,) + $needed_data_in
-        !render_template2($rest, $needed_data2, $needed_data_out)
+        ($real_name, $index) = $name.split('.')
+        check $index.isdigit()
+        !render_template2($rest, $needed_data1)
             $$(template, data)
+        $needed_data = $needed_data1 if $real_name in $needed_data1 \
+                                     else ($real_name,) + $needed_data1
     with
         getattr(template, $name).content = str(data[$real_name])
 
 render_template2_rep
-    use render_template2(((rep, $name, *$children), *$rest),
-                         $needed_data_in, $needed_data_out) \
+    use render_template2(((rep, $name, *$children), *$rest), $needed_data) \
         taking (template, data)
     when
-        !render_template2($children, (), $child_data) as $detail_fun
-        !render_template2($rest, (($name, (), *$child_data), *$needed_data_in),
-                                 $needed_data_out)
+        !render_template2($children, $child_data) as $detail_fun
+        !render_template2($rest, $needed_data1)
             $$(template, data)
+        $needed_data = (($name, ()) + $child_data,) + $needed_data1
     with
         getattr(template, $name).repeat($detail_fun, data[$name])
 

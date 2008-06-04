@@ -345,6 +345,9 @@ get_multi2_no_linked_to
 get_multi2_linked_to
     use get_multi2($starting_data, $multi_data, $linked_to, $order_by, $plan)
     when
+        # FIX: This should allow $linked_to to be an inherited table
+        #      Or should we allow specifying the multi-row table rather than
+        #      (in addition to?) the linked_to table?
         check $linked_to in $starting_data
         get_multi3($linked_to, $multi_data, $order_by, $plan)
 
