@@ -327,10 +327,10 @@ class variable(pattern.pattern):
         return my_context.is_bound(self)
 
 class anonymous(variable):
-    #def __new__(cls):
-    #    return super(anonymous, cls).__new__(cls, '_')
-    #def __init__(self):
-    #    super(anonymous, self).__init__('_')
+    def __init__(self, name):
+        assert name[0] == '_', \
+               "anonymous variables must start with '_', not %s" % name
+        super(anonymous, self).__init__(name)
     def lookup(self, my_context, allow_variable_in_ans = False):
         if allow_variable_in_ans: return self, my_context
         raise KeyError("$%s not bound" % self.name)

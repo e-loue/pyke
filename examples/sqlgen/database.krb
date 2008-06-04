@@ -179,21 +179,6 @@ find_columns
             python matching_tables.append($table)
         $matching_tables = tuple(matching_tables)
 
-#find_columns_done
-#    use find_columns($_, (), ())
-#
-#find_columns_in_next
-#    use find_columns($column, ($table, *$rest), ($table, *$tables_out))
-#    when
-#        schema.column($table, $column, $_, $_, $_, $_, $_)
-#        special.claim_goal()
-#        !find_columns($column, $rest, $tables_out)
-#
-#find_columns_not_in_next
-#    use find_columns($column, ($_, *$rest), $tables_out)
-#    when
-#        !find_columns($column, $rest, $tables_out)
-
 lookup_indirect
     use lookup_indirect($depth, $column, $starting_data, $from_clause)
     when
@@ -218,7 +203,7 @@ lookup_indirect2_next_depth
     use lookup_indirect2($depth, $column, $starting_data, True, (),
                          $from_clause)
     when
-        # $column not found, but the inherited tables haven't run out yet!
+        # $column not found, but the inherited tables haven't hit $depth yet!
         special.claim_goal()
         $depth2 = $depth + 1
         lookup_indirect($depth2, $column, $starting_data, $from_clause)
@@ -242,21 +227,6 @@ find_depth_step
         find_depth($depth, $column, $rest, $got_depth2, $tables_out2)
         $got_depth = $got_depth1 or $got_depth2
         $tables_out = $from + $tables_out2
-
-#find_depth2_false
-#    use find_depth2($depth, $column, $_table, $rest, False, (),
-#                    $got_depth, $tables_out)
-#    when
-#        special.claim_goal()
-#        find_depth($depth, $column, $rest, $got_depth, $tables_out)
-#
-#find_depth2_true
-#    use find_depth2($depth, $column, $table, $rest, True, $froms,
-#                    True, $tables_out)
-#    when
-#        special.claim_goal()
-#        find_depth($depth, $column, $rest, $_got_depth, $rest_out)
-#        $tables_out = $froms + $rest_out
 
 process_unique_queries_done
     use process_unique_queries(()) taking(db_cursor, starting_data, dict)
@@ -294,21 +264,23 @@ process_query_match_n
         special.claim_goal()
         #python print "merge_joins(%s, %s, $merged_join)" % 
         #                ($joins1, $joins2)
-        merge_joins($joins1, $joins2, $merged_join)
+        !merge_joins($joins1, $joins2, $merged_join)
         $select2 = "%s.%s" % (($table1 if not $joins2 else $joins2[-1][0]),
                               $select_column2)
-        process_query((($table1, *$merged_join),
-                           ($select2, *$select_columns1),
-                           ($dict_key2, *$dict_keys1)),
-                      $rest, $unrelated_queries, $combined_query)
+        !process_query((($table1, *$merged_join),
+                        ($select2, *$select_columns1),
+                        ($dict_key2, *$dict_keys1)),
+                       $rest, $unrelated_queries, $combined_query)
 
 process_query_match
     use process_query($query1, ($unrelated_query1, *$rest),
                       ($unrelated_query1, *$unrelated_queries), $combined_query)
     when
-        process_query($query1, $rest, $unrelated_queries, $combined_query)
+        !process_query($query1, $rest, $unrelated_queries, $combined_query)
 
 merge_join_match
+    # Merge joins with the same first table by merging the rest of the joins
+    # in each clause. 
     use merge_joins(($first_join, *$rest_joins1), ($first_join, *$rest_joins2),
                     ($first_join, *$merged_joins))
     when
@@ -316,41 +288,45 @@ merge_join_match
         merge_joins($rest_joins1, $rest_joins2, $merged_joins)
 
 merge_join_no_match
+    # Merge joins with different first tables by concatenating the join
+    # clauses.
     use merge_joins($joins1, $joins2, $merged_joins)
     when
         $merged_joins = $joins1 + $joins2
 
 run_query
-    use run_query((($table1, *$joins1), $select_columns, $dict_keys)) \
+    # This subgoal constructs the sql select statement and produces a plan to
+    # execute that statement and deposit the results in a dict.
+    use run_query((($table, *$joins), $select_columns, $dict_keys)) \
         taking(db_cursor, starting_data, dict)
     when
-        #python print "make_from_clause(%s, %s, $from_clause)" % 
-        #                ($table1, $joins1)
-        !make_from_clause($table1, $joins1, $from_clause)
+        #python print "make_from_clause(%s, %s, $from_clause)" % \
+        #                ($table, $joins)
+        !make_from_clause($table, $joins, $from_clause)
         $sql_command = "select %s\n  from %s\n where %s.id = %%(id)s" % \
-                           (', '.join($select_columns), $from_clause, $table1)
+                           (', '.join($select_columns), $from_clause, $table)
     with
-        db_cursor.execute($sql_command, {'id': starting_data[$table1]})
+        db_cursor.execute($sql_command, {'id': starting_data[$table]})
         assert db_cursor.rowcount == 1, \
             'expected unique row, got %d rows from "%s"' % \
-              (db_cursor.rowcount, sql_command)
+              (db_cursor.rowcount, $sql_command)
         dict.update(zip($dict_keys, db_cursor.fetchone()))
 
-make_from_clause_done
-    use make_from_clause($from_in, (), $from_in)
-
-make_from_clause_next
-    use make_from_clause($from_in,
-                         (($table2, $from_table, $from_cols, $to_cols), *$rest),
-                         $from_clause)
+make_from_clause
+    use make_from_clause($table, $joins, $from_clause)
     when
-        $from1 = "%s\n           inner join %s on (%s)" % \
-                   ($from_in, $table2,
-                    ' AND '.join("%s.%s = %s.%s" %
-                                    ($from_table, from_col, $table2, to_col)
-                                 for from_col, to_col
-                                 in zip($from_cols, $to_cols)))
-        make_from_clause($from1, $rest, $from_clause)
+        python from_clause = $table
+        forall
+            $join in $joins
+        require
+            ($table2, $from_table, $from_cols, $to_cols) = $join
+            python from_clause += "\n           inner join %s on (%s)" % \
+                       ($table2,
+                        ' AND '.join("%s.%s = %s.%s" %
+                                        ($from_table, from_col, $table2, to_col)
+                                     for from_col, to_col
+                                     in zip($from_cols, $to_cols)))
+        $from_clause = from_clause
 
 get_multi
     use get_multi($starting_data, $options, $multi_data, $plan)
