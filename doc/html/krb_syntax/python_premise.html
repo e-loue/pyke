@@ -41,9 +41,10 @@
 
 <div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
-<div class="normal-nav"><a href="pattern.html">Pattern</a></div>
-<div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 <div class="normal-nav"><a href="bc_rule.html">Bc_rule</a></div>
+<div class="normal-nav"><a href="pattern.html">Pattern</a></div>
+<div class="normal-nav"><a href="compound_premise.html">Compound Premise</a></div>
+<div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 </div>
 <div class="normal-nav"><a href="../examples.html">Examples</a></div>
 <div class="normal-nav"><a href="../logic_tricks.html">Logic Tricks</a></div>
@@ -101,9 +102,6 @@ individually.</p>
 <dd><em>python_exp</em> is evaluated.  If the result is
 python &quot;true&quot; the clause succeeds, otherwise
 it fails.  The clause always fails on <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a>.</dd>
-<dt>python_statements</dt>
-<dd>The python_statements are simply executed.  They always succeed, but fail
-on <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a>.</dd>
 </dl>
 </div>
 <div class="section">
@@ -115,7 +113,52 @@ python_statements ::= 'python' python_statement
                       DEINDENT
 </pre>
 <p>This clause allows the inclusion of arbitrary python statements in your
-<a class="reference" href="../overview/rules/index.html">rules</a>.</p>
+<a class="reference" href="../overview/rules/index.html">rules</a>.  This premise always succeeds; and fails on backtracking.</p>
+<div class="tip">
+<p class="first admonition-title">Tip</p>
+<p>It is important to always keep in mind the difference between <a class="reference" href="patternvariable_">pattern
+variables</a> and python variables.  <a class="reference" href="patternvariable_">Pattern variables</a> are always
+indicated with a <tt class="docutils literal"><span class="pre">$</span></tt> and are only bound to a value during inferencing.
+Thus, a <tt class="docutils literal"><span class="pre">python_statement</span></tt> may not set a <a class="reference" href="pattern.html#pattern-variable">pattern variable</a>; you must
+use the special <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> assignment:</p>
+<pre class="literal-block">
+&lt;pattern&gt; = &lt;some python expression&gt;
+</pre>
+<p>Also, when a <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> is used within a python expression or
+statement, it must be bound to a value that does not contain any unbound
+<a class="reference" href="patternvariable_">pattern variables</a>.</p>
+<p>Python variables are not visible to the inference engine.  They are local
+variables that are also not visible to python code in other <a class="reference" href="../overview/rules/index.html">rules</a> or other
+invocations of the same <a class="reference" href="../overview/rules/index.html">rule</a>.</p>
+<p>Finally, python variables in the <a class="reference" href="bc_rule.html#when-clause">when clause</a> of a <a class="reference" href="bc_rule.html">backward-chaining
+rule</a> are not visible to the python code in the <a class="reference" href="bc_rule.html#with-clause">with clause</a> of the same
+<a class="reference" href="../overview/rules/index.html">rule</a>.  (These end up in two different python functions after the <a class="reference" href="index.html">.krb
+file</a> is compiled).  So this won't work:</p>
+<pre class="literal-block">
+some_bc_rule
+    use some_goal(...)
+    when
+        ...
+        python x_list = &lt;some python expression&gt;
+        ...
+    with
+        for x in x_list: process(x)
+</pre>
+<p>In this case, assign the value of the python variable to a <a class="reference" href="pattern.html#pattern-variable">pattern
+variable</a> in the <a class="reference" href="bc_rule.html#when-clause">when clause</a> and then use that <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> in
+the <a class="reference" href="bc_rule.html#with-clause">with clause</a>:</p>
+<pre class="last literal-block">
+some_bc_rule
+    use some_goal(...)
+    when
+        ...
+        python x_list = &lt;some python expression&gt;
+        ...
+        $x_list = tuple(x_list)
+    with
+        for x in $x_list: process(x)
+</pre>
+</div>
 </div>
 </div>
 
@@ -130,11 +173,13 @@ python_statements ::= 'python' python_statement
                 <h3>More:</h3>
 <div class="right-item"><a href="fc_rule.html">Fc_rule Syntax</a><p>The syntax of a forward-chaining rule.</p>
 </div>
+<div class="right-item"><a href="bc_rule.html">Bc_rule Syntax</a><p>The syntax of a backward-chaining rule.</p>
+</div>
 <div class="right-item"><a href="pattern.html">Pattern Syntax</a><p>The syntax of a pattern used to match data values.</p>
 </div>
-<div class="right-item"><a href="python_premise.html">Python Premise Syntax</a><p>The syntax of a python premise.</p>
+<div class="right-item"><a href="compound_premise.html">Compound Premise Syntax</a><p>The syntax of compound premises.</p>
 </div>
-<div class="right-item"><a href="bc_rule.html">Bc_rule Syntax</a><p>The syntax of a backward-chaining rule.</p>
+<div class="right-item"><a href="python_premise.html">Python Premise Syntax</a><p>The syntax of a python premise.</p>
 </div>
 
             </div>
@@ -152,7 +197,7 @@ python_statements ::= 'python' python_statement
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, May 20 2008.
+    Page last modified Sat, Jun 07 2008.
   </div>
 
 </body>

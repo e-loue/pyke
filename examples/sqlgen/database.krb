@@ -41,134 +41,252 @@
 #    - column_name qualification is not supported to disambiguate between
 #      multiple columns being inherited with the same name.
 
+
+# get_data($starting_tables, $needed_data) taking(db_cursor, starting_keys)
+#
+# This is the top-level goal to generate a plan to retrieve a set of data.
+#   Input goal arguments:
+#     $starting_tables      - a tuple of table_names that keys will be
+#                             provided for when the plan is called (e.g.,
+#                             ('movie',)).
+#     $needed_data          - a tuple of data descriptors describing the data
+#                             that should be returned (as a dict) from
+#                             executing the plan.  Each data descriptor is one
+#                             of the following:
+#                                column_name
+#                                  -- binds a single (ie, unique) value to
+#                                     column_name
+#                                (name, (option...), needed_data...)
+#                                  -- binds a tuple of dictionaries to name
+#                                  -- an option is:
+#                                       ('linked_to' table_name)
+#                                           -- table_name is the "1" table in
+#                                              the many_to_1 link
+#                                       ('order_by' 'asc'|'desc'|column_name...)
+#                                  -- needed_data can only be a column_name at
+#                                     this point (no nested multirow queries).
+#   plan arguments:
+#     db_cursor             - an open cursor to the database.
+#     starting_keys         - a dict mapping the table_names in
+#                             $starting_tables to their key values (e.g.,
+#                             {'movie': 4}).
+#   plan return:
+#     The plan returns a dict mapping the names in $needed_data to their
+#     values from the database.
 get_data
-    # $starting_data is a tuple of table_names that we will have ids for when
-    # we call the plan function.  These ids are passed to the plan function as
-    # a dict mapping table_names to ids.
-    # $needed_data is a tuple describing the data that should be returned (as
-    # a dict).  It is composed of the following:
-    #     column_name
-    #         -- binds a single (ie, unique) value to column_name
-    #     (name, (options), needed_data...)
-    #         -- binds a tuple of dictionaries to name
-    #         -- options can be:
-    #               (linked_to table_name)
-    #                   -- table_name is the "1" table in the many_to_1 link
-    #               (order_by 'asc'|'desc'|column_name...)
-    #         -- needed_data can only be a column_name at this point
-    #            (no nested multirow queries)
-    use get_data($starting_data, $needed_data) \
-        taking(db_cursor, starting_data)
+    use get_data($starting_tables, $needed_data)
+        taking(db_cursor, starting_keys)
     when
-        #python print "get_data: starting_data: %s" % str($starting_data)
+        #python print "get_data: starting_tables: %s" % str($starting_tables)
         #python print "get_data: needed_data: %s" % str($needed_data)
-        !get_data2($starting_data, $needed_data, $multi_plans, $unique_queries)
+        !parse_needed_data($starting_tables, $needed_data,
+                           $multi_plans, $unique_queries)
         !process_unique_queries($unique_queries)
             ans = {}
-            $$(db_cursor, starting_data, ans)
+            $$(db_cursor, starting_keys, ans)
     with
         for row_name, plan in $multi_plans:
-            ans[row_name] = plan(db_cursor, starting_data)
+            ans[row_name] = plan(db_cursor, starting_keys)
         return ans
 
-get_data2
-    # This processes the each element in $needed_data.  It creates two tuples:
-    # $multi_plans, $unique_queries.
-    # 
-    # Each request for multi-row data in $needed_data results in an element in
-    # $multi_plans.  This element is a two-tuple: (row_name, retrieval_fn)
-    # where the retrieval_fn takes two arguments: db_cursor and starting_data.
-    #
-    # Each request for single-row (unique) data in $needed_data results in an
-    # element in $unique_queries.  This element is a three-tuple:
-    #     from clause, which is a tuple starting with table_name_a followed by:
-    #                  (table_name_b, from_table, from_columns, b_columns)...
-    #     select clause, which is a column_name in the last table of the from
-    #                    clause
-    #     name binding, which will be the key in the resulting dict
-    #
-    # No plan is returned.
-    use get_data2($starting_data, $needed_data, $multi_plans, $unique_queries)
+# parse_needed_data($starting_tables, $needed_data,
+#                   $multi_plans, $unique_queries)
+#
+# This parses all of the $needed_data and produces two outputs: one for the
+# multi_row data, and the other for the unique data.
+#   Input goal arguments:
+#     $starting_tables      - a tuple of table_names that keys will be
+#                             provided for when the plan is called (e.g.,
+#                             ('movie',)).
+#     $needed_data          - a tuple of data descriptors describing the data
+#                             that should be returned (as a dict) from
+#                             executing the plan.  Each data descriptor is one
+#                             of the following:
+#                                column_name
+#                                  -- binds a single (ie, unique) value to
+#                                     column_name
+#                                (name, (option...), needed_data...)
+#                                  -- binds a tuple of dictionaries to name
+#                                  -- an option is:
+#                                       ('linked_to' table_name)
+#                                           -- table_name is the "1" table in
+#                                              the many_to_1 link
+#                                       ('order_by' 'asc'|'desc'|column_name...)
+#                                  -- needed_data can only be a column_name at
+#                                     this point (no nested multirow queries).
+#   Output goal arguments:
+#     $multi_plans              - A tuple of two-tuples; one for each request
+#                                 for multi-row data.  Each two-tuple has: 
+#                                   row_name
+#                                     - the key to set in the top-level dict.
+#                                   plan
+#                                     - a function taking (db_cursor,
+#                                       starting_keys)
+#     $unique_queries           - A tuple of three-tuples; one for each
+#                                 request for a unique data value.  Each
+#                                 three-tuple has:
+#                                   from clause
+#                                     - a tuple starting with table_name_a
+#                                       followed by:
+#                                         (table_name_b, from_table,
+#                                          from_columns, b_columns)...
+#                                   select clause
+#                                     - a column_name in the last table of the
+#                                       from clause
+#                                   name binding
+#                                     - the key in the resulting dict
+# No plan is returned.
+parse_needed_data
+    use parse_needed_data($starting_tables, $needed_data,
+                          $multi_plans, $unique_queries)
     when
-        python print "get_data2(%s, %s, _, _)" % ($starting_data, $needed_data)
+        #python print "parse_needed_data(%s, %s, _, _)" % \
+        #                ($starting_tables, $needed_data)
 
         # Note difference between multi_plans and $multi_plans!
         python multi_plans = []
         python unique_queries = []
 
         forall
-            $needed in $needed_data
+            $needed_element in $needed_data
         require
-            get_data3($starting_data, $needed, $multi_plan, $unique_queries1)
+            parse_needed_element($starting_tables, $needed_element,
+                                 $multi_plan, $unique_queries1)
             python if $multi_plan: multi_plans.append($multi_plan)
             python if $unique_queries1: unique_queries.append($unique_queries1)
         $multi_plans = tuple(multi_plans)
         $unique_queries = tuple(unique_queries)
 
-get_data3_multi
-    # This handles an individual $needed_data request for get_data2 (above).
-    use get_data3($starting_data, ($row_name, $options, *$multi_data),
-                  ($row_name, $multi_plan), None)
+
+# parse_needed_element($starting_tables, $needed_element,
+#                      $multi_plan, $unique_query)
+#
+# This processes one element in $needed_data.
+#   Input goal arguments:
+#     $starting_tables      - a tuple of table_names that keys will be
+#                             provided for when the plan is called (e.g.,
+#                             ('movie',)).
+#     $needed_element       - one of the following:
+#                                column_name
+#                                  -- binds a single (ie, unique) value to
+#                                     column_name
+#                                (name, (option...), needed_data...)
+#                                  -- binds a tuple of dictionaries to name
+#                                  -- an option is:
+#                                       ('linked_to' table_name)
+#                                           -- table_name is the "1" table in
+#                                              the many_to_1 link
+#                                       ('order_by' 'asc'|'desc'|column_name...)
+#                                  -- needed_data can only be a column_name at
+#                                     this point (no nested multirow queries).
+#   Output goal arguments:
+#     $multi_plan               - a two-tuple: (row_name, plan), or None
+#                                   row_name
+#                                     - the key to set in the top-level dict.
+#                                   plan
+#                                     - a function taking (db_cursor,
+#                                       starting_keys)
+#     $unique_query             - This element is a three-tuple or None:
+#                                   from clause
+#                                     - a tuple starting with table_name_a
+#                                       followed by:
+#                                         (table_name_b, from_table,
+#                                          from_columns, b_columns)...
+#                                   select clause
+#                                     - a column_name in the last table of the
+#                                       from clause
+#                                   name binding
+#                                     - the key in the resulting dict
+# No plan is returned.
+parse_needed_element_multi
+    use parse_needed_element($starting_tables,
+                             ($row_name, $options, *$multi_data),
+                             ($row_name, $plan),
+                             None)
     when
         # Multi-row request.
         special.claim_goal()
-        get_multi($starting_data, $options, $multi_data, $multi_plan)
+        get_multi($starting_tables, $options, $multi_data, $plan)
 
-get_data3_unique
-    use get_data3($starting_data, $unique_data, None, $unique_out)
+parse_needed_element_unique
+    use parse_needed_element($starting_tables, $unique_data, None, $unique_out)
     when
         # Single-row (unique) request.
-        get_unique($starting_data, $unique_data, $unique_out)
+        get_unique($starting_tables, $unique_data, $unique_out)
 
+# get_unique($starting_tables, $column, $unique_query)
+#
+# This processes one column in $needed_data.
+#   Input goal arguments:
+#     $starting_tables      - a tuple of table_names that keys will be
+#                             provided for when the plan is called (e.g.,
+#                             ('movie',)).
+#     $column               - the desired column_name
+#   Output goal arguments:
+#     $unique_query         - A three-tuple:
+#                                from clause
+#                                  - a tuple starting with table_name_a
+#                                    followed by:
+#                                      (table_name_b, from_table,
+#                                       from_columns, b_columns)...
+#                                select clause
+#                                  - a column_name in the last table of the
+#                                    from clause
+#                                name binding
+#                                  - the key in the resulting dict
+# No plan is returned.
 get_unique_direct
-    # $unique_out is a tuple of:
-    #     from clause, which is a tuple starting with table_name_a followed by:
-    #         (table_name_b, from_table, from_columns, b_columns)...
-    #     select clause, which is a column_name
-    #     name binding, which is a string
-    use get_unique($starting_data, $column, ($from_clause, $column, $column))
+    use get_unique($starting_tables, $column, (($table), $column, $column))
     when
         # This handles the case where $column is directly in one of the
-        # $starting_data tables.
-        lookup_column($column, $starting_data, $from_clause)
+        # $starting_tables.
+        lookup_column($column, $starting_tables, $table)
         special.claim_goal()
-        # lookup_column sets $from_clause to None if there were multiple
-        # matches... (which is an error and should cause get_unique to fail).
-        check $from_clause
+        # lookup_column sets $table to None if there were multiple matches...
+        # (which is an error and should cause get_unique to fail).
+        check $table
 
 get_unique_indirect
-    use get_unique($starting_data, $column, ($from_clause, $column, $column))
+    use get_unique($starting_tables, $column, ($from_clause, $column, $column))
     when
         # This handles the case where $column is inherited into one of the
-        # $starting_data tables.
-        lookup_indirect(1, $column, $starting_data, $from_clause)
+        # $starting_tables.
+        lookup_indirect(1, $column, $starting_tables, $from_clause)
 
+# lookup_column($column, $starting_tables, $table)
+#
+# This figures out which unique table within $starting_tables contains $column.
+#
+# This succeeds with None, after printing an error message, if $column appears
+# in more than one $table within $starting_tables.  This is done so that the
+# invoking goal does not try to find inherited columns in this situation.
+#
+# It fails if none of the tables in $starting_tables contain $column.
+#
+#   Input goal arguments:
+#     $column               - The desired column_name.
+#     $starting_tables      - A tuple of table_names.
+#   Output goal arguments:
+#     $table                - The table_name of the table in $starting_tables
+#                             containing $column, or None.
+# No plan is returned.
 lookup_column
-    use lookup_column($column, $starting_data, $ans)
+    use lookup_column($column, $starting_tables, $table)
     when
-        # Find all of the tables in $starting_data that have $column.
-        find_columns($column, $starting_data, $tables)
-        unique_table($column, $tables, $ans)
+        # Find all of the tables in $starting_tables that have $column.
+        find_columns($column, $starting_tables, $tables)
+        unique_table($column, $tables, $table)
 
-unique_table_success
-    use unique_table($_, ($table), ($table))
-    when
-        # A single table was found: Success!
-        special.claim_goal()
-
-unique_table_not_found
-    use unique_table($_, (), $_)
-    when
-        # No tables were found: fail
-        special.claim_goal()
-        check False
-
-unique_table_dups
-    use unique_table($column, $tables, None)
-    when
-        # Multiple tables were found: succeed with None to flag problem...
-        python print "duplicate column %s, found in %s" % ($column, $tables)
-
+# find_columns($column, $tables_in, $matching_tables)
+#
+# Produces a list of the table in $tables_in that directly contain $column.
+#   Input goal arguments:
+#     $column               - The column_name to look for.
+#     $tables_in            - A tuple of table_names.
+#   Output goal arguments:
+#     $matching_tables      - A tuple of the table_names in $tables_in that
+#                             directly contain $column.
+# No plan is returned.
 find_columns
     use find_columns($column, $tables_in, $matching_tables)
     when
@@ -179,87 +297,190 @@ find_columns
             python matching_tables.append($table)
         $matching_tables = tuple(matching_tables)
 
+# unique_table($column, $table_list, $table)
+#
+# This checks to see if $table_list contains only one table.
+#
+# If so, it returns it.
+# If $table_list is empty, it fails.
+# If $table_list has more than one table, it prints an error message and
+# succeeds with $table set to None.
+#
+#   Input goal arguments:
+#     $column               - The column_name to use in the error message.
+#     $table_list           - A tuple of table_names.
+#   Output goal arguments:
+#     $table                - The table_name of the only table in $table_list,
+#                             or None.
+# No plan is returned.
+unique_table_success
+    use unique_table($_, ($table), $table)
+    when
+        # A single table was found: Success!
+        special.claim_goal()
+
+unique_table_not_found
+    use unique_table($_, (), $_)
+    when
+        # No tables were found: cause the unique_table goal to fail!
+        special.claim_goal()
+        check False
+
+unique_table_dups
+    use unique_table($column, $tables, None)
+    when
+        # Multiple tables were found!
+        # Print error message:
+        python print "duplicate column %s, found in %s" % ($column, $tables)
+        # Then succeed with None to flag the problem...
+
+# lookup_indirect($depth, $column, $starting_tables, $from_clause)
+#
+# This implements a depth first search of the tables inherited by the tables
+# in $starting_tables looking for $column.  It calls itself recursively to
+# search at ever greater $depth values (starting with 1).
+#
+# It will fail if the $column can't be found, or if the $column exists in more
+# than one inherited table at the same $depth when first encountered.  (It's
+# OK if the first encounter is unique, but there are more $columns at a
+# greater depth).
+#
+# No plan is returned.
 lookup_indirect
-    use lookup_indirect($depth, $column, $starting_data, $from_clause)
+    use lookup_indirect($depth, $column, $starting_tables, $from_clause)
     when
         #python print "lookup_indirect: "
-        #                "find_depth(%s, %s, %s, _, _)" %
-        #                ($depth, $column, $starting_data)
-        !find_depth($depth, $column, $starting_data, $got_depth, $tables)
+        #                "find_at_depth(%s, %s, %s, _, _)" %
+        #                ($depth, $column, $starting_tables)
+        !find_at_depth($depth, $column, $starting_tables,
+                       $got_depth, $from_clauses)
         #python print "lookup_indirect: "
         #                "lookup_indirect2(%s, %s, %s, %s, %s, _)" %
-        #                ($depth, $column, $starting_data, $got_depth, $tables)
-        lookup_indirect2($depth, $column, $starting_data, $got_depth, $tables,
-                         $from_clause)
+        #                ($depth, $column, $starting_tables, $got_depth,
+        #                 $tables)
+        lookup_indirect2($depth, $column, $starting_tables, $got_depth,
+                         $from_clauses, $from_clause)
 
+
+# lookup_indirect2($depth, $column, $starting_tables, $got_depth, $from_clauses,
+#                  $from_clause)
+#
+# This finishes the job for lookup_indirect after find_at_depth has looked for
+# $column at $depth.  $got_depth is a bool indicating whether there were any
+# inherited tables at $depth.  This is how lookup_indirect2 knows when to stop
+# searching at greater depths.
+#
+# No plan is returned.
 lookup_indirect2_success
-    use lookup_indirect2($_depth, $_column, $_starting_data, $_got_depth,
+    # $column found in one table.  Success!
+    use lookup_indirect2($_depth, $_column, $_starting_tables, $_got_depth,
                          ($from_clause), $from_clause)
     when
         # Found it!
         special.claim_goal()
 
 lookup_indirect2_next_depth
-    use lookup_indirect2($depth, $column, $starting_data, True, (),
+    # $column not found, but there are still tables at this $depth.
+    # Try the next higher $depth...
+    use lookup_indirect2($depth, $column, $starting_tables, True, (),
                          $from_clause)
     when
         # $column not found, but the inherited tables haven't hit $depth yet!
         special.claim_goal()
         $depth2 = $depth + 1
-        lookup_indirect($depth2, $column, $starting_data, $from_clause)
+        lookup_indirect($depth2, $column, $starting_tables, $from_clause)
 
 lookup_indirect2_dups
-    # $got_depth must be True if there are multiple $froms.  If $got_depth is
-    # False, let lookup_indirect2 fail silently...
-    use lookup_indirect2($_depth, $column, $_starting_data, True, $froms, $_)
+    # We're using $got_depth of True here so that we don't match empty $froms.
+    # We can do this because $got_depth must be True if there are any $froms.
+    # If $got_depth is False, let lookup_indirect2 fail silently...
+    use lookup_indirect2($_depth, $column, $_starting_tables, True, $froms, $_)
     when
         python print "duplicate tables for %s: %s" % \
                          ($column, tuple(from_[0] for from_ in $froms))
         check False
 
-find_depth_done
-    use find_depth($_depth, $_column, (), False, ())
-
-find_depth_step
-    use find_depth($depth, $column, ($table, *$rest), $got_depth, $tables_out)
+# find_at_depth($depth, $column, $starting_tables, $got_depth, $from_clauses)
+#
+# This looks for $column at an inheritance depth of $depth from each table in
+# $starting_tables.  It returns $got_depth of True if any tables were found at
+# this depth and the $from_clauses of all the matches.
+#
+# No plan is returned.
+find_at_depth
+    use find_at_depth($depth, $column, $starting_tables,
+                      $got_depth, $from_clauses)
     when
-        ($got_depth1, $from) = find_depth1(engine, $depth, $column, $table)
-        find_depth($depth, $column, $rest, $got_depth2, $tables_out2)
-        $got_depth = $got_depth1 or $got_depth2
-        $tables_out = $from + $tables_out2
+        python got_depth = False
+        python from_clauses = []
+        forall
+            $table in $starting_tables
+        require
+            ($got_depth1, $from) = find_at_depth1(engine, $depth, $column,
+                                                  $table)
+            python got_depth = got_depth or $got_depth1
+            python from_clauses.extend($from)
+        $got_depth = got_depth
+        $from_clauses = tuple(from_clauses)
 
+# process_unique_queries($unique_queries) taking(db_cursor, starting_keys, dict)
+#
+# This groups queries from a common root table into one sql select statement
+# to minimize the number of sql statements issued to the database.  It does
+# this by:
+#    1. Taking the first item in $unique_queries
+#    2. Going through the rest of the items in $unique_queries sorting out
+#       those that can be combined and those that can't.
+#    3. For all of the combined queries it generates a single sql select
+#       statement.
+#    4. Then it repeats the process on those queries that can't be combined
+#       until no queries remain.
+#
+# It returns a plan that will execute these sql statements and populate a dict
+# with the answers.
 process_unique_queries_done
-    use process_unique_queries(()) taking(db_cursor, starting_data, dict)
+    # All done!
+    use process_unique_queries(()) taking(db_cursor, starting_keys, dict)
     with
         pass
 
 process_unique_queries_step
-    use process_unique_queries((($from, $select, $key), *$rest)) \
-        taking(db_cursor, starting_data, dict)
+    use process_unique_queries((($from, $select, $key), *$rest))
+        taking(db_cursor, starting_keys, dict)
     when
         $select2 = "%s.%s" % (($from[0] if len($from) == 1 else $from[-1][0]),
                               $select)
-        python print "process_unique_queries_step: " \
-                     "process_query(%s, %s, _, _)" %  \
-                        (($from, ($select2,), ($key,)), $rest)
-        !process_query(($from, ($select2), ($key)), $rest, $unrelated_queries,
-                       $combined_query)
-        python print "process_unique_queries_step: combined_query is: %s" % \
-                        str($combined_query)
+        #python print "process_unique_queries_step: " \
+        #             "combine_queries(%s, %s, _, _)" %  \
+        #                (($from, ($select2,), ($key,)), $rest)
+        !combine_queries(($from, ($select2), ($key)), $rest, $combined_query,
+                         $uncombined_queries)
+        #python print "process_unique_queries_step: combined_query is: %s" % \
+        #                str($combined_query)
         !run_query($combined_query)
-            $$(db_cursor, starting_data, dict)
-        !process_unique_queries($unrelated_queries)
-            $$(db_cursor, starting_data, dict)
+            $$(db_cursor, starting_keys, dict)
+        !process_unique_queries($uncombined_queries)
+            $$(db_cursor, starting_keys, dict)
 
-process_query_done_n
-    use process_query($query, (), (), $query)
+# combine_queries($unique_query, $rest_unique_queries,
+#                 $combined_query, $uncombined_queries)
+#
+# This combines $unique_query with as many queries in $rest_unique_queries as
+# it can.  The combined query is returned in $combined_query and the
+# uncombined queries are returned as a tuple in $uncombined_queries.
+#
+# No plan is returned.
+combine_queries_done_n
+    # All done!
+    use combine_queries($query, (), $query, ())
 
-process_query_match_n
-    use process_query((($table1, *$joins1), $select_columns1, $dict_keys1),
-                      ((($table1, *$joins2), $select_column2, $dict_key2),
-                       *$rest),
-                      $unrelated_queries,
-                      $combined_query)
+combine_queries_match_n
+    # The next query in $rest_unique_queries can be combined!
+    use combine_queries((($table1, *$joins1), $select_columns1, $dict_keys1),
+                        ((($table1, *$joins2), $select_column2, $dict_key2),
+                         *$rest),
+                        $combined_query,
+                        $uncombined_queries)
     when
         special.claim_goal()
         #python print "merge_joins(%s, %s, $merged_join)" % 
@@ -267,18 +488,38 @@ process_query_match_n
         !merge_joins($joins1, $joins2, $merged_join)
         $select2 = "%s.%s" % (($table1 if not $joins2 else $joins2[-1][0]),
                               $select_column2)
-        !process_query((($table1, *$merged_join),
-                        ($select2, *$select_columns1),
-                        ($dict_key2, *$dict_keys1)),
-                       $rest, $unrelated_queries, $combined_query)
+        !combine_queries((($table1, *$merged_join),
+                          ($select2, *$select_columns1),
+                          ($dict_key2, *$dict_keys1)),
+                         $rest, $combined_query, $uncombined_queries)
 
-process_query_match
-    use process_query($query1, ($unrelated_query1, *$rest),
-                      ($unrelated_query1, *$unrelated_queries), $combined_query)
+combine_queries_match
+    # The next query in $rest_unique_queries can not be combined...
+    use combine_queries($query1, ($uncombined_query1, *$rest), $combined_query,
+                        ($uncombined_query1, *$uncombined_queries))
     when
-        !process_query($query1, $rest, $unrelated_queries, $combined_query)
+        !combine_queries($query1, $rest, $combined_query, $uncombined_queries)
 
-merge_join_match
+# merge_joins($joins1, $joins2, $merged_join)
+#
+# Merges two join clauses into one.  It does this by determining how many of
+# the leading tables match (if any) and then appending the unmatched tail of
+# the second join clause to the end of the first join clause.
+#
+# This goal should never fail.
+#
+# Examples:
+#   merge_joins((table1, table2, table3), (table1, table2, table4),
+#               (table1, table2, table3, table4))
+#
+#   merge_joins((table1, table2), (table3, table4),
+#               (table1, table2, table3, table4))
+#
+#   merge_joins((table1, table2, table3), (table1, table2),
+#               (table1, table2, table3))
+#
+# No plan is returned.
+merge_joins_match
     # Merge joins with the same first table by merging the rest of the joins
     # in each clause. 
     use merge_joins(($first_join, *$rest_joins1), ($first_join, *$rest_joins2),
@@ -287,18 +528,20 @@ merge_join_match
         special.claim_goal()
         merge_joins($rest_joins1, $rest_joins2, $merged_joins)
 
-merge_join_no_match
+merge_joins_no_match
     # Merge joins with different first tables by concatenating the join
     # clauses.
     use merge_joins($joins1, $joins2, $merged_joins)
     when
         $merged_joins = $joins1 + $joins2
 
+# run_query($combined_query) taking(db_cursor, starting_keys, dict)
+#
+# This constructs a sql select statement for $combined_query and returns a
+# plan to run that select statement and populate a dict with the results.
 run_query
-    # This subgoal constructs the sql select statement and produces a plan to
-    # execute that statement and deposit the results in a dict.
-    use run_query((($table, *$joins), $select_columns, $dict_keys)) \
-        taking(db_cursor, starting_data, dict)
+    use run_query((($table, *$joins), $select_columns, $dict_keys))
+        taking(db_cursor, starting_keys, dict)
     when
         #python print "make_from_clause(%s, %s, $from_clause)" % \
         #                ($table, $joins)
@@ -306,12 +549,18 @@ run_query
         $sql_command = "select %s\n  from %s\n where %s.id = %%(id)s" % \
                            (', '.join($select_columns), $from_clause, $table)
     with
-        db_cursor.execute($sql_command, {'id': starting_data[$table]})
+        db_cursor.execute($sql_command, {'id': starting_keys[$table]})
         assert db_cursor.rowcount == 1, \
             'expected unique row, got %d rows from "%s"' % \
               (db_cursor.rowcount, $sql_command)
         dict.update(zip($dict_keys, db_cursor.fetchone()))
 
+# make_from_clause($table, $joins, $from_clause)
+#
+# Creates the $from_clause for a sql select statement (as a string) starting
+# with $table and including the $joins.
+#
+# No plan is returned.
 make_from_clause
     use make_from_clause($table, $joins, $from_clause)
     when
@@ -322,60 +571,115 @@ make_from_clause
             ($table2, $from_table, $from_cols, $to_cols) = $join
             python from_clause += "\n           inner join %s on (%s)" % \
                        ($table2,
-                        ' AND '.join("%s.%s = %s.%s" %
+                        ' and '.join("%s.%s = %s.%s" %
                                         ($from_table, from_col, $table2, to_col)
                                      for from_col, to_col
                                      in zip($from_cols, $to_cols)))
         $from_clause = from_clause
 
+# get_multi($starting_tables, $options, $multi_data, $plan)
+#
+# This creates a $plan for retrieving the multi-row $multi_data starting from
+# $starting_tables with any indicated $options.
+#   Input goal arguments:
+#     $starting_tables      - a tuple of table_names that keys will be
+#                             provided for when the plan is called (e.g.,
+#                             ('movie',)).
+#     $options              - a tuple of options.  Currently, only two options
+#                             are supported:
+#                               ('linked_to', table_name)
+#                               ('order_by', 'asc'|'desc'|column_name...)
+#     $multi_data           - can only be a tuple of column_names at this point
+#                             (no nested multirow queries).
+#   Output goal arguments:
+#     $plan                 - a function taking (db_cursor, starting_keys) that
+#                             will return a tuple of dicts (one per row in the
+#                             select result).
+#
+# No plan is attached to the goal.  Instead, it is returned in $plan.
 get_multi
-    use get_multi($starting_data, $options, $multi_data, $plan)
+    use get_multi($starting_tables, $options, $multi_data, $plan)
     when
         $linked_to = dict($options).get('linked_to')
         $order_by = dict($options).get('order_by')
-        get_multi2($starting_data, $multi_data, $linked_to, $order_by, $plan)
+        get_multi2($starting_tables, $multi_data, $linked_to, $order_by, $plan)
 
+# get_multi2($starting_tables, $multi_data, $linked_to, $order_by, $plan)
+#
+# This is a continuation of the get_multi goal (above) with the options pulled
+# out separately.
+#
+# No plan is attached to the goal.  Instead, it is returned in $plan.
 get_multi2_no_linked_to
-    use get_multi2($starting_data, $multi_data, None, $order_by, $plan)
+    use get_multi2($starting_tables, $multi_data, None, $order_by, $plan)
     when
         special.claim_goal()
-        $unique_table in $starting_data
-        get_multi3($unique_table, $multi_data, $order_by, $plan)
+        # Try each $unique_table in $starting_tables to find one that
+        # find_multi_from_unique likes.
+        # FIX: This should check for duplicates (ambiguous specification)!
+        $unique_table in $starting_tables
+        find_multi_from_unique($unique_table, $multi_data, $order_by, $plan)
 
 get_multi2_linked_to
-    use get_multi2($starting_data, $multi_data, $linked_to, $order_by, $plan)
+    use get_multi2($starting_tables, $multi_data, $linked_to, $order_by,
+                   $plan)
     when
         # FIX: This should allow $linked_to to be an inherited table
         #      Or should we allow specifying the multi-row table rather than
         #      (in addition to?) the linked_to table?
-        check $linked_to in $starting_data
-        get_multi3($linked_to, $multi_data, $order_by, $plan)
+        check $linked_to in $starting_tables
+        find_multi_from_unique($linked_to, $multi_data, $order_by, $plan)
 
-get_multi3
-    use get_multi3($unique_table, $multi_data, $order_by, $plan)
+# find_multi_from_unique($unique_table, $multi_data, $order_by, $plan)
+#
+# Finds a many-to-1 relationship between some table X (as the "many" end of
+# the relationship) and $unique_table (as the "1" end of the relationship) and
+# then creates a plan to retrieve the columns specified in $multi_data from
+# that table X.
+#
+# No plan is attached to the goal.  Instead, it is returned in $plan.
+find_multi_from_unique
+    use find_multi_from_unique($unique_table, $multi_data, $order_by, $plan)
     when
+        # FIX: This should check for duplicate possibilities (duplicate
+        #      $multi_tables)!
         schema.many_to_1($multi_table, $unique_table, ($multi_link_column), $_)
-        get_data2(($multi_table), $multi_data, (), $unique_queries)
+        parse_needed_data(($multi_table), $multi_data, (), $unique_queries)
         process_multi_queries($unique_queries, $combined_query)
         run_multi_query($unique_table, $combined_query, $multi_link_column,
                         $order_by) as $plan
 
-process_multi_queries_done
+# process_multi_queries($unique_queries, $combined_query)
+#
+# This combines the $unique_queries into a single $combined_query.
+#
+# No plan is returned.
+process_multi_queries_none
     use process_multi_queries((), ())
 
-process_multi_queries_step
+process_multi_queries_some
     use process_multi_queries((($from, $select, $key), *$rest), $combined_query)
     when
         $select2 = "%s.%s" % (($from[0] if len($from) == 1 else $from[-1][0]),
                               $select)
-        process_query(($from, ($select2), ($key)), $rest, (), $combined_query)
+        combine_queries(($from, ($select2), ($key)), $rest, $combined_query, ())
 
+# run_multi_query($unique_table, $combined_query, $multi_link_column, $order_by)
+# taking (db_cursor, starting_keys)
+#
+# This creates a sql select statement to retrieve multi-row data.  The first
+# table in $combined_query must link to $unique_table by $multi_link_column to
+# generate the multiple rows.
+#
+# It generates a plan to execute this sql select statement and create a tuple
+# of dicts, one per row in the select response.
+#
+# The plan returns a tuple of dictionaries
 run_multi_query
     use run_multi_query($unique_table,
                         (($table1, *$joins1), $select_columns, $dict_keys),
                         $multi_link_column, $order_by) \
-        taking (db_cursor, starting_data)
-        # plan returns tuple of dictionaries
+        taking (db_cursor, starting_keys)
     when
         !make_from_clause($table1, $joins1, $from_clause)
         # FIX: Add order_by
@@ -383,11 +687,11 @@ run_multi_query
                            (', '.join($select_columns), $from_clause,
                             $table1, $multi_link_column)
     with
-        db_cursor.execute($sql_command, {'id': starting_data[$unique_table]})
+        db_cursor.execute($sql_command, {'id': starting_keys[$unique_table]})
         return tuple(dict(zip($dict_keys, row)) for row in db_cursor.fetchall())
 
 bc_extras
-    def find_depth1(engine, depth, column, table):
+    def find_at_depth1(engine, depth, column, table):
         got_depth = False
         ans_joins = []
         for (to_table, joins), bogus_plan1 \
@@ -397,8 +701,4 @@ bc_extras
              in engine.prove_n("schema", "column", (to_table, column), 5):
                 ans_joins.append((table,) + joins)
         return got_depth, tuple(ans_joins)
-
-    def print_fail(msg):
-        print msg
-        return False
 

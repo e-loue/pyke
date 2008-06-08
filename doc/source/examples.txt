@@ -102,15 +102,15 @@ automatically figure out the table joins.
 
 The program automatically introspects the schema information.  For this
 example, it assumes that `id` is the primary key for each table, and that
-when one table links to another, it uses the target table name as the column
-name.
+when one table links to another, it uses the target table name suffixed with
+`_id` as the column name.
 
 This example uses MySQL_ and includes the .sql files to create the database,
 tables, and example data.  It lacks more general capabilities that would be
 required for real use, but may serve as a starting point for something more
 complete.
 
-This example also has more elaborate rules than the prior two examples.
+This example also has much more elaborate rules than the prior two examples.
 
 web_framework
 ================
@@ -126,11 +126,10 @@ developers having to modify them in any way.
 Note that the code generated here is fully "cooked" code, custom built for that
 schema and HTML template.  This should run extremely fast because there is
 nothing left at run-time concerning parsing and figuring out the HTML template
-or constructing the SQL statements.  (Though this demo does not cache the
-generated plans_).
+or constructing the SQL statements.
 
 The demo is packaged as a WSGI_ application and also demonstrates the use of
-multiple `rule bases`_ by using the sqlgen example.
+multiple `rule bases`_ by using the sqlgen example above.
 
 .. _knapsack problem: http://en.wikipedia.org/wiki/Knapsack_problem
 .. _PyCon 2008: http://us.pycon.org/2008/about/

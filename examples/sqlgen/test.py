@@ -54,25 +54,25 @@ def init():
            as conn:
         load_mysql_schema.load_schema(test.Engine, conn)
 
-def run_plan(locals):
+def run_plan(globals, locals):
     plan = locals['plan']
     args = locals['args']
-    starting_data = dict(zip(args[0], range(1, len(args[0]) + 1)))
+    starting_keys = dict(zip(args[0], range(1, len(args[0]) + 1)))
     print "executing the plan with debug database cursor"
-    ans = plan(cursor(len(args[1])), starting_data)
+    ans = plan(cursor(len(args[1])), starting_keys)
     print "plan returned:", ans
     while True:
         print
         data_values = raw_input("%s: " % str(args[0])).split()
         if not data_values: break
-        starting_data = dict(zip(args[0], data_values))
+        starting_keys = dict(zip(args[0], data_values))
         print "executing the plan with real database cursor"
         with contextlib.closing(db.connect(user="movie_user",
                                            passwd="user_pw",
                                            db="movie_db")) \
                as conn:
             with contextlib.closing(conn.cursor()) as cur:
-                ans = plan(cur, starting_data)
+                ans = plan(cur, starting_keys)
         print "plan returned:", ans
 
 def run():

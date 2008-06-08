@@ -116,13 +116,13 @@ columns from table A through it's link to table A.  Thus, the pyke rules will
 automatically figure out the table joins.</p>
 <p>The program automatically introspects the schema information.  For this
 example, it assumes that <cite>id</cite> is the primary key for each table, and that
-when one table links to another, it uses the target table name as the column
-name.</p>
+when one table links to another, it uses the target table name suffixed with
+<cite>_id</cite> as the column name.</p>
 <p>This example uses <a class="reference" href="http://www.mysql.com/">MySQL</a> and includes the .sql files to create the database,
 tables, and example data.  It lacks more general capabilities that would be
 required for real use, but may serve as a starting point for something more
 complete.</p>
-<p>This example also has more elaborate rules than the prior two examples.</p>
+<p>This example also has much more elaborate rules than the prior two examples.</p>
 </div>
 <div class="section">
 <h2><a id="web-framework" name="web-framework">web_framework</a></h2>
@@ -135,10 +135,9 @@ developers having to modify them in any way.</p>
 <p>Note that the code generated here is fully &quot;cooked&quot; code, custom built for that
 schema and HTML template.  This should run extremely fast because there is
 nothing left at run-time concerning parsing and figuring out the HTML template
-or constructing the SQL statements.  (Though this demo does not cache the
-generated <a class="reference" href="overview/plans.html">plans</a>).</p>
+or constructing the SQL statements.</p>
 <p>The demo is packaged as a <a class="reference" href="http://www.python.org/dev/peps/pep-0333/">WSGI</a> application and also demonstrates the use of
-multiple <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a> by using the sqlgen example.</p>
+multiple <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a> by using the sqlgen example above.</p>
 </div>
 </div>
 
@@ -184,7 +183,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Sun, Apr 13 2008.
+    Page last modified Fri, Jun 06 2008.
   </div>
 
 </body>

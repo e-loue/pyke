@@ -21,6 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import MySQLdb as db
 from pyke import test
 from examples.sqlgen import load_mysql_schema
 
@@ -28,12 +29,17 @@ def init():
     test.init(('.', '../sqlgen'))
 
 def init_fn(engine):
+    global Db_connection, Db_cursor
+    Db_connection = db.connect(user="movie_user", passwd="user_pw",
+                               db="movie_db")
+    Db_cursor = Db_connection.cursor()
+    load_mysql_schema.load_schema(engine, Db_connection)
     engine.add_universal_fact('request', 'request_method', ('GET',))
-    engine.add_universal_fact('request', 'path_info', ('/1/movie.html',))
+    engine.add_universal_fact('request', 'path_info', ('/movie/1/movie.html',))
     engine.add_universal_fact('request', 'script_info', ('',))
 
 def run():
-    test.run(('web', 'database'), init_fn = init_fn)
+    test.run(('web', 'database'), init_fn = init_fn, plan_globals = globals())
 
 def doc_test():
     import doctest

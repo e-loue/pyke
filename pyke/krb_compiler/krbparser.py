@@ -32,28 +32,28 @@ from pyke.krb_compiler import scanner
 tokens = scanner.tokens
 
 def p_file(p):
-    ''' file : nls_opt parent_opt fc_rules bc_rules_opt
+    ''' file : nl_opt parent_opt fc_rules bc_rules_opt
     '''
     p[0] = ('file', p[2], (tuple(p[3]), ()), p[4])
 
 def p_file_fc_extras(p):
-    ''' file : nls_opt parent_opt fc_rules fc_extras bc_rules_opt
+    ''' file : nl_opt parent_opt fc_rules fc_extras bc_rules_opt
     '''
     p[0] = ('file', p[2], (tuple(p[3]), p[4]), p[5])
 
 def p_file_bc(p):
-    ''' file : nls_opt parent_opt bc_rules_section
+    ''' file : nl_opt parent_opt bc_rules_section
     '''
     p[0] = ('file', p[2], ((), ()), p[3])
 
 # Uncomment this to generate an error in the grammer.
 #def p_bogus(p):
-#    ''' file : nls_opt parent_opt bc_rules_opt
+#    ''' file : nl_opt parent_opt bc_rules_opt
 #    '''
 #    p[0] = ('file', p[2], ((), ()), p[3])
 
 def p_parent(p):
-    ''' parent_opt : EXTENDING_TOK IDENTIFIER_TOK without_opt nls
+    ''' parent_opt : EXTENDING_TOK IDENTIFIER_TOK without_opt NL_TOK
     '''
     p[0] = ('parent', p[2], tuple(p[3]))
 
@@ -84,10 +84,10 @@ def p_inc_plan_vars(p):
     p[0] = None
 
 def p_fifth(p):
-    ''' bc_extras_opt : BC_EXTRAS_TOK NL_TOK start_extra_statements INDENT_TOK python_extras_code nls DEINDENT_TOK
-        fc_extras : FC_EXTRAS_TOK NL_TOK start_extra_statements INDENT_TOK python_extras_code nls DEINDENT_TOK
-        plan_extras_opt : PLAN_EXTRAS_TOK NL_TOK start_extra_statements INDENT_TOK python_extras_code nls DEINDENT_TOK
-        with_opt : WITH_TOK NL_TOK start_python_statements INDENT_TOK python_plan_code nls DEINDENT_TOK
+    ''' bc_extras_opt : BC_EXTRAS_TOK NL_TOK start_extra_statements INDENT_TOK python_extras_code NL_TOK DEINDENT_TOK
+        fc_extras : FC_EXTRAS_TOK NL_TOK start_extra_statements INDENT_TOK python_extras_code NL_TOK DEINDENT_TOK
+        plan_extras_opt : PLAN_EXTRAS_TOK NL_TOK start_extra_statements INDENT_TOK python_extras_code NL_TOK DEINDENT_TOK
+        with_opt : WITH_TOK NL_TOK start_python_statements INDENT_TOK python_plan_code NL_TOK DEINDENT_TOK
     '''
     p[0] = p[5]
 
@@ -98,12 +98,10 @@ def p_none(p):
         colon_opt :
         data : NONE_TOK
         fc_require_opt :
-        nls : NL_TOK
-        nls : nls NL_TOK
-        nls_opt :
-        nls_opt : nls
+        nl_opt :
+        nl_opt : NL_TOK
         parent_opt :
-        plan_spec : nls
+        plan_spec : NL_TOK
         rest_opt : comma_opt
     '''
     p[0] = None
@@ -128,12 +126,12 @@ def p_foreach(p):
     p[0] = tuple(p[4])
 
 def p_fc_premise(p):
-    ''' fc_premise : IDENTIFIER_TOK '.' IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK nls
+    ''' fc_premise : IDENTIFIER_TOK '.' IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK NL_TOK
     '''
     p[0] = ('fc_premise', p[1], p[3], tuple(p[5]), p.lineno(1), p.lineno(6))
 
 def p_fc_first_1(p):
-    ''' fc_premise : FIRST_TOK nls INDENT_TOK fc_premises DEINDENT_TOK
+    ''' fc_premise : FIRST_TOK NL_TOK INDENT_TOK fc_premises DEINDENT_TOK
     '''
     p[0] = ('fc_first', tuple(p[4]), p.lineno(1))
 
@@ -143,42 +141,42 @@ def p_fc_first_n(p):
     p[0] = ('fc_first', (p[2],), p.lineno(1))
 
 def p_fc_notany(p):
-    ''' fc_premise : NOTANY_TOK nls INDENT_TOK fc_premises DEINDENT_TOK
+    ''' fc_premise : NOTANY_TOK NL_TOK INDENT_TOK fc_premises DEINDENT_TOK
     '''
     p[0] = ('fc_notany', tuple(p[4]), p.lineno(1))
 
 def p_fc_forall(p):
-    ''' fc_premise : FORALL_TOK nls INDENT_TOK fc_premises DEINDENT_TOK fc_require_opt
+    ''' fc_premise : FORALL_TOK NL_TOK INDENT_TOK fc_premises DEINDENT_TOK fc_require_opt
     '''
     p[0] = ('fc_forall', tuple(p[4]), p[6], p.lineno(1), p.linespan(6)[1])
 
 def p_fc_require_opt(p):
-    ''' fc_require_opt : REQUIRE_TOK nls INDENT_TOK fc_premises DEINDENT_TOK
+    ''' fc_require_opt : REQUIRE_TOK NL_TOK INDENT_TOK fc_premises DEINDENT_TOK
     '''
     p[0] = tuple(p[4])
 
 def p_python_eq(p):
-    ''' python_premise : pattern start_python_code '=' python_rule_code nls
+    ''' python_premise : pattern start_python_code '=' python_rule_code NL_TOK
     '''
     p[0] = ('python_eq', p[1], p[4], p.linespan(1)[0], p.linespan(4)[1])
 
 def p_python_in(p):
-    ''' python_premise : pattern start_python_code IN_TOK python_rule_code nls
+    ''' python_premise : pattern start_python_code IN_TOK python_rule_code NL_TOK
     '''
     p[0] = ('python_in', p[1], p[4], p.linespan(1)[0], p.linespan(4)[1])
 
 def p_python_check(p):
-    ''' python_premise : start_python_code CHECK_TOK python_rule_code nls
+    ''' python_premise : start_python_code CHECK_TOK python_rule_code NL_TOK
     '''
     p[0] = ('python_check', p[3], p.lineno(2), p.linespan(3)[1])
 
 def p_python_block_n(p):
-    ''' python_premise : check_nl PYTHON_TOK nls start_python_assertion INDENT_TOK python_rule_code nls DEINDENT_TOK
+    ''' python_premise : check_nl PYTHON_TOK NL_TOK start_python_assertion INDENT_TOK python_rule_code NL_TOK DEINDENT_TOK
     '''
     p[0] = ('python_block', p[6], p.lineno(2), p.linespan(6)[1])
 
 def p_python_block_1(p):
-    ''' python_premise : check_nl PYTHON_TOK start_python_code NOT_NL_TOK python_rule_code nls
+    ''' python_premise : check_nl PYTHON_TOK start_python_code NOT_NL_TOK python_rule_code NL_TOK
     '''
     p[0] = ('python_block', p[5], p.lineno(2), p.linespan(5)[1])
 
@@ -188,12 +186,12 @@ def p_assertion(p):
     p[0] = ('assert', p[1], p[3], tuple(p[5]), p.lineno(1), p.lineno(6))
 
 def p_python_assertion_n(p):
-    ''' assertion : check_nl PYTHON_TOK nls start_python_assertion INDENT_TOK python_rule_code nls DEINDENT_TOK
+    ''' assertion : check_nl PYTHON_TOK NL_TOK start_python_assertion INDENT_TOK python_rule_code NL_TOK DEINDENT_TOK
     '''
     p[0] = ('python_assertion', p[6], p.lineno(2), p.linespan(6)[1])
 
 def p_python_assertion_1(p):
-    ''' assertion : check_nl PYTHON_TOK start_python_code NOT_NL_TOK python_rule_code nls
+    ''' assertion : check_nl PYTHON_TOK start_python_code NOT_NL_TOK python_rule_code NL_TOK
     '''
     p[0] = ('python_assertion', p[5], p.lineno(2), p.linespan(5)[1])
 
@@ -218,8 +216,13 @@ def p_bc_rules_section(p):
     '''
     p[0] = (tuple(p[1]), p[2], p[3])
 
-def p_goal(p):
-    ''' goal : IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK taking_opt nls
+def p_goal_no_taking(p):
+    ''' goal : IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK NL_TOK
+    '''
+    p[0] = ('goal', p[1], tuple(p[3]), (), p.lineno(1), p.lineno(4))
+
+def p_goal_taking(p):
+    ''' goal : IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK taking
     '''
     p[0] = ('goal', p[1], tuple(p[3]), p[5], p.lineno(1), p.lineno(4))
 
@@ -258,7 +261,7 @@ def p_bc_premise4(p):
             p.lineno(1), p.lineno(7))
 
 def p_bc_first_1f(p):
-    ''' bc_premise : FIRST_TOK nls INDENT_TOK bc_premises DEINDENT_TOK
+    ''' bc_premise : FIRST_TOK NL_TOK INDENT_TOK bc_premises DEINDENT_TOK
     '''
     p[0] = ('bc_first', False, tuple(p[4]), p.lineno(1))
 
@@ -268,7 +271,7 @@ def p_bc_first_nf(p):
     p[0] = ('bc_first', False, (p[2],), p.lineno(1))
 
 def p_bc_first_1t(p):
-    ''' bc_premise : '!' FIRST_TOK nls INDENT_TOK bc_premises DEINDENT_TOK
+    ''' bc_premise : '!' FIRST_TOK NL_TOK INDENT_TOK bc_premises DEINDENT_TOK
     '''
     p[0] = ('bc_first', True, tuple(p[4]), p.lineno(1))
 
@@ -278,33 +281,33 @@ def p_bc_first_nt(p):
     p[0] = ('bc_first', True, (p[2],), p.lineno(1))
 
 def p_bc_notany(p):
-    ''' bc_premise : NOTANY_TOK nls INDENT_TOK bc_premises DEINDENT_TOK
+    ''' bc_premise : NOTANY_TOK NL_TOK INDENT_TOK bc_premises DEINDENT_TOK
     '''
     p[0] = ('bc_notany', tuple(p[4]), p.lineno(1))
 
 def p_bc_forall(p):
-    ''' bc_premise : FORALL_TOK nls INDENT_TOK bc_premises DEINDENT_TOK bc_require_opt
+    ''' bc_premise : FORALL_TOK NL_TOK INDENT_TOK bc_premises DEINDENT_TOK bc_require_opt
     '''
     p[0] = ('bc_forall', tuple(p[4]), p[6], p.lineno(1), p.linespan(6)[1])
 
 def p_bc_require_opt(p):
-    ''' bc_require_opt : REQUIRE_TOK nls INDENT_TOK bc_premises DEINDENT_TOK
+    ''' bc_require_opt : REQUIRE_TOK NL_TOK INDENT_TOK bc_premises DEINDENT_TOK
     '''
     p[0] = tuple(p[4])
 
 def p_as(p):
-    ''' plan_spec : AS_TOK PATTERN_VAR_TOK nls
+    ''' plan_spec : AS_TOK PATTERN_VAR_TOK NL_TOK
     '''
     p[0] = ('as', p[2][1:-1])
 
 def p_step_code(p):
-    ''' plan_spec : STEP_TOK NUMBER_TOK nls start_python_plan_call INDENT_TOK python_plan_code nls DEINDENT_TOK
+    ''' plan_spec : STEP_TOK NUMBER_TOK NL_TOK start_python_plan_call INDENT_TOK python_plan_code NL_TOK DEINDENT_TOK
     '''
     p[0] = ('plan_spec', p[2], plan_var, p[6][0], p[6][1],
             p.lineno(1), p.lexpos(1))
 
 def p_code(p):
-    ''' plan_spec : nls start_python_plan_call INDENT_TOK python_plan_code nls DEINDENT_TOK
+    ''' plan_spec : NL_TOK start_python_plan_call INDENT_TOK python_plan_code NL_TOK DEINDENT_TOK
     '''
     p[0] = ('plan_spec', None, plan_var, p[4][0], p[4][1], p[4][2], p[4][3])
 
@@ -382,9 +385,14 @@ def p_last(p):
     p[0] = p[len(p)-1]
 
 def p_taking(p):
-    ''' taking_opt : start_python_code TAKING_TOK python_rule_code
+    ''' taking : start_python_code TAKING_TOK python_rule_code NL_TOK
     '''
     p[0] = p[3][0]
+
+def p_taking2(p):
+    ''' taking : NL_TOK INDENT_TOK start_python_code TAKING_TOK python_rule_code NL_TOK DEINDENT_TOK
+    '''
+    p[0] = p[5][0]
 
 def p_quoted_last(p):
     ''' data : IDENTIFIER_TOK
@@ -420,10 +428,10 @@ def p_empty_tuple(p):
         foreach_opt :
         patterns_opt :
         plan_extras_opt :
-        taking_opt :
         when_opt :
         without_opt :
     '''
+        # DEL taking_opt :
     p[0] = ()
 
 def p_double_empty_tuple(p):

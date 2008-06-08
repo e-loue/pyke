@@ -518,15 +518,15 @@ def tokenize(s):
         >>> tokenize("# This is a comment\n# line 2 of comment\n\n"
         ...          "# comment after blank line\n")
         LexToken(NL_TOK,'\n# line 2 of comment\n\n# comment after blank line\n',1,19)
-        >>> tokenize('name1\n    forall   foreach\n\nname2')
+        >>> tokenize('name1\n    forall   foreach\n           \nname2')
         LexToken(IDENTIFIER_TOK,'name1',1,0)
         LexToken(NL_TOK,'\n',1,5)
         LexToken(INDENT_TOK,'\n    ',2,5)
         LexToken(FORALL_TOK,'forall',2,10)
         LexToken(FOREACH_TOK,'foreach',2,19)
-        LexToken(NL_TOK,'\n\n',2,26)
-        LexToken(DEINDENT_TOK,'\n',4,27)
-        LexToken(IDENTIFIER_TOK,'name2',4,28)
+        LexToken(NL_TOK,'\n           \n',2,26)
+        LexToken(DEINDENT_TOK,'\n',4,38)
+        LexToken(IDENTIFIER_TOK,'name2',4,39)
     '''
     for t in token_iterator(s):
         print t

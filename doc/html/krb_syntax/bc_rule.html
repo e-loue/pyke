@@ -41,9 +41,10 @@
 
 <div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
-<div class="normal-nav"><a href="pattern.html">Pattern</a></div>
-<div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 <div class="normal-nav"><a href="bc_rule.html">Bc_rule</a></div>
+<div class="normal-nav"><a href="pattern.html">Pattern</a></div>
+<div class="normal-nav"><a href="compound_premise.html">Compound Premise</a></div>
+<div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 </div>
 <div class="normal-nav"><a href="../examples.html">Examples</a></div>
 <div class="normal-nav"><a href="../logic_tricks.html">Logic Tricks</a></div>
@@ -71,7 +72,7 @@
                 <div class="document" id="bc-rule-syntax">
 <h1 class="title">Bc_rule Syntax</h1>
 <div class="section">
-<h1><a id="bc-rule" name="bc-rule">Bc_rule</a></h1>
+<h2><a id="bc-rule" name="bc-rule">Bc_rule</a></h2>
 <p><a class="reference" href="../overview/rules/backward_chaining.html">Backward-chaining</a> <a class="reference" href="../overview/rules/index.html">rules</a> have four parts:</p>
 <ol class="arabic simple">
 <li>A unique name.</li>
@@ -93,20 +94,21 @@ associated with the rule.  This name will show up in stack traces
 associated with exceptions raised during the inferencing or plan execution.</p>
 </div>
 <div class="section">
-<h1><a id="use-clause" name="use-clause">Use Clause</a></h1>
+<h2><a id="use-clause" name="use-clause">Use Clause</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">use</span></tt> clause is the <strong>then</strong> part of the <a class="reference" href="../overview/rules/index.html">rule</a>.  It identifies the
 <em>goal</em> that this <a class="reference" href="../overview/rules/index.html">rule</a> is trying to prove.</p>
-<blockquote>
-<dl class="docutils">
-<dt>use ::= 'use' IDENTIFIER '(' {pattern,} ')'</dt>
-<dd>['taking' '(' &lt;python_arg_spec&gt; ')'] NL</dd>
-</dl>
-</blockquote>
+<pre class="literal-block">
+use ::= 'use' IDENTIFIER '(' {pattern,} ')'
+        ['taking' '(' &lt;python_arg_spec&gt; ')'] NL
+      | 'use' IDENTIFIER '(' {pattern,} ')' NL
+         INDENT_TOK 'taking' '(' &lt;python_arg_spec&gt; ')'
+         DEINDENT_TOK
+</pre>
 <p>Notice that it uses a single <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.  The <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> name is implied
 as the <a class="reference" href="../overview/knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name (the name of the root rule base) for the
 <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> containing this <a class="reference" href="../overview/rules/index.html">rule</a>.</p>
 <div class="section">
-<h2><a id="taking-clause" name="taking-clause">Taking Clause</a></h2>
+<h3><a id="taking-clause" name="taking-clause">Taking Clause</a></h3>
 <p>The <tt class="docutils literal"><span class="pre">use</span></tt> clause also defines parameters to the <a class="reference" href="../overview/plans.html">plan</a> function (if one is
 used for this <a class="reference" href="../overview/rules/index.html">rule</a>) with the optional <tt class="docutils literal"><span class="pre">taking</span></tt> sub-clause.</p>
 <p>The <em>python_arg_spec</em> is not parsed by pyke, but simply copied to the
@@ -115,7 +117,7 @@ default values).</p>
 </div>
 </div>
 <div class="section">
-<h1><a id="when-clause" name="when-clause">When Clause</a></h1>
+<h2><a id="when-clause" name="when-clause">When Clause</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">when</span></tt> clause is the <strong>if</strong> part of the <a class="reference" href="../overview/rules/index.html">rule</a>.  It defines the
 premises that must be true for this rule to succeed.</p>
 <p>If the <tt class="docutils literal"><span class="pre">when</span></tt> clause is omitted, the only
@@ -129,25 +131,14 @@ when ::= 'when' NL INDENT
          DEINDENT
 
 bc_premise ::= ['!'] [ name '.' ] name '(' {pattern,} ')' [ plan_spec ]
-             | ['!'] 'first' bc_premise
-             | ['!'] 'first' NL INDENT
-                    {bc_premise NL}
-                DEINDENT
-             | 'forall' NL INDENT
-                    {bc_premise NL}
-                DEINDENT
-                [ 'require' NL INDENT
-                      {bc_premise NL}
-                  DEINDENT ]
-             | 'notany' NL INDENT
-                    {bc_premise NL}
-                DEINDENT
+             | compound_premise
              | python_premise
 
 name ::= IDENTIFIER
        | '$'IDENTIFIER
 </pre>
-<p>Here are the links to the definitions for <a class="reference" href="pattern.html">pattern</a> and <a class="reference" href="python_premise.html">python_premise</a>.</p>
+<p>Here are the links to the definitions for <a class="reference" href="pattern.html">pattern</a>, <a class="reference" href="compound_premise.html">compound_premise</a> and
+<a class="reference" href="python_premise.html">python_premise</a>.</p>
 <p>If the <em>bc_premise</em> includes the <tt class="docutils literal"><span class="pre">!</span></tt>, an AssertionError will be raised if the
 premise fails on the first try.  This can help in debugging.</p>
 <div class="note">
@@ -169,24 +160,7 @@ the current <a class="reference" href="../overview/knowledge_bases/rule_bases.ht
 <a class="reference" href="../using_pyke.html#setting-up-each-case">active</a> <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a>.  In that case, the derived <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> is used to
 prove the premise.</p>
 <div class="section">
-<h2><a id="first" name="first">First</a></h2>
-<p>The <tt class="docutils literal"><span class="pre">first</span></tt> clause fails on backtracking so that it only produces one
-result (the first one).  This does not mean that backtracking between multiple
-sub-premises within the <tt class="docutils literal"><span class="pre">first</span></tt> clause will fail internal to <tt class="docutils literal"><span class="pre">first</span></tt>
-clause, but that once the premise
-following the <tt class="docutils literal"><span class="pre">first</span></tt> clause is tried, the entire <tt class="docutils literal"><span class="pre">first</span></tt> clause will fail
-on backtracking.</p>
-<p>If the <tt class="docutils literal"><span class="pre">!</span></tt> may used with the <tt class="docutils literal"><span class="pre">first</span></tt> clause to raise an AssertionError if
-the entire <tt class="docutils literal"><span class="pre">first</span></tt> clause fails on the first try.</p>
-</div>
-<div class="section">
-<h2><a id="forall" name="forall">Forall</a></h2>
-</div>
-<div class="section">
-<h2><a id="notany" name="notany">Notany</a></h2>
-</div>
-<div class="section">
-<h2><a id="plan-spec" name="plan-spec">Plan_spec</a></h2>
+<h3><a id="plan-spec" name="plan-spec">Plan_spec</a></h3>
 <p>A <em>plan_spec</em> is required for all premises that return subordinate <a class="reference" href="../overview/plans.html">plans</a>.
 These show what this rule's <a class="reference" href="../overview/plans.html">plan</a> function should do with each of the
 subordinate <a class="reference" href="../overview/plans.html">plan</a> functions.</p>
@@ -226,7 +200,7 @@ premise.</p>
 </div>
 </div>
 <div class="section">
-<h1><a id="with-clause" name="with-clause">With Clause</a></h1>
+<h2><a id="with-clause" name="with-clause">With Clause</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">with</span></tt> clause contains python
 statements to include in the <a class="reference" href="../overview/plans.html">plan</a> produced by this <a class="reference" href="../overview/rules/index.html">rule</a>.  These python
 statements may
@@ -269,11 +243,13 @@ goal has been proven.</p>
                 <h3>More:</h3>
 <div class="right-item"><a href="fc_rule.html">Fc_rule Syntax</a><p>The syntax of a forward-chaining rule.</p>
 </div>
+<div class="right-item"><a href="bc_rule.html">Bc_rule Syntax</a><p>The syntax of a backward-chaining rule.</p>
+</div>
 <div class="right-item"><a href="pattern.html">Pattern Syntax</a><p>The syntax of a pattern used to match data values.</p>
 </div>
-<div class="right-item"><a href="python_premise.html">Python Premise Syntax</a><p>The syntax of a python premise.</p>
+<div class="right-item"><a href="compound_premise.html">Compound Premise Syntax</a><p>The syntax of compound premises.</p>
 </div>
-<div class="right-item"><a href="bc_rule.html">Bc_rule Syntax</a><p>The syntax of a backward-chaining rule.</p>
+<div class="right-item"><a href="python_premise.html">Python Premise Syntax</a><p>The syntax of a python premise.</p>
 </div>
 
             </div>
@@ -291,7 +267,7 @@ goal has been proven.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, May 20 2008.
+    Page last modified Sun, Jun 08 2008.
   </div>
 
 </body>

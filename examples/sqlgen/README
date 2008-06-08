@@ -63,11 +63,12 @@ database.krb
     This uses backward-chaining to build SQL statements and cook them into
     plans that execute them.  The top-level goal is:
 
-        get_data($starting_data, $needed_data) taking(db_cursor, starting_data)
+        get_data($starting_tables, $needed_data) \
+          taking(db_cursor, starting_keys)
 
-    $starting_data is a list of tables that you have id values for.  The
-    starting_data parameter to the plan is a dictionary mapping these table
-    names to the id values.
+    $starting_tables is a list of tables that you have id values for.  The
+    starting_keys parameter to the plan is a dictionary mapping these table
+    names to id values that identify a unique row in that table.
 
     The $needed_data is a tuple of column_names and/or (multi-row-name,
     (options), column_name...).
@@ -99,6 +100,6 @@ test.py
             Loops on "goal: " prompt.  Type a goal, or trace/untrace rule_name.
             Empty string terminates the loop.  When the plan is run, it first
             runs it with the debug cursor, then enters a loop prompting for the
-            starting_data values.  These should be entered space separated.
+            starting_keys values.  These should be entered space separated.
             An empty line terminates the plan loop.
 

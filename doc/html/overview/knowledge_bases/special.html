@@ -76,23 +76,23 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="special">
 <h1 class="title">Special</h1>
-<p>Other kinds of knowledge bases may be created that act in different ways
-when they are asked to lookup facts or prove goals.  Pyke includes one of
-these named <em>special</em>.  Each entity in this knowledge
-base is a python function that does something &quot;special&quot; when run.</p>
+<p>Other kinds of <a class="reference" href="index.html">knowledge bases</a> may be created that act in different ways
+when they are asked to lookup <a class="reference" href="fact_bases.html#facts">facts</a> or <a class="reference" href="../../using_pyke.html#proving-goals">prove</a> <a class="reference" href="../rules/backward_chaining.html">goals</a>.  Pyke includes one of
+these named <tt class="docutils literal"><span class="pre">special</span></tt>.  Each entity in this <a class="reference" href="index.html">knowledge base</a> is a python
+function that does something &quot;special&quot; when run.</p>
 <p>Currently, there is only one special function:</p>
 <pre class="literal-block">
-special.claim_goal()
+``special.claim_goal()``
 </pre>
-<p>This acts like the prolog <tt class="docutils literal"><span class="pre">cut</span></tt> operator.</p>
-<p>In general there are multiple rules that might be used to try to prove any
-goal.  They are each tried in the order that they appear in the .krb file.
-If one rule fails, the next rule is tried.  The goal itself doesn't fail
-until all of the rules for it have failed.</p>
+<p>This acts like the <a class="reference" href="http://en.wikipedia.org/wiki/Prolog">prolog</a> <a class="reference" href="http://en.wikipedia.org/wiki/Cut_%28logic_programming%29">cut operator</a>.</p>
+<p>In general there are multiple <a class="reference" href="../rules/index.html">rules</a> that might be used to try to <a class="reference" href="../../using_pyke.html#proving-goals">prove</a> any
+<a class="reference" href="../rules/backward_chaining.html">goal</a>.  They are each tried in the order that they appear in the <a class="reference" href="../../krb_syntax/index.html">.krb file</a>.
+If one <a class="reference" href="../rules/index.html">rule</a> fails, the next <a class="reference" href="../rules/index.html">rule</a> is tried.  The <a class="reference" href="../rules/backward_chaining.html">goal</a> itself doesn't fail
+until all of the <a class="reference" href="../rules/index.html">rules</a> for it have failed.</p>
 <div class="section">
 <h1><a id="example" name="example">Example</a></h1>
 <p>Suppose I want to translate a number, N, into the phrase &quot;N dogs&quot;.  I could
-use the following rules:</p>
+use the following <a class="reference" href="../rules/index.html">rules</a>:</p>
 <pre class="literal-block">
 one_dog
     use n_dogs(1, '1 dog')
@@ -102,8 +102,8 @@ n_dogs
     when
         $phrase = &quot;%d dogs&quot; % $n
 </pre>
-<p>The problem here is that both rules might be used with <tt class="docutils literal"><span class="pre">n</span></tt> is 1, but the
-second rule isn't appropriate in this case.  <tt class="docutils literal"><span class="pre">Special.claim_goal()</span></tt> may
+<p>The problem here is that both <a class="reference" href="../rules/index.html">rules</a> might be used when <tt class="docutils literal"><span class="pre">n</span></tt> is 1, but the
+second <a class="reference" href="../rules/index.html">rule</a> isn't appropriate in this case.  <tt class="docutils literal"><span class="pre">Special.claim_goal()</span></tt> may
 be used to fix this, as follows:</p>
 <pre class="literal-block">
 one_dog
@@ -116,23 +116,23 @@ n_dogs
     when
         $phrase = &quot;%d dogs&quot; % $n
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> prevents the second rule from being used when
+<p>The <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> prevents the second <a class="reference" href="../rules/index.html">rule</a> from being used when
 <tt class="docutils literal"><span class="pre">n</span></tt> is 1.</p>
 </div>
 <div class="section">
 <h1><a id="explanation" name="explanation">Explanation</a></h1>
-<p>When a rule executes <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> in its <tt class="docutils literal"><span class="pre">when</span></tt>
-clause, none of the rest of the rules will be tried for that goal.
-Thus, when <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is backtracked over, the goal fails
-immediately without trying any more rules for it.</p>
+<p>When a <a class="reference" href="../rules/index.html">rule</a> executes <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> in its <tt class="docutils literal"><span class="pre">when</span></tt>
+clause, none of the rest of the <a class="reference" href="../rules/index.html">rules</a> will be tried for that <a class="reference" href="../rules/backward_chaining.html">goal</a>.
+Thus, when <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is <a class="reference" href="../rules/backward_chaining.html#backtracking">backtracked</a> over, the <a class="reference" href="../rules/backward_chaining.html">goal</a> fails
+immediately without trying any more <a class="reference" href="../rules/index.html">rules</a> for it.</p>
 <p>This ends up acting like an &quot;else&quot;.  You place it in the <tt class="docutils literal"><span class="pre">when</span></tt> clause
-after the premises that show that this rule <strong>must</strong> be
-the correct one to use.  Then the subsequent rules will only be tried if
-these premises fail, such that <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is never executed.</p>
-<p>This means that you don't need to
-add extra premises in each subsequent rule to make sure that these premises
-have <strong>not</strong> occurred.</p>
-<p>Without the <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt>, I would have to write:</p>
+after the <a class="reference" href="../../krb_syntax/bc_rule.html#when-clause">premises</a> that show that this <a class="reference" href="../rules/index.html">rule</a> <strong>must</strong> be
+the correct one to use.  Then the subsequent <a class="reference" href="../rules/index.html">rules</a> will only be tried if
+these <a class="reference" href="../../krb_syntax/bc_rule.html#when-clause">premises</a> fail, such that <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is never executed.</p>
+<p>This means that you don't need to add extra <a class="reference" href="../../krb_syntax/bc_rule.html#when-clause">premises</a> in each subsequent rule
+to make sure that these <a class="reference" href="../../krb_syntax/bc_rule.html#when-clause">premises</a> have <strong>not</strong> occurred.</p>
+<p>Without the <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> in the prior example, you would have to
+write:</p>
 <pre class="literal-block">
 one_dog
     use n_dogs(1, '1 dog')
@@ -144,8 +144,8 @@ n_dogs
         $phrase = &quot;%d dogs&quot; % $n
 </pre>
 <p>This is a simple example where it is easy to add the check in the second
-rule.  But in general, it can be difficult to check for prior conditions,
-especially when many rules are involved that each has its own condition.</p>
+<a class="reference" href="../rules/index.html">rule</a>.  But in general, it can be difficult to check for prior conditions,
+especially when many <a class="reference" href="../rules/index.html">rules</a> are involved that each has its own condition.</p>
 </div>
 </div>
 
@@ -181,7 +181,7 @@ are compiled and loaded into your python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, May 20 2008.
+    Page last modified Sat, Jun 07 2008.
   </div>
 
 </body>

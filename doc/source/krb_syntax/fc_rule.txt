@@ -65,49 +65,18 @@ Foreach clause
                    DEINDENT
 
     fc_premise ::= fact_pattern
-                 | 'first' fc_premise
-                 | 'first' NL
-                     INDENT
-                        {fc_premise NL}
-                     DEINDENT
-                 | 'forall' NL
-                     INDENT
-                        {fc_premise NL}
-                     DEINDENT
-                   [ 'require' NL
-                       INDENT
-                          {fc_premise NL}
-                       DEINDENT ]
-                 | 'notany' NL
-                     INDENT
-                        {fc_premise NL}
-                     DEINDENT
+                 | compound_premise
                  | python_premise
 
     fact_pattern ::= IDENTIFIER '.' IDENTIFIER '(' [{pattern,}] ')'
 
-Here are links to the definitions for pattern_ and python_premise_.
+Here are links to the definitions for pattern_, compound_premise_ and
+python_premise_.
 
 If the ``foreach`` clause is **not** used, the rule_ is always fired once.
 
 If the ``foreach`` clause **is** used, the rule_ is fired for each
 combination of true premises.
-
-The ``first`` clause fails on backtracking so that it only produces one
-result (the first one).  This does not mean that backtracking between
-multiple sub-premises within the ``first`` clause will fail internal to
-``first`` clause, but that once the
-premise following the ``first`` clause is tried, the entire ``first`` clause
-will fail on backtracking.
-
-The ``forall`` and ``notany`` clauses undo all `pattern variable`_ bindings
-before the following ``fc_premise`` is run.  Thus, they can only be used to
-test values produced by prior ``fc_premises``, but not to generate them for
-subsequent ``fc_premises`` (except by using the ``python`` clause, see
-python_premise_).
-
-If the ``require`` clause is missing from the ``forall`` clause, the ``forall``
-clause always succeeds.
 
 Assert clause
 =================
@@ -129,6 +98,7 @@ include `pattern variables`_ which should also appear in the ``foreach``
 clause where they are bound to a value.  These values will then be substituted
 into the facts_ and python statements.
 
+.. _compound_premise: compound_premise.html
 .. _facts: ../overview/knowledge_bases/fact_bases.html#facts
 .. _forward-chaining: ../overview/rules/forward_chaining.html
 .. _pattern: pattern.html

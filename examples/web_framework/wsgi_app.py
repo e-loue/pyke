@@ -22,6 +22,7 @@
 # THE SOFTWARE.
 
 import sys
+import os
 import MySQLdb as db
 from pyke import knowledge_engine, krb_traceback
 from examples.sqlgen import load_mysql_schema
@@ -53,9 +54,8 @@ def init():
 
 Debug = 0
 
-def wsgi_app(environ, start_response):
-    if not Initialized: init()
-    else: Engine.reset()
+def gen_plan(environ, starting_tables, template_name):
+    Engine.reset()
 
     def add_fact(fb_name, env_var):
         fact_name = env_var.split('.')[-1].lower()
@@ -85,7 +85,7 @@ def wsgi_app(environ, start_response):
 
     add_fact("header", "CONTENT_TYPE")
     add_fact("request", "REQUEST_METHOD")
-    path = add_fact("request", "PATH_INFO")
+    add_fact("request", "PATH_INFO")
     add_fact("request", "SCRIPT_NAME")
     add_fact("request", "QUERY_STRING")
     add_fact("request", "REMOTE_ADDR")
@@ -108,17 +108,48 @@ def wsgi_app(environ, start_response):
 
     Engine.activate('database', 'web')
 
-    movie_id, template_name = path.lstrip('/').split('/')
     try:
         no_vars, plan = \
-            Engine.prove_1("web", "process", (('movie',), template_name), 0)
+            Engine.prove_1("web", "process",
+                           (starting_tables, template_name),
+                           0)
     except:
         traceback = krb_traceback.format_exc(100)
-        Db_connection.rollback()
-        start_response('500 Server Error', [('Content-Type', 'text/plain')])
-        return traceback
+        return None, traceback
+    return plan, None
 
-    status, headers, document = plan(Db_cursor, {'movie': int(movie_id)})
+Plans_cache = {}
+
+def wsgi_app(environ, start_response):
+    global Plans_cache
+
+    if not Initialized: init()
+
+    # Parse the path:
+    components = environ["PATH_INFO"].lstrip('/').split('/')
+    template_name = components[-1]
+    starting_tables = []
+    starting_keys = {}
+    for i in range(0, len(components) - 1, 2):
+        starting_tables.append(components[i])
+        starting_keys[components[i]] = int(components[i + 1])
+    # Convert to tuple so that it can be used as a dict key and sort so
+    # different orders compare equal.
+    starting_tables = tuple(sorted(starting_tables))
+
+    template_mtime = os.stat(template_name).st_mtime
+    mtime, plan = Plans_cache.get((starting_tables, template_name),
+                                  (None, None))
+    if mtime is None or mtime < template_mtime:
+        print "get_plan(..., %s, %s)" % (starting_tables, template_name)
+        plan, traceback = gen_plan(environ, starting_tables, template_name)
+        if plan is None:
+            Db_connection.rollback()
+            start_response('500 Server Error', [('Content-Type', 'text/plain')])
+            return traceback
+        Plans_cache[starting_tables, template_name] = template_mtime, plan
+
+    status, headers, document = plan(Db_cursor, starting_keys)
     start_response(status, headers)
     return document
 

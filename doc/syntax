@@ -56,10 +56,10 @@ python_premise ::= pattern '=' python_exp
 	         | 'check' python_exp
                  | python_statements
 
-python_statements ::= 'python' python_statement
+python_statements ::= 'python' <python_statement>
                     | 'python' NL_TOK
                         INDENT_TOK
-                            {python_statement NL_TOK}
+                            {<python_statement> NL_TOK}
                         DEINDENT_TOK
 
 fc_assert ::= 'assert' NL_TOK INDENT_TOK {assertion NL_TOK} DEINDENT_TOK

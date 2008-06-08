@@ -175,17 +175,17 @@ def init(*args, **kws):
     Engine = knowledge_engine.engine(*args, **kws)
     Did_init = True
 
-def eval_plan(locals):
-    plan = locals['plan']
+def eval_plan(globals, locals):
     while True:
         print
         expr = raw_input("run plan: ").strip()
         if not expr: break
-        ans = eval(expr)
+        ans = eval(expr, globals.copy(), locals.copy())
         print "plan returned:", ans
 
 def run(rule_bases_to_activate,
-        default_rb = None, init_fn = None, fn_to_run_plan = eval_plan):
+        default_rb = None, init_fn = None, fn_to_run_plan = eval_plan,
+        plan_globals = {}):
     if not Did_init: init()
 
     if not isinstance(rule_bases_to_activate, (tuple, list)):
@@ -235,7 +235,7 @@ def run(rule_bases_to_activate,
                     print "no plan returned"
                 else:
                     plan = prototype_plan.create_plan(final)
-                    fn_to_run_plan(locals())
+                    fn_to_run_plan(plan_globals, locals())
         except:
             krb_traceback.print_exc(100)
 

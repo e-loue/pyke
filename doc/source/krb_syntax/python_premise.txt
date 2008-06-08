@@ -69,9 +69,6 @@ pattern_ 'in' python_exp
     *python_exp* is evaluated.  If the result is
     python "true" the clause succeeds, otherwise
     it fails.  The clause always fails on backtracking_.
-python_statements
-    The python_statements are simply executed.  They always succeed, but fail
-    on backtracking_.
 
 
 Python_statements
@@ -85,8 +82,60 @@ Python_statements
                           DEINDENT
 
 This clause allows the inclusion of arbitrary python statements in your
-rules_.
+rules_.  This premise always succeeds; and fails on backtracking.
+
+.. Tip::
+   It is important to always keep in mind the difference between `pattern
+   variables`_ and python variables.  `Pattern variables`_ are always
+   indicated with a ``$`` and are only bound to a value during inferencing.
+   Thus, a ``python_statement`` may not set a `pattern variable`_; you must
+   use the special `pattern variable`_ assignment::
+
+        <pattern> = <some python expression>
+   
+   Also, when a `pattern variable`_ is used within a python expression or
+   statement, it must be bound to a value that does not contain any unbound
+   `pattern variables`_.
+
+   Python variables are not visible to the inference engine.  They are local
+   variables that are also not visible to python code in other rules_ or other
+   invocations of the same rule_.
+
+   Finally, python variables in the `when clause`_ of a `backward-chaining
+   rule`_ are not visible to the python code in the `with clause`_ of the same
+   rule_.  (These end up in two different python functions after the `.krb
+   file`_ is compiled).  So this won't work::
+
+        some_bc_rule
+            use some_goal(...)
+            when
+                ...
+                python x_list = <some python expression>
+                ...
+            with
+                for x in x_list: process(x)
+
+   In this case, assign the value of the python variable to a `pattern
+   variable`_ in the `when clause`_ and then use that `pattern variable`_ in
+   the `with clause`_::
+
+        some_bc_rule
+            use some_goal(...)
+            when
+                ...
+                python x_list = <some python expression>
+                ...
+                $x_list = tuple(x_list)
+            with
+                for x in $x_list: process(x)
 
 .. _backtracking: ../overview/rules/backward_chaining.html#backtracking
+.. _backward-chaining rule: bc_rule.html
+.. _.krb file: index.html
 .. _pattern: pattern.html
-.. _rules: ../overview/rules/index.html
+.. _pattern variable: pattern.html#pattern-variable
+.. _pattern variables: pattern variable_
+.. _rule: ../overview/rules/index.html
+.. _rules: rule_
+.. _when clause: bc_rule.html#when-clause
+.. _with clause: bc_rule.html#with-clause

@@ -1,6 +1,3 @@
-NOTE: This example is only a proof-of-concept and is not intended for
-      production use!
-
 This example automatically generates programs to render HTMLTemplates
 (http://py-templates.sourceforge.net/htmltemplate/index.html).
 
@@ -11,10 +8,10 @@ containing the "examples" directory to be on your PYTHONPATH (e.g., if you
 downloaded the pyke_examples separately).
 
 This is also an example of using multiple rule bases (its own rule base, and
-the sqlgen rule base).
+the sqlgen/database.krb rule base).
 
-This example is not sophisticated enough to cache the plans returned from
-pyke.  It just runs pyke for every request.
+This example also caches the plans returned from pyke so it should be extremely
+fast!
 
 To run this example:
 
@@ -23,27 +20,37 @@ To run this example:
 
 Then point your browser at:
 
-    http://localhost:8080/1/movie.html
+    http://localhost:8080/movie/1/movie.html
 
-The "1" is the movie id and "movie.html" is the name of the HTMLTemplate you
-want to use.
+The "movie/1" says that you're starting with a unique row (id of 1) in the
+"movie" table.  The "movie.html" is the name of the HTMLTemplate file you want
+to use.  You may specify multiple unique starting tables by pairing the table
+name with the id value: "/movie/1/genre/2/movie.html", though this doesn't
+make much sense with the example templates...
 
 web.krb
     This uses backward-chaining to build a program to fill an HTMLTemplate.
 
     The top-level goal is:
 
-        process() taking (db_cursor)
+        process($starting_tables, $template_name)
+        taking (db_cursor, starting_keys)
 
     The plan returned from this goal returns a three tuple:
 
         http_status, header_list, html_document
 
 wsgi_app.py
-    The WSGI front-end that drives pyke.  This takes the WSGI environ and
-    establishes some of the interesting values as facts, then does the
-    "process" goal above.  The plan returned is run to produce the WSGI
-    output.
+    The WSGI front-end that drives pyke and executes the resulting plans.
+    This parses the path from the WSGI environ and creates a plan for the
+    combination of starting_tables and template_file, if one hasn't already
+    been created by an earlier request, or if the template_file has been
+    modified since the last plan for it was created.
+
+    To create the plan, it establishes some of the interesting values in its
+    environ as facts, then does the "process" goal above.
+    
+    The plan returned is run with the specific key to produce the WSGI output.
 
 simple_server.py
     This is just a simple driver to run the wsgi_app as a local http server
@@ -61,8 +68,10 @@ test.py
             Loops on "goal: " prompt.  Type a goal, or trace/untrace rule_name.
             Empty string terminates the loop.  When the plan is returned,
             it enters a loop prompting for a python expression to run the plan
-            (the plan is in a variable called "plan").  An empty line
-            terminates the plan loop.
+            (the plan itself is in a variable called "plan", and "Db_cursor"
+            is a variable containing a database cursor).  For example:
+            "plan(Db_cursor, {'movie': 1})".  An empty line terminates the plan
+            loop.
 
 movie.html
 movie2.html

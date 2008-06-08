@@ -35,27 +35,27 @@ restindex
 Special
 =============================================
 
-Other kinds of knowledge bases may be created that act in different ways
-when they are asked to lookup facts or prove goals.  Pyke includes one of
-these named *special*.  Each entity in this knowledge
-base is a python function that does something "special" when run.
+Other kinds of `knowledge bases`_ may be created that act in different ways
+when they are asked to lookup facts_ or prove_ goals_.  Pyke includes one of
+these named ``special``.  Each entity in this `knowledge base`_ is a python
+function that does something "special" when run.
 
 Currently, there is only one special function::
 
-    special.claim_goal()
+    ``special.claim_goal()``
 
-This acts like the prolog ``cut`` operator.
+This acts like the prolog_ `cut operator`_.
 
-In general there are multiple rules that might be used to try to prove any
-goal.  They are each tried in the order that they appear in the .krb file.
-If one rule fails, the next rule is tried.  The goal itself doesn't fail
-until all of the rules for it have failed.
+In general there are multiple rules_ that might be used to try to prove_ any
+goal_.  They are each tried in the order that they appear in the `.krb file`_.
+If one rule_ fails, the next rule_ is tried.  The goal_ itself doesn't fail
+until all of the rules_ for it have failed.
 
 Example
 ===============
 
 Suppose I want to translate a number, N, into the phrase "N dogs".  I could
-use the following rules::
+use the following rules_::
 
     one_dog
         use n_dogs(1, '1 dog')
@@ -65,8 +65,8 @@ use the following rules::
         when
             $phrase = "%d dogs" % $n
 
-The problem here is that both rules might be used with ``n`` is 1, but the
-second rule isn't appropriate in this case.  ``Special.claim_goal()`` may
+The problem here is that both rules_ might be used when ``n`` is 1, but the
+second rule_ isn't appropriate in this case.  ``Special.claim_goal()`` may
 be used to fix this, as follows::
 
     one_dog
@@ -79,27 +79,27 @@ be used to fix this, as follows::
         when
             $phrase = "%d dogs" % $n
 
-The ``special.claim_goal()`` prevents the second rule from being used when
+The ``special.claim_goal()`` prevents the second rule_ from being used when
 ``n`` is 1.
 
 Explanation
 =================================
 
-When a rule executes ``special.claim_goal()`` in its ``when``
-clause, none of the rest of the rules will be tried for that goal.
-Thus, when ``special.claim_goal()`` is backtracked over, the goal fails
-immediately without trying any more rules for it.
+When a rule_ executes ``special.claim_goal()`` in its ``when``
+clause, none of the rest of the rules_ will be tried for that goal_.
+Thus, when ``special.claim_goal()`` is backtracked_ over, the goal_ fails
+immediately without trying any more rules_ for it.
 
 This ends up acting like an "else".  You place it in the ``when`` clause 
-after the premises that show that this rule **must** be
-the correct one to use.  Then the subsequent rules will only be tried if
-these premises fail, such that ``special.claim_goal()`` is never executed.
+after the premises_ that show that this rule_ **must** be
+the correct one to use.  Then the subsequent rules_ will only be tried if
+these premises_ fail, such that ``special.claim_goal()`` is never executed.
 
-This means that you don't need to 
-add extra premises in each subsequent rule to make sure that these premises
-have **not** occurred.
+This means that you don't need to add extra premises_ in each subsequent rule
+to make sure that these premises_ have **not** occurred.
 
-Without the ``special.claim_goal()``, I would have to write::
+Without the ``special.claim_goal()`` in the prior example, you would have to
+write::
 
     one_dog
         use n_dogs(1, '1 dog')
@@ -111,5 +111,20 @@ Without the ``special.claim_goal()``, I would have to write::
             $phrase = "%d dogs" % $n
 
 This is a simple example where it is easy to add the check in the second
-rule.  But in general, it can be difficult to check for prior conditions,
-especially when many rules are involved that each has its own condition.
+rule_.  But in general, it can be difficult to check for prior conditions,
+especially when many rules_ are involved that each has its own condition.
+
+.. _backtracked: ../rules/backward_chaining.html#backtracking
+.. _cut operator: http://en.wikipedia.org/wiki/Cut_%28logic_programming%29
+.. _facts: fact_bases.html#facts
+.. _goal: ../rules/backward_chaining.html
+.. _goals: goal_
+.. _knowledge base: index.html
+.. _knowledge bases: `knowledge base`_
+.. _.krb file: ../../krb_syntax/index.html
+.. _premise: ../../krb_syntax/bc_rule.html#when-clause
+.. _premises: premise_
+.. _prolog: http://en.wikipedia.org/wiki/Prolog
+.. _prove: ../../using_pyke.html#proving-goals
+.. _rule: ../rules/index.html
+.. _rules: rule_

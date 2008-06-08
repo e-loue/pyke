@@ -24,6 +24,7 @@ python_premise : ('python_eq', pattern, python_code,
                | ('python_in', pattern, python_code,
                   starting_lineno, ending_lineno)
                | ('python_check', python_code, starting_lineno, ending_lineno)
+               | ('python_block', python_code, starting_lineno, ending_lineno)
 
 counting : ('counting', quoted_pattern_var_name,
                         <from>python_code_opt, <by>python_code_opt)

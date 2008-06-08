@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Compound Premise Syntax</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../stylesheets/pyke.css" type="text/css" />
+</head>
+<body>
+  <table id="page-table">
+    <thead class="head">
+        <tr id="header1"><th id="header" colspan="3">
+            &nbsp;
+        </th></tr>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <li><a href="../index.html">Home</a></li>
+<li>&gt;</li>
+<li><a href="index.html">KRB Syntax</a></li>
+<li>&gt;</li>
+<li>Compound Premise</li>
+
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
+    </thead>
+
+    <tbody id="body">
+        <tr id="body-tr">
+          <td id="left-nav">
+            <div id="left-nav-div">
+              
+<div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../overview/index.html">Overview</a></div>
+<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
+
+<div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
+<div class="normal-nav"><a href="bc_rule.html">Bc_rule</a></div>
+<div class="normal-nav"><a href="pattern.html">Pattern</a></div>
+<div class="normal-nav"><a href="compound_premise.html">Compound Premise</a></div>
+<div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
+</div>
+<div class="normal-nav"><a href="../examples.html">Examples</a></div>
+<div class="normal-nav"><a href="../logic_tricks.html">Logic Tricks</a></div>
+<div class="normal-nav"><a href="../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
+</div>
+
+            </div>
+            <div id="icons">
+                <div id="project-page">
+                  <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
+                </div>
+                Please Make a Donation:<br />
+                <a href="http://sourceforge.net/donate/index.php?group_id=207724">
+                  <img src="http://images.sourceforge.net/images/project-support.jpg"
+                       width="88" height="32" border="0"
+                       alt="Support This Project" /> </a> <br /><br />
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+            </div>
+          </td>
+          <td id="main-td">
+            <div id="main">
+                <a name="startcontent" id="startcontent"></a>
+                <div class="document" id="compound-premise-syntax">
+<h1 class="title">Compound Premise Syntax</h1>
+<p>There are three kinds of compound premises.  These can be used in both
+<a class="reference" href="fc_rule.html">forward-chaining rules</a> and <a class="reference" href="bc_rule.html">backward-chaining rules</a>, but the nested
+premises are restricted to the kind of premises legal for that kind of rule:
+<a class="reference" href="fc_rule.html#foreach-clause">fc_premise</a> for <a class="reference" href="fc_rule.html">forward-chaining rules</a>, and <a class="reference" href="bc_rule.html#when-clause">bc_premise</a> for
+<a class="reference" href="bc_rule.html">backward-chaining rules</a>.</p>
+<pre class="literal-block">
+compound_premise ::= first_premise
+                   | forall_premise
+                   | notany_premise
+</pre>
+<div class="section">
+<h2><a id="first-premise" name="first-premise">First Premise</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">first</span></tt> premise is used to prevent <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a> from finding subsequent
+solutions to a set of premises.  The <tt class="docutils literal"><span class="pre">first</span></tt> premise always fails on
+<a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a>, but does do <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a> within the nested premises.</p>
+<pre class="literal-block">
+first_premise ::= ['!'] 'first' premise
+                | ['!'] 'first' NL
+                          INDENT
+                             {premise NL}
+                          DEINDENT
+</pre>
+<p>The <tt class="docutils literal"><span class="pre">!</span></tt> option can only be used in <a class="reference" href="bc_rule.html">backward-chaining rules</a>.</p>
+<p>The nested premises may include any type of <a class="reference" href="bc_rule.html#plan-spec">plan_spec</a> in <a class="reference" href="bc_rule.html">backward-chaining
+rules</a>.</p>
+</div>
+<div class="section">
+<h2><a id="forall-premise" name="forall-premise">Forall Premise</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">forall</span></tt> premise forces backtracking within the nested premises to
+process all of the possible solutions found.</p>
+<pre class="literal-block">
+forall_premise ::= 'forall' NL
+                     INDENT
+                        {premise NL}
+                     DEINDENT
+                 [ 'require' NL
+                     INDENT
+                        {premise NL}
+                     DEINDENT ]
+</pre>
+<p>The premises within the <tt class="docutils literal"><span class="pre">require</span></tt> clause are tried for each solution found.
+If these fail for any solution, then the entire <tt class="docutils literal"><span class="pre">forall</span></tt> premise fails.
+Thus, the <tt class="docutils literal"><span class="pre">forall</span></tt> only succeeds if the <tt class="docutils literal"><span class="pre">require</span></tt> premises are true for
+all solutions generated within the <tt class="docutils literal"><span class="pre">forall</span></tt> clause.</p>
+<p>The <tt class="docutils literal"><span class="pre">forall</span></tt> always succeeds if the <tt class="docutils literal"><span class="pre">require</span></tt> clause is omitted.  This can
+be used in conjunction with <a class="reference" href="python_premise.html#python-statements">python_statements</a> to gather a list of results.</p>
+<p>The <tt class="docutils literal"><span class="pre">forall</span></tt> premise always fails on backtracking.</p>
+<p>See <a class="reference" href="#notes-on-forall-and-notany-premises">Notes on Forall and Notany Premises</a> and <a class="reference" href="#examples">Examples</a>, below.</p>
+</div>
+<div class="section">
+<h2><a id="notany-premise" name="notany-premise">Notany Premise</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">notany</span></tt> premise only succeeds if no solution can be found to the nested
+premises.</p>
+<pre class="literal-block">
+notany_premise ::= 'notany' NL
+                     INDENT
+                        {premise NL}
+                     DEINDENT
+</pre>
+<p>See <a class="reference" href="#notes-on-forall-and-notany-premises">Notes on Forall and Notany Premises</a> and <a class="reference" href="#examples">Examples</a>, below.</p>
+</div>
+<div class="section">
+<h2><a id="notes-on-forall-and-notany-premises" name="notes-on-forall-and-notany-premises">Notes on Forall and Notany Premises</a></h2>
+<ol class="arabic simple">
+<li>All <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> bindings made during the execution of a <tt class="docutils literal"><span class="pre">forall</span></tt>
+or <tt class="docutils literal"><span class="pre">notany</span></tt> premise are undone before the premises following the
+<tt class="docutils literal"><span class="pre">forall</span></tt> or <tt class="docutils literal"><span class="pre">notany</span></tt> are run.
+Thus, <tt class="docutils literal"><span class="pre">forall</span></tt> and <tt class="docutils literal"><span class="pre">notany</span></tt> can be used to test
+values produced by prior premises; but to generate values for subsequent
+premises the values must be captured in python variables within the
+<tt class="docutils literal"><span class="pre">forall</span></tt> or <tt class="docutils literal"><span class="pre">notany</span></tt> clause before the <cite>pattern variables</cite> are unbound
+(see <a class="reference" href="#computing-sets-of-values">Computing Sets of Values</a>, below).</li>
+<li>When used in <a class="reference" href="bc_rule.html">backward-chaining rules</a>, the only <a class="reference" href="bc_rule.html#plan-spec">plan_spec</a> allowed in
+nested premises is the <tt class="docutils literal"><span class="pre">as</span></tt> clause.</li>
+</ol>
+</div>
+<div class="section">
+<h2><a id="examples" name="examples">Examples</a></h2>
+<p>These examples use the following subgoals:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">generate_x($x)</span></tt> generates multiple solutions (as <tt class="docutils literal"><span class="pre">$x</span></tt>) that will looped
+over</li>
+<li><tt class="docutils literal"><span class="pre">test_x($x)</span></tt> does some test on <tt class="docutils literal"><span class="pre">$x</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">compute_y($x,</span> <span class="pre">$y)</span></tt> takes <tt class="docutils literal"><span class="pre">$x</span></tt> as input and computes a <tt class="docutils literal"><span class="pre">$y</span></tt> value</li>
+</ul>
+<div class="section">
+<h3><a id="finding-the-first-solution-from-a-set-of-values" name="finding-the-first-solution-from-a-set-of-values">Finding the First Solution From a Set of Values</a></h3>
+<p>If you want the first <tt class="docutils literal"><span class="pre">$x</span></tt> that passes the <tt class="docutils literal"><span class="pre">test_x($x)</span></tt> test, you have two
+options:</p>
+<pre class="literal-block">
+generate_x($x)
+test_x($x)
+...
+</pre>
+<p>And:</p>
+<pre class="literal-block">
+first
+    generate_x($x)
+    test_x($x)
+...
+</pre>
+<p>The difference is that the first example will find other <tt class="docutils literal"><span class="pre">$x</span></tt> values that
+pass <tt class="docutils literal"><span class="pre">test_x($x)</span></tt> on <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a>, while the second example will stop after
+the first value is found and fail on <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a>.</p>
+</div>
+<div class="section">
+<h3><a id="testing-sets-of-values" name="testing-sets-of-values">Testing Sets of Values</a></h3>
+<p>There are two general cases.  You might want to verify that <tt class="docutils literal"><span class="pre">test_x($x)</span></tt>
+<em>succeeds</em> for all generated <tt class="docutils literal"><span class="pre">$x</span></tt> values:</p>
+<pre class="literal-block">
+forall
+    generate_x($x)
+require
+    test_x($x)
+</pre>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">While <tt class="docutils literal"><span class="pre">$x</span></tt> is set and used within the <tt class="docutils literal"><span class="pre">forall</span></tt> premise to transfer
+values from the <tt class="docutils literal"><span class="pre">generate_x($x)</span></tt> goal to the <tt class="docutils literal"><span class="pre">test_x($x)</span></tt> goal, it is
+no longer set afterwards and can not be referenced in the premises
+following the <tt class="docutils literal"><span class="pre">forall</span></tt> premise.</p>
+</div>
+<p>The second case that you might want to verify is that <tt class="docutils literal"><span class="pre">test_x($x)</span></tt> <em>fails</em>
+for all generated <tt class="docutils literal"><span class="pre">$x</span></tt> values:</p>
+<pre class="literal-block">
+forall
+    generate_x($x)
+require
+    notany
+        test_x($x)
+</pre>
+<p>Or, more simply:</p>
+<pre class="literal-block">
+notany
+    generate_x($x)
+    test_x($x)
+</pre>
+</div>
+<div class="section">
+<h3><a id="computing-sets-of-values" name="computing-sets-of-values">Computing Sets of Values</a></h3>
+<p>If you want a tuple of computed <tt class="docutils literal"><span class="pre">$y</span></tt> values for all of the <tt class="docutils literal"><span class="pre">$x</span></tt> values:</p>
+<pre class="literal-block">
+python y_list = []
+forall
+    generate_x($x)
+require
+    compute_x($x, $y)
+    python y_list.append($y)
+$y_list = tuple(y_list)
+</pre>
+<p>This will only succeed if <tt class="docutils literal"><span class="pre">compute_y</span></tt> succeeds for every <tt class="docutils literal"><span class="pre">$x</span></tt> value.  If
+you want to skip over <tt class="docutils literal"><span class="pre">$x</span></tt> values that <tt class="docutils literal"><span class="pre">compute_y</span></tt> fails on, you might
+try:</p>
+<pre class="literal-block">
+python y_list = []
+forall
+    generate_x($x)
+    compute_x($x, $y)
+    python y_list.append($y)
+$y_list = tuple(y_list)
+</pre>
+<p>But note that if <tt class="docutils literal"><span class="pre">compute_y</span></tt> might compute multiple solutions on
+<a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a>, you would end up including all of these solutions for each
+<tt class="docutils literal"><span class="pre">$x</span></tt> in your <tt class="docutils literal"><span class="pre">$y_list</span></tt>.  To only get the first computed value for each
+<tt class="docutils literal"><span class="pre">$x</span></tt>:</p>
+<pre class="literal-block">
+python y_list = []
+forall
+    generate_x($x)
+    first
+        compute_x($x, $y)
+        python y_list.append($y)
+$y_list = tuple(y_list)
+</pre>
+<p>A simple common case of <tt class="docutils literal"><span class="pre">generate_x</span></tt> is when you are computing values for
+each element of a tuple:</p>
+<pre class="literal-block">
+python y_list = []
+forall
+    $x in $x_list
+    first
+        compute_x($x, $y)
+        python y_list.append($y)
+$y_list = tuple(y_list)
+</pre>
+<p>This can also be done by creating a new subgoal that recurses on <tt class="docutils literal"><span class="pre">$x_list</span></tt>:</p>
+<pre class="literal-block">
+compute_list_done
+    use compute_list((), ())
+
+compute_list_step
+    use compute_list(($x, *$x_rest), ($y, *$y_rest))
+    when
+        compute_y($x, $y)
+        compute_list($x_rest, $y_rest)
+</pre>
+<p>Note that there is an important difference between these two examples if
+<tt class="docutils literal"><span class="pre">compute_y</span></tt> may find alternate <tt class="docutils literal"><span class="pre">$y</span></tt> values for any given <tt class="docutils literal"><span class="pre">$x</span></tt> value on
+<a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a>.</p>
+<p>The first example will only generate one <tt class="docutils literal"><span class="pre">$y_list</span></tt>.  If that <tt class="docutils literal"><span class="pre">$y_list</span></tt>
+doesn't work in subsequent premises, the <tt class="docutils literal"><span class="pre">forall</span></tt> fails on <a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a>,
+so no solution will be found.</p>
+<p>The second example will not fail in this situation, but will produce all
+possible combinations of solutions to <tt class="docutils literal"><span class="pre">computer_y</span></tt> for each <tt class="docutils literal"><span class="pre">$x</span></tt> on
+<a class="reference" href="../overview/rules/backward_chaining.html#backtracking">backtracking</a> until a resulting <tt class="docutils literal"><span class="pre">$y_list</span></tt> satisfies the subsequent premises.</p>
+<p>Finally, if you want to gather only the computed <tt class="docutils literal"><span class="pre">$y</span></tt> values for <tt class="docutils literal"><span class="pre">$x</span></tt>
+values that pass <tt class="docutils literal"><span class="pre">test_x($x)</span></tt>:</p>
+<pre class="literal-block">
+python y_list = []
+forall
+    generate_x($x)
+    test_x($x)
+require
+    compute_x($x, $y)
+    python y_list.append($y)
+$y_list = tuple(y_list)
+</pre>
+</div>
+</div>
+</div>
+
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
+            </div>
+          </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <h3>More:</h3>
+<div class="right-item"><a href="fc_rule.html">Fc_rule Syntax</a><p>The syntax of a forward-chaining rule.</p>
+</div>
+<div class="right-item"><a href="bc_rule.html">Bc_rule Syntax</a><p>The syntax of a backward-chaining rule.</p>
+</div>
+<div class="right-item"><a href="pattern.html">Pattern Syntax</a><p>The syntax of a pattern used to match data values.</p>
+</div>
+<div class="right-item"><a href="compound_premise.html">Compound Premise Syntax</a><p>The syntax of compound premises.</p>
+</div>
+<div class="right-item"><a href="python_premise.html">Python Premise Syntax</a><p>The syntax of a python premise.</p>
+</div>
+
+            </div>
+          </td>
+        </tr>
+    </tbody>
+
+    <tfoot id="foot">
+        <tr id="foot2">
+          <td id="copyright" colspan="3">
+            Copyright &copy; 2007 Bruce Frederiksen
+          </td>
+        </tr>
+    </tfoot>
+  </table>
+
+  <div id="last-modified">
+    Page last modified Sun, Jun 08 2008.
+  </div>
+
+</body>
+</html>

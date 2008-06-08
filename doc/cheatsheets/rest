@@ -130,6 +130,20 @@ Document Title/Subtitle:
     second unique adornment style immediately after that for the subtitle
     (if any).
 
+Admonitions:
+
+    attention, caution, danger, error, hint, important, note, tip, warning
+
+    .. <admonition>::
+        body1
+        body2
+
+  or
+    
+    .. admonition:: title
+        body1
+        body2
+
 Images:
 
     .. image:: images/foobar.png

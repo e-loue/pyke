@@ -8,15 +8,4 @@
         - patterns used in bc_predicates
         - patterns assigned to with python_code
 - add error recovery to krbparser
-- documentation
-    - add links to overview/knowledge_bases/special.txt
-    - krb_syntax/fc_rule.txt:
-        - check description of forall
-        - add notany description
-    - krb_syntax/bc_rule.txt:
-        - add forall description in forall section
-        - add notany description in notany section
-    - explore reST admonitions
-    - krb_syntax/python_premise.txt:
-        - check python_statements (is this the right name?)
 

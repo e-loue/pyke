@@ -29,7 +29,7 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
-    initialheaderlevel: 1
+    initialheaderlevel: 2
 /restindex
 
 =============================================
@@ -66,8 +66,13 @@ Use Clause
 The ``use`` clause is the **then** part of the rule_.  It identifies the
 *goal* that this rule_ is trying to prove.
 
+::
+
     use ::= 'use' IDENTIFIER '(' {pattern,} ')'
             ['taking' '(' <python_arg_spec> ')'] NL
+          | 'use' IDENTIFIER '(' {pattern,} ')' NL
+             INDENT_TOK 'taking' '(' <python_arg_spec> ')'
+             DEINDENT_TOK
 
 Notice that it uses a single ``IDENTIFIER``.  The `rule base`_ name is implied
 as the `rule base category`_ name (the name of the root rule base) for the
@@ -103,25 +108,14 @@ combination of true premises.
              DEINDENT
 
     bc_premise ::= ['!'] [ name '.' ] name '(' {pattern,} ')' [ plan_spec ]
-                 | ['!'] 'first' bc_premise
-                 | ['!'] 'first' NL INDENT
-                        {bc_premise NL}
-                    DEINDENT
-                 | 'forall' NL INDENT
-                        {bc_premise NL}
-                    DEINDENT
-                    [ 'require' NL INDENT
-                          {bc_premise NL}
-                      DEINDENT ]
-                 | 'notany' NL INDENT
-                        {bc_premise NL}
-                    DEINDENT
+                 | compound_premise
                  | python_premise
 
     name ::= IDENTIFIER
            | '$'IDENTIFIER
 
-Here are the links to the definitions for pattern_ and python_premise_.
+Here are the links to the definitions for pattern_, compound_premise_ and
+python_premise_.
 
 If the *bc_premise* includes the ``!``, an AssertionError will be raised if the
 premise fails on the first try.  This can help in debugging.
@@ -145,25 +139,6 @@ the current `rule base`_ does not have to be the active_ `rule base`_ for that
 category_.  It could be the case that a derived `rule base`_ is the
 active_ `rule base`_.  In that case, the derived `rule base`_ is used to
 prove the premise.
-
-First
-------
-
-The ``first`` clause fails on backtracking so that it only produces one
-result (the first one).  This does not mean that backtracking between multiple
-sub-premises within the ``first`` clause will fail internal to ``first``
-clause, but that once the premise
-following the ``first`` clause is tried, the entire ``first`` clause will fail
-on backtracking.
-
-If the ``!`` may used with the ``first`` clause to raise an AssertionError if
-the entire ``first`` clause fails on the first try.
-
-Forall
--------
-
-Notany
--------
 
 Plan_spec
 ------------
@@ -254,6 +229,7 @@ goal has been proven.
 .. _backward-chaining: ../overview/rules/backward_chaining.html
 .. _backtracking: ../overview/rules/backward_chaining.html#backtracking
 .. _category: `rule base category`_
+.. _compound_premise: compound_premise.html
 .. _fact base: ../overview/knowledge_bases/fact_bases.html
 .. _pattern: pattern.html
 .. _patterns: pattern_

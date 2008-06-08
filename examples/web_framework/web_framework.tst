@@ -53,7 +53,7 @@ Then interact with it:
     ...     finally:
     ...         f.close()
 
-    >>> print get("1/movie.html")
+    >>> print get("movie/1/movie.html")
     <html>
       <head>
         <title>It's a Mad, Mad, Mad, Mad World</title>
@@ -74,9 +74,9 @@ Then interact with it:
     <BLANKLINE>
 
     #>>> server.stderr.readline()        # doctest: +ELLIPSIS
-    #'localhost - - [...] "GET /1/movie.html HTTP/1.0" 200 305\n'
+    #'localhost - - [...] "GET /movie/1/movie.html HTTP/1.0" 200 305\n'
 
-    >>> print get("3/movie.html")
+    >>> print get("movie/3/movie.html")
     <html>
       <head>
         <title>A Funny Thing Happened on the Way to the Forum</title>
@@ -97,9 +97,9 @@ Then interact with it:
     <BLANKLINE>
 
     #>>> server.stderr.readline()        # doctest: +ELLIPSIS
-    #'localhost - - [...] "GET /3/movie.html HTTP/1.0" 200 335\n'
+    #'localhost - - [...] "GET /movie/3/movie.html HTTP/1.0" 200 335\n'
 
-    >>> print get("3/movie2.html")
+    >>> print get("movie/3/movie2.html")
     <html>
       <head>
         <title>A Funny Thing Happened on the Way to the Forum</title>
@@ -127,9 +127,9 @@ Then interact with it:
     <BLANKLINE>
 
     #>>> server.stderr.readline()        # doctest: +ELLIPSIS
-    #'localhost - - [...] "GET /3/movie2.html HTTP/1.0" 200 432\n'
+    #'localhost - - [...] "GET /movie/3/movie2.html HTTP/1.0" 200 432\n'
 
-    >>> print get("6/movie2.html")
+    >>> print get("movie/6/movie2.html")
     <html>
       <head>
         <title>Casino Royale</title>
@@ -165,7 +165,7 @@ Then interact with it:
     <BLANKLINE>
 
     #>>> server.stderr.readline()        # doctest: +ELLIPSIS
-    #'localhost - - [...] "GET /6/movie2.html HTTP/1.0" 200 488\n'
+    #'localhost - - [...] "GET /movie/6/movie2.html HTTP/1.0" 200 488\n'
 
 Kill server:
 

@@ -41,9 +41,10 @@
 
 <div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
-<div class="normal-nav"><a href="pattern.html">Pattern</a></div>
-<div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 <div class="normal-nav"><a href="bc_rule.html">Bc_rule</a></div>
+<div class="normal-nav"><a href="pattern.html">Pattern</a></div>
+<div class="normal-nav"><a href="compound_premise.html">Compound Premise</a></div>
+<div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 </div>
 <div class="normal-nav"><a href="../examples.html">Examples</a></div>
 <div class="normal-nav"><a href="../logic_tricks.html">Logic Tricks</a></div>
@@ -95,44 +96,16 @@ fc_foreach ::= 'foreach' NL INDENT
                DEINDENT
 
 fc_premise ::= fact_pattern
-             | 'first' fc_premise
-             | 'first' NL
-                 INDENT
-                    {fc_premise NL}
-                 DEINDENT
-             | 'forall' NL
-                 INDENT
-                    {fc_premise NL}
-                 DEINDENT
-               [ 'require' NL
-                   INDENT
-                      {fc_premise NL}
-                   DEINDENT ]
-             | 'notany' NL
-                 INDENT
-                    {fc_premise NL}
-                 DEINDENT
+             | compound_premise
              | python_premise
 
 fact_pattern ::= IDENTIFIER '.' IDENTIFIER '(' [{pattern,}] ')'
 </pre>
-<p>Here are links to the definitions for <a class="reference" href="pattern.html">pattern</a> and <a class="reference" href="python_premise.html">python_premise</a>.</p>
+<p>Here are links to the definitions for <a class="reference" href="pattern.html">pattern</a>, <a class="reference" href="compound_premise.html">compound_premise</a> and
+<a class="reference" href="python_premise.html">python_premise</a>.</p>
 <p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause is <strong>not</strong> used, the <a class="reference" href="../overview/rules/index.html">rule</a> is always fired once.</p>
 <p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause <strong>is</strong> used, the <a class="reference" href="../overview/rules/index.html">rule</a> is fired for each
 combination of true premises.</p>
-<p>The <tt class="docutils literal"><span class="pre">first</span></tt> clause fails on backtracking so that it only produces one
-result (the first one).  This does not mean that backtracking between
-multiple sub-premises within the <tt class="docutils literal"><span class="pre">first</span></tt> clause will fail internal to
-<tt class="docutils literal"><span class="pre">first</span></tt> clause, but that once the
-premise following the <tt class="docutils literal"><span class="pre">first</span></tt> clause is tried, the entire <tt class="docutils literal"><span class="pre">first</span></tt> clause
-will fail on backtracking.</p>
-<p>The <tt class="docutils literal"><span class="pre">forall</span></tt> and <tt class="docutils literal"><span class="pre">notany</span></tt> clauses undo all <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> bindings
-before the following <tt class="docutils literal"><span class="pre">fc_premise</span></tt> is run.  Thus, they can only be used to
-test values produced by prior <tt class="docutils literal"><span class="pre">fc_premises</span></tt>, but not to generate them for
-subsequent <tt class="docutils literal"><span class="pre">fc_premises</span></tt> (except by using the <tt class="docutils literal"><span class="pre">python</span></tt> clause, see
-<a class="reference" href="python_premise.html">python_premise</a>).</p>
-<p>If the <tt class="docutils literal"><span class="pre">require</span></tt> clause is missing from the <tt class="docutils literal"><span class="pre">forall</span></tt> clause, the <tt class="docutils literal"><span class="pre">forall</span></tt>
-clause always succeeds.</p>
 </div>
 <div class="section">
 <h2><a id="assert-clause" name="assert-clause">Assert clause</a></h2>
@@ -164,11 +137,13 @@ into the <a class="reference" href="../overview/knowledge_bases/fact_bases.html#
                 <h3>More:</h3>
 <div class="right-item"><a href="fc_rule.html">Fc_rule Syntax</a><p>The syntax of a forward-chaining rule.</p>
 </div>
+<div class="right-item"><a href="bc_rule.html">Bc_rule Syntax</a><p>The syntax of a backward-chaining rule.</p>
+</div>
 <div class="right-item"><a href="pattern.html">Pattern Syntax</a><p>The syntax of a pattern used to match data values.</p>
 </div>
-<div class="right-item"><a href="python_premise.html">Python Premise Syntax</a><p>The syntax of a python premise.</p>
+<div class="right-item"><a href="compound_premise.html">Compound Premise Syntax</a><p>The syntax of compound premises.</p>
 </div>
-<div class="right-item"><a href="bc_rule.html">Bc_rule Syntax</a><p>The syntax of a backward-chaining rule.</p>
+<div class="right-item"><a href="python_premise.html">Python Premise Syntax</a><p>The syntax of a python premise.</p>
 </div>
 
             </div>
@@ -186,7 +161,7 @@ into the <a class="reference" href="../overview/knowledge_bases/fact_bases.html#
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, May 20 2008.
+    Page last modified Sat, Jun 07 2008.
   </div>
 
 </body>
