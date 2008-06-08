@@ -431,7 +431,6 @@ def p_empty_tuple(p):
         when_opt :
         without_opt :
     '''
-        # DEL taking_opt :
     p[0] = ()
 
 def p_double_empty_tuple(p):

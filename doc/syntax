@@ -69,8 +69,12 @@ assertion ::= fact_pattern
 
 bc_rule ::= IDENTIFIER_TOK ':' NL_TOK INDENT_TOK use [when] [with] DEINDENT_TOK
 
-use ::= 'use' IDENTIFIER_TOK '(' {pattern,} ')'
-		['taking' '(' <python_arg_spec> ')'] NL_TOK
+use ::= 'use' IDENTIFIER_TOK '(' {pattern,} ')' NL_TOK
+      | 'use' IDENTIFIER_TOK '(' {pattern,} ')'
+              'taking' '(' <python_arg_spec> ')' NL_TOK
+      | 'use' IDENTIFIER_TOK '(' {pattern,} ')' NL_TOK
+	INDENT_TOK 'taking' '(' <python_arg_spec> ')' NL_TOK
+        DEINDENT_TOK
 
 when ::= 'when' NL_TOK INDENT_TOK {bc_premise NL_TOK} DEINDENT_TOK
 

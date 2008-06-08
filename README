@@ -1,6 +1,6 @@
 Pyke: Python Knowledge Engine
 
-Version: 0.2
+Version: 0.3
 
 Both forward-chaining and backward-chaining rules (which may include python
 code) are compiled into python. Can also automatically assemble python
@@ -20,7 +20,7 @@ The documentation is at:
 
 You can download a copy of this documentation to your hard drive:
 
-    pyke_doc_html-0.2.tar.gz
+    pyke_doc_html-0.3.tar.gz
 
 See the end of this file for how to regenerate the html files.
 
@@ -57,14 +57,15 @@ This can be checked as follows:
 
 Then you got two choices for pyke:
 
-    pyke-0.2-py2.5.egg
+    pyke-0.3-py2.5.egg
+ or the source distribution (see below)
 
 
 SOURCE DISTRIBUTION:
 
 The pyke source distribution is the file:
 
-    pyke-0.2.tar.gz
+    pyke-0.3.tar.gz
 
 This contains the pyke source code, documentation (both source and html), and
 examples.
@@ -74,7 +75,7 @@ EXAMPLES:
 Pyke examples may be downloaded separately from sourceforge if you've used
 easy_install to install pyke (or installed the .egg file):
 
-    pyke_examples-0.2.tar.gz
+    pyke_examples-0.3.tar.gz
 
 Each example has a README file that explains how to run it.
 
@@ -94,9 +95,12 @@ of multiple rule bases.  The web_framework is a WSGI application that uses the
 HTMLTemplate package.  It gets the column names from the HTMLTemplate and
 feeds those to the sqlgen example to generate a plan to retrieve the data.  It
 then builds a plan to populate the template and return the finished HTML
-document.  The example includes a wsgiref simple_server setup to run it as an
-http server so that you can access it through your browser.
+document.  It also caches the plans so that they don't have to be re-generated
+for each request.  This should make this run very fast!  The example includes
+a wsgiref simple_server setup to run it as an http server so that you can
+access it through your browser.
 
+The findall, forall, knapsack and notany examples are each very small.
 
 TO INSTALL FROM THE SOURCES:
 
@@ -110,6 +114,10 @@ directory and:
 
     $ ./testpyke
 
+To run doctests on the whole source directory, cd to the top-level directory
+and:
+
+    $ ./testall
 
 COMPILING THE COMPILER.KRB FILE:
 
@@ -120,12 +128,6 @@ In pyke/krb_compiler:
     >>> krb_compiler.compile('.', 'compiled_krb', ('compiler.krb',))
     $ cp compiled_krb/compiler_bc.py .
     $ rm -rf compiled_krb
-
-
-EXAMPLES:
-
-Currently there is only one example.  Read its README file for how to run it.
-
 
 COMPILING THE DOCUMENTATION:
 
@@ -157,7 +159,7 @@ To regenerate the html, cd to the doc directory and:
     $ r2w r2w.ini
 
 This regenerates everything from doc/source into doc/html.  It takes about
-2 seconds to run.
+3 seconds to run.
 
 If you want to run doctest on all of the *.txt files in doc/source,
 cd to doc and:

@@ -98,10 +98,10 @@ associated with exceptions raised during the inferencing or plan execution.</p>
 <p>The <tt class="docutils literal"><span class="pre">use</span></tt> clause is the <strong>then</strong> part of the <a class="reference" href="../overview/rules/index.html">rule</a>.  It identifies the
 <em>goal</em> that this <a class="reference" href="../overview/rules/index.html">rule</a> is trying to prove.</p>
 <pre class="literal-block">
-use ::= 'use' IDENTIFIER '(' {pattern,} ')'
-        ['taking' '(' &lt;python_arg_spec&gt; ')'] NL
+use ::= 'use' IDENTIFIER '(' {pattern,} ')' NL
+      | 'use' IDENTIFIER '(' {pattern,} ')' 'taking' '(' &lt;python_arg_spec&gt; ')' NL
       | 'use' IDENTIFIER '(' {pattern,} ')' NL
-         INDENT_TOK 'taking' '(' &lt;python_arg_spec&gt; ')'
+         INDENT_TOK 'taking' '(' &lt;python_arg_spec&gt; ')' NL
          DEINDENT_TOK
 </pre>
 <p>Notice that it uses a single <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.  The <a class="reference" href="../overview/knowledge_bases/rule_bases.html">rule base</a> name is implied

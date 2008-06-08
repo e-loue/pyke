@@ -36,7 +36,7 @@ restindex
 Welcome to Pyke
 =============================
 -----------------------------
-Release 0.2
+Release 0.3
 -----------------------------
 
 Pyke is a knowledge-based inference engine (expert system) written in

@@ -68,10 +68,10 @@ The ``use`` clause is the **then** part of the rule_.  It identifies the
 
 ::
 
-    use ::= 'use' IDENTIFIER '(' {pattern,} ')'
-            ['taking' '(' <python_arg_spec> ')'] NL
+    use ::= 'use' IDENTIFIER '(' {pattern,} ')' NL
+          | 'use' IDENTIFIER '(' {pattern,} ')' 'taking' '(' <python_arg_spec> ')' NL
           | 'use' IDENTIFIER '(' {pattern,} ')' NL
-             INDENT_TOK 'taking' '(' <python_arg_spec> ')'
+             INDENT_TOK 'taking' '(' <python_arg_spec> ')' NL
              DEINDENT_TOK
 
 Notice that it uses a single ``IDENTIFIER``.  The `rule base`_ name is implied

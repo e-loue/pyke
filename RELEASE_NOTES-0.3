@@ -1,0 +1,59 @@
+0.3 RELEASE NOTES 6/08/2008
+
+I expect only minor feature enhancements at this point and am focusing now
+on testing.  Often the sources under subversion are more stable than the
+release.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 0.2 RELEASE:
+
+    - Made use of ':' after rule names in .krb files deprecated.
+    - Also eliminated use of ':' after 'python' in fc_assertions so that ':' is
+      no longer used to introduce indented lines in .krb files.
+    - Changed the url format in the web_framework example from "/1/movie.html"
+      to "/movie/1/movie.html".
+
+FEATURE ENHANCEMENTS:
+
+Added the following features:
+
+    - Added 'forall'/'require', 'notany', 'first', and 'python' premises to both
+      fc and bc rules.
+    - The web_framework example now caches plans.  It should be extremely fast
+      now!
+    - Anonymous pattern variables are now any identifier starting with an
+      underscore.  This allows you to document the variable.
+    - Allow the 'taking' clause to be indented on the next line after the 'use'
+      clause without requiring a \ continuation.
+    - Changed 'python' syntax to allow either a single python statement on the
+      same line as 'python', or multiple python statements indented under
+      'python'.
+    - All .krb files are now automatically recompiled whenever the pyke version
+      changes.
+    - Top-level testall script.
+
+Added the following web pages:
+
+    - KRB Syntax => Compound Premise
+    - Examples
+    - PyCon 2008 Paper
+
+Added the following examples:
+
+    - knapsack example.  This is a small example that came up at the PyCon 2008
+      conference.
+    - findall example.  This is mostly for testing the new forall premise
+      combined with the new 'python' premise.
+    - forall example.  This is mostly for testing the new forall premise.
+    - notany example.  This is mostly for testing the new notany premise.
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    The 'python' assertion in fc rules didn't work.

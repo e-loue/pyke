@@ -330,7 +330,7 @@ def t_ANONYMOUS_VAR_TOK(t):
     return t
 
 def t_PATTERN_VAR_TOK(t):
-    r'\$[a-zA-Z_][a-zA-Z0-9_]*'
+    r'\$[a-zA-Z][a-zA-Z0-9_]*'
     t.value = "'" + t.value[1:] + "'"
     return t
 
