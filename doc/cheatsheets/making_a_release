@@ -50,14 +50,8 @@ TAG RELEASE
 
 UPLOAD DIST FILES TO SOURCEFORGE:
 
-    $ cd dist
-    $ ftp upload.sourceforge.net
-    Name: anonymous
-    Password: mtnyogi
-    ftp> binary
-    ftp> cd incoming
-    ftp> mput *-0.2*
-    ftp> quit
+    In the browser, go to: https://frs.sourceforge.net/webupload and upload the
+    files.
 
     Go to: Admin -> File Releases
     Click on "Add Release", Enter: 0.2
@@ -84,6 +78,8 @@ ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
     Admin -> Tracker -> "Tracker Administration" link
 
     Do: Bugs, Support Requests, and Patches
+
+    Add release through "Add/Update Groups"
 
 CREATE NEWS ANNOUNCEMENT ON SOURCEFORGE
 
