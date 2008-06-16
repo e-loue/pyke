@@ -59,6 +59,8 @@ class question(object):
                                    else self.format)
         self.cache[cache_key] = ans
         return ans
+    def reset(self):
+        self.cache = {}
 
 class ask_user(object):
     prompt_ans = "? "
@@ -171,25 +173,28 @@ class multiple_choice(ask_user):
         >>> sys.stdin = StringIO("1\n")
         >>> ans.ask("prompt")
         prompt? 
-        1. small
-        2. medium
-        3. large
+        <BLANKLINE>
+          1. small
+          2. medium
+          3. large
         ? 'small'
 
         >>> sys.stdin = StringIO("2\n")
         >>> ans.ask("prompt")
         prompt? 
-        1. small
-        2. medium
-        3. large
+        <BLANKLINE>
+          1. small
+          2. medium
+          3. large
         ? 'average'
 
         >>> sys.stdin = StringIO("3\n")
         >>> ans.ask("prompt")
         prompt? 
-        1. small
-        2. medium
-        3. large
+        <BLANKLINE>
+          1. small
+          2. medium
+          3. large
         ? 'large'
 
         >>> sys.stdin = StringIO("0\n")
@@ -206,8 +211,9 @@ class multiple_choice(ask_user):
         self.choice_answers = tuple(map(functools.partial(get, 1), choices))
     def get_input(self, prompt):
         print prompt + self.prompt_ans
+        print
         for i, choice_prompt in enumerate(self.choice_prompts):
-            print "%d. %s" % (i + 1, choice_prompt)
+            print "  %d. %s" % (i + 1, choice_prompt)
         return raw_input(self.prompt_ans)
     def convert(self, text):
         ans = int(text)

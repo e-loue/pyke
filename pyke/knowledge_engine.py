@@ -140,7 +140,7 @@ class engine(object):
     def prove(self, kb_name, entity_name, pat_context, patterns):
         return self.get_kb(kb_name).prove(pat_context, pat_context,
                                           entity_name, patterns)
-    def prove_n(self, kb_name, entity_name, fixed_args, num_returns):
+    def prove_n(self, kb_name, entity_name, fixed_args = (), num_returns = 0):
         ''' Generates: a tuple of len == num_returns, and a plan (or None).
         '''
         if isinstance(fixed_args, types.StringTypes):
@@ -160,7 +160,7 @@ class engine(object):
                 yield ans, plan
         finally:
             context.done()
-    def prove_1(self, kb_name, entity_name, fixed_args, num_returns):
+    def prove_1(self, kb_name, entity_name, fixed_args = (), num_returns = 0):
         ''' Returns a tuple of len == num_returns, and a plan (or None).
         '''
         try:
