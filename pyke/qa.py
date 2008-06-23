@@ -40,34 +40,52 @@ class question(object):
            ...
         ValueError: value, 444, greater than maximum, 120
     '''
-    def __init__(self, format, answer_type):
+    def __init__(self, format, answer_type, answer_review = None):
         self.format = format
         self.answer_type = answer_type
+        self.answer_review = answer_review
         self.cache = {}
-    def __call__(self, *pos_params, **kw_params):
+    def get_params(self, pos_params, kw_params):
         if pos_params:
-            cache_key = format_params = pos_params
-        elif kw_params:
-            cache_key = tuple(sorted(kw_params.items(), key=lambda x: x[0]))
-            format_params = kw_params
-        else:
-            cache_key = format_params = None
+            assert not kw_params, \
+                   "Can not pass both positional and keyword parameters to a " \
+                   "question"
+            return pos_params, pos_params
+        if kw_params:
+            return tuple(sorted(kw_params.items(), key=lambda x: x[0])), \
+                   kw_params
+        return None, None
+    def asked(self, *pos_params, **kw_params):
+        cache_key, format_params = self.get_params(pos_params, kw_params)
+        return cache_key in self.cache
+    def __call__(self, *pos_params, **kw_params):
+        cache_key, format_params = self.get_params(pos_params, kw_params)
         if cache_key in self.cache:
             return self.cache[cache_key]
-        ans = self.answer_type.ask(self.format % format_params
-                                   if format_params
-                                   else self.format)
+        ans = self.answer_type.ask(self.format, format_params)
         self.cache[cache_key] = ans
+        if self.answer_review: self.answer_review.review(ans, format_params)
+        print
         return ans
     def reset(self):
         self.cache = {}
 
 class ask_user(object):
-    prompt_ans = "? "
-    def ask(self, prompt):
-        return self.convert(self.get_input(prompt))
-    def get_input(self, prompt):
-        return raw_input(prompt + self.prompt_ans)
+    ans_prompt = " "
+    def ask(self, prompt, format_params):
+        while True:
+            print '_' * 78
+            try:
+                return self.convert(self.get_input(prompt, format_params))
+            except ValueError, e:
+                print e.message
+                print
+                print "Try Again:"
+    def get_input(self, prompt, format_params):
+        if format_params:
+            return raw_input(prompt % format_params + self.get_ans_prompt())
+        return raw_input(prompt + self.get_ans_prompt())
+    def get_ans_prompt(self): return self.ans_prompt
 
 class yn_answer(ask_user):
     r'''
@@ -86,7 +104,7 @@ class yn_answer(ask_user):
            ...
         ValueError: incorrect answer: 'bogus'
     '''
-    prompt_ans = " (y/n)? "
+    ans_prompt = " (y/n) "
     def __init__(self, yes = ('y', 'yes', 't', 'true'),
                        no = ('n', 'no', 'f', 'false')):
         self.yes = yes
@@ -209,18 +227,38 @@ class multiple_choice(ask_user):
             return x
         self.choice_prompts = tuple(map(functools.partial(get, 0), choices))
         self.choice_answers = tuple(map(functools.partial(get, 1), choices))
-    def get_input(self, prompt):
-        print prompt + self.prompt_ans
+    def get_input(self, prompt, format_params):
+        if format_params: print prompt % format_params
+        else: print prompt
         print
         for i, choice_prompt in enumerate(self.choice_prompts):
-            print "  %d. %s" % (i + 1, choice_prompt)
-        return raw_input(self.prompt_ans)
+            if format_params:
+                formatted_choice_prompt = choice_prompt % format_params
+            else:
+                formatted_choice_prompt = choice_prompt
+            prefix = "  %d. " % (i + 1)
+            print "%s%s" % (prefix,
+                            ('\n' + ' ' * len(prefix))
+                            .join(formatted_choice_prompt.split('\n')))
+        return raw_input("?" + self.get_ans_prompt())
+    def get_ans_prompt(self):
+        return " [1-%d] " % len(self.choice_prompts)
     def convert(self, text):
         ans = int(text)
         if ans < 1 or ans > len(self.choice_answers):
             raise ValueError("answer, %d, must be between 1 and %d" %
                              (ans, len(self.choice_answers)))
         return self.choice_answers[ans - 1]
+
+class enumerated_review(object):
+    def __init__(self, *answers):
+        self.answers = answers
+    def review(self, ans, format_params):
+        for key, msg in self.answers:
+            if ans == key:
+                if format_params: print msg % format_params
+                else: print msg
+                break
 
 def test():
     import doctest

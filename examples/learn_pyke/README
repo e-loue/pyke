@@ -1,0 +1,11 @@
+This is an experimental Computer Based Training (CBT) program to teach the
+user Pyke.
+
+(Currently, it only teaches patterns and pattern matching).
+
+To run this:
+
+    $ python
+    >>> import run
+    >>> run.run()
+
