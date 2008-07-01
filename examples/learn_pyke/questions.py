@@ -48,16 +48,15 @@ If the two patterns are matched together, what will $x be bound to?""",
         (5, "Incorrect: Pattern variable '$b' is bound to a value."),
 
         (2, "Incorrect: Pattern variable '$a' is bound to a value."),
-        (6, "Incorrect: Pattern variable '$a' is bound to a value."),
         (7, "Incorrect: Pattern variable '$a' is bound to a value."),
         (8, "Incorrect: Pattern variable '$a' is bound to a value."),
 
-        (4, "Incorrect: The '*' is part of the pattern syntax and "
-            "is not seen in the bound value."),
         (6, "Incorrect: The '*' is part of the pattern syntax and "
-            "is not seen in the bound value."),
+            "is not seen in the\n"
+            "           bound value."),
         (9, "Incorrect: The '*' is part of the pattern syntax and "
-            "is not seen in the bound value."),
+            "is not seen in the\n"
+            "           bound value."),
 
         (10, "Incorrect: The '*' in '*$b' means "
              "\"the rest of the tuple\" is '$b'."),
@@ -70,7 +69,7 @@ If the two patterns are matched together, what will $x be bound to?""",
              "           the '$a' in pattern 2."),
 
         (13, "Correct!  Pattern 1: $a = ho and $b = (ho, ho)\n"
-             "     and  Pattern 2: $a = (ho, $_, (ho, ho)), "
+             "     and  Pattern 2: $a = (ho, $_, (ho, ho)),\n"
              "      so  $x = (ho, ho, ho)."),
         (14, "Incorrect: The patterns do match!"),
         (15, "Incorrect: Pattern 1 is a legal pattern.")))

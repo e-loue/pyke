@@ -81,7 +81,7 @@ format_retrieval
         !render_elements($elements, $needed_data) as $render_fn
     with
         return '200 OK', [('Content-Type', 'text/html')], \
-               $template.render($render_fn, data)
+               ($template.render($render_fn, data),)
 
 #
 # render_elements($elements, $needed_data) taking (template, data)

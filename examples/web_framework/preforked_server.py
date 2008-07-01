@@ -21,19 +21,47 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import wsgi_app
+import sys
+import os
+import signal
+import functools
 import wsgiref.simple_server
+import wsgi_app
+
+def kill(pids, signum, frame):
+    sys.stderr.write("preforked_server(%d) caught SIGINT\n" % os.getpid())
+    sys.stderr.write("preforked_server(%d) self.pids is %s\n" %
+                     (os.getpid(), str(pids)))
+    for pid in pids: os.kill(pid, signal.SIGTERM)
+    sys.exit(1)
 
 class RequestHandlerNoLogging(wsgiref.simple_server.WSGIRequestHandler):
     def log_request(self, code='-', size='-'): pass
 
-def run(port = 8080, logging = True):
+class server(wsgiref.simple_server.WSGIServer):
+    def __init__(self, server_address, rq_handler_class, num_children):
+        self.num_children = num_children
+        wsgiref.simple_server.WSGIServer.__init__(self, server_address,
+                                                        rq_handler_class)
+    def name(self): return "prefork_server(%d)" % self.num_children
+    def server_activate(self):
+        wsgiref.simple_server.WSGIServer.server_activate(self)
+        pids = []
+        for i in xrange(self.num_children - 1):
+            pid = os.fork()
+            if pid == 0: break
+            pids.append(pid)
+        else:
+            # only run by parent process
+            signal.signal(signal.SIGINT, functools.partial(kill, pids))
+
+def run(num_children = 2, port = 8080, logging = False):
     server_address = ('', port)
-    httpd = wsgiref.simple_server.WSGIServer(
-                server_address,
-                wsgiref.simple_server.WSGIRequestHandler 
-                    if logging
-                    else RequestHandlerNoLogging)
+    httpd = server(server_address,
+                   wsgiref.simple_server.WSGIRequestHandler 
+                       if logging
+                       else RequestHandlerNoLogging,
+                   num_children)
     httpd.set_app(wsgi_app.wsgi_app)
     httpd.serve_forever()
 
