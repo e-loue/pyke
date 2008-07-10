@@ -1,15 +1,21 @@
 # generator_exception_propagation.py
 
+import sys
+
 class Backup(Exception): pass
 
 class watch(object):
-    def __init__(self, name, iterator):
+    def __init__(self, name, gen, *gen_args):
         self.name = name
-        self.iterator = iterator
+        print "%s.__init__()" % self.name
+        self.iterator = gen(*gen_args)
     def __iter__(self):
         print "%s.__iter__()" % self.name
         self.iterator_iter = iter(self.iterator)
         return self
+    def __del__(self):
+        print "%s.__del__()" % self.name
+        del self.iterator
     def next(self):
         try:
             ans = self.iterator_iter.next()
@@ -35,41 +41,54 @@ class watch(object):
         print "%s.close()" % self.name
         self.iterator_iter.close()
 
-def gen1(a):
+def gen1(name, gen, *args):
     try:
-        for i in a: yield i
-    except Exception, e:
-        print "gen1 => %s: %s" % (e.__class__.__name__, str(e))
-        raise
+        try:
+            for i in gen(*args): yield i
+        except Exception, e:
+            print "gen1(%s) => %s: %s" % (name, e.__class__.__name__, str(e))
+            raise
+    finally:
+        print "gen1(%s) done" % name
 
-def gen2(a, b):
+def gen2(name, gen1, gen1_args, gen2, gen2_args):
     try:
-        for i in a:
-            for j in b: yield i, j
-    except Exception, e:
-        print "gen2 => %s: %s" % (e.__class__.__name__, str(e))
-        raise
+        try:
+            for i in gen1(*gen1_args):
+                for j in gen2(*gen2_args): yield i, j
+        except Exception, e:
+            print "gen2(%s) => %s: %s" % (name, e.__class__.__name__, str(e))
+            raise
+    finally:
+        print "gen2(%s) done" % name
 
-def gen_exception(a):
+def gen_exception(name, gen, *args):
     try:
-        for i in a:
-            if i == 2:
-                print "gen_exception: raising exception"
-                raise Backup("gen_exception: hello bob")
-            yield i
-    except Exception, e:
-        print "gen_exception => %s: %s" % (e.__class__.__name__, str(e))
-        raise
+        try:
+            for i in gen(*args):
+                if i == 2:
+                    print "gen_exception(%s): raising exception" % name
+                    raise Backup("gen_exception(%s): hello bob" % name)
+                yield i
+        except Exception, e:
+            print "gen_exception(%s) => %s: %s" % \
+                    (name, e.__class__.__name__, str(e))
+            raise
+    finally:
+        print "gen_exception(%s) done" % name
+
+def make_gen():
+    return watch("top_gen",
+                 gen2, "top_gen",
+                       watch, ("first_gen", gen1, "first_gen", range, 1, 5),
+                       watch, ("second_gen",
+                               gen1, "second_gen",
+                                     watch, "gen_exception",
+                                            gen_exception, "gen_exception",
+                                                watch, "range", range, 1, 5))
 
 def test():
-    for i, x in \
-        enumerate(watch("top-gen",
-                        gen2(watch("first-gen", range(1, 5)),
-                             watch("second-gen",
-                                   gen1(watch("gen_exception",
-                                              gen_exception(watch("range",
-                                                                  range(1,5)))))
-                                  )))):
+    for i, x in enumerate(make_gen()):
         print "got", x
         if i == 3:
             print "test: raising exception"

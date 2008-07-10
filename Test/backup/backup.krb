@@ -1,0 +1,21 @@
+# backup.krb
+
+top_a
+    use top($a)
+    when
+        a($a)
+
+top_b
+    use top($_)
+
+a
+    # creates context and binds local $a to top $a
+    use a($a)
+    when
+        c($a)
+        special.claim_goal()
+        check False
+
+c
+    # creates context and binds top $a to 44
+    use c(44)

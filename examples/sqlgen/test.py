@@ -32,16 +32,10 @@ class cursor(object):
     rowcount = 1        # This is only check for unique queries...
     def __init__(self, width):
         self.width = width
-    def execute(self, str, *args, **kws):
-        if kws:
-            if args:
-                assert len(args) < 2
-                args = args.copy().update(kws)
-            else:
-                args = kws
+    def execute(self, str, parameters=None):
         print "execute got:"
         print str
-        print "with:", args
+        if parameters: print "with:", parameters
     def fetchone(self, base = 44):
         return (base,) * self.width
     def fetchall(self):

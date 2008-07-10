@@ -39,15 +39,15 @@ class RequestHandlerNoLogging(wsgiref.simple_server.WSGIRequestHandler):
     def log_request(self, code='-', size='-'): pass
 
 class server(wsgiref.simple_server.WSGIServer):
-    def __init__(self, server_address, rq_handler_class, num_children):
-        self.num_children = num_children
+    def __init__(self, server_address, rq_handler_class, num_processes):
+        self.num_processes = num_processes
         wsgiref.simple_server.WSGIServer.__init__(self, server_address,
                                                         rq_handler_class)
-    def name(self): return "prefork_server(%d)" % self.num_children
+    def name(self): return "prefork_server(%d)" % self.num_processes
     def server_activate(self):
         wsgiref.simple_server.WSGIServer.server_activate(self)
         pids = []
-        for i in xrange(self.num_children - 1):
+        for i in xrange(self.num_processes - 1):
             pid = os.fork()
             if pid == 0: break
             pids.append(pid)
@@ -55,13 +55,13 @@ class server(wsgiref.simple_server.WSGIServer):
             # only run by parent process
             signal.signal(signal.SIGINT, functools.partial(kill, pids))
 
-def run(num_children = 2, port = 8080, logging = False):
+def run(num_processes = 2, port = 8080, logging = False):
     server_address = ('', port)
     httpd = server(server_address,
                    wsgiref.simple_server.WSGIRequestHandler 
                        if logging
                        else RequestHandlerNoLogging,
-                   num_children)
+                   num_processes)
     httpd.set_app(wsgi_app.wsgi_app)
     httpd.serve_forever()
 

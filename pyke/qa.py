@@ -30,15 +30,21 @@ class question(object):
         >>> import sys
         >>> from StringIO import StringIO
         >>> sys.stdin = StringIO("44\n")
-        >>> fn_name = question("How old is %s",
+        >>> fn_name = question("How old is %s?",
         ...                    integer_answer(1, 120))
         >>> fn_name("Bob")
-        How old is Bob? 44
-        >>> sys.stdin = StringIO("444\n")
+        ______________________________________________________________________________
+        How old is Bob? 
+        44
+        >>> sys.stdin = StringIO("444\n120\n")
         >>> fn_name("Bruce")
-        Traceback (most recent call last):
-           ...
-        ValueError: value, 444, greater than maximum, 120
+        ______________________________________________________________________________
+        How old is Bruce? value, 444, greater than maximum, 120
+        <BLANKLINE>
+        Try Again:
+        ______________________________________________________________________________
+        How old is Bruce? 
+        120
     '''
     def __init__(self, format, answer_type, answer_review = None):
         self.format = format
@@ -93,16 +99,21 @@ class yn_answer(ask_user):
         >>> from StringIO import StringIO
         >>> ans = yn_answer()
         >>> sys.stdin = StringIO("y\n")
-        >>> ans.ask("prompt")
-        prompt (y/n)? True
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
+        prompt? (y/n) True
         >>> sys.stdin = StringIO("no\n")
-        >>> ans.ask("prompt")
-        prompt (y/n)? False
-        >>> sys.stdin = StringIO("bogus\n")
-        >>> ans.ask("prompt")
-        Traceback (most recent call last):
-           ...
-        ValueError: incorrect answer: 'bogus'
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
+        prompt? (y/n) False
+        >>> sys.stdin = StringIO("bogus\nf\n")
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
+        prompt? (y/n) incorrect answer: 'bogus'
+        <BLANKLINE>
+        Try Again:
+        ______________________________________________________________________________
+        prompt? (y/n) False
     '''
     ans_prompt = " (y/n) "
     def __init__(self, yes = ('y', 'yes', 't', 'true'),
@@ -121,21 +132,29 @@ class integer_answer(ask_user):
         >>> from StringIO import StringIO
         >>> ans = integer_answer(-10, 10)
         >>> sys.stdin = StringIO("-10\n")
-        >>> ans.ask("prompt")
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
         prompt? -10
         >>> sys.stdin = StringIO("10\n")
-        >>> ans.ask("prompt")
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
         prompt? 10
-        >>> sys.stdin = StringIO("-11\n")
-        >>> ans.ask("prompt")
-        Traceback (most recent call last):
-           ...
-        ValueError: value, -11, less than minimum, -10
-        >>> sys.stdin = StringIO("11\n")
-        >>> ans.ask("prompt")
-        Traceback (most recent call last):
-           ...
-        ValueError: value, 11, greater than maximum, 10
+        >>> sys.stdin = StringIO("-11\n-10\n")
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
+        prompt? value, -11, less than minimum, -10
+        <BLANKLINE>
+        Try Again:
+        ______________________________________________________________________________
+        prompt? -10
+        >>> sys.stdin = StringIO("11\n10\n")
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
+        prompt? value, 11, greater than maximum, 10
+        <BLANKLINE>
+        Try Again:
+        ______________________________________________________________________________
+        prompt? 10
     '''
     def __init__(self, min = None, max = None):
         self.min = min
@@ -156,20 +175,26 @@ class string_answer(ask_user):
         >>> from StringIO import StringIO
         >>> ans = string_answer()
         >>> sys.stdin = StringIO("hi mom!\n")
-        >>> ans.ask("prompt")
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
         prompt? 'hi mom!'
         >>> sys.stdin = StringIO("\n")
-        >>> ans.ask("prompt")
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
         prompt? ''
         >>> ans = string_answer(r'hi ([a-zA-Z]+)')
         >>> sys.stdin = StringIO("hi mom\n")
-        >>> ans.ask("prompt")
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
         prompt? 'mom'
-        >>> sys.stdin = StringIO("bye mom\n")
-        >>> ans.ask("prompt")
-        Traceback (most recent call last):
-           ...
-        ValueError: invalid response: 'bye mom'
+        >>> sys.stdin = StringIO("bye mom\nhi dad\n")
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
+        prompt? invalid response: 'bye mom'
+        <BLANKLINE>
+        Try Again:
+        ______________________________________________________________________________
+        prompt? 'dad'
     '''
     def __init__(self, regexp = None):
         self.re = None if regexp is None else re.compile(regexp)
@@ -189,37 +214,53 @@ class multiple_choice(ask_user):
         >>> ans = multiple_choice('small', ('medium', 'average'), 'large')
 
         >>> sys.stdin = StringIO("1\n")
-        >>> ans.ask("prompt")
-        prompt? 
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
+        prompt?
         <BLANKLINE>
           1. small
           2. medium
           3. large
-        ? 'small'
+        ? [1-3] 'small'
 
         >>> sys.stdin = StringIO("2\n")
-        >>> ans.ask("prompt")
-        prompt? 
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
+        prompt?
         <BLANKLINE>
           1. small
           2. medium
           3. large
-        ? 'average'
+        ? [1-3] 'average'
 
         >>> sys.stdin = StringIO("3\n")
-        >>> ans.ask("prompt")
-        prompt? 
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
+        prompt?
         <BLANKLINE>
           1. small
           2. medium
           3. large
-        ? 'large'
+        ? [1-3] 'large'
 
-        >>> sys.stdin = StringIO("0\n")
-        >>> ans.ask("prompt")
-        Traceback (most recent call last):
-           ...
-        ValueError: answer, 0, must be between 1 and 3
+        >>> sys.stdin = StringIO("0\n1\n")
+        >>> ans.ask("prompt?", ())
+        ______________________________________________________________________________
+        prompt?
+        <BLANKLINE>
+          1. small
+          2. medium
+          3. large
+        ? [1-3] answer, 0, must be between 1 and 3
+        <BLANKLINE>
+        Try Again:
+        ______________________________________________________________________________
+        prompt?
+        <BLANKLINE>
+          1. small
+          2. medium
+          3. large
+        ? [1-3] 'small'
     '''
     def __init__(self, *choices):
         def get(n, x):

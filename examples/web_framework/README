@@ -52,9 +52,14 @@ wsgi_app.py
     
     The plan returned is run with the specific key to produce the WSGI output.
 
+    To echo all sql statements to stderr, set the TRACE_SQL environment
+    variable to something other than False prior to executing python. 
+
 simple_server.py
     This is just a simple driver to run the wsgi_app as a local http server
-    (default port 8080).
+    (default port 8080).  The 'run' function takes two optional arguments:
+    port=8080 and logging=True.  Pass logging=False to disable logging
+    requests to stderr (e.g., for performance measurement).
 
 test.py
     This is a test driver to let you type goals in and run them to debug the
@@ -77,3 +82,40 @@ movie.html
 movie2.html
     Two very simple html templates that you can play with.
 
+siege.urls
+    A list of all combinations of movies 1-6 with movie.html and movie2.html
+    for the siege program.  This measures the performance of the web server:
+
+        $ siege -c 2 -f siege.urls
+
+profile_server.py
+    Invokes the simple_server under cProfile.  Use siege to stimulate the
+    server, then type ctl-C to interrupt it:
+
+        Terminal 1                      Terminal 2
+        --------------------------      --------------------------
+        $ python                        
+        >>> import profile_server       
+        >>> profile_server.run()        
+                                        $ siege -c 1 -f siege.urls
+        ctl-C                           
+        >>> profile_server.stats()      
+
+    The 'run' function takes two optional arguments: port=8080 and
+    logging=False.  Pass logging=True to enable logging requests to stderr.
+
+preforked_server.py
+    This creates the web server socket, then forks the process to get N long
+    running processes all accepting connections from the same socket.  Each
+    process will connect independently to the database server when they
+    receive their first request.  Use ctl-C to kill all of the processes.
+    This will fully utilize multiple processors to achieve higher throughputs:
+
+        $ python
+        >>> import preforked_server
+        >>> preforked_server.run(2)     # 2 is the number of processes
+
+        ctl-C
+
+    The 'run' function takes three optional arguments: num_processes=2,
+    port=8080 and logging=False.

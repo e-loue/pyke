@@ -239,7 +239,9 @@ class simple_context(object):
             if ans is None: break
             val, where = ans
         else:
+            # where is None or not isinstance(val, variable)
             return val, where
+        # where is not None and isinstance(val, variable)
         if allow_variable_in_ans: return val, where
         raise KeyError("%s not bound" % str(val))
     def mark(self, save_all_undo = False):
@@ -296,8 +298,8 @@ class variable(pattern.pattern):
             sys.stderr.write("%s.match_data(%s, %s, %s)\n" %
                 (self, bindings, my_context, data))
         var, var_context = my_context.lookup(self, True)
-        if var is self:
-            bindings.bind(self.name, var_context, data)
+        if isinstance(var, variable):
+            bindings.bind(var.name, var_context, data)
             return True
         if self.name in debug:
             sys.stderr.write("%s.match_data: lookup got %s in %s\n" %
@@ -306,8 +308,8 @@ class variable(pattern.pattern):
         return var.match_data(bindings, var_context, data)
     def simple_match_pattern(self, bindings, my_context, pattern_b, b_context):
         var, var_context = my_context.lookup(self, True)
-        if var is self:
-            bindings.bind(self.name, var_context, pattern_b, b_context)
+        if isinstance(var, variable):
+            bindings.bind(var.name, var_context, pattern_b, b_context)
             return True
         if var_context is None:
             return pattern_b.match_data(bindings, b_context, var)
@@ -315,8 +317,8 @@ class variable(pattern.pattern):
                                         pattern_b, b_context)
     def match_pattern(self, bindings, my_context, pattern_b, b_context):
         var, var_context = my_context.lookup(self, True)
-        if var is self:
-            bindings.bind(self.name, var_context, pattern_b, b_context)
+        if isinstance(var, variable):
+            bindings.bind(var.name, var_context, pattern_b, b_context)
             return True
         if var_context is None:
             return pattern_b.match_data(bindings, b_context, var)
