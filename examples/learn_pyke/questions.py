@@ -2,17 +2,19 @@
 
 from pyke.qa import *
 
-knows_prolog = question(
+pm = pool()
+
+knows_prolog = pm(
     "Do you have some familiarity with the programming language prolog?",
     yn_answer())
 
-knows_ai = question(
+knows_ai = pm(
     "Do you have some familiarity with artificial intelligence or expert systems?",
     yn_answer())
 
-generic_yn = question("%s?", yn_answer())
+generic_yn = pm("%s?", yn_answer())
 
-pat_master = question(
+pat_master = pm(
     """Assume that the following two patterns are contained in different rules
 and that none of the pattern variables are initially bound to values:
 
@@ -68,13 +70,21 @@ If the two patterns are matched together, what will $x be bound to?""",
              "a different pattern variable than\n"
              "           the '$a' in pattern 2."),
 
-        (13, "Correct!  Pattern 1: $a = ho and $b = (ho, ho)\n"
-             "     and  Pattern 2: $a = (ho, $_, (ho, ho)),\n"
-             "      so  $x = (ho, ho, ho)."),
+        (13, "Correct!\n"
+             "  matching Pattern 1: (ho, $_, ($a, $a))\n"
+             "        to Pattern 2: $a\n"
+             "     binds Pattern 2: $a to Pattern 1: (ho, $_, (ho, ho))\n"
+             "  matching Pattern 1: ($a, $a, $b)\n"
+             "        to Pattern 2: $a, which is bound to Pattern 1: (ho, $_, ($a, $a))\n"
+             "     binds Pattern 1: $a to ho,\n"
+             "       and Pattern 1: $b to Pattern 1: ($a, $a) which expands to (ho, ho)\n"
+             "  matching Pattern 1: ($a, *$b)\n"
+             "        to Pattern 2: $x\n"
+             "     binds Pattern 2: $x to Pattern 1: ($a, *$b) which expands to (ho, ho, ho)"),
         (14, "Incorrect: The patterns do match!"),
         (15, "Incorrect: Pattern 1 is a legal pattern.")))
 
-pat_var_syntax = question(
+pat_var_syntax = pm(
     "A pattern variable matches any value (including other pattern variables).\n"
     "What is the syntax for a pattern variable?",
     multiple_choice(
@@ -89,7 +99,7 @@ pat_var_syntax = question(
         (2, "Correct: Pattern variables are preceded by a '$'."),
         (3, "Incorrect: Pattern variables must be preceded by a '$'.")))
 
-pat_literal = question(
+pat_literal = pm(
     "Pattern literals are patterns that only match a single constant value.\n"
     "Which of these is NOT a pattern literal?",
     multiple_choice(
@@ -108,7 +118,7 @@ pat_literal = question(
             "           and are pattern literals just like quoted strings are.\n"),
         (6, "Correct: Simple python values are pattern literals that only match themselves.")))
 
-multiple_matching = question(
+multiple_matching = pm(
     "What value matches the pattern: ($a, $a)?",
     multiple_choice(
         ("44", 1),
@@ -124,7 +134,7 @@ multiple_matching = question(
             "         in this case: b"),
         (5, "Incorrect: A tuple pattern only matches another tuple of the same length.")))
 
-anonymous_syntax = question(
+anonymous_syntax = pm(
     "Anonymous pattern variables act like \"don't care\" patterns.\n"
     "What is the syntax for an anonymous pattern variable?",
     multiple_choice(
@@ -139,7 +149,7 @@ anonymous_syntax = question(
             "           whose name starts with an underscore ('_')."),
         (3, "Correct!")))
 
-rest_pattern_variable_syntax = question(
+rest_pattern_variable_syntax = pm(
     "\"Rest\" pattern variables are used at the end of a tuple pattern to match the\n"
     "rest of the tuple.\n"
     "\n"
@@ -155,7 +165,7 @@ rest_pattern_variable_syntax = question(
             "           preceded by an asterisk ('*')."),
         (3, "Correct!")))
 
-tuple_pattern_syntax = question(
+tuple_pattern_syntax = pm(
     "What is the syntax for a tuple pattern?",
     multiple_choice(
         ("A series of patterns enclosed in \"tuple(\" ... \")\".", 1),
@@ -164,13 +174,14 @@ tuple_pattern_syntax = question(
         (1, "Incorrect: a tuple pattern is a series of patterns enclosed in parenthesis."),
         (2, "Correct!")))
 
-anonymous_matching = question(
+anonymous_matching = pm(
     "What value matches the pattern: ($_a, $_a)?",
     multiple_choice(
         ("44", 1),
         ("a", 2),
         ("(a, b)", 3),
-        ("(a, a, b)", 4)),
+        ("(a, a, b)", 4),
+        ("none of the above", 5)),
     enumerated_review(
         (1, "Incorrect: a tuple pattern only matches another tuple."),
         (2, "Incorrect: a tuple pattern only matches another tuple."),
@@ -178,9 +189,14 @@ anonymous_matching = question(
             "         are not constrained to match the same value.\n"
             "         They serve as a \"don't care\" pattern and their name just\n"
             "         documents that value's function."),
-        (4, "Incorrect: a tuple pattern only matches another tuple of the same length.")))
+        (4, "Incorrect: a tuple pattern only matches another tuple of the same length."),
+        (5, "Incorrect: pattern variable names that begin with an '_' are anonymous and\n"
+            "           are not constrained to match the same value.\n"
+            "           They serve as a \"don't care\" pattern and their name just\n"
+            "           documents that value's function."),
+        ))
 
-pattern_scope = question(
+pattern_scope = pm(
     "For each answer, assume that the two patterns are contained in different rules.\n"
     "Which set of patterns match each other?",
     multiple_choice(
@@ -216,7 +232,7 @@ pattern_scope = question(
             "              This is where the match fails!"),
         (5, "Incorrect: One set of patterns do match!")))
 
-rest_match = question(
+rest_match = pm(
     """After matching the following two patterns, what is $c set to?
 
 pattern 1: ($a, $b, *$c)
@@ -238,7 +254,7 @@ pattern 2: (1, 2, 3)
         (4, "Incorrect: these two patterns do match!"),
         (5, "Incorrect: pattern 1 is a legal pattern.")))
 
-same_var_different_rules = question(
+same_var_different_rules = pm(
     "Assume that the following two patterns are in different rules:\n"
     "\n"
     "  Pattern 1: ($a, 2)\n"

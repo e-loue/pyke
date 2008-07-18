@@ -25,6 +25,24 @@
 import re
 import functools
 
+class pool(object):
+    r'''
+        Keeps track of a set of questions as a unit.  This lets you, for
+        example, reset all of the questions in the pool with a single command.
+
+        Call the instance like a function to create (and register) new
+        questions.  These should be assigned to variables for individual
+        access.
+    '''
+    def __init__(self):
+        self.questions = []
+    def __call__(self, format, answer_type, answer_review = None):
+        ans = question(format, answer_type, answer_review)
+        self.questions.append(ans)
+        return ans
+    def reset(self):
+        for q in self.questions: q.reset()
+
 class question(object):
     r'''
         >>> import sys
