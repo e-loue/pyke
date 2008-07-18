@@ -284,7 +284,7 @@ intervening python functions between subgoal proofs.
         goal4()
       File "...error_test.krb", line 41, in rule4
         check $bar > 0
-      File "...contexts.py", line 224, in lookup_data
+      File "...contexts.py", line 227, in lookup_data
         raise KeyError("$%s not bound" % var_name)
     KeyError: '$bar not bound'
 

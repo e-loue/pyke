@@ -172,6 +172,9 @@ class simple_context(object):
         self.bindings = {}
         self.undo_list = []
         self.save_all_undo_count = 0
+    def dump(self):
+        for var_name in sorted(self.bindings.iterkeys()):
+            print "%s: %s" % (var_name, repr(self.lookup_data(var_name, True)))
     def bind(self, var_name, var_context, val, val_context = None):
         """ val_context must be None iff val is not a pattern.
             Returns True if a new binding was created.
