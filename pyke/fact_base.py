@@ -156,6 +156,7 @@ class fact_list(knowledge_base.knowledge_entity_list):
         if other_arg_lists:
             for args in other_arg_lists:
                 mark = bindings.mark(True)
+                end_done = False
                 try:
                     if all(itertools.imap(lambda i, arg:
                                             patterns[i].match_data(bindings,
@@ -164,10 +165,10 @@ class fact_list(knowledge_base.knowledge_entity_list):
                                           other_indices,
                                           args)):
                         bindings.end_save_all_undo()
+                        end_done = True
                         yield
-                    else:
-                        bindings.end_save_all_undo()
                 finally:
+                    if not end_done: bindings.end_save_all_undo()
                     bindings.undo_to_mark(mark)
     def _get_hashed(self, len, indices, args):
         ans = self.hashes.get((len, indices))

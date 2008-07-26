@@ -266,9 +266,9 @@ intervening python functions between subgoal proofs.
     Traceback (most recent call last):
       File "<doctest using_pyke.txt[31]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
-      File "...knowledge_engine.py", line 168, in prove_1
+      File "...knowledge_engine.py", line 181, in prove_1
         return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
-      File "...knowledge_engine.py", line 155, in prove_n
+      File "...knowledge_engine.py", line 168, in prove_n
         for arg in fixed_args) + vars):
       File "...rule_base.py", line 37, in next
         return self.iterator.next()

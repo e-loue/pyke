@@ -26,6 +26,7 @@
 
 from __future__ import with_statement
 import itertools
+import warnings
 from ply import yacc
 from pyke.krb_compiler import scanner
 
@@ -109,10 +110,9 @@ def p_none(p):
 def p_colon_deprication(p):
     ''' colon_opt : ':'
     '''
-    if False:
-        import sys
-        sys.stderr.write("%s(%d): use of ':' deprecated\n" %
-                         (scanner.lexer.filename, p.lineno(1)))
+    warnings.warn_explicit("use of ':' deprecated after rule names",
+                           DeprecationWarning,
+                           scanner.lexer.filename, p.lineno(1))
     p[0] = None
 
 def p_fc_rule(p):

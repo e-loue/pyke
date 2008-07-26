@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-transfer1:
+transfer1
     use transfer($from_acct, $to_acct) taking (amount)
     when
         withdraw($from_acct)
@@ -28,23 +28,23 @@ transfer1:
         deposit($to_acct)
             $$(amount)
     
-transfer2:
+transfer2
     use transfer($from_acct, $to_acct) taking (amount)
     when
         transfer_ach($from_acct, $to_acct)
             $$(amount)
     
-withdraw:
+withdraw
     use withdraw(($who, $acct_type)) taking (amount)
     with
         print "withdraw", amount, "from", $who, $acct_type
 
-deposit:
+deposit
     use deposit(($who, $acct_type)) taking (amount)
     with
         print "deposit", amount, "to", $who, $acct_type
     
-transfer_ach1:
+transfer_ach1
     use transfer_ach($from_acct, ($bank, $who, $acct_type)) taking (amount)
     when
         withdraw($from_acct)
@@ -54,7 +54,7 @@ transfer_ach1:
     with
         print "send", amount, "to bank", $bank, "acct", $who, $acct_type
     
-transfer_ach2:
+transfer_ach2
     use transfer_ach($from_acct, $to_acct) taking (amount)
     when
         get_ach($from_acct)
@@ -64,7 +64,7 @@ transfer_ach2:
         deposit($to_acct)
             $$(amount)
     
-get_ach:
+get_ach
     use get_ach(($bank, $who, $acct_type)) taking (amount)
     with
         print "get", amount, "from bank", $bank, "acct", $who, $acct_type

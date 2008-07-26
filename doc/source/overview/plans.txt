@@ -69,7 +69,7 @@ At least one of the bank accounts must be a local account.
 
 Here's the example rule base::
 
-     1  transfer1:
+     1  transfer1
      2      use transfer($from_acct, $to_acct) taking (amount)
      3      when
      4          withdraw($from_acct)
@@ -77,23 +77,23 @@ Here's the example rule base::
      6          deposit($to_acct)
      7              $$(amount)
         
-     8  transfer2:
+     8  transfer2
      9      use transfer($from_acct, $to_acct) taking (amount)
     10      when
     11          transfer_ach($from_acct, $to_acct)
     12              $$(amount)
         
-    13  withdraw:
+    13  withdraw
     14      use withdraw(($who, $acct_type)) taking (amount)
     15      with
     16          print "withdraw", amount, "from", $who, $acct_type
         
-    17  deposit:
+    17  deposit
     18      use deposit(($who, $acct_type)) taking (amount)
     19      with
     20          print "deposit", amount, "to", $who, $acct_type
         
-    21  transfer_ach1:
+    21  transfer_ach1
     22      use transfer_ach($from_acct, ($bank, $who, $acct_type)) taking (amount)
     23      when
     24          withdraw($from_acct)
@@ -103,7 +103,7 @@ Here's the example rule base::
     28      with
     29          print "send", amount, "to bank", $bank, "acct", $who, $acct_type
         
-    30  transfer_ach2:
+    30  transfer_ach2
     31      use transfer_ach($from_acct, $to_acct) taking (amount)
     32      when
     33          get_ach($from_acct)
@@ -113,7 +113,7 @@ Here's the example rule base::
     37          deposit($to_acct)
     38              $$(amount)
         
-    39  get_ach:
+    39  get_ach
     40      use get_ach(($bank, $who, $acct_type)) taking (amount)
     41      with
     42          print "get", amount, "from bank", $bank, "acct", $who, $acct_type

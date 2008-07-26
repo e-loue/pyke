@@ -28,6 +28,7 @@ import sys
 # FIX: Take this out:
 use_test = False
 
+import pyke
 from pyke import knowledge_engine
 
 if use_test:
@@ -85,62 +86,86 @@ def dump(ast, f = sys.stderr, need_nl = False, indent = 0):
     f.write(')')
     return did_nl
 
-def compile(gen_dir, gen_root_pkg, filenames):
+def compile(gen_root_location, gen_root_pkg, filenames):
     engine = knowledge_engine.engine(compiler_bc)
     for filename in filenames:
-        compile_file(engine, gen_dir, gen_root_pkg, filename)
+        compile_file(engine, gen_root_location, gen_root_pkg, filename)
 
-def compile_file(engine, gen_dir, gen_root_pkg, filename):
+def compile_file(engine, gen_root_location, gen_root_pkg, filename):
+    global pickle, kqb_parser
     rb_name = os.path.basename(filename)
-    if not rb_name.endswith('.krb'):
-        raise ValueError("compile: filename, %s, must end with .krb" % filename)
+    suffix = rb_name[-4:]
     rb_name = rb_name[:-4]
     if not knowledge_engine.Name_test.match(rb_name):
         raise ValueError("compile: %s illegal as python identifier" % rb_name)
     base_path, ignore = \
-        knowledge_engine._get_base_path(filename, gen_dir, gen_root_pkg, True)
-    fc_path = base_path + '_fc.py'
-    bc_path = base_path + '_bc.py'
-    plan_path = base_path + '_plans.py'
-    try:
-        ast = krbparser.parse(filename)
-        #sys.stderr.write("got ast\n")
-        # dump(ast)
-        # sys.stderr.write('\n\n')
-        engine.reset()
-        if use_test:
-            engine.activate('compiler_test')
-            (fc_lines, bc_lines, plan_lines), plan = \
-                engine.prove_1('compiler_test', 'compile', (rb_name, ast), 3)
-        else:
-            engine.activate('compiler')
-            (fc_lines, bc_lines, plan_lines), plan = \
-                engine.prove_1('compiler', 'compile', (rb_name, ast), 3)
-        krb_filename = os.path.abspath(filename)
-        if fc_lines:
-            sys.stderr.write("writing %s\n" % fc_path)
-            write_file(fc_lines + ("Krb_filename = '%s'" % krb_filename,),
-                       fc_path)
-        elif os.path.lexists(fc_path): os.remove(fc_path)
-        if bc_lines:
-            sys.stderr.write("writing %s\n" % bc_path)
-            write_file(bc_lines + ("Krb_filename = '%s'" % krb_filename,),
-                       bc_path)
-        elif os.path.lexists(bc_path): os.remove(bc_path)
-        if plan_lines:
-            sys.stderr.write("writing %s\n" % plan_path)
-            #sys.stderr.write("plan_lines:\n")
-            #for line in plan_lines:
-            #    sys.stderr.write("  " + repr(line) + "\n")
-            write_file(plan_lines + ("Krb_filename = '%s'" % krb_filename,),
-                       plan_path)
-        elif os.path.lexists(plan_path): os.remove(plan_path)
-        #sys.stderr.write("done!\n")
-    except:
-        if os.path.lexists(fc_path): os.remove(fc_path)
-        if os.path.lexists(bc_path): os.remove(bc_path)
-        if os.path.lexists(plan_path): os.remove(plan_path)
-        raise
+        knowledge_engine._get_base_path(filename, gen_root_location,
+                                        gen_root_pkg, True)
+    if suffix == '.krb':
+        fc_path = base_path + '_fc.py'
+        bc_path = base_path + '_bc.py'
+        plan_path = base_path + '_plans.py'
+        try:
+            ast = krbparser.parse(filename)
+            #sys.stderr.write("got ast\n")
+            # dump(ast)
+            # sys.stderr.write('\n\n')
+            engine.reset()
+            if use_test:
+                engine.activate('compiler_test')
+                (fc_lines, bc_lines, plan_lines), plan = \
+                    engine.prove_1('compiler_test', 'compile', (rb_name, ast),
+                                   3)
+            else:
+                engine.activate('compiler')
+                (fc_lines, bc_lines, plan_lines), plan = \
+                    engine.prove_1('compiler', 'compile', (rb_name, ast), 3)
+            krb_filename = os.path.abspath(filename)
+            if fc_lines:
+                sys.stderr.write("writing %s\n" % fc_path)
+                write_file(fc_lines + ("Krb_filename = '%s'" % krb_filename,),
+                           fc_path)
+            elif os.path.lexists(fc_path): os.remove(fc_path)
+            if bc_lines:
+                sys.stderr.write("writing %s\n" % bc_path)
+                write_file(bc_lines + ("Krb_filename = '%s'" % krb_filename,),
+                           bc_path)
+            elif os.path.lexists(bc_path): os.remove(bc_path)
+            if plan_lines:
+                sys.stderr.write("writing %s\n" % plan_path)
+                #sys.stderr.write("plan_lines:\n")
+                #for line in plan_lines:
+                #    sys.stderr.write("  " + repr(line) + "\n")
+                write_file(plan_lines + ("Krb_filename = '%s'" % krb_filename,),
+                           plan_path)
+            elif os.path.lexists(plan_path): os.remove(plan_path)
+            #sys.stderr.write("done!\n")
+        except:
+            if os.path.lexists(fc_path): os.remove(fc_path)
+            if os.path.lexists(bc_path): os.remove(bc_path)
+            if os.path.lexists(plan_path): os.remove(plan_path)
+            raise
+    elif suffix == '.kqb':
+        try:
+            pickle
+        except NameError:
+            import cPickle as pickle
+            from pyke.krb_compiler import kqb_parser
+            import copy_reg
+            copy_reg.pickle(slice, lambda s: (slice, (s.start, s.stop, s.step)))
+        qbc_path = base_path + '.qbc'
+        try:
+            qb = kqb_parser.parse_kqb(filename)
+            sys.stderr.write("writing %s\n" % qbc_path)
+            with open(qbc_path, 'wb') as f:
+                pickle.dump(pyke.version, f)
+                pickle.dump(qb, f)
+        except:
+            if os.path.lexists(qbc_path): os.remove(qbc_path)
+            raise
+    else:
+        raise ValueError("compile: filename, %s, must end with .krb or .kqb" %
+                         filename)
 
 def write_file(lines, filename):
     with open(filename, 'w') as f:

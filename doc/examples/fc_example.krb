@@ -20,21 +20,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-son_of:
+son_of
     foreach
         family.son_of($son, $father, $mother)
     assert
         family.child_parent($son, $father, (), son, father)
         family.child_parent($son, $mother, (), son, mother)
     
-daughter_of:
+daughter_of
     foreach
         family.daughter_of($daughter, $father, $mother)
     assert
         family.child_parent($daughter, $father, (), daughter, father)
         family.child_parent($daughter, $mother, (), daughter, mother)
     
-grand_parent_and_child:
+grand_parent_and_child
     foreach
         family.child_parent($grand_child, $parent, (),
                             $grand_child_type, $_)
@@ -44,7 +44,7 @@ grand_parent_and_child:
         family.child_parent($grand_child, $grand_parent, (grand),
                             $grand_child_type, $grand_parent_type)
     
-great_grand_parent_and_child:
+great_grand_parent_and_child
     foreach
         family.child_parent($gg_child, $parent, (), $gg_child_type, $_)
         family.child_parent($parent, $gg_parent,

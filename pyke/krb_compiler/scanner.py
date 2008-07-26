@@ -25,6 +25,7 @@
 """
 
 from __future__ import with_statement
+import string
 from ply import lex
 
 debug=0
@@ -111,7 +112,7 @@ def t_indent_sp(t):
     # level.  The tp_NL_TOK function does a skip(-1) to retain the final '\n'
     # for t_indent_sp.
     r'\n[ \t]*'
-    indent = count_indent(t.value[1:])
+    indent = count_indent(t.value[1:])[0]
     current_indent = indent_levels[-1] if indent_levels else 0
     if debug:
         print "t_indent_sp: t.value", repr(t.value), "indent", indent, \
@@ -282,7 +283,7 @@ def t_code_NL_TOK(t):
     if current_line:
         code.append(current_line)
         current_line = ''
-    indent = count_indent(t.value[t.value.rindex('\n') + 1:])
+    indent = count_indent(t.value[t.value.rindex('\n') + 1:])[0]
     if debug: print "scanner saw nl:", t.value, "new indent is", indent
     if indent < code_indent_level and code_nesting_level == 0:
         t.lexer.skip(-len(t.value))
@@ -412,30 +413,39 @@ def t_ANY_error(t):
 
 # helper functions:
 
-def count_indent(s):
+def count_indent(s, count_all=False):
     r'''
         >>> count_indent('')
-        0
+        (0, 0)
         >>> count_indent('   ')
-        3
+        (3, 3)
+        >>> count_indent('   stuff')
+        (3, 3)
         >>> count_indent('\t')
-        8
+        (8, 1)
         >>> count_indent('\t ')
-        9
+        (9, 2)
         >>> count_indent('\t\t')
-        16
+        (16, 2)
         >>> count_indent('   \t')
-        8
+        (8, 4)
         >>> count_indent('       \t')
-        8
+        (8, 8)
         >>> count_indent('        \t')
-        16
+        (16, 9)
+        >>> count_indent(' a\t', True)
+        (8, 3)
+        >>> count_indent(' a ', True)
+        (3, 3)
     '''
-    ans = 0
+    indent = 0
+    chars = 0
     for c in s:
-        if c == '\t': ans = (ans + 8) & ~7
-        else: ans += 1
-    return ans
+        if c == '\t': indent = (indent + 8) & ~7
+        elif c == ' ' or count_all: indent += 1
+        else: break
+        chars += 1
+    return indent, chars
 
 escapes = {
     'a': '\a',

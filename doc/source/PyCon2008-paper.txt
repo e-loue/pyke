@@ -303,18 +303,18 @@ We'll continue with the previous example here.
 First, let's look at the rules before we attach the python functions.
 Here's three of the rules::
 
-    use_B2:
+    use_B2
         use find_B($client)
         when
             check_function($client, B, 2)
             find_D($client)
 
-    use_D1:
+    use_D1
         use find_D($client)
         when
             check_function($client, D, 1)
 
-    use_D2:
+    use_D2
         use find_D($client)
         when
             check_function($client, D, 2)
@@ -338,14 +338,14 @@ the inferencing process, it is a hidden parameter.
 These examples just show one line of python code, but you may have as many
 lines as you want::
 
-    use_D1:
+    use_D1
         use find_D($client)
         when
             check_function($client, D, 1)
         with
             print "D1"
 
-    use_D2:
+    use_D2
         use find_D($client)
         when
             check_function($client, D, 2)
@@ -360,7 +360,7 @@ Calling Subordinate Plans
 
 Now we do the same thing to add python code to the ``use_B2`` rule::
 
-    use_B2:
+    use_B2
         use find_B($client)
         when
             check_function($client, B, 2)
@@ -373,7 +373,7 @@ returned from the ``find_D`` goal?
 
 The most common way is::
 
-    use_B2:
+    use_B2
         use find_B($client)
         when
             check_function($client, B, 2)
@@ -394,7 +394,7 @@ But in this case, this would mean that ``print "Dx"`` would be executed before
 To call the subordinate plan within the ``with`` clause, there is an alternate
 mechanism::
 
-    use_B2:
+    use_B2
         use find_B($client)
         when
             check_function($client, B, 2)
@@ -421,7 +421,7 @@ Some Final Points about Plans
 * Function parameters are specified at the end of the ``use`` clause with an
   optional ``taking`` clause::
 
-    use_B2:
+    use_B2
         use find_B($client) taking (a, b = None)
         ...
 
@@ -439,7 +439,7 @@ Other Capabilities
 
 * Pyke also supports forward-chaining rules::
 
-    fc_rule_name:
+    fc_rule_name
         foreach
             fact_base_name.fact_name(pattern...)
             ...

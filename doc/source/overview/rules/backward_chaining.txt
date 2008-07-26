@@ -45,34 +45,34 @@ Example
 
 Consider this example::
 
-     1  son_father:
+     1  son_father
      2      use child_parent($son, $father, (), son, father)
      3      when
      4          family.son_of($son, $father, $_)
         
-     5  son_mother:
+     5  son_mother
      6      use child_parent($son, $mother, (), son, mother)
      7      when
      8          family.son_of($son, $_, $mother)
         
-     9  daughter_father:
+     9  daughter_father
     10      use child_parent($daughter, $father, (), daughter, father)
     11      when
     12          family.daughter_of($daughter, $father, $_)
         
-    13  daughter_mother:
+    13  daughter_mother
     14      use child_parent($daughter, $mother, (), daughter, mother)
     15      when
     16          family.daughter_of($daughter, $_, $mother)
         
-    17  grand_parent_and_child:
+    17  grand_parent_and_child
     18      use child_parent($grand_child, $grand_parent, (grand),
     19                       $grand_child_type, $grand_parent_type)
     20      when
     21          child_parent($grand_child, $parent, (), $grand_child_type, $_)
     22          child_parent($parent, $grand_parent, (), $_, $grand_parent_type)
         
-    23  great_grand_parent_and_child:
+    23  great_grand_parent_and_child
     24      use child_parent($gg_child, $gg_parent, (great, $prefix1, *$rest_prefixes),
     25                       $gg_child_type, $gg_parent_type)
     26      when

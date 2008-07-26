@@ -53,12 +53,12 @@ class engine(object):
     _Variables = tuple(contexts.variable('ans_%d' % i) for i in range(100))
     
     def __init__(self, paths = ('.',),
-                 gen_dir = '.', gen_root_dir = 'compiled_krb',
-                 load_fc = True, load_bc = True):
-        if not Name_test.match(gen_root_dir):
+                 gen_root_location = '.', gen_root_pkg = 'compiled_krb',
+                 load_fc = True, load_bc = True, load_qb = True):
+        if not Name_test.match(gen_root_pkg):
             raise ValueError(
-                "engine.__init__: gen_root_dir (%s) must be a legal python "
-                "identifier" % (gen_root_dir,))
+                "engine.__init__: gen_root_pkg (%s) must be a legal python "
+                "identifier" % (gen_root_pkg,))
         self.knowledge_bases = {}
         self.rule_bases = {}
         special.create_for(self)
@@ -69,24 +69,35 @@ class engine(object):
                 paths.populate(self)
             else:
                 if isinstance(paths, types.StringTypes): paths = (paths,)
-                compile_list = _get_compile_list(paths, gen_dir, gen_root_dir)
+                compile_list = _get_compile_list(paths, gen_root_location,
+                                                 gen_root_pkg)
                 if compile_list:
                     from pyke import krb_compiler
-                    krb_compiler.compile(gen_dir, gen_root_dir, compile_list)
-                    _check_list(compile_list, gen_dir, gen_root_dir)
-                compile_list2 = _load_paths(self, paths, gen_dir, gen_root_dir,
-                                            load_fc, load_bc, compile_list)
+                    krb_compiler.compile(gen_root_location, gen_root_pkg,
+                                         compile_list)
+                    _check_list(compile_list, gen_root_location, gen_root_pkg)
+                compile_list2 = _load_paths(self, paths, gen_root_location,
+                                            gen_root_pkg,
+                                            load_fc, load_bc, load_qb,
+                                            compile_list)
                 if compile_list2:
                     from pyke import krb_compiler
-                    krb_compiler.compile(gen_dir, gen_root_dir, compile_list2)
-                    _check_list(compile_list2, gen_dir, gen_root_dir)
+                    krb_compiler.compile(gen_root_location, gen_root_pkg,
+                                         compile_list2)
+                    _check_list(compile_list2, gen_root_location, gen_root_pkg)
                     for full_filename in compile_list2:
                         if not _load_file(self, full_filename,
-                                          gen_dir, gen_root_dir,
-                                          load_fc, load_bc, compile_list2):
+                                          gen_root_location, gen_root_pkg,
+                                          load_fc, load_bc, load_qb,
+                                          compile_list2):
                             raise AssertionError("version recompile failed")
         for kb in self.knowledge_bases.itervalues(): kb.init2()
         for rb in self.rule_bases.itervalues(): rb.init2()
+    def get_ask_module(self):
+        if not hasattr(self, 'ask_module'):
+            from pyke import ask_tty
+            self.ask_module = ask_tty
+        return self.ask_module
     def reset(self):
         for rb in self.rule_bases.itervalues(): rb.reset()
         for kb in self.knowledge_bases.itervalues(): kb.reset()
@@ -107,6 +118,8 @@ class engine(object):
         elif ans.parent != parent or ans.exclude_set != frozenset(exclude_list):
             raise AssertionError("duplicate rule_base: %s" % rb_name)
         return ans
+    def get_ke(self, kb_name, entity_name):
+        return self.get_kb(kb_name).get_entity_list(entity_name)
 
     def add_universal_fact(self, kb_name, fact_name, args):
         if isinstance(args, types.StringTypes):
@@ -199,8 +212,13 @@ def _make_package_dirs(base_dir, package_path):
     return full_package_path
 
 def _doctor_names(path):
-    ''' Convert all path components into legal path names.
-        Return converted result.
+    ''' Convert all path components into legal python identifiers.
+        Return converted result as a list of the legal identifiers.
+
+        >>> _doctor_names('a/b/c')
+        ['a', 'b', 'c']
+        >>> _doctor_names('44/4.2/hi-mom.txt')
+        ['_44', '_4_2', 'hi_mom_txt']
     '''
     def fix_component(c):
         if c[0] in '0123456789': c = '_' + c
@@ -208,9 +226,62 @@ def _doctor_names(path):
     if not path: return []
     return [fix_component(component) for component in path.split(os.path.sep)]
 
-def _get_base_path(filename, gen_dir, gen_root_dir, makedirs = False):
-    if makedirs and not os.path.exists(gen_dir): os.makedirs(gen_dir)
-    fn_dirname, fn_name = os.path.split(filename)
+def _get_base_path(filename, gen_root_location, gen_root_pkg, makedirs = False):
+    r'''
+        Figures out the base path for the compiled files of a source filename.
+
+        Also returns a list of packages starting at gen_root_pkg to the
+        package containing the compiled files.
+
+        This is an example for the default gen_root_location, gen_root_pkg
+        arguments:
+
+        >>> sourcefile = 'sourcedir/a/b/c.krb'
+        >>> base_path, package_list = \
+        ...     _get_base_path(sourcefile, '.', 'compiled_krb')
+        >>> base_path
+        './compiled_krb/sourcedir/a/b/c'
+        >>> package_list
+        ['compiled_krb', 'sourcedir', 'a', 'b']
+
+        Here's an example where the sources and compiled files are both in
+        the same subdirectory (common_subdir):
+
+        >>> common_subdir = 'x/y/z'
+        >>> filename = common_subdir + '/' + sourcefile
+        >>> base_path, package_list = \
+        ...     _get_base_path(filename,
+        ...                    common_subdir + '/test/root',
+        ...                    'compiled_krb')
+        >>> base_path
+        'x/y/z/test/root/compiled_krb/sourcedir/a/b/c'
+        >>> package_list
+        ['compiled_krb', 'sourcedir', 'a', 'b']
+
+        And finally an example where the sources and compiled files are in
+        different directories starting in ../..:
+
+        >>> import os, os.path
+        >>> base2, sub2 = os.path.split(os.getcwd())
+        >>> base1, sub1 = os.path.split(base2)
+        >>> base_path, package_list = \
+        ...     _get_base_path(sourcefile,
+        ...                    '../../test_root',
+        ...                    'compiled_krb')
+        >>> expected_path = os.path.join('../../test_root/compiled_krb',
+        ...                              _doctor_names(sub1)[0],
+        ...                              _doctor_names(sub2)[0],
+        ...                              'sourcedir/a/b/c')
+        >>> base_path == expected_path
+        True
+        >>> package_list == ['compiled_krb',
+        ...                  _doctor_names(sub1)[0], _doctor_names(sub2)[0],
+        ...                  'sourcedir', 'a', 'b']
+        True
+    '''
+    if makedirs and not os.path.exists(gen_root_location):
+        os.makedirs(gen_root_location)
+    fn_dirname, fn_basename = os.path.split(filename)
     fndrive, fnpath = os.path.splitdrive(os.path.abspath(fn_dirname))
     # convert "c:\a\b\c" to "\c_drive\a\b\c"
     if fndrive:
@@ -218,7 +289,7 @@ def _get_base_path(filename, gen_dir, gen_root_dir, makedirs = False):
     else:
         fn_boguspath = fnpath
     #print "fn_boguspath:", fn_boguspath
-    gendrive, genpath = os.path.splitdrive(os.path.abspath(gen_dir))
+    gendrive, genpath = os.path.splitdrive(os.path.abspath(gen_root_location))
     if gendrive:
         gen_boguspath = '%s%s_drive%s' % (os.path.sep, gendrive, genpath)
     else:
@@ -238,62 +309,86 @@ def _get_base_path(filename, gen_dir, gen_root_dir, makedirs = False):
     fn_unique_tail = fn_boguspath[skip_len:]
     #print "fn_unique_tail:", fn_unique_tail
     assert not fn_unique_tail or fn_unique_tail[0] != os.path.sep
-    package_list = [gen_root_dir] + _doctor_names(fn_unique_tail)
+    package_list = [gen_root_pkg] + _doctor_names(fn_unique_tail)
     if makedirs:
-        path = _make_package_dirs(gen_dir, package_list)
+        path = _make_package_dirs(gen_root_location, package_list)
     else:
-        path = os.path.join(gen_dir, *package_list)
-    return os.path.join(path, fn_name[:-4]), package_list
+        path = os.path.join(gen_root_location, *package_list)
+    return os.path.join(path, fn_basename[:-4]), package_list
 
-def _needs_compiling(filename, gen_dir, gen_root_dir):
+def _needs_compiling(filename, gen_root_location, gen_root_pkg):
+    r'''
+        Returns True if 'filename' needs to be recompiled.
+
+        This means that the compiled file exists and its modification time is
+        later than modification time of 'filename'.
+
+        It does not check the pyke.version cooked into the compiled file.
+        That is done by _load_file.
+    '''
     source_mtime = os.stat(filename).st_mtime
-    base, ignore = _get_base_path(filename, gen_dir, gen_root_dir)
-    try:
-        ok = os.stat(base + '_fc.py').st_mtime > source_mtime
-    except OSError:
-        ok = None
-    if ok is None or ok:
+    base, ignore = _get_base_path(filename, gen_root_location, gen_root_pkg)
+    if filename.endswith('.krb'):
         try:
-            ok = os.stat(base + '_bc.py').st_mtime > source_mtime
+            ok = os.stat(base + '_fc.py').st_mtime > source_mtime
         except OSError:
-            if ok is None: ok = False
+            ok = None
+        if ok is None or ok:
+            try:
+                ok = os.stat(base + '_bc.py').st_mtime > source_mtime
+            except OSError:
+                if ok is None: ok = False
+    elif filename.endswith('.kqb'):
+        try:
+            ok = os.stat(base + '.qbc').st_mtime > source_mtime
+        except OSError:
+            ok = False
     return not ok
 
-def _get_compile_list(paths, gen_dir, gen_root_dir):
+def _get_compile_list(paths, gen_root_location, gen_root_pkg):
     ans = []
     for path in paths:
         for dirpath, dirnames, filenames in os.walk(path, onerror=_raise_exc):
             for filename in filenames:
-                if filename.endswith('.krb') and \
-                   _needs_compiling(os.path.join(dirpath, filename),
-                                    gen_dir, gen_root_dir):
+                if (filename.endswith('.krb') or filename.endswith('.kqb')) \
+                   and _needs_compiling(os.path.join(dirpath, filename),
+                                        gen_root_location, gen_root_pkg):
                     ans.append(os.path.join(dirpath, filename))
     return ans
 
-def _load_paths(engine, paths, gen_dir, gen_root_dir, load_fc, load_bc,
-                compile_list):
-    if gen_dir == '.':
-        if '' not in sys.path and os.path.abspath(gen_dir) not in sys.path:
+def _load_paths(engine, paths, gen_root_location, gen_root_pkg,
+                load_fc, load_bc, load_qb, compile_list):
+    r'''
+        Loads the compiled versions of all source files in 'paths'.
+
+        Returns a list of source files that are missing or have old pyke
+        versions in them.  These must be re-compiled and re-loaded.
+    '''
+    if gen_root_location == '.':
+        if '' not in sys.path \
+           and os.path.abspath(gen_root_location) not in sys.path:
             sys.path.insert(0, '')
     else:
-        if os.path.abspath(gen_dir) not in sys.path:
-            sys.path.insert(0, os.path.abspath(gen_dir))
+        if os.path.abspath(gen_root_location) not in sys.path:
+            sys.path.insert(0, os.path.abspath(gen_root_location))
     ans = []
     for path in paths:
         for dirpath, dirnames, filenames in os.walk(path, onerror=_raise_exc):
             for filename in filenames:
-                if filename.endswith('.krb'):
+                if filename.endswith('.krb') or filename.endswith('.kqb'):
                     full_filename = os.path.join(dirpath, filename)
                     if not _load_file(engine, full_filename,
-                                      gen_dir, gen_root_dir, load_fc, load_bc,
-                                      compile_list):
+                                      gen_root_location, gen_root_pkg,
+                                      load_fc, load_bc, load_qb, compile_list):
                         ans.append(full_filename)
     #print "_load_paths =>", ans
     return ans
 
-def _load_file(engine, filename, gen_dir, gen_root_dir, load_fc, load_bc,
-               compile_list):
-    base, package_list = _get_base_path(filename, gen_dir, gen_root_dir)
+def _load_file(engine, filename, gen_root_location, gen_root_pkg,
+               load_fc, load_bc, load_qb, compile_list):
+    global pickle
+    base, package_list = \
+        _get_base_path(filename, gen_root_location, gen_root_pkg)
     base_modulename = os.path.basename(base)
     def load_module(type, do_import=True):
         try:
@@ -320,11 +415,26 @@ def _load_file(engine, filename, gen_dir, gen_root_dir, load_fc, load_bc,
         if do_import: module.populate(engine)
         #print "load_module(%s, %s) => True" % (filename, type)
         return True
-    if load_fc:
+    if load_fc and filename.endswith('.krb'):
         if not load_module('_fc'): return False
-    if load_bc:
+    if load_bc and filename.endswith('.krb'):
         if not load_module('_plans', False): return False
         if not load_module('_bc'): return False
+    if load_qb and filename.endswith('.kqb'):
+        try:
+            pickle      # test to see whether this has already been loaded
+        except NameError:
+            import cPickle as pickle
+        try:
+            f = open(base + '.qbc', 'rb')
+        except IOError:
+            return False
+        try:
+            version = pickle.load(f)
+            if version != pyke.version: return False
+            pickle.load(f).register(engine)
+        finally:
+            f.close()
     return True
 
 """ ******* for testing:
@@ -358,9 +468,9 @@ def _import(modulepath):
         mod = getattr(mod, comp)
     return mod
 
-def _check_list(compile_list, gen_dir, gen_root_dir):
+def _check_list(compile_list, gen_root_location, gen_root_pkg):
     for filename in compile_list:
-        if _needs_compiling(filename, gen_dir, gen_root_dir):
+        if _needs_compiling(filename, gen_root_location, gen_root_pkg):
             raise AssertionError("%s didn't compile correctly" % filename)
 
 def test():

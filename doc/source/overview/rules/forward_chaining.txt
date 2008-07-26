@@ -48,21 +48,21 @@ Example
 
 Consider this example::
 
-     1  son_of:
+     1  son_of
      2      foreach
      3          family.son_of($son, $father, $mother)
      4      assert
      5          family.child_parent($son, $father, (), son, father)
      6          family.child_parent($son, $mother, (), son, mother)
         
-     7  daughter_of:
+     7  daughter_of
      8      foreach
      9          family.daughter_of($daughter, $father, $mother)
     10      assert
     11          family.child_parent($daughter, $father, (), daughter, father)
     12          family.child_parent($daughter, $mother, (), daughter, mother)
         
-    13  grand_parent_and_child:
+    13  grand_parent_and_child
     14      foreach
     15          family.child_parent($grand_child, $parent, (),
     16                              $grand_child_type, $_)
@@ -72,7 +72,7 @@ Consider this example::
     20          family.child_parent($grand_child, $grand_parent, (grand),
     21                              $grand_child_type, $grand_parent_type)
         
-    22  great_grand_parent_and_child:
+    22  great_grand_parent_and_child
     23      foreach
     24          family.child_parent($gg_child, $parent, (), $gg_child_type, $_)
     25          family.child_parent($parent, $gg_parent,

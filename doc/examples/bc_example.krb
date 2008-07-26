@@ -20,34 +20,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-son_father:
+son_father
     use child_parent($son, $father, (), son, father)
     when
         family.son_of($son, $father, $_)
     
-son_mother:
+son_mother
     use child_parent($son, $mother, (), son, mother)
     when
         family.son_of($son, $_, $mother)
     
-daughter_father:
+daughter_father
     use child_parent($daughter, $father, (), daughter, father)
     when
         family.daughter_of($daughter, $father, $_)
     
-daughter_mother:
+daughter_mother
     use child_parent($daughter, $mother, (), daughter, mother)
     when
         family.daughter_of($daughter, $_, $mother)
     
-grand_parent_and_child:
+grand_parent_and_child
     use child_parent($grand_child, $grand_parent, (grand),
                      $grand_child_type, $grand_parent_type)
     when
         child_parent($grand_child, $parent, (), $grand_child_type, $_)
         child_parent($parent, $grand_parent, (), $_, $grand_parent_type)
     
-great_grand_parent_and_child:
+great_grand_parent_and_child
     use child_parent($gg_child, $gg_parent, (great, $prefix1, *$rest_prefixes),
                      $gg_child_type, $gg_parent_type)
     when

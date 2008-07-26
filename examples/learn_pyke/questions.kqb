@@ -1,0 +1,255 @@
+# questions.kqb
+
+knows_prolog($ans)
+    Do you have some familiarity with the programming language prolog?
+    ---
+    $ans = yn
+
+knows_ai($ans)
+    Do you have some familiarity with artificial intelligence or expert systems?
+    ---
+    $ans = yn
+
+generic_yn($question, $ans)
+    $question?
+    ---
+    $ans = yn
+
+pat_master($ans)
+    Assume that the following two patterns are contained in different rules
+    and that none of the pattern variables are initially bound to values:
+
+    pattern 1: ((ho, $$_, ($$a, $$a)), ($$a, $$a, $$b), ($$a, *$$b))
+    pattern 2: ($$a, $$a, $$x)
+
+    If the two patterns are matched together, what will $$x be bound to?
+    ---
+    $ans = select_1
+        1: (a, b)
+           ! Incorrect: Neither of the symbols 'a' nor 'b' appear in either pattern.
+        2: $$a
+           ! Incorrect: Pattern variable '$$a' is bound to a value.
+        3: ho
+           ! Incorrect: $$x is bound to a tuple.
+        4: ($$a, *$$b)
+           ! Incorrect: Both pattern variables '$$a' and '$$b' are bound to values.
+        5: (ho, *$$b)
+           ! Incorrect: Pattern variable '$$b' is bound to a value.
+        6: (ho, *($$a, $$a))
+           ! Incorrect: The '*' is part of the pattern syntax and is not seen in the
+                        bound value.
+        7: (ho, ($$a, $$a))
+           !=2
+        8: (ho, $$a, $$a)
+           !=2
+        9: (ho, *(ho, ho))
+           !=6
+        10: (ho, (ho, ho))
+            ! Incorrect: The '*' in '*$$b' means "the rest of the tuple" is '$$b'.
+        11: (ho, $$_, (ho, ho))
+            ! Incorrect: The '$$a' in pattern 1 is a different pattern variable than
+                         the '$$a' in pattern 2.
+        12: (ho, ho, (ho, ho))
+            !=11
+        13: (ho, ho, ho)
+            ! Correct!
+                  matching Pattern 1: (ho, $$_, ($$a, $$a))
+                        to Pattern 2: $$a
+                     binds Pattern 2: $$a to Pattern 1: (ho, $$_, (ho, ho))
+                  matching Pattern 1: ($$a, $$a, $$b)
+                        to Pattern 2: $$a, which is bound to Pattern 1: (ho, $$_, ($$a, $$a))
+                     binds Pattern 1: $$a to ho,
+                       and Pattern 1: $$b to Pattern 1: ($$a, $$a) which expands to (ho, ho)
+                  matching Pattern 1: ($$a, *$$b)
+                        to Pattern 2: $$x
+                     binds Pattern 2: $$x to Pattern 1: ($$a, *$$b) which expands to (ho, ho, ho)
+        14: nothing, the two patterns don't match
+            ! Incorrect: The patterns do match!
+        15: nothing, pattern 1 is not a legal pattern
+            ! Incorrect: Pattern 1 is a legal pattern.
+        16: I don't have a clue...
+
+pat_var_syntax($ans)
+    A pattern variable matches any value (including other pattern variables).
+    What is the syntax for a pattern variable?
+    ---
+    $ans = select_1
+        1: any legal identifier not within quotes is a pattern variable
+           ! Incorrect: A legal identifier not within quotes is treated the same
+                        as if it were in quotes.  This just saves you the trouble of typing
+                        the quotes.
+                        A pattern variable is any identifier preceded by a '$$'.
+        2: a '$$' in front of any legal identifier
+           ! Correct: Pattern variables are preceded by a '$$'.
+        3: a '*' in front of any legal identifier
+           ! Incorrect: Pattern variables must be preceded by a '$$'.
+
+pat_literal($ans)
+    Pattern literals are patterns that only match a single constant value.
+    Which of these is NOT a pattern literal?
+    ---
+    $ans = select_1
+        1: None
+           ! Incorrect: Simple python values, like None, are pattern literals.
+        2: 33
+           ! Incorrect: Simple python values, like 33 and 3.14159, are pattern literals.
+        3: True
+           ! Incorrect: Simple python values, like True and False, are pattern literals.
+        4: "hi mom!"
+           ! Incorrect: Simple python values, like strings, are pattern literals.
+        5: fred
+           ! Incorrect: Legal identifiers are strings that don't require quotes
+                        and are pattern literals just like quoted strings are.
+        6: $$fred
+           ! Correct: Simple python values are pattern literals that only match themselves.
+
+multiple_matching($ans)
+    What value matches the pattern: ($$a, $$a)?
+    ---
+    $ans = select_1
+        1: 44
+           ! Incorrect: A tuple pattern only matches another tuple.
+        2: a
+           !=1
+        3: (a, b)
+           ! Incorrect: Both '$$a' pattern variables must match the same value.
+        4: (b, b)
+           ! Correct: Both '$$a' pattern variables must always match the same value,
+                      in this case: b
+        5: (a, a, b)
+           ! Incorrect: A tuple pattern only matches another tuple of the same length.
+
+anonymous_syntax($ans)
+    Anonymous pattern variables act like "don't care" patterns.
+    What is the syntax for an anonymous pattern variable?
+    ---
+    $ans = select_1
+        1: $$anonymous
+           ! Incorrect: An anonymous pattern variable is any pattern variable
+                        whose name starts with an underscore ('_').
+        2: _anonymous
+           !=1
+        3: Using a pattern variable name that starts with an underscore ('_'),
+           like: $$_anonymous.
+           ! Correct!
+
+rest_pattern_variable_syntax($ans)
+    "Rest" pattern variables are used at the end of a tuple pattern to match the
+    rest of the tuple.
+
+    What is the syntax for a "rest" pattern variable?
+    ---
+    $ans = select_1
+        1: $$rest
+           ! Incorrect: A "rest" pattern variable is any pattern variable preceded
+                        by an asterisk ('*').
+        2: _rest
+           !=1
+        3: Preceding a pattern variable with an asterisk ('*'), like: *$$foo.
+           ! Correct!
+
+tuple_pattern_syntax($ans)
+    What is the syntax for a tuple pattern?
+    ---
+    $ans = select_1
+        1: A series of patterns enclosed in "tuple(" ... ")".
+           ! Incorrect: a tuple pattern is a series of patterns enclosed in parenthesis.
+        2: A series of patterns enclosed in parenthesis.
+           ! Correct!
+
+anonymous_matching($ans)
+    What value matches the pattern: ($$_a, $$_a)?
+    ---
+    $ans = select_1
+        1: 44
+           ! Incorrect: a tuple pattern only matches another tuple.
+        2: a
+           !=1
+        3: (a, b)
+           ! Correct: pattern variable names that begin with an '_' are anonymous and
+                      are not constrained to match the same value.
+                      They serve as a "don't care" pattern and their name just
+                      documents that value's function.
+        4: (a, a, b)
+           ! Incorrect: a tuple pattern only matches another tuple of the same length.
+        5: none of the above
+           ! Incorrect: pattern variable names that begin with an '_' are anonymous and
+                        are not constrained to match the same value.
+                        They serve as a "don't care" pattern and their name just
+                        documents that value's function.
+
+pattern_scope($ans)
+    For each answer, assume that the two patterns are contained in different rules.
+    Which set of patterns match each other?
+    ---
+    $ans = select_1
+        1: Pattern 1: a
+           Pattern 2: 44
+           ! Incorrect: an identifier is treated as a string, and "a" does not match 44.
+        2: Pattern 1: ($$a, $$a, 3)
+           Pattern 2: (1, 2, 3)
+           ! Incorrect: both '$$a' pattern variables in pattern 1 must match the same value.
+        3: Pattern 1: ($$a, $$a, 3)
+           Pattern 2: (1, 1, $$a)
+           ! Correct: All of the pattern variables with the same name within the same rule
+                      must always match the same value.
+                      But pattern variables with the same name within different rules
+                      may match different values.  Thus all of the $$a pattern variables
+                      in Pattern 1 must match the same value, but this may be a different
+                      value than the $$a in Pattern 2.
+        4: Pattern 1: ($$a, $$a, 3)
+           Pattern 2: (1, $$b, $$b)
+           ! Incorrect: All pattern variables with the same name in the same rule
+                        must match the same value.
+                        Here's the sequence of how these patterns are matched:
+                        1. The first $$a in Pattern 1 is matched to the 1 in Pattern 2.
+                           This sets the $$a in Pattern 1 to 1.
+                        2. The second $$a in Pattern 1 is matched to the first $$b in
+                           Pattern 2.  This sets $$b in Pattern 2 to 1, since that is what
+                           $$a in Pattern 1 is set to.
+                        3. The 3 in Pattern 1 is matched to the second $$b in Pattern 2.
+                           This tries to match 3 to 1, since $$b in Pattern 2 is 1.
+                           This is where the match fails!
+        5: None of these match.
+           ! Incorrect: One set of patterns do match!
+        6: I don't have a clue.
+
+rest_match($ans)
+    After matching the following two patterns, what is $$c set to?
+
+    pattern 1: ($$a, $$b, *$$c)
+    pattern 2: (1, 2, 3)
+    ---
+    $ans = select_1
+        1: 3
+           ! Incorrect: a "rest" pattern variable is always set to a tuple.
+        2: (3)
+           ! Correct!  (Note that a comma is not required for singleton tuples in PyKE).
+        3: (3,)
+           ! Correct, but answer 2 is slightly better because a comma is not required for
+                      singleton tuples in pyke.
+        4: nothing, the two patterns don't match
+           ! Incorrect: these two patterns do match!
+        5: nothing, pattern 1 is not a legal pattern
+           ! Incorrect: pattern 1 is a legal pattern.
+
+same_var_different_rules($ans)
+    Assume that the following two patterns are in different rules:
+
+      Pattern 1: ($$a, 2)
+      Pattern 2: (1, $$a)
+
+    Do these patterns match?
+    ---
+    $ans = yn
+        True ! Correct!  The $$a in Pattern 1 is in a different rule than
+                         the $$a in Pattern 2, so they are not required
+                         to match the same value.
+        False! Incorrect: The $$a in Pattern 1 is in a different rule than
+                          the $$a in Pattern 2, so they are not required
+                          to match the same value.
+
+#$$x matching $$y means that both $$x and $$y have to mean the same thing from then
+#    on
+#pattern matching to select what to do
+#pattern matching to generate values

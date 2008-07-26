@@ -31,19 +31,35 @@ class knowledge_base(object):
         is "name1".
     '''
     def __init__(self, engine, name, entity_list_type = None, register = True):
-        self.engine = engine
         self.name = name
-        if register:
-            if name in engine.knowledge_bases:
-                raise AssertionError("knowledge_base %s already exists" % name)
-            if name in engine.rule_bases:
-                raise AssertionError("name clash between %s '%s' and "
-                                     "rule_base '%s'" %
-                                         (self.__class__.__name__, name, name))
-            engine.knowledge_bases[name] = self
         self.entity_lists = {}          # {name: entity_list}
         self.entity_list_type = entity_list_type
         self.initialized = False        # used by self.init2
+        if register: self.register(engine)
+        else: self.engine = engine
+    def register(self, engine):
+        r'''
+            Called at most once either from __init__ or after loading from a
+            pickle.
+        '''
+        self.engine = engine
+        name = self.name
+        if name in engine.knowledge_bases:
+            raise AssertionError("knowledge_base %s already exists" % name)
+        if name in engine.rule_bases:
+            raise AssertionError("name clash between %s '%s' and "
+                                 "rule_base '%s'" %
+                                     (self.__class__.__name__, name, name))
+        engine.knowledge_bases[name] = self
+    def __getstate__(self):
+        r'''
+            User must call 'register' on the new instance after loading it
+            from the pickle.  We do this so that we don't end up pickling the
+            whole engine!
+        '''
+        ans = vars(self).copy()
+        del ans['engine']
+        return ans
     def init2(self):
         ''' overridden by subclasses. '''
         pass
