@@ -23,7 +23,8 @@
 
 
 #
-# process($starting_tables, $template_name) taking (db_cursor, starting_keys)
+# process($starting_tables, $template_name)
+#  taking (db_connection, db_cursor, starting_keys)
 #
 # This is the top-level goal called by the wsgi application.
 #   Input goal arguments:
@@ -33,6 +34,8 @@
 #     $template_name        - the filename of the template file to use
 #                             (e.g., 'movie1.html').
 #   plan arguments:
+#     db_connection         - the database connection object (to commit or
+#                             rollback).
 #     db_cursor             - an open cursor to the database.
 #     starting_keys         - a dict mapping the table_names given in
 #                             $starting_tables to their key values (e.g.,
@@ -42,11 +45,11 @@
 #     wsgi function.
 process_retrieval
     use process($starting_tables, $template_name)
-        taking (db_cursor, starting_keys)
+        taking (db_connection, db_cursor, starting_keys)
     when
         !format_retrieval($starting_tables, $template_name, $needed_data) \
                 step -1
-            return $$(data)
+            return $$(db_connection, data)
         !database.get_data($starting_tables, $needed_data)
             data = $$(db_cursor, starting_keys)
 
@@ -66,6 +69,8 @@ process_retrieval
 #                             by the plan.  This is ready for input into
 #                             the sqlgen/database.get_data goal.
 #   plan arguments:
+#     db_connection         - the database connection object (to commit or
+#                             rollback).
 #     data                  - the dict returned by the
 #                             sqlgen/database.get_data plan containing the
 #                             values of the $needed_data.
@@ -74,12 +79,13 @@ process_retrieval
 #     wsgi function.
 format_retrieval
     use format_retrieval($starting_tables, $template_name, $needed_data)
-        taking (data)
+        taking (db_connection, data)
     when
         $template = get_template($template_name)
         $elements = structure($template)
         !render_elements($elements, $needed_data) as $render_fn
     with
+        db_connection.commit()
         return '200 OK', [('Content-Type', 'text/html')], \
                ($template.render($render_fn, data),)
 

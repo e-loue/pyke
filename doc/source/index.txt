@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007 Bruce Frederiksen
+.. Copyright © 2007-2008 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@ restindex
     format: rest
     encoding: utf8
     output-encoding: utf8
-    section-pages: , overview/index, installing_pyke, using_pyke, krb_syntax/index, examples, logic_tricks, PyCon2008-paper
+    section-pages: , overview/index, installing_pyke, using_pyke, kfb_syntax, kqb_syntax, krb_syntax/index, examples, logic_tricks, PyCon2008-paper
     template: template.txt
     template-encoding: utf8
     include: No
@@ -57,6 +57,9 @@ Pyke is a knowledge-based inference engine (expert system) written in
     function's requirements are completely satisfied, by examining the entire
     call graph down to the leaves, before **any** of the functions are
     executed.
+  - This technique can give order of magnitude improvements in performance.
+    For example, the web_framework_ example runs 10 times faster than
+    TurboGears 2 (791 vs 76 trans/sec)!
   - This is an optional feature.  You don't need to use it if you just
     want the inferencing capability by itself.
 
@@ -81,7 +84,7 @@ Automatic program generation:
   rules.
 - Plans may be pickled and cached to disk to be used by other programs or
   in later runs of the same program.
-- No pyke modules are required to run the plans.
+- Only one small pyke module is required to run the plans.
 
 Potential pyke applications:
 ========================================
@@ -111,3 +114,11 @@ Potential pyke applications:
   configure and interconnect a network of objects to meet a specific need
   or situation.
 
+
+Pyke on Google Groups
+=====================
+
+Please join pyke_ on Google Groups for questions and discussion!
+
+.. _pyke: http://groups.google.com/group/pyke
+.. _web_framework: examples.html#web-framework

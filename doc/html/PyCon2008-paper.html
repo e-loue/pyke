@@ -36,6 +36,8 @@
 <div class="normal-nav"><a href="overview/index.html">Overview</a></div>
 <div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="kfb_syntax.html">KFB Syntax</a></div>
+<div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
 <div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="examples.html">Examples</a></div>
 <div class="normal-nav"><a href="logic_tricks.html">Logic Tricks</a></div>
@@ -325,18 +327,18 @@ language (like arithmetic and simple list manipulation).</p>
 <p>First, let's look at the rules before we attach the python functions.
 Here's three of the rules:</p>
 <pre class="literal-block">
-use_B2:
+use_B2
     use find_B($client)
     when
         check_function($client, B, 2)
         find_D($client)
 
-use_D1:
+use_D1
     use find_D($client)
     when
         check_function($client, D, 1)
 
-use_D2:
+use_D2
     use find_D($client)
     when
         check_function($client, D, 2)
@@ -357,14 +359,14 @@ the inferencing process, it is a hidden parameter.</p>
 <p>These examples just show one line of python code, but you may have as many
 lines as you want:</p>
 <pre class="literal-block">
-use_D1:
+use_D1
     use find_D($client)
     when
         check_function($client, D, 1)
     with
         print &quot;D1&quot;
 
-use_D2:
+use_D2
     use find_D($client)
     when
         check_function($client, D, 2)
@@ -377,7 +379,7 @@ final top-level call graph, as well as intermediate call graphs.</p>
 <h3><a class="toc-backref" href="#id15" id="calling-subordinate-plans" name="calling-subordinate-plans">Calling Subordinate Plans</a></h3>
 <p>Now we do the same thing to add python code to the <tt class="docutils literal"><span class="pre">use_B2</span></tt> rule:</p>
 <pre class="literal-block">
-use_B2:
+use_B2
     use find_B($client)
     when
         check_function($client, B, 2)
@@ -389,7 +391,7 @@ use_B2:
 returned from the <tt class="docutils literal"><span class="pre">find_D</span></tt> goal?</p>
 <p>The most common way is:</p>
 <pre class="literal-block">
-use_B2:
+use_B2
     use find_B($client)
     when
         check_function($client, B, 2)
@@ -408,7 +410,7 @@ rule (with the differences in indenting levels corrected).</p>
 <p>To call the subordinate plan within the <tt class="docutils literal"><span class="pre">with</span></tt> clause, there is an alternate
 mechanism:</p>
 <pre class="literal-block">
-use_B2:
+use_B2
     use find_B($client)
     when
         check_function($client, B, 2)
@@ -434,7 +436,7 @@ placed directly in the .krb file rather than in a separate python module.</p>
 <li><p class="first">Function parameters are specified at the end of the <tt class="docutils literal"><span class="pre">use</span></tt> clause with an
 optional <tt class="docutils literal"><span class="pre">taking</span></tt> clause:</p>
 <pre class="literal-block">
-use_B2:
+use_B2
     use find_B($client) taking (a, b = None)
     ...
 </pre>
@@ -459,7 +461,7 @@ use_B2:
 <ul>
 <li><p class="first">Pyke also supports forward-chaining rules:</p>
 <pre class="literal-block">
-fc_rule_name:
+fc_rule_name
     foreach
         fact_base_name.fact_name(pattern...)
         ...
@@ -629,6 +631,12 @@ generation stuff means and how it works.</p>
 </div>
 <div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
 </div>
+<div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of knowledge fact base (KFB) files, which is where you
+write your universal facts.</p>
+</div>
+<div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of knowledge question base (KQB) files, which is where you
+write your end user questions.</p>
+</div>
 <div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
 write your rules.</p>
 </div>
@@ -654,7 +662,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, Jun 03 2008.
+    Page last modified Sat, Aug 09 2008.
   </div>
 
 </body>

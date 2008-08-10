@@ -302,8 +302,10 @@ def match(ans, test):
         match(ans, test.test)   # raises ValueError if it doesn't match
         return test.value
     elif isinstance(test, slice):
-        if (test.start is None or ans >= test.start) and \
-           (test.stop is None or ans <= test.stop):
+        if isinstance(ans, types.StringTypes): value = len(ans)
+        else: value = ans
+        if (test.start is None or value >= test.start) and \
+           (test.stop is None or value <= test.stop):
             return ans
     elif isinstance(test, (tuple, list)):
         for test_i in test:

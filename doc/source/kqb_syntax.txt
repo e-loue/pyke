@@ -1,0 +1,288 @@
+.. $Id$
+.. 
+.. Copyright © 2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: KQB Syntax
+    page-description:
+        The syntax of knowledge question base (KQB) files, which is where you
+        write your end user questions.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+===================================
+KQB Syntax
+===================================
+
+This uses a different lexical structure than `KRB files`_.  Textual parameter
+substitution is done with the standard Python `string.Template`_ class, which
+specifies parameters with ``$``, much like `pattern variables`_.  In the
+following descriptions, substitution parameters are acted upon in
+``PARAMETERIZED_TEXT``, but not in ``TEXT``.
+
+The name of the `question base`_ is simple the filename with the ``.kqb``
+suffix stripped.  This must be a valid python identifier.
+
+Syntax for KQB File
+===================
+
+::
+
+    file ::= [NL] {question}
+
+    question ::= IDENTIFIER '(' [{parameter,}] ')' NL_TOK 
+                    INDENT_TOK {PARAMETERIZED_TEXT NL_TOK}
+                    '---' NL_TOK
+                    parameter '=' question_type
+                 DEINDENT_TOK
+
+    parameter ::= '$' IDENTIFIER
+
+Each question has a name and a fixed number of parameters.  One of these
+parameters is designated as the *answer* parameter on the line immediately
+following the termination of the question ``PARAMETERIZED_TEXT`` (``'---'``).
+
+The question is referenced in the premise_ of a rule_ as::
+
+    question_base_name.question_name(parameter...)
+
+There are several different kinds of ``question_types``::
+
+    question_type ::= yn_type
+                    | integer_type
+                    | number_type
+                    | float_type
+                    | string_type
+                    | select_1_type
+                    | select_n_type
+
+
+YN_type
+=======
+
+::
+
+    yn_type ::= 'yn' NL_TOK [review]
+
+The user answers "yes" or "no".  The answer returned is True or False.  If the
+`ask_tty`_ module is used, the user may type "yes", "y", "true" or "t" for
+True and "no", "n", "false", or "f" for False.  These comparisons are case
+insensitive.
+
+See review_, below.
+
+
+Integer_type
+============
+
+::
+
+    integer_type ::= 'integer' ['(' match ')'] NL_TOK [review]
+
+
+The user enters an integer.  If the match_ is specified, the integer must
+match it or the user is asked to try again.
+
+See review_, below.
+
+
+Number_type
+============
+
+::
+
+    number_type ::= 'number' ['(' match ')'] NL_TOK [review]
+
+The user enters either an integer or a floating point number.  If the user
+enters an integer, a Python ``int`` is returned.  Otherwise a Python ``float``
+is returned.
+
+If the match_ is specified, the number must match it or the user is asked
+to try again.
+
+See review_, below.
+
+
+Float_type
+============
+
+::
+
+    float_type ::= 'float' ['(' match ')'] NL_TOK [review]
+
+
+The user enters an integer or a floating point number.  The number is always
+returned as a Python ``float``.
+
+If the match_ is specified, the number must match it or the user is asked
+to try again.
+
+See review_, below.
+
+
+String_type
+============
+
+::
+
+    string_type ::= 'string' ['(' match ')'] NL_TOK [review]
+
+The user enters a string.  If the match_ is specified, the string must match
+it or the user is asked to try again.
+
+See review_, below.
+
+
+Match
+=====
+
+::
+
+    match ::= simple_match {'|' simple_match}
+
+A match may be made up of several ``simple_matches`` or-ed together.  The
+match succeeds if any of the ``simple_matches`` succeed.
+
+::
+
+    simple_match ::= '(' match ')'
+                   | [ STRING ] [ '[' TEXT ']' ] '/' REGEXP_TEXT '/'
+                   | [NUMBER] '-' NUMBER
+                   | NUMBER '-'
+                   | value
+                   | value '=' simple_match
+
+Regexp Match
+------------
+
+A regexp match matches if the regexp matches.
+
+If the regexp contains a single group, that group is returned rather than the
+entire string.
+
+If the regexp contains multiple groups, a tuple of the groups is returned
+rather than entire string.
+
+If the initial STRING is specified on a regexp, it is used in the error
+message if the regexp fails.  The error message is "Answer should be $msg, got
+$string".
+
+If the '[' TEXT ']' is specified on a regexp, it is used in the prompt for the
+end user.  Generally, this prompt message is enclosed in '[' and ']' when it
+is displayed to the user.
+
+Range Match
+-----------
+
+A range match has a '-' in it.  It matches if the answer is between the two
+values.  If either value is omitted, it is not tested.  If matched to a
+string, it matches the length of the string.
+
+Value '=' Match
+---------------
+
+The '=' means "map".  The match fails if the match after the '=' fails.
+Otherwise it returns the value before the '=' rather than what the user
+entered. 
+
+Value Match
+-----------
+
+::
+
+    value ::= STRING | IDENTIFIER | NUMBER | 'None' | 'True' | 'False'
+
+A value match, only matches that one value.
+
+
+Review
+======
+
+::
+
+    review ::= {match '!' PARAMETERIZED_TEXT}
+
+The review is applied after the answer has been validated (which possibly
+changes the value).
+
+Each match is checked and all matching review's ``PARAMETERIZED_TEXT``
+messages are displayed to the user.
+
+
+Select_1_type
+=============
+
+::
+
+    select_1_type ::= 'select_1' NL_TOK alternatives
+
+This is a multiple choice question.  The alternatives_ are displayed to the
+user, and he picks one (and only one).
+
+
+Select_n_type
+=============
+
+::
+
+    select_n_type ::= 'select_n' NL_TOK alternatives
+
+This is a multiple choice question.  The alternatives_ are displayed to the
+user, and he picks as many as he likes.
+
+
+Alternatives
+============
+
+::
+
+    alternatives ::= {value ':' PARAMETERIZED_TEXT NL_TOK [alt_review]}
+
+The user only sees the ``PARAMETERIZED_TEXT`` values.  The ``value``
+associated with the selected ``PARAMETERIZED_TEXT`` is returned (but the user
+never sees it).  The ``value`` *tags* the alternative.
+
+::
+
+    alt_review ::= '!' '=' value NL_TOK
+                 | '!' PARAMETERIZED_TEXT NL_TOK
+
+Each alternative may have it's own review associated with it.
+
+The ``'!' '=' value`` form uses the same review text as the previous
+alternative with that *tag*.
+
+The second form specifies the review text for this alternative directly.
+
+
+.. _premise: overview/rules/index.html#premises-and-conclusions
+.. _rule: overview/rules/index.html
+.. _question base: overview/knowledge_bases/question_bases.html
+.. _KRB files: krb_syntax/index.html#lexical-structure
+.. _string.Template: http://docs.python.org/lib/node40.html
+.. _pattern variables: krb_syntax/pattern.html#pattern-variable
+.. _ask_tty:
+   overview/knowledge_bases/question_bases.html#presenting-questions-to-your-end-users

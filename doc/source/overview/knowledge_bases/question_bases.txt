@@ -1,0 +1,110 @@
+.. $Id$
+.. 
+.. Copyright © 2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Question Bases
+    page-description:
+        Explanation of question bases and .kqb files.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+=============================================
+Question Bases
+=============================================
+
+Question bases contain questions for end users.  These questions can be of
+various types (e.g., yes/no, multiple_choice).  The questions can be
+parameterized, with the parameter values substituted into the question text
+when the question is asked.  In this case, different parameter values are
+treated as different questions.
+
+The answers to all questions are automatically remembered so that if multiple
+rules ask the same question, the end user only sees it once.  These answers
+are erased when an `engine.reset`_ is done.
+
+Finally, questions may have *reviews* attached to them to automatically
+display different canned messages (with parameter substitution) depending on
+the end user's answer.
+
+
+KQB files
+==========
+
+Each question base is defined by a `.kqb file`_.  The name of each question
+base is the filename of the `.kqb file`_ (with the ``.kqb`` suffix removed).
+This must be a legal python identifier.
+
+These `.kqb files`_ are compiled and loaded automatically when you create your 
+`knowledge_engine.engine`_ object.
+
+The `.kqb file`_ contains all of the information about the question needed to
+ask the question, validate the answer and output the appropriate *review*
+text.
+
+The `.kqb file`_ also specifies which parameter contains the answer.  All
+parameters, except this one, must be bound to values before testing the
+question.
+
+
+Presenting Questions to Your End Users
+======================================
+
+Pyke provides two modules to actually present a question to your end user:
+
+  - ask_tty
+    
+    This presents the question on stdout and reads stdin for the answer.
+
+  - ask_wx
+
+    This presents the question in a dialog box for use with wxpython_.
+
+You may write your own module to present questions to end users.  Look at the
+modules provided by Pyke for guidance.
+
+To ask a question, Pyke looks for an ``ask_module`` attribute on:
+
+  - the question_base object
+  - then the `knowledge_engine.engine`_ object
+
+If the `knowledge_engine.engine`_ object does not have an ``ask_module``
+attribute, ask_tty is imported by default and stored there.
+
+Here's an example of setting this attribute::
+
+    from pyke import knowledge_engine
+    from pyke import ask_wx
+
+    engine = knowledge_engine.engine('.')
+    engine.ask_module = ask_wx
+
+
+.. _.kqb file: ../../kqb_syntax.html
+.. _.kqb files: `.kqb file`_
+.. _knowledge_engine.engine: ../../using_pyke.html#initializing-pyke
+.. _engine.reset: ../../using_pyke.html#setting-up-each-case
+.. _wxpython: http://www.wxpython.org/

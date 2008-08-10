@@ -31,6 +31,7 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
+    initialheaderlevel: 2
 /restindex
 
 ===================

@@ -161,7 +161,7 @@ def wsgi_app(environ, start_response):
             return traceback
         Plans_cache[starting_tables, template_name] = template_mtime, plan
 
-    status, headers, document = plan(Db_cursor, starting_keys)
+    status, headers, document = plan(Db_connection, Db_cursor, starting_keys)
     start_response(status, headers)
     return document
 

@@ -49,6 +49,8 @@
 </div>
 <div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../../kfb_syntax.html">KFB Syntax</a></div>
+<div class="normal-nav"><a href="../../kqb_syntax.html">KQB Syntax</a></div>
 <div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../../examples.html">Examples</a></div>
 <div class="normal-nav"><a href="../../logic_tricks.html">Logic Tricks</a></div>
@@ -79,37 +81,37 @@
 a specific <em>goal</em>.  Pyke will only use <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a> <a class="reference" href="../knowledge_bases/rule_bases.html">rule bases</a> to do the
 proof.</p>
 <div class="section">
-<h3><a id="example" name="example">Example</a></h3>
+<h2><a id="example" name="example">Example</a></h2>
 <p>Consider this example:</p>
 <pre class="literal-block">
- 1  son_father:
+ 1  son_father
  2      use child_parent($son, $father, (), son, father)
  3      when
  4          family.son_of($son, $father, $_)
 
- 5  son_mother:
+ 5  son_mother
  6      use child_parent($son, $mother, (), son, mother)
  7      when
  8          family.son_of($son, $_, $mother)
 
- 9  daughter_father:
+ 9  daughter_father
 10      use child_parent($daughter, $father, (), daughter, father)
 11      when
 12          family.daughter_of($daughter, $father, $_)
 
-13  daughter_mother:
+13  daughter_mother
 14      use child_parent($daughter, $mother, (), daughter, mother)
 15      when
 16          family.daughter_of($daughter, $_, $mother)
 
-17  grand_parent_and_child:
+17  grand_parent_and_child
 18      use child_parent($grand_child, $grand_parent, (grand),
 19                       $grand_child_type, $grand_parent_type)
 20      when
 21          child_parent($grand_child, $parent, (), $grand_child_type, $_)
 22          child_parent($parent, $grand_parent, (), $_, $grand_parent_type)
 
-23  great_grand_parent_and_child:
+23  great_grand_parent_and_child
 24      use child_parent($gg_child, $gg_parent, (great, $prefix1, *$rest_prefixes),
 25                       $gg_child_type, $gg_parent_type)
 26      when
@@ -119,7 +121,7 @@ proof.</p>
 </pre>
 </div>
 <div class="section">
-<h3><a id="identifying-backward-chaining-rules" name="identifying-backward-chaining-rules">Identifying Backward-Chaining Rules</a></h3>
+<h2><a id="identifying-backward-chaining-rules" name="identifying-backward-chaining-rules">Identifying Backward-Chaining Rules</a></h2>
 <p>These <a class="reference" href="index.html">rules</a> draw the same conclusions as the <a class="reference" href="forward_chaining.html">forward-chaining</a> <a class="reference" href="forward_chaining.html#example">example</a>;
 but you'll notice three differences:</p>
 <ol class="arabic simple">
@@ -132,7 +134,7 @@ the <a class="reference" href="../knowledge_bases/rule_bases.html#rule-base-cate
 </ol>
 </div>
 <div class="section">
-<h3><a id="how-backward-chaining-rules-are-run" name="how-backward-chaining-rules-are-run">How Backward-Chaining Rules are Run</a></h3>
+<h2><a id="how-backward-chaining-rules-are-run" name="how-backward-chaining-rules-are-run">How Backward-Chaining Rules are Run</a></h2>
 <p>These <a class="reference" href="index.html">rules</a> are not used until you ask pyke to <a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a goal.</p>
 <p>The easiest way to do this is with
 <em>some_engine</em>.prove_1_ or <em>some_engine</em>.prove_n_.  <a class="reference" href="../../using_pyke.html#proving-goals">Prove_1</a> only
@@ -147,7 +149,7 @@ specify.</p>
 arguments you specified as a tuple, along with the <a class="reference" href="../plans.html">plan</a>.</p>
 </div>
 <div class="section">
-<h3><a id="running-the-example" name="running-the-example">Running the Example</a></h3>
+<h2><a id="running-the-example" name="running-the-example">Running the Example</a></h2>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
@@ -186,7 +188,7 @@ that concludes the goal in its <tt class="docutils literal"><span class="pre">us
 </ol>
 </div>
 <div class="section">
-<h3><a id="backward-chaining-defined" name="backward-chaining-defined">Backward-Chaining Defined</a></h3>
+<h2><a id="backward-chaining-defined" name="backward-chaining-defined">Backward-Chaining Defined</a></h2>
 <p>Note how the <a class="reference" href="index.html">rules</a> are combined in the opposite direction from
 <a class="reference" href="forward_chaining.html">forward-chaining</a> <a class="reference" href="index.html">rules</a>.  Here the first <a class="reference" href="index.html">rule's</a> <strong>if</strong> (<tt class="docutils literal"><span class="pre">when</span></tt>) clause is
 linked backwards to the next rule's <strong>then</strong> (<tt class="docutils literal"><span class="pre">use</span></tt>) clause.</p>
@@ -195,7 +197,7 @@ referred to as <em>goal directed</em>, since the inferencing is driven by the fi
 goal.</p>
 </div>
 <div class="section">
-<h3><a id="backtracking" name="backtracking">Backtracking</a></h3>
+<h2><a id="backtracking" name="backtracking">Backtracking</a></h2>
 <p>Also note that while processing each subgoal within a <a class="reference" href="index.html">rule's</a> <tt class="docutils literal"><span class="pre">when</span></tt> clause:</p>
 <ul class="simple">
 <li>If pyke succeeds at proving the subgoal:<ul>
@@ -249,7 +251,7 @@ clause to try alternate subproofs is called <em>backtracking</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Wed, Mar 05 2008.
+    Page last modified Sat, Aug 09 2008.
   </div>
 
 </body>

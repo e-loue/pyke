@@ -41,6 +41,8 @@
 </div>
 <div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../kfb_syntax.html">KFB Syntax</a></div>
+<div class="normal-nav"><a href="../kqb_syntax.html">KQB Syntax</a></div>
 <div class="normal-nav"><a href="../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../examples.html">Examples</a></div>
 <div class="normal-nav"><a href="../logic_tricks.html">Logic Tricks</a></div>
@@ -77,8 +79,10 @@ may be repeated.  For each cycle a different rule base may be <a class="referenc
 top-level goal has been completely proven.  This shields the code from
 blind alleys and <a class="reference" href="rules/backward_chaining.html#backtracking">backtracking</a> within the rules.</p>
 <p>Once a <a class="reference" href="plans.html">plan</a> has been created, it may be executed multiple times with different
-arguments.  It may also be <a class="reference" href="plans.html#running-and-pickling-plans">pickled</a>,
-and later run again without requiring any pyke modules.</p>
+arguments.  It may also be <a class="reference" href="plans.html#running-and-pickling-plans">pickled</a>, and later run again only requiring one
+small pyke module.</p>
+<p>Pyke also provides an end user <a class="reference" href="knowledge_bases/question_bases.html">question</a> capability, as well as the capability
+to run <a class="reference" href="knowledge_bases/special.html#running-commands">commands</a> on the local system to guide the inferencing.</p>
 </div>
 
                 <!-- <div id="return-to-top">
@@ -113,7 +117,7 @@ into named repositories called <em>knowledge bases</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Nov 08 2007.
+    Page last modified Sat, Aug 09 2008.
   </div>
 
 </body>

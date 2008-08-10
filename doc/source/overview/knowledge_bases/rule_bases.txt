@@ -30,7 +30,7 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
-    initialheaderlevel: 1
+    initialheaderlevel: 2
 /restindex
 
 =============================================
@@ -42,18 +42,17 @@ forward-chaining_ and backward-chaining_ rules.
 
 Rule bases are created by writing a *knowledge rule base* (or `.krb`_) file
 with your favorite text editor.  Place all of your `.krb files`_ into a
-directory structure.  Then load_ this directory into your python program.
-
-The load_ will walk the directory structure recursively and
-automatically compile any `.krb files`_ into python source files.  These
-python modules are then automatically imported to define the rule base.
-Subsequent loads_ only recompile `.krb files`_ that have changed since the
-last time they were compiled.
+directory structure.  Then include this directory as an argument to the
+`knowledge_engine.engine`_ constructor.  This will recursively search your
+directory for `.krb files`_ and compile them into .py files.  These .py files
+are then automatically imported to define the rule base.  Subsequent runs of
+the `knowledge_engine.engine`_ constructor only recompile `.krb files`_ that
+have changed since the last time they were compiled.
 
 The name of each rule base is the filename of the `.krb file`_ (with the .krb
 suffix removed).  This must be a legal python identifier.
 
-In addition, each directory name within the directory structure loaded_
+In addition, each directory name within your directory structure
 becomes a python package (to facilitate importing the generated python modules)
 and must also be a legal python identifier.
 
@@ -120,8 +119,8 @@ Here is the definition, then, of a `rule base category`_:
 So, for our database example, we'd have a root rule base called
 ``database.krb`` and it would have derived rule bases called ``mysql.krb``,
 ``postgresql.krb`` and ``oracle.krb``.  (Note that each of these
-`.krb files`_ may be placed anywhere you want them within the directory
-structure that you load_ -- in other words, the loaded_ directory structure
+`.krb files`_ may be placed anywhere you want them within your directory
+structure -- in other words, your directory structure
 does not need to match the rule base inheritance structure).
 
 All of these `.krb files`_ are within the ``database`` `rule base category`_,
@@ -207,10 +206,8 @@ particular database in use at the time the program is run.
 .. _.krb: ../../krb_syntax/index.html
 .. _.krb file: `.krb`_
 .. _.krb files: `.krb`_
-.. _load: ../../using_pyke.html#initializing-pyke
-.. _loaded: load_
-.. _loading: load_
-.. _loads: load_
+.. _knowledge_engine.engine: ../../using_pyke.html#initializing-pyke
+.. _loading: `knowledge_engine.engine`_
 .. _Rule Base Category: `Rule Base Categories`_
 .. _rule: ../rules/index.html
 .. _rules: rule_

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-    <title>Knowledge Bases</title>
+    <title>Question Bases</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="../../stylesheets/pyke.css" type="text/css" />
 </head>
@@ -20,7 +20,9 @@
 <li>&gt;</li>
 <li><a href="../index.html">Overview</a></li>
 <li>&gt;</li>
-<li>Knowledge Bases</li>
+<li><a href="index.html">Knowledge Bases</a></li>
+<li>&gt;</li>
+<li>Question Bases</li>
 
               </ul>
             </div>
@@ -75,46 +77,65 @@
           <td id="main-td">
             <div id="main">
                 <a name="startcontent" id="startcontent"></a>
-                <div class="document" id="knowledge-bases">
-<h1 class="title">Knowledge Bases</h1>
-<p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are organized
-into named repositories called <em>knowledge bases</em>.  A knowledge base is like
-a directory for files on disk, except that knowledge bases may not be
-nested.  Therefore, facts and goals always have a two-level name.</p>
-<p>Here are some examples of facts you might see in a web server application:</p>
-<pre class="literal-block">
-header.cookie('session=123456789;remember=the_alamo')
-cookie.session(123456789)
-cookie.remember(the_alamo)
-header.accept_encoding(gzip)
-header.accept_encoding(deflate)
-request.path('/my/site.html')
-request.path_segment(0, my)
-request.path_segment(1, 'site.html')
-request.path_segment(-2, my)
-request.path_segment(-1, 'site.html')
-</pre>
-<p>Note that three different knowledge bases (all <a class="reference" href="fact_bases.html">fact bases</a>) are shown here
-named <tt class="docutils literal"><span class="pre">header</span></tt>, <tt class="docutils literal"><span class="pre">cookie</span></tt>, and <tt class="docutils literal"><span class="pre">request</span></tt>; each with multiple facts.</p>
-<p>There are different types of knowledge bases.</p>
-<ul class="simple">
-<li>Those that contain facts are called <a class="reference" href="fact_bases.html">fact bases</a>.</li>
-<li>Those that contain rules are called <a class="reference" href="rule_bases.html">rule bases</a>.</li>
-<li>It is also possible to create other kinds of knowledge bases that lookup
-facts and prove goals in different ways.  Pyke provides two of these:<ul>
-<li>The <a class="reference" href="question_bases.html">question base</a> which asks an end user questions.</li>
-<li>The <a class="reference" href="special.html">special</a> knowledge base which only has one instance.</li>
-</ul>
-</li>
-</ul>
+                <div class="document" id="question-bases">
+<h1 class="title">Question Bases</h1>
+<p>Question bases contain questions for end users.  These questions can be of
+various types (e.g., yes/no, multiple_choice).  The questions can be
+parameterized, with the parameter values substituted into the question text
+when the question is asked.  In this case, different parameter values are
+treated as different questions.</p>
+<p>The answers to all questions are automatically remembered so that if multiple
+rules ask the same question, the end user only sees it once.  These answers
+are erased when an <a class="reference" href="../../using_pyke.html#setting-up-each-case">engine.reset</a> is done.</p>
+<p>Finally, questions may have <em>reviews</em> attached to them to automatically
+display different canned messages (with parameter substitution) depending on
+the end user's answer.</p>
 <div class="section">
-<h2><a id="notes" name="notes">NOTES</a></h2>
-<ul class="simple">
-<li>All knowledge bases share the same name space.<ul>
-<li>So no two of them, regardless of their type, may have the same name.</li>
-</ul>
+<h2><a id="kqb-files" name="kqb-files">KQB files</a></h2>
+<p>Each question base is defined by a <a class="reference" href="../../kqb_syntax.html">.kqb file</a>.  The name of each question
+base is the filename of the <a class="reference" href="../../kqb_syntax.html">.kqb file</a> (with the <tt class="docutils literal"><span class="pre">.kqb</span></tt> suffix removed).
+This must be a legal python identifier.</p>
+<p>These <a class="reference" href="../../kqb_syntax.html">.kqb files</a> are compiled and loaded automatically when you create your
+<a class="reference" href="../../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object.</p>
+<p>The <a class="reference" href="../../kqb_syntax.html">.kqb file</a> contains all of the information about the question needed to
+ask the question, validate the answer and output the appropriate <em>review</em>
+text.</p>
+<p>The <a class="reference" href="../../kqb_syntax.html">.kqb file</a> also specifies which parameter contains the answer.  All
+parameters, except this one, must be bound to values before testing the
+question.</p>
+</div>
+<div class="section">
+<h2><a id="presenting-questions-to-your-end-users" name="presenting-questions-to-your-end-users">Presenting Questions to Your End Users</a></h2>
+<p>Pyke provides two modules to actually present a question to your end user:</p>
+<blockquote>
+<ul>
+<li><p class="first">ask_tty</p>
+<p>This presents the question on stdout and reads stdin for the answer.</p>
+</li>
+<li><p class="first">ask_wx</p>
+<p>This presents the question in a dialog box for use with <a class="reference" href="http://www.wxpython.org/">wxpython</a>.</p>
 </li>
 </ul>
+</blockquote>
+<p>You may write your own module to present questions to end users.  Look at the
+modules provided by Pyke for guidance.</p>
+<p>To ask a question, Pyke looks for an <tt class="docutils literal"><span class="pre">ask_module</span></tt> attribute on:</p>
+<blockquote>
+<ul class="simple">
+<li>the question_base object</li>
+<li>then the <a class="reference" href="../../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object</li>
+</ul>
+</blockquote>
+<p>If the <a class="reference" href="../../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object does not have an <tt class="docutils literal"><span class="pre">ask_module</span></tt>
+attribute, ask_tty is imported by default and stored there.</p>
+<p>Here's an example of setting this attribute:</p>
+<pre class="literal-block">
+from pyke import knowledge_engine
+from pyke import ask_wx
+
+engine = knowledge_engine.engine('.')
+engine.ask_module = ask_wx
+</pre>
 </div>
 </div>
 

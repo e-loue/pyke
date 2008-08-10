@@ -26,7 +26,7 @@ restindex
         Knowledge is made up of both *facts* and *rules*.  These are gathered
         into named repositories called *knowledge bases*.
     /description
-    section-pages: , fact_bases, rule_bases, special
+    section-pages: , fact_bases, rule_bases, question_bases, special
     format: rest
     encoding: utf8
     output-encoding: utf8
@@ -64,8 +64,10 @@ There are different types of knowledge bases.
 - Those that contain facts are called `fact bases`_.
 - Those that contain rules are called `rule bases`_.
 - It is also possible to create other kinds of knowledge bases that lookup
-  facts and prove goals in different ways.  The only one of these in pyke
-  is the special_ knowledge base.
+  facts and prove goals in different ways.  Pyke provides two of these:
+
+  - The `question base`_ which asks an end user questions.
+  - The special_ knowledge base which only has one instance.
 
 NOTES
 ------------
@@ -74,6 +76,7 @@ NOTES
 
   * So no two of them, regardless of their type, may have the same name.
 
+.. _question base: question_bases.html
 .. _fact bases: fact_bases.html
 .. _special: special.html
 .. _rule bases: rule_bases.html

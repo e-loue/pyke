@@ -29,7 +29,7 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
-    initialheaderlevel: 1
+    initialheaderlevel: 2
 /restindex
 
 =============================================
@@ -77,8 +77,9 @@ They may also be asserted by forward-chaining_ rules.
 Universal Facts
 ---------------------
 
-Universal facts are never deleted, specifically, when a reset_ is done.  Add
-universal facts by calling::
+Universal facts are never deleted, specifically, when a reset_ is done.  You
+can specify universal facts in a `.kfb file`, or add universal facts by
+calling::
 
     some_engine.add_universal_fact(kb_name, fact_name, arguments)
 
@@ -87,3 +88,4 @@ Typically, all universal facts are added once at `program startup`_.
 .. _forward-chaining: ../rules/forward_chaining.html
 .. _program startup: ../../using_pyke.html#initializing-pyke
 .. _reset: ../../using_pyke.html#setting-up-each-case
+.. _.kfb file: ../../kfb_syntax.html

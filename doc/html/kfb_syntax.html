@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-    <title>Welcome to Pyke</title>
+    <title>KFB Syntax</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="stylesheets/pyke.css" type="text/css" />
 </head>
@@ -16,7 +16,9 @@
           <th id="crumb-line">
             <div id="nav">
               <ul>
-                  <li>Home</li>
+                  <li><a href="index.html">Home</a></li>
+<li>&gt;</li>
+<li>KFB Syntax</li>
 
               </ul>
             </div>
@@ -60,91 +62,30 @@
           <td id="main-td">
             <div id="main">
                 <a name="startcontent" id="startcontent"></a>
-                <div class="document" id="welcome-to-pyke">
-<h1 class="title">Welcome to Pyke</h1>
-<h2 class="subtitle" id="release-0-3">Release 0.3</h2>
-<p>Pyke is a knowledge-based inference engine (expert system) written in
-100% python that can:</p>
+                <div class="document" id="kfb-syntax">
+<h1 class="title">KFB Syntax</h1>
+<p>This uses the same lexical structure as <a class="reference" href="krb_syntax/index.html#lexical-structure">KRB files</a>, except that the only
+keywords are:</p>
+<blockquote>
 <ul class="simple">
-<li>Do both forward-chaining (data driven) and
-backward-chaining (goal directed) inferencing.<ul>
-<li>Pyke may be embedded into any python program.</li>
+<li>None</li>
+<li>True</li>
+<li>False</li>
 </ul>
-</li>
-<li>Automatically generate python programs by assembling individual python
-functions into complete call graphs.<ul>
-<li>This is done through a unique design where the individual python
-functions are attached to backward-chaining rules.</li>
-<li>Unlike other approaches to code reuse (e.g. Zope adapters and generic
-functions), this allows the inference engine to ensure that all of the
-function's requirements are completely satisfied, by examining the entire
-call graph down to the leaves, before <strong>any</strong> of the functions are
-executed.</li>
-<li>This technique can give order of magnitude improvements in performance.
-For example, the <a class="reference" href="examples.html#web-framework">web_framework</a> example runs 10 times faster than
-TurboGears 2 (791 vs 76 trans/sec)!</li>
-<li>This is an optional feature.  You don't need to use it if you just
-want the inferencing capability by itself.</li>
-</ul>
-</li>
-</ul>
+</blockquote>
+<p>The name of the <a class="reference" href="overview/knowledge_bases/fact_bases.html">fact base</a> is simply the filename with the <tt class="docutils literal"><span class="pre">.kfb</span></tt> suffix
+stripped.  This must be a valid python identifier.</p>
 <div class="section">
-<h2><a id="the-knowledge-engine-supports" name="the-knowledge-engine-supports">The knowledge engine supports:</a></h2>
-<ul class="simple">
-<li>Multiple <em>fact bases</em>, each with its own list of facts.</li>
-<li>Both <em>forward-chaining</em> rules and <em>backward-chaining</em> rules.</li>
-<li>Multiple <em>rule bases</em>, each with its own list of forward-chaining
-and/or backward-chaining rules.</li>
-<li>Rule base inheritance -- <em>activating</em> the derived rule base
-includes the rules from the parent rule base.</li>
-<li>The inference rules are compiled into python functions, allowing
-python code snippets to be used within the rules.
-This greatly enhances the expressiveness of the rules.</li>
-</ul>
-</div>
-<div class="section">
-<h2><a id="automatic-program-generation" name="automatic-program-generation">Automatic program generation:</a></h2>
-<ul class="simple">
-<li>Calls the generated python programs <em>plans</em>.</li>
-<li>Plans may be run multiple times without needing to rerun the inference
-rules.</li>
-<li>Plans may be pickled and cached to disk to be used by other programs or
-in later runs of the same program.</li>
-<li>Only one small pyke module is required to run the plans.</li>
-</ul>
-</div>
-<div class="section">
-<h2><a id="potential-pyke-applications" name="potential-pyke-applications">Potential pyke applications:</a></h2>
-<ul class="simple">
-<li>Complicated decision making applications.</li>
-<li>The back-end (code generation and optimization) of compilers.
-Pyke is used as the back-end of its own
-compiler that translates rules into python code.</li>
-<li>Automatic SQL statement generation.</li>
-<li>Automatic HTML generation and automatic HTML template processing.</li>
-<li>Automatic program builder to reuse a common set of functions for many
-different specific situations.  This could also easily
-incorporate a new custom function into a much larger program, where the use
-of the custom function might influence the choice of other standard
-functions in other parts of the program.</li>
-<li>The control module for a web framework tool.</li>
-<li>A high-level planner to automatically distribute the
-modules of a large system over several computers in a distributed system
-to meet specific performance and capacity goals.  This could be used to
-automatically scale the same system code from a small one program,
-one computer system
-to much larger distributed systems to meet a wide range of performance
-goals.</li>
-<li>Diagnosis systems, including automated customer service systems.</li>
-<li>Program or library customization for specific uses.</li>
-<li>In addition to being able to build programs, pyke can instantiate,
-configure and interconnect a network of objects to meet a specific need
-or situation.</li>
-</ul>
-</div>
-<div class="section">
-<h2><a id="pyke-on-google-groups" name="pyke-on-google-groups">Pyke on Google Groups</a></h2>
-<p>Please join <a class="reference" href="http://groups.google.com/group/pyke">pyke</a> on Google Groups for questions and discussion!</p>
+<h2><a id="syntax-for-kfb-file" name="syntax-for-kfb-file">Syntax for KFB File</a></h2>
+<pre class="literal-block">
+file ::= [NL] {fact}
+
+fact ::= IDENTIFIER '(' [{data,}] ')'
+
+data ::= 'None' | 'True' | 'False'
+       | NUMBER | IDENTIFIER | STRING
+       | '(' [{data,}] ')'
+</pre>
 </div>
 </div>
 

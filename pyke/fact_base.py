@@ -91,8 +91,8 @@ from pyke import knowledge_base, contexts
 
 class fact_base(knowledge_base.knowledge_base):
     ''' Not much to fact_bases.  The real work is done in fact_list! '''
-    def __init__(self, engine, name):
-        super(fact_base, self).__init__(engine, name, fact_list)
+    def __init__(self, engine, name, register = True):
+        super(fact_base, self).__init__(engine, name, fact_list, register)
     def dump_universal_facts(self):
         for fl_name in sorted(self.entity_lists.iterkeys()):
             self.entity_lists[fl_name].dump_universal_facts()

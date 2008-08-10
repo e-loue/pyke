@@ -49,6 +49,8 @@
 </div>
 <div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../../kfb_syntax.html">KFB Syntax</a></div>
+<div class="normal-nav"><a href="../../kqb_syntax.html">KQB Syntax</a></div>
 <div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../../examples.html">Examples</a></div>
 <div class="normal-nav"><a href="../../logic_tricks.html">Logic Tricks</a></div>
@@ -81,24 +83,24 @@
 its <a class="reference" href="../knowledge_bases/rule_bases.html#rule-base-inheritance">inherited</a> forward-chaining <a class="reference" href="index.html">rules</a>) are run in the order that they appear
 in the <a class="reference" href="../../krb_syntax/index.html">.krb file</a>.</p>
 <div class="section">
-<h3><a id="example" name="example">Example</a></h3>
+<h2><a id="example" name="example">Example</a></h2>
 <p>Consider this example:</p>
 <pre class="literal-block">
- 1  son_of:
+ 1  son_of
  2      foreach
  3          family.son_of($son, $father, $mother)
  4      assert
  5          family.child_parent($son, $father, (), son, father)
  6          family.child_parent($son, $mother, (), son, mother)
 
- 7  daughter_of:
+ 7  daughter_of
  8      foreach
  9          family.daughter_of($daughter, $father, $mother)
 10      assert
 11          family.child_parent($daughter, $father, (), daughter, father)
 12          family.child_parent($daughter, $mother, (), daughter, mother)
 
-13  grand_parent_and_child:
+13  grand_parent_and_child
 14      foreach
 15          family.child_parent($grand_child, $parent, (),
 16                              $grand_child_type, $_)
@@ -108,7 +110,7 @@ in the <a class="reference" href="../../krb_syntax/index.html">.krb file</a>.</p
 20          family.child_parent($grand_child, $grand_parent, (grand),
 21                              $grand_child_type, $grand_parent_type)
 
-22  great_grand_parent_and_child:
+22  great_grand_parent_and_child
 23      foreach
 24          family.child_parent($gg_child, $parent, (), $gg_child_type, $_)
 25          family.child_parent($parent, $gg_parent,
@@ -121,14 +123,14 @@ in the <a class="reference" href="../../krb_syntax/index.html">.krb file</a>.</p
 </pre>
 </div>
 <div class="section">
-<h3><a id="identifying-forward-chaining-rules" name="identifying-forward-chaining-rules">Identifying Forward-Chaining Rules</a></h3>
+<h2><a id="identifying-forward-chaining-rules" name="identifying-forward-chaining-rules">Identifying Forward-Chaining Rules</a></h2>
 <p>Note that the keyword <tt class="docutils literal"><span class="pre">foreach</span></tt> is used for the <strong>if</strong> part of each <a class="reference" href="index.html">rule</a>
 and the keyword <tt class="docutils literal"><span class="pre">assert</span></tt> is used for the <strong>then</strong> part of each <a class="reference" href="index.html">rule</a>.
 The use of these keywords is what identifies these <a class="reference" href="index.html">rules</a> as
 forward-chaining <a class="reference" href="index.html">rules</a>.</p>
 </div>
 <div class="section">
-<h3><a id="how-forward-chaining-rules-are-run" name="how-forward-chaining-rules-are-run">How Forward-Chaining Rules are Run</a></h3>
+<h2><a id="how-forward-chaining-rules-are-run" name="how-forward-chaining-rules-are-run">How Forward-Chaining Rules are Run</a></h2>
 <p>Starting off with a set of <tt class="docutils literal"><span class="pre">family.son_of</span></tt> and <tt class="docutils literal"><span class="pre">family.daughter_of</span></tt> <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a>,
 these <a class="reference" href="index.html">rules</a> will figure out, and <a class="reference" href="../../using_pyke.html#setting-up-each-case">assert</a>, all <tt class="docutils literal"><span class="pre">family.child_parent</span></tt>
 relationships.</p>
@@ -154,7 +156,7 @@ each use of <tt class="docutils literal"><span class="pre">$_</span></tt> can ma
 even more great, great... <tt class="docutils literal"><span class="pre">family.child_parent</span></tt> relationships.</p>
 </div>
 <div class="section">
-<h3><a id="forward-chaining-defined" name="forward-chaining-defined">Forward-Chaining Defined</a></h3>
+<h2><a id="forward-chaining-defined" name="forward-chaining-defined">Forward-Chaining Defined</a></h2>
 <p>Thus, even though pyke runs the <a class="reference" href="index.html">rules</a> in order, it will go back and rerun
 prior <a class="reference" href="index.html">rules</a> if a new <a class="reference" href="../knowledge_bases/fact_bases.html#facts">fact</a> is <a class="reference" href="../../using_pyke.html#setting-up-each-case">asserted</a> that matches any of the prior
 <a class="reference" href="index.html">rule's</a> premises in its <tt class="docutils literal"><span class="pre">foreach</span></tt> clause.  This forms an implicit linkage
@@ -167,7 +169,7 @@ initial data (<a class="reference" href="../knowledge_bases/fact_bases.html#fact
 <p>The forward-chaining continues until no more <a class="reference" href="index.html">rules</a> can be fired.</p>
 </div>
 <div class="section">
-<h3><a id="running-the-example" name="running-the-example">Running the Example</a></h3>
+<h2><a id="running-the-example" name="running-the-example">Running the Example</a></h2>
 <p>These rules could be run as follows:</p>
 <blockquote>
 <pre class="doctest-block">
@@ -227,7 +229,7 @@ son_of('bruce', 'thomas', 'norma')
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, Jun 03 2008.
+    Page last modified Sat, Aug 09 2008.
   </div>
 
 </body>

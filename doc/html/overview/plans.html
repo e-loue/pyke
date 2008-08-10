@@ -43,6 +43,8 @@
 </div>
 <div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../kfb_syntax.html">KFB Syntax</a></div>
+<div class="normal-nav"><a href="../kqb_syntax.html">KQB Syntax</a></div>
 <div class="normal-nav"><a href="../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../examples.html">Examples</a></div>
 <div class="normal-nav"><a href="../logic_tricks.html">Logic Tricks</a></div>
@@ -72,7 +74,7 @@
 <p>Once you understand how <a class="reference" href="rules/backward_chaining.html">backward-chaining</a> works, it is relatively easy to
 do automatic program generation.</p>
 <div class="section">
-<h3><a id="adding-plans-to-backward-chaining-rules" name="adding-plans-to-backward-chaining-rules">Adding Plans to Backward-Chaining Rules</a></h3>
+<h2><a id="adding-plans-to-backward-chaining-rules" name="adding-plans-to-backward-chaining-rules">Adding Plans to Backward-Chaining Rules</a></h2>
 <p>The way this is done is by attaching python functions to
 <a class="reference" href="rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="rules/index.html">rules</a>.  These functions are written in the <em>with</em>
 clause at the end of each <a class="reference" href="rules/index.html">rule</a> in the <a class="reference" href="../krb_syntax/index.html">.krb file</a>.  They don't affect how
@@ -81,7 +83,7 @@ gathered up to form a call graph that is returned along with the <a class="refer
 variable</a> bindings that <a class="reference" href="../using_pyke.html#proving-goals">prove</a> the top-level goal.</p>
 </div>
 <div class="section">
-<h3><a id="example" name="example">Example</a></h3>
+<h2><a id="example" name="example">Example</a></h2>
 <p>Consider a small <a class="reference" href="knowledge_bases/rule_bases.html">rule base</a> to construct programs to transfer money between
 bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two forms:</p>
 <ol class="arabic simple">
@@ -99,7 +101,7 @@ bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two fo
 <p>At least one of the bank accounts must be a local account.</p>
 <p>Here's the example rule base:</p>
 <pre class="literal-block">
- 1  transfer1:
+ 1  transfer1
  2      use transfer($from_acct, $to_acct) taking (amount)
  3      when
  4          withdraw($from_acct)
@@ -107,23 +109,23 @@ bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two fo
  6          deposit($to_acct)
  7              $$(amount)
 
- 8  transfer2:
+ 8  transfer2
  9      use transfer($from_acct, $to_acct) taking (amount)
 10      when
 11          transfer_ach($from_acct, $to_acct)
 12              $$(amount)
 
-13  withdraw:
+13  withdraw
 14      use withdraw(($who, $acct_type)) taking (amount)
 15      with
 16          print &quot;withdraw&quot;, amount, &quot;from&quot;, $who, $acct_type
 
-17  deposit:
+17  deposit
 18      use deposit(($who, $acct_type)) taking (amount)
 19      with
 20          print &quot;deposit&quot;, amount, &quot;to&quot;, $who, $acct_type
 
-21  transfer_ach1:
+21  transfer_ach1
 22      use transfer_ach($from_acct, ($bank, $who, $acct_type)) taking (amount)
 23      when
 24          withdraw($from_acct)
@@ -133,7 +135,7 @@ bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two fo
 28      with
 29          print &quot;send&quot;, amount, &quot;to bank&quot;, $bank, &quot;acct&quot;, $who, $acct_type
 
-30  transfer_ach2:
+30  transfer_ach2
 31      use transfer_ach($from_acct, $to_acct) taking (amount)
 32      when
 33          get_ach($from_acct)
@@ -143,13 +145,13 @@ bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two fo
 37          deposit($to_acct)
 38              $$(amount)
 
-39  get_ach:
+39  get_ach
 40      use get_ach(($bank, $who, $acct_type)) taking (amount)
 41      with
 42          print &quot;get&quot;, amount, &quot;from bank&quot;, $bank, &quot;acct&quot;, $who, $acct_type
 </pre>
 <div class="section">
-<h4><a id="how-the-plan-functions-are-generated-for-this-example" name="how-the-plan-functions-are-generated-for-this-example">How the Plan Functions are Generated for This Example</a></h4>
+<h3><a id="how-the-plan-functions-are-generated-for-this-example" name="how-the-plan-functions-are-generated-for-this-example">How the Plan Functions are Generated for This Example</a></h3>
 <p>Each of these <a class="reference" href="rules/index.html">rules</a> will have a plan function generated for it.  These plan
 functions are generated with the same name as the <a class="reference" href="rules/index.html">rule</a> name.  Thus, the
 name of the generated python plan function for the first rule would be
@@ -176,7 +178,7 @@ are at different indent levels in the <a class="reference" href="../krb_syntax/i
 </div>
 </div>
 <div class="section">
-<h3><a id="running-the-example" name="running-the-example">Running the Example</a></h3>
+<h2><a id="running-the-example" name="running-the-example">Running the Example</a></h2>
 <p>The plan is created as a byproduct of <a class="reference" href="../using_pyke.html#proving-goals">proving</a> the goal:</p>
 <blockquote>
 <pre class="doctest-block">
@@ -302,7 +304,7 @@ still be called successfully, resulting in different calls from the initial
 <em>transfer2</em> function.</p>
 </div>
 <div class="section">
-<h3><a id="conclusion" name="conclusion">Conclusion</a></h3>
+<h2><a id="conclusion" name="conclusion">Conclusion</a></h2>
 <p>So you can see that it quite easy to use pyke to automatically combine
 python functions into programs!</p>
 <p>It also allows data within each python function to
@@ -343,7 +345,7 @@ into named repositories called <em>knowledge bases</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Wed, Mar 05 2008.
+    Page last modified Sat, Aug 09 2008.
   </div>
 
 </body>

@@ -29,6 +29,7 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
+    initialheaderlevel: 2
 /restindex
 
 =============================================
@@ -37,12 +38,25 @@ Special
 
 Other kinds of `knowledge bases`_ may be created that act in different ways
 when they are asked to lookup facts_ or prove_ goals_.  Pyke includes one of
-these named ``special``.  Each entity in this `knowledge base`_ is a python
-function that does something "special" when run.
+these named ``special``.  There is only one instance of this 'special'
+knowledge base (called ``special``).
 
-Currently, there is only one special function::
+Each entity in this `knowledge base`_ is a python function that does
+something "special" when run.
 
-    ``special.claim_goal()``
+The ``special`` functions are:
+
+  - claim_goal_
+  - check_command_
+  - command_
+  - general_command_
+
+Claim_goal
+==========
+
+The ``claim_goal`` function has no arguments::
+
+    special.claim_goal()
 
 This acts like the prolog_ `cut operator`_.
 
@@ -52,7 +66,7 @@ If one rule_ fails, the next rule_ is tried.  The goal_ itself doesn't fail
 until all of the rules_ for it have failed.
 
 Example
-===============
+-------
 
 Suppose I want to translate a number, N, into the phrase "N dogs".  I could
 use the following rules_::
@@ -83,7 +97,7 @@ The ``special.claim_goal()`` prevents the second rule_ from being used when
 ``n`` is 1.
 
 Explanation
-=================================
+-----------
 
 When a rule_ executes ``special.claim_goal()`` in its ``when``
 clause, none of the rest of the rules_ will be tried for that goal_.
@@ -114,6 +128,64 @@ This is a simple example where it is easy to add the check in the second
 rule_.  But in general, it can be difficult to check for prior conditions,
 especially when many rules_ are involved that each has its own condition.
 
+Running Commands
+================
+
+The remaining three functions deal with running programs (commands) on the
+computer that is running the PyKE program.  Their difference is in what kind
+of output they are looking for from the commands.
+
+There are three parameters that are given to the standard Python library
+`subprocess.Popen`_ function:
+
+    - The ``$command`` parameter (must always be present).  This is a tuple,
+      such as ``(ls, '-l')``.
+    - The ``$cwd`` parameter (optional).  This specifies the current working
+      directory that the command should be run in.  This may be omitted or
+      ``None`` to run the command in the same current working directory as
+      the PyKE program running the command.
+    - The ``$stdin`` parameter (optional).  This is a string (with embedded
+      newlines, if the command expects multiple lines).  It is fed to the
+      command as its stdin input.
+
+Check_command
+-------------
+
+::
+
+    special.check_command($command [, $cwd [, $stdin]])
+
+Succeeds if the command returns a zero exit status.  Fails otherwise.  Any
+output from the command to stdout or stderr is not available.
+
+Command
+-------
+
+::
+
+    special.command($stdout, $command [, $cwd [, $stdin]])
+
+This just looks at the stdout of the command.  Any output from the command
+to stderr is not available.
+
+The ``$stdout`` is a tuple of lines with the trailing newlines removed.
+
+This raises `subprocess.CalledProcessError`_ if the command returns a non-zero
+exit status.
+
+General_command
+---------------
+
+::
+
+    special.general_command($output, $command [, $cwd [, $stdin]])
+
+This is the fully general form that gives you all output from the command.
+
+The ``$output`` is a three tuple: (exit_status, stdout, stderr).  Both stdout
+and stderr are single strings (with embedded newlines).
+
+
 .. _backtracked: ../rules/backward_chaining.html#backtracking
 .. _cut operator: http://en.wikipedia.org/wiki/Cut_%28logic_programming%29
 .. _facts: fact_bases.html#facts
@@ -128,3 +200,5 @@ especially when many rules_ are involved that each has its own condition.
 .. _prove: ../../using_pyke.html#proving-goals
 .. _rule: ../rules/index.html
 .. _rules: rule_
+.. _subprocess.Popen: http://docs.python.org/lib/node528.html
+.. _subprocess.CalledProcessError: http://docs.python.org/lib/node530.html

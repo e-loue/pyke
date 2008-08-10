@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>KQB Syntax</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="stylesheets/pyke.css" type="text/css" />
+</head>
+<body>
+  <table id="page-table">
+    <thead class="head">
+        <tr id="header1"><th id="header" colspan="3">
+            &nbsp;
+        </th></tr>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <li><a href="index.html">Home</a></li>
+<li>&gt;</li>
+<li>KQB Syntax</li>
+
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
+    </thead>
+
+    <tbody id="body">
+        <tr id="body-tr">
+          <td id="left-nav">
+            <div id="left-nav-div">
+              
+<div class="title-nav"><a href="index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="overview/index.html">Overview</a></div>
+<div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="kfb_syntax.html">KFB Syntax</a></div>
+<div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
+<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="examples.html">Examples</a></div>
+<div class="normal-nav"><a href="logic_tricks.html">Logic Tricks</a></div>
+<div class="normal-nav"><a href="PyCon2008-paper.html">PyCon 2008 Paper</a></div>
+</div>
+
+            </div>
+            <div id="icons">
+                <div id="project-page">
+                  <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
+                </div>
+                Please Make a Donation:<br />
+                <a href="http://sourceforge.net/donate/index.php?group_id=207724">
+                  <img src="http://images.sourceforge.net/images/project-support.jpg"
+                       width="88" height="32" border="0"
+                       alt="Support This Project" /> </a> <br /><br />
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+            </div>
+          </td>
+          <td id="main-td">
+            <div id="main">
+                <a name="startcontent" id="startcontent"></a>
+                <div class="document" id="kqb-syntax">
+<h1 class="title">KQB Syntax</h1>
+<p>This uses a different lexical structure than <a class="reference" href="krb_syntax/index.html#lexical-structure">KRB files</a>.  Textual parameter
+substitution is done with the standard Python <a class="reference" href="http://docs.python.org/lib/node40.html">string.Template</a> class, which
+specifies parameters with <tt class="docutils literal"><span class="pre">$</span></tt>, much like <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a>.  In the
+following descriptions, substitution parameters are acted upon in
+<tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt>, but not in <tt class="docutils literal"><span class="pre">TEXT</span></tt>.</p>
+<p>The name of the <a class="reference" href="overview/knowledge_bases/question_bases.html">question base</a> is simple the filename with the <tt class="docutils literal"><span class="pre">.kqb</span></tt>
+suffix stripped.  This must be a valid python identifier.</p>
+<div class="section">
+<h2><a id="syntax-for-kqb-file" name="syntax-for-kqb-file">Syntax for KQB File</a></h2>
+<pre class="literal-block">
+file ::= [NL] {question}
+
+question ::= IDENTIFIER '(' [{parameter,}] ')' NL_TOK
+                INDENT_TOK {PARAMETERIZED_TEXT NL_TOK}
+                '---' NL_TOK
+                parameter '=' question_type
+             DEINDENT_TOK
+
+parameter ::= '$' IDENTIFIER
+</pre>
+<p>Each question has a name and a fixed number of parameters.  One of these
+parameters is designated as the <em>answer</em> parameter on the line immediately
+following the termination of the question <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt> (<tt class="docutils literal"><span class="pre">'---'</span></tt>).</p>
+<p>The question is referenced in the <a class="reference" href="overview/rules/index.html#premises-and-conclusions">premise</a> of a <a class="reference" href="overview/rules/index.html">rule</a> as:</p>
+<pre class="literal-block">
+question_base_name.question_name(parameter...)
+</pre>
+<p>There are several different kinds of <tt class="docutils literal"><span class="pre">question_types</span></tt>:</p>
+<pre class="literal-block">
+question_type ::= yn_type
+                | integer_type
+                | number_type
+                | float_type
+                | string_type
+                | select_1_type
+                | select_n_type
+</pre>
+</div>
+<div class="section">
+<h2><a id="yn-type" name="yn-type">YN_type</a></h2>
+<pre class="literal-block">
+yn_type ::= 'yn' NL_TOK [review]
+</pre>
+<p>The user answers &quot;yes&quot; or &quot;no&quot;.  The answer returned is True or False.  If the
+<a class="reference" href="overview/knowledge_bases/question_bases.html#presenting-questions-to-your-end-users">ask_tty</a> module is used, the user may type &quot;yes&quot;, &quot;y&quot;, &quot;true&quot; or &quot;t&quot; for
+True and &quot;no&quot;, &quot;n&quot;, &quot;false&quot;, or &quot;f&quot; for False.  These comparisons are case
+insensitive.</p>
+<p>See <a class="reference" href="#review">review</a>, below.</p>
+</div>
+<div class="section">
+<h2><a id="integer-type" name="integer-type">Integer_type</a></h2>
+<pre class="literal-block">
+integer_type ::= 'integer' ['(' match ')'] NL_TOK [review]
+</pre>
+<p>The user enters an integer.  If the <a class="reference" href="#match">match</a> is specified, the integer must
+match it or the user is asked to try again.</p>
+<p>See <a class="reference" href="#review">review</a>, below.</p>
+</div>
+<div class="section">
+<h2><a id="number-type" name="number-type">Number_type</a></h2>
+<pre class="literal-block">
+number_type ::= 'number' ['(' match ')'] NL_TOK [review]
+</pre>
+<p>The user enters either an integer or a floating point number.  If the user
+enters an integer, a Python <tt class="docutils literal"><span class="pre">int</span></tt> is returned.  Otherwise a Python <tt class="docutils literal"><span class="pre">float</span></tt>
+is returned.</p>
+<p>If the <a class="reference" href="#match">match</a> is specified, the number must match it or the user is asked
+to try again.</p>
+<p>See <a class="reference" href="#review">review</a>, below.</p>
+</div>
+<div class="section">
+<h2><a id="float-type" name="float-type">Float_type</a></h2>
+<pre class="literal-block">
+float_type ::= 'float' ['(' match ')'] NL_TOK [review]
+</pre>
+<p>The user enters an integer or a floating point number.  The number is always
+returned as a Python <tt class="docutils literal"><span class="pre">float</span></tt>.</p>
+<p>If the <a class="reference" href="#match">match</a> is specified, the number must match it or the user is asked
+to try again.</p>
+<p>See <a class="reference" href="#review">review</a>, below.</p>
+</div>
+<div class="section">
+<h2><a id="string-type" name="string-type">String_type</a></h2>
+<pre class="literal-block">
+string_type ::= 'string' ['(' match ')'] NL_TOK [review]
+</pre>
+<p>The user enters a string.  If the <a class="reference" href="#match">match</a> is specified, the string must match
+it or the user is asked to try again.</p>
+<p>See <a class="reference" href="#review">review</a>, below.</p>
+</div>
+<div class="section">
+<h2><a id="match" name="match">Match</a></h2>
+<pre class="literal-block">
+match ::= simple_match {'|' simple_match}
+</pre>
+<p>A match may be made up of several <tt class="docutils literal"><span class="pre">simple_matches</span></tt> or-ed together.  The
+match succeeds if any of the <tt class="docutils literal"><span class="pre">simple_matches</span></tt> succeed.</p>
+<pre class="literal-block">
+simple_match ::= '(' match ')'
+               | [ STRING ] [ '[' TEXT ']' ] '/' REGEXP_TEXT '/'
+               | [NUMBER] '-' NUMBER
+               | NUMBER '-'
+               | value
+               | value '=' simple_match
+</pre>
+<div class="section">
+<h3><a id="regexp-match" name="regexp-match">Regexp Match</a></h3>
+<p>A regexp match matches if the regexp matches.</p>
+<p>If the regexp contains a single group, that group is returned rather than the
+entire string.</p>
+<p>If the regexp contains multiple groups, a tuple of the groups is returned
+rather than entire string.</p>
+<p>If the initial STRING is specified on a regexp, it is used in the error
+message if the regexp fails.  The error message is &quot;Answer should be $msg, got
+$string&quot;.</p>
+<p>If the '[' TEXT ']' is specified on a regexp, it is used in the prompt for the
+end user.  Generally, this prompt message is enclosed in '[' and ']' when it
+is displayed to the user.</p>
+</div>
+<div class="section">
+<h3><a id="range-match" name="range-match">Range Match</a></h3>
+<p>A range match has a '-' in it.  It matches if the answer is between the two
+values.  If either value is omitted, it is not tested.  If matched to a
+string, it matches the length of the string.</p>
+</div>
+<div class="section">
+<h3><a id="value-match" name="value-match">Value '=' Match</a></h3>
+<p>The '=' means &quot;map&quot;.  The match fails if the match after the '=' fails.
+Otherwise it returns the value before the '=' rather than what the user
+entered.</p>
+</div>
+<div class="section">
+<h3><a id="id1" name="id1">Value Match</a></h3>
+<pre class="literal-block">
+value ::= STRING | IDENTIFIER | NUMBER | 'None' | 'True' | 'False'
+</pre>
+<p>A value match, only matches that one value.</p>
+</div>
+</div>
+<div class="section">
+<h2><a id="review" name="review">Review</a></h2>
+<pre class="literal-block">
+review ::= {match '!' PARAMETERIZED_TEXT}
+</pre>
+<p>The review is applied after the answer has been validated (which possibly
+changes the value).</p>
+<p>Each match is checked and all matching review's <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt>
+messages are displayed to the user.</p>
+</div>
+<div class="section">
+<h2><a id="select-1-type" name="select-1-type">Select_1_type</a></h2>
+<pre class="literal-block">
+select_1_type ::= 'select_1' NL_TOK alternatives
+</pre>
+<p>This is a multiple choice question.  The <a class="reference" href="#alternatives">alternatives</a> are displayed to the
+user, and he picks one (and only one).</p>
+</div>
+<div class="section">
+<h2><a id="select-n-type" name="select-n-type">Select_n_type</a></h2>
+<pre class="literal-block">
+select_n_type ::= 'select_n' NL_TOK alternatives
+</pre>
+<p>This is a multiple choice question.  The <a class="reference" href="#alternatives">alternatives</a> are displayed to the
+user, and he picks as many as he likes.</p>
+</div>
+<div class="section">
+<h2><a id="alternatives" name="alternatives">Alternatives</a></h2>
+<pre class="literal-block">
+alternatives ::= {value ':' PARAMETERIZED_TEXT NL_TOK [alt_review]}
+</pre>
+<p>The user only sees the <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt> values.  The <tt class="docutils literal"><span class="pre">value</span></tt>
+associated with the selected <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt> is returned (but the user
+never sees it).  The <tt class="docutils literal"><span class="pre">value</span></tt> <em>tags</em> the alternative.</p>
+<pre class="literal-block">
+alt_review ::= '!' '=' value NL_TOK
+             | '!' PARAMETERIZED_TEXT NL_TOK
+</pre>
+<p>Each alternative may have it's own review associated with it.</p>
+<p>The <tt class="docutils literal"><span class="pre">'!'</span> <span class="pre">'='</span> <span class="pre">value</span></tt> form uses the same review text as the previous
+alternative with that <em>tag</em>.</p>
+<p>The second form specifies the review text for this alternative directly.</p>
+</div>
+</div>
+
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
+            </div>
+          </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <h3>More:</h3>
+<div class="right-item"><a href="overview/index.html">Overview</a><p>The big picture of
+what all this knowledge-base, inferencing and automatic program
+generation stuff means and how it works.</p>
+</div>
+<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
+</div>
+<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
+</div>
+<div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of knowledge fact base (KFB) files, which is where you
+write your universal facts.</p>
+</div>
+<div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of knowledge question base (KQB) files, which is where you
+write your end user questions.</p>
+</div>
+<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
+write your rules.</p>
+</div>
+<div class="right-item"><a href="examples.html">Examples</a><p>This gives an overview of the examples provided with pyke.</p>
+</div>
+<div class="right-item"><a href="logic_tricks.html">Logic Tricks</a><p>How to accomplish different logic operations with rules.</p>
+</div>
+<div class="right-item"><a href="PyCon2008-paper.html">Applying Expert System Technology to Code Reuse with Pyke</a><p>Paper presented at the PyCon 2008 conference in Chicago.</p>
+</div>
+
+            </div>
+          </td>
+        </tr>
+    </tbody>
+
+    <tfoot id="foot">
+        <tr id="foot2">
+          <td id="copyright" colspan="3">
+            Copyright &copy; 2007 Bruce Frederiksen
+          </td>
+        </tr>
+    </tfoot>
+  </table>
+
+  <div id="last-modified">
+    Page last modified Sat, Aug 09 2008.
+  </div>
+
+</body>
+</html>

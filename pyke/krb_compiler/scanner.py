@@ -30,11 +30,19 @@ from ply import lex
 
 debug=0
 
+kfb_mode = False
+
 states = (
     ('indent', 'exclusive'),
     ('code', 'exclusive'),
     ('checknl', 'exclusive'),
 )
+
+kfb_keywords = frozenset((
+    'False',
+    'None',
+    'True',
+))
 
 keywords = frozenset((
     'as',
@@ -62,25 +70,32 @@ keywords = frozenset((
     'without',
 ))
 
-tokens = tuple(x.upper() + '_TOK' for x in keywords) + (
-    'ANONYMOUS_VAR_TOK',
-    'CODE_TOK',
+base_kfb_tokens = (
   # 'DATE_TOK',         # FIX: Add the definition for this!
-    'DEINDENT_TOK',
     'IDENTIFIER_TOK',
-    'INDENT_TOK',
   # 'LB_TOK',
   # 'LC_TOK',
     'LP_TOK',
     'NL_TOK',
-    'NOT_NL_TOK',
     'NUMBER_TOK',
-    'PATTERN_VAR_TOK',
   # 'RB_TOK',
   # 'RC_TOK',
     'RP_TOK',
     'STRING_TOK',
 )
+
+base_krb_tokens = base_kfb_tokens + (
+    'ANONYMOUS_VAR_TOK',
+    'CODE_TOK',
+    'DEINDENT_TOK',
+    'INDENT_TOK',
+    'NOT_NL_TOK',
+    'PATTERN_VAR_TOK',
+)
+
+kfb_tokens = tuple(x.upper() + '_TOK' for x in kfb_keywords) + base_kfb_tokens
+
+tokens = tuple(x.upper() + '_TOK' for x in keywords) + base_krb_tokens
 
 literals = '*:,!.='     # FIX: delete ':'
 
@@ -96,6 +111,7 @@ def t_NL_TOK(t):
     # newline, followed by any number of empty or comment only lines
     r'(\r)?\n([ \t]*(\#.*)?(\r)?\n)*'
     t.lexer.lineno += t.value.count('\n')
+    if kfb_mode: return t
     if nesting_level == 0:
         t.lexer.begin('indent')
         t.lexer.skip(-1)        # put the final '\n' back for tp_indent_sp!
@@ -327,17 +343,21 @@ def t_dqstring(t):
 
 def t_ANONYMOUS_VAR_TOK(t):
     r'\$_([a-zA-Z_][a-zA-Z0-9_]*)?'
+    if kfb_mode: t_ANY_error(t)
     t.value = "'" + t.value[1:] + "'"
     return t
 
 def t_PATTERN_VAR_TOK(t):
     r'\$[a-zA-Z][a-zA-Z0-9_]*'
+    if kfb_mode: t_ANY_error(t)
     t.value = "'" + t.value[1:] + "'"
     return t
 
 def t_IDENTIFIER_TOK(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
-    if t.value in keywords: t.type = t.value.upper() + '_TOK'
+    if kfb_mode and t.value in kfb_keywords or \
+       not kfb_mode and t.value in keywords:
+        t.type = t.value.upper() + '_TOK'
     return t
 
 # numbers:
@@ -620,10 +640,11 @@ def syntaxerror_params(pos = None, lineno = None):
     if debug: print "start", start, "column", column, "end", end
     return (lexer.filename, lineno, column, lexer.lexdata[start:end])
 
-def init():
-    global indent_levels, nesting_level
+def init(kfb = False):
+    global indent_levels, nesting_level, kfb_mode
     indent_levels = []
     nesting_level = 0
+    kfb_mode = kfb
 
 def test():
     import doctest

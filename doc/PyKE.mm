@@ -9,10 +9,18 @@
 <node CREATED="1216347070472" ID="Freemind_Link_1205187763" MODIFIED="1216347537421" TEXT="case_specific facts"/>
 <node CREATED="1216347104159" ID="Freemind_Link_1881520302" MODIFIED="1216350047209" TEXT="order of fact lookups on backtracking"/>
 <node CREATED="1216347113546" ID="Freemind_Link_1462096531" MODIFIED="1216347127795" TEXT="internal caching"/>
+<node CREATED="1218304709453" ID="Freemind_Link_1473399794" MODIFIED="1218304718635" TEXT=".kfb files">
+<node CREATED="1218304720638" ID="Freemind_Link_978809075" MODIFIED="1218304728066" TEXT="syntax"/>
+<node CREATED="1218304728862" ID="Freemind_Link_629711865" MODIFIED="1218304843526" TEXT="loading">
+<arrowlink DESTINATION="Freemind_Link_1276213100" ENDARROW="Default" ENDINCLINATION="560;0;" ID="Freemind_Arrow_Link_1700490932" STARTARROW="None" STARTINCLINATION="560;0;"/>
+<node CREATED="1218304762552" ID="Freemind_Link_129808086" MODIFIED="1218304778338" TEXT="compiles .kfb files into .fbc files and loads them"/>
+<node CREATED="1218304780609" ID="Freemind_Link_17233504" MODIFIED="1218304785515" TEXT="compiling is automatic"/>
+</node>
+</node>
 </node>
 <node CREATED="1216344330554" ID="Freemind_Link_1164789183" MODIFIED="1216344685790" TEXT="rule_base">
 <node CREATED="1216344429510" ID="Freemind_Link_789541104" MODIFIED="1216347050249" TEXT="rules">
-<node CREATED="1216344445969" ID="Freemind_Link_1386265889" MODIFIED="1216349683141" TEXT="what is a rule?">
+<node CREATED="1216344445969" FOLDED="true" ID="Freemind_Link_1386265889" MODIFIED="1216349683141" TEXT="what is a rule?">
 <node CREATED="1216344459585" ID="Freemind_Link_1289750371" MODIFIED="1216344463748" TEXT="premise">
 <node CREATED="1216348668190" ID="Freemind_Link_535629107" MODIFIED="1216348694690" TEXT="fact (or goal)">
 <node CREATED="1216348579353" ID="Freemind_Link_967760767" MODIFIED="1216348583287" TEXT="syntax"/>
@@ -61,7 +69,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1216340996413" ID="Freemind_Link_1143553684" MODIFIED="1216341005193" TEXT="forward chaining">
+<node CREATED="1216340996413" FOLDED="true" ID="Freemind_Link_1143553684" MODIFIED="1216341005193" TEXT="forward chaining">
 <node CREATED="1216347450244" ID="Freemind_Link_1722643312" MODIFIED="1216347457396" TEXT="meaning of forward chaining"/>
 <node CREATED="1216343898380" ID="Freemind_Link_1894415000" MODIFIED="1216343899948" TEXT="syntax"/>
 <node CREATED="1216344300931" ID="Freemind_Link_176387521" MODIFIED="1216347431293" TEXT="executed at rule base activation time">
@@ -79,7 +87,7 @@
 <node CREATED="1216347155805" ID="Freemind_Link_661659513" MODIFIED="1216347297967" TEXT="derive many possible outputs from a small set of possible inputs"/>
 </node>
 </node>
-<node CREATED="1216341006320" ID="Freemind_Link_1860230711" MODIFIED="1216341009330" TEXT="backward chaining">
+<node CREATED="1216341006320" FOLDED="true" ID="Freemind_Link_1860230711" MODIFIED="1216341009330" TEXT="backward chaining">
 <node CREATED="1216347463872" ID="Freemind_Link_1134438709" MODIFIED="1216379621997" TEXT="meaning of backward chaining"/>
 <node CREATED="1216343902956" ID="Freemind_Link_298526575" MODIFIED="1216343905175" TEXT="syntax"/>
 <node CREATED="1216347582335" ID="Freemind_Link_841683200" MODIFIED="1216347607620" TEXT="executed when your program calls for a proof">
@@ -138,8 +146,8 @@
 </node>
 <node CREATED="1216344501827" ID="Freemind_Link_1097298780" MODIFIED="1216344505754" TEXT=".krb files">
 <node CREATED="1216344508223" ID="Freemind_Link_1405186303" MODIFIED="1216344512287" TEXT="syntax"/>
-<node CREATED="1216344513182" ID="Freemind_Link_1263748171" MODIFIED="1216379165622" TEXT="loading">
-<arrowlink DESTINATION="Freemind_Link_1276213100" ENDARROW="Default" ENDINCLINATION="283;0;" ID="Freemind_Arrow_Link_300472352" STARTARROW="None" STARTINCLINATION="283;0;"/>
+<node CREATED="1216344513182" ID="Freemind_Link_1263748171" MODIFIED="1218140848077" TEXT="loading">
+<arrowlink DESTINATION="Freemind_Link_1276213100" ENDARROW="Default" ENDINCLINATION="279;0;" ID="Freemind_Arrow_Link_300472352" STARTARROW="None" STARTINCLINATION="283;0;"/>
 <node CREATED="1216351049591" ID="Freemind_Link_119885790" MODIFIED="1216351064097" TEXT="compiles .krb files into .py files and imports them">
 <node CREATED="1216351019408" ID="Freemind_Link_1032561609" MODIFIED="1216351082472" TEXT="may create up to 3 .py files for each .krb file"/>
 </node>
@@ -147,8 +155,42 @@
 <node CREATED="1216344623230" ID="Freemind_Link_1428680401" MODIFIED="1216348528219" TEXT="but doesn&apos;t automatically recompile until you create a new engine"/>
 </node>
 </node>
-<node CREATED="1216344524982" ID="Freemind_Link_632300396" MODIFIED="1216348551981" TEXT="activating">
-<arrowlink DESTINATION="Freemind_Link_1986125832" ENDARROW="Default" ENDINCLINATION="237;0;" ID="Freemind_Arrow_Link_1994817685" STARTARROW="None" STARTINCLINATION="237;0;"/>
+<node CREATED="1216344524982" ID="Freemind_Link_632300396" MODIFIED="1218140862268" TEXT="activating">
+<arrowlink DESTINATION="Freemind_Link_1986125832" ENDARROW="Default" ENDINCLINATION="607;0;" ID="Freemind_Arrow_Link_1994817685" STARTARROW="None" STARTINCLINATION="237;0;"/>
+</node>
+</node>
+</node>
+<node CREATED="1218139126663" ID="Freemind_Link_60612906" MODIFIED="1218139209969" TEXT="question_base">
+<node CREATED="1218140412372" ID="Freemind_Link_1554332733" MODIFIED="1218140435431" TEXT="parameters to the question">
+<node CREATED="1218140437438" ID="Freemind_Link_1894803745" MODIFIED="1218140443935" TEXT="must be bound to values"/>
+<node CREATED="1218140444602" ID="Freemind_Link_1097054958" MODIFIED="1218140476839" TEXT="can be substituted into any of the strings within the question using the string.Template syntax"/>
+</node>
+<node CREATED="1218139799829" ID="Freemind_Link_1392961051" MODIFIED="1218139809080" TEXT="different types of answers">
+<node CREATED="1218139810173" ID="Freemind_Link_1774414842" MODIFIED="1218139815022" TEXT="yes/no"/>
+<node CREATED="1218139816526" ID="Freemind_Link_566975389" MODIFIED="1218139820291" TEXT="integer"/>
+<node CREATED="1218139820826" ID="Freemind_Link_1388595763" MODIFIED="1218139822791" TEXT="float"/>
+<node CREATED="1218139823134" ID="Freemind_Link_1641317110" MODIFIED="1218139825370" TEXT="number"/>
+<node CREATED="1218139825742" ID="Freemind_Link_474144842" MODIFIED="1218139827016" TEXT="string"/>
+<node CREATED="1218139841347" ID="Freemind_Link_1861112634" MODIFIED="1218139847756" TEXT="select_1"/>
+<node CREATED="1218139848511" ID="Freemind_Link_1916349070" MODIFIED="1218139851710" TEXT="select_n"/>
+</node>
+<node CREATED="1218140725504" ID="Freemind_Link_514714444" MODIFIED="1218140735150" TEXT="answer parameter pattern matched to user&apos;s answer"/>
+<node CREATED="1218139653681" ID="Freemind_Link_93233211" MODIFIED="1218139662613" TEXT="answers are cached">
+<node CREATED="1218140069335" ID="Freemind_Link_250848438" MODIFIED="1218140078717" TEXT="cache is cleared when the engine is reset"/>
+</node>
+<node CREATED="1218139737726" ID="Freemind_Link_1301762436" MODIFIED="1218139751141" TEXT="there are different ways to interact with the user">
+<node CREATED="1218139759823" ID="Freemind_Link_133726390" MODIFIED="1218139765261" TEXT="ask_tty.py"/>
+<node CREATED="1218139765975" ID="Freemind_Link_1872833123" MODIFIED="1218139777394" TEXT="ask_wx.py"/>
+<node CREATED="1218139898206" ID="Freemind_Link_377878420" MODIFIED="1218140025787" TEXT="install imported module as &apos;ask_module&apos; attr on either the question_base or knowledge_engine"/>
+<node CREATED="1218139982958" ID="Freemind_Link_1533737315" MODIFIED="1218140001412" TEXT="ask_tty used by default"/>
+<node CREATED="1218140037893" ID="Freemind_Link_1582940550" MODIFIED="1218140046298" TEXT="write your own user interaction module"/>
+</node>
+<node CREATED="1218139248420" ID="Freemind_Link_488439990" MODIFIED="1218139257659" TEXT=".kqb files">
+<node CREATED="1218139288514" ID="Freemind_Link_57525613" MODIFIED="1218139291434" TEXT="syntax"/>
+<node CREATED="1218139292291" ID="Freemind_Link_71067801" MODIFIED="1218140693643" TEXT="loading">
+<arrowlink DESTINATION="Freemind_Link_1276213100" ENDARROW="Default" ENDINCLINATION="250;0;" ID="Freemind_Arrow_Link_907901968" STARTARROW="None" STARTINCLINATION="250;0;"/>
+<node CREATED="1218139307035" ID="Freemind_Link_1003909038" MODIFIED="1218139402732" TEXT="compiles .kqb files into .qbc files and loads them"/>
+<node CREATED="1218139403708" ID="Freemind_Link_1500460340" MODIFIED="1218139414395" TEXT="compiling is automatic"/>
 </node>
 </node>
 </node>
@@ -163,7 +205,7 @@
 <node CREATED="1216344651505" ID="Freemind_Link_1899970365" MODIFIED="1216344655448" POSITION="right" TEXT="knowledge_engine">
 <node CREATED="1216346098936" ID="Freemind_Link_260781230" MODIFIED="1216346117753" TEXT="calling pyke from your python program">
 <node CREATED="1216346120712" ID="Freemind_Link_1927215817" MODIFIED="1216346129694" TEXT="from pyke import knowledge_engine"/>
-<node CREATED="1216346130771" ID="Freemind_Link_1276213100" MODIFIED="1216379165622" TEXT="engine = knowledge_engine.engine"/>
+<node CREATED="1216346130771" ID="Freemind_Link_1276213100" MODIFIED="1218304843524" TEXT="engine = knowledge_engine.engine"/>
 <node CREATED="1216346149886" ID="Freemind_Link_60846124" MODIFIED="1216347531311" TEXT="engine.add_universal_fact">
 <arrowlink DESTINATION="Freemind_Link_543127937" ENDARROW="Default" ENDINCLINATION="308;0;" ID="Freemind_Arrow_Link_1575801102" STARTARROW="None" STARTINCLINATION="308;0;"/>
 </node>
@@ -171,7 +213,7 @@
 <node CREATED="1216346177181" ID="Freemind_Link_420213469" MODIFIED="1216347537422" TEXT="engine.add_case_specific_fact">
 <arrowlink DESTINATION="Freemind_Link_1205187763" ENDARROW="Default" ENDINCLINATION="347;0;" ID="Freemind_Arrow_Link_1758290041" STARTARROW="None" STARTINCLINATION="347;0;"/>
 </node>
-<node CREATED="1216346195280" ID="Freemind_Link_1986125832" MODIFIED="1216348551979" TEXT="engine.activate"/>
+<node CREATED="1216346195280" ID="Freemind_Link_1986125832" MODIFIED="1218140862269" TEXT="engine.activate"/>
 <node CREATED="1216346259246" ID="Freemind_Link_1512457251" MODIFIED="1216347607618" TEXT="engine.prove_1">
 <node CREATED="1216346300384" ID="Freemind_Link_1690844986" MODIFIED="1216346301829" TEXT="or">
 <node CREATED="1216346264790" ID="Freemind_Link_1012312061" MODIFIED="1216346269899" TEXT="engine.prove_n"/>
@@ -181,6 +223,7 @@
 <node CREATED="1216346314263" ID="Freemind_Link_337994704" MODIFIED="1216348248083" TEXT="execute the resulting plan"/>
 <node CREATED="1216346142339" ID="Freemind_Link_1277930996" MODIFIED="1216346234533" TEXT="engine.reset">
 <node CREATED="1216346984516" ID="Freemind_Link_1736249616" MODIFIED="1216347005770" TEXT="deletes case_specific_facts from fact_bases"/>
+<node CREATED="1218156314912" ID="Freemind_Link_287522236" MODIFIED="1218156348852" TEXT="clears all question caches in question_bases"/>
 </node>
 </node>
 <node CREATED="1216346416407" ID="Freemind_Link_429646996" MODIFIED="1216346420422" TEXT="other functions">
@@ -194,12 +237,34 @@
 </node>
 <node CREATED="1216346784340" ID="Freemind_Link_1250792142" MODIFIED="1216346912593" TEXT="you can have multiple instances of knowledge_engines using different knowledge bases"/>
 </node>
-<node CREATED="1216351264518" ID="Freemind_Link_962996702" MODIFIED="1216379092527" POSITION="left" TEXT="overview" VSHIFT="-38">
+<node CREATED="1218155730538" ID="Freemind_Link_1229838546" MODIFIED="1218155733278" POSITION="right" TEXT="examples"/>
+<node CREATED="1218156083292" ID="Freemind_Link_1612320530" MODIFIED="1218156084954" POSITION="right" TEXT="internals"/>
+<node CREATED="1218158071230" ID="Freemind_Link_765757853" MODIFIED="1218305116895" POSITION="left" TEXT="what can PyKE do for me?"/>
+<node CREATED="1218158086351" ID="Freemind_Link_173254572" MODIFIED="1218158118140" POSITION="left" TEXT="what are the drawbacks of using PyKE?"/>
+<node CREATED="1218155965474" ID="Freemind_Link_1667004899" MODIFIED="1218155966923" POSITION="left" TEXT="features">
+<node CREATED="1218156645449" ID="Freemind_Link_742432311" MODIFIED="1218156660700" TEXT="both forward-chaining and backward-chaining"/>
+<node CREATED="1218156716548" ID="Freemind_Link_763574843" MODIFIED="1218156731033" TEXT="may be embedded within any python program"/>
+<node CREATED="1218157179808" ID="Freemind_Link_1120441624" MODIFIED="1218157191008" TEXT="may include python code snippets within the rules"/>
+<node CREATED="1218156744590" FOLDED="true" ID="Freemind_Link_310654415" MODIFIED="1218156768796" TEXT="can automatically assemble python functions into complete call graphs">
+<node CREATED="1218156787400" ID="Freemind_Link_1268182560" MODIFIED="1218156802843" TEXT="by attaching the python functions to backward-chaining rules"/>
+<node CREATED="1218156815697" ID="Freemind_Link_1885293879" MODIFIED="1218156917313" TEXT="unlike other approaches to code reuse, ensures that each function&apos;s requirements are met before executing any of them"/>
+<node CREATED="1218157004871" ID="Freemind_Link_1279278164" MODIFIED="1218157022053" TEXT="calls the completed function call graph a &quot;plan&quot;"/>
+<node CREATED="1218157041953" ID="Freemind_Link_47552201" MODIFIED="1218157066619" TEXT="plans may be run many times without needing to re-run pyke"/>
+<node CREATED="1218157068246" ID="Freemind_Link_142901827" MODIFIED="1218157083084" TEXT="plans may be pickled and sent to other processes or stored to disk"/>
+<node CREATED="1218157084279" ID="Freemind_Link_1349362240" MODIFIED="1218157098392" TEXT="only one small pyke module is required to load the pickle"/>
+<node CREATED="1218156944716" ID="Freemind_Link_1596811970" MODIFIED="1218156951899" TEXT="this is an optional feature"/>
+</node>
+<node CREATED="1218157109001" ID="Freemind_Link_787059190" MODIFIED="1218157340706" TEXT="can question end users from the rules"/>
+<node CREATED="1218157275225" ID="Freemind_Link_798815092" MODIFIED="1218157321373" TEXT="can run programs from rules to snif the system"/>
+<node CREATED="1218157394565" ID="Freemind_Link_651997872" MODIFIED="1218157458873" TEXT="you can write your own kind of knowledge_bases to do whatever you want to prove a statement"/>
+</node>
+<node CREATED="1218155783604" ID="Freemind_Link_284948023" MODIFIED="1218155787090" POSITION="left" TEXT="installation"/>
+<node CREATED="1216351264518" FOLDED="true" ID="Freemind_Link_962996702" MODIFIED="1216379092527" POSITION="left" TEXT="overview" VSHIFT="-38">
 <node CREATED="1216351454194" ID="Freemind_Link_1372986928" MODIFIED="1216353623800" TEXT="knowledge is made up of simple statements of fact">
 <node CREATED="1216353582405" ID="Freemind_Link_1164028160" MODIFIED="1216353588521" TEXT="what a statement of fact looks like"/>
 <node CREATED="1216353698333" ID="Freemind_Link_1749934684" MODIFIED="1216353746826" TEXT="like rows in a relational table, there is never a need to record the same statement of fact twice"/>
 </node>
-<node CREATED="1216351665913" ID="Freemind_Link_335695136" MODIFIED="1216353352576" TEXT="new statements can be dynamically deduced from already known statements through if-then rules">
+<node CREATED="1216351665913" FOLDED="true" ID="Freemind_Link_335695136" MODIFIED="1216353352576" TEXT="new statements can be dynamically deduced from already known statements through if-then rules">
 <node CREATED="1216353983049" ID="Freemind_Link_28863524" MODIFIED="1216356044007" TEXT="if premises; then conclusions"/>
 <node CREATED="1216356046859" ID="Freemind_Link_946233064" MODIFIED="1216356072076" TEXT="each premise and conclusion is a statement pattern that may match multiple statements of fact"/>
 <node CREATED="1216351284825" ID="Freemind_Link_1467107537" MODIFIED="1216355428584" TEXT="pyke tries all combinations of these matching statements in order to satisfy the &quot;if&quot; part of the rule">
@@ -226,7 +291,7 @@
 </node>
 <node CREATED="1216353803660" ID="Freemind_Link_491564855" MODIFIED="1216353807906" TEXT="integration with python"/>
 </node>
-<node CREATED="1216340762982" HGAP="32" ID="Freemind_Link_563953999" MODIFIED="1216379085592" POSITION="left" TEXT="pattern matching" VSHIFT="-100">
+<node CREATED="1216340762982" ID="Freemind_Link_563953999" MODIFIED="1218157770527" POSITION="left" TEXT="pattern matching" VSHIFT="-6">
 <node CREATED="1216338038124" HGAP="24" ID="_" MODIFIED="1216379082256" TEXT="patterns" VSHIFT="-9">
 <node CREATED="1216338045115" ID="Freemind_Link_1076679700" MODIFIED="1216338385098" TEXT="pattern literals">
 <arrowlink DESTINATION="Freemind_Link_735183346" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Freemind_Arrow_Link_575361317" STARTARROW="None" STARTINCLINATION="176;0;"/>

@@ -29,6 +29,7 @@ restindex
     encoding: utf8
     output-encoding: utf8
     include: yes
+    initialheaderlevel: 2
 /restindex
 
 ===================================
@@ -42,7 +43,7 @@ Initializing Pyke
 
 There are two steps to initializing a pyke knowledge engine:
 
-knowledge_engine.engine(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb', load_fc = True, load_bc = True)
+knowledge_engine.engine(paths = ('.',), gen_root_location = '.', gen_root_pkg = 'compiled_krb', load_fc = True, load_bc = True, load_fb = True, load_qb = True)
     The pyke inference engine is offered
     as a class so that you can instantiate multiple copies of it with different
     rule bases to accomplish different tasks.
@@ -53,23 +54,22 @@ knowledge_engine.engine(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_
     >>> my_engine = knowledge_engine.engine('examples')
 
     This expects either a single directory or a sequence of directories as
-    the ``paths`` argument.
-    It recursively walks each directory looking for `.krb files`_.
-    Each `.krb file`_ that it finds is compiled, if out of date, and then
-    the resulting python modules imported (depending on ``load_fc`` and
-    ``load_bc``).
-    This causes all of the `rule bases`_ to be loaded and made ready to
-    *activate* (see below).
+    the ``paths`` argument.  It recursively walks each directory looking
+    for PyKE source files (`.kfb files`_, `.krb files`_, and `.kqb files`_).
+    Each source file that it finds is compiled, if out of date, and then
+    imported (depending on ``load_fc``, ``load_bc``, ``load_fb`` and
+    ``load_qb``).  This causes all of the `rule bases`_ to be loaded and made
+    ready to *activate* (see below).
 
     All generated python files are placed in a mirror directory structure
-    under the *gen_root_dir* directory in *gen_dir*.  Thus, by default,
-    this mirrored directory structure would be rooted under the
+    under the *gen_root_location* directory in *gen_root_pkg*.  Thus, by
+    default, this mirrored directory structure would be rooted under the
     "./compiled_krb" directory.  You probably want to add ``compiled_krb`` to
-    your subversion ``global-ignores`` option.  *Gen_dir*, *gen_root_dir*
-    and the mirrored directory structure will be created automatically if
-    any of them do not already exist.
+    your subversion ``global-ignores`` option.  *Gen_root_pkg*,
+    *gen_root_location* and the mirrored directory structure will be created
+    automatically if any of them do not already exist.
 
-    If you change some of the .krb files, you can create a new engine
+    If you change some of your PyKE source files, you can create a new engine
     object to compile and reload the generated python modules without
     restarting your program.  But note that you'll need to rerun your
     ``add_universal_fact`` calls.
@@ -77,6 +77,9 @@ knowledge_engine.engine(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_
     The ``add_universal_fact`` function is called once per fact_.  These facts_
     are never deleted and apply to all *cases*.
     
+    Alternatively, you can place universal facts in a `.kfb file`_ so that
+    they are loaded automatically.
+
     >>> my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas', 'norma'))
 
     Multiple facts with the same name are allowed.
@@ -91,7 +94,7 @@ knowledge_engine.engine(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_
     son_of('david', 'bruce', 'marilyn')
 
     These facts are accessed as *kb_name.fact_name(arguments)* within the
-    .krb files.
+    `.krb files`_.
 
 Setting up Each Case
 ===========================
@@ -217,9 +220,9 @@ before pickling the plan_:
     >>> copy_reg.pickle(functools.partial,
     ...                 lambda p: (functools.partial, (p.func,) + p.args))
 
-No special code is required to unpickle a plan_.  Also, the program that
-unpickles the plan_ does not have to import any pyke modules to be able
-to run the plan_.  Just unpickle and call it.
+No special code is required to unpickle a plan_.  Just unpickle and call it.
+(Unpickling the plan_ only imports one small pyke module to be able to run
+the plan_).
 
 Tracing Rules
 -------------
@@ -266,9 +269,9 @@ intervening python functions between subgoal proofs.
     Traceback (most recent call last):
       File "<doctest using_pyke.txt[31]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
-      File "...knowledge_engine.py", line 181, in prove_1
+      File "...knowledge_engine.py", line 182, in prove_1
         return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
-      File "...knowledge_engine.py", line 168, in prove_n
+      File "...knowledge_engine.py", line 169, in prove_n
         for arg in fixed_args) + vars):
       File "...rule_base.py", line 37, in next
         return self.iterator.next()
@@ -376,6 +379,10 @@ proof is yielded. This is done by either:
 .. _facts: fact_
 .. _functools.partial: http://docs.python.org/lib/module-functools.html
 .. _knowledge base: overview/knowledge_bases/index.html
+.. _.kfb file: kfb_syntax.html
+.. _.kfb files: `.kfb file`_
+.. _.kqb file: kqb_syntax.html
+.. _.kqb files: `.kqb file`_
 .. _.krb file: krb_syntax/index.html
 .. _.krb files: `.krb file`_
 .. _pattern: krb_syntax/pattern.html

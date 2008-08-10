@@ -92,7 +92,7 @@ def compile(gen_root_location, gen_root_pkg, filenames):
         compile_file(engine, gen_root_location, gen_root_pkg, filename)
 
 def compile_file(engine, gen_root_location, gen_root_pkg, filename):
-    global pickle, kqb_parser
+    global pickle, kqb_parser, kfbparser
     rb_name = os.path.basename(filename)
     suffix = rb_name[-4:]
     rb_name = rb_name[:-4]
@@ -145,9 +145,25 @@ def compile_file(engine, gen_root_location, gen_root_pkg, filename):
             if os.path.lexists(bc_path): os.remove(bc_path)
             if os.path.lexists(plan_path): os.remove(plan_path)
             raise
+    elif suffix == '.kfb':
+        try:
+            kfbparser
+        except NameError:
+            import cPickle as pickle
+            from pyke.krb_compiler import kfbparser
+        fbc_path = base_path + '.fbc'
+        try:
+            fb = kfbparser.parse(filename)
+            sys.stderr.write("writing %s\n" % fbc_path)
+            with open(fbc_path, 'wb') as f:
+                pickle.dump(pyke.version, f)
+                pickle.dump(fb, f)
+        except:
+            if os.path.lexists(fbc_path): os.remove(fbc_path)
+            raise
     elif suffix == '.kqb':
         try:
-            pickle
+            kqb_parser
         except NameError:
             import cPickle as pickle
             from pyke.krb_compiler import kqb_parser

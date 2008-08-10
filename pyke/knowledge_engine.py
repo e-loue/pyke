@@ -54,7 +54,8 @@ class engine(object):
     
     def __init__(self, paths = ('.',),
                  gen_root_location = '.', gen_root_pkg = 'compiled_krb',
-                 load_fc = True, load_bc = True, load_qb = True):
+                 load_fc = True, load_bc = True, load_fb = True,
+                 load_qb = True):
         if not Name_test.match(gen_root_pkg):
             raise ValueError(
                 "engine.__init__: gen_root_pkg (%s) must be a legal python "
@@ -78,7 +79,7 @@ class engine(object):
                     _check_list(compile_list, gen_root_location, gen_root_pkg)
                 compile_list2 = _load_paths(self, paths, gen_root_location,
                                             gen_root_pkg,
-                                            load_fc, load_bc, load_qb,
+                                            load_fc, load_bc, load_fb, load_qb,
                                             compile_list)
                 if compile_list2:
                     from pyke import krb_compiler
@@ -88,7 +89,7 @@ class engine(object):
                     for full_filename in compile_list2:
                         if not _load_file(self, full_filename,
                                           gen_root_location, gen_root_pkg,
-                                          load_fc, load_bc, load_qb,
+                                          load_fc, load_bc, load_fb, load_qb,
                                           compile_list2):
                             raise AssertionError("version recompile failed")
         for kb in self.knowledge_bases.itervalues(): kb.init2()
@@ -338,6 +339,11 @@ def _needs_compiling(filename, gen_root_location, gen_root_pkg):
                 ok = os.stat(base + '_bc.py').st_mtime > source_mtime
             except OSError:
                 if ok is None: ok = False
+    elif filename.endswith('.kfb'):
+        try:
+            ok = os.stat(base + '.fbc').st_mtime > source_mtime
+        except OSError:
+            ok = False
     elif filename.endswith('.kqb'):
         try:
             ok = os.stat(base + '.qbc').st_mtime > source_mtime
@@ -350,14 +356,15 @@ def _get_compile_list(paths, gen_root_location, gen_root_pkg):
     for path in paths:
         for dirpath, dirnames, filenames in os.walk(path, onerror=_raise_exc):
             for filename in filenames:
-                if (filename.endswith('.krb') or filename.endswith('.kqb')) \
+                if len(filename) > 4 \
+                   and filename[-4:] in ('.krb', '.kfb', '.kqb') \
                    and _needs_compiling(os.path.join(dirpath, filename),
                                         gen_root_location, gen_root_pkg):
                     ans.append(os.path.join(dirpath, filename))
     return ans
 
 def _load_paths(engine, paths, gen_root_location, gen_root_pkg,
-                load_fc, load_bc, load_qb, compile_list):
+                load_fc, load_bc, load_fb, load_qb, compile_list):
     r'''
         Loads the compiled versions of all source files in 'paths'.
 
@@ -375,18 +382,19 @@ def _load_paths(engine, paths, gen_root_location, gen_root_pkg,
     for path in paths:
         for dirpath, dirnames, filenames in os.walk(path, onerror=_raise_exc):
             for filename in filenames:
-                if filename.endswith('.krb') or filename.endswith('.kqb'):
+                if len(filename) > 4 \
+                   and filename[-4:] in ('.krb', '.kfb', '.kqb'):
                     full_filename = os.path.join(dirpath, filename)
                     if not _load_file(engine, full_filename,
                                       gen_root_location, gen_root_pkg,
-                                      load_fc, load_bc, load_qb, compile_list):
+                                      load_fc, load_bc, load_fb, load_qb,
+                                      compile_list):
                         ans.append(full_filename)
     #print "_load_paths =>", ans
     return ans
 
 def _load_file(engine, filename, gen_root_location, gen_root_pkg,
-               load_fc, load_bc, load_qb, compile_list):
-    global pickle
+               load_fc, load_bc, load_fb, load_qb, compile_list):
     base, package_list = \
         _get_base_path(filename, gen_root_location, gen_root_pkg)
     base_modulename = os.path.basename(base)
@@ -420,21 +428,28 @@ def _load_file(engine, filename, gen_root_location, gen_root_pkg,
     if load_bc and filename.endswith('.krb'):
         if not load_module('_plans', False): return False
         if not load_module('_bc'): return False
+    if load_fb and filename.endswith('.kfb'):
+        return _load_pickle(base + '.fbc', engine)
     if load_qb and filename.endswith('.kqb'):
-        try:
-            pickle      # test to see whether this has already been loaded
-        except NameError:
-            import cPickle as pickle
-        try:
-            f = open(base + '.qbc', 'rb')
-        except IOError:
-            return False
-        try:
-            version = pickle.load(f)
-            if version != pyke.version: return False
-            pickle.load(f).register(engine)
-        finally:
-            f.close()
+        return _load_pickle(base + '.qbc', engine)
+    return True
+
+def _load_pickle(filename, engine):
+    global pickle
+    try:
+        pickle      # test to see whether this has already been loaded
+    except NameError:
+        import cPickle as pickle
+    try:
+        f = open(filename, 'rb')
+    except IOError:
+        return False
+    try:
+        version = pickle.load(f)
+        if version != pyke.version: return False
+        pickle.load(f).register(engine)
+    finally:
+        f.close()
     return True
 
 """ ******* for testing:

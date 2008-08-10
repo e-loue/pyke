@@ -43,6 +43,7 @@
 <div class="title-nav"><a href="index.html">Knowledge Bases</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="fact_bases.html">Fact Bases</a></div>
 <div class="normal-nav"><a href="rule_bases.html">Rule Bases</a></div>
+<div class="normal-nav"><a href="question_bases.html">Question Bases</a></div>
 <div class="normal-nav"><a href="special.html">Special</a></div>
 </div>
 <div class="normal-nav"><a href="../rules/index.html">Rules</a></div>
@@ -50,6 +51,8 @@
 </div>
 <div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../../kfb_syntax.html">KFB Syntax</a></div>
+<div class="normal-nav"><a href="../../kqb_syntax.html">KQB Syntax</a></div>
 <div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../../examples.html">Examples</a></div>
 <div class="normal-nav"><a href="../../logic_tricks.html">Logic Tricks</a></div>
@@ -80,19 +83,19 @@
 <a class="reference" href="../rules/forward_chaining.html">forward-chaining</a> and <a class="reference" href="../rules/backward_chaining.html">backward-chaining</a> rules.</p>
 <p>Rule bases are created by writing a <em>knowledge rule base</em> (or <a class="reference" href="../../krb_syntax/index.html">.krb</a>) file
 with your favorite text editor.  Place all of your <a class="reference" href="../../krb_syntax/index.html">.krb files</a> into a
-directory structure.  Then <a class="reference" href="../../using_pyke.html#initializing-pyke">load</a> this directory into your python program.</p>
-<p>The <a class="reference" href="../../using_pyke.html#initializing-pyke">load</a> will walk the directory structure recursively and
-automatically compile any <a class="reference" href="../../krb_syntax/index.html">.krb files</a> into python source files.  These
-python modules are then automatically imported to define the rule base.
-Subsequent <a class="reference" href="../../using_pyke.html#initializing-pyke">loads</a> only recompile <a class="reference" href="../../krb_syntax/index.html">.krb files</a> that have changed since the
-last time they were compiled.</p>
+directory structure.  Then include this directory as an argument to the
+<a class="reference" href="../../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> constructor.  This will recursively search your
+directory for <a class="reference" href="../../krb_syntax/index.html">.krb files</a> and compile them into .py files.  These .py files
+are then automatically imported to define the rule base.  Subsequent runs of
+the <a class="reference" href="../../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> constructor only recompile <a class="reference" href="../../krb_syntax/index.html">.krb files</a> that
+have changed since the last time they were compiled.</p>
 <p>The name of each rule base is the filename of the <a class="reference" href="../../krb_syntax/index.html">.krb file</a> (with the .krb
 suffix removed).  This must be a legal python identifier.</p>
-<p>In addition, each directory name within the directory structure <a class="reference" href="../../using_pyke.html#initializing-pyke">loaded</a>
+<p>In addition, each directory name within your directory structure
 becomes a python package (to facilitate importing the generated python modules)
 and must also be a legal python identifier.</p>
 <div class="section">
-<h1><a id="managing-multiple-rule-bases" name="managing-multiple-rule-bases">Managing Multiple Rule Bases</a></h1>
+<h2><a id="managing-multiple-rule-bases" name="managing-multiple-rule-bases">Managing Multiple Rule Bases</a></h2>
 <p>There are two reasons to have more than one rule base (i.e., more than one
 <a class="reference" href="../../krb_syntax/index.html">.krb file</a>):</p>
 <ol class="arabic">
@@ -112,7 +115,7 @@ more than one of these rule bases at the same time.</p>
 <p>These goals are met by three capabilities:</p>
 </div>
 <div class="section">
-<h1><a id="rule-base-categories" name="rule-base-categories">Rule Base Categories</a></h1>
+<h2><a id="rule-base-categories" name="rule-base-categories">Rule Base Categories</a></h2>
 <p>Rule bases are grouped into categories.  Each rule base category only gets
 to have <strong>one</strong> <a class="reference" href="#rule-base-activation">active</a> rule base.</p>
 <p>Thus, you place rule bases that you want to have active simultaneously into
@@ -124,7 +127,7 @@ used within the <a class="reference" href="../../krb_syntax/index.html">.krb fil
 <tt class="docutils literal"><span class="pre">database.insert(...)</span></tt>.</p>
 </div>
 <div class="section">
-<h1><a id="rule-base-inheritance" name="rule-base-inheritance">Rule Base Inheritance</a></h1>
+<h2><a id="rule-base-inheritance" name="rule-base-inheritance">Rule Base Inheritance</a></h2>
 <p>The rule bases within the same <a class="reference" href="#rule-base-categories">category</a> share rules amongst themselves
 through rule base inheritance.</p>
 <p>Rule bases use single inheritance to <a class="reference" href="../../krb_syntax/index.html#extending-clause">inherit</a> the <a class="reference" href="../rules/index.html">rules</a> from another rule
@@ -143,8 +146,8 @@ rule base.</p>
 <p>So, for our database example, we'd have a root rule base called
 <tt class="docutils literal"><span class="pre">database.krb</span></tt> and it would have derived rule bases called <tt class="docutils literal"><span class="pre">mysql.krb</span></tt>,
 <tt class="docutils literal"><span class="pre">postgresql.krb</span></tt> and <tt class="docutils literal"><span class="pre">oracle.krb</span></tt>.  (Note that each of these
-<a class="reference" href="../../krb_syntax/index.html">.krb files</a> may be placed anywhere you want them within the directory
-structure that you <a class="reference" href="../../using_pyke.html#initializing-pyke">load</a> -- in other words, the <a class="reference" href="../../using_pyke.html#initializing-pyke">loaded</a> directory structure
+<a class="reference" href="../../krb_syntax/index.html">.krb files</a> may be placed anywhere you want them within your directory
+structure -- in other words, your directory structure
 does not need to match the rule base inheritance structure).</p>
 <p>All of these <a class="reference" href="../../krb_syntax/index.html">.krb files</a> are within the <tt class="docutils literal"><span class="pre">database</span></tt> <a class="reference" href="#rule-base-categories">rule base category</a>,
 and only one of them may be <a class="reference" href="#rule-base-activation">active</a> at any point in time.</p>
@@ -159,7 +162,7 @@ category</a>, for example, <tt class="docutils literal"><span class="pre">databa
 <p>In this way, all of the <a class="reference" href="../rules/index.html">rules</a> will work no matter which rule base is
 active within the database <a class="reference" href="#rule-base-categories">category</a>.</p>
 <div class="section">
-<h2><a id="rule-inheritance" name="rule-inheritance">Rule Inheritance</a></h2>
+<h3><a id="rule-inheritance" name="rule-inheritance">Rule Inheritance</a></h3>
 <p>There is an important difference between how <a class="reference" href="../rules/backward_chaining.html">backward-chaining</a> rule
 inheritance works within pyke rule bases and how method inheritance works
 within python classes:</p>
@@ -187,7 +190,7 @@ applies to <a class="reference" href="../rules/backward_chaining.html">backward-
 </div>
 </div>
 <div class="section">
-<h1><a id="rule-base-activation" name="rule-base-activation">Rule Base Activation</a></h1>
+<h2><a id="rule-base-activation" name="rule-base-activation">Rule Base Activation</a></h2>
 <p><a class="reference" href="../../using_pyke.html#initializing-pyke">Loading</a> the rule bases only makes the rule bases available for use.  It
 does not automatically <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> any rule bases.  This must be done
 explicitly by your python program.  Your program may decide to <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a>
@@ -221,6 +224,8 @@ particular database in use at the time the program is run.</p>
 <div class="right-item"><a href="rule_bases.html">Rule Bases</a><p>Explanation of rule bases, overview of .krb files and how these files
 are compiled and loaded into your python program.</p>
 </div>
+<div class="right-item"><a href="question_bases.html">Question Bases</a><p>Explanation of question bases and .kqb files.</p>
+</div>
 <div class="right-item"><a href="special.html">Special</a><p>Explanation of the special knowledge base.</p>
 </div>
 
@@ -239,7 +244,7 @@ are compiled and loaded into your python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Jan 04 2008.
+    Page last modified Sat, Aug 09 2008.
   </div>
 
 </body>

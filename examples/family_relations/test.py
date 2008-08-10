@@ -23,7 +23,7 @@
 
 '''
     This example shows how people are related.  The primary data (facts) that
-    are used to figure everything out are in family.py.
+    are used to figure everything out are in family.kfb.
 
     There are four independent rule bases that all do the same thing.  The
     fc_example rule base only uses forward-chaining rules.  The bc_example
@@ -47,10 +47,6 @@ from pyke import knowledge_engine, krb_traceback
 
 # Compile and load .krb files in '.' directory (recursively).
 engine = knowledge_engine.engine('.')
-
-# This loads the family universal facts.
-import family
-family.init(engine)
 
 def fc_test(person1 = 'bruce'):
     '''

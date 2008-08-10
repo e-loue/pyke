@@ -36,6 +36,8 @@
 <div class="normal-nav"><a href="overview/index.html">Overview</a></div>
 <div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="kfb_syntax.html">KFB Syntax</a></div>
+<div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
 <div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="examples.html">Examples</a></div>
 <div class="normal-nav"><a href="logic_tricks.html">Logic Tricks</a></div>
@@ -64,10 +66,10 @@
 <h1 class="title">Using Pyke</h1>
 <p>This describes how to use pyke from within your python program.</p>
 <div class="section">
-<h1><a id="initializing-pyke" name="initializing-pyke">Initializing Pyke</a></h1>
+<h2><a id="initializing-pyke" name="initializing-pyke">Initializing Pyke</a></h2>
 <p>There are two steps to initializing a pyke knowledge engine:</p>
 <dl class="docutils">
-<dt>knowledge_engine.engine(paths = ('.',), gen_dir = '.', gen_root_dir = 'compiled_krb', load_fc = True, load_bc = True)</dt>
+<dt>knowledge_engine.engine(paths = ('.',), gen_root_location = '.', gen_root_pkg = 'compiled_krb', load_fc = True, load_bc = True, load_fb = True, load_qb = True)</dt>
 <dd><p class="first">The pyke inference engine is offered
 as a class so that you can instantiate multiple copies of it with different
 rule bases to accomplish different tasks.
@@ -78,21 +80,20 @@ the functions that you need are provided directly by this object:</p>
 &gt;&gt;&gt; my_engine = knowledge_engine.engine('examples')
 </pre>
 <p>This expects either a single directory or a sequence of directories as
-the <tt class="docutils literal"><span class="pre">paths</span></tt> argument.
-It recursively walks each directory looking for <a class="reference" href="krb_syntax/index.html">.krb files</a>.
-Each <a class="reference" href="krb_syntax/index.html">.krb file</a> that it finds is compiled, if out of date, and then
-the resulting python modules imported (depending on <tt class="docutils literal"><span class="pre">load_fc</span></tt> and
-<tt class="docutils literal"><span class="pre">load_bc</span></tt>).
-This causes all of the <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a> to be loaded and made ready to
-<em>activate</em> (see below).</p>
+the <tt class="docutils literal"><span class="pre">paths</span></tt> argument.  It recursively walks each directory looking
+for PyKE source files (<a class="reference" href="kfb_syntax.html">.kfb files</a>, <a class="reference" href="krb_syntax/index.html">.krb files</a>, and <a class="reference" href="kqb_syntax.html">.kqb files</a>).
+Each source file that it finds is compiled, if out of date, and then
+imported (depending on <tt class="docutils literal"><span class="pre">load_fc</span></tt>, <tt class="docutils literal"><span class="pre">load_bc</span></tt>, <tt class="docutils literal"><span class="pre">load_fb</span></tt> and
+<tt class="docutils literal"><span class="pre">load_qb</span></tt>).  This causes all of the <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a> to be loaded and made
+ready to <em>activate</em> (see below).</p>
 <p>All generated python files are placed in a mirror directory structure
-under the <em>gen_root_dir</em> directory in <em>gen_dir</em>.  Thus, by default,
-this mirrored directory structure would be rooted under the
+under the <em>gen_root_location</em> directory in <em>gen_root_pkg</em>.  Thus, by
+default, this mirrored directory structure would be rooted under the
 &quot;./compiled_krb&quot; directory.  You probably want to add <tt class="docutils literal"><span class="pre">compiled_krb</span></tt> to
-your subversion <tt class="docutils literal"><span class="pre">global-ignores</span></tt> option.  <em>Gen_dir</em>, <em>gen_root_dir</em>
-and the mirrored directory structure will be created automatically if
-any of them do not already exist.</p>
-<p class="last">If you change some of the .krb files, you can create a new engine
+your subversion <tt class="docutils literal"><span class="pre">global-ignores</span></tt> option.  <em>Gen_root_pkg</em>,
+<em>gen_root_location</em> and the mirrored directory structure will be created
+automatically if any of them do not already exist.</p>
+<p class="last">If you change some of your PyKE source files, you can create a new engine
 object to compile and reload the generated python modules without
 restarting your program.  But note that you'll need to rerun your
 <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> calls.</p>
@@ -100,6 +101,8 @@ restarting your program.  But note that you'll need to rerun your
 <dt><em>some_engine</em>.add_universal_fact(kb_name, fact_name, arguments)</dt>
 <dd><p class="first">The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">fact</a>.  These <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">facts</a>
 are never deleted and apply to all <em>cases</em>.</p>
+<p>Alternatively, you can place universal facts in a <a class="reference" href="kfb_syntax.html">.kfb file</a> so that
+they are loaded automatically.</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas', 'norma'))
 </pre>
@@ -115,12 +118,12 @@ son_of('bruce', 'thomas', 'norma')
 son_of('david', 'bruce', 'marilyn')
 </pre>
 <p class="last">These facts are accessed as <em>kb_name.fact_name(arguments)</em> within the
-.krb files.</p>
+<a class="reference" href="krb_syntax/index.html">.krb files</a>.</p>
 </dd>
 </dl>
 </div>
 <div class="section">
-<h1><a id="setting-up-each-case" name="setting-up-each-case">Setting up Each Case</a></h1>
+<h2><a id="setting-up-each-case" name="setting-up-each-case">Setting up Each Case</a></h2>
 <p>Pyke is designed to be run multiple times for multiple <em>cases</em>.  In
 general each case has its own set of starting <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">facts</a> and may use different
 <a class="reference" href="overview/knowledge_bases/rule_bases.html">rule bases</a>, depending on the situation.</p>
@@ -173,7 +176,7 @@ arguments.</p>
 <p>Your pyke engine is now ready to prove goals for this case!</p>
 </div>
 <div class="section">
-<h1><a id="proving-goals" name="proving-goals">Proving Goals</a></h1>
+<h2><a id="proving-goals" name="proving-goals">Proving Goals</a></h2>
 <p>Two functions are provided that cover the easy cases.  More general
 functions are provided in <a class="reference" href="#other-functions">Other Functions</a>, below.</p>
 <dl class="docutils">
@@ -228,7 +231,7 @@ if no <a class="reference" href="overview/plans.html">plan</a> was generated.</p
 </dd>
 </dl>
 <div class="section">
-<h2><a id="running-and-pickling-plans" name="running-and-pickling-plans">Running and Pickling Plans</a></h2>
+<h3><a id="running-and-pickling-plans" name="running-and-pickling-plans">Running and Pickling Plans</a></h3>
 <p>Once you've obtained a <a class="reference" href="overview/plans.html">plan</a> from <tt class="docutils literal"><span class="pre">prove_1</span></tt> or <tt class="docutils literal"><span class="pre">prove_n</span></tt>, you just call
 it like a normal python function.  The arguments required are simply those
 specified, if any, in the <a class="reference" href="krb_syntax/bc_rule.html#taking-clause">taking clause</a> of the <a class="reference" href="overview/rules/index.html">rule</a> proving the top-level
@@ -245,12 +248,12 @@ before pickling the <a class="reference" href="overview/plans.html">plan</a>:</p
 ...                 lambda p: (functools.partial, (p.func,) + p.args))
 </pre>
 </blockquote>
-<p>No special code is required to unpickle a <a class="reference" href="overview/plans.html">plan</a>.  Also, the program that
-unpickles the <a class="reference" href="overview/plans.html">plan</a> does not have to import any pyke modules to be able
-to run the <a class="reference" href="overview/plans.html">plan</a>.  Just unpickle and call it.</p>
+<p>No special code is required to unpickle a <a class="reference" href="overview/plans.html">plan</a>.  Just unpickle and call it.
+(Unpickling the <a class="reference" href="overview/plans.html">plan</a> only imports one small pyke module to be able to run
+the <a class="reference" href="overview/plans.html">plan</a>).</p>
 </div>
 <div class="section">
-<h2><a id="tracing-rules" name="tracing-rules">Tracing Rules</a></h2>
+<h3><a id="tracing-rules" name="tracing-rules">Tracing Rules</a></h3>
 <p>Individual rules may be traced to aid in debugging.  The <tt class="docutils literal"><span class="pre">trace</span></tt> function
 takes two arguments: the rule base name, and the name of the rule to trace:</p>
 <blockquote>
@@ -273,7 +276,7 @@ in effect until you call <tt class="docutils literal"><span class="pre">untrace<
 </blockquote>
 </div>
 <div class="section">
-<h2><a id="krb-traceback" name="krb-traceback">Krb_traceback</a></h2>
+<h3><a id="krb-traceback" name="krb-traceback">Krb_traceback</a></h3>
 <p>A handy traceback module is provided to convert python functions, lines and
 line numbers to the <a class="reference" href="krb_syntax/index.html">.krb file</a> rule names, lines and line numbers in python
 traceback.  This makes it much easier to read the tracebacks that occur
@@ -297,9 +300,9 @@ intervening python functions between subgoal proofs.</p>
 Traceback (most recent call last):
   File &quot;&lt;doctest using_pyke.txt[31]&gt;&quot;, line 2, in &lt;module&gt;
     my_engine.prove_1('error_test', 'goal', (), 0)
-  File &quot;...knowledge_engine.py&quot;, line 168, in prove_1
+  File &quot;...knowledge_engine.py&quot;, line 182, in prove_1
     return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
-  File &quot;...knowledge_engine.py&quot;, line 155, in prove_n
+  File &quot;...knowledge_engine.py&quot;, line 169, in prove_n
     for arg in fixed_args) + vars):
   File &quot;...rule_base.py&quot;, line 37, in next
     return self.iterator.next()
@@ -315,7 +318,7 @@ Traceback (most recent call last):
     goal4()
   File &quot;...error_test.krb&quot;, line 41, in rule4
     check $bar &gt; 0
-  File &quot;...contexts.py&quot;, line 224, in lookup_data
+  File &quot;...contexts.py&quot;, line 227, in lookup_data
     raise KeyError(&quot;$%s not bound&quot; % var_name)
 KeyError: '$bar not bound'
 </pre>
@@ -323,7 +326,7 @@ KeyError: '$bar not bound'
 </div>
 </div>
 <div class="section">
-<h1><a id="other-functions" name="other-functions">Other Functions</a></h1>
+<h2><a id="other-functions" name="other-functions">Other Functions</a></h2>
 <p>There are a few more functions that may be useful in special situations.</p>
 <p>The first two of these provide more general access to the <a class="reference" href="overview/knowledge_bases/fact_bases.html#facts">fact</a> lookup and
 goal proof mechanisms.  The catch is that you must first convert <strong>all</strong>
@@ -362,7 +365,7 @@ Note that one backward-chaining rule may succeed many times through
 backtracking.</dd>
 </dl>
 <div class="section">
-<h2><a id="creating-your-own-patterns" name="creating-your-own-patterns">Creating Your Own Patterns</a></h2>
+<h3><a id="creating-your-own-patterns" name="creating-your-own-patterns">Creating Your Own Patterns</a></h3>
 <p>You'll need two more pyke modules to create your own <a class="reference" href="krb_syntax/pattern.html">patterns</a> and contexts:</p>
 <blockquote>
 <pre class="doctest-block">
@@ -421,6 +424,12 @@ generation stuff means and how it works.</p>
 </div>
 <div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
 </div>
+<div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of knowledge fact base (KFB) files, which is where you
+write your universal facts.</p>
+</div>
+<div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of knowledge question base (KQB) files, which is where you
+write your end user questions.</p>
+</div>
 <div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
 write your rules.</p>
 </div>
@@ -446,7 +455,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, Jun 03 2008.
+    Page last modified Sat, Aug 09 2008.
   </div>
 
 </body>

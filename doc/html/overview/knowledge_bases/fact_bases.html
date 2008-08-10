@@ -43,6 +43,7 @@
 <div class="title-nav"><a href="index.html">Knowledge Bases</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="fact_bases.html">Fact Bases</a></div>
 <div class="normal-nav"><a href="rule_bases.html">Rule Bases</a></div>
+<div class="normal-nav"><a href="question_bases.html">Question Bases</a></div>
 <div class="normal-nav"><a href="special.html">Special</a></div>
 </div>
 <div class="normal-nav"><a href="../rules/index.html">Rules</a></div>
@@ -50,6 +51,8 @@
 </div>
 <div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../../kfb_syntax.html">KFB Syntax</a></div>
+<div class="normal-nav"><a href="../../kqb_syntax.html">KQB Syntax</a></div>
 <div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../../examples.html">Examples</a></div>
 <div class="normal-nav"><a href="../../logic_tricks.html">Logic Tricks</a></div>
@@ -79,7 +82,7 @@
 <p>Facts are organized into fact bases.  The fact bases are created
 automatically as new facts are asserted.</p>
 <div class="section">
-<h1><a id="facts" name="facts">Facts</a></h1>
+<h2><a id="facts" name="facts">Facts</a></h2>
 <p>Think of a fact as a simple statement.  It has a name and a set of
 arguments.  The arguments may be:</p>
 <ul class="simple">
@@ -100,7 +103,7 @@ arguments must be the same too!</p>
 <p>Facts are immutable.  They may not be changed or retracted.  That's why
 dictionaries, lists and user-defined objects are not allowed as arguments.</p>
 <div class="section">
-<h2><a id="case-specific-facts" name="case-specific-facts">Case Specific Facts</a></h2>
+<h3><a id="case-specific-facts" name="case-specific-facts">Case Specific Facts</a></h3>
 <p>Most facts are case specific facts.  This means that they will be deleted
 when a <a class="reference" href="../../using_pyke.html#setting-up-each-case">reset</a> is done to prepare for another run of the inference engine.
 Case specific facts are asserted through either:</p>
@@ -111,9 +114,10 @@ some_engine.add_case_specific_fact(kb_name, fact_name, arguments)
 <p>They may also be asserted by <a class="reference" href="../rules/forward_chaining.html">forward-chaining</a> rules.</p>
 </div>
 <div class="section">
-<h2><a id="universal-facts" name="universal-facts">Universal Facts</a></h2>
-<p>Universal facts are never deleted, specifically, when a <a class="reference" href="../../using_pyke.html#setting-up-each-case">reset</a> is done.  Add
-universal facts by calling:</p>
+<h3><a id="universal-facts" name="universal-facts">Universal Facts</a></h3>
+<p>Universal facts are never deleted, specifically, when a <a class="reference" href="../../using_pyke.html#setting-up-each-case">reset</a> is done.  You
+can specify universal facts in a <cite>.kfb file</cite>, or add universal facts by
+calling:</p>
 <pre class="literal-block">
 some_engine.add_universal_fact(kb_name, fact_name, arguments)
 </pre>
@@ -136,6 +140,8 @@ some_engine.add_universal_fact(kb_name, fact_name, arguments)
 <div class="right-item"><a href="rule_bases.html">Rule Bases</a><p>Explanation of rule bases, overview of .krb files and how these files
 are compiled and loaded into your python program.</p>
 </div>
+<div class="right-item"><a href="question_bases.html">Question Bases</a><p>Explanation of question bases and .kqb files.</p>
+</div>
 <div class="right-item"><a href="special.html">Special</a><p>Explanation of the special knowledge base.</p>
 </div>
 
@@ -154,7 +160,7 @@ are compiled and loaded into your python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Mar 10 2008.
+    Page last modified Sat, Aug 09 2008.
   </div>
 
 </body>
