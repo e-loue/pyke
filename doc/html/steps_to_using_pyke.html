@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Steps to Using Pyke</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="stylesheets/pyke.css" type="text/css" />
+</head>
+<body>
+  <table id="page-table">
+    <thead class="head">
+        <tr id="header1"><th id="header" colspan="3">
+            &nbsp;
+        </th></tr>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <li><a href="index.html">Home</a></li>
+<li>&gt;</li>
+<li>Steps to Using Pyke</li>
+
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
+    </thead>
+
+    <tbody id="body">
+        <tr id="body-tr">
+          <td id="left-nav">
+            <div id="left-nav-div">
+              
+<div class="title-nav"><a href="index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="why_pyke.html">Why Pyke?</a></div>
+<div class="normal-nav"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a></div>
+<div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="logic_programming/index.html">Logic Programming</a></div>
+<div class="normal-nav"><a href="knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="normal-nav"><a href="kfb_syntax.html">KFB Syntax</a></div>
+<div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
+<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="examples.html">Examples</a></div>
+<div class="normal-nav"><a href="PyCon2008-paper.html">PyCon 2008 Paper</a></div>
+</div>
+
+            </div>
+            <div id="icons">
+                <div id="project-page">
+                  <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
+                </div>
+                Please Make a Donation:<br />
+                <a href="http://sourceforge.net/donate/index.php?group_id=207724">
+                  <img src="http://images.sourceforge.net/images/project-support.jpg"
+                       width="88" height="32" border="0"
+                       alt="Support This Project" /> </a> <br /><br />
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+            </div>
+          </td>
+          <td id="main-td">
+            <div id="main">
+                <a name="startcontent" id="startcontent"></a>
+                <div class="document" id="steps-to-using-pyke">
+<h1 class="title">Steps to Using Pyke</h1>
+<ol class="arabic simple">
+<li>You provide the following to Pyke's <a class="reference" href="logic_programming/statements.html">knowledge engine</a>:<ul>
+<li>A set of universally true <a class="reference" href="logic_programming/statements.html">statements</a>.</li>
+<li>The text for all <a class="reference" href="knowledge_bases/question_bases.html">questions</a> that you might want Pyke to ask your end user.</li>
+<li>Multiple sets of <a class="reference" href="logic_programming/statements.html">rules</a>.<ul>
+<li>Your rules may include both <a class="reference" href="logic_programming/rules/forward_chaining_rules.html">forward-chaining</a> and
+<a class="reference" href="logic_programming/rules/backward_chaining_rules.html">backward-chaining</a> rules.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Repeat for each specific use case:<ol class="arabic">
+<li>You provide a set of <a class="reference" href="logic_programming/statements.html">statements</a> describing this specific use case to
+Pyke.</li>
+<li>You select which set of rules apply to this use case.</li>
+<li>Pyke automatically runs all of the selected forward-chaining rules that
+apply to the statements that you've given to it to deduce new statements.<ul>
+<li>Your forward-chaining rules may interactively ask your end user
+<a class="reference" href="knowledge_bases/question_bases.html">questions</a>, or get information by executing <a class="reference" href="knowledge_bases/special.html#running-commands">commands</a> (programs)
+on the computer that it's running on to help in its decision
+making.</li>
+</ul>
+</li>
+<li>You ask Pyke a question by having it <a class="reference" href="FIX">prove</a> a <a class="reference" href="FIX">goal</a> (which is just
+another statement).  This goal may include <a class="reference" href="logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> that
+allow you to ask &quot;for what values is this statement true?&quot;.<ul>
+<li>Pyke runs the selected backward-chaining rules against the statements
+that it has in order to figure out the answer to your question.</li>
+<li>Your backward-chaining rules may also ask your end user <a class="reference" href="knowledge_bases/question_bases.html">questions</a> and
+run <a class="reference" href="knowledge_bases/special.html#running-commands">commands</a>.</li>
+<li>You may have written python code at the end of some of your
+backward-chaining rules.  For each such rule, Pyke has compiled this
+python code into a python function called a <a class="reference" href="FIX">plan</a> which it has attached
+to the rule.</li>
+<li>Once Pyke finds an answer to your question, it gathers all of the plan
+functions of the rules that it used to find your answer into a
+complete function call graph.  The plan functions are linked together
+mirroring the way that the rules linked together to find your answer.
+In this way, you can write high-level compilers that assemble python
+functions together to solve specific problems.</li>
+<li>Pyke returns the top Python function of this function call graph as a
+standard Python function along with the answer to your question.  You
+may call this function as may times as you like.  You may also <a class="reference" href="http://docs.python.org/lib/module-pickle.html">pickle</a>
+the function so that you can send it to another program or save it to
+disk.  You only need one small Pyke module to load and run these
+pickles.</li>
+</ul>
+</li>
+<li>You <a class="reference" href="FIX">reset</a> Pyke to clear out all of these case specific statements and
+prepare it for the next use case.</li>
+</ol>
+</li>
+</ol>
+</div>
+
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
+            </div>
+          </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <h3>More:</h3>
+<div class="right-item"><a href="why_pyke.html">Why Pyke?</a><p>What does Pyke do for me?</p>
+</div>
+<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A very brief look at the steps involved in programming in Pyke.</p>
+</div>
+<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
+</div>
+<div class="right-item"><a href="logic_programming/index.html">Logic Programming Overview</a><p>An overview of Logic Programming in Pyke, including statements,
+pattern matching and rules.</p>
+</div>
+<div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered
+into named repositories called <em>knowledge bases</em>.</p>
+</div>
+<div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of knowledge fact base (KFB) files, which is where you
+write your universal facts.</p>
+</div>
+<div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of knowledge question base (KQB) files, which is where you
+write your end user questions.</p>
+</div>
+<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
+write your rules.</p>
+</div>
+<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
+</div>
+<div class="right-item"><a href="examples.html">Examples</a><p>This gives an overview of the examples provided with pyke.</p>
+</div>
+<div class="right-item"><a href="PyCon2008-paper.html">Applying Expert System Technology to Code Reuse with Pyke</a><p>Paper presented at the PyCon 2008 conference in Chicago.</p>
+</div>
+
+            </div>
+          </td>
+        </tr>
+    </tbody>
+
+    <tfoot id="foot">
+        <tr id="foot2">
+          <td id="copyright" colspan="3">
+            Copyright &copy; 2007 Bruce Frederiksen
+          </td>
+        </tr>
+    </tfoot>
+  </table>
+
+  <div id="last-modified">
+    Page last modified Mon, Aug 11 2008.
+  </div>
+
+</body>
+</html>
