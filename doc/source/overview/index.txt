@@ -21,11 +21,10 @@
 .. THE SOFTWARE.
 
 restindex
-    crumb: Overview
+    crumb: Logic Programming
     page-description:
-        The big picture of 
-        what all this knowledge-base, inferencing and automatic program
-        generation stuff means and how it works.
+        An overview of Logic Programming in PyKE, including statements,
+        pattern matching and rules.
     /description
     section-pages: , knowledge_bases/index, rules/index, plans
     format: rest
