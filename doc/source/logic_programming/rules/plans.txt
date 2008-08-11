@@ -286,4 +286,4 @@ values to match the specific situation.
 .. _proving: prove_
 .. _rule: rules/index.html
 .. _rules: rule_
-.. _rule base: knowledge_bases/rule_bases.html
+.. _rule base: ../../knowledge_bases/rule_bases.html

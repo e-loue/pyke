@@ -129,13 +129,13 @@ rules_.  This premise always succeeds; and fails on backtracking.
             with
                 for x in $x_list: process(x)
 
-.. _backtracking: ../overview/rules/backward_chaining.html#backtracking
+.. _backtracking: ../logic_programming/rules/backward_chaining.html#backtracking
 .. _backward-chaining rule: bc_rule.html
 .. _.krb file: index.html
 .. _pattern: pattern.html
 .. _pattern variable: pattern.html#pattern-variable
 .. _pattern variables: pattern variable_
-.. _rule: ../overview/rules/index.html
+.. _rule: ../logic_programming/rules/index.html
 .. _rules: rule_
 .. _when clause: bc_rule.html#when-clause
 .. _with clause: bc_rule.html#with-clause

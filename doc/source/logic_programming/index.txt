@@ -23,10 +23,10 @@
 restindex
     crumb: Logic Programming
     page-description:
-        An overview of Logic Programming in PyKE, including statements,
+        An overview of Logic Programming in Pyke, including statements,
         pattern matching and rules.
     /description
-    section-pages: , knowledge_bases/index, rules/index, plans
+    section-pages: , statements, pattern_matching, rules/index
     format: rest
     encoding: utf8
     output-encoding: utf8
@@ -34,9 +34,9 @@ restindex
     initialheaderlevel: 2
 /restindex
 
-==================
-Overview
-==================
+==========================
+Logic Programming Overview
+==========================
 
 Pyke is an inference engine that applies rules_ to facts_ to establish
 additional facts (through forward-chaining_ rules), and/or to prove *goals*
@@ -60,9 +60,9 @@ to run commands_ on the local system to guide the inferencing.
 .. _activated: ../using_pyke.html#setting-up-each-case
 .. _backtracking: rules/backward_chaining.html#backtracking
 .. _backward-chaining: rules/backward_chaining.html
-.. _question: knowledge_bases/question_bases.html
-.. _commands: knowledge_bases/special.html#running-commands
-.. _facts: knowledge_bases/fact_bases.html#facts
+.. _question: ../knowledge_bases/question_bases.html
+.. _commands: ../knowledge_bases/special.html#running-commands
+.. _facts: ../knowledge_bases/fact_bases.html#facts
 .. _forward-chaining: rules/forward_chaining.html
 .. _pickled: plans.html#running-and-pickling-plans
 .. _plan: plans.html

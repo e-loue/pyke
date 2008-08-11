@@ -1,0 +1,147 @@
+.. $Id$
+.. 
+.. Copyright © 2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Why Pyke?
+    page-description:
+        What does Pyke do for me?
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+============
+Why Pyke?
+============
+-------------------------
+What Does Pyke Do for Me?
+-------------------------
+
+Pyke was primarily designed to allow you to "cook" your Python_ code.  You
+write Python code, and then you write Pyke code to cook that Python
+code -- i.e. to assemble the Python functions that you've written and
+customize them for a specific situation or use-case.
+
+Pyke can also be used for difficult decision making applications where each
+part of the problem has multiple possible solutions and the selection of a
+solution to one part of the problem affects whether another part of the problem
+can be solved or not.  Examples of these kind of applications are listed on
+the `home page`_.
+
+
+Examples of "Cooking" Python Code
+=================================
+
+Database Access Library
+-----------------------
+
+You're writing a library package to make it easier for Python programmers to
+access relational databases.  You write Python code that deals with the
+mechanics of accessing relational databases, and then you write Pyke code to
+make a cooked version of this code for each database access with your user's
+application.
+
+You might also use Pyke to provide help installing and configuring the
+database and help creating the schema.
+
+By taking this approach, your library will be an order of magnitude faster
+than competing database access libraries because you've used Pyke to
+essentially compile custom code for each database access.
+
+The sqlgen_ example demonstates this approach.
+
+
+HTML Templating Library
+-----------------------
+
+Or you're writing an HTML templating package to make it easier for Python
+programmers to generate HTML.  You write Python code that deals with the
+mechanics of HTML, and then you write Pyke code to make a cooked version of
+this code for each HTML template.
+
+By taking this approach, your library will be an order of magnitude faster
+than competing HTML templating libraries because you've used Pyke to
+essentially compile custom code for each HTML template.
+
+The web_framework_ example demonstates this approach.  It uses the sqlgen_
+example to make a little web framework.  The 2 HTML templates in this example
+were also done in TurboGears 2 and then a siege_ benchmark test done on both:
+
+- TurboGears 2 ran 75.83 transactions/sec
+- The Pyke example ran 791.01 transactions/sec
+
+
+Linux Configuration Program
+---------------------------
+
+Or you're writing a new Linux configuration program.  You write the Python
+code to query and set the various system configuration options, and then you
+write Pyke code to ask the user what he wants and build a cooked version of
+your code to make the necessary changes.
+
+In this case, you're not looking for performance.  You use Pyke to handle the
+complicated decision making and use its plan_ facility to postpone making any
+configuration changes until your program is sure that it's "dotted all of the
+I's and crossed all the T's".
+
+
+Summary
+=======
+
+Pyke provides a way to directly "program in the large", which dovetails with
+using Python to "program in the small".  Pyke supplements but does not replace
+Python!
+
+Pyke helps programmers to achieve order of magnitude improvements in:
+
+- Adaptability/Customization
+
+  - Using Pyke allows your Python code to be combined into thousands of
+    different configurations.
+
+  - Thus, your application or library takes on the characteristics of a
+    Domain Specific Language to achieve an order of magnitude increase in
+    adaptability without a corresponding increase your program's "surface
+    area" to your users.
+
+- Performance
+
+  - Thinking of your application or library as a Domain Specific Language
+    (DSL), you're using Pyke to "compile" rather than "interpret" your DSL to
+    achieve an order of magnitude improvement in performance.
+
+- Code Reuse
+
+  - Making your code an order of magnitude more adaptable and an order of
+    magnitude faster allows it to be (re)used in a correspondingly broader
+    range of situations.
+
+
+.. _home page: index.html
+.. _plan: logic_programming/rules/backward_chaining/plans.html
+.. _Python: http://www.python.org
+.. _siege: http://www.joedog.org/JoeDog/Siege
+.. _sqlgen: examples.html#sqlgen
+.. _web_framework: examples.html#web-framework

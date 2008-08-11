@@ -21,10 +21,9 @@
 .. THE SOFTWARE.
 
 restindex
-    crumb: KFB Syntax
+    crumb: Pattern Matching
     page-description:
-        The syntax of knowledge fact base (KFB) files, which is where you
-        write your universal facts.
+        Explanation of pattern matching and pattern variables.
     /description
     format: rest
     encoding: utf8
@@ -33,33 +32,23 @@ restindex
     initialheaderlevel: 2
 /restindex
 
-===================================
-KFB Syntax
-===================================
+================
+Pattern Matching
+================
 
-This uses the same lexical structure as `KRB files`_, except that the only
-keywords are:
+Pattern matching is a little strange at first.
 
-   - None
-   - True
-   - False
+FIX
 
-The name of the `fact base`_ is simply the filename with the ``.kfb`` suffix
-stripped.  This must be a valid python identifier.
-
-Syntax for KFB File
-===================
-
-::
-
-    file ::= [NL] {fact}
-
-    fact ::= IDENTIFIER '(' [{data,}] ')'
-
-    data ::= 'None' | 'True' | 'False'
-           | NUMBER | IDENTIFIER | STRING
-           | '(' [{data,}] ')'
-
-
-.. _fact base: fact_bases.html
-.. _KRB files: krb_syntax/index.html#lexical-structure
+.. _backward-chaining: rules/backward_chaining.html
+.. _Bc_rule Syntax: ../krb_syntax/bc_rule.html
+..  _.krb file: ../krb_syntax/index.html
+.. _pattern: ../krb_syntax/pattern.html
+.. _patterns: pattern_
+.. _pattern variable: ../krb_syntax/pattern.html#pattern-variable
+.. _pattern variables: `pattern variable`_
+.. _prove: ../using_pyke.html#proving-goals
+.. _proving: prove_
+.. _rule: rules/index.html
+.. _rules: rule_
+.. _rule base: ../knowledge_bases/rule_bases.html

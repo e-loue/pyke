@@ -183,7 +183,7 @@ clause to try alternate subproofs is called *backtracking*.
 
 .. _activated: ../../using_pyke.html#setting-up-each-case
 .. _example: forward_chaining.html#example
-.. _fact: ../knowledge_bases/fact_bases.html#facts
+.. _fact: ../../knowledge_bases/fact_bases.html#facts
 .. _facts: fact_
 .. _forward-chaining: forward_chaining.html
 .. _plan: ../plans.html
@@ -193,8 +193,9 @@ clause to try alternate subproofs is called *backtracking*.
 .. _pyke.prove_1: `prove_1`_
 .. _pyke.prove_n: `prove_n`_
 .. _rule: index.html
-.. _rule base: ../knowledge_bases/rule_bases.html
-.. _rule base category: ../knowledge_bases/rule_bases.html#rule-base-categories
+.. _rule base: ../../knowledge_bases/rule_bases.html
+.. _rule base category:
+   ../../knowledge_bases/rule_bases.html#rule-base-categories
 .. _rule bases: `rule base`_
 .. _rules: rule_
 .. _rule's: rule_

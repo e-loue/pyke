@@ -132,7 +132,7 @@ Running Commands
 ================
 
 The remaining three functions deal with running programs (commands) on the
-computer that is running the PyKE program.  Their difference is in what kind
+computer that is running the Pyke program.  Their difference is in what kind
 of output they are looking for from the commands.
 
 There are three parameters that are given to the standard Python library
@@ -143,7 +143,7 @@ There are three parameters that are given to the standard Python library
     - The ``$cwd`` parameter (optional).  This specifies the current working
       directory that the command should be run in.  This may be omitted or
       ``None`` to run the command in the same current working directory as
-      the PyKE program running the command.
+      the Pyke program running the command.
     - The ``$stdin`` parameter (optional).  This is a string (with embedded
       newlines, if the command expects multiple lines).  It is fed to the
       command as its stdin input.

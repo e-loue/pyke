@@ -135,12 +135,12 @@ multiple `rule bases`_ by using the sqlgen example above.
 .. _PyCon 2008: http://us.pycon.org/2008/about/
 .. _.krb files: krb_syntax/index.html
 .. _how to call pyke: using_pyke.html
-.. _facts: overview/knowledge_bases/fact_bases.html#facts
-.. _forward-chaining: overview/rules/forward_chaining.html
-.. _backward-chaining: overview/rules/backward_chaining.html
-.. _plans: overview/plans.html
+.. _facts: knowledge_bases/fact_bases.html#facts
+.. _forward-chaining: logic_programming/rules/forward_chaining.html
+.. _backward-chaining: logic_programming/rules/backward_chaining.html
+.. _plans: logic_programming/rules/plans.html
 .. _krb_traceback: using_pyke.html#krb-traceback
-.. _rule bases: overview/knowledge_bases/rule_bases.html
+.. _rule bases: knowledge_bases/rule_bases.html
 .. _print_stats: using_pyke.html#other-functions
 .. _MySQL: http://www.mysql.com/
 .. _WSGI: http://www.python.org/dev/peps/pep-0333/

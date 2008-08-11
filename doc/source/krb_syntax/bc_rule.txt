@@ -226,23 +226,22 @@ subsequent rules_ required to prove higher-level goals before the top-level
 goal has been proven.
 
 .. _active: ../using_pyke.html#setting-up-each-case
-.. _backward-chaining: ../overview/rules/backward_chaining.html
-.. _backtracking: ../overview/rules/backward_chaining.html#backtracking
+.. _backward-chaining: ../logic_programming/rules/backward_chaining.html
+.. _backtracking: ../logic_programming/rules/backward_chaining.html#backtracking
 .. _category: `rule base category`_
 .. _compound_premise: compound_premise.html
-.. _fact base: ../overview/knowledge_bases/fact_bases.html
+.. _fact base: knowledge_bases/fact_bases.html
 .. _pattern: pattern.html
 .. _patterns: pattern_
 .. _pattern variable: pattern.html#pattern-variable
 .. _pattern variables: `pattern variable`_
-.. _plan: ../overview/plans.html
+.. _plan: ../logic_programming/rules/plans.html
 .. _plans: plan_
 .. _python_premise: python_premise.html
-.. _rule: ../overview/rules/index.html
+.. _rule: ../logic_programming/rules/index.html
 .. _rules: rule_
-.. _rule base: ../overview/knowledge_bases/rule_bases.html
+.. _rule base: knowledge_bases/rule_bases.html
 .. _rule base's: `rule base`_
-.. _rule base category:
-       ../overview/knowledge_bases/rule_bases.html#rule-base-categories
+.. _rule base category: knowledge_bases/rule_bases.html#rule-base-categories
 .. _variables: `pattern variable`_
 

@@ -21,10 +21,9 @@
 .. THE SOFTWARE.
 
 restindex
-    crumb: KFB Syntax
+    crumb: Statements
     page-description:
-        The syntax of knowledge fact base (KFB) files, which is where you
-        write your universal facts.
+        What is a *statement* is in Pyke?
     /description
     format: rest
     encoding: utf8
@@ -33,33 +32,39 @@ restindex
     initialheaderlevel: 2
 /restindex
 
-===================================
-KFB Syntax
-===================================
+===========
+Statements
+===========
 
-This uses the same lexical structure as `KRB files`_, except that the only
-keywords are:
+A *statement* is a statement of fact.  They are the bread and butter of Pyke.
+Statements are the data values that Pyke acts upon.
 
-   - None
-   - True
-   - False
+Statements in Pyke are very structured.  They have three components:
 
-The name of the `fact base`_ is simply the filename with the ``.kfb`` suffix
-stripped.  This must be a valid python identifier.
+#. The name of a `knowledge base`_.
+#. The name of a *knowledge entity*.
+#. The statement arguments.
 
-Syntax for KFB File
-===================
+The syntax for a statement looks like this::
 
-::
+    statement ::= name '.' name '(' {argument,} ')'
 
-    file ::= [NL] {fact}
+The first name is the name of the knowledge base.  Within `backward-chaining
+rules`_, this may be omitted to imply the currently selected `rule base`_ for
+this `rule base category`_.
 
-    fact ::= IDENTIFIER '(' [{data,}] ')'
+The second name is the name of the *knowledge entity*.  You can think of this
+as naming the relationship amoung its arguments.
 
-    data ::= 'None' | 'True' | 'False'
-           | NUMBER | IDENTIFIER | STRING
-           | '(' [{data,}] ')'
+The arguments can be any simple Python data value (numbers, strings, None,
+True or False) or tuples of these values (including nested tuples).
+Statements are supposed to be immutable, so all of the arguments are
+immutable.
 
+Like rows in relational database tables, it doesn't make sense to have two
+identical statements.
 
-.. _fact base: fact_bases.html
-.. _KRB files: krb_syntax/index.html#lexical-structure
+.. _backward-chaining rules: rules/backward_chaining.html
+.. _rule base: ../knowledge_bases/rule_bases.html
+.. _rule base category: FIX
+.. _knowledge base: FIX

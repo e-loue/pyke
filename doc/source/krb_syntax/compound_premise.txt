@@ -273,7 +273,7 @@ values that pass ``test_x($x)``::
         python y_list.append($y)
     $y_list = tuple(y_list)
 
-.. _backtracking: ../overview/rules/backward_chaining.html#backtracking
+.. _backtracking: ../logic_programming/rules/backward_chaining.html#backtracking
 .. _backward-chaining rules: bc_rule.html
 .. _bc_premise: bc_rule.html#when-clause
 .. _Examples: #examples

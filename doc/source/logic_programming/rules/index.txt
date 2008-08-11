@@ -25,7 +25,7 @@ restindex
     page-description:
         Explanation of rules, forward-chaining and backward-chaining.
     /description
-    section-pages: , forward_chaining, backward_chaining
+    section-pages: , forward_chaining, backward_chaining, plans
     format: rest
     encoding: utf8
     output-encoding: utf8
@@ -75,11 +75,11 @@ depending on the rule's type.
 .. _activated: activate_
 .. _assert: activate_
 .. _backward-chaining: backward_chaining.html
-.. _facts: ../knowledge_bases/fact_bases.html#facts
+.. _facts: ../../knowledge_bases/fact_bases.html#facts
 .. _forward-chaining: forward_chaining.html
 .. _goals: ../../krb_syntax/bc_rule.html#use-clause
 .. _patterns: ../../krb_syntax/pattern.html
 .. _plan: ../plans.html
 .. _prove: ../../using_pyke.html#proving-goals
-.. _rule base: ../knowledge_bases/rule_bases.html
+.. _rule base: ../../knowledge_bases/rule_bases.html
 .. _rule bases: `rule base`_

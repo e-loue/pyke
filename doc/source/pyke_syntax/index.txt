@@ -21,11 +21,11 @@
 .. THE SOFTWARE.
 
 restindex
-    crumb: KFB Syntax
+    crumb: Pyke Syntax
     page-description:
-        The syntax of knowledge fact base (KFB) files, which is where you
-        write your universal facts.
+        The syntax of Pyke's three different kinds of source files.
     /description
+    section-pages: , kfb_syntax, krb_syntax/index, kqb_syntax
     format: rest
     encoding: utf8
     output-encoding: utf8
@@ -33,33 +33,19 @@ restindex
     initialheaderlevel: 2
 /restindex
 
-===================================
-KFB Syntax
-===================================
+===========
+Pyke Syntax
+===========
 
-This uses the same lexical structure as `KRB files`_, except that the only
-keywords are:
+Pyke has three different kinds of source files:
 
-   - None
-   - True
-   - False
+#. KFB files.
+#. KRB files.
+#. KQB files.
 
-The name of the `fact base`_ is simply the filename with the ``.kfb`` suffix
-stripped.  This must be a valid python identifier.
+FIX
 
-Syntax for KFB File
-===================
-
-::
-
-    file ::= [NL] {fact}
-
-    fact ::= IDENTIFIER '(' [{data,}] ')'
-
-    data ::= 'None' | 'True' | 'False'
-           | NUMBER | IDENTIFIER | STRING
-           | '(' [{data,}] ')'
-
-
-.. _fact base: fact_bases.html
-.. _KRB files: krb_syntax/index.html#lexical-structure
+.. _question base: question_bases.html
+.. _fact bases: fact_bases.html
+.. _special: special.html
+.. _rule bases: rule_bases.html

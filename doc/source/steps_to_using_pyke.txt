@@ -1,0 +1,108 @@
+.. $Id$
+.. 
+.. Copyright © 2007 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Steps to Using Pyke
+    page-description:
+        A very brief look at the steps involved in programming in Pyke.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+====================
+Steps to Using Pyke
+====================
+
+#. You provide the following to Pyke's `knowledge engine`_:
+
+   - A set of universally true statements_.
+   - The text for all questions_ that you might want Pyke to ask your end user.
+   - Multiple sets of rules_.
+
+     - Your rules may include both `forward-chaining`_ and
+       `backward-chaining`_ rules.
+
+#. Repeat for each specific use case:
+
+   #. You provide a set of statements_ describing this specific use case to
+      Pyke.
+
+   #. You select which set of rules apply to this use case.
+
+   #. Pyke automatically runs all of the selected forward-chaining rules that
+      apply to the statements that you've given to it to deduce new statements.
+
+      - Your forward-chaining rules may interactively ask your end user
+        `questions`_, or get information by executing `commands`_ (programs)
+        on the computer that it's running on to help in its decision
+        making.
+
+   #. You ask Pyke a question by having it prove_ a goal_ (which is just
+      another statement).  This goal may include `pattern variables`_ that
+      allow you to ask "for what values is this statement true?".
+
+      - Pyke runs the selected backward-chaining rules against the statements
+        that it has in order to figure out the answer to your question.
+
+      - Your backward-chaining rules may also ask your end user questions_ and
+        run commands_.
+
+      - You may have written python code at the end of some of your
+        backward-chaining rules.  For each such rule, Pyke has compiled this
+        python code into a python function called a plan_ which it has attached
+        to the rule.
+
+      - Once Pyke finds an answer to your question, it gathers all of the plan
+        functions of the rules that it used to find your answer into a
+        complete function call graph.  The plan functions are linked together
+        mirroring the way that the rules linked together to find your answer.
+        In this way, you can write high-level compilers that assemble python
+        functions together to solve specific problems.
+
+      - Pyke returns the top Python function of this function call graph as a
+        standard Python function along with the answer to your question.  You
+        may call this function as may times as you like.  You may also pickle_
+        the function so that you can send it to another program or save it to
+        disk.  You only need one small Pyke module to load and run these
+        pickles.
+
+   #. You reset_ Pyke to clear out all of these case specific statements and
+      prepare it for the next use case.
+
+
+.. _backward-chaining: logic_programming/rules/backward_chaining_rules.html
+.. _commands: knowledge_bases/special.html#running-commands
+.. _forward-chaining: logic_programming/rules/forward_chaining_rules.html
+.. _goal: FIX
+.. _knowledge engine: logic_programming/statements.html
+.. _pattern variables: logic_programming/pattern_matching/pattern_variables.html
+.. _pickle: http://docs.python.org/lib/module-pickle.html
+.. _plan: FIX
+.. _prove: FIX
+.. _reset: FIX
+.. _questions: knowledge_bases/question_bases.html
+.. _rules: logic_programming/statements.html
+.. _statements: logic_programming/statements.html

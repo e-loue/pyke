@@ -33,14 +33,16 @@
             <div id="left-nav-div">
               
 <div class="title-nav"><a href="index.html">Home</a></div><div class="nav-branch">
-<div class="normal-nav"><a href="overview/index.html">Overview</a></div>
+<div class="normal-nav"><a href="why_pyke.html">Why Pyke?</a></div>
+<div class="normal-nav"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a></div>
 <div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
-<div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="logic_programming/index.html">Logic Programming</a></div>
+<div class="normal-nav"><a href="knowledge_bases/index.html">Knowledge Bases</a></div>
 <div class="normal-nav"><a href="kfb_syntax.html">KFB Syntax</a></div>
 <div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
 <div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
 <div class="normal-nav"><a href="examples.html">Examples</a></div>
-<div class="normal-nav"><a href="logic_tricks.html">Logic Tricks</a></div>
 <div class="normal-nav"><a href="PyCon2008-paper.html">PyCon 2008 Paper</a></div>
 </div>
 
@@ -69,7 +71,7 @@ substitution is done with the standard Python <a class="reference" href="http://
 specifies parameters with <tt class="docutils literal"><span class="pre">$</span></tt>, much like <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a>.  In the
 following descriptions, substitution parameters are acted upon in
 <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt>, but not in <tt class="docutils literal"><span class="pre">TEXT</span></tt>.</p>
-<p>The name of the <a class="reference" href="overview/knowledge_bases/question_bases.html">question base</a> is simple the filename with the <tt class="docutils literal"><span class="pre">.kqb</span></tt>
+<p>The name of the <a class="reference" href="knowledge_bases/question_bases.html">question base</a> is simple the filename with the <tt class="docutils literal"><span class="pre">.kqb</span></tt>
 suffix stripped.  This must be a valid python identifier.</p>
 <div class="section">
 <h2><a id="syntax-for-kqb-file" name="syntax-for-kqb-file">Syntax for KQB File</a></h2>
@@ -87,7 +89,7 @@ parameter ::= '$' IDENTIFIER
 <p>Each question has a name and a fixed number of parameters.  One of these
 parameters is designated as the <em>answer</em> parameter on the line immediately
 following the termination of the question <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt> (<tt class="docutils literal"><span class="pre">'---'</span></tt>).</p>
-<p>The question is referenced in the <a class="reference" href="overview/rules/index.html#premises-and-conclusions">premise</a> of a <a class="reference" href="overview/rules/index.html">rule</a> as:</p>
+<p>The question is referenced in the <a class="reference" href="logic_programming/rules/index.html#premises-and-conclusions">premise</a> of a <a class="reference" href="logic_programming/rules/index.html">rule</a> as:</p>
 <pre class="literal-block">
 question_base_name.question_name(parameter...)
 </pre>
@@ -108,7 +110,7 @@ question_type ::= yn_type
 yn_type ::= 'yn' NL_TOK [review]
 </pre>
 <p>The user answers &quot;yes&quot; or &quot;no&quot;.  The answer returned is True or False.  If the
-<a class="reference" href="overview/knowledge_bases/question_bases.html#presenting-questions-to-your-end-users">ask_tty</a> module is used, the user may type &quot;yes&quot;, &quot;y&quot;, &quot;true&quot; or &quot;t&quot; for
+<a class="reference" href="knowledge_bases/question_bases.html#presenting-questions-to-your-end-users">ask_tty</a> module is used, the user may type &quot;yes&quot;, &quot;y&quot;, &quot;true&quot; or &quot;t&quot; for
 True and &quot;no&quot;, &quot;n&quot;, &quot;false&quot;, or &quot;f&quot; for False.  These comparisons are case
 insensitive.</p>
 <p>See <a class="reference" href="#review">review</a>, below.</p>
@@ -257,13 +259,17 @@ alternative with that <em>tag</em>.</p>
           <td id="right-nav">
             <div id="right-nav-div">
                 <h3>More:</h3>
-<div class="right-item"><a href="overview/index.html">Overview</a><p>The big picture of
-what all this knowledge-base, inferencing and automatic program
-generation stuff means and how it works.</p>
+<div class="right-item"><a href="why_pyke.html">Why Pyke?</a><p>What does Pyke do for me?</p>
+</div>
+<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A very brief look at the steps involved in programming in Pyke.</p>
 </div>
 <div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
 </div>
-<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
+<div class="right-item"><a href="logic_programming/index.html">Logic Programming Overview</a><p>An overview of Logic Programming in Pyke, including statements,
+pattern matching and rules.</p>
+</div>
+<div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered
+into named repositories called <em>knowledge bases</em>.</p>
 </div>
 <div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of knowledge fact base (KFB) files, which is where you
 write your universal facts.</p>
@@ -274,9 +280,9 @@ write your end user questions.</p>
 <div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
 write your rules.</p>
 </div>
-<div class="right-item"><a href="examples.html">Examples</a><p>This gives an overview of the examples provided with pyke.</p>
+<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
 </div>
-<div class="right-item"><a href="logic_tricks.html">Logic Tricks</a><p>How to accomplish different logic operations with rules.</p>
+<div class="right-item"><a href="examples.html">Examples</a><p>This gives an overview of the examples provided with pyke.</p>
 </div>
 <div class="right-item"><a href="PyCon2008-paper.html">Applying Expert System Technology to Code Reuse with Pyke</a><p>Paper presented at the PyCon 2008 conference in Chicago.</p>
 </div>
@@ -296,7 +302,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Sat, Aug 09 2008.
+    Page last modified Mon, Aug 11 2008.
   </div>
 
 </body>

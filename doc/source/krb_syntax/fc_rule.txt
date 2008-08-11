@@ -99,12 +99,12 @@ clause where they are bound to a value.  These values will then be substituted
 into the facts_ and python statements.
 
 .. _compound_premise: compound_premise.html
-.. _facts: ../overview/knowledge_bases/fact_bases.html#facts
-.. _forward-chaining: ../overview/rules/forward_chaining.html
+.. _facts: knowledge_bases/fact_bases.html#facts
+.. _forward-chaining: ../logic_programming/rules/forward_chaining.html
 .. _pattern: pattern.html
 .. _pattern variable: pattern.html#pattern-variable
 .. _pattern variables: `pattern variable`_
 .. _python_premise: python_premise.html
 .. _python_statements: python_premise.html#python-statements
-.. _rule: ../overview/rules/index.html
+.. _rule: ../logic_programming/rules/index.html
 .. _rules: rule_
