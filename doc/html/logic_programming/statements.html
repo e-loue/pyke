@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Statements</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../stylesheets/pyke.css" type="text/css" />
+</head>
+<body>
+  <table id="page-table">
+    <thead class="head">
+        <tr id="header1"><th id="header" colspan="3">
+            &nbsp;
+        </th></tr>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <li><a href="../index.html">Home</a></li>
+<li>&gt;</li>
+<li><a href="index.html">Logic Programming</a></li>
+<li>&gt;</li>
+<li>Statements</li>
+
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
+    </thead>
+
+    <tbody id="body">
+        <tr id="body-tr">
+          <td id="left-nav">
+            <div id="left-nav-div">
+              
+<div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../why_pyke.html">Why Pyke?</a></div>
+<div class="normal-nav"><a href="../steps_to_using_pyke.html">Steps to Using Pyke</a></div>
+<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
+
+<div class="title-nav"><a href="index.html">Logic Programming</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="statements.html">Statements</a></div>
+<div class="normal-nav"><a href="pattern_matching.html">Pattern Matching</a></div>
+<div class="normal-nav"><a href="rules/index.html">Rules</a></div>
+</div>
+<div class="normal-nav"><a href="../knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="normal-nav"><a href="../pyke_syntax/index.html">Pyke Syntax</a></div>
+<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../examples.html">Examples</a></div>
+<div class="normal-nav"><a href="../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
+</div>
+
+            </div>
+            <div id="icons">
+                <div id="project-page">
+                  <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
+                </div>
+                Please Make a Donation:<br />
+                <a href="http://sourceforge.net/donate/index.php?group_id=207724">
+                  <img src="http://images.sourceforge.net/images/project-support.jpg"
+                       width="88" height="32" border="0"
+                       alt="Support This Project" /> </a> <br /><br />
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+            </div>
+          </td>
+          <td id="main-td">
+            <div id="main">
+                <a name="startcontent" id="startcontent"></a>
+                <div class="document" id="statements">
+<h1 class="title">Statements</h1>
+<p>A <em>statement</em> is a statement of fact, also just called a <em>fact</em>.  They are
+the bread and butter of Pyke.  Statements are the data values that Pyke acts
+upon.</p>
+<p>You might also think of a statement as a spoken sentence.  For example, the
+Pyke <a class="reference" href="FIX">family_relations</a> example deals with sentences like:</p>
+<pre class="literal-block">
+&quot;Bruce is the son of Thomas (his father) and Norma (his mother).&quot;
+</pre>
+<p>But we condense the sentence down to it's essence.  In this case, the sentence
+revolves around three things: Bruce, Thomas and Norma.  All of the rest of the
+words can be condensed into a single identifier that identifies the
+relationship between these three things:</p>
+<pre class="literal-block">
+son_of(Bruce, Thomas, Norma)
+</pre>
+<p>We can give these condensed sentence structures any names that we want.  In
+this case, I chose <tt class="docutils literal"><span class="pre">son_of</span></tt>.  I might have also chosen &quot;parents_of&quot;, which
+might conjure the following English sentence:</p>
+<pre class="literal-block">
+&quot;The parents of Bruce are Thomas (his father) and Norma (his mother).&quot;
+</pre>
+<p>Or:</p>
+<pre class="literal-block">
+&quot;Bruce's parents are Thomas (his father) and Norma (his mother).&quot;
+</pre>
+<p>But the <tt class="docutils literal"><span class="pre">son_of</span></tt> form carries the additional information that Bruce is a son
+rather than a daughter.  So this is the form used in the family_relations
+example.</p>
+<div class="caution">
+<p class="first admonition-title">Caution!</p>
+<p class="last">Statements are not functions!
+When we wear our Python hats, <tt class="docutils literal"><span class="pre">son_of(Bruce,</span> <span class="pre">Thomas,</span> <span class="pre">Norma)</span></tt> looks like a
+function call!  We might expect that it can be executed to <em>do</em> something
+and possibly return a value.  But when we wear our Pyke hats, this is just
+a statement, or a piece of data.  It doesn't <em>do</em> anything and it <strong>never</strong>
+returns a value!</p>
+</div>
+<p>Note that it makes perfect sense to have several statements defining the same
+relationship between their arguments:</p>
+<pre class="literal-block">
+son_of(Bruce, Thomas, Norma)
+son_of(Michael, Bruce, Marilyn)
+son_of(David, Bruce, Marilyn)
+</pre>
+<p>But this only makes sense if they have different arguments.  There is never a
+need to state the same fact twice.  Thus we can never establish two facts (two
+statements) that are identical.  If we try to do this, the second one is
+silently ignored.</p>
+<p>So:</p>
+<pre class="literal-block">
+son_of(Bruce, Thomas, Norma)
+son_of(Bruce, Thomas, Norma)
+son_of(Bruce, Thomas, Norma)
+</pre>
+<p>is exactly the same as:</p>
+<pre class="literal-block">
+son_of(Bruce, Thomas, Norma)
+</pre>
+<p>Finally, we see that the position of each argument is important.  In our
+<tt class="docutils literal"><span class="pre">son_of</span></tt> example, the meaning of each argument is:</p>
+<pre class="literal-block">
+son_of(son, father, mother)
+</pre>
+<p>Thus, changing the order of the arguments changes the meaning of the
+statement.  So:</p>
+<pre class="literal-block">
+son_of(Bruce, Thomas, Norma)
+</pre>
+<p>and:</p>
+<pre class="literal-block">
+son_of(Bruce, Norma, Thomas)
+</pre>
+<p>mean different things!  The first statement says that Thomas is the father of
+Bruce, but the second statement says that Norma is the father!</p>
+<div class="section">
+<h2><a id="syntactic-structure-of-statements" name="syntactic-structure-of-statements">Syntactic Structure of Statements</a></h2>
+<p>So we see that statements in Pyke are very structured.</p>
+<p>Pyke stores statements in statement repositories called <a class="reference" href="FIX">knowledge bases</a>.
+You create knowledge bases to help you organize your statements.
+A <em>knowledge base</em> in Pyke roughly corresponds to a <em>module</em> in Python.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Pyke does not allow knowledge bases to contain other knowledge bases, only
+statements.  Thus, there is only one level of knowledge bases; and beneath
+each knowledge base, one level of statements.</p>
+</div>
+<p>So statements have three components:</p>
+<ol class="arabic simple">
+<li>The name of a knowledge base.  For example, <tt class="docutils literal"><span class="pre">family</span></tt>.</li>
+<li>The name of the relationship between the arguments.  For example, <tt class="docutils literal"><span class="pre">son_of</span></tt>.</li>
+<li>The statement arguments.  These are just Python data.  Currently in Pyke,
+there is a push for these arguments to be immutable.</li>
+</ol>
+<p>The syntax for a statement looks like this:</p>
+<pre class="literal-block">
+statement ::= IDENTIFIER '.' IDENTIFIER '(' {argument,} ')'
+</pre>
+<p>The first IDENTIFIER is the name of the knowledge base.  In our
+family_relations example, this is <tt class="docutils literal"><span class="pre">family</span></tt>.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">You'll see that within <a class="reference" href="rules/backward_chaining.html">backward-chaining rules</a>, the name of the
+knowledge base may be omitted.  It defaults to the currently selected
+<a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a> for this <a class="reference" href="FIX">rule base category</a>.  You'll learn more about this
+later.</p>
+</div>
+<p>The second IDENTIFIER is the name of the relationship between the arguments.
+Pyke calls this a <em>knowledge entity</em> or tidbit of knowledge.</p>
+<p>The arguments can be any simple Python data value (numbers, strings, None,
+True or False) or tuples of these values (including nested tuples).
+Currently, statements are supposed to be immutable, so all of the arguments
+are immutable.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last"><a class="reference" href="FIX">Prolog</a> allows arguments to be other statements.  But Pyke needs to
+integrate into Python and Python has no concept of a &quot;statement&quot;.  So we
+just use tuples in Pyke because Python is very happy with tuples!</p>
+</div>
+<p>So the complete statement for our family_relations example is:</p>
+<pre class="literal-block">
+family.son_of(Bruce, Thomas, Norma)
+</pre>
+</div>
+</div>
+
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
+            </div>
+          </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <h3>More:</h3>
+<div class="right-item"><a href="statements.html">Statements</a><p>What is a <em>statement</em> in Pyke?</p>
+</div>
+<div class="right-item"><a href="pattern_matching.html">Pattern Matching</a><p>Explanation of <em>pattern matching</em> and <em>pattern variables</em>.</p>
+</div>
+<div class="right-item"><a href="rules/index.html">Rules</a><p>Explanation of rules, forward-chaining and backward-chaining.</p>
+</div>
+
+            </div>
+          </td>
+        </tr>
+    </tbody>
+
+    <tfoot id="foot">
+        <tr id="foot2">
+          <td id="copyright" colspan="3">
+            Copyright &copy; 2007 Bruce Frederiksen
+          </td>
+        </tr>
+    </tfoot>
+  </table>
+
+  <div id="last-modified">
+    Page last modified Tue, Aug 12 2008.
+  </div>
+
+</body>
+</html>

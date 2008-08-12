@@ -23,7 +23,7 @@
 restindex
     crumb: KFB Syntax
     page-description:
-        The syntax of knowledge fact base (KFB) files, which is where you
+        The syntax of *Knowledge Fact Base* (KFB) files, which is where you
         write your universal facts.
     /description
     format: rest
@@ -45,7 +45,7 @@ keywords are:
    - False
 
 The name of the `fact base`_ is simply the filename with the ``.kfb`` suffix
-stripped.  This must be a valid python identifier.
+stripped.  This must be a valid Python identifier.
 
 Syntax for KFB File
 ===================

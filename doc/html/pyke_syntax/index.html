@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-    <title>KFB Syntax</title>
+    <title>Pyke Syntax</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="../stylesheets/pyke.css" type="text/css" />
 </head>
@@ -18,9 +18,7 @@
               <ul>
                   <li><a href="../index.html">Home</a></li>
 <li>&gt;</li>
-<li><a href="index.html">Pyke Syntax</a></li>
-<li>&gt;</li>
-<li>KFB Syntax</li>
+<li>Pyke Syntax</li>
 
               </ul>
             </div>
@@ -69,30 +67,79 @@
           <td id="main-td">
             <div id="main">
                 <a name="startcontent" id="startcontent"></a>
-                <div class="document" id="kfb-syntax">
-<h1 class="title">KFB Syntax</h1>
-<p>This uses the same lexical structure as <a class="reference" href="krb_syntax/index.html#lexical-structure">KRB files</a>, except that the only
-keywords are:</p>
-<blockquote>
-<ul class="simple">
-<li>None</li>
-<li>True</li>
-<li>False</li>
-</ul>
-</blockquote>
-<p>The name of the <a class="reference" href="fact_bases.html">fact base</a> is simply the filename with the <tt class="docutils literal"><span class="pre">.kfb</span></tt> suffix
-stripped.  This must be a valid Python identifier.</p>
+                <div class="document" id="pyke-syntax">
+<h1 class="title">Pyke Syntax</h1>
+<p>Pyke has three different kinds of source files for the three main types of
+<a class="reference" href="FIX">knowledge bases</a>:</p>
+<ol class="arabic simple">
+<li><em>Knowledge Fact Base</em> (KFB) files for <a class="reference" href="FIX">fact bases</a>.</li>
+<li><em>Knowledge Rule Base</em> (KRB) files for <a class="reference" href="FIX">rule bases</a>.</li>
+<li><em>Knowledge Question Base</em> (KQB) files for <a class="reference" href="FIX">question bases</a>.</li>
+</ol>
+<p>Each type of source file ends in a different file suffix: .kfb, .krb or .kqb.</p>
 <div class="section">
-<h2><a id="syntax-for-kfb-file" name="syntax-for-kfb-file">Syntax for KFB File</a></h2>
-<pre class="literal-block">
-file ::= [NL] {fact}
-
-fact ::= IDENTIFIER '(' [{data,}] ')'
-
-data ::= 'None' | 'True' | 'False'
-       | NUMBER | IDENTIFIER | STRING
-       | '(' [{data,}] ')'
-</pre>
+<h2><a id="syntax-legend" name="syntax-legend">Syntax Legend</a></h2>
+<p>To describe this syntax, the following punctuation is used:</p>
+<dl class="docutils">
+<dt>'<em>any_chars</em>'</dt>
+<dd>Required punctuation or keyword: <em>any_chars</em>.</dd>
+<dt><em>a</em> | <em>b</em></dt>
+<dd>Alternation: <em>a</em> or <em>b</em>.</dd>
+<dt>[<em>a</em>]</dt>
+<dd>Optional <em>a</em>.</dd>
+<dt>{<em>a</em>}</dt>
+<dd>One or more <em>a</em>'s.  <strong>But</strong> it is understood that if <em>a</em> ends in a comma,
+the comma after the last <em>a</em> is optional.</dd>
+<dt>IDENTIFIER</dt>
+<dd>Any legal Python identifier.  Example: <em>foobar</em></dd>
+<dt>NUMBER</dt>
+<dd>Any legal Python integer or floating point literal.
+Examples: <em>123</em>, <em>3.14</em>.</dd>
+<dt>STRING</dt>
+<dd>Any legal Python string literal.
+Examples: <em>'Hi Mom!'</em>, <em>u&quot;Hi Dad!\n&quot;</em>, <em>r'''don't gobble my \'s!'''</em>,
+<em>ur&quot;&quot;&quot;leave \'s alone!&quot;&quot;&quot;</em>.</dd>
+<dt>TEXT</dt>
+<dd>Only used in KQB files.  This signifies any text (any characters) other
+than then the delimiter characters containing the TEXT.</dd>
+<dt>PARAMETERIZED_TEXT</dt>
+<dd>Only used in KQB files.  This signifies any text (any characters) through
+the end of the line and all text on subsequent lines that are indented at
+least as much as the character position on the line of the first
+PARAMETERIZED_TEXT line.  All PARAMETERIZED_TEXT is treated as a
+<a class="reference" href="http://docs.python.org/lib/node40.html">string.Template</a> and may include <tt class="docutils literal"><span class="pre">$IDENTIFIER</span></tt> or <tt class="docutils literal"><span class="pre">${IDENTIFIER}</span></tt>
+parameters.  All other <tt class="docutils literal"><span class="pre">$</span></tt> characters must be doubled (<tt class="docutils literal"><span class="pre">$$</span></tt>).</dd>
+<dt>REGEXP_TEXT</dt>
+<dd>Only used in KQB files.  This signifies any text (any characters) excluding
+unescaped backslashes (<tt class="docutils literal"><span class="pre">\\</span></tt>).  These are given to the Python's <tt class="docutils literal"><span class="pre">re</span></tt>
+module as regular expressions and must follow Python's <a class="reference" href="http://docs.python.org/lib/re-syntax.html">regular expression
+syntax</a>.</dd>
+<dt>NL</dt>
+<dd>One or more newlines.</dd>
+<dt>INDENT</dt>
+<dd>The following text must be indented to a higher level (more) than the
+previous text.</dd>
+<dt>DEINDENT</dt>
+<dd>The following text must be indented one less level than the previous text.</dd>
+</dl>
+</div>
+<div class="section">
+<h2><a id="lexical-structure" name="lexical-structure">Lexical Structure</a></h2>
+<p>The lexical structure is much like Python.  Like Python, indenting is
+significant.  It uses the same commenting, line continuation and literal
+formats for strings and numbers (but doesn't use complex numbers).  It also
+uses the same rules for forming identifiers.</p>
+<p>The two notable exceptions to Python conventions are:</p>
+<ol class="arabic simple">
+<li>Identifiers may be used as strings, without requiring quotes.<ul>
+<li>So <tt class="docutils literal"><span class="pre">foobar</span></tt> is the same as <tt class="docutils literal"><span class="pre">'foobar'</span></tt>.</li>
+</ul>
+</li>
+<li>Singleton tuples do not require a trailing comma.<ul>
+<li>So <tt class="docutils literal"><span class="pre">(1)</span></tt> is the same as <tt class="docutils literal"><span class="pre">(1,)</span></tt>.</li>
+</ul>
+</li>
+</ol>
 </div>
 </div>
 

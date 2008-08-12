@@ -37,15 +37,82 @@ restindex
 Pyke Syntax
 ===========
 
-Pyke has three different kinds of source files:
+Pyke has three different kinds of source files for the three main types of
+`knowledge bases`_:
 
-#. KFB files.
-#. KRB files.
-#. KQB files.
+#. *Knowledge Fact Base* (KFB) files for `fact bases`_.
+#. *Knowledge Rule Base* (KRB) files for `rule bases`_.
+#. *Knowledge Question Base* (KQB) files for `question bases`_.
 
-FIX
+Each type of source file ends in a different file suffix: .kfb, .krb or .kqb.
 
-.. _question base: question_bases.html
-.. _fact bases: fact_bases.html
-.. _special: special.html
-.. _rule bases: rule_bases.html
+Syntax Legend
+==============
+
+To describe this syntax, the following punctuation is used:
+
+'*any_chars*'
+   Required punctuation or keyword: *any_chars*.
+*a* | *b*
+   Alternation: *a* or *b*.
+[*a*]
+   Optional *a*.
+{*a*}
+   One or more *a*'s.  **But** it is understood that if *a* ends in a comma,
+   the comma after the last *a* is optional.
+IDENTIFIER
+   Any legal Python identifier.  Example: *foobar*
+NUMBER
+   Any legal Python integer or floating point literal.
+   Examples: *123*, *3.14*.
+STRING
+   Any legal Python string literal.
+   Examples: *'Hi Mom!'*, *u"Hi Dad!\\n"*, *r'''don't gobble my \\'s!'''*,
+   *ur"""leave \\'s alone!"""*.
+TEXT
+   Only used in KQB files.  This signifies any text (any characters) other
+   than then the delimiter characters containing the TEXT.
+PARAMETERIZED_TEXT
+   Only used in KQB files.  This signifies any text (any characters) through
+   the end of the line and all text on subsequent lines that are indented at
+   least as much as the character position on the line of the first
+   PARAMETERIZED_TEXT line.  All PARAMETERIZED_TEXT is treated as a
+   `string.Template`_ and may include ``$IDENTIFIER`` or ``${IDENTIFIER}``
+   parameters.  All other ``$`` characters must be doubled (``$$``).
+REGEXP_TEXT
+   Only used in KQB files.  This signifies any text (any characters) excluding
+   unescaped backslashes (``\\``).  These are given to the Python's ``re``
+   module as regular expressions and must follow Python's `regular expression
+   syntax`_.
+NL
+   One or more newlines.
+INDENT
+   The following text must be indented to a higher level (more) than the
+   previous text.
+DEINDENT
+   The following text must be indented one less level than the previous text.
+
+Lexical Structure
+=======================
+
+The lexical structure is much like Python.  Like Python, indenting is
+significant.  It uses the same commenting, line continuation and literal
+formats for strings and numbers (but doesn't use complex numbers).  It also
+uses the same rules for forming identifiers.
+
+The two notable exceptions to Python conventions are:
+
+#. Identifiers may be used as strings, without requiring quotes.
+
+   - So ``foobar`` is the same as ``'foobar'``.
+
+#. Singleton tuples do not require a trailing comma.
+
+   - So ``(1)`` is the same as ``(1,)``.
+
+.. _knowledge bases: FIX
+.. _fact bases: FIX
+.. _rule bases: FIX
+.. _question bases: FIX
+.. _string.Template: http://docs.python.org/lib/node40.html
+.. _regular expression syntax: http://docs.python.org/lib/re-syntax.html

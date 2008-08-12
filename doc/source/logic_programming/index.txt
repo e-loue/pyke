@@ -23,8 +23,8 @@
 restindex
     crumb: Logic Programming
     page-description:
-        An overview of Logic Programming in Pyke, including statements,
-        pattern matching and rules.
+        An tutorial on logic programming in Pyke, including *statements*,
+        *pattern matching* and *rules*.
     /description
     section-pages: , statements, pattern_matching, rules/index
     format: rest
@@ -35,12 +35,12 @@ restindex
 /restindex
 
 ==========================
-Logic Programming Overview
+Logic Programming Tutorial
 ==========================
 
 Pyke is an inference engine that applies rules_ to facts_ to establish
 additional facts (through forward-chaining_ rules), and/or to prove *goals*
-and optionally assemble python functions
+and optionally assemble Python functions
 into customized call graphs, called plans_ (through backward-chaining_ rules).
 
 Pyke may then be reset_, deleting the last set of facts, so that the cycle
@@ -48,11 +48,11 @@ may be repeated.  For each cycle a different rule base may be activated_.
 
 The plan_ capability allows the postponement of code execution until the
 top-level goal has been completely proven.  This shields the code from
-blind alleys and backtracking_ within the rules.
+blind alleys and the backtracking_ that occurs within the rules.
 
 Once a plan_ has been created, it may be executed multiple times with different
 arguments.  It may also be pickled_, and later run again only requiring one
-small pyke module.
+small Pyke module.
 
 Pyke also provides an end user question_ capability, as well as the capability
 to run commands_ on the local system to guide the inferencing.

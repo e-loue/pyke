@@ -37,23 +37,24 @@
             <div id="left-nav-div">
               
 <div class="title-nav"><a href="../../index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../../why_pyke.html">Why Pyke?</a></div>
+<div class="normal-nav"><a href="../../steps_to_using_pyke.html">Steps to Using Pyke</a></div>
+<div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
 
 <div class="title-nav"><a href="../index.html">Logic Programming</a></div><div class="nav-branch">
-<div class="normal-nav"><a href="../knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="normal-nav"><a href="../statements.html">Statements</a></div>
+<div class="normal-nav"><a href="../pattern_matching.html">Pattern Matching</a></div>
 
 <div class="title-nav"><a href="index.html">Rules</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="forward_chaining.html">Forward Chaining</a></div>
 <div class="normal-nav"><a href="backward_chaining.html">Backward Chaining</a></div>
+<div class="normal-nav"><a href="plans.html">Plans</a></div>
 </div>
-<div class="normal-nav"><a href="../plans.html">Plans</a></div>
 </div>
-<div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="../../knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="normal-nav"><a href="../../pyke_syntax/index.html">Pyke Syntax</a></div>
 <div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
-<div class="normal-nav"><a href="../../kfb_syntax.html">KFB Syntax</a></div>
-<div class="normal-nav"><a href="../../kqb_syntax.html">KQB Syntax</a></div>
-<div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../../examples.html">Examples</a></div>
-<div class="normal-nav"><a href="../../logic_tricks.html">Logic Tricks</a></div>
 <div class="normal-nav"><a href="../../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
 </div>
 
@@ -77,8 +78,8 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="backward-chaining">
 <h1 class="title">Backward Chaining</h1>
-<p>Backward chaining <a class="reference" href="index.html">rules</a> are processed when your program asks pyke to <a class="reference" href="../../using_pyke.html#proving-goals">prove</a>
-a specific <em>goal</em>.  Pyke will only use <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a> <a class="reference" href="../knowledge_bases/rule_bases.html">rule bases</a> to do the
+<p>Backward chaining <a class="reference" href="index.html">rules</a> are processed when your program asks Pyke to <a class="reference" href="../../using_pyke.html#proving-goals">prove</a>
+a specific <em>goal</em>.  Pyke will only use <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a> <a class="reference" href="../../knowledge_bases/rule_bases.html">rule bases</a> to do the
 proof.</p>
 <div class="section">
 <h2><a id="example" name="example">Example</a></h2>
@@ -128,14 +129,14 @@ but you'll notice three differences:</p>
 <li>The <a class="reference" href="index.html">rule's</a> <strong>if</strong> and <strong>then</strong> parts are reversed.</li>
 <li>The <a class="reference" href="index.html">rules</a> use different keywords: <tt class="docutils literal"><span class="pre">use</span></tt> for the <strong>then</strong> clause
 and <tt class="docutils literal"><span class="pre">when</span></tt> for the <strong>if</strong> clause.</li>
-<li>The <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a> established by backward-chaining do not have a knowledge
+<li>The <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> established by backward-chaining do not have a knowledge
 base name prefix.  In this case, the knowledge base name defaults to
-the <a class="reference" href="../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> of this <a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a> (it's root rule base name).</li>
+the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> of this <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> (it's root rule base name).</li>
 </ol>
 </div>
 <div class="section">
 <h2><a id="how-backward-chaining-rules-are-run" name="how-backward-chaining-rules-are-run">How Backward-Chaining Rules are Run</a></h2>
-<p>These <a class="reference" href="index.html">rules</a> are not used until you ask pyke to <a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a goal.</p>
+<p>These <a class="reference" href="index.html">rules</a> are not used until you ask Pyke to <a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a goal.</p>
 <p>The easiest way to do this is with
 <em>some_engine</em>.prove_1_ or <em>some_engine</em>.prove_n_.  <a class="reference" href="../../using_pyke.html#proving-goals">Prove_1</a> only
 returns the first proof found and then stops (or raises pyke.CanNotProve).
@@ -171,7 +172,7 @@ arguments you specified as a tuple, along with the <a class="reference" href="..
 </blockquote>
 <p>Pyke performs the proof by:</p>
 <ol class="arabic simple">
-<li>Checking to see if the goal is simply a known <a class="reference" href="../knowledge_bases/fact_bases.html#facts">fact</a>.
+<li>Checking to see if the goal is simply a known <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">fact</a>.
 If so, it has a proof!</li>
 <li>Look for the first backward-chaining <a class="reference" href="index.html">rule</a> that concludes the goal
 in its <tt class="docutils literal"><span class="pre">use</span></tt> clause.<ul>
@@ -200,17 +201,17 @@ goal.</p>
 <h2><a id="backtracking" name="backtracking">Backtracking</a></h2>
 <p>Also note that while processing each subgoal within a <a class="reference" href="index.html">rule's</a> <tt class="docutils literal"><span class="pre">when</span></tt> clause:</p>
 <ul class="simple">
-<li>If pyke succeeds at proving the subgoal:<ul>
+<li>If Pyke succeeds at proving the subgoal:<ul>
 <li>Pyke will proceed to the next subgoal within the <tt class="docutils literal"><span class="pre">when</span></tt> clause.</li>
-<li>If pyke reaches the end of the <tt class="docutils literal"><span class="pre">when</span></tt> clause, the <a class="reference" href="index.html">rule</a> succeeds.</li>
+<li>If Pyke reaches the end of the <tt class="docutils literal"><span class="pre">when</span></tt> clause, the <a class="reference" href="index.html">rule</a> succeeds.</li>
 </ul>
 </li>
-<li>If pyke fails at proving the subgoal:<ul>
+<li>If Pyke fails at proving the subgoal:<ul>
 <li>Pyke will back up to the prior subgoal within the <tt class="docutils literal"><span class="pre">when</span></tt> clause
 and try to find another proof for it.  The process starts over
 from this prior subgoal, going forward or backing up depending on
 whether another proof can be found.</li>
-<li>If pyke reaches the beginning of the <tt class="docutils literal"><span class="pre">when</span></tt> clause, the <a class="reference" href="index.html">rule</a>
+<li>If Pyke reaches the beginning of the <tt class="docutils literal"><span class="pre">when</span></tt> clause, the <a class="reference" href="index.html">rule</a>
 fails.</li>
 </ul>
 </li>
@@ -235,6 +236,8 @@ clause to try alternate subproofs is called <em>backtracking</em>.</p>
 </div>
 <div class="right-item"><a href="backward_chaining.html">Backward Chaining</a><p>Explanation of backward-chaining rules.</p>
 </div>
+<div class="right-item"><a href="plans.html">Plans and Automatic Program Generation</a><p>Explanation of plans and automatic program generation.</p>
+</div>
 
             </div>
           </td>
@@ -251,7 +254,7 @@ clause to try alternate subproofs is called <em>backtracking</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Sat, Aug 09 2008.
+    Page last modified Mon, Aug 11 2008.
   </div>
 
 </body>

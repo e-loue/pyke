@@ -38,9 +38,7 @@
 <div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="logic_programming/index.html">Logic Programming</a></div>
 <div class="normal-nav"><a href="knowledge_bases/index.html">Knowledge Bases</a></div>
-<div class="normal-nav"><a href="kfb_syntax.html">KFB Syntax</a></div>
-<div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
-<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="pyke_syntax/index.html">Pyke Syntax</a></div>
 <div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
 <div class="normal-nav"><a href="examples.html">Examples</a></div>
 <div class="normal-nav"><a href="PyCon2008-paper.html">PyCon 2008 Paper</a></div>
@@ -66,13 +64,13 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="examples">
 <h1 class="title">Examples</h1>
-<p>Several examples are included to help you become familiar with pyke.  If you
+<p>Several examples are included to help you become familiar with Pyke.  If you
 did an svn checkout, these should all be included in the <tt class="docutils literal"><span class="pre">examples</span></tt> directory.
-If you used easy_install for pyke, you'll need to download the pyke_examples
+If you used easy_install for Pyke, you'll need to download the pyke_examples
 tar file separately <a class="reference" href="http://sourceforge.net/project/showfiles.php?group_id=207724">here</a>.</p>
 <p>Each example is in its own sub-directory and has a README file to get you
-started.  They all have <a class="reference" href="krb_syntax/index.html">.krb files</a> and a python module to run the example
-that also demonstrates <a class="reference" href="using_pyke.html">how to call pyke</a> from your python program.</p>
+started.  They all have <a class="reference" href="krb_syntax/index.html">.krb files</a> and a Python module to run the example
+that also demonstrates <a class="reference" href="using_pyke.html">how to call Pyke</a> from your Python program.</p>
 <div class="section">
 <h2><a id="family-relations" name="family-relations">family_relations</a></h2>
 <p>This is a good basic example to start with.</p>
@@ -101,13 +99,13 @@ too.</li>
 <div class="section">
 <h2><a id="knapsack" name="knapsack">knapsack</a></h2>
 <p>At the <a class="reference" href="http://us.pycon.org/2008/about/">PyCon 2008</a> conference, somebody asked about the <a class="reference" href="http://en.wikipedia.org/wiki/Knapsack_problem">knapsack problem</a>.
-We found a solution in prolog <a class="reference" href="http://www.ise.gmu.edu/~duminda/classes/fall03/set3.ppt">here</a> (starting on page 19), and rewrote it in
-pyke.  This is a quick simple little example.</p>
+We found a solution in Prolog <a class="reference" href="http://www.ise.gmu.edu/~duminda/classes/fall03/set3.ppt">here</a> (starting on page 19), and rewrote it in
+Pyke.  This is a quick simple little example.</p>
 </div>
 <div class="section">
 <h2><a id="sqlgen" name="sqlgen">sqlgen</a></h2>
 <p>Pyke was originally developed as the control component for a web framework.
-This example shows how pyke can automatically generate SQL SELECT statements,
+This example shows how Pyke can automatically generate SQL SELECT statements,
 given a set of tables that the calling program has keys to and a tuple of the
 desired column names.  Column names specified in the top-level tuple are
 expected to produce a single value each.  Nested tuples are used when multiple
@@ -116,7 +114,7 @@ the result rows.</p>
 <p>The data model used for the requested columns is that tables inherit the
 columns from tables they link to.  So if there is a 1-many relationship
 between tables A and B (1 A row has many B rows), the B table inherits the
-columns from table A through it's link to table A.  Thus, the pyke rules will
+columns from table A through it's link to table A.  Thus, the Pyke rules will
 automatically figure out the table joins.</p>
 <p>The program automatically introspects the schema information.  For this
 example, it assumes that <cite>id</cite> is the primary key for each table, and that
@@ -156,28 +154,22 @@ multiple <a class="reference" href="knowledge_bases/rule_bases.html">rule bases<
                 <h3>More:</h3>
 <div class="right-item"><a href="why_pyke.html">Why Pyke?</a><p>What does Pyke do for me?</p>
 </div>
-<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A very brief look at the steps involved in programming in Pyke.</p>
+<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A brief list of the steps involved in programming in Pyke (with lots
+of links).</p>
 </div>
-<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
+<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing Pyke.</p>
 </div>
-<div class="right-item"><a href="logic_programming/index.html">Logic Programming Overview</a><p>An overview of Logic Programming in Pyke, including statements,
-pattern matching and rules.</p>
+<div class="right-item"><a href="logic_programming/index.html">Logic Programming Tutorial</a><p>An tutorial on logic programming in Pyke, including <em>statements</em>,
+<em>pattern matching</em> and <em>rules</em>.</p>
 </div>
 <div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered
 into named repositories called <em>knowledge bases</em>.</p>
 </div>
-<div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of knowledge fact base (KFB) files, which is where you
-write your universal facts.</p>
+<div class="right-item"><a href="pyke_syntax/index.html">Pyke Syntax</a><p>The syntax of Pyke's three different kinds of source files.</p>
 </div>
-<div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of knowledge question base (KQB) files, which is where you
-write your end user questions.</p>
+<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your Python program uses Pyke.</p>
 </div>
-<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
-write your rules.</p>
-</div>
-<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
-</div>
-<div class="right-item"><a href="examples.html">Examples</a><p>This gives an overview of the examples provided with pyke.</p>
+<div class="right-item"><a href="examples.html">Examples</a><p>An overview of the examples provided with Pyke.</p>
 </div>
 <div class="right-item"><a href="PyCon2008-paper.html">Applying Expert System Technology to Code Reuse with Pyke</a><p>Paper presented at the PyCon 2008 conference in Chicago.</p>
 </div>

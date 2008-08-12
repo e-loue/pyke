@@ -35,23 +35,24 @@
             <div id="left-nav-div">
               
 <div class="title-nav"><a href="../../index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../../why_pyke.html">Why Pyke?</a></div>
+<div class="normal-nav"><a href="../../steps_to_using_pyke.html">Steps to Using Pyke</a></div>
+<div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
 
 <div class="title-nav"><a href="../index.html">Logic Programming</a></div><div class="nav-branch">
-<div class="normal-nav"><a href="../knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="normal-nav"><a href="../statements.html">Statements</a></div>
+<div class="normal-nav"><a href="../pattern_matching.html">Pattern Matching</a></div>
 
 <div class="title-nav"><a href="index.html">Rules</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="forward_chaining.html">Forward Chaining</a></div>
 <div class="normal-nav"><a href="backward_chaining.html">Backward Chaining</a></div>
+<div class="normal-nav"><a href="plans.html">Plans</a></div>
 </div>
-<div class="normal-nav"><a href="../plans.html">Plans</a></div>
 </div>
-<div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="../../knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="normal-nav"><a href="../../pyke_syntax/index.html">Pyke Syntax</a></div>
 <div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
-<div class="normal-nav"><a href="../../kfb_syntax.html">KFB Syntax</a></div>
-<div class="normal-nav"><a href="../../kqb_syntax.html">KQB Syntax</a></div>
-<div class="normal-nav"><a href="../../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../../examples.html">Examples</a></div>
-<div class="normal-nav"><a href="../../logic_tricks.html">Logic Tricks</a></div>
 <div class="normal-nav"><a href="../../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
 </div>
 
@@ -78,9 +79,9 @@
 <div class="section">
 <h2><a id="premises-and-conclusions" name="premises-and-conclusions">Premises and Conclusions</a></h2>
 <p>Rules have two parts to them: an <strong>if</strong> part (the <em>premises</em>),
-and a <strong>then</strong> part (the <em>conclusions</em>).  (Though pyke uses different
+and a <strong>then</strong> part (the <em>conclusions</em>).  (Though Pyke uses different
 names for these).
-Each of these <strong>if</strong> and <strong>then</strong> parts contain one or more <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a> or <a class="reference" href="../../krb_syntax/bc_rule.html#use-clause">goals</a>
+Each of these <strong>if</strong> and <strong>then</strong> parts contain one or more <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> or <a class="reference" href="../../krb_syntax/bc_rule.html#use-clause">goals</a>
 represented by <a class="reference" href="../../krb_syntax/pattern.html">patterns</a>.</p>
 <p>Logically, the rule says that if <strong>all</strong> of the <em>premises</em> in the <strong>if</strong> part
 of the rule are true, then each of the <em>conclusions</em> in the <strong>then</strong> part
@@ -88,21 +89,21 @@ of the rule must also be true.</p>
 </div>
 <div class="section">
 <h2><a id="inferencing" name="inferencing">Inferencing</a></h2>
-<p>Rules are specified individually within a <a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a>.  They are not nested
-or explicitly linked to each other.  So pyke must automatically figure out
+<p>Rules are specified individually within a <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a>.  They are not nested
+or explicitly linked to each other.  So Pyke must automatically figure out
 how to combine these rules to accomplish some larger task.  This is called
-<em>inferencing</em> and there are two different approaches that pyke uses,
+<em>inferencing</em> and there are two different approaches that Pyke uses,
 depending on the rule's type.</p>
 <ul class="simple">
-<li>All <a class="reference" href="forward_chaining.html">forward-chaining</a> rules are processed when a <a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a> is <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a>.<ul>
+<li>All <a class="reference" href="forward_chaining.html">forward-chaining</a> rules are processed when a <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> is <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a>.<ul>
 <li><a class="reference" href="forward_chaining.html">Forward-chaining</a> rules may <a class="reference" href="../../using_pyke.html#setting-up-each-case">assert</a> new facts, and <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific
-<a class="reference" href="../knowledge_bases/rule_bases.html">rule bases</a>.</li>
+<a class="reference" href="../../knowledge_bases/rule_bases.html">rule bases</a>.</li>
 </ul>
 </li>
-<li><a class="reference" href="backward_chaining.html">Backward-chaining</a> rules are processed when your program asks pyke to
+<li><a class="reference" href="backward_chaining.html">Backward-chaining</a> rules are processed when your program asks Pyke to
 <a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a specific <em>goal</em>.<ul>
 <li>These rules don't <a class="reference" href="../../using_pyke.html#setting-up-each-case">assert</a> new facts or <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific rule
-bases.  But they do have the ability to assemble python functions into
+bases.  But they do have the ability to assemble Python functions into
 a customized call graph or program, called a <a class="reference" href="../plans.html">plan</a>, to meet a specific need.</li>
 </ul>
 </li>
@@ -123,6 +124,8 @@ a customized call graph or program, called a <a class="reference" href="../plans
 </div>
 <div class="right-item"><a href="backward_chaining.html">Backward Chaining</a><p>Explanation of backward-chaining rules.</p>
 </div>
+<div class="right-item"><a href="plans.html">Plans and Automatic Program Generation</a><p>Explanation of plans and automatic program generation.</p>
+</div>
 
             </div>
           </td>
@@ -139,7 +142,7 @@ a customized call graph or program, called a <a class="reference" href="../plans
   </table>
 
   <div id="last-modified">
-    Page last modified Sat, Aug 09 2008.
+    Page last modified Mon, Aug 11 2008.
   </div>
 
 </body>

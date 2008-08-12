@@ -75,7 +75,7 @@ Rest Variable
 The ``*variable`` at the end of a tuple pattern will match the rest of the
 tuple.  Thus, ``variable`` is always bound to a (possibly empty) tuple.
 
-The syntax is taken from rest parameter syntax in python function definitions.
+The syntax is taken from rest parameter syntax in Python function definitions.
 The difference here is that the variable needs a ``$`` on it.
 
 You may use either a named variable or an anonymous variable here.

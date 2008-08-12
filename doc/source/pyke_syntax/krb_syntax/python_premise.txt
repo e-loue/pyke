@@ -23,7 +23,7 @@
 restindex
     crumb: Python Premise
     page-description:
-        The syntax of a python premise.
+        The syntax of a *python_premise*.
     /description
     format: rest
     encoding: utf8
@@ -46,7 +46,7 @@ Python_premise
                      | 'check' python_exp
                      | python_statements
 
-Each of these clauses results in a python expression being executed.  Their
+Each of these clauses results in a Python expression being executed.  Their
 meaning is as follows:
 
 pattern_ '=' python_exp
@@ -67,7 +67,7 @@ pattern_ 'in' python_exp
     individually.
 'check' python_exp
     *python_exp* is evaluated.  If the result is
-    python "true" the clause succeeds, otherwise
+    Python "true" the clause succeeds, otherwise
     it fails.  The clause always fails on backtracking_.
 
 
@@ -81,29 +81,29 @@ Python_statements
                               {python_statement NL}
                           DEINDENT
 
-This clause allows the inclusion of arbitrary python statements in your
+This clause allows the inclusion of arbitrary Python statements in your
 rules_.  This premise always succeeds; and fails on backtracking.
 
 .. Tip::
    It is important to always keep in mind the difference between `pattern
-   variables`_ and python variables.  `Pattern variables`_ are always
+   variables`_ and Python variables.  `Pattern variables`_ are always
    indicated with a ``$`` and are only bound to a value during inferencing.
    Thus, a ``python_statement`` may not set a `pattern variable`_; you must
    use the special `pattern variable`_ assignment::
 
         <pattern> = <some python expression>
    
-   Also, when a `pattern variable`_ is used within a python expression or
+   Also, when a `pattern variable`_ is used within a Python expression or
    statement, it must be bound to a value that does not contain any unbound
    `pattern variables`_.
 
    Python variables are not visible to the inference engine.  They are local
-   variables that are also not visible to python code in other rules_ or other
+   variables that are also not visible to Python code in other rules_ or other
    invocations of the same rule_.
 
-   Finally, python variables in the `when clause`_ of a `backward-chaining
-   rule`_ are not visible to the python code in the `with clause`_ of the same
-   rule_.  (These end up in two different python functions after the `.krb
+   Finally, Python variables in the `when clause`_ of a `backward-chaining
+   rule`_ are not visible to the Python code in the `with clause`_ of the same
+   rule_.  (These end up in two different Python functions after the `.krb
    file`_ is compiled).  So this won't work::
 
         some_bc_rule
@@ -115,7 +115,7 @@ rules_.  This premise always succeeds; and fails on backtracking.
             with
                 for x in x_list: process(x)
 
-   In this case, assign the value of the python variable to a `pattern
+   In this case, assign the value of the Python variable to a `pattern
    variable`_ in the `when clause`_ and then use that `pattern variable`_ in
    the `with clause`_::
 

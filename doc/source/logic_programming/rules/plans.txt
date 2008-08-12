@@ -42,7 +42,7 @@ do automatic program generation.
 Adding Plans to Backward-Chaining Rules
 ============================================
 
-The way this is done is by attaching python functions to 
+The way this is done is by attaching Python functions to 
 backward-chaining_ rules_.  These functions are written in the *with*
 clause at the end of each rule_ in the `.krb file`_.  They don't affect how
 the rules_ run to prove a goal, but are
@@ -123,7 +123,7 @@ How the Plan Functions are Generated for This Example
 
 Each of these rules_ will have a plan function generated for it.  These plan
 functions are generated with the same name as the rule_ name.  Thus, the
-name of the generated python plan function for the first rule would be
+name of the generated Python plan function for the first rule would be
 "transfer1".
 
 The plan function generated for the first rule consists of two lines taken
@@ -268,11 +268,11 @@ still be called successfully, resulting in different calls from the initial
 Conclusion
 ==============
 
-So you can see that it quite easy to use pyke to automatically combine
-python functions into programs!
+So you can see that it quite easy to use Pyke to automatically combine
+Python functions into programs!
 
-It also allows data within each python function to
-be specified using a `pattern variable`_ so that pyke can customize these
+It also allows data within each Python function to
+be specified using a `pattern variable`_ so that Pyke can customize these
 values to match the specific situation.
 
 .. _backward-chaining: rules/backward_chaining.html

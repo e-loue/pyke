@@ -126,7 +126,7 @@ even more great, great... ``family.child_parent`` relationships.
 Forward-Chaining Defined
 ============================
 
-Thus, even though pyke runs the rules_ in order, it will go back and rerun
+Thus, even though Pyke runs the rules_ in order, it will go back and rerun
 prior rules_ if a new fact_ is asserted_ that matches any of the prior
 `rule's`_ premises in its ``foreach`` clause.  This forms an implicit linkage
 from one `rule's`_ **then** (``assert``) clause

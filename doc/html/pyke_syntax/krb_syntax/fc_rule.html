@@ -3,7 +3,7 @@
 <head>
     <title>Fc_rule Syntax</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="../stylesheets/pyke.css" type="text/css" />
+    <link rel="stylesheet" href="../../stylesheets/pyke.css" type="text/css" />
 </head>
 <body>
   <table id="page-table">
@@ -16,7 +16,9 @@
           <th id="crumb-line">
             <div id="nav">
               <ul>
-                  <li><a href="../index.html">Home</a></li>
+                  <li><a href="../../index.html">Home</a></li>
+<li>&gt;</li>
+<li><a href="../index.html">Pyke Syntax</a></li>
 <li>&gt;</li>
 <li><a href="index.html">KRB Syntax</a></li>
 <li>&gt;</li>
@@ -34,14 +36,15 @@
           <td id="left-nav">
             <div id="left-nav-div">
               
-<div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
-<div class="normal-nav"><a href="../why_pyke.html">Why Pyke?</a></div>
-<div class="normal-nav"><a href="../steps_to_using_pyke.html">Steps to Using Pyke</a></div>
-<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
-<div class="normal-nav"><a href="../logic_programming/index.html">Logic Programming</a></div>
-<div class="normal-nav"><a href="../knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="title-nav"><a href="../../index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../../why_pyke.html">Why Pyke?</a></div>
+<div class="normal-nav"><a href="../../steps_to_using_pyke.html">Steps to Using Pyke</a></div>
+<div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="../../logic_programming/index.html">Logic Programming</a></div>
+<div class="normal-nav"><a href="../../knowledge_bases/index.html">Knowledge Bases</a></div>
+
+<div class="title-nav"><a href="../index.html">Pyke Syntax</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="../kfb_syntax.html">KFB Syntax</a></div>
-<div class="normal-nav"><a href="../kqb_syntax.html">KQB Syntax</a></div>
 
 <div class="title-nav"><a href="index.html">KRB Syntax</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="fc_rule.html">Fc_rule</a></div>
@@ -50,9 +53,11 @@
 <div class="normal-nav"><a href="compound_premise.html">Compound Premise</a></div>
 <div class="normal-nav"><a href="python_premise.html">Python Premise</a></div>
 </div>
-<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
-<div class="normal-nav"><a href="../examples.html">Examples</a></div>
-<div class="normal-nav"><a href="../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
+<div class="normal-nav"><a href="../kqb_syntax.html">KQB Syntax</a></div>
+</div>
+<div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../../examples.html">Examples</a></div>
+<div class="normal-nav"><a href="../../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
 </div>
 
             </div>
@@ -90,7 +95,7 @@ fc_rule ::= IDENTIFIER NL INDENT
             DEINDENT
 </pre>
 <p>The <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt> uniquely names this <a class="reference" href="../logic_programming/rules/index.html">rule</a> and is used as the corresponding
-python function name in the generated &lt;rb_name&gt;_fc.py file.</p>
+Python function name in the generated &lt;rb_name&gt;_fc.py file.</p>
 </div>
 <div class="section">
 <h2><a id="foreach-clause" name="foreach-clause">Foreach clause</a></h2>
@@ -122,11 +127,11 @@ assertion ::= fact_pattern
             | python_statements
 </pre>
 <p>Here is the link to the definitions of <a class="reference" href="python_premise.html#python-statements">python_statements</a>.</p>
-<p>The <tt class="docutils literal"><span class="pre">assert</span></tt> clause lists new <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> to assert, and/or python
+<p>The <tt class="docutils literal"><span class="pre">assert</span></tt> clause lists new <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> to assert, and/or Python
 statements to execute each time the <a class="reference" href="../logic_programming/rules/index.html">rule</a> is fired.  Each of these may
 include <a class="reference" href="pattern.html#pattern-variable">pattern variables</a> which should also appear in the <tt class="docutils literal"><span class="pre">foreach</span></tt>
 clause where they are bound to a value.  These values will then be substituted
-into the <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> and python statements.</p>
+into the <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> and Python statements.</p>
 </div>
 </div>
 
@@ -147,7 +152,7 @@ into the <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts
 </div>
 <div class="right-item"><a href="compound_premise.html">Compound Premise Syntax</a><p>The syntax of compound premises.</p>
 </div>
-<div class="right-item"><a href="python_premise.html">Python Premise Syntax</a><p>The syntax of a python premise.</p>
+<div class="right-item"><a href="python_premise.html">Python Premise Syntax</a><p>The syntax of a <em>python_premise</em>.</p>
 </div>
 
             </div>

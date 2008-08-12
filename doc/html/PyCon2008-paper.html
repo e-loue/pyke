@@ -38,9 +38,7 @@
 <div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="logic_programming/index.html">Logic Programming</a></div>
 <div class="normal-nav"><a href="knowledge_bases/index.html">Knowledge Bases</a></div>
-<div class="normal-nav"><a href="kfb_syntax.html">KFB Syntax</a></div>
-<div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
-<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="pyke_syntax/index.html">Pyke Syntax</a></div>
 <div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
 <div class="normal-nav"><a href="examples.html">Examples</a></div>
 <div class="normal-nav"><a href="PyCon2008-paper.html">PyCon 2008 Paper</a></div>
@@ -323,7 +321,7 @@ very easy to embed short python code snippets directly within the rules to
 help out with the inferencing.  This keeps the inference mechanism simpler as
 it does not have to deal with things that are already easy in a procedural
 language (like arithmetic and simple list manipulation).</p>
-<p>The pyke rule source files are called <em>knowledge rule bases</em> and have a
+<p>The Pyke rule source files are called <em>knowledge rule bases</em> and have a
 <tt class="docutils literal"><span class="pre">.krb</span></tt> suffix.</p>
 <p>We'll continue with the previous example here.</p>
 <p>First, let's look at the rules before we attach the python functions.
@@ -345,7 +343,7 @@ use_D2
     when
         check_function($client, D, 2)
 </pre>
-<p>Note that pyke uses a <tt class="docutils literal"><span class="pre">$</span></tt> to indicate pattern variables (anonymous pattern
+<p>Note that Pyke uses a <tt class="docutils literal"><span class="pre">$</span></tt> to indicate pattern variables (anonymous pattern
 variables start with <tt class="docutils literal"><span class="pre">$_</span></tt>).</p>
 <p>The <tt class="docutils literal"><span class="pre">check_function</span></tt> goal checks to see what version of the indicated
 function should be used for this client.  If this is the incorrect version,
@@ -450,9 +448,9 @@ use_B2
 <li>If you add functools.partial to copy_reg.</li>
 </ul>
 </li>
-<li><p class="first">You don't need to import all of pyke to unpickle and run a plan.</p>
+<li><p class="first">You don't need to import all of Pyke to unpickle and run a plan.</p>
 <ul class="simple">
-<li>Only one small pyke module is needed.</li>
+<li>Only one small Pyke module is needed.</li>
 </ul>
 </li>
 </ul>
@@ -514,7 +512,7 @@ another rule base.<ul>
 </div>
 <div class="section">
 <h1><a class="toc-backref" href="#id18" id="initial-results" name="initial-results">Initial Results</a></h1>
-<p>After writing pyke's younger brother, it occurred to me that backward-chaining
+<p>After writing Pyke's younger brother, it occurred to me that backward-chaining
 could be used to automatically figure out how to join database tables together
 and generate SQL statements.</p>
 <p>And if the backward-chaining rules could see which substitution variables are
@@ -547,7 +545,7 @@ statements and return the needed data as a simple dictionary.</li>
 <p>Then the two sub plans were combined in the reverse order, to first retrieve
 the data and then populate the template, for the final plan that went back to
 the WSGI front-end.</p>
-<p>The pyke examples/sqlgen and examples/web_framework are simplified examples
+<p>The Pyke examples/sqlgen and examples/web_framework are simplified examples
 that you can look at.</p>
 <p>Now, as it turned out, the company had been running without a president for
 quite awhile, and had finally hired a new president.</p>
@@ -627,28 +625,22 @@ License</a>.</p>
                 <h3>More:</h3>
 <div class="right-item"><a href="why_pyke.html">Why Pyke?</a><p>What does Pyke do for me?</p>
 </div>
-<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A very brief look at the steps involved in programming in Pyke.</p>
+<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A brief list of the steps involved in programming in Pyke (with lots
+of links).</p>
 </div>
-<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
+<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing Pyke.</p>
 </div>
-<div class="right-item"><a href="logic_programming/index.html">Logic Programming Overview</a><p>An overview of Logic Programming in Pyke, including statements,
-pattern matching and rules.</p>
+<div class="right-item"><a href="logic_programming/index.html">Logic Programming Tutorial</a><p>An tutorial on logic programming in Pyke, including <em>statements</em>,
+<em>pattern matching</em> and <em>rules</em>.</p>
 </div>
 <div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered
 into named repositories called <em>knowledge bases</em>.</p>
 </div>
-<div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of knowledge fact base (KFB) files, which is where you
-write your universal facts.</p>
+<div class="right-item"><a href="pyke_syntax/index.html">Pyke Syntax</a><p>The syntax of Pyke's three different kinds of source files.</p>
 </div>
-<div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of knowledge question base (KQB) files, which is where you
-write your end user questions.</p>
+<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your Python program uses Pyke.</p>
 </div>
-<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
-write your rules.</p>
-</div>
-<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
-</div>
-<div class="right-item"><a href="examples.html">Examples</a><p>This gives an overview of the examples provided with pyke.</p>
+<div class="right-item"><a href="examples.html">Examples</a><p>An overview of the examples provided with Pyke.</p>
 </div>
 <div class="right-item"><a href="PyCon2008-paper.html">Applying Expert System Technology to Code Reuse with Pyke</a><p>Paper presented at the PyCon 2008 conference in Chicago.</p>
 </div>
@@ -668,7 +660,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Sat, Aug 09 2008.
+    Page last modified Mon, Aug 11 2008.
   </div>
 
 </body>

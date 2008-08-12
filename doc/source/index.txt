@@ -39,18 +39,19 @@ Welcome to Pyke
 Release 0.3
 -----------------------------
 
-Pyke is a knowledge-based inference engine (expert system) written in
-100% python that can:
+Pyke introduces a form of `Logic Programming`_ (inspired by Prolog_) to the
+Python community by providing a knowledge-based inference engine (expert
+system) written in 100% Python that can:
 
 - Do both forward-chaining (data driven) and
   backward-chaining (goal directed) inferencing.
 
-  - Pyke may be embedded into any python program.
+  - Pyke may be embedded into any Python program.
 
-- Automatically generate python programs by assembling individual python
+- Automatically generate Python programs by assembling individual Python
   functions into complete call graphs.
 
-  - This is done through a unique design where the individual python
+  - This is done through a unique design where the individual Python
     functions are attached to backward-chaining rules.
   - Unlike other approaches to code reuse (e.g. Zope adapters and generic
     functions), this allows the inference engine to ensure that all of the
@@ -63,7 +64,7 @@ Pyke is a knowledge-based inference engine (expert system) written in
   - This is an optional feature.  You don't need to use it if you just
     want the inferencing capability by itself.
 
-The knowledge engine supports:
+The Knowledge Engine Supports:
 ========================================
 
 - Multiple *fact bases*, each with its own list of facts.
@@ -72,27 +73,27 @@ The knowledge engine supports:
   and/or backward-chaining rules.
 - Rule base inheritance -- *activating* the derived rule base 
   includes the rules from the parent rule base.
-- The inference rules are compiled into python functions, allowing 
-  python code snippets to be used within the rules.
+- The inference rules are compiled into Python functions, allowing 
+  Python code snippets to be used within the rules.
   This greatly enhances the expressiveness of the rules.
 
-Automatic program generation:
+Automatic Program Generation:
 ========================================
 
-- Calls the generated python programs *plans*.
+- Calls the generated Python programs *plans*.
 - Plans may be run multiple times without needing to rerun the inference
   rules.
 - Plans may be pickled and cached to disk to be used by other programs or
   in later runs of the same program.
-- Only one small pyke module is required to run the plans.
+- Only one small Pyke module is required to run the plans.
 
-Potential pyke applications:
+Potential Pyke Applications:
 ========================================
 
 - Complicated decision making applications.
 - The back-end (code generation and optimization) of compilers.
   Pyke is used as the back-end of its own
-  compiler that translates rules into python code.
+  compiler that translates rules into Python code.
 - Automatic SQL statement generation.
 - Automatic HTML generation and automatic HTML template processing.
 - Automatic program builder to reuse a common set of functions for many
@@ -110,7 +111,7 @@ Potential pyke applications:
   goals.
 - Diagnosis systems, including automated customer service systems.
 - Program or library customization for specific uses.
-- In addition to being able to build programs, pyke can instantiate,
+- In addition to being able to build programs, Pyke can instantiate,
   configure and interconnect a network of objects to meet a specific need
   or situation.
 
@@ -118,7 +119,9 @@ Potential pyke applications:
 Pyke on Google Groups
 =====================
 
-Please join pyke_ on Google Groups for questions and discussion!
+Please join Pyke_ on Google Groups for questions and discussion!
 
-.. _pyke: http://groups.google.com/group/pyke
+.. _Pyke: http://groups.google.com/group/pyke
 .. _web_framework: examples.html#web-framework
+.. _Logic Programming: http://en.wikipedia.org/wiki/Logic_programming
+.. _Prolog: http://en.wikipedia.org/wiki/Prolog

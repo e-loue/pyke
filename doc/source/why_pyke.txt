@@ -51,8 +51,44 @@ can be solved or not.  Examples of these kind of applications are listed on
 the `home page`_.
 
 
-Examples of "Cooking" Python Code
-=================================
+Cooking Your Python Code
+========================
+
+Cooking your Python code is a form of meta-programming, or writing programs
+that manipulate other programs.  I.e., it's a means of `programming in the
+large`_.
+
+Thus, Pyke provides a way to directly "program in the large", which dovetails
+with using Python to "program in the small".  Pyke supplements but does not
+replace Python!
+
+Pyke helps programmers to achieve order of magnitude improvements in:
+
+- Adaptability/Customization
+
+  - Using Pyke allows your Python code to be combined into thousands of
+    different configurations.
+
+  - Thus, your application or library takes on the characteristics of a
+    Domain Specific Language to achieve an order of magnitude increase in
+    adaptability without a corresponding increase your program's "surface
+    area" to your users.
+
+- Performance
+
+  - Thinking of your application or library as a Domain Specific Language
+    (DSL), you're using Pyke to "compile" rather than "interpret" your DSL to
+    achieve an order of magnitude improvement in performance.
+
+- Code Reuse
+
+  - Making your code an order of magnitude more adaptable and an order of
+    magnitude faster allows it to be (re)used in a correspondingly broader
+    range of situations.
+
+
+Examples of Cooking Python Code
+===============================
 
 Database Access Library
 -----------------------
@@ -107,37 +143,6 @@ configuration changes until your program is sure that it's "dotted all of the
 I's and crossed all the T's".
 
 
-Summary
-=======
-
-Pyke provides a way to directly "program in the large", which dovetails with
-using Python to "program in the small".  Pyke supplements but does not replace
-Python!
-
-Pyke helps programmers to achieve order of magnitude improvements in:
-
-- Adaptability/Customization
-
-  - Using Pyke allows your Python code to be combined into thousands of
-    different configurations.
-
-  - Thus, your application or library takes on the characteristics of a
-    Domain Specific Language to achieve an order of magnitude increase in
-    adaptability without a corresponding increase your program's "surface
-    area" to your users.
-
-- Performance
-
-  - Thinking of your application or library as a Domain Specific Language
-    (DSL), you're using Pyke to "compile" rather than "interpret" your DSL to
-    achieve an order of magnitude improvement in performance.
-
-- Code Reuse
-
-  - Making your code an order of magnitude more adaptable and an order of
-    magnitude faster allows it to be (re)used in a correspondingly broader
-    range of situations.
-
 
 .. _home page: index.html
 .. _plan: logic_programming/rules/backward_chaining/plans.html
@@ -145,3 +150,4 @@ Pyke helps programmers to achieve order of magnitude improvements in:
 .. _siege: http://www.joedog.org/JoeDog/Siege
 .. _sqlgen: examples.html#sqlgen
 .. _web_framework: examples.html#web-framework
+.. _programming in the large: http://portal.acm.org/citation.cfm?id=808431

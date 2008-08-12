@@ -41,7 +41,7 @@ Premises and Conclusions
 =================================
 
 Rules have two parts to them: an **if** part (the *premises*),
-and a **then** part (the *conclusions*).  (Though pyke uses different
+and a **then** part (the *conclusions*).  (Though Pyke uses different
 names for these).
 Each of these **if** and **then** parts contain one or more facts_ or goals_
 represented by patterns_.
@@ -54,9 +54,9 @@ Inferencing
 ===================================
 
 Rules are specified individually within a `rule base`_.  They are not nested
-or explicitly linked to each other.  So pyke must automatically figure out
+or explicitly linked to each other.  So Pyke must automatically figure out
 how to combine these rules to accomplish some larger task.  This is called
-*inferencing* and there are two different approaches that pyke uses,
+*inferencing* and there are two different approaches that Pyke uses,
 depending on the rule's type.
 
 - All forward-chaining_ rules are processed when a `rule base`_ is activated_.
@@ -64,11 +64,11 @@ depending on the rule's type.
   - Forward-chaining_ rules may assert_ new facts, and activate_ more specific
     `rule bases`_.
 
-- Backward-chaining_ rules are processed when your program asks pyke to
+- Backward-chaining_ rules are processed when your program asks Pyke to
   prove_ a specific *goal*.
 
   - These rules don't assert_ new facts or activate_ more specific rule
-    bases.  But they do have the ability to assemble python functions into
+    bases.  But they do have the ability to assemble Python functions into
     a customized call graph or program, called a plan_, to meet a specific need.
 
 .. _activate: ../../using_pyke.html#setting-up-each-case

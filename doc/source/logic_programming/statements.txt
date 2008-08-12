@@ -23,7 +23,7 @@
 restindex
     crumb: Statements
     page-description:
-        What is a *statement* is in Pyke?
+        What is a *statement* in Pyke?
     /description
     format: rest
     encoding: utf8
@@ -36,35 +36,136 @@ restindex
 Statements
 ===========
 
-A *statement* is a statement of fact.  They are the bread and butter of Pyke.
-Statements are the data values that Pyke acts upon.
+A *statement* is a statement of fact, also just called a *fact*.  They are
+the bread and butter of Pyke.  Statements are the data values that Pyke acts
+upon.
 
-Statements in Pyke are very structured.  They have three components:
+You might also think of a statement as a spoken sentence.  For example, the
+Pyke family_relations_ example deals with sentences like::
 
-#. The name of a `knowledge base`_.
-#. The name of a *knowledge entity*.
-#. The statement arguments.
+    "Bruce is the son of Thomas (his father) and Norma (his mother)."
+
+But we condense the sentence down to it's essence.  In this case, the sentence
+revolves around three things: Bruce, Thomas and Norma.  All of the rest of the
+words can be condensed into a single identifier that identifies the
+relationship between these three things::
+
+    son_of(Bruce, Thomas, Norma)
+
+We can give these condensed sentence structures any names that we want.  In
+this case, I chose ``son_of``.  I might have also chosen "parents_of", which
+might conjure the following English sentence::
+
+    "The parents of Bruce are Thomas (his father) and Norma (his mother)."
+
+Or::
+
+    "Bruce's parents are Thomas (his father) and Norma (his mother)."
+
+But the ``son_of`` form carries the additional information that Bruce is a son
+rather than a daughter.  So this is the form used in the family_relations
+example.
+
+.. caution:: Statements are not functions!
+   When we wear our Python hats, ``son_of(Bruce, Thomas, Norma)`` looks like a
+   function call!  We might expect that it can be executed to *do* something
+   and possibly return a value.  But when we wear our Pyke hats, this is just
+   a statement, or a piece of data.  It doesn't *do* anything and it **never**
+   returns a value!
+
+Note that it makes perfect sense to have several statements defining the same
+relationship between their arguments::
+
+    son_of(Bruce, Thomas, Norma)
+    son_of(Michael, Bruce, Marilyn)
+    son_of(David, Bruce, Marilyn)
+
+But this only makes sense if they have different arguments.  There is never a
+need to state the same fact twice.  Thus we can never establish two facts (two
+statements) that are identical.  If we try to do this, the second one is
+silently ignored.
+
+So::
+
+    son_of(Bruce, Thomas, Norma)
+    son_of(Bruce, Thomas, Norma)
+    son_of(Bruce, Thomas, Norma)
+
+is exactly the same as::
+
+    son_of(Bruce, Thomas, Norma)
+
+Finally, we see that the position of each argument is important.  In our
+``son_of`` example, the meaning of each argument is::
+
+    son_of(son, father, mother)
+
+Thus, changing the order of the arguments changes the meaning of the
+statement.  So::
+
+    son_of(Bruce, Thomas, Norma)
+
+and::
+
+    son_of(Bruce, Norma, Thomas)
+
+mean different things!  The first statement says that Thomas is the father of
+Bruce, but the second statement says that Norma is the father!
+
+Syntactic Structure of Statements
+=================================
+
+So we see that statements in Pyke are very structured.
+
+Pyke stores statements in statement repositories called `knowledge bases`_.
+You create knowledge bases to help you organize your statements.
+A *knowledge base* in Pyke roughly corresponds to a *module* in Python.
+
+.. note::
+   Pyke does not allow knowledge bases to contain other knowledge bases, only
+   statements.  Thus, there is only one level of knowledge bases; and beneath
+   each knowledge base, one level of statements. 
+
+So statements have three components:
+
+#. The name of a knowledge base.  For example, ``family``.
+#. The name of the relationship between the arguments.  For example, ``son_of``.
+#. The statement arguments.  These are just Python data.  Currently in Pyke,
+   there is a push for these arguments to be immutable.
 
 The syntax for a statement looks like this::
 
-    statement ::= name '.' name '(' {argument,} ')'
+    statement ::= IDENTIFIER '.' IDENTIFIER '(' {argument,} ')'
 
-The first name is the name of the knowledge base.  Within `backward-chaining
-rules`_, this may be omitted to imply the currently selected `rule base`_ for
-this `rule base category`_.
+The first IDENTIFIER is the name of the knowledge base.  In our
+family_relations example, this is ``family``.
 
-The second name is the name of the *knowledge entity*.  You can think of this
-as naming the relationship amoung its arguments.
+.. note::
+   You'll see that within `backward-chaining rules`_, the name of the
+   knowledge base may be omitted.  It defaults to the currently selected
+   `rule base`_ for this `rule base category`_.  You'll learn more about this
+   later.
+
+The second IDENTIFIER is the name of the relationship between the arguments.
+Pyke calls this a *knowledge entity* or tidbit of knowledge.
 
 The arguments can be any simple Python data value (numbers, strings, None,
 True or False) or tuples of these values (including nested tuples).
-Statements are supposed to be immutable, so all of the arguments are
-immutable.
+Currently, statements are supposed to be immutable, so all of the arguments
+are immutable.
 
-Like rows in relational database tables, it doesn't make sense to have two
-identical statements.
+.. note::
+   Prolog_ allows arguments to be other statements.  But Pyke needs to
+   integrate into Python and Python has no concept of a "statement".  So we
+   just use tuples in Pyke because Python is very happy with tuples!
+
+So the complete statement for our family_relations example is::
+
+    family.son_of(Bruce, Thomas, Norma)
 
 .. _backward-chaining rules: rules/backward_chaining.html
 .. _rule base: ../knowledge_bases/rule_bases.html
 .. _rule base category: FIX
-.. _knowledge base: FIX
+.. _knowledge bases: FIX
+.. _family_relations: FIX
+.. _Prolog: FIX

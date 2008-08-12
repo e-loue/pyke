@@ -23,7 +23,7 @@
 restindex
     crumb: Pattern Matching
     page-description:
-        Explanation of pattern matching and pattern variables.
+        Explanation of *pattern matching* and *pattern variables*.
     /description
     format: rest
     encoding: utf8
@@ -36,19 +36,289 @@ restindex
 Pattern Matching
 ================
 
-Pattern matching is a little strange at first.
+Pattern matching is a little strange at first, so we're going to ease into
+it slowly...
 
-FIX
+There are two aspects to pattern matching: *patterns*, which you write, and
+*matching*, which is what Pyke does with your patterns.
 
-.. _backward-chaining: rules/backward_chaining.html
-.. _Bc_rule Syntax: ../krb_syntax/bc_rule.html
-..  _.krb file: ../krb_syntax/index.html
-.. _pattern: ../krb_syntax/pattern.html
-.. _patterns: pattern_
-.. _pattern variable: ../krb_syntax/pattern.html#pattern-variable
-.. _pattern variables: `pattern variable`_
-.. _prove: ../using_pyke.html#proving-goals
-.. _proving: prove_
-.. _rule: rules/index.html
-.. _rules: rule_
-.. _rule base: ../knowledge_bases/rule_bases.html
+In a nutshell, patterns are made up of two fundamental building blocks:
+
+#. `Literal patterns`_.
+   
+   - Theses are just data values that only match themselves.
+
+#. `Pattern variables`_.
+
+   - These will match anything.  (Including other pattern variables, as we'll
+     see later)!
+
+And one compound pattern:
+
+#. `Tuple patterns`_.
+
+   - These match -- you guessed it! -- tuples!
+
+We'll examine all of the above looking at how Pyke matches a pattern to data.
+Then we'll expand this to cover `matching two patterns together`_.
+
+And finally, a `pathological question`_ to see if you've been paying
+attention.
+
+Sound like fun?  Good!  Let's get started!
+
+OK, so why do we need patterns?  The simple answer is that we need patterns
+to generalize statements_.  One example is to turn statements into questions.
+
+.. important::
+   - When you want a *direct* statement, such as to state a fact, you just use
+     *data* for its arguments.
+   - But when you want a *generalized* statement, such as to ask a question,
+     you use *patterns* for its arguments.
+
+
+Literal Patterns
+================
+
+You want to ask Pyke a question.  The simplest questions are just asking "Is
+statement X true?".  Going back to Pyke's family_relations_ example, your
+Python program might want to know whether it's really true that Bruce's
+parents are Thomas and Norma?  So it would ask whether the following statement
+is true::
+
+    family.son_of(Bruce, Thomas, Norma)
+
+Pyke would search the facts that's it's been told about and answer "thumbs up"
+because you've told it before that this statement is true and it has
+remembered that.
+
+In this case, all of the statement's arguments are *literal patterns*.  You
+might consider literal patterns to be *input* to Pyke.  You're passing Bruce,
+Thomas and Norma *into* Pyke.  And Pyke just answers "thumbs up" or "thumbs
+down".
+
+Literal patterns look exactly like data.  Thus, your question would look
+exactly like you see above.
+
+Pattern Variables
+=================
+
+To take this to the next level, you might want to ask "Who are the sons of
+Thomas and Norma?".  In this case, you are passing ``Thomas`` and ``Norma``
+*into* Pyke, and you'd like Pyke to pass something back *out* to you as part of
+the answer (in addition to the thumbs up).
+
+Pattern variables serve as output parameters.  They start with a ``$``::
+
+    family.son_of($son, Thomas, Norma)
+
+You can use whatever name you like after the ``$``.  Pyke will answer with a
+thumbs up *binding* ``$son`` to ``Bruce``.  If you don't like that answer, you
+can reject that answer and ask Pyke for another answer ("nope, try again!").
+Each time Pyke finds another son for Thomas and Norma, it answers with another
+thumbs up and ``$son`` *bound* to a different value.
+
+If you reject the last son of ``Thomas`` and ``Norma`` (or if ``Thomas`` and
+``Norma`` have no sons in the first place), Pyke will answer with a thumbs
+down.
+
+We say that Pyke *binds* ``Bruce`` to the pattern variable ``$son`` when it
+comes back with its first thumbs up.  When we tell Pyke "nope, try again!",
+Pyke must first *unbind* ``$son`` before it can go on and *bind* it to the
+next value.  The "nope" part does the *unbinding*, and the "try again" part
+does the *binding* again to a new value.
+
+So at any point in time, a pattern variable is either *bound* to a value or
+*unbound*.  If we follow a particular pattern variable through time, we might
+see that it is alternately bound and unbound many times as Pyke tries to find
+a suitable answer to your question.  Specifically, when Pyke comes back with
+the final thumbs down, ``$son`` is unbound.
+
+Anonymous Pattern Variables
+---------------------------
+
+Suppose we want to know who Norma's sons are?  In this case we don't care
+about the father.  We use *anonymous variables* as "don't care" placeholders.
+
+An anonymous variable is any pattern variable who's name starts with an
+underscore (``_``).  The rest of the name doesn't matter and just serves as
+documentation (and so ``$_`` is all that's strictly needed).
+
+So "Who are Norma's sons?" looks like::
+
+    family.son_of($son, $_father, Norma)
+
+We're giving Norma as input to Pyke, and asking for the ``$son`` as output and
+telling Pyke that we don't care about the ``$_father``.
+
+Anonymous variables are never bound to values.  (So you could say that they
+are always unbound).
+
+Pattern Variable Identity
+-------------------------
+
+Now this is very important, so pay attention!  The same pattern variable
+*name* means the same *pattern variable*.  Thus, if you say ``$son`` twice,
+it's the *same* pattern variable.  And, a pattern variable can only be bound
+to one value (at a time), so you mean the *same* data value must appear in
+both places.
+
+.. note::
+   This does *not* apply to `anonymous pattern variables`_.  Since they are
+   never bound to a value, each use of the same anonymous variable can match
+   different data values.
+
+So if you wanted to see all of the sons with the same name as their fathers,
+you would ask::
+
+    family.son_of($father, $father, $_mother)
+
+.. note::
+
+   The Pyke family_relations_ example never uses the same name for both
+   father and son because that would cause confusion about which of them
+   was the father to both of their sons and daughters.
+   
+   In these cases, it modifies the name of the son to make it unique.
+
+   Thus, this question would always fail within the family_relations
+   example...
+
+And so here is the complete explanation of how pattern variables are matched
+to a data value.
+
+First, the pattern variable is checked to see if it is already bound to a
+value.
+
+If it is bound to a value, then this bound value has to match the data for
+the match to succeed.
+
+If it is unbound, then the pattern variable is bound to the data value as a
+by-product of doing the match, and the match always succeeds.
+
+And so pattern variables only "match any value" when they are unbound.  And in
+matching that value, they become bound to it as a by-product of doing the
+match.  Once bound to a value, a pattern variable will only match that value
+(much like a literal pattern).
+
+Tuple Patterns
+==============
+
+Tuple patterns only match tuples.  They are written as simply a comma
+seperated list of patterns within parenthesis::
+
+    (1, $x, "buckle my shoe")
+
+You can also write a *rest* pattern variable at the end using an asterisk
+(``*``)::
+
+    ($a, fie, $b, *$c)
+
+This will match the rest of the items in the data value that the tuple pattern
+is matched to.  Note that the *rest* pattern variable is *always* bound to a
+tuple.
+
+Examples:
+
+    - matching ``(1, $x, "buckle my shoe")`` to ``(1, 2, "buckle my shoe")``
+      matches, binding ``$x`` to 2.
+    - matching ``(1, $x, "buckle my shoe")`` to ``(1, 2, "buckle my belt")``
+      does not match because the third pattern within the tuple pattern fails
+      to match the third value in the matched tuple.
+    - matching ``($a, fie, $b, *$c)`` to ``(fee, fie, foe, fum)``
+      matches, binding ``$a`` to ``fee``, ``$b`` to ``foe`` and ``$c`` to
+      ``(fum)``.
+    - matching ``($a, fie, $b, *$c)`` to ``(fee, fie, foe)``
+      matches, binding ``$a`` to ``fee``, ``$b`` to ``foe`` and ``$c`` to
+      ``()``.
+    - matching ``($a, fie, $b, *$c)`` to ``(fee, fie)`` does not match because
+      the data value has to have a length of at least three.
+
+.. hint::
+   You can use ``(*$foo)`` to only match a tuple.  It will bind ``$foo`` to
+   the entire tuple, but will fail to match any other data type.
+
+
+Matching Two Patterns Together
+==============================
+
+You've now seen all of the different kinds of patterns and how they are
+matched to data.  Not too bad so far...
+
+Patterns are used to generalize statements.  One situation where you need to
+generalize a statement is when you want to ask a question.  That's been
+covered above.
+
+The other situation where you need to generalize a statement is when you write
+rules_, which are explained later.
+
+But rules also need to be able to match one pattern to another *pattern*,
+and not just match patterns to *data* as we have discussed so far.
+
+So before we can move on to rules, we need to examine how one pattern is
+matched to another pattern.
+
+The short answer is that it all comes down to pattern variables and that
+pattern variables may not only be bound to *data*, but may also be bound to
+other *patterns*.
+
+Binding to a Literal Pattern
+----------------------------
+
+Binding a pattern variable to a literal pattern is just like binding it to the
+data within that literal pattern.  Nothing fancy here!
+
+Binding to Another Pattern Variable
+-----------------------------------
+
+When pattern variable A is bound to pattern variable B, they essentially
+become the *same pattern variable*.  Basically, pattern variable A *becomes*
+pattern variable B (or, you might say, *defers* to pattern variable B).
+
+Let's say that pattern variable A has been bound to pattern variable B and
+that pattern variable B is still unbound.
+
+#. Prior to binding pattern variable B to a value, it doesn't matter whether
+   you ask if pattern variable A is bound or pattern variable B is bound, the
+   answer is False for both.
+
+#. It doesn't matter whether you match pattern variable A to a value or
+   pattern variable B to a value.  In both cases, it is pattern variable B
+   that gets bound to this value.
+
+#. And once pattern variable B is bound to a value, it doesn't matter whether
+   you ask for the bound value of pattern variable A or pattern variable B,
+   you will get the same value.
+
+So for all intents and purposes pattern variable A and pattern variable B
+become the same pattern variable.
+
+Binding to a Tuple Pattern
+--------------------------
+
+Because pattern variables may be bound to tuple patterns, the term *fully
+bound* is introduced.  Asking whether the pattern variable is *fully bound*
+means that not only is it bound to a value (the tuple pattern), but that all
+of the subordinate patterns (recursively) within the tuple pattern are also
+bound to values.
+
+Being *fully bound* means that the bound value of the pattern variable can be
+converted into standard Python data without any pattern variables in it.  This
+is important when Pyke wants to talk to Python because Python has no concept
+of storing *variables* within its data structures.
+
+
+Pathological Question
+=====================
+
+What is the bound value of pattern variable ``$y`` after matching the
+following two tuple patterns:
+
+    Tuple pattern A:
+        ``((ho, $_, ($a, $a)), ($a, $a, $b), ($a, *$b))``
+    Tuple pattern B:
+        ``($x, $x, $y)``
+
+.. _rules: FIX
+.. _statements: FIX
+.. _family_relations: FIX

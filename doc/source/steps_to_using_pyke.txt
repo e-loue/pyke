@@ -23,7 +23,8 @@
 restindex
     crumb: Steps to Using Pyke
     page-description:
-        A very brief look at the steps involved in programming in Pyke.
+        A brief list of the steps involved in programming in Pyke (with lots
+        of links).
     /description
     format: rest
     encoding: utf8
@@ -39,6 +40,9 @@ Steps to Using Pyke
 #. You provide the following to Pyke's `knowledge engine`_:
 
    - A set of universally true statements_.
+
+     - These statements are true for all time.
+
    - The text for all questions_ that you might want Pyke to ask your end user.
    - Multiple sets of rules_.
 
@@ -70,17 +74,18 @@ Steps to Using Pyke
       - Your backward-chaining rules may also ask your end user questions_ and
         run commands_.
 
-      - You may have written python code at the end of some of your
+      - You may have written Python code at the end of some of your
         backward-chaining rules.  For each such rule, Pyke has compiled this
-        python code into a python function called a plan_ which it has attached
+        Python code into a Python function called a plan_ which it has attached
         to the rule.
 
       - Once Pyke finds an answer to your question, it gathers all of the plan
         functions of the rules that it used to find your answer into a
         complete function call graph.  The plan functions are linked together
-        mirroring the way that the rules linked together to find your answer.
-        In this way, you can write high-level compilers that assemble python
-        functions together to solve specific problems.
+        mirroring the way that the rules were linked together to find your
+        answer.  In this way, you can write high-level compilers that assemble
+        together and configure a set of Python functions to solve specific
+        problems.
 
       - Pyke returns the top Python function of this function call graph as a
         standard Python function along with the answer to your question.  You

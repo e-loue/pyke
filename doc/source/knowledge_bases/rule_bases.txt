@@ -24,7 +24,7 @@ restindex
     crumb: Rule Bases
     page-description:
         Explanation of rule bases, overview of .krb files and how these files
-        are compiled and loaded into your python program.
+        are compiled and loaded into your Python program.
     /description
     format: rest
     encoding: utf8
@@ -50,11 +50,11 @@ the `knowledge_engine.engine`_ constructor only recompile `.krb files`_ that
 have changed since the last time they were compiled.
 
 The name of each rule base is the filename of the `.krb file`_ (with the .krb
-suffix removed).  This must be a legal python identifier.
+suffix removed).  This must be a legal Python identifier.
 
 In addition, each directory name within your directory structure
-becomes a python package (to facilitate importing the generated python modules)
-and must also be a legal python identifier.
+becomes a Python package (to facilitate importing the generated Python modules)
+and must also be a legal Python identifier.
 
 Managing Multiple Rule Bases
 ===============================
@@ -64,16 +64,16 @@ There are two reasons to have more than one rule base (i.e., more than one
 
 #. To divide a large set of rules into human manageable units.
 
-   In this case, you want pyke to use all of the rule bases combined.
+   In this case, you want Pyke to use all of the rule bases combined.
 
-#. To enable your python program to choose between different rule bases
+#. To enable your Python program to choose between different rule bases
    that are tailored to different specific situations.
 
    For example, you may have rules governing the automatic generation of
    SQL statements.  Some of these rules may vary depending upon the target
    database (e.g., mysql, postgresql, oracle).
 
-   In this case, you want to be able to tell pyke which of several mutually
+   In this case, you want to be able to tell Pyke which of several mutually
    exclusive rule bases to use on each invocation.  You would never use
    more than one of these rule bases at the same time.
 
@@ -143,15 +143,15 @@ Rule Inheritance
 --------------------
 
 There is an important difference between how backward-chaining_ rule
-inheritance works within pyke rule bases and how method inheritance works
-within python classes:
+inheritance works within Pyke rule bases and how method inheritance works
+within Python classes:
 
-* When a derived class in python defines a method by the same name as a
+* When a derived class in Python defines a method by the same name as a
   method in its parent class, the derived method *overrides* the parent
   method.  I.e., only the derived method is used when a call is made
   to it.
 
-* In contrast, when a derived rule base in pyke defines a
+* In contrast, when a derived rule base in Pyke defines a
   backward-chaining_ rule_ for a
   goal that also has backward-chaining_ rules_ defined for it in the
   parent rule base, the derived rule_ *extends* the set of rules_ that may
@@ -171,7 +171,7 @@ Rule Base Activation
 
 Loading_ the rule bases only makes the rule bases available for use.  It
 does not automatically activate_ any rule bases.  This must be done
-explicitly by your python program.  Your program may decide to activate_
+explicitly by your Python program.  Your program may decide to activate_
 different rule bases in different situations.
 
 Additionally, forward-chaining_ rules_ may be used to activate_ more specific

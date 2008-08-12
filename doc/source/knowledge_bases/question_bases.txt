@@ -56,7 +56,7 @@ KQB files
 
 Each question base is defined by a `.kqb file`_.  The name of each question
 base is the filename of the `.kqb file`_ (with the ``.kqb`` suffix removed).
-This must be a legal python identifier.
+This must be a legal Python identifier.
 
 These `.kqb files`_ are compiled and loaded automatically when you create your 
 `knowledge_engine.engine`_ object.

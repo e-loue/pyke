@@ -23,7 +23,7 @@
 restindex
     crumb: KQB Syntax
     page-description:
-        The syntax of knowledge question base (KQB) files, which is where you
+        The syntax of *Knowledge Question Base* (KQB) files, which is where you
         write your end user questions.
     /description
     format: rest
@@ -44,7 +44,7 @@ following descriptions, substitution parameters are acted upon in
 ``PARAMETERIZED_TEXT``, but not in ``TEXT``.
 
 The name of the `question base`_ is simple the filename with the ``.kqb``
-suffix stripped.  This must be a valid python identifier.
+suffix stripped.  This must be a valid Python identifier.
 
 Syntax for KQB File
 ===================
@@ -53,11 +53,11 @@ Syntax for KQB File
 
     file ::= [NL] {question}
 
-    question ::= IDENTIFIER '(' [{parameter,}] ')' NL_TOK 
-                    INDENT_TOK {PARAMETERIZED_TEXT NL_TOK}
-                    '---' NL_TOK
+    question ::= IDENTIFIER '(' [{parameter,}] ')' NL
+                    INDENT {PARAMETERIZED_TEXT NL}
+                    '---' NL
                     parameter '=' question_type
-                 DEINDENT_TOK
+                 DEINDENT
 
     parameter ::= '$' IDENTIFIER
 
@@ -85,7 +85,7 @@ YN_type
 
 ::
 
-    yn_type ::= 'yn' NL_TOK [review]
+    yn_type ::= 'yn' NL [review]
 
 The user answers "yes" or "no".  The answer returned is True or False.  If the
 `ask_tty`_ module is used, the user may type "yes", "y", "true" or "t" for
@@ -100,7 +100,7 @@ Integer_type
 
 ::
 
-    integer_type ::= 'integer' ['(' match ')'] NL_TOK [review]
+    integer_type ::= 'integer' ['(' match ')'] NL [review]
 
 
 The user enters an integer.  If the match_ is specified, the integer must
@@ -114,7 +114,7 @@ Number_type
 
 ::
 
-    number_type ::= 'number' ['(' match ')'] NL_TOK [review]
+    number_type ::= 'number' ['(' match ')'] NL [review]
 
 The user enters either an integer or a floating point number.  If the user
 enters an integer, a Python ``int`` is returned.  Otherwise a Python ``float``
@@ -131,7 +131,7 @@ Float_type
 
 ::
 
-    float_type ::= 'float' ['(' match ')'] NL_TOK [review]
+    float_type ::= 'float' ['(' match ')'] NL [review]
 
 
 The user enters an integer or a floating point number.  The number is always
@@ -148,7 +148,7 @@ String_type
 
 ::
 
-    string_type ::= 'string' ['(' match ')'] NL_TOK [review]
+    string_type ::= 'string' ['(' match ')'] NL [review]
 
 The user enters a string.  If the match_ is specified, the string must match
 it or the user is asked to try again.
@@ -237,7 +237,7 @@ Select_1_type
 
 ::
 
-    select_1_type ::= 'select_1' NL_TOK alternatives
+    select_1_type ::= 'select_1' NL alternatives
 
 This is a multiple choice question.  The alternatives_ are displayed to the
 user, and he picks one (and only one).
@@ -248,7 +248,7 @@ Select_n_type
 
 ::
 
-    select_n_type ::= 'select_n' NL_TOK alternatives
+    select_n_type ::= 'select_n' NL alternatives
 
 This is a multiple choice question.  The alternatives_ are displayed to the
 user, and he picks as many as he likes.
@@ -259,7 +259,7 @@ Alternatives
 
 ::
 
-    alternatives ::= {value ':' PARAMETERIZED_TEXT NL_TOK [alt_review]}
+    alternatives ::= {value ':' PARAMETERIZED_TEXT NL [alt_review]}
 
 The user only sees the ``PARAMETERIZED_TEXT`` values.  The ``value``
 associated with the selected ``PARAMETERIZED_TEXT`` is returned (but the user
@@ -267,8 +267,8 @@ never sees it).  The ``value`` *tags* the alternative.
 
 ::
 
-    alt_review ::= '!' '=' value NL_TOK
-                 | '!' PARAMETERIZED_TEXT NL_TOK
+    alt_review ::= '!' '=' value NL
+                 | '!' PARAMETERIZED_TEXT NL
 
 Each alternative may have it's own review associated with it.
 

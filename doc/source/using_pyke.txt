@@ -23,7 +23,7 @@
 restindex
     crumb: Using Pyke
     page-description:
-        How your python program uses pyke.
+        How your Python program uses Pyke.
     /description
     format: rest
     encoding: utf8
@@ -36,15 +36,15 @@ restindex
 Using Pyke
 ===================================
 
-This describes how to use pyke from within your python program.
+This describes how to use Pyke from within your Python program.
 
 Initializing Pyke
 ===============================
 
-There are two steps to initializing a pyke knowledge engine:
+There are two steps to initializing a Pyke knowledge engine:
 
 knowledge_engine.engine(paths = ('.',), gen_root_location = '.', gen_root_pkg = 'compiled_krb', load_fc = True, load_bc = True, load_fb = True, load_qb = True)
-    The pyke inference engine is offered
+    The Pyke inference engine is offered
     as a class so that you can instantiate multiple copies of it with different
     rule bases to accomplish different tasks.
     Once you have a knowledge_engine.engine object; generally, all of
@@ -61,7 +61,7 @@ knowledge_engine.engine(paths = ('.',), gen_root_location = '.', gen_root_pkg = 
     ``load_qb``).  This causes all of the `rule bases`_ to be loaded and made
     ready to *activate* (see below).
 
-    All generated python files are placed in a mirror directory structure
+    All generated Python files are placed in a mirror directory structure
     under the *gen_root_location* directory in *gen_root_pkg*.  Thus, by
     default, this mirrored directory structure would be rooted under the
     "./compiled_krb" directory.  You probably want to add ``compiled_krb`` to
@@ -70,7 +70,7 @@ knowledge_engine.engine(paths = ('.',), gen_root_location = '.', gen_root_pkg = 
     automatically if any of them do not already exist.
 
     If you change some of your Pyke source files, you can create a new engine
-    object to compile and reload the generated python modules without
+    object to compile and reload the generated Python modules without
     restarting your program.  But note that you'll need to rerun your
     ``add_universal_fact`` calls.
 *some_engine*.add_universal_fact(kb_name, fact_name, arguments)
@@ -146,7 +146,7 @@ Three functions initialize each case:
 
     >>> my_engine.activate('bc_example')
 
-Your pyke engine is now ready to prove goals for this case!
+Your Pyke engine is now ready to prove goals for this case!
 
 Proving Goals
 ======================
@@ -158,7 +158,7 @@ functions are provided in `Other Functions`_, below.
     ``Kb_name`` may name either a fact_base_ or an activated
     `rule base category`_.  The ``entity_name`` is the fact_name for fact_bases,
     or the name of the `backward chaining`_ goal for `rule bases`_.
-    The ``fixed_args`` are a tuple of python values.  These form the first
+    The ``fixed_args`` are a tuple of Python values.  These form the first
     group of arguments to the proof.  ``Num_returns`` specifies the number of
     additional `pattern variables`_ to be appended to the arguments for the
     proof.  The bindings of these pattern variables will be returned as the
@@ -175,7 +175,7 @@ functions are provided in `Other Functions`_, below.
 
     Returns the first proof found as a 2-tuple: a tuple of the bindings for
     the ``num_returns`` pattern variables, and a plan_.  The plan_ is ``None``
-    if no plan_ was generated; otherwise, it is a python function as
+    if no plan_ was generated; otherwise, it is a Python function as
     described below__.
 
 .. __: #running-and-pickling-plans
@@ -206,7 +206,7 @@ Running and Pickling Plans
 ----------------------------
 
 Once you've obtained a plan_ from ``prove_1`` or ``prove_n``, you just call
-it like a normal python function.  The arguments required are simply those
+it like a normal Python function.  The arguments required are simply those
 specified, if any, in the `taking clause`_ of the rule_ proving the top-level
 goal.
 
@@ -221,7 +221,7 @@ before pickling the plan_:
     ...                 lambda p: (functools.partial, (p.func,) + p.args))
 
 No special code is required to unpickle a plan_.  Just unpickle and call it.
-(Unpickling the plan_ only imports one small pyke module to be able to run
+(Unpickling the plan_ only imports one small Pyke module to be able to run
 the plan_).
 
 Tracing Rules
@@ -246,15 +246,15 @@ in effect until you call ``untrace``:
 Krb_traceback
 ---------------
 
-A handy traceback module is provided to convert python functions, lines and
-line numbers to the `.krb file`_ rule names, lines and line numbers in python
+A handy traceback module is provided to convert Python functions, lines and
+line numbers to the `.krb file`_ rule names, lines and line numbers in Python
 traceback.  This makes it much easier to read the tracebacks that occur
 during proofs.
 
 The krb_traceback module has exactly the same functions as the standard
-python traceback_ module, but they convert the generated python function
+Python traceback_ module, but they convert the generated Python function
 information into `.krb file`_ information.  They also delete the
-intervening python functions between subgoal proofs.
+intervening Python functions between subgoal proofs.
 
     >>> import sys
     >>> from pyke import knowledge_engine
@@ -307,7 +307,7 @@ discussed below_.
 *some_engine*.prove(kb_name, entity_name, pattern_context, patterns)
     A generator that binds patterns_ to successive proofs.  Yields a
     *prototype_plan* or ``None`` for each successful match.  To turn the
-    prototype_plan into a python function, use *prototype_plan*.create_plan().
+    prototype_plan into a Python function, use *prototype_plan*.create_plan().
     This returns the plan_ function.
 
 The remaining functions are:
@@ -335,7 +335,7 @@ The remaining functions are:
 Creating Your Own Patterns
 ----------------------------------
 
-You'll need two more pyke modules to create your own patterns_ and contexts:
+You'll need two more Pyke modules to create your own patterns_ and contexts:
 
     >>> from pyke import pattern, contexts
 

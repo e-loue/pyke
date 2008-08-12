@@ -3,7 +3,7 @@
 <head>
     <title>KQB Syntax</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="stylesheets/pyke.css" type="text/css" />
+    <link rel="stylesheet" href="../stylesheets/pyke.css" type="text/css" />
 </head>
 <body>
   <table id="page-table">
@@ -16,7 +16,9 @@
           <th id="crumb-line">
             <div id="nav">
               <ul>
-                  <li><a href="index.html">Home</a></li>
+                  <li><a href="../index.html">Home</a></li>
+<li>&gt;</li>
+<li><a href="index.html">Pyke Syntax</a></li>
 <li>&gt;</li>
 <li>KQB Syntax</li>
 
@@ -32,18 +34,21 @@
           <td id="left-nav">
             <div id="left-nav-div">
               
-<div class="title-nav"><a href="index.html">Home</a></div><div class="nav-branch">
-<div class="normal-nav"><a href="why_pyke.html">Why Pyke?</a></div>
-<div class="normal-nav"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a></div>
-<div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
-<div class="normal-nav"><a href="logic_programming/index.html">Logic Programming</a></div>
-<div class="normal-nav"><a href="knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../why_pyke.html">Why Pyke?</a></div>
+<div class="normal-nav"><a href="../steps_to_using_pyke.html">Steps to Using Pyke</a></div>
+<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="../logic_programming/index.html">Logic Programming</a></div>
+<div class="normal-nav"><a href="../knowledge_bases/index.html">Knowledge Bases</a></div>
+
+<div class="title-nav"><a href="index.html">Pyke Syntax</a></div><div class="nav-branch">
 <div class="normal-nav"><a href="kfb_syntax.html">KFB Syntax</a></div>
-<div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
 <div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
-<div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
-<div class="normal-nav"><a href="examples.html">Examples</a></div>
-<div class="normal-nav"><a href="PyCon2008-paper.html">PyCon 2008 Paper</a></div>
+<div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
+</div>
+<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../examples.html">Examples</a></div>
+<div class="normal-nav"><a href="../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
 </div>
 
             </div>
@@ -72,17 +77,17 @@ specifies parameters with <tt class="docutils literal"><span class="pre">$</span
 following descriptions, substitution parameters are acted upon in
 <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt>, but not in <tt class="docutils literal"><span class="pre">TEXT</span></tt>.</p>
 <p>The name of the <a class="reference" href="knowledge_bases/question_bases.html">question base</a> is simple the filename with the <tt class="docutils literal"><span class="pre">.kqb</span></tt>
-suffix stripped.  This must be a valid python identifier.</p>
+suffix stripped.  This must be a valid Python identifier.</p>
 <div class="section">
 <h2><a id="syntax-for-kqb-file" name="syntax-for-kqb-file">Syntax for KQB File</a></h2>
 <pre class="literal-block">
 file ::= [NL] {question}
 
-question ::= IDENTIFIER '(' [{parameter,}] ')' NL_TOK
-                INDENT_TOK {PARAMETERIZED_TEXT NL_TOK}
-                '---' NL_TOK
+question ::= IDENTIFIER '(' [{parameter,}] ')' NL
+                INDENT {PARAMETERIZED_TEXT NL}
+                '---' NL
                 parameter '=' question_type
-             DEINDENT_TOK
+             DEINDENT
 
 parameter ::= '$' IDENTIFIER
 </pre>
@@ -107,7 +112,7 @@ question_type ::= yn_type
 <div class="section">
 <h2><a id="yn-type" name="yn-type">YN_type</a></h2>
 <pre class="literal-block">
-yn_type ::= 'yn' NL_TOK [review]
+yn_type ::= 'yn' NL [review]
 </pre>
 <p>The user answers &quot;yes&quot; or &quot;no&quot;.  The answer returned is True or False.  If the
 <a class="reference" href="knowledge_bases/question_bases.html#presenting-questions-to-your-end-users">ask_tty</a> module is used, the user may type &quot;yes&quot;, &quot;y&quot;, &quot;true&quot; or &quot;t&quot; for
@@ -118,7 +123,7 @@ insensitive.</p>
 <div class="section">
 <h2><a id="integer-type" name="integer-type">Integer_type</a></h2>
 <pre class="literal-block">
-integer_type ::= 'integer' ['(' match ')'] NL_TOK [review]
+integer_type ::= 'integer' ['(' match ')'] NL [review]
 </pre>
 <p>The user enters an integer.  If the <a class="reference" href="#match">match</a> is specified, the integer must
 match it or the user is asked to try again.</p>
@@ -127,7 +132,7 @@ match it or the user is asked to try again.</p>
 <div class="section">
 <h2><a id="number-type" name="number-type">Number_type</a></h2>
 <pre class="literal-block">
-number_type ::= 'number' ['(' match ')'] NL_TOK [review]
+number_type ::= 'number' ['(' match ')'] NL [review]
 </pre>
 <p>The user enters either an integer or a floating point number.  If the user
 enters an integer, a Python <tt class="docutils literal"><span class="pre">int</span></tt> is returned.  Otherwise a Python <tt class="docutils literal"><span class="pre">float</span></tt>
@@ -139,7 +144,7 @@ to try again.</p>
 <div class="section">
 <h2><a id="float-type" name="float-type">Float_type</a></h2>
 <pre class="literal-block">
-float_type ::= 'float' ['(' match ')'] NL_TOK [review]
+float_type ::= 'float' ['(' match ')'] NL [review]
 </pre>
 <p>The user enters an integer or a floating point number.  The number is always
 returned as a Python <tt class="docutils literal"><span class="pre">float</span></tt>.</p>
@@ -150,7 +155,7 @@ to try again.</p>
 <div class="section">
 <h2><a id="string-type" name="string-type">String_type</a></h2>
 <pre class="literal-block">
-string_type ::= 'string' ['(' match ')'] NL_TOK [review]
+string_type ::= 'string' ['(' match ')'] NL [review]
 </pre>
 <p>The user enters a string.  If the <a class="reference" href="#match">match</a> is specified, the string must match
 it or the user is asked to try again.</p>
@@ -218,7 +223,7 @@ messages are displayed to the user.</p>
 <div class="section">
 <h2><a id="select-1-type" name="select-1-type">Select_1_type</a></h2>
 <pre class="literal-block">
-select_1_type ::= 'select_1' NL_TOK alternatives
+select_1_type ::= 'select_1' NL alternatives
 </pre>
 <p>This is a multiple choice question.  The <a class="reference" href="#alternatives">alternatives</a> are displayed to the
 user, and he picks one (and only one).</p>
@@ -226,7 +231,7 @@ user, and he picks one (and only one).</p>
 <div class="section">
 <h2><a id="select-n-type" name="select-n-type">Select_n_type</a></h2>
 <pre class="literal-block">
-select_n_type ::= 'select_n' NL_TOK alternatives
+select_n_type ::= 'select_n' NL alternatives
 </pre>
 <p>This is a multiple choice question.  The <a class="reference" href="#alternatives">alternatives</a> are displayed to the
 user, and he picks as many as he likes.</p>
@@ -234,14 +239,14 @@ user, and he picks as many as he likes.</p>
 <div class="section">
 <h2><a id="alternatives" name="alternatives">Alternatives</a></h2>
 <pre class="literal-block">
-alternatives ::= {value ':' PARAMETERIZED_TEXT NL_TOK [alt_review]}
+alternatives ::= {value ':' PARAMETERIZED_TEXT NL [alt_review]}
 </pre>
 <p>The user only sees the <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt> values.  The <tt class="docutils literal"><span class="pre">value</span></tt>
 associated with the selected <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt> is returned (but the user
 never sees it).  The <tt class="docutils literal"><span class="pre">value</span></tt> <em>tags</em> the alternative.</p>
 <pre class="literal-block">
-alt_review ::= '!' '=' value NL_TOK
-             | '!' PARAMETERIZED_TEXT NL_TOK
+alt_review ::= '!' '=' value NL
+             | '!' PARAMETERIZED_TEXT NL
 </pre>
 <p>Each alternative may have it's own review associated with it.</p>
 <p>The <tt class="docutils literal"><span class="pre">'!'</span> <span class="pre">'='</span> <span class="pre">value</span></tt> form uses the same review text as the previous
@@ -259,32 +264,14 @@ alternative with that <em>tag</em>.</p>
           <td id="right-nav">
             <div id="right-nav-div">
                 <h3>More:</h3>
-<div class="right-item"><a href="why_pyke.html">Why Pyke?</a><p>What does Pyke do for me?</p>
-</div>
-<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A very brief look at the steps involved in programming in Pyke.</p>
-</div>
-<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
-</div>
-<div class="right-item"><a href="logic_programming/index.html">Logic Programming Overview</a><p>An overview of Logic Programming in Pyke, including statements,
-pattern matching and rules.</p>
-</div>
-<div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered
-into named repositories called <em>knowledge bases</em>.</p>
-</div>
-<div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of knowledge fact base (KFB) files, which is where you
+<div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of <em>Knowledge Fact Base</em> (KFB) files, which is where you
 write your universal facts.</p>
 </div>
-<div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of knowledge question base (KQB) files, which is where you
-write your end user questions.</p>
-</div>
-<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
+<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the <em>Knowledge Rule Base</em> (KRB) files, which is where you
 write your rules.</p>
 </div>
-<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
-</div>
-<div class="right-item"><a href="examples.html">Examples</a><p>This gives an overview of the examples provided with pyke.</p>
-</div>
-<div class="right-item"><a href="PyCon2008-paper.html">Applying Expert System Technology to Code Reuse with Pyke</a><p>Paper presented at the PyCon 2008 conference in Chicago.</p>
+<div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of <em>Knowledge Question Base</em> (KQB) files, which is where you
+write your end user questions.</p>
 </div>
 
             </div>

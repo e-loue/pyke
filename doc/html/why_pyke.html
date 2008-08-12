@@ -38,9 +38,7 @@
 <div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="logic_programming/index.html">Logic Programming</a></div>
 <div class="normal-nav"><a href="knowledge_bases/index.html">Knowledge Bases</a></div>
-<div class="normal-nav"><a href="kfb_syntax.html">KFB Syntax</a></div>
-<div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
-<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="pyke_syntax/index.html">Pyke Syntax</a></div>
 <div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
 <div class="normal-nav"><a href="examples.html">Examples</a></div>
 <div class="normal-nav"><a href="PyCon2008-paper.html">PyCon 2008 Paper</a></div>
@@ -77,7 +75,40 @@ solution to one part of the problem affects whether another part of the problem
 can be solved or not.  Examples of these kind of applications are listed on
 the <a class="reference" href="index.html">home page</a>.</p>
 <div class="section">
-<h2><a id="examples-of-cooking-python-code" name="examples-of-cooking-python-code">Examples of &quot;Cooking&quot; Python Code</a></h2>
+<h2><a id="cooking-your-python-code" name="cooking-your-python-code">Cooking Your Python Code</a></h2>
+<p>Cooking your Python code is a form of meta-programming, or writing programs
+that manipulate other programs.  I.e., it's a means of <a class="reference" href="http://portal.acm.org/citation.cfm?id=808431">programming in the
+large</a>.</p>
+<p>Thus, Pyke provides a way to directly &quot;program in the large&quot;, which dovetails
+with using Python to &quot;program in the small&quot;.  Pyke supplements but does not
+replace Python!</p>
+<p>Pyke helps programmers to achieve order of magnitude improvements in:</p>
+<ul class="simple">
+<li>Adaptability/Customization<ul>
+<li>Using Pyke allows your Python code to be combined into thousands of
+different configurations.</li>
+<li>Thus, your application or library takes on the characteristics of a
+Domain Specific Language to achieve an order of magnitude increase in
+adaptability without a corresponding increase your program's &quot;surface
+area&quot; to your users.</li>
+</ul>
+</li>
+<li>Performance<ul>
+<li>Thinking of your application or library as a Domain Specific Language
+(DSL), you're using Pyke to &quot;compile&quot; rather than &quot;interpret&quot; your DSL to
+achieve an order of magnitude improvement in performance.</li>
+</ul>
+</li>
+<li>Code Reuse<ul>
+<li>Making your code an order of magnitude more adaptable and an order of
+magnitude faster allows it to be (re)used in a correspondingly broader
+range of situations.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section">
+<h2><a id="examples-of-cooking-python-code" name="examples-of-cooking-python-code">Examples of Cooking Python Code</a></h2>
 <div class="section">
 <h3><a id="database-access-library" name="database-access-library">Database Access Library</a></h3>
 <p>You're writing a library package to make it easier for Python programmers to
@@ -121,36 +152,6 @@ configuration changes until your program is sure that it's &quot;dotted all of t
 I's and crossed all the T's&quot;.</p>
 </div>
 </div>
-<div class="section">
-<h2><a id="summary" name="summary">Summary</a></h2>
-<p>Pyke provides a way to directly &quot;program in the large&quot;, which dovetails with
-using Python to &quot;program in the small&quot;.  Pyke supplements but does not replace
-Python!</p>
-<p>Pyke helps programmers to achieve order of magnitude improvements in:</p>
-<ul class="simple">
-<li>Adaptability/Customization<ul>
-<li>Using Pyke allows your Python code to be combined into thousands of
-different configurations.</li>
-<li>Thus, your application or library takes on the characteristics of a
-Domain Specific Language to achieve an order of magnitude increase in
-adaptability without a corresponding increase your program's &quot;surface
-area&quot; to your users.</li>
-</ul>
-</li>
-<li>Performance<ul>
-<li>Thinking of your application or library as a Domain Specific Language
-(DSL), you're using Pyke to &quot;compile&quot; rather than &quot;interpret&quot; your DSL to
-achieve an order of magnitude improvement in performance.</li>
-</ul>
-</li>
-<li>Code Reuse<ul>
-<li>Making your code an order of magnitude more adaptable and an order of
-magnitude faster allows it to be (re)used in a correspondingly broader
-range of situations.</li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 
                 <!-- <div id="return-to-top">
@@ -164,28 +165,22 @@ range of situations.</li>
                 <h3>More:</h3>
 <div class="right-item"><a href="why_pyke.html">Why Pyke?</a><p>What does Pyke do for me?</p>
 </div>
-<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A very brief look at the steps involved in programming in Pyke.</p>
+<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A brief list of the steps involved in programming in Pyke (with lots
+of links).</p>
 </div>
-<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
+<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing Pyke.</p>
 </div>
-<div class="right-item"><a href="logic_programming/index.html">Logic Programming Overview</a><p>An overview of Logic Programming in Pyke, including statements,
-pattern matching and rules.</p>
+<div class="right-item"><a href="logic_programming/index.html">Logic Programming Tutorial</a><p>An tutorial on logic programming in Pyke, including <em>statements</em>,
+<em>pattern matching</em> and <em>rules</em>.</p>
 </div>
 <div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered
 into named repositories called <em>knowledge bases</em>.</p>
 </div>
-<div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of knowledge fact base (KFB) files, which is where you
-write your universal facts.</p>
+<div class="right-item"><a href="pyke_syntax/index.html">Pyke Syntax</a><p>The syntax of Pyke's three different kinds of source files.</p>
 </div>
-<div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of knowledge question base (KQB) files, which is where you
-write your end user questions.</p>
+<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your Python program uses Pyke.</p>
 </div>
-<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
-write your rules.</p>
-</div>
-<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
-</div>
-<div class="right-item"><a href="examples.html">Examples</a><p>This gives an overview of the examples provided with pyke.</p>
+<div class="right-item"><a href="examples.html">Examples</a><p>An overview of the examples provided with Pyke.</p>
 </div>
 <div class="right-item"><a href="PyCon2008-paper.html">Applying Expert System Technology to Code Reuse with Pyke</a><p>Paper presented at the PyCon 2008 conference in Chicago.</p>
 </div>

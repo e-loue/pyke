@@ -23,7 +23,7 @@
 restindex
     crumb: Installing Pyke
     page-description:
-        System Requirements and installing pyke.
+        System Requirements and installing Pyke.
     /description
     format: rest
     encoding: utf8
@@ -45,16 +45,17 @@ Index to This Page
 
   * `Installing the Executables`_
   * `Installing the Sources`_
-  * `Installing the Example`_
+  * `Installing the Examples`_
   * `Installing the HTML Documentation`_
 
 * `Subversion Directories`_
 * Documentation_
 
+
 Licensing
 ================
 
-This software is licensed under the MIT license:
+This software is licensed under the MIT license::
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -74,14 +75,16 @@ This software is licensed under the MIT license:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
+
 System Requirements
 ====================
 
-Pyke is 100% python, so it should run on any platform supported by python.
+Pyke is 100% Python, so it should run on any platform supported by Python.
 You'll need:
 
 * `Python 2.5`_
 * `PLY 2.3`_ (easy_install_ automatically installs this)
+
 
 Installation
 ==================
@@ -89,35 +92,42 @@ Installation
 Installing the Executables
 ----------------------------
 
-Pyke is registered on pypi_, so once you have `python 2.5`_ with
-easy_install_ you can just type (you'll probably need root permission)::
+Pyke is registered on pypi_, so once you have `Python 2.5`_ with
+easy_install_ you can just type::
 
-    $ easy_install-2.5 pyke
+    $ sudo easy_install-2.5 pyke
 
 This will automatically install `PLY 2.3`_ too.
 
 Installing the Sources
 ------------------------
 
-The source code for the latest release can be found on the `pyke project
+The source code for the latest release can be found on the `Pyke project
 download page`_ as ``pyke-<release>.tar.gz``.
 
 If you want the latest developer version, read `Subversion Directories`_,
 below.
 
-Installing the Example
+Installing the Examples
 -------------------------
 
-At this point, there is a single example that is contained in the source
-directory.  There is a README file that explains how to run it.
+There are several examples that are contained in the source directory.
+There is a README file for each one that explains how to run it.
+
+These are in the source directory in the ``examples`` subdirectory.
+To download just the examples (for example, if you used easy_install to
+install Pyke), download the ``pyke_examples-<release>.tar.gz`` file.
+
+See also Examples_.
 
 Installing the HTML Documentation
 ----------------------------------------
 
-If you'd like to view the html documentation from you hard drive,
+If you'd like to view this html documentation from you hard drive,
 it is in the source directory (doc/html), or you can download just the
 documentation itself as ``pyke_doc_html-<release>.zip`` file from the
-`pyke project download page`_.
+`Pyke project download page`_.
+
 
 Subversion Directories
 ==========================
@@ -140,15 +150,17 @@ the example above and changing the directory that you want it to go into.
 
 * ``examples``
 
-  - Currently, there is only one example: *family_relations*.  Look at the
-    ``README`` file there to see how to run it.
+  - There are several examples.  Start with *family_relations*.  Look at the
+    ``README`` file for each example to see how to run it.  See also,
+    Examples_.
 
 * ``pyke``
   
-  - This is the top-level python package directory for the python sources.
+  - This is the top-level Python package directory for the Python sources.
     This needs to be in a directory on your ``PYTHONPATH``.
-    The sources for the compiler is in the ``krb_compiler`` subdirectory,
+    The sources for the compilers are in the ``krb_compiler`` subdirectory,
     which is expected to be a subpackage of ``pyke``.
+
 
 Documentation
 =================
@@ -175,8 +187,9 @@ the documentation without having to run ``r2w``.
 .. _Docutils: http://sourceforge.net/projects/docutils
 .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
 .. _PLY 2.3: http://www.dabeaz.com/ply/
-.. _pyke project download page:
+.. _Pyke project download page:
         http://sourceforge.net/project/showfiles.php?group_id=207724
 .. _pypi: http://pypi.python.org/pypi
 .. _Python 2.5: http://python.org
 .. _Rest2web: http://sourceforge.net/projects/rest2web
+.. _Examples: examples.html

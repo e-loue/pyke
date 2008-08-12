@@ -296,7 +296,7 @@ help out with the inferencing.  This keeps the inference mechanism simpler as
 it does not have to deal with things that are already easy in a procedural
 language (like arithmetic and simple list manipulation).
 
-The pyke rule source files are called *knowledge rule bases* and have a
+The Pyke rule source files are called *knowledge rule bases* and have a
 ``.krb`` suffix.
 
 We'll continue with the previous example here.
@@ -320,7 +320,7 @@ Here's three of the rules::
         when
             check_function($client, D, 2)
 
-Note that pyke uses a ``$`` to indicate pattern variables (anonymous pattern
+Note that Pyke uses a ``$`` to indicate pattern variables (anonymous pattern
 variables start with ``$_``).
 
 The ``check_function`` goal checks to see what version of the indicated
@@ -431,9 +431,9 @@ Some Final Points about Plans
 
   * If you add functools.partial to copy_reg.
 
-* You don't need to import all of pyke to unpickle and run a plan.
+* You don't need to import all of Pyke to unpickle and run a plan.
 
-  * Only one small pyke module is needed.
+  * Only one small Pyke module is needed.
 
 Other Capabilities
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -484,7 +484,7 @@ Other Capabilities
 Initial Results
 ================================
 
-After writing pyke's younger brother, it occurred to me that backward-chaining
+After writing Pyke's younger brother, it occurred to me that backward-chaining
 could be used to automatically figure out how to join database tables together
 and generate SQL statements.
 
@@ -524,7 +524,7 @@ Then the two sub plans were combined in the reverse order, to first retrieve
 the data and then populate the template, for the final plan that went back to
 the WSGI front-end.
 
-The pyke examples/sqlgen and examples/web_framework are simplified examples
+The Pyke examples/sqlgen and examples/web_framework are simplified examples
 that you can look at.
 
 Now, as it turned out, the company had been running without a president for

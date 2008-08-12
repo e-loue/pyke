@@ -36,7 +36,7 @@ restindex
 Backward Chaining
 =============================================
 
-Backward chaining rules_ are processed when your program asks pyke to prove_
+Backward chaining rules_ are processed when your program asks Pyke to prove_
 a specific *goal*.  Pyke will only use activated_ `rule bases`_ to do the
 proof.
 
@@ -96,7 +96,7 @@ but you'll notice three differences:
 How Backward-Chaining Rules are Run
 ====================================
 
-These rules_ are not used until you ask pyke to prove_ a goal.
+These rules_ are not used until you ask Pyke to prove_ a goal.
 
 The easiest way to do this is with
 *some_engine*.prove_1_ or *some_engine*.prove_n_.  Prove_1_ only
@@ -161,18 +161,18 @@ Backtracking
 
 Also note that while processing each subgoal within a `rule's`_ ``when`` clause:
 
-* If pyke succeeds at proving the subgoal:
+* If Pyke succeeds at proving the subgoal:
 
   * Pyke will proceed to the next subgoal within the ``when`` clause.
-  * If pyke reaches the end of the ``when`` clause, the rule_ succeeds.
+  * If Pyke reaches the end of the ``when`` clause, the rule_ succeeds.
 
-* If pyke fails at proving the subgoal:
+* If Pyke fails at proving the subgoal:
 
   * Pyke will back up to the prior subgoal within the ``when`` clause
     and try to find another proof for it.  The process starts over
     from this prior subgoal, going forward or backing up depending on
     whether another proof can be found.
-  * If pyke reaches the beginning of the ``when`` clause, the rule_
+  * If Pyke reaches the beginning of the ``when`` clause, the rule_
     fails.
 
 Thus, execution within each `rule's`_ ``when`` clause proceeds both forwards

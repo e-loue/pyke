@@ -23,7 +23,7 @@
 restindex
     crumb: Examples
     page-description:
-        This gives an overview of the examples provided with pyke.
+        An overview of the examples provided with Pyke.
     /description
     format: rest
     encoding: utf8
@@ -36,14 +36,14 @@ restindex
 Examples
 =============================
 
-Several examples are included to help you become familiar with pyke.  If you
+Several examples are included to help you become familiar with Pyke.  If you
 did an svn checkout, these should all be included in the ``examples`` directory.
-If you used easy_install for pyke, you'll need to download the pyke_examples
+If you used easy_install for Pyke, you'll need to download the pyke_examples
 tar file separately here__.
 
 Each example is in its own sub-directory and has a README file to get you
-started.  They all have `.krb files`_ and a python module to run the example
-that also demonstrates `how to call pyke`_ from your python program.
+started.  They all have `.krb files`_ and a Python module to run the example
+that also demonstrates `how to call Pyke`_ from your Python program.
 
 .. __: http://sourceforge.net/project/showfiles.php?group_id=207724
 
@@ -78,8 +78,8 @@ knapsack
 ================
 
 At the `PyCon 2008`_ conference, somebody asked about the `knapsack problem`_.
-We found a solution in prolog here__ (starting on page 19), and rewrote it in
-pyke.  This is a quick simple little example.
+We found a solution in Prolog here__ (starting on page 19), and rewrote it in
+Pyke.  This is a quick simple little example.
 
 .. __: http://www.ise.gmu.edu/~duminda/classes/fall03/set3.ppt
 
@@ -87,7 +87,7 @@ sqlgen
 ================
 
 Pyke was originally developed as the control component for a web framework.
-This example shows how pyke can automatically generate SQL SELECT statements,
+This example shows how Pyke can automatically generate SQL SELECT statements,
 given a set of tables that the calling program has keys to and a tuple of the
 desired column names.  Column names specified in the top-level tuple are
 expected to produce a single value each.  Nested tuples are used when multiple
@@ -97,7 +97,7 @@ the result rows.
 The data model used for the requested columns is that tables inherit the
 columns from tables they link to.  So if there is a 1-many relationship
 between tables A and B (1 A row has many B rows), the B table inherits the
-columns from table A through it's link to table A.  Thus, the pyke rules will
+columns from table A through it's link to table A.  Thus, the Pyke rules will
 automatically figure out the table joins.
 
 The program automatically introspects the schema information.  For this
@@ -134,7 +134,7 @@ multiple `rule bases`_ by using the sqlgen example above.
 .. _knapsack problem: http://en.wikipedia.org/wiki/Knapsack_problem
 .. _PyCon 2008: http://us.pycon.org/2008/about/
 .. _.krb files: krb_syntax/index.html
-.. _how to call pyke: using_pyke.html
+.. _how to call Pyke: using_pyke.html
 .. _facts: knowledge_bases/fact_bases.html#facts
 .. _forward-chaining: logic_programming/rules/forward_chaining.html
 .. _backward-chaining: logic_programming/rules/backward_chaining.html

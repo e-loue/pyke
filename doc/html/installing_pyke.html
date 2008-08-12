@@ -38,9 +38,7 @@
 <div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="logic_programming/index.html">Logic Programming</a></div>
 <div class="normal-nav"><a href="knowledge_bases/index.html">Knowledge Bases</a></div>
-<div class="normal-nav"><a href="kfb_syntax.html">KFB Syntax</a></div>
-<div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
-<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="pyke_syntax/index.html">Pyke Syntax</a></div>
 <div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
 <div class="normal-nav"><a href="examples.html">Examples</a></div>
 <div class="normal-nav"><a href="PyCon2008-paper.html">PyCon 2008 Paper</a></div>
@@ -74,7 +72,7 @@
 <li><a class="reference" href="#installation">Installation</a><ul>
 <li><a class="reference" href="#installing-the-executables">Installing the Executables</a></li>
 <li><a class="reference" href="#installing-the-sources">Installing the Sources</a></li>
-<li><a class="reference" href="#installing-the-example">Installing the Example</a></li>
+<li><a class="reference" href="#installing-the-examples">Installing the Examples</a></li>
 <li><a class="reference" href="#installing-the-html-documentation">Installing the HTML Documentation</a></li>
 </ul>
 </li>
@@ -85,27 +83,29 @@
 <div class="section">
 <h2><a id="licensing" name="licensing">Licensing</a></h2>
 <p>This software is licensed under the MIT license:</p>
-<blockquote>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+<pre class="literal-block">
+Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the &quot;Software&quot;), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.</p>
-</blockquote>
+THE SOFTWARE.
+</pre>
 </div>
 <div class="section">
 <h2><a id="system-requirements" name="system-requirements">System Requirements</a></h2>
-<p>Pyke is 100% python, so it should run on any platform supported by python.
+<p>Pyke is 100% Python, so it should run on any platform supported by Python.
 You'll need:</p>
 <ul class="simple">
 <li><a class="reference" href="http://python.org">Python 2.5</a></li>
@@ -116,31 +116,35 @@ You'll need:</p>
 <h2><a id="installation" name="installation">Installation</a></h2>
 <div class="section">
 <h3><a id="installing-the-executables" name="installing-the-executables">Installing the Executables</a></h3>
-<p>Pyke is registered on <a class="reference" href="http://pypi.python.org/pypi">pypi</a>, so once you have <a class="reference" href="http://python.org">python 2.5</a> with
-<a class="reference" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a> you can just type (you'll probably need root permission):</p>
+<p>Pyke is registered on <a class="reference" href="http://pypi.python.org/pypi">pypi</a>, so once you have <a class="reference" href="http://python.org">Python 2.5</a> with
+<a class="reference" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a> you can just type:</p>
 <pre class="literal-block">
-$ easy_install-2.5 pyke
+$ sudo easy_install-2.5 pyke
 </pre>
 <p>This will automatically install <a class="reference" href="http://www.dabeaz.com/ply/">PLY 2.3</a> too.</p>
 </div>
 <div class="section">
 <h3><a id="installing-the-sources" name="installing-the-sources">Installing the Sources</a></h3>
-<p>The source code for the latest release can be found on the <a class="reference" href="http://sourceforge.net/project/showfiles.php?group_id=207724">pyke project
+<p>The source code for the latest release can be found on the <a class="reference" href="http://sourceforge.net/project/showfiles.php?group_id=207724">Pyke project
 download page</a> as <tt class="docutils literal"><span class="pre">pyke-&lt;release&gt;.tar.gz</span></tt>.</p>
 <p>If you want the latest developer version, read <a class="reference" href="#subversion-directories">Subversion Directories</a>,
 below.</p>
 </div>
 <div class="section">
-<h3><a id="installing-the-example" name="installing-the-example">Installing the Example</a></h3>
-<p>At this point, there is a single example that is contained in the source
-directory.  There is a README file that explains how to run it.</p>
+<h3><a id="installing-the-examples" name="installing-the-examples">Installing the Examples</a></h3>
+<p>There are several examples that are contained in the source directory.
+There is a README file for each one that explains how to run it.</p>
+<p>These are in the source directory in the <tt class="docutils literal"><span class="pre">examples</span></tt> subdirectory.
+To download just the examples (for example, if you used easy_install to
+install Pyke), download the <tt class="docutils literal"><span class="pre">pyke_examples-&lt;release&gt;.tar.gz</span></tt> file.</p>
+<p>See also <a class="reference" href="examples.html">Examples</a>.</p>
 </div>
 <div class="section">
 <h3><a id="installing-the-html-documentation" name="installing-the-html-documentation">Installing the HTML Documentation</a></h3>
-<p>If you'd like to view the html documentation from you hard drive,
+<p>If you'd like to view this html documentation from you hard drive,
 it is in the source directory (doc/html), or you can download just the
 documentation itself as <tt class="docutils literal"><span class="pre">pyke_doc_html-&lt;release&gt;.zip</span></tt> file from the
-<a class="reference" href="http://sourceforge.net/project/showfiles.php?group_id=207724">pyke project download page</a>.</p>
+<a class="reference" href="http://sourceforge.net/project/showfiles.php?group_id=207724">Pyke project download page</a>.</p>
 </div>
 </div>
 <div class="section">
@@ -161,14 +165,15 @@ the example above and changing the directory that you want it to go into.</p>
 </ul>
 </li>
 <li><tt class="docutils literal"><span class="pre">examples</span></tt><ul>
-<li>Currently, there is only one example: <em>family_relations</em>.  Look at the
-<tt class="docutils literal"><span class="pre">README</span></tt> file there to see how to run it.</li>
+<li>There are several examples.  Start with <em>family_relations</em>.  Look at the
+<tt class="docutils literal"><span class="pre">README</span></tt> file for each example to see how to run it.  See also,
+<a class="reference" href="examples.html">Examples</a>.</li>
 </ul>
 </li>
 <li><tt class="docutils literal"><span class="pre">pyke</span></tt><ul>
-<li>This is the top-level python package directory for the python sources.
+<li>This is the top-level Python package directory for the Python sources.
 This needs to be in a directory on your <tt class="docutils literal"><span class="pre">PYTHONPATH</span></tt>.
-The sources for the compiler is in the <tt class="docutils literal"><span class="pre">krb_compiler</span></tt> subdirectory,
+The sources for the compilers are in the <tt class="docutils literal"><span class="pre">krb_compiler</span></tt> subdirectory,
 which is expected to be a subpackage of <tt class="docutils literal"><span class="pre">pyke</span></tt>.</li>
 </ul>
 </li>
@@ -206,28 +211,22 @@ the documentation without having to run <tt class="docutils literal"><span class
                 <h3>More:</h3>
 <div class="right-item"><a href="why_pyke.html">Why Pyke?</a><p>What does Pyke do for me?</p>
 </div>
-<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A very brief look at the steps involved in programming in Pyke.</p>
+<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A brief list of the steps involved in programming in Pyke (with lots
+of links).</p>
 </div>
-<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
+<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing Pyke.</p>
 </div>
-<div class="right-item"><a href="logic_programming/index.html">Logic Programming Overview</a><p>An overview of Logic Programming in Pyke, including statements,
-pattern matching and rules.</p>
+<div class="right-item"><a href="logic_programming/index.html">Logic Programming Tutorial</a><p>An tutorial on logic programming in Pyke, including <em>statements</em>,
+<em>pattern matching</em> and <em>rules</em>.</p>
 </div>
 <div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered
 into named repositories called <em>knowledge bases</em>.</p>
 </div>
-<div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of knowledge fact base (KFB) files, which is where you
-write your universal facts.</p>
+<div class="right-item"><a href="pyke_syntax/index.html">Pyke Syntax</a><p>The syntax of Pyke's three different kinds of source files.</p>
 </div>
-<div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of knowledge question base (KQB) files, which is where you
-write your end user questions.</p>
+<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your Python program uses Pyke.</p>
 </div>
-<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
-write your rules.</p>
-</div>
-<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
-</div>
-<div class="right-item"><a href="examples.html">Examples</a><p>This gives an overview of the examples provided with pyke.</p>
+<div class="right-item"><a href="examples.html">Examples</a><p>An overview of the examples provided with Pyke.</p>
 </div>
 <div class="right-item"><a href="PyCon2008-paper.html">Applying Expert System Technology to Code Reuse with Pyke</a><p>Paper presented at the PyCon 2008 conference in Chicago.</p>
 </div>
@@ -247,7 +246,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Sat, Aug 09 2008.
+    Page last modified Mon, Aug 11 2008.
   </div>
 
 </body>

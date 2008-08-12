@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-    <title>Overview</title>
+    <title>Logic Programming Tutorial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="../stylesheets/pyke.css" type="text/css" />
 </head>
@@ -33,19 +33,19 @@
             <div id="left-nav-div">
               
 <div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../why_pyke.html">Why Pyke?</a></div>
+<div class="normal-nav"><a href="../steps_to_using_pyke.html">Steps to Using Pyke</a></div>
+<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
 
 <div class="title-nav"><a href="index.html">Logic Programming</a></div><div class="nav-branch">
-<div class="normal-nav"><a href="knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="normal-nav"><a href="statements.html">Statements</a></div>
+<div class="normal-nav"><a href="pattern_matching.html">Pattern Matching</a></div>
 <div class="normal-nav"><a href="rules/index.html">Rules</a></div>
-<div class="normal-nav"><a href="plans.html">Plans</a></div>
 </div>
-<div class="normal-nav"><a href="../installing_pyke.html">Installing Pyke</a></div>
+<div class="normal-nav"><a href="../knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="normal-nav"><a href="../pyke_syntax/index.html">Pyke Syntax</a></div>
 <div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
-<div class="normal-nav"><a href="../kfb_syntax.html">KFB Syntax</a></div>
-<div class="normal-nav"><a href="../kqb_syntax.html">KQB Syntax</a></div>
-<div class="normal-nav"><a href="../krb_syntax/index.html">KRB Syntax</a></div>
 <div class="normal-nav"><a href="../examples.html">Examples</a></div>
-<div class="normal-nav"><a href="../logic_tricks.html">Logic Tricks</a></div>
 <div class="normal-nav"><a href="../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
 </div>
 
@@ -67,22 +67,22 @@
           <td id="main-td">
             <div id="main">
                 <a name="startcontent" id="startcontent"></a>
-                <div class="document" id="overview">
-<h1 class="title">Overview</h1>
-<p>Pyke is an inference engine that applies <a class="reference" href="rules/index.html">rules</a> to <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> to establish
+                <div class="document" id="logic-programming-tutorial">
+<h1 class="title">Logic Programming Tutorial</h1>
+<p>Pyke is an inference engine that applies <a class="reference" href="rules/index.html">rules</a> to <a class="reference" href="../knowledge_bases/fact_bases.html#facts">facts</a> to establish
 additional facts (through <a class="reference" href="rules/forward_chaining.html">forward-chaining</a> rules), and/or to prove <em>goals</em>
-and optionally assemble python functions
+and optionally assemble Python functions
 into customized call graphs, called <a class="reference" href="plans.html">plans</a> (through <a class="reference" href="rules/backward_chaining.html">backward-chaining</a> rules).</p>
 <p>Pyke may then be <a class="reference" href="../using_pyke.html#setting-up-each-case">reset</a>, deleting the last set of facts, so that the cycle
 may be repeated.  For each cycle a different rule base may be <a class="reference" href="../using_pyke.html#setting-up-each-case">activated</a>.</p>
 <p>The <a class="reference" href="plans.html">plan</a> capability allows the postponement of code execution until the
 top-level goal has been completely proven.  This shields the code from
-blind alleys and <a class="reference" href="rules/backward_chaining.html#backtracking">backtracking</a> within the rules.</p>
+blind alleys and the <a class="reference" href="rules/backward_chaining.html#backtracking">backtracking</a> that occurs within the rules.</p>
 <p>Once a <a class="reference" href="plans.html">plan</a> has been created, it may be executed multiple times with different
 arguments.  It may also be <a class="reference" href="plans.html#running-and-pickling-plans">pickled</a>, and later run again only requiring one
-small pyke module.</p>
-<p>Pyke also provides an end user <a class="reference" href="knowledge_bases/question_bases.html">question</a> capability, as well as the capability
-to run <a class="reference" href="knowledge_bases/special.html#running-commands">commands</a> on the local system to guide the inferencing.</p>
+small Pyke module.</p>
+<p>Pyke also provides an end user <a class="reference" href="../knowledge_bases/question_bases.html">question</a> capability, as well as the capability
+to run <a class="reference" href="../knowledge_bases/special.html#running-commands">commands</a> on the local system to guide the inferencing.</p>
 </div>
 
                 <!-- <div id="return-to-top">
@@ -94,12 +94,11 @@ to run <a class="reference" href="knowledge_bases/special.html#running-commands"
           <td id="right-nav">
             <div id="right-nav-div">
                 <h3>More:</h3>
-<div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered
-into named repositories called <em>knowledge bases</em>.</p>
+<div class="right-item"><a href="statements.html">Statements</a><p>What is a <em>statement</em> in Pyke?</p>
+</div>
+<div class="right-item"><a href="pattern_matching.html">Pattern Matching</a><p>Explanation of <em>pattern matching</em> and <em>pattern variables</em>.</p>
 </div>
 <div class="right-item"><a href="rules/index.html">Rules</a><p>Explanation of rules, forward-chaining and backward-chaining.</p>
-</div>
-<div class="right-item"><a href="plans.html">Plans and Automatic Program Generation</a><p>Explanation of plans and automatic program generation.</p>
 </div>
 
             </div>

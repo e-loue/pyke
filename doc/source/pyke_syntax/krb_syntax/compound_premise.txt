@@ -120,7 +120,7 @@ Notes on Forall and Notany Premises
    ``forall`` or ``notany`` are run.
    Thus, ``forall`` and ``notany`` can be used to test
    values produced by prior premises; but to generate values for subsequent
-   premises the values must be captured in python variables within the
+   premises the values must be captured in Python variables within the
    ``forall`` or ``notany`` clause before the `pattern variables` are unbound
    (see `Computing Sets of Values`_, below).
 

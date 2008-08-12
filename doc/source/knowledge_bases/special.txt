@@ -41,7 +41,7 @@ when they are asked to lookup facts_ or prove_ goals_.  Pyke includes one of
 these named ``special``.  There is only one instance of this 'special'
 knowledge base (called ``special``).
 
-Each entity in this `knowledge base`_ is a python function that does
+Each entity in this `knowledge base`_ is a Python function that does
 something "special" when run.
 
 The ``special`` functions are:
@@ -58,7 +58,7 @@ The ``claim_goal`` function has no arguments::
 
     special.claim_goal()
 
-This acts like the prolog_ `cut operator`_.
+This acts like the Prolog_ `cut operator`_.
 
 In general there are multiple rules_ that might be used to try to prove_ any
 goal_.  They are each tried in the order that they appear in the `.krb file`_.
@@ -196,7 +196,7 @@ and stderr are single strings (with embedded newlines).
 .. _.krb file: ../../krb_syntax/index.html
 .. _premise: ../../krb_syntax/bc_rule.html#when-clause
 .. _premises: premise_
-.. _prolog: http://en.wikipedia.org/wiki/Prolog
+.. _Prolog: http://en.wikipedia.org/wiki/Prolog
 .. _prove: ../../using_pyke.html#proving-goals
 .. _rule: ../rules/index.html
 .. _rules: rule_

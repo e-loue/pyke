@@ -53,7 +53,7 @@ Forward-chaining_ rules_ have three parts:
                 DEINDENT
 
 The ``IDENTIFIER`` uniquely names this rule_ and is used as the corresponding
-python function name in the generated <rb_name>_fc.py file.
+Python function name in the generated <rb_name>_fc.py file.
 
 Foreach clause
 =================
@@ -92,11 +92,11 @@ Assert clause
 
 Here is the link to the definitions of python_statements_.
 
-The ``assert`` clause lists new facts_ to assert, and/or python
+The ``assert`` clause lists new facts_ to assert, and/or Python
 statements to execute each time the rule_ is fired.  Each of these may
 include `pattern variables`_ which should also appear in the ``foreach``
 clause where they are bound to a value.  These values will then be substituted
-into the facts_ and python statements.
+into the facts_ and Python statements.
 
 .. _compound_premise: compound_premise.html
 .. _facts: knowledge_bases/fact_bases.html#facts

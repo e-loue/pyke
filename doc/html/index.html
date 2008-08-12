@@ -36,9 +36,7 @@
 <div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
 <div class="normal-nav"><a href="logic_programming/index.html">Logic Programming</a></div>
 <div class="normal-nav"><a href="knowledge_bases/index.html">Knowledge Bases</a></div>
-<div class="normal-nav"><a href="kfb_syntax.html">KFB Syntax</a></div>
-<div class="normal-nav"><a href="kqb_syntax.html">KQB Syntax</a></div>
-<div class="normal-nav"><a href="krb_syntax/index.html">KRB Syntax</a></div>
+<div class="normal-nav"><a href="pyke_syntax/index.html">Pyke Syntax</a></div>
 <div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
 <div class="normal-nav"><a href="examples.html">Examples</a></div>
 <div class="normal-nav"><a href="PyCon2008-paper.html">PyCon 2008 Paper</a></div>
@@ -65,17 +63,18 @@
                 <div class="document" id="welcome-to-pyke">
 <h1 class="title">Welcome to Pyke</h1>
 <h2 class="subtitle" id="release-0-3">Release 0.3</h2>
-<p>Pyke is a knowledge-based inference engine (expert system) written in
-100% python that can:</p>
+<p>Pyke introduces a form of <a class="reference" href="http://en.wikipedia.org/wiki/Logic_programming">Logic Programming</a> (inspired by <a class="reference" href="http://en.wikipedia.org/wiki/Prolog">Prolog</a>) to the
+Python community by providing a knowledge-based inference engine (expert
+system) written in 100% Python that can:</p>
 <ul class="simple">
 <li>Do both forward-chaining (data driven) and
 backward-chaining (goal directed) inferencing.<ul>
-<li>Pyke may be embedded into any python program.</li>
+<li>Pyke may be embedded into any Python program.</li>
 </ul>
 </li>
-<li>Automatically generate python programs by assembling individual python
+<li>Automatically generate Python programs by assembling individual Python
 functions into complete call graphs.<ul>
-<li>This is done through a unique design where the individual python
+<li>This is done through a unique design where the individual Python
 functions are attached to backward-chaining rules.</li>
 <li>Unlike other approaches to code reuse (e.g. Zope adapters and generic
 functions), this allows the inference engine to ensure that all of the
@@ -91,7 +90,7 @@ want the inferencing capability by itself.</li>
 </li>
 </ul>
 <div class="section">
-<h2><a id="the-knowledge-engine-supports" name="the-knowledge-engine-supports">The knowledge engine supports:</a></h2>
+<h2><a id="the-knowledge-engine-supports" name="the-knowledge-engine-supports">The Knowledge Engine Supports:</a></h2>
 <ul class="simple">
 <li>Multiple <em>fact bases</em>, each with its own list of facts.</li>
 <li>Both <em>forward-chaining</em> rules and <em>backward-chaining</em> rules.</li>
@@ -99,29 +98,29 @@ want the inferencing capability by itself.</li>
 and/or backward-chaining rules.</li>
 <li>Rule base inheritance -- <em>activating</em> the derived rule base
 includes the rules from the parent rule base.</li>
-<li>The inference rules are compiled into python functions, allowing
-python code snippets to be used within the rules.
+<li>The inference rules are compiled into Python functions, allowing
+Python code snippets to be used within the rules.
 This greatly enhances the expressiveness of the rules.</li>
 </ul>
 </div>
 <div class="section">
-<h2><a id="automatic-program-generation" name="automatic-program-generation">Automatic program generation:</a></h2>
+<h2><a id="automatic-program-generation" name="automatic-program-generation">Automatic Program Generation:</a></h2>
 <ul class="simple">
-<li>Calls the generated python programs <em>plans</em>.</li>
+<li>Calls the generated Python programs <em>plans</em>.</li>
 <li>Plans may be run multiple times without needing to rerun the inference
 rules.</li>
 <li>Plans may be pickled and cached to disk to be used by other programs or
 in later runs of the same program.</li>
-<li>Only one small pyke module is required to run the plans.</li>
+<li>Only one small Pyke module is required to run the plans.</li>
 </ul>
 </div>
 <div class="section">
-<h2><a id="potential-pyke-applications" name="potential-pyke-applications">Potential pyke applications:</a></h2>
+<h2><a id="potential-pyke-applications" name="potential-pyke-applications">Potential Pyke Applications:</a></h2>
 <ul class="simple">
 <li>Complicated decision making applications.</li>
 <li>The back-end (code generation and optimization) of compilers.
 Pyke is used as the back-end of its own
-compiler that translates rules into python code.</li>
+compiler that translates rules into Python code.</li>
 <li>Automatic SQL statement generation.</li>
 <li>Automatic HTML generation and automatic HTML template processing.</li>
 <li>Automatic program builder to reuse a common set of functions for many
@@ -139,14 +138,14 @@ to much larger distributed systems to meet a wide range of performance
 goals.</li>
 <li>Diagnosis systems, including automated customer service systems.</li>
 <li>Program or library customization for specific uses.</li>
-<li>In addition to being able to build programs, pyke can instantiate,
+<li>In addition to being able to build programs, Pyke can instantiate,
 configure and interconnect a network of objects to meet a specific need
 or situation.</li>
 </ul>
 </div>
 <div class="section">
 <h2><a id="pyke-on-google-groups" name="pyke-on-google-groups">Pyke on Google Groups</a></h2>
-<p>Please join <a class="reference" href="http://groups.google.com/group/pyke">pyke</a> on Google Groups for questions and discussion!</p>
+<p>Please join <a class="reference" href="http://groups.google.com/group/pyke">Pyke</a> on Google Groups for questions and discussion!</p>
 </div>
 </div>
 
@@ -161,28 +160,22 @@ or situation.</li>
                 <h3>More:</h3>
 <div class="right-item"><a href="why_pyke.html">Why Pyke?</a><p>What does Pyke do for me?</p>
 </div>
-<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A very brief look at the steps involved in programming in Pyke.</p>
+<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A brief list of the steps involved in programming in Pyke (with lots
+of links).</p>
 </div>
-<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing pyke.</p>
+<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing Pyke.</p>
 </div>
-<div class="right-item"><a href="logic_programming/index.html">Logic Programming Overview</a><p>An overview of Logic Programming in Pyke, including statements,
-pattern matching and rules.</p>
+<div class="right-item"><a href="logic_programming/index.html">Logic Programming Tutorial</a><p>An tutorial on logic programming in Pyke, including <em>statements</em>,
+<em>pattern matching</em> and <em>rules</em>.</p>
 </div>
 <div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered
 into named repositories called <em>knowledge bases</em>.</p>
 </div>
-<div class="right-item"><a href="kfb_syntax.html">KFB Syntax</a><p>The syntax of knowledge fact base (KFB) files, which is where you
-write your universal facts.</p>
+<div class="right-item"><a href="pyke_syntax/index.html">Pyke Syntax</a><p>The syntax of Pyke's three different kinds of source files.</p>
 </div>
-<div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of knowledge question base (KQB) files, which is where you
-write your end user questions.</p>
+<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your Python program uses Pyke.</p>
 </div>
-<div class="right-item"><a href="krb_syntax/index.html">KRB Syntax</a><p>Syntax of the knowledge rule base (KRB) files, which is where you
-write your rules.</p>
-</div>
-<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your python program uses pyke.</p>
-</div>
-<div class="right-item"><a href="examples.html">Examples</a><p>This gives an overview of the examples provided with pyke.</p>
+<div class="right-item"><a href="examples.html">Examples</a><p>An overview of the examples provided with Pyke.</p>
 </div>
 <div class="right-item"><a href="PyCon2008-paper.html">Applying Expert System Technology to Code Reuse with Pyke</a><p>Paper presented at the PyCon 2008 conference in Chicago.</p>
 </div>
@@ -202,7 +195,7 @@ write your rules.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Aug 11 2008.
+    Page last modified Tue, Aug 12 2008.
   </div>
 
 </body>

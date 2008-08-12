@@ -23,7 +23,7 @@
 restindex
     crumb: KRB Syntax
     page-description:
-        Syntax of the knowledge rule base (KRB) files, which is where you
+        Syntax of the *Knowledge Rule Base* (KRB) files, which is where you
         write your rules.
     /description
     section-pages: , fc_rule, bc_rule, pattern, compound_premise, python_premise
@@ -38,41 +38,7 @@ restindex
 KRB Syntax
 ===================
 
-This section describes the syntax for defining rules_ in the KRB files.
-
-Legend
-==============
-
-To describe this syntax, the following punctuation is used:
-
-'*any_chars*'
-   required punctuation or keyword: *any_chars*
-*a* | *b*
-   alternation: *a* or *b*
-[*a*]
-   optional *a*
-{*a*}
-   one or more *a*'s.  If *a* ends in a comma, the last comma is optional.
-NL
-   means one or more newlines
-
-Lexical Structure
-=======================
-
-The KRB lexical structure is much like python.  Like python, indenting is
-significant.  It uses the same commenting, line continuation and literal
-formats for strings and numbers (except complex numbers).  It also uses the
-same rules for forming identifiers.
-
-The two notable exceptions to python conventions are:
-
-#. Identifiers may be used as strings, without requiring quotes.
-
-   - ``foobar`` is the same as ``'foobar'``
-
-#. Singleton tuples do not require a trailing comma.
-
-   - ``(1)`` is the same as ``(1,)``
+This section describes the syntax for defining rules_ in KRB files.
 
 
 Keywords
@@ -116,7 +82,7 @@ The KRB file has three optional parts.  It must contain at least one rule_
 (either forward-chaining_ or backward-chaining_).
 
 The filename (minus the .krb extension) is the name of the `rule base`_.
-This must be a legal python identifier.
+This must be a legal Python identifier.
 
 Extending clause
 -----------------
@@ -129,37 +95,37 @@ from this inheritance.
 Forward-Chaining Section
 --------------------------
 
-If the krb file contains any forward-chaining_ rules_, a python source file
+If the krb file contains any forward-chaining_ rules_, a Python source file
 will be created named <rb_name>_fc.py, where <rb_name> is the `rule base`_
 name.
 
 The syntax of a forward-chaining_ rule_ (fc_rule_) is defined elsewhere__.
 
 The ``fc_extras`` can only be used if there are forward-chaining_ rules_.
-This allows you to add other python code (for example, ``import`` statements)
-to the generated python source file.
+This allows you to add other Python code (for example, ``import`` statements)
+to the generated Python source file.
 
 .. __: fc_rule_
 
 Backward-Chaining Section
 --------------------------
 
-If the krb file contains any backward-chaining_ rules_, a python source file
+If the krb file contains any backward-chaining_ rules_, a Python source file
 will be created named <rb_name>_bc.py, where <rb_name> is the `rule base`_
 name.
 
 The syntax of a backward-chaining_ rule_ (bc_rule_) is defined elsewhere__.
 
 The ``bc_extras`` can only be used if there are backward-chaining_ rules_.
-This allows you to add other python code (for example, ``import`` statements)
-to the generated python source file.
+This allows you to add other Python code (for example, ``import`` statements)
+to the generated Python source file.
 
 In addition, if any of the backward-chaining_ rules_ have plan_ code (for
 example, a ``with`` clause or subgoals in the ``when`` clause that produce
-plans_), a python source file will be created name <rb_name>_plans.py, where
+plans_), a Python source file will be created name <rb_name>_plans.py, where
 <rb_name> is the `rule base`_ name.
 
-You use the ``plan_extras`` to include arbitrary python code in this plans
+You use the ``plan_extras`` to include arbitrary Python code in this plans
 file.
 
 .. __: bc_rule_
