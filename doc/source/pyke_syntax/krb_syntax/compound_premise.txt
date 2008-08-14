@@ -276,11 +276,8 @@ values that pass ``test_x($x)``::
 .. _backtracking: ../logic_programming/rules/backward_chaining.html#backtracking
 .. _backward-chaining rules: bc_rule.html
 .. _bc_premise: bc_rule.html#when-clause
-.. _Examples: #examples
 .. _fc_premise: fc_rule.html#foreach-clause
 .. _forward-chaining rules: fc_rule.html
-.. _Notes on Forall and Notany Premises: #notes-on-forall-and-notany-premises
 .. _pattern variable: pattern.html#pattern-variable
 .. _plan_spec: bc_rule.html#plan-spec
 .. _python_statements: python_premise.html#python-statements
-.. _Computing Sets of Values: #computing-sets-of-values

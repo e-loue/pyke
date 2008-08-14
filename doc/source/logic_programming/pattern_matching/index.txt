@@ -1,0 +1,87 @@
+.. $Id$
+.. 
+.. Copyright © 2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Pattern Matching
+    page-description:
+        Explanation of *pattern matching* and *pattern variables*.
+    /description
+    section-pages: , literal_patterns, pattern_variables, tuple_patterns, matching_patterns
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+================
+Pattern Matching
+================
+
+Pattern matching is a little strange at first, so we're going to ease into
+it slowly...
+
+There are two aspects to pattern matching: *patterns*, which you write, and
+*matching*, which is what Pyke does with your patterns.
+
+In a nutshell, patterns are made up of two fundamental building blocks:
+
+#. `Literal patterns`_.
+   
+   - Theses are just data values that only match themselves.
+
+#. `Pattern variables`_.
+
+   - These will match anything.  (Including other pattern variables, as we'll
+     see later)!
+
+And one compound pattern:
+
+#. `Tuple patterns`_.
+
+   - These match -- you guessed it! -- tuples!
+
+We'll examine all of the above looking at how Pyke matches a pattern to data.
+Then we'll expand this to cover `matching two patterns together`_.
+
+And finally, a `pathological question`_ to see if you've been paying
+attention.
+
+Sound like fun?  Good!  Let's get started!
+
+OK, so why do we need patterns?  The simple answer is that we need patterns
+to generalize statements_.  One example is to turn statements into questions.
+
+.. important::
+   - When you want a *direct* statement, such as to state a fact, you just use
+     *data* for its arguments.
+   - But when you want a *generalized* statement, such as to ask a question,
+     you use *patterns* for its arguments.
+
+
+
+.. _statements: FIX
+.. _Literal patterns: literal_patterns.html
+.. _Pattern variables: pattern_variables.html
+.. _Tuple patterns: tuple_patterns.html
+.. _matching two patterns together: matching_patterns.html
+.. _pathological question: matching_patterns.html#pathological-question

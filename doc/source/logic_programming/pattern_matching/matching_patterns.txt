@@ -1,0 +1,120 @@
+.. $Id$
+.. 
+.. Copyright © 2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Matching 2 Patterns
+    page-description:
+        Explanation of matching two patterns together, vs matching a pattern
+        to data.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+=====================
+Matching Two Patterns
+=====================
+
+You've now seen all of the different kinds of patterns and how they are
+matched to data.  Not too bad so far...
+
+Patterns are used to generalize statements.  One situation where you need to
+generalize a statement is when you want to ask a question.  That's been
+covered above.
+
+The other situation where you need to generalize a statement is when you write
+rules_, which are explained later.
+
+But rules also need to be able to match one pattern to another *pattern*,
+and not just match patterns to *data* as we have discussed so far.
+
+So before we can move on to rules, we need to examine how one pattern is
+matched to another pattern.
+
+The short answer is that it all comes down to pattern variables and that
+pattern variables may not only be bound to *data*, but may also be bound to
+other *patterns*.
+
+Binding to a Literal Pattern
+============================
+
+Binding a pattern variable to a literal pattern is just like binding it to the
+data within that literal pattern.  Nothing fancy here!
+
+Binding to Another Pattern Variable
+=====================================
+
+When pattern variable A is bound to pattern variable B, they essentially
+become the *same pattern variable*.  Basically, pattern variable A *becomes*
+pattern variable B (or, you might say, *defers* to pattern variable B).
+
+Let's say that pattern variable A has been bound to pattern variable B and
+that pattern variable B is still unbound.
+
+#. Prior to binding pattern variable B to a value, it doesn't matter whether
+   you ask if pattern variable A is bound or pattern variable B is bound, the
+   answer is False for both.
+
+#. It doesn't matter whether you match pattern variable A to a value or
+   pattern variable B to a value.  In both cases, it is pattern variable B
+   that gets bound to this value.
+
+#. And once pattern variable B is bound to a value, it doesn't matter whether
+   you ask for the bound value of pattern variable A or pattern variable B,
+   you will get the same value.
+
+So for all intents and purposes pattern variable A and pattern variable B
+become the same pattern variable.
+
+Binding to a Tuple Pattern
+===========================
+
+Because pattern variables may be bound to tuple patterns, the term *fully
+bound* is introduced.  Asking whether the pattern variable is *fully bound*
+means that not only is it bound to a value (the tuple pattern), but that all
+of the subordinate patterns (recursively) within the tuple pattern are also
+bound to values.
+
+Being *fully bound* means that the bound value of the pattern variable can be
+converted into standard Python data without any pattern variables in it.  This
+is important when Pyke wants to talk to Python because Python has no concept
+of storing *variables* within its data structures.
+
+
+Pathological Question
+=====================
+
+What is the bound value of pattern variable ``$y`` after matching the
+following two tuple patterns:
+
+    Tuple pattern A:
+        ``((ho, $_, ($a, $a)), ($a, $a, $b), ($a, *$b))``
+    Tuple pattern B:
+        ``($x, $x, $y)``
+
+The answer is here_ (but no peeking!).
+
+.. _rules: FIX
+.. _here: pathological_answer.html

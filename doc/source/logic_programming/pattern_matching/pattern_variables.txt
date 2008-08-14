@@ -1,0 +1,138 @@
+.. $Id$
+.. 
+.. Copyright © 2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Pattern Variables
+    page-description:
+        Explanation of *pattern variables*.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+=================
+Pattern Variables
+=================
+
+To take this to the next level, you might want to ask "Who are the sons of
+Thomas and Norma?".  In this case, you are passing ``Thomas`` and ``Norma``
+*into* Pyke, and you'd like Pyke to pass something back *out* to you as part of
+the answer (in addition to the thumbs up).
+
+Pattern variables serve as output parameters.  They start with a ``$``::
+
+    family.son_of($son, Thomas, Norma)
+
+You can use whatever name you like after the ``$``.  Pyke will answer with a
+thumbs up *binding* ``$son`` to ``Bruce``.  If you don't like that answer, you
+can reject that answer and ask Pyke for another answer ("nope, try again!").
+Each time Pyke finds another son for Thomas and Norma, it answers with another
+thumbs up and ``$son`` *bound* to a different value.
+
+If you reject the last son of ``Thomas`` and ``Norma`` (or if ``Thomas`` and
+``Norma`` have no sons in the first place), Pyke will answer with a thumbs
+down.
+
+We say that Pyke *binds* ``Bruce`` to the pattern variable ``$son`` when it
+comes back with its first thumbs up.  When we tell Pyke "nope, try again!",
+Pyke must first *unbind* ``$son`` before it can go on and *bind* it to the
+next value.  The "nope" part does the *unbinding*, and the "try again" part
+does the *binding* again to a new value.
+
+So at any point in time, a pattern variable is either *bound* to a value or
+*unbound*.  If we follow a particular pattern variable through time, we might
+see that it is alternately bound and unbound many times as Pyke tries to find
+a suitable answer to your question.  Specifically, when Pyke comes back with
+the final thumbs down, ``$son`` is unbound.
+
+Anonymous Pattern Variables
+===========================
+
+Suppose we want to know who Norma's sons are?  In this case we don't care
+about the father.  We use *anonymous variables* as "don't care" placeholders.
+
+An anonymous variable is any pattern variable who's name starts with an
+underscore (``_``).  The rest of the name doesn't matter and just serves as
+documentation (and so ``$_`` is all that's strictly needed).
+
+So "Who are Norma's sons?" looks like::
+
+    family.son_of($son, $_father, Norma)
+
+We're giving Norma as input to Pyke, and asking for the ``$son`` as output and
+telling Pyke that we don't care about the ``$_father``.
+
+Anonymous variables are never bound to values.  (So you could say that they
+are always unbound).
+
+Pattern Variable Identity
+===========================
+
+Now this is very important, so pay attention!  The same pattern variable
+*name* means the same *pattern variable*.  Thus, if you say ``$son`` twice,
+it's the *same* pattern variable.  And, a pattern variable can only be bound
+to one value (at a time), so you mean the *same* data value must appear in
+both places.
+
+.. note::
+   This does *not* apply to `anonymous pattern variables`_.  Since they are
+   never bound to a value, each use of the same anonymous variable can match
+   different data values.
+
+So if you wanted to see all of the sons with the same name as their fathers,
+you would ask::
+
+    family.son_of($father, $father, $_mother)
+
+.. note::
+
+   The Pyke family_relations_ example never uses the same name for both
+   father and son because that would cause confusion about which of them
+   was the father to both of their sons and daughters.
+   
+   In these cases, it modifies the name of the son to make it unique.
+
+   Thus, this question would always fail within the family_relations
+   example...
+
+And so here is the complete explanation of how pattern variables are matched
+to a data value.
+
+First, the pattern variable is checked to see if it is already bound to a
+value.
+
+If it is bound to a value, then this bound value has to match the data for
+the match to succeed.
+
+If it is unbound, then the pattern variable is bound to the data value as a
+by-product of doing the match, and the match always succeeds.
+
+And so pattern variables only "match any value" when they are unbound.  And in
+matching that value, they become bound to it as a by-product of doing the
+match.  Once bound to a value, a pattern variable will only match that value
+(much like a literal pattern).
+
+
+.. _family_relations: FIX

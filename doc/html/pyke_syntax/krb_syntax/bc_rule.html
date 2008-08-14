@@ -107,8 +107,7 @@ associated with exceptions raised during the inferencing or plan execution.</p>
 <p>The <tt class="docutils literal"><span class="pre">use</span></tt> clause is the <strong>then</strong> part of the <a class="reference" href="../logic_programming/rules/index.html">rule</a>.  It identifies the
 <em>goal</em> that this <a class="reference" href="../logic_programming/rules/index.html">rule</a> is trying to prove.</p>
 <pre class="literal-block">
-use ::= 'use' IDENTIFIER '(' {pattern,} ')' NL
-      | 'use' IDENTIFIER '(' {pattern,} ')' 'taking' '(' &lt;python_arg_spec&gt; ')' NL
+use ::= 'use' IDENTIFIER '(' {pattern,} ')' ['taking' '(' &lt;python_arg_spec&gt; ')'] NL
       | 'use' IDENTIFIER '(' {pattern,} ')' NL
          INDENT 'taking' '(' &lt;python_arg_spec&gt; ')' NL
          DEINDENT
@@ -276,7 +275,7 @@ goal has been proven.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Mon, Aug 11 2008.
+    Page last modified Wed, Aug 13 2008.
   </div>
 
 </body>

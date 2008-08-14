@@ -1,11 +1,3 @@
 - add ability to use pattern variables for kb_name and fact_name in assertions
-- add python if statements to bc_predicates
-- add ability to use normal python variables
-    - normal_var = python_code
-    - tuple_of_normal_vars = python_code
-    - possibly mixing normal_vars and pattern_vars in patterns?
-        - patterns used in goal arguments?
-        - patterns used in bc_predicates
-        - patterns assigned to with python_code
 - add error recovery to krbparser
 

@@ -140,7 +140,7 @@ your code to make the necessary changes.
 In this case, you're not looking for performance.  You use Pyke to handle the
 complicated decision making and use its plan_ facility to postpone making any
 configuration changes until your program is sure that it's "dotted all of the
-I's and crossed all the T's".
+i's and crossed all the t's".
 
 
 

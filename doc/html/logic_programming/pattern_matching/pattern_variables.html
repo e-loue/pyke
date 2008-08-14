@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Pattern Variables</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../../stylesheets/pyke.css" type="text/css" />
+</head>
+<body>
+  <table id="page-table">
+    <thead class="head">
+        <tr id="header1"><th id="header" colspan="3">
+            &nbsp;
+        </th></tr>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <li><a href="../../index.html">Home</a></li>
+<li>&gt;</li>
+<li><a href="../index.html">Logic Programming</a></li>
+<li>&gt;</li>
+<li><a href="index.html">Pattern Matching</a></li>
+<li>&gt;</li>
+<li>Pattern Variables</li>
+
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
+    </thead>
+
+    <tbody id="body">
+        <tr id="body-tr">
+          <td id="left-nav">
+            <div id="left-nav-div">
+              
+<div class="title-nav"><a href="../../index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../../why_pyke.html">Why Pyke?</a></div>
+<div class="normal-nav"><a href="../../steps_to_using_pyke.html">Steps to Using Pyke</a></div>
+<div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
+
+<div class="title-nav"><a href="../index.html">Logic Programming</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../statements.html">Statements</a></div>
+
+<div class="title-nav"><a href="index.html">Pattern Matching</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="literal_patterns.html">Literal Patterns</a></div>
+<div class="normal-nav"><a href="pattern_variables.html">Pattern Variables</a></div>
+<div class="normal-nav"><a href="tuple_patterns.html">Tuple Patterns</a></div>
+<div class="normal-nav"><a href="matching_patterns.html">Matching 2 Patterns</a></div>
+</div>
+<div class="normal-nav"><a href="../rules/index.html">Rules</a></div>
+</div>
+<div class="normal-nav"><a href="../../knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="normal-nav"><a href="../../pyke_syntax/index.html">Pyke Syntax</a></div>
+<div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../../examples.html">Examples</a></div>
+<div class="normal-nav"><a href="../../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
+</div>
+
+            </div>
+            <div id="icons">
+                <div id="project-page">
+                  <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
+                </div>
+                Please Make a Donation:<br />
+                <a href="http://sourceforge.net/donate/index.php?group_id=207724">
+                  <img src="http://images.sourceforge.net/images/project-support.jpg"
+                       width="88" height="32" border="0"
+                       alt="Support This Project" /> </a> <br /><br />
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+            </div>
+          </td>
+          <td id="main-td">
+            <div id="main">
+                <a name="startcontent" id="startcontent"></a>
+                <div class="document" id="pattern-variables">
+<h1 class="title">Pattern Variables</h1>
+<p>To take this to the next level, you might want to ask &quot;Who are the sons of
+Thomas and Norma?&quot;.  In this case, you are passing <tt class="docutils literal"><span class="pre">Thomas</span></tt> and <tt class="docutils literal"><span class="pre">Norma</span></tt>
+<em>into</em> Pyke, and you'd like Pyke to pass something back <em>out</em> to you as part of
+the answer (in addition to the thumbs up).</p>
+<p>Pattern variables serve as output parameters.  They start with a <tt class="docutils literal"><span class="pre">$</span></tt>:</p>
+<pre class="literal-block">
+family.son_of($son, Thomas, Norma)
+</pre>
+<p>You can use whatever name you like after the <tt class="docutils literal"><span class="pre">$</span></tt>.  Pyke will answer with a
+thumbs up <em>binding</em> <tt class="docutils literal"><span class="pre">$son</span></tt> to <tt class="docutils literal"><span class="pre">Bruce</span></tt>.  If you don't like that answer, you
+can reject that answer and ask Pyke for another answer (&quot;nope, try again!&quot;).
+Each time Pyke finds another son for Thomas and Norma, it answers with another
+thumbs up and <tt class="docutils literal"><span class="pre">$son</span></tt> <em>bound</em> to a different value.</p>
+<p>If you reject the last son of <tt class="docutils literal"><span class="pre">Thomas</span></tt> and <tt class="docutils literal"><span class="pre">Norma</span></tt> (or if <tt class="docutils literal"><span class="pre">Thomas</span></tt> and
+<tt class="docutils literal"><span class="pre">Norma</span></tt> have no sons in the first place), Pyke will answer with a thumbs
+down.</p>
+<p>We say that Pyke <em>binds</em> <tt class="docutils literal"><span class="pre">Bruce</span></tt> to the pattern variable <tt class="docutils literal"><span class="pre">$son</span></tt> when it
+comes back with its first thumbs up.  When we tell Pyke &quot;nope, try again!&quot;,
+Pyke must first <em>unbind</em> <tt class="docutils literal"><span class="pre">$son</span></tt> before it can go on and <em>bind</em> it to the
+next value.  The &quot;nope&quot; part does the <em>unbinding</em>, and the &quot;try again&quot; part
+does the <em>binding</em> again to a new value.</p>
+<p>So at any point in time, a pattern variable is either <em>bound</em> to a value or
+<em>unbound</em>.  If we follow a particular pattern variable through time, we might
+see that it is alternately bound and unbound many times as Pyke tries to find
+a suitable answer to your question.  Specifically, when Pyke comes back with
+the final thumbs down, <tt class="docutils literal"><span class="pre">$son</span></tt> is unbound.</p>
+<div class="section">
+<h2><a id="anonymous-pattern-variables" name="anonymous-pattern-variables">Anonymous Pattern Variables</a></h2>
+<p>Suppose we want to know who Norma's sons are?  In this case we don't care
+about the father.  We use <em>anonymous variables</em> as &quot;don't care&quot; placeholders.</p>
+<p>An anonymous variable is any pattern variable who's name starts with an
+underscore (<tt class="docutils literal"><span class="pre">_</span></tt>).  The rest of the name doesn't matter and just serves as
+documentation (and so <tt class="docutils literal"><span class="pre">$_</span></tt> is all that's strictly needed).</p>
+<p>So &quot;Who are Norma's sons?&quot; looks like:</p>
+<pre class="literal-block">
+family.son_of($son, $_father, Norma)
+</pre>
+<p>We're giving Norma as input to Pyke, and asking for the <tt class="docutils literal"><span class="pre">$son</span></tt> as output and
+telling Pyke that we don't care about the <tt class="docutils literal"><span class="pre">$_father</span></tt>.</p>
+<p>Anonymous variables are never bound to values.  (So you could say that they
+are always unbound).</p>
+</div>
+<div class="section">
+<h2><a id="pattern-variable-identity" name="pattern-variable-identity">Pattern Variable Identity</a></h2>
+<p>Now this is very important, so pay attention!  The same pattern variable
+<em>name</em> means the same <em>pattern variable</em>.  Thus, if you say <tt class="docutils literal"><span class="pre">$son</span></tt> twice,
+it's the <em>same</em> pattern variable.  And, a pattern variable can only be bound
+to one value (at a time), so you mean the <em>same</em> data value must appear in
+both places.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">This does <em>not</em> apply to <a class="reference" href="#anonymous-pattern-variables">anonymous pattern variables</a>.  Since they are
+never bound to a value, each use of the same anonymous variable can match
+different data values.</p>
+</div>
+<p>So if you wanted to see all of the sons with the same name as their fathers,
+you would ask:</p>
+<pre class="literal-block">
+family.son_of($father, $father, $_mother)
+</pre>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p>The Pyke <a class="reference" href="FIX">family_relations</a> example never uses the same name for both
+father and son because that would cause confusion about which of them
+was the father to both of their sons and daughters.</p>
+<p>In these cases, it modifies the name of the son to make it unique.</p>
+<p class="last">Thus, this question would always fail within the family_relations
+example...</p>
+</div>
+<p>And so here is the complete explanation of how pattern variables are matched
+to a data value.</p>
+<p>First, the pattern variable is checked to see if it is already bound to a
+value.</p>
+<p>If it is bound to a value, then this bound value has to match the data for
+the match to succeed.</p>
+<p>If it is unbound, then the pattern variable is bound to the data value as a
+by-product of doing the match, and the match always succeeds.</p>
+<p>And so pattern variables only &quot;match any value&quot; when they are unbound.  And in
+matching that value, they become bound to it as a by-product of doing the
+match.  Once bound to a value, a pattern variable will only match that value
+(much like a literal pattern).</p>
+</div>
+</div>
+
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
+            </div>
+          </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <h3>More:</h3>
+<div class="right-item"><a href="literal_patterns.html">Literal Patterns</a><p>Explanation of <em>literal patterns</em>.</p>
+</div>
+<div class="right-item"><a href="pattern_variables.html">Pattern Variables</a><p>Explanation of <em>pattern variables</em>.</p>
+</div>
+<div class="right-item"><a href="tuple_patterns.html">Tuple Patterns</a><p>Explanation of <em>tuple patterns</em>.</p>
+</div>
+<div class="right-item"><a href="matching_patterns.html">Matching Two Patterns</a><p>Explanation of matching two patterns together, vs matching a pattern
+to data.</p>
+</div>
+
+            </div>
+          </td>
+        </tr>
+    </tbody>
+
+    <tfoot id="foot">
+        <tr id="foot2">
+          <td id="copyright" colspan="3">
+            Copyright &copy; 2007 Bruce Frederiksen
+          </td>
+        </tr>
+    </tfoot>
+  </table>
+
+  <div id="last-modified">
+    Page last modified Tue, Aug 12 2008.
+  </div>
+
+</body>
+</html>

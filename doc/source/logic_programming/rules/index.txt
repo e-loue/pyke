@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007 Bruce Frederiksen
+.. Copyright © 2007-2008 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@
 restindex
     crumb: Rules
     page-description:
-        Explanation of rules, forward-chaining and backward-chaining.
+        Explanation of *rules*, *forward-chaining* and *backward-chaining*.
     /description
     section-pages: , forward_chaining, backward_chaining, plans
     format: rest
@@ -33,9 +33,9 @@ restindex
     initialheaderlevel: 2
 /restindex
 
-=============================================
+=======
 Rules
-=============================================
+=======
 
 Premises and Conclusions
 =================================

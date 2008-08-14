@@ -1,0 +1,60 @@
+.. $Id$
+.. 
+.. Copyright © 2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Literal Patterns
+    page-description:
+        Explanation of *literal patterns*.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+================
+Literal Patterns
+================
+
+You want to ask Pyke a question.  The simplest questions are just asking "Is
+statement X true?".  Going back to Pyke's family_relations_ example, your
+Python program might want to know whether it's really true that Bruce's
+parents are Thomas and Norma?  So it would ask whether the following statement
+is true::
+
+    family.son_of(Bruce, Thomas, Norma)
+
+Pyke would search the facts that's it's been told about and answer "thumbs up"
+because you've told it before that this statement is true and it has
+remembered that.
+
+In this case, all of the statement's arguments are *literal patterns*.  You
+might consider literal patterns to be *input* to Pyke.  You're passing Bruce,
+Thomas and Norma *into* Pyke.  And Pyke just answers "thumbs up" or "thumbs
+down".
+
+Literal patterns look exactly like data.  Thus, your question would look
+exactly like you see above.
+
+
+.. _family_relations: FIX

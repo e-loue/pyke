@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Pattern Matching</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../../stylesheets/pyke.css" type="text/css" />
+</head>
+<body>
+  <table id="page-table">
+    <thead class="head">
+        <tr id="header1"><th id="header" colspan="3">
+            &nbsp;
+        </th></tr>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <li><a href="../../index.html">Home</a></li>
+<li>&gt;</li>
+<li><a href="../index.html">Logic Programming</a></li>
+<li>&gt;</li>
+<li>Pattern Matching</li>
+
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
+    </thead>
+
+    <tbody id="body">
+        <tr id="body-tr">
+          <td id="left-nav">
+            <div id="left-nav-div">
+              
+<div class="title-nav"><a href="../../index.html">Home</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../../why_pyke.html">Why Pyke?</a></div>
+<div class="normal-nav"><a href="../../steps_to_using_pyke.html">Steps to Using Pyke</a></div>
+<div class="normal-nav"><a href="../../installing_pyke.html">Installing Pyke</a></div>
+
+<div class="title-nav"><a href="../index.html">Logic Programming</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="../statements.html">Statements</a></div>
+
+<div class="title-nav"><a href="index.html">Pattern Matching</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="literal_patterns.html">Literal Patterns</a></div>
+<div class="normal-nav"><a href="pattern_variables.html">Pattern Variables</a></div>
+<div class="normal-nav"><a href="tuple_patterns.html">Tuple Patterns</a></div>
+<div class="normal-nav"><a href="matching_patterns.html">Matching 2 Patterns</a></div>
+</div>
+<div class="normal-nav"><a href="../rules/index.html">Rules</a></div>
+</div>
+<div class="normal-nav"><a href="../../knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="normal-nav"><a href="../../pyke_syntax/index.html">Pyke Syntax</a></div>
+<div class="normal-nav"><a href="../../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../../examples.html">Examples</a></div>
+<div class="normal-nav"><a href="../../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
+</div>
+
+            </div>
+            <div id="icons">
+                <div id="project-page">
+                  <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
+                </div>
+                Please Make a Donation:<br />
+                <a href="http://sourceforge.net/donate/index.php?group_id=207724">
+                  <img src="http://images.sourceforge.net/images/project-support.jpg"
+                       width="88" height="32" border="0"
+                       alt="Support This Project" /> </a> <br /><br />
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+            </div>
+          </td>
+          <td id="main-td">
+            <div id="main">
+                <a name="startcontent" id="startcontent"></a>
+                <div class="document" id="pattern-matching">
+<h1 class="title">Pattern Matching</h1>
+<p>Pattern matching is a little strange at first, so we're going to ease into
+it slowly...</p>
+<p>There are two aspects to pattern matching: <em>patterns</em>, which you write, and
+<em>matching</em>, which is what Pyke does with your patterns.</p>
+<p>In a nutshell, patterns are made up of two fundamental building blocks:</p>
+<ol class="arabic simple">
+<li><a class="reference" href="literal_patterns.html">Literal patterns</a>.<ul>
+<li>Theses are just data values that only match themselves.</li>
+</ul>
+</li>
+<li><a class="reference" href="pattern_variables.html">Pattern variables</a>.<ul>
+<li>These will match anything.  (Including other pattern variables, as we'll
+see later)!</li>
+</ul>
+</li>
+</ol>
+<p>And one compound pattern:</p>
+<ol class="arabic simple">
+<li><a class="reference" href="tuple_patterns.html">Tuple patterns</a>.<ul>
+<li>These match -- you guessed it! -- tuples!</li>
+</ul>
+</li>
+</ol>
+<p>We'll examine all of the above looking at how Pyke matches a pattern to data.
+Then we'll expand this to cover <a class="reference" href="matching_patterns.html">matching two patterns together</a>.</p>
+<p>And finally, a <a class="reference" href="matching_patterns.html#pathological-question">pathological question</a> to see if you've been paying
+attention.</p>
+<p>Sound like fun?  Good!  Let's get started!</p>
+<p>OK, so why do we need patterns?  The simple answer is that we need patterns
+to generalize <a class="reference" href="FIX">statements</a>.  One example is to turn statements into questions.</p>
+<div class="important">
+<p class="first admonition-title">Important</p>
+<ul class="last simple">
+<li>When you want a <em>direct</em> statement, such as to state a fact, you just use
+<em>data</em> for its arguments.</li>
+<li>But when you want a <em>generalized</em> statement, such as to ask a question,
+you use <em>patterns</em> for its arguments.</li>
+</ul>
+</div>
+</div>
+
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
+            </div>
+          </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <h3>More:</h3>
+<div class="right-item"><a href="literal_patterns.html">Literal Patterns</a><p>Explanation of <em>literal patterns</em>.</p>
+</div>
+<div class="right-item"><a href="pattern_variables.html">Pattern Variables</a><p>Explanation of <em>pattern variables</em>.</p>
+</div>
+<div class="right-item"><a href="tuple_patterns.html">Tuple Patterns</a><p>Explanation of <em>tuple patterns</em>.</p>
+</div>
+<div class="right-item"><a href="matching_patterns.html">Matching Two Patterns</a><p>Explanation of matching two patterns together, vs matching a pattern
+to data.</p>
+</div>
+
+            </div>
+          </td>
+        </tr>
+    </tbody>
+
+    <tfoot id="foot">
+        <tr id="foot2">
+          <td id="copyright" colspan="3">
+            Copyright &copy; 2007 Bruce Frederiksen
+          </td>
+        </tr>
+    </tfoot>
+  </table>
+
+  <div id="last-modified">
+    Page last modified Tue, Aug 12 2008.
+  </div>
+
+</body>
+</html>

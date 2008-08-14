@@ -129,6 +129,8 @@ You use the ``plan_extras`` to include arbitrary Python code in this plans
 file.
 
 .. __: bc_rule_
+
+
 .. _backward-chaining: ../logic_programming/rules/backward_chaining.html
 .. _bc_rule: bc_rule.html
 .. _fc_rule: fc_rule.html

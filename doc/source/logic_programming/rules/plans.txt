@@ -23,7 +23,7 @@
 restindex
     crumb: Plans
     page-description:
-        Explanation of plans and automatic program generation.
+        Explanation of *plans* and automatic program generation.
     /description
     format: rest
     encoding: utf8

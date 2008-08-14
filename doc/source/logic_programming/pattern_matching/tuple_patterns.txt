@@ -1,0 +1,73 @@
+.. $Id$
+.. 
+.. Copyright © 2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Tuple Patterns
+    page-description:
+        Explanation of *tuple patterns*.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+================
+Tuple Patterns
+================
+
+Tuple patterns only match tuples.  They are written as simply a comma
+seperated list of patterns within parenthesis::
+
+    (1, $x, "buckle my shoe")
+
+You can also write a *rest* pattern variable at the end using an asterisk
+(``*``)::
+
+    ($a, fie, $b, *$c)
+
+This will match the rest of the items in the data value that the tuple pattern
+is matched to.  Note that the *rest* pattern variable is *always* bound to a
+tuple.
+
+Examples:
+
+    - matching ``(1, $x, "buckle my shoe")`` to ``(1, 2, "buckle my shoe")``
+      matches, binding ``$x`` to 2.
+    - matching ``(1, $x, "buckle my shoe")`` to ``(1, 2, "buckle my belt")``
+      does not match because the third pattern within the tuple pattern fails
+      to match the third value in the matched tuple.
+    - matching ``($a, fie, $b, *$c)`` to ``(fee, fie, foe, fum)``
+      matches, binding ``$a`` to ``fee``, ``$b`` to ``foe`` and ``$c`` to
+      ``(fum)``.
+    - matching ``($a, fie, $b, *$c)`` to ``(fee, fie, foe)``
+      matches, binding ``$a`` to ``fee``, ``$b`` to ``foe`` and ``$c`` to
+      ``()``.
+    - matching ``($a, fie, $b, *$c)`` to ``(fee, fie)`` does not match because
+      the data value has to have a length of at least three.
+
+.. hint::
+   You can use ``(*$foo)`` to only match a tuple.  It will bind ``$foo`` to
+   the entire tuple, but will fail to match any other data type.
+
+
