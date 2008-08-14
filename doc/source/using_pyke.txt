@@ -23,7 +23,7 @@
 restindex
     crumb: Using Pyke
     page-description:
-        How your Python program uses Pyke.
+        How your Python program uses Pyke.  I.e., Pyke's API to Python.
     /description
     format: rest
     encoding: utf8

@@ -21,11 +21,13 @@
 .. THE SOFTWARE.
 
 restindex
-    crumb: Why Pyke?
+    crumb: About Pyke
     page-description:
-        What does Pyke do for me?
+        What pyke does for you, its features, steps to using pyke and
+        installation.
     /description
     format: rest
+    section-pages: , cooking_functions, what_is_pyke, steps_to_using_pyke, installing_pyke
     encoding: utf8
     output-encoding: utf8
     include: yes
@@ -33,7 +35,7 @@ restindex
 /restindex
 
 ============
-Why Pyke?
+About Pyke
 ============
 -------------------------
 What Does Pyke Do for Me?

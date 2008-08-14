@@ -1,0 +1,176 @@
+.. $Id$
+.. 
+.. Copyright © 2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Cooking Functions
+    page-description:
+        Explanation of how Pyke "cooks" Python functions.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+===========================
+Cooking Python Functions
+===========================
+
+"Cooking" a Python function means customizing it.  And you customize it by
+cooking certain parameter values into it as constant values.
+
+Cooking a single parameter value
+================================
+
+First you define the function that you want to cook with an extra parameter
+at the start:
+
+    >>> def foo(cooked, standard):
+    ...     print "foo called with cooked: %s, standard: %s" % \
+    ...               (cooked, standard)
+
+Now you can call this function with two parameters:
+
+    >>> foo('a', 'b')
+    foo called with cooked: a, standard: b
+
+But your real intention is that it appear to be a function taking one
+parameter, with the first parameter cooked in.
+
+This is done with the ``partial`` class of the functools_ module in the
+standard Python library.
+
+    >>> from functools import partial
+
+And then using ``partial`` to cook the first parameter:
+
+    >>> cooked1 = partial(foo, 'cooked_value1')
+
+Now ``cooked_foo`` is a function that takes one parameter:
+
+    >>> cooked1('value1')
+    foo called with cooked: cooked_value1, standard: value1
+    >>> cooked1('value2')
+    foo called with cooked: cooked_value1, standard: value2
+
+And you can make other cooked functions from foo with other cooked values:
+
+    >>> cooked2 = partial(foo, 'cooked_value2')
+    >>> cooked2('value1')
+    foo called with cooked: cooked_value2, standard: value1
+    >>> cooked2('value2')
+    foo called with cooked: cooked_value2, standard: value2
+
+And you can still use the first cooked function, so now you have two functions
+for the price of one!
+
+    >>> cooked1('value3')
+    foo called with cooked: cooked_value1, standard: value3
+    >>> cooked1('value4')
+    foo called with cooked: cooked_value1, standard: value4
+    >>> cooked2('value5')
+    foo called with cooked: cooked_value2, standard: value5
+    >>> cooked2('value6')
+    foo called with cooked: cooked_value2, standard: value6
+
+And you can keep going with this to make as many functions as you care to
+from your single starting function.
+
+Cooking a Function Call Graph 
+=============================
+
+This same technique can be used to cook a function call graph, by making the
+subordinate function a cooked parameter:
+
+    >>> def bar(child_fun, a):
+    ...     print "bar called with:", %s
+    ...     return child_fun(a)
+
+And now you can cook which function ``bar`` calls the same way you cook any
+other parameter:
+
+    >>> bar_float = partial(bar, float)
+    >>> bar_float('123')
+    bar called with: 123
+    123.0
+    >>> bar_min = partial(bar, min)
+    >>> bar_min((3,2,5))
+    bar called with: (3, 2, 5)
+    2
+
+And, of course, you can use cooked functions as these subordinate functions
+too:
+
+    >>> bar_cooked1 = partial(bar, cooked1)
+    >>> bar_cooked1('abc')
+    bar called with: abc
+    foo called with cooked: cooked_value1, standard: abc
+
+Which means that you can create function call graphs to any depth:
+
+    >>> bar_bar_min = partial(bar, bar_min)
+    >>> bar_bar_min((3,2,5))
+    bar called with: (3, 2, 5)
+    bar called with: (3, 2, 5)
+    2
+
+Cooking Several Parameters
+==========================
+
+In general, you may want to cook several values for each function.  Some of
+these values may specify which subordinate functions to call, others may just
+fix certain constant values for the function.
+
+Pyke does this using a single extra parameter called ``context``, which is a
+read-only dictionary.  It can then prepare this dictionary with as many values
+as it needs and then cook the whole dictionary into the function using
+``partial``.
+
+Pyke translates each individual access to a cooked parameter into a dictionary
+lookup on ``context`` that looks up that parameter name::
+
+    context['parameter_name']
+
+The Need for Pyke
+=================
+
+Now that you understand how Pyke cooks Python functions, you should be able
+to understand how this technique can achieve the "order of magnitude"
+improvements to Adaptability/Customization, Performance and Code Reuse
+discussed on the `About Pyke`_ page.
+
+You should also now see the need for a tool like Pyke to assemble all of
+these functions to fit specific situations and use cases.
+
+.. note::
+   Pyke calls a customized function call graph a *plan*.  Plans_ are explained
+   later, after you've been introduced to `Logic Programming in Pyke`_.
+
+And, finally, you should start to get a sense for how "programming in the
+large" with Pyke dovetails with "programming in the small" with Python.
+
+
+.. _Plans: FIX
+.. _Logic Programming in Pyke: FIX
+.. _functools: http://docs.python.org/lib/module-functools.html
+.. _About Pyke: FIX

@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Cooking Python Functions</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../stylesheets/pyke.css" type="text/css" />
+</head>
+<body>
+  <table id="page-table">
+    <thead class="head">
+        <tr id="header1"><th id="header" colspan="3">
+            &nbsp;
+        </th></tr>
+        <tr id="header2">
+          <th id="crumb-left"></th>
+          <th id="crumb-line">
+            <div id="nav">
+              <ul>
+                  <li><a href="../index.html">Home</a></li>
+<li>&gt;</li>
+<li><a href="index.html">About Pyke</a></li>
+<li>&gt;</li>
+<li>Cooking Functions</li>
+
+              </ul>
+            </div>
+          </th>
+          <th id="crumb-right"></th>
+        </tr>
+    </thead>
+
+    <tbody id="body">
+        <tr id="body-tr">
+          <td id="left-nav">
+            <div id="left-nav-div">
+              
+<div class="title-nav"><a href="../index.html">Home</a></div><div class="nav-branch">
+
+<div class="title-nav"><a href="index.html">About Pyke</a></div><div class="nav-branch">
+<div class="normal-nav"><a href="cooking_functions.html">Cooking Functions</a></div>
+<div class="normal-nav"><a href="what_is_pyke.html">What is Pyke?</a></div>
+<div class="normal-nav"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a></div>
+<div class="normal-nav"><a href="installing_pyke.html">Installing Pyke</a></div>
+</div>
+<div class="normal-nav"><a href="../logic_programming/index.html">Logic Programming</a></div>
+<div class="normal-nav"><a href="../knowledge_bases/index.html">Knowledge Bases</a></div>
+<div class="normal-nav"><a href="../pyke_syntax/index.html">Pyke Syntax</a></div>
+<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../examples.html">Examples</a></div>
+<div class="normal-nav"><a href="../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
+</div>
+
+            </div>
+            <div id="icons">
+                <div id="project-page">
+                  <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
+                </div>
+                Please Make a Donation:<br />
+                <a href="http://sourceforge.net/donate/index.php?group_id=207724">
+                  <img src="http://images.sourceforge.net/images/project-support.jpg"
+                       width="88" height="32" border="0"
+                       alt="Support This Project" /> </a> <br /><br />
+                Hosted by: <br />
+                <!-- <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> -->
+                <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=207724&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+            </div>
+          </td>
+          <td id="main-td">
+            <div id="main">
+                <a name="startcontent" id="startcontent"></a>
+                <div class="document" id="cooking-python-functions">
+<h1 class="title">Cooking Python Functions</h1>
+<p>&quot;Cooking&quot; a Python function means customizing it.  And you customize it by
+cooking certain parameter values into it as constant values.</p>
+<div class="section">
+<h2><a id="cooking-a-single-parameter-value" name="cooking-a-single-parameter-value">Cooking a single parameter value</a></h2>
+<p>First you define the function that you want to cook with an extra parameter
+at the start:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; def foo(cooked, standard):
+...     print &quot;foo called with cooked: %s, standard: %s&quot; % \
+...               (cooked, standard)
+</pre>
+</blockquote>
+<p>Now you can call this function with two parameters:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; foo('a', 'b')
+foo called with cooked: a, standard: b
+</pre>
+</blockquote>
+<p>But your real intention is that it appear to be a function taking one
+parameter, with the first parameter cooked in.</p>
+<p>This is done with the <tt class="docutils literal"><span class="pre">partial</span></tt> class of the <a class="reference" href="http://docs.python.org/lib/module-functools.html">functools</a> module in the
+standard Python library.</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; from functools import partial
+</pre>
+</blockquote>
+<p>And then using <tt class="docutils literal"><span class="pre">partial</span></tt> to cook the first parameter:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; cooked1 = partial(foo, 'cooked_value1')
+</pre>
+</blockquote>
+<p>Now <tt class="docutils literal"><span class="pre">cooked_foo</span></tt> is a function that takes one parameter:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; cooked1('value1')
+foo called with cooked: cooked_value1, standard: value1
+&gt;&gt;&gt; cooked1('value2')
+foo called with cooked: cooked_value1, standard: value2
+</pre>
+</blockquote>
+<p>And you can make other cooked functions from foo with other cooked values:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; cooked2 = partial(foo, 'cooked_value2')
+&gt;&gt;&gt; cooked2('value1')
+foo called with cooked: cooked_value2, standard: value1
+&gt;&gt;&gt; cooked2('value2')
+foo called with cooked: cooked_value2, standard: value2
+</pre>
+</blockquote>
+<p>And you can still use the first cooked function, so now you have two functions
+for the price of one!</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; cooked1('value3')
+foo called with cooked: cooked_value1, standard: value3
+&gt;&gt;&gt; cooked1('value4')
+foo called with cooked: cooked_value1, standard: value4
+&gt;&gt;&gt; cooked2('value5')
+foo called with cooked: cooked_value2, standard: value5
+&gt;&gt;&gt; cooked2('value6')
+foo called with cooked: cooked_value2, standard: value6
+</pre>
+</blockquote>
+<p>And you can keep going with this to make as many functions as you care to
+from your single starting function.</p>
+</div>
+<div class="section">
+<h2><a id="cooking-a-function-call-graph" name="cooking-a-function-call-graph">Cooking a Function Call Graph</a></h2>
+<p>This same technique can be used to cook a function call graph, by making the
+subordinate function a cooked parameter:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; def bar(child_fun, a):
+...     print &quot;bar called with:&quot;, %s
+...     return child_fun(a)
+</pre>
+</blockquote>
+<p>And now you can cook which function <tt class="docutils literal"><span class="pre">bar</span></tt> calls the same way you cook any
+other parameter:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; bar_float = partial(bar, float)
+&gt;&gt;&gt; bar_float('123')
+bar called with: 123
+123.0
+&gt;&gt;&gt; bar_min = partial(bar, min)
+&gt;&gt;&gt; bar_min((3,2,5))
+bar called with: (3, 2, 5)
+2
+</pre>
+</blockquote>
+<p>And, of course, you can use cooked functions as these subordinate functions
+too:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; bar_cooked1 = partial(bar, cooked1)
+&gt;&gt;&gt; bar_cooked1('abc')
+bar called with: abc
+foo called with cooked: cooked_value1, standard: abc
+</pre>
+</blockquote>
+<p>Which means that you can create function call graphs to any depth:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; bar_bar_min = partial(bar, bar_min)
+&gt;&gt;&gt; bar_bar_min((3,2,5))
+bar called with: (3, 2, 5)
+bar called with: (3, 2, 5)
+2
+</pre>
+</blockquote>
+</div>
+<div class="section">
+<h2><a id="cooking-several-parameters" name="cooking-several-parameters">Cooking Several Parameters</a></h2>
+<p>In general, you may want to cook several values for each function.  Some of
+these values may specify which subordinate functions to call, others may just
+fix certain constant values for the function.</p>
+<p>Pyke does this using a single extra parameter called <tt class="docutils literal"><span class="pre">context</span></tt>, which is a
+read-only dictionary.  It can then prepare this dictionary with as many values
+as it needs and then cook the whole dictionary into the function using
+<tt class="docutils literal"><span class="pre">partial</span></tt>.</p>
+<p>Pyke translates each individual access to a cooked parameter into a dictionary
+lookup on <tt class="docutils literal"><span class="pre">context</span></tt> that looks up that parameter name:</p>
+<pre class="literal-block">
+context['parameter_name']
+</pre>
+</div>
+<div class="section">
+<h2><a id="the-need-for-pyke" name="the-need-for-pyke">The Need for Pyke</a></h2>
+<p>Now that you understand how Pyke cooks Python functions, you should be able
+to understand how this technique can achieve the &quot;order of magnitude&quot;
+improvements to Adaptability/Customization, Performance and Code Reuse
+discussed on the <a class="reference" href="FIX">About Pyke</a> page.</p>
+<p>You should also now see the need for a tool like Pyke to assemble all of
+these functions to fit specific situations and use cases.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Pyke calls a customized function call graph a <em>plan</em>.  <a class="reference" href="FIX">Plans</a> are explained
+later, after you've been introduced to <a class="reference" href="FIX">Logic Programming in Pyke</a>.</p>
+</div>
+<p>And, finally, you should start to get a sense for how &quot;programming in the
+large&quot; with Pyke dovetails with &quot;programming in the small&quot; with Python.</p>
+</div>
+</div>
+
+                <!-- <div id="return-to-top">
+                       <a href="#">Return to Top</a>
+                     </div>
+                -->
+            </div>
+          </td>
+          <td id="right-nav">
+            <div id="right-nav-div">
+                <h3>More:</h3>
+<div class="right-item"><a href="cooking_functions.html">Cooking Python Functions</a><p>Explanation of how Pyke &quot;cooks&quot; Python functions.</p>
+</div>
+<div class="right-item"><a href="what_is_pyke.html">What is Pyke?</a><p>An overview of Pyke's features.</p>
+</div>
+<div class="right-item"><a href="steps_to_using_pyke.html">Steps to Using Pyke</a><p>A brief list of the steps involved in programming in Pyke (with lots
+of links).</p>
+</div>
+<div class="right-item"><a href="installing_pyke.html">Installing Pyke</a><p>System Requirements and installing Pyke.</p>
+</div>
+
+            </div>
+          </td>
+        </tr>
+    </tbody>
+
+    <tfoot id="foot">
+        <tr id="foot2">
+          <td id="copyright" colspan="3">
+            Copyright &copy; 2007 Bruce Frederiksen
+          </td>
+        </tr>
+    </tfoot>
+  </table>
+
+  <div id="last-modified">
+    Page last modified Thu, Aug 14 2008.
+  </div>
+
+</body>
+</html>

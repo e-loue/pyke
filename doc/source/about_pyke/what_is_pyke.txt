@@ -21,27 +21,24 @@
 .. THE SOFTWARE.
 
 restindex
-    crumb: Home
+    crumb: What is Pyke?
+    page-description:
+        An overview of Pyke's features.
+    /description
     format: rest
     encoding: utf8
     output-encoding: utf8
     section-pages: , why_pyke, steps_to_using_pyke, installing_pyke, logic_programming/index, knowledge_bases/index, pyke_syntax/index, using_pyke, examples, PyCon2008-paper
-    template: template.txt
-    template-encoding: utf8
-    include: No
+    include: Yes
     initialheaderlevel: 2
 /restindex
 
 =============================
-Welcome to Pyke
+What is Pyke?
 =============================
------------------------------
-Release 0.3
------------------------------
 
-Pyke introduces a form of `Logic Programming`_ (inspired by Prolog_) to the
-Python community by providing a knowledge-based inference engine (expert
-system) written in 100% Python that can:
+Pyke integrates a form of `Logic Programming`_ into Python by providing a
+knowledge engine that can:
 
 - Do both forward-chaining (data driven) and
   backward-chaining (goal directed) inferencing.
@@ -53,14 +50,11 @@ system) written in 100% Python that can:
 
   - This is done through a unique design where the individual Python
     functions are attached to backward-chaining rules.
-  - Unlike other approaches to code reuse (e.g. Zope adapters and generic
-    functions), this allows the inference engine to ensure that all of the
-    function's requirements are completely satisfied, by examining the entire
-    call graph down to the leaves, before **any** of the functions are
-    executed.
-  - This technique can give order of magnitude improvements in performance.
-    For example, the web_framework_ example runs 10 times faster than
-    TurboGears 2 (791 vs 76 trans/sec)!
+  - Unlike other approaches to code reuse (e.g. Object-oriented programming,
+    Zope adapters, generic functions), this allows the inference engine to
+    ensure that all of the function's requirements are completely satisfied,
+    by examining the entire call graph down to the leaves, before **any** of
+    the functions are executed.
   - This is an optional feature.  You don't need to use it if you just
     want the inferencing capability by itself.
 
@@ -116,12 +110,6 @@ Potential Pyke Applications:
   or situation.
 
 
-Pyke on Google Groups
-=====================
-
-Please join Pyke_ on Google Groups for questions and discussion!
-
-.. _Pyke: http://groups.google.com/group/pyke
 .. _web_framework: examples.html#web-framework
 .. _Logic Programming: http://en.wikipedia.org/wiki/Logic_programming
 .. _Prolog: http://en.wikipedia.org/wiki/Prolog

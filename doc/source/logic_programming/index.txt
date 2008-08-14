@@ -26,7 +26,7 @@ restindex
         An tutorial on logic programming in Pyke, including *statements*,
         *pattern matching* and *rules*.
     /description
-    section-pages: , statements, pattern_matching/index, rules/index
+    section-pages: , statements, pattern_matching/index, rules/index, plans
     format: rest
     encoding: utf8
     output-encoding: utf8
