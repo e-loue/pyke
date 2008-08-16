@@ -1,3 +1,5 @@
+- remove subdirectories from compiled_krb directory (since all knowledge bases
+  must have mutually unique names anyway).
 - add ability to use pattern variables for kb_name and fact_name in assertions
 - add error recovery to krbparser
 

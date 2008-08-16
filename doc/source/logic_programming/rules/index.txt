@@ -37,49 +37,123 @@ restindex
 Rules
 =======
 
+Conceptually, a rule is very simple::
+
+    if
+        A
+        B
+        C
+    then
+        D
+        E
+
+Meaning, "if A, B *and* C are true, then D and E are also true".  These are
+often called *if-then* rules.
+
+.. admonition:: And what are A, B, C, D and E?
+
+   They are simply statements_.  Specifically, they are generalized statements
+   containing patterns_ as arguments.  You'll see more about this later.
+
 Premises and Conclusions
 =================================
 
-Rules have two parts to them: an **if** part (the *premises*),
-and a **then** part (the *conclusions*).  (Though Pyke uses different
-names for these).
-Each of these **if** and **then** parts contain one or more facts_ or goals_
-represented by patterns_.
+Rules have two parts to them: an **if** part (containing a list of statements
+called the *premises*), and a **then** part (containing a list of statements
+called the *conclusions*).
 
-Logically, the rule says that if **all** of the *premises* in the **if** part
-of the rule are true, then each of the *conclusions* in the **then** part
-of the rule must also be true.
+.. note::
+
+   Pyke doesn't use the words **if** and **then**, as you'll see shortly.
+
+Each of these **if** and **then** parts contain one or more facts_ or goals_
+which are just generalized statements_ (meaning statements with patterns_ as
+arguments).
+
+
+Processing the Premises Within the *If* Clause
+==============================================
+
+Because each premise with the *if* clause is a generalized statement, the
+premise is pattern matched to known facts.  This means that it may match more
+than one fact.
+
+Pyke tries all combinations of matching facts through a process called
+*backtracking*.  This will cause the same rule to potentially succeed multiple
+times, once for each unique combination of matching facts.
+
+Backtracking
+------------
+
+Note that while processing the list of premises within a rule's ``if``
+clause:
+
+* If Pyke succeeds at proving a premise:
+
+  * Pyke will proceed *down* to the next premise in the list.
+  * Trying to proceed *down* from the *last* premise in the list (when it
+    succeeds) causes the rule to *succeed*.
+
+* If Pyke fails at proving a premise:
+
+  * Pyke will back *up* to the prior premise in the list and try to find
+    another solution for it.  The process starts over at the prior premise,
+    going back down or further up the list depending on whether another
+    solution can be found or not.
+  * Trying to back *up* from the *first* premise in the list (when it fails)
+    causes the rule to *fail*.
+
+.. figure:: ../../images/backtracking.png
+   :alt: backtracking flow diagram
+   :align: center
+
+   Backtracking Flow Diagram
+
+Thus, execution within each rule's ``if`` clause proceeds both backwards and
+forwards, up and down the list of premises, depending on whether each
+premise succeeds or fails.  The process of backing up within the ``if``
+clause to try alternate solutions is called *backtracking*.
 
 Inferencing
-===================================
+===========
 
 Rules are specified individually within a `rule base`_.  They are not nested
 or explicitly linked to each other.  So Pyke must automatically figure out
 how to combine these rules to accomplish some larger task.  This is called
-*inferencing* and there are two different approaches that Pyke uses,
-depending on the rule's type.
+*inferencing* and there are two different approaches that Pyke uses:
 
 - All forward-chaining_ rules are processed when a `rule base`_ is activated_.
 
-  - Forward-chaining_ rules may assert_ new facts, and activate_ more specific
+  - Forward-chaining rules may assert_ new facts, and activate_ more specific
     `rule bases`_.
 
 - Backward-chaining_ rules are processed when your program asks Pyke to
-  prove_ a specific *goal*.
+  prove_ a specific *goal* (i.e., asks Pyke a question_).
 
-  - These rules don't assert_ new facts or activate_ more specific rule
-    bases.  But they do have the ability to assemble Python functions into
-    a customized call graph or program, called a plan_, to meet a specific need.
+  - These rules are designed to answer a question rather than assert new
+    facts or activate more specific rule bases.
+  - They also have the ability to assemble Python functions into a customized
+    call graph or program, called a plan_, to meet a specific need.
+
+.. note::
+
+   Forward-chaining and backward-chaining rules may both be included within
+   the same `rule base`_.  Pyke knows the difference between forward-chaining
+   and backward-chaining rules because they have different syntax_.
 
 .. _activate: ../../using_pyke.html#setting-up-each-case
 .. _activated: activate_
 .. _assert: activate_
+.. _forward-chaining: forward_chaining.html
+.. _syntax: FIX
 .. _backward-chaining: backward_chaining.html
 .. _facts: ../../knowledge_bases/fact_bases.html#facts
 .. _forward-chaining: forward_chaining.html
 .. _goals: ../../krb_syntax/bc_rule.html#use-clause
-.. _patterns: ../../krb_syntax/pattern.html
+.. _patterns: FIX
 .. _plan: ../plans.html
 .. _prove: ../../using_pyke.html#proving-goals
 .. _rule base: ../../knowledge_bases/rule_bases.html
 .. _rule bases: `rule base`_
+.. _statements: FIX
+.. _question: FIX

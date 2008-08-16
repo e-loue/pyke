@@ -103,7 +103,7 @@ This same technique can be used to cook a function call graph, by making the
 subordinate function a cooked parameter:
 
     >>> def bar(child_fun, a):
-    ...     print "bar called with:", %s
+    ...     print "bar called with:", a
     ...     return child_fun(a)
 
 And now you can cook which function ``bar`` calls the same way you cook any

@@ -76,9 +76,44 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="backward-chaining">
 <h1 class="title">Backward Chaining</h1>
-<p>Backward chaining <a class="reference" href="index.html">rules</a> are processed when your program asks Pyke to <a class="reference" href="../../using_pyke.html#proving-goals">prove</a>
-a specific <em>goal</em>.  Pyke will only use <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a> <a class="reference" href="../../knowledge_bases/rule_bases.html">rule bases</a> to do the
-proof.</p>
+<p>Backward chaining <a class="reference" href="index.html">rules</a> are processed when your program asks Pyke a <a class="reference" href="FIX">question</a>
+(i.e., asks Pyke to <a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a specific <em>goal</em>).  Pyke will only use <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a>
+<a class="reference" href="../../knowledge_bases/rule_bases.html">rule bases</a> to do the proof.</p>
+<div class="section">
+<h2><a id="overview-of-backward-chaining" name="overview-of-backward-chaining">Overview of &quot;Backward-Chaining&quot;</a></h2>
+<p>To do backward-chaining, Pyke finds rules whose <em>then</em> part matches the <em>goal</em>
+(i.e., the question).  Once it finds such a rule, it tries to (recursively)
+prove all of the subgoals in the <em>if</em> part of that rule.  Some of these
+subgoals are matched against facts, and others are subgoals for other
+backward-chaining rules.  If all of the subgoals can be proven, the rule
+succeeds and the original goal is proven.  Otherwise, the rule fails, and Pyke
+tries to find another rule whose <em>then</em> part matches the goal, and so on.</p>
+<p>So Pyke ends up linking (or <em>chaining</em>) the <em>if</em> part of the first rule to the
+<em>then</em> part of the next rule.</p>
+<p>Reviewing:</p>
+<ol class="arabic simple">
+<li>Pyke starts by finding a rule whose <em>then</em> part matches the goal.</li>
+<li>Pyke then proceeds to process the <em>if</em> part of that rule.</li>
+<li>Which may link (or chain) to the <em>then</em> part of another rule.</li>
+</ol>
+<p>Since Pyke processes these rules from <em>then</em> to <em>if</em> to <em>then</em> to <em>if</em> in the
+reverse manner that we normally think of using rules, it's called <em>backward</em>
+chaining.</p>
+<p>To make this more clear, Pyke has you write your backward-chaining rules
+upside down by writing the <em>then</em> part first (since that's how it is
+processed).</p>
+</div>
+<div class="section">
+<h2><a id="use-when-rather-than-then-if" name="use-when-rather-than-then-if">&quot;Use&quot;, &quot;When&quot; Rather than &quot;Then&quot;, &quot;If&quot;</a></h2>
+<p>But <em>then-if</em> rules sound confusing, so Pyke uses the words <strong>use</strong> and
+<strong>when</strong> rather than <strong>then</strong> and <strong>if</strong>.  You can then read the rule as &quot;use&quot;
+this statement &quot;when&quot; these other statements can be proven.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Unlike <a class="reference" href="forward_chaining.html">forward-chaining</a> rules, Pyke only allows one statement in the
+<em>use</em> clause.</p>
+</div>
+</div>
 <div class="section">
 <h2><a id="example" name="example">Example</a></h2>
 <p>Consider this example:</p>
@@ -118,32 +153,22 @@ proof.</p>
 28          child_parent($parent, $gg_parent, ($prefix1, *$rest_prefixes),
 29                       $_, $gg_parent_type)
 </pre>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">These <a class="reference" href="index.html">rules</a> draw the same conclusions as the <a class="reference" href="forward_chaining.html">forward-chaining</a> <a class="reference" href="forward_chaining.html#example">example</a>.</p>
 </div>
-<div class="section">
-<h2><a id="identifying-backward-chaining-rules" name="identifying-backward-chaining-rules">Identifying Backward-Chaining Rules</a></h2>
-<p>These <a class="reference" href="index.html">rules</a> draw the same conclusions as the <a class="reference" href="forward_chaining.html">forward-chaining</a> <a class="reference" href="forward_chaining.html#example">example</a>;
-but you'll notice three differences:</p>
-<ol class="arabic simple">
-<li>The <a class="reference" href="index.html">rule's</a> <strong>if</strong> and <strong>then</strong> parts are reversed.</li>
-<li>The <a class="reference" href="index.html">rules</a> use different keywords: <tt class="docutils literal"><span class="pre">use</span></tt> for the <strong>then</strong> clause
-and <tt class="docutils literal"><span class="pre">when</span></tt> for the <strong>if</strong> clause.</li>
-<li>The <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> established by backward-chaining do not have a knowledge
-base name prefix.  In this case, the knowledge base name defaults to
-the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> of this <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> (it's root rule base name).</li>
-</ol>
 </div>
 <div class="section">
 <h2><a id="how-backward-chaining-rules-are-run" name="how-backward-chaining-rules-are-run">How Backward-Chaining Rules are Run</a></h2>
 <p>These <a class="reference" href="index.html">rules</a> are not used until you ask Pyke to <a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a goal.</p>
-<p>The easiest way to do this is with
-<em>some_engine</em>.prove_1_ or <em>some_engine</em>.prove_n_.  <a class="reference" href="../../using_pyke.html#proving-goals">Prove_1</a> only
-returns the first proof found and then stops (or raises pyke.CanNotProve).
-<a class="reference" href="../../using_pyke.html#proving-goals">Prove_n</a> is a generator that generates all possible proofs (which, in
-some cases, might be infinite).  In both cases, you pass a tuple of
-arguments and the number of variable arguments as the last two parameters.
-The total number of arguments for the goal is the sum of the length of the
-actual arguments that you pass plus the number of variable arguments that you
-specify.</p>
+<p>The easiest way to do this is with <em>some_engine.prove_1</em> or
+<em>some_engine.prove_n</em>.  <a class="reference" href="../../using_pyke.html#proving-goals">Prove_1</a> only returns the first proof found and
+then stops (or raises <tt class="docutils literal"><span class="pre">pyke.knowledge_engine.CanNotProve</span></tt>).  <a class="reference" href="../../using_pyke.html#proving-goals">Prove_n</a>
+is a generator that generates all possible proofs (which, in some cases,
+might be infinite).  In both cases, you pass a tuple of data arguments and
+the number of variable arguments as the last two parameters.  The total number
+of arguments for the goal is the sum of the length of the data arguments
+that you pass plus the number of variable arguments that you specify.</p>
 <p>Both functions return the variable bindings for the number of variable
 arguments you specified as a tuple, along with the <a class="reference" href="../plans.html">plan</a>.</p>
 </div>
@@ -157,6 +182,23 @@ arguments you specified as a tuple, along with the <a class="reference" href="..
 &gt;&gt;&gt; engine.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
 &gt;&gt;&gt; engine.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
 &gt;&gt;&gt; engine.activate('bc_example')
+</pre>
+</blockquote>
+<p>Noting happens this time when we activate the rule base, because there are no
+forward-chaining rules here.</p>
+<p>We want to ask the question: &quot;What is Michael's ancestry?&quot;.  This translates
+into the Pyke statement:
+<tt class="docutils literal"><span class="pre">bc_example.child_parent(michael,</span> <span class="pre">$v1,</span> <span class="pre">$v2,</span> <span class="pre">$v3,</span> <span class="pre">$v4)</span></tt>.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note that we're using the name of the rule base, <tt class="docutils literal"><span class="pre">bc_example</span></tt> rather than
+the fact base, <tt class="docutils literal"><span class="pre">family</span></tt> here.  We expect this answer to come from the
+<tt class="docutils literal"><span class="pre">bc_example</span></tt> rule base.</p>
+</div>
+<p>This is 'bc_example', 'child_parent', with ('michael',) followed by 4 pattern
+variables as arguments:</p>
+<blockquote>
+<pre class="doctest-block">
 &gt;&gt;&gt; for vars, no_plan in engine.prove_n('bc_example', 'child_parent',
 ...                                     ('michael',), 4):
 ...     print vars
@@ -168,56 +210,16 @@ arguments you specified as a tuple, along with the <a class="reference" href="..
 ('ismay', ('great', 'grand'), 'son', 'mother')
 </pre>
 </blockquote>
-<p>Pyke performs the proof by:</p>
-<ol class="arabic simple">
-<li>Checking to see if the goal is simply a known <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">fact</a>.
-If so, it has a proof!</li>
-<li>Look for the first backward-chaining <a class="reference" href="index.html">rule</a> that concludes the goal
-in its <tt class="docutils literal"><span class="pre">use</span></tt> clause.<ul>
-<li>If not found, the goal fails.</li>
-<li>If found, try to recursively prove all of the subgoals in the
-<a class="reference" href="index.html">rule's</a> <tt class="docutils literal"><span class="pre">when</span></tt> clause.<ul>
-<li>If this succeeds, the goal is proven.</li>
-<li>If this fails, go back to step 2 and look for the next rule
-that concludes the goal in its <tt class="docutils literal"><span class="pre">use</span></tt> clause.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-</div>
-<div class="section">
-<h2><a id="backward-chaining-defined" name="backward-chaining-defined">Backward-Chaining Defined</a></h2>
-<p>Note how the <a class="reference" href="index.html">rules</a> are combined in the opposite direction from
-<a class="reference" href="forward_chaining.html">forward-chaining</a> <a class="reference" href="index.html">rules</a>.  Here the first <a class="reference" href="index.html">rule's</a> <strong>if</strong> (<tt class="docutils literal"><span class="pre">when</span></tt>) clause is
-linked backwards to the next rule's <strong>then</strong> (<tt class="docutils literal"><span class="pre">use</span></tt>) clause.</p>
-<p>This is why these rules are called <em>backward-chaining</em> rules.  This is also
-referred to as <em>goal directed</em>, since the inferencing is driven by the final
-goal.</p>
-</div>
-<div class="section">
-<h2><a id="backtracking" name="backtracking">Backtracking</a></h2>
-<p>Also note that while processing each subgoal within a <a class="reference" href="index.html">rule's</a> <tt class="docutils literal"><span class="pre">when</span></tt> clause:</p>
-<ul class="simple">
-<li>If Pyke succeeds at proving the subgoal:<ul>
-<li>Pyke will proceed to the next subgoal within the <tt class="docutils literal"><span class="pre">when</span></tt> clause.</li>
-<li>If Pyke reaches the end of the <tt class="docutils literal"><span class="pre">when</span></tt> clause, the <a class="reference" href="index.html">rule</a> succeeds.</li>
-</ul>
-</li>
-<li>If Pyke fails at proving the subgoal:<ul>
-<li>Pyke will back up to the prior subgoal within the <tt class="docutils literal"><span class="pre">when</span></tt> clause
-and try to find another proof for it.  The process starts over
-from this prior subgoal, going forward or backing up depending on
-whether another proof can be found.</li>
-<li>If Pyke reaches the beginning of the <tt class="docutils literal"><span class="pre">when</span></tt> clause, the <a class="reference" href="index.html">rule</a>
-fails.</li>
-</ul>
-</li>
-</ul>
-<p>Thus, execution within each <a class="reference" href="index.html">rule's</a> <tt class="docutils literal"><span class="pre">when</span></tt> clause proceeds both forwards
-and backwards up and down the list of subgoals, depending on whether each
-subgoal succeeds or fails.  The process of backing up in the <tt class="docutils literal"><span class="pre">when</span></tt>
-clause to try alternate subproofs is called <em>backtracking</em>.</p>
+<p>We get six answers.  Each answer is a tuple of the final 4 pattern variables.
+So the six proofs found were:</p>
+<pre class="literal-block">
+bc_example.child_parent(michael, bruce, (), son, father)
+bc_example.child_parent(michael, marilyn, (), son, mother)
+bc_example.child_parent(michael, thomas, (grand), son, father)
+bc_example.child_parent(michael, norma, (grand), son, mother)
+bc_example.child_parent(michael, allen, (great, grand), son, father)
+bc_example.child_parent(michael, ismay, (great, grand), son, mother)
+</pre>
 </div>
 </div>
 
@@ -230,9 +232,11 @@ clause to try alternate subproofs is called <em>backtracking</em>.</p>
           <td id="right-nav">
             <div id="right-nav-div">
                 <h3>More:</h3>
-<div class="right-item"><a href="forward_chaining.html">Forward Chaining</a><p>Explanation of forward-chaining rules.</p>
+<div class="right-item"><a href="forward_chaining.html">Forward Chaining</a><p>Explanation of <em>forward-chaining rules</em> and how <em>forward-chaining</em>
+works.</p>
 </div>
-<div class="right-item"><a href="backward_chaining.html">Backward Chaining</a><p>Explanation of backward-chaining rules.</p>
+<div class="right-item"><a href="backward_chaining.html">Backward Chaining</a><p>Explanation of <em>backward-chaining</em> rules, including how
+<em>backward-chaining</em> and <em>backtracking</em> works.</p>
 </div>
 
             </div>
@@ -250,7 +254,7 @@ clause to try alternate subproofs is called <em>backtracking</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, Aug 12 2008.
+    Page last modified Fri, Aug 15 2008.
   </div>
 
 </body>

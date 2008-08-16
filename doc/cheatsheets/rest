@@ -135,12 +135,16 @@ Admonitions:
     attention, caution, danger, error, hint, important, note, tip, warning
 
     .. <admonition>::
+                                -- this blank line is optional
         body1
         body2
 
   or
     
     .. admonition:: title
+                                -- this blank line seems to be required, I
+                                   guess to separate the body from a
+                                   continuation of the title?
         body1
         body2
 
@@ -154,7 +158,20 @@ Images:
        :height: 100
        :width: 200
        :scale: 50
+       :align: top|middle|bottom|left|center|right
+       :target: url (to turn the image into a link)
+       :class: text
        :alt: alternate text
+
+    .. figure:: images/foobar.png
+       <same options as image>
+       :figwidth: integer or "image"
+       :figclass: text
+       :align: left|center|right
+
+       caption (simple paragraph)
+
+       legend (all remaining elements)
 
 Horizontal Rule:
 

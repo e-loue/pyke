@@ -189,13 +189,14 @@ base figure out which derived rule base to activate_ depending on the
 particular database in use at the time the program is run.
 
 
+.. _active: `Rule Base Activation`_
+.. _category: `Rule Base Categories`_
+
 .. _activate: ../../using_pyke.html#setting-up-each-case
 .. _activated: activate_
 .. _activating: activate_
 .. _activation: activate_
-.. _active: `Rule Base Activation`_
 .. _backward-chaining: ../rules/backward_chaining.html
-.. _category: `Rule Base Categories`_
 .. _extending: ../../krb_syntax/index.html#extending-clause
 .. _forward-chaining: ../rules/forward_chaining.html
 .. _goal: backward-chaining_

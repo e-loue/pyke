@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007 Bruce Frederiksen
+.. Copyright © 2007-2008 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,8 @@
 restindex
     crumb: Backward Chaining
     page-description:
-        Explanation of backward-chaining rules.
+        Explanation of *backward-chaining* rules, including how
+        *backward-chaining* and *backtracking* works.
     /description
     format: rest
     encoding: utf8
@@ -36,9 +37,49 @@ restindex
 Backward Chaining
 =============================================
 
-Backward chaining rules_ are processed when your program asks Pyke to prove_
-a specific *goal*.  Pyke will only use activated_ `rule bases`_ to do the
-proof.
+Backward chaining rules_ are processed when your program asks Pyke a question_
+(i.e., asks Pyke to prove_ a specific *goal*).  Pyke will only use activated_
+`rule bases`_ to do the proof.
+
+Overview of "Backward-Chaining"
+===============================
+
+To do backward-chaining, Pyke finds rules whose *then* part matches the *goal*
+(i.e., the question).  Once it finds such a rule, it tries to (recursively)
+prove all of the subgoals in the *if* part of that rule.  Some of these
+subgoals are matched against facts, and others are subgoals for other
+backward-chaining rules.  If all of the subgoals can be proven, the rule
+succeeds and the original goal is proven.  Otherwise, the rule fails, and Pyke
+tries to find another rule whose *then* part matches the goal, and so on.
+
+So Pyke ends up linking (or *chaining*) the *if* part of the first rule to the
+*then* part of the next rule.
+
+Reviewing:
+
+#. Pyke starts by finding a rule whose *then* part matches the goal.
+#. Pyke then proceeds to process the *if* part of that rule.
+#. Which may link (or chain) to the *then* part of another rule.
+
+Since Pyke processes these rules from *then* to *if* to *then* to *if* in the
+reverse manner that we normally think of using rules, it's called *backward*
+chaining.
+
+To make this more clear, Pyke has you write your backward-chaining rules
+upside down by writing the *then* part first (since that's how it is
+processed).
+
+"Use", "When" Rather than "Then", "If"
+======================================
+
+But *then-if* rules sound confusing, so Pyke uses the words **use** and
+**when** rather than **then** and **if**.  You can then read the rule as "use"
+this statement "when" these other statements can be proven.
+
+.. note::
+
+   Unlike forward-chaining_ rules, Pyke only allows one statement in the
+   *use* clause.
 
 Example
 =================
@@ -80,33 +121,22 @@ Consider this example::
     28          child_parent($parent, $gg_parent, ($prefix1, *$rest_prefixes),
     29                       $_, $gg_parent_type)
 
-Identifying Backward-Chaining Rules
-=====================================
-
-These rules_ draw the same conclusions as the forward-chaining_ example_;
-but you'll notice three differences:
-
-#. The `rule's`_ **if** and **then** parts are reversed.
-#. The rules_ use different keywords: ``use`` for the **then** clause
-   and ``when`` for the **if** clause.
-#. The facts_ established by backward-chaining do not have a knowledge
-   base name prefix.  In this case, the knowledge base name defaults to
-   the `rule base category`_ of this `rule base`_ (it's root rule base name).
+.. note::
+   These rules_ draw the same conclusions as the forward-chaining_ example_.
 
 How Backward-Chaining Rules are Run
 ====================================
 
 These rules_ are not used until you ask Pyke to prove_ a goal.
 
-The easiest way to do this is with
-*some_engine*.prove_1_ or *some_engine*.prove_n_.  Prove_1_ only
-returns the first proof found and then stops (or raises pyke.CanNotProve).
-Prove_n_ is a generator that generates all possible proofs (which, in
-some cases, might be infinite).  In both cases, you pass a tuple of
-arguments and the number of variable arguments as the last two parameters.
-The total number of arguments for the goal is the sum of the length of the
-actual arguments that you pass plus the number of variable arguments that you
-specify.
+The easiest way to do this is with *some_engine.prove_1* or
+*some_engine.prove_n*.  Prove_1_ only returns the first proof found and
+then stops (or raises ``pyke.knowledge_engine.CanNotProve``).  Prove_n_
+is a generator that generates all possible proofs (which, in some cases,
+might be infinite).  In both cases, you pass a tuple of data arguments and
+the number of variable arguments as the last two parameters.  The total number
+of arguments for the goal is the sum of the length of the data arguments
+that you pass plus the number of variable arguments that you specify.
 
 Both functions return the variable bindings for the number of variable
 arguments you specified as a tuple, along with the plan_.
@@ -120,6 +150,22 @@ Running the Example
     >>> engine.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
     >>> engine.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
     >>> engine.activate('bc_example')
+
+Noting happens this time when we activate the rule base, because there are no
+forward-chaining rules here.
+
+We want to ask the question: "What is Michael's ancestry?".  This translates
+into the Pyke statement:
+``bc_example.child_parent(michael, $v1, $v2, $v3, $v4)``.
+
+.. note::
+   Note that we're using the name of the rule base, ``bc_example`` rather than
+   the fact base, ``family`` here.  We expect this answer to come from the
+   ``bc_example`` rule base.
+
+This is 'bc_example', 'child_parent', with ('michael',) followed by 4 pattern
+variables as arguments:
+
     >>> for vars, no_plan in engine.prove_n('bc_example', 'child_parent',
     ...                                     ('michael',), 4):
     ...     print vars
@@ -130,59 +176,20 @@ Running the Example
     ('allen', ('great', 'grand'), 'son', 'father')
     ('ismay', ('great', 'grand'), 'son', 'mother')
 
-Pyke performs the proof by:
+We get six answers.  Each answer is a tuple of the final 4 pattern variables.
+So the six proofs found were::
 
-#. Checking to see if the goal is simply a known fact_.
-   If so, it has a proof!
-#. Look for the first backward-chaining rule_ that concludes the goal
-   in its ``use`` clause.
+    bc_example.child_parent(michael, bruce, (), son, father)
+    bc_example.child_parent(michael, marilyn, (), son, mother)
+    bc_example.child_parent(michael, thomas, (grand), son, father)
+    bc_example.child_parent(michael, norma, (grand), son, mother)
+    bc_example.child_parent(michael, allen, (great, grand), son, father)
+    bc_example.child_parent(michael, ismay, (great, grand), son, mother)
 
-   * If not found, the goal fails.
-   * If found, try to recursively prove all of the subgoals in the
-     `rule's`_ ``when`` clause.
 
-     * If this succeeds, the goal is proven.
-     * If this fails, go back to step 2 and look for the next rule
-       that concludes the goal in its ``use`` clause.
-
-Backward-Chaining Defined
-==============================
-
-Note how the rules_ are combined in the opposite direction from
-forward-chaining_ rules_.  Here the first `rule's`_ **if** (``when``) clause is
-linked backwards to the next rule's **then** (``use``) clause.
-
-This is why these rules are called *backward-chaining* rules.  This is also
-referred to as *goal directed*, since the inferencing is driven by the final
-goal.
-
-Backtracking
-=====================
-
-Also note that while processing each subgoal within a `rule's`_ ``when`` clause:
-
-* If Pyke succeeds at proving the subgoal:
-
-  * Pyke will proceed to the next subgoal within the ``when`` clause.
-  * If Pyke reaches the end of the ``when`` clause, the rule_ succeeds.
-
-* If Pyke fails at proving the subgoal:
-
-  * Pyke will back up to the prior subgoal within the ``when`` clause
-    and try to find another proof for it.  The process starts over
-    from this prior subgoal, going forward or backing up depending on
-    whether another proof can be found.
-  * If Pyke reaches the beginning of the ``when`` clause, the rule_
-    fails.
-
-Thus, execution within each `rule's`_ ``when`` clause proceeds both forwards
-and backwards up and down the list of subgoals, depending on whether each
-subgoal succeeds or fails.  The process of backing up in the ``when``
-clause to try alternate subproofs is called *backtracking*.
-
+.. _example: forward_chaining.html#example
 
 .. _activated: ../../using_pyke.html#setting-up-each-case
-.. _example: forward_chaining.html#example
 .. _fact: ../../knowledge_bases/fact_bases.html#facts
 .. _facts: fact_
 .. _forward-chaining: forward_chaining.html
@@ -190,12 +197,10 @@ clause to try alternate subproofs is called *backtracking*.
 .. _prove: ../../using_pyke.html#proving-goals
 .. _prove_1: prove_
 .. _prove_n: `prove_1`_
-.. _pyke.prove_1: `prove_1`_
-.. _pyke.prove_n: `prove_n`_
 .. _rule: index.html
 .. _rule base: ../../knowledge_bases/rule_bases.html
 .. _rule base category:
    ../../knowledge_bases/rule_bases.html#rule-base-categories
 .. _rule bases: `rule base`_
 .. _rules: rule_
-.. _rule's: rule_
+.. _question: FIX

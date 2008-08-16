@@ -183,7 +183,7 @@ functions are provided in `Other Functions`_, below.
     >>> my_engine.prove_1('bc_example', 'child_parent', ('david', 'norma'), 3)
     ((('grand',), 'son', 'mother'), None)
 
-    Raises ``knowledge_engine.CanNotProve`` if no proof is found.
+    Raises ``pyke.knowledge_engine.CanNotProve`` if no proof is found.
 
     >>> my_engine.prove_1('bc_example', 'bogus', ('david', 'norma'), 3)
     Traceback (most recent call last):
@@ -232,8 +232,11 @@ takes two arguments: the rule base name, and the name of the rule to trace:
 
     >>> my_engine.trace('bc_example', 'grand_parent_and_child')
     >>> my_engine.prove_1('bc_example', 'child_parent', ('david', 'norma'), 3)
-    bc_example.grand_parent_and_child('david', 'norma', '$ans_0', '$ans_1', '$ans_2')
-    bc_example.grand_parent_and_child succeeded with ('david', 'norma', ('grand',), 'son', 'mother')
+    ...     # doctest: +NORMALIZE_WHITESPACE
+    bc_example.grand_parent_and_child('david', 'norma',
+                                      '$ans_0', '$ans_1', '$ans_2')
+    bc_example.grand_parent_and_child succeeded with
+        ('david', 'norma', ('grand',), 'son', 'mother')
     ((('grand',), 'son', 'mother'), None)
 
 This can be done either before or after rule base activation and will remain
@@ -326,7 +329,7 @@ The remaining functions are:
 *some_engine*.print_stats([f = sys.stdout])
     Prints a brief set of statistics for each knowledge base to file ``f``.
     These are reset by the ``reset`` function.  This will show how many facts
-    were asserted, and counts of how many forward-chaining rules were triggered
+    were asserted, and counts of how many forward-chaining rules were fired
     and rerun, as well as counts of how many backward-chaining goals were tried,
     and how many backward-chaining rules matched, succeeded and failed.
     Note that one backward-chaining rule may succeed many times through
@@ -369,8 +372,10 @@ proof is yielded. This is done by either:
     | *some_context*.lookup_data(*variable_name*)
     | *some_variable*.as_data(*some_context*)
 
-.. _backward chaining: logic_programming/rules/backward_chaining.html
+
 .. _below: `Creating Your Own Patterns`_
+
+.. _backward chaining: logic_programming/rules/backward_chaining.html
 .. _case specific facts: knowledge_bases/fact_bases.html#case-specific-facts
 .. _copy_reg: http://docs.python.org/lib/module-copyreg.html
 .. _fact: knowledge_bases/fact_bases.html#facts

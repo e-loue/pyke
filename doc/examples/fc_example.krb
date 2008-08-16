@@ -1,6 +1,6 @@
 # $Id$
 # 
-# Copyright © 2007 Bruce Frederiksen
+# Copyright © 2007-2008 Bruce Frederiksen
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,38 +20,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-son_of
+
+direct_son_father
     foreach
-        family.son_of($son, $father, $mother)
+        family.son_of($son, $father)
     assert
-        family.child_parent($son, $father, (), son, father)
-        family.child_parent($son, $mother, (), son, mother)
-    
-daughter_of
+        family.son_father($son, $father, ())
+
+grand_son_father
     foreach
-        family.daughter_of($daughter, $father, $mother)
+        family.son_father($grand_son, $father, ())
+        family.son_father($father, $grand_father, ())
     assert
-        family.child_parent($daughter, $father, (), daughter, father)
-        family.child_parent($daughter, $mother, (), daughter, mother)
-    
-grand_parent_and_child
+        family.son_father($grand_son, $grand_father, (grand))
+
+great_grand_son_father
     foreach
-        family.child_parent($grand_child, $parent, (),
-                            $grand_child_type, $_)
-        family.child_parent($parent, $grand_parent, (),
-                            $_, $grand_parent_type)
+        family.son_father($gg_child, $parent, ())
+        family.son_father($parent, $gg_parent, ($prefix1, *$rest_prefixes))
     assert
-        family.child_parent($grand_child, $grand_parent, (grand),
-                            $grand_child_type, $grand_parent_type)
-    
-great_grand_parent_and_child
-    foreach
-        family.child_parent($gg_child, $parent, (), $gg_child_type, $_)
-        family.child_parent($parent, $gg_parent,
-                            ($prefix1, *$rest_prefixes),
-                            $_, $gg_parent_type)
-    assert
-        family.child_parent($gg_child, $gg_parent,
-                            (great, $prefix1, *$rest_prefixes),
-                            $gg_child_type, $gg_parent_type)
+        family.son_father($gg_child, $gg_parent,
+                            (great, $prefix1, *$rest_prefixes))
 

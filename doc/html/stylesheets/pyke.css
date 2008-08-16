@@ -451,7 +451,7 @@ div.warning p.admonition-title {
   font-family: sans-serif }
 
 /* from rest.css: */
-div.attention, div.caution, div.danger, div.error, div.hint,
+div.attention, div.admonition, div.caution, div.danger, div.error, div.hint,
 div.important, div.note, div.tip, div.warning {
   background-color: #C7D0C0;
   padding: 3px;

@@ -327,26 +327,26 @@ def _needs_compiling(filename, gen_root_location, gen_root_pkg):
         It does not check the pyke.version cooked into the compiled file.
         That is done by _load_file.
     '''
-    source_mtime = os.stat(filename).st_mtime
+    source_mtime = os.path.getmtime(filename)
     base, ignore = _get_base_path(filename, gen_root_location, gen_root_pkg)
     if filename.endswith('.krb'):
         try:
-            ok = os.stat(base + '_fc.py').st_mtime > source_mtime
+            ok = os.path.getmtime(base + '_fc.py') > source_mtime
         except OSError:
             ok = None
         if ok is None or ok:
             try:
-                ok = os.stat(base + '_bc.py').st_mtime > source_mtime
+                ok = os.path.getmtime(base + '_bc.py') > source_mtime
             except OSError:
                 if ok is None: ok = False
     elif filename.endswith('.kfb'):
         try:
-            ok = os.stat(base + '.fbc').st_mtime > source_mtime
+            ok = os.path.getmtime(base + '.fbc') > source_mtime
         except OSError:
             ok = False
     elif filename.endswith('.kqb'):
         try:
-            ok = os.stat(base + '.qbc').st_mtime > source_mtime
+            ok = os.path.getmtime(base + '.qbc') > source_mtime
         except OSError:
             ok = False
     return not ok

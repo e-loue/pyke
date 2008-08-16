@@ -284,5 +284,4 @@ The second form specifies the review text for this alternative directly.
 .. _KRB files: krb_syntax/index.html#lexical-structure
 .. _string.Template: http://docs.python.org/lib/node40.html
 .. _pattern variables: krb_syntax/pattern.html#pattern-variable
-.. _ask_tty:
-   knowledge_bases/question_bases.html#presenting-questions-to-your-end-users
+.. _ask_tty: knowledge_bases/question_bases.html#presenting-questions-to-your-end-users

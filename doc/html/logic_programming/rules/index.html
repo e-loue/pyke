@@ -74,38 +74,102 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="rules">
 <h1 class="title">Rules</h1>
+<p>Conceptually, a rule is very simple:</p>
+<pre class="literal-block">
+if
+    A
+    B
+    C
+then
+    D
+    E
+</pre>
+<p>Meaning, &quot;if A, B <em>and</em> C are true, then D and E are also true&quot;.  These are
+often called <em>if-then</em> rules.</p>
+<div class="admonition-and-what-are-a-b-c-d-and-e admonition">
+<p class="first admonition-title">And what are A, B, C, D and E?</p>
+<p class="last">They are simply <a class="reference" href="FIX">statements</a>.  Specifically, they are generalized statements
+containing <a class="reference" href="FIX">patterns</a> as arguments.  You'll see more about this later.</p>
+</div>
 <div class="section">
 <h2><a id="premises-and-conclusions" name="premises-and-conclusions">Premises and Conclusions</a></h2>
-<p>Rules have two parts to them: an <strong>if</strong> part (the <em>premises</em>),
-and a <strong>then</strong> part (the <em>conclusions</em>).  (Though Pyke uses different
-names for these).
-Each of these <strong>if</strong> and <strong>then</strong> parts contain one or more <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> or <a class="reference" href="../../krb_syntax/bc_rule.html#use-clause">goals</a>
-represented by <a class="reference" href="../../krb_syntax/pattern.html">patterns</a>.</p>
-<p>Logically, the rule says that if <strong>all</strong> of the <em>premises</em> in the <strong>if</strong> part
-of the rule are true, then each of the <em>conclusions</em> in the <strong>then</strong> part
-of the rule must also be true.</p>
+<p>Rules have two parts to them: an <strong>if</strong> part (containing a list of statements
+called the <em>premises</em>), and a <strong>then</strong> part (containing a list of statements
+called the <em>conclusions</em>).</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Pyke doesn't use the words <strong>if</strong> and <strong>then</strong>, as you'll see shortly.</p>
+</div>
+<p>Each of these <strong>if</strong> and <strong>then</strong> parts contain one or more <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> or <a class="reference" href="../../krb_syntax/bc_rule.html#use-clause">goals</a>
+which are just generalized <a class="reference" href="FIX">statements</a> (meaning statements with <a class="reference" href="FIX">patterns</a> as
+arguments).</p>
+</div>
+<div class="section">
+<h2><a id="processing-the-premises-within-the-if-clause" name="processing-the-premises-within-the-if-clause">Processing the Premises Within the <em>If</em> Clause</a></h2>
+<p>Because each premise with the <em>if</em> clause is a generalized statement, the
+premise is pattern matched to known facts.  This means that it may match more
+than one fact.</p>
+<p>Pyke tries all combinations of matching facts through a process called
+<em>backtracking</em>.  This will cause the same rule to potentially succeed multiple
+times, once for each unique combination of matching facts.</p>
+<div class="section">
+<h3><a id="backtracking" name="backtracking">Backtracking</a></h3>
+<p>Note that while processing the list of premises within a rule's <tt class="docutils literal"><span class="pre">if</span></tt>
+clause:</p>
+<ul class="simple">
+<li>If Pyke succeeds at proving a premise:<ul>
+<li>Pyke will proceed <em>down</em> to the next premise in the list.</li>
+<li>Trying to proceed <em>down</em> from the <em>last</em> premise in the list (when it
+succeeds) causes the rule to <em>succeed</em>.</li>
+</ul>
+</li>
+<li>If Pyke fails at proving a premise:<ul>
+<li>Pyke will back <em>up</em> to the prior premise in the list and try to find
+another solution for it.  The process starts over at the prior premise,
+going back down or further up the list depending on whether another
+solution can be found or not.</li>
+<li>Trying to back <em>up</em> from the <em>first</em> premise in the list (when it fails)
+causes the rule to <em>fail</em>.</li>
+</ul>
+</li>
+</ul>
+<div align="center" class="figure">
+<img alt="backtracking flow diagram" src="../../images/backtracking.png" />
+<p class="caption">Backtracking Flow Diagram</p>
+</div>
+<p>Thus, execution within each rule's <tt class="docutils literal"><span class="pre">if</span></tt> clause proceeds both backwards and
+forwards, up and down the list of premises, depending on whether each
+premise succeeds or fails.  The process of backing up within the <tt class="docutils literal"><span class="pre">if</span></tt>
+clause to try alternate solutions is called <em>backtracking</em>.</p>
+</div>
 </div>
 <div class="section">
 <h2><a id="inferencing" name="inferencing">Inferencing</a></h2>
 <p>Rules are specified individually within a <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a>.  They are not nested
 or explicitly linked to each other.  So Pyke must automatically figure out
 how to combine these rules to accomplish some larger task.  This is called
-<em>inferencing</em> and there are two different approaches that Pyke uses,
-depending on the rule's type.</p>
+<em>inferencing</em> and there are two different approaches that Pyke uses:</p>
 <ul class="simple">
 <li>All <a class="reference" href="forward_chaining.html">forward-chaining</a> rules are processed when a <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> is <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a>.<ul>
-<li><a class="reference" href="forward_chaining.html">Forward-chaining</a> rules may <a class="reference" href="../../using_pyke.html#setting-up-each-case">assert</a> new facts, and <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific
+<li>Forward-chaining rules may <a class="reference" href="../../using_pyke.html#setting-up-each-case">assert</a> new facts, and <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific
 <a class="reference" href="../../knowledge_bases/rule_bases.html">rule bases</a>.</li>
 </ul>
 </li>
 <li><a class="reference" href="backward_chaining.html">Backward-chaining</a> rules are processed when your program asks Pyke to
-<a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a specific <em>goal</em>.<ul>
-<li>These rules don't <a class="reference" href="../../using_pyke.html#setting-up-each-case">assert</a> new facts or <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific rule
-bases.  But they do have the ability to assemble Python functions into
-a customized call graph or program, called a <a class="reference" href="../plans.html">plan</a>, to meet a specific need.</li>
+<a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a specific <em>goal</em> (i.e., asks Pyke a <a class="reference" href="FIX">question</a>).<ul>
+<li>These rules are designed to answer a question rather than assert new
+facts or activate more specific rule bases.</li>
+<li>They also have the ability to assemble Python functions into a customized
+call graph or program, called a <a class="reference" href="../plans.html">plan</a>, to meet a specific need.</li>
 </ul>
 </li>
 </ul>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Forward-chaining and backward-chaining rules may both be included within
+the same <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a>.  Pyke knows the difference between forward-chaining
+and backward-chaining rules because they have different <a class="reference" href="FIX">syntax</a>.</p>
+</div>
 </div>
 </div>
 
@@ -118,9 +182,11 @@ a customized call graph or program, called a <a class="reference" href="../plans
           <td id="right-nav">
             <div id="right-nav-div">
                 <h3>More:</h3>
-<div class="right-item"><a href="forward_chaining.html">Forward Chaining</a><p>Explanation of forward-chaining rules.</p>
+<div class="right-item"><a href="forward_chaining.html">Forward Chaining</a><p>Explanation of <em>forward-chaining rules</em> and how <em>forward-chaining</em>
+works.</p>
 </div>
-<div class="right-item"><a href="backward_chaining.html">Backward Chaining</a><p>Explanation of backward-chaining rules.</p>
+<div class="right-item"><a href="backward_chaining.html">Backward Chaining</a><p>Explanation of <em>backward-chaining</em> rules, including how
+<em>backward-chaining</em> and <em>backtracking</em> works.</p>
 </div>
 
             </div>
@@ -138,7 +204,7 @@ a customized call graph or program, called a <a class="reference" href="../plans
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Aug 14 2008.
+    Page last modified Fri, Aug 15 2008.
   </div>
 
 </body>

@@ -1,0 +1,83 @@
+.. $Id$
+.. 
+.. Copyright © 2007-2008 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Home
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    section-pages: , about_pyke/index, logic_programming/index, knowledge_bases/index, pyke_syntax/index, using_pyke, examples, PyCon2008-paper
+    template: template.txt
+    template-encoding: utf8
+    include: No
+    initialheaderlevel: 2
+/restindex
+
+=============================
+Welcome to Pyke
+=============================
+-----------------------------
+Release 0.3
+-----------------------------
+
+Pyke introduces a form of `Logic Programming`_ (inspired by Prolog_) to the
+Python community by providing a knowledge-based inference engine (expert
+system) written in 100% Python.
+
+Unlike Prolog, Pyke integrates with Python allowing you to invoke Pyke from
+Python and intermingle Python statements and expressions within your expert
+system rules.
+
+Pyke was developed to significantly raise the bar on code reuse.  To do this,
+it had to provide a way to take Python code and be able to radically customize
+it for a specific purpose or use case.
+
+Doing this essentially makes Pyke a very high-level "compiler".  And taking
+this approach also produces dramatic increases in performance.
+
+And Pyke is very successful at this, providing order of magnitude improvements
+in:
+
+- Code adaptability (or customization),
+- Code reuse and
+- Performance
+
+Pyke does not replace Python, nor is meant to compete with Python.  Python is
+an excellent general purpose programming language, that allows you to "program
+in the small".
+
+Pyke builds upon Python by also giving you tools to directly `program in the
+large`_.
+
+Oh, and Pyke uses Logic Programming to do all of this.  So if you're interested
+in Logic Programming or Expert Systems, well Pyke has that too...
+
+Pyke on Google Groups
+=====================
+
+Please join Pyke_ on Google Groups for questions and discussion!
+
+.. _Pyke: http://groups.google.com/group/pyke
+.. _web_framework: examples.html#web-framework
+.. _Logic Programming: http://en.wikipedia.org/wiki/Logic_programming
+.. _Prolog: http://en.wikipedia.org/wiki/Prolog
+.. _program in the large: http://portal.acm.org/citation.cfm?id=808431
