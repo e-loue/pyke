@@ -71,10 +71,10 @@
 <h1 class="title">KQB Syntax</h1>
 <p>This uses a different lexical structure than <a class="reference" href="krb_syntax/index.html#lexical-structure">KRB files</a>.  Textual parameter
 substitution is done with the standard Python <a class="reference" href="http://docs.python.org/lib/node40.html">string.Template</a> class, which
-specifies parameters with <tt class="docutils literal"><span class="pre">$</span></tt>, much like <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a>.  In the
+specifies parameters with <tt class="docutils literal"><span class="pre">$</span></tt>, much like <a class="reference" href="patternvariable_">pattern variables</a>.  In the
 following descriptions, substitution parameters are acted upon in
 <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt>, but not in <tt class="docutils literal"><span class="pre">TEXT</span></tt>.</p>
-<p>The name of the <a class="reference" href="knowledge_bases/question_bases.html">question base</a> is simple the filename with the <tt class="docutils literal"><span class="pre">.kqb</span></tt>
+<p>The name of the <a class="reference" href="../knowledge_bases/question_bases.html">question base</a> is simple the filename with the <tt class="docutils literal"><span class="pre">.kqb</span></tt>
 suffix stripped.  This must be a valid Python identifier.</p>
 <div class="section">
 <h2><a id="syntax-for-kqb-file" name="syntax-for-kqb-file">Syntax for KQB File</a></h2>
@@ -92,7 +92,7 @@ parameter ::= '$' IDENTIFIER
 <p>Each question has a name and a fixed number of parameters.  One of these
 parameters is designated as the <em>answer</em> parameter on the line immediately
 following the termination of the question <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt> (<tt class="docutils literal"><span class="pre">'---'</span></tt>).</p>
-<p>The question is referenced in the <a class="reference" href="logic_programming/rules/index.html#premises-and-conclusions">premise</a> of a <a class="reference" href="logic_programming/rules/index.html">rule</a> as:</p>
+<p>The question is referenced in the <a class="reference" href="krb_syntax/bc_rule.html#when-clause">premise</a> of a <a class="reference" href="../logic_programming/rules/index.html">rule</a> as:</p>
 <pre class="literal-block">
 question_base_name.question_name(parameter...)
 </pre>
@@ -113,7 +113,7 @@ question_type ::= yn_type
 yn_type ::= 'yn' NL [review]
 </pre>
 <p>The user answers &quot;yes&quot; or &quot;no&quot;.  The answer returned is True or False.  If the
-<a class="reference" href="knowledge_bases/question_bases.html#presenting-questions-to-your-end-users">ask_tty</a> module is used, the user may type &quot;yes&quot;, &quot;y&quot;, &quot;true&quot; or &quot;t&quot; for
+<a class="reference" href="../knowledge_bases/question_bases.html#presenting-questions-to-your-end-users">ask_tty</a> module is used, the user may type &quot;yes&quot;, &quot;y&quot;, &quot;true&quot; or &quot;t&quot; for
 True and &quot;no&quot;, &quot;n&quot;, &quot;false&quot;, or &quot;f&quot; for False.  These comparisons are case
 insensitive.</p>
 <p>See <a class="reference" href="#review">review</a>, below.</p>
@@ -280,15 +280,16 @@ write your end user questions.</p>
     <tfoot id="foot">
         <tr id="foot2">
           <td id="copyright" colspan="3">
-            Copyright &copy; 2007 Bruce Frederiksen
+            Copyright &copy; 2007-2008 Bruce Frederiksen
           </td>
         </tr>
     </tfoot>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, Aug 12 2008.
+    Page last modified Sat, Aug 16 2008.
   </div>
 
 </body>
 </html>
+

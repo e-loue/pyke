@@ -80,7 +80,7 @@
 <h1 class="title">Fc_rule Syntax</h1>
 <div class="section">
 <h2><a id="fc-rule" name="fc-rule">Fc_rule</a></h2>
-<p><a class="reference" href="../logic_programming/rules/forward_chaining.html">Forward-chaining</a> <a class="reference" href="../logic_programming/rules/index.html">rules</a> have three parts:</p>
+<p><a class="reference" href="../../logic_programming/rules/forward_chaining.html">Forward-chaining</a> <a class="reference" href="../../logic_programming/rules/index.html">rules</a> have three parts:</p>
 <ol class="arabic simple">
 <li>A unique name.</li>
 <li>An optional <tt class="docutils literal"><span class="pre">foreach</span></tt> clause.</li>
@@ -92,7 +92,7 @@ fc_rule ::= IDENTIFIER NL INDENT
                fc_assert
             DEINDENT
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt> uniquely names this <a class="reference" href="../logic_programming/rules/index.html">rule</a> and is used as the corresponding
+<p>The <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt> uniquely names this <a class="reference" href="../../logic_programming/rules/index.html">rule</a> and is used as the corresponding
 Python function name in the generated &lt;rb_name&gt;_fc.py file.</p>
 </div>
 <div class="section">
@@ -110,8 +110,8 @@ fact_pattern ::= IDENTIFIER '.' IDENTIFIER '(' [{pattern,}] ')'
 </pre>
 <p>Here are links to the definitions for <a class="reference" href="pattern.html">pattern</a>, <a class="reference" href="compound_premise.html">compound_premise</a> and
 <a class="reference" href="python_premise.html">python_premise</a>.</p>
-<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause is <strong>not</strong> used, the <a class="reference" href="../logic_programming/rules/index.html">rule</a> is always fired once.</p>
-<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause <strong>is</strong> used, the <a class="reference" href="../logic_programming/rules/index.html">rule</a> is fired for each
+<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause is <strong>not</strong> used, the <a class="reference" href="../../logic_programming/rules/index.html">rule</a> is always fired once.</p>
+<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause <strong>is</strong> used, the <a class="reference" href="../../logic_programming/rules/index.html">rule</a> is fired for each
 combination of true premises.</p>
 </div>
 <div class="section">
@@ -125,11 +125,11 @@ assertion ::= fact_pattern
             | python_statements
 </pre>
 <p>Here is the link to the definitions of <a class="reference" href="python_premise.html#python-statements">python_statements</a>.</p>
-<p>The <tt class="docutils literal"><span class="pre">assert</span></tt> clause lists new <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> to assert, and/or Python
-statements to execute each time the <a class="reference" href="../logic_programming/rules/index.html">rule</a> is fired.  Each of these may
-include <a class="reference" href="pattern.html#pattern-variable">pattern variables</a> which should also appear in the <tt class="docutils literal"><span class="pre">foreach</span></tt>
+<p>The <tt class="docutils literal"><span class="pre">assert</span></tt> clause lists new <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> to assert, and/or Python
+statements to execute each time the <a class="reference" href="../../logic_programming/rules/index.html">rule</a> is fired.  Each of these may
+include <a class="reference" href="patternvariable_">pattern variables</a> which should also appear in the <tt class="docutils literal"><span class="pre">foreach</span></tt>
 clause where they are bound to a value.  These values will then be substituted
-into the <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> and Python statements.</p>
+into the <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> and Python statements.</p>
 </div>
 </div>
 
@@ -161,15 +161,16 @@ into the <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts
     <tfoot id="foot">
         <tr id="foot2">
           <td id="copyright" colspan="3">
-            Copyright &copy; 2007 Bruce Frederiksen
+            Copyright &copy; 2007-2008 Bruce Frederiksen
           </td>
         </tr>
     </tfoot>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, Aug 12 2008.
+    Page last modified Sat, Aug 16 2008.
   </div>
 
 </body>
 </html>
+

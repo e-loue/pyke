@@ -62,12 +62,14 @@ named ``header``, ``cookie``, and ``request``; each with multiple facts.
 There are different types of knowledge bases.
 
 - Those that contain facts are called `fact bases`_.
-- Those that contain rules are called `rule bases`_.
+- Those that contain rules are called `rule bases`__.
 - It is also possible to create other kinds of knowledge bases that lookup
   facts and prove goals in different ways.  Pyke provides two of these:
 
   - The `question base`_ which asks an end user questions.
   - The special_ knowledge base which only has one instance.
+
+.. __: rule_bases.html
 
 NOTES
 ------------
@@ -75,8 +77,5 @@ NOTES
 * All knowledge bases share the same name space.
 
   * So no two of them, regardless of their type, may have the same name.
-
-
-.. _rule bases: rule_bases.html
 
 

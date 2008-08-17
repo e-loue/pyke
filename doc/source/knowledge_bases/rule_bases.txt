@@ -189,6 +189,3 @@ base figure out which derived rule base to activate_ depending on the
 particular database in use at the time the program is run.
 
 
-.. _active: `Rule Base Activation`_
-.. _category: `Rule Base Categories`_
-

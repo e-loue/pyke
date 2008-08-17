@@ -155,7 +155,7 @@ Two functions are provided that cover the easy cases.  More general
 functions are provided in `Other Functions`_, below.
 
 *some_engine*.prove_1(kb_name, entity_name, fixed_args, num_returns)
-    ``Kb_name`` may name either a fact_base_ or an activated
+    ``Kb_name`` may name either a `fact base`_ or an activated
     `rule base category`_.  The ``entity_name`` is the fact_name for fact_bases,
     or the name of the `backward chaining`_ goal for `rule bases`_.
     The ``fixed_args`` are a tuple of Python values.  These form the first
@@ -318,6 +318,7 @@ discussed below_.
     This returns the plan_ function.
 
 .. __: #creating-your-own-patterns
+.. __: #creating-your-own-patterns
 
 The remaining functions are:
 
@@ -345,6 +346,8 @@ Creating Your Own Patterns
 ----------------------------------
 
 You'll need two more Pyke modules to create your own patterns__ and contexts:
+
+.. __: logic_programming/pattern_matching/index.txt
 
     >>> from pyke import pattern, contexts
 
@@ -377,8 +380,6 @@ proof is yielded. This is done by either:
 
     | *some_context*.lookup_data(*variable_name*)
     | *some_variable*.as_data(*some_context*)
-
-.. __: logic_programming/pattern_matching/index.txt
 
 .. _below: `Creating Your Own Patterns`_
 

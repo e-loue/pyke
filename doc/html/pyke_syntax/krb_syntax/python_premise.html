@@ -92,13 +92,13 @@ meaning is as follows:</p>
 <dt><a class="reference" href="pattern.html">pattern</a> '=' python_exp</dt>
 <dd><em>python_exp</em> is evaluated and the result matched
 with <a class="reference" href="pattern.html">pattern</a>.  If the result does not match,
-the clause fails and <a class="reference" href="../logic_programming/rules/backward_chaining.html#backtracking">backtracking</a> is initiated.
-The clause always fails on <a class="reference" href="../logic_programming/rules/backward_chaining.html#backtracking">backtracking</a>, meaning that it only produces
+the clause fails and <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a> is initiated.
+The clause always fails on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>, meaning that it only produces
 a single result (contrasted with <tt class="docutils literal"><span class="pre">in</span></tt>).</dd>
 <dt><a class="reference" href="pattern.html">pattern</a> 'in' python_exp</dt>
 <dd><p class="first"><em>python_exp</em> is evaluated and the first element
 from the resulting <em>iterable</em> is matched
-with <a class="reference" href="pattern.html">pattern</a>.  On <a class="reference" href="../logic_programming/rules/backward_chaining.html#backtracking">backtracking</a>, successive
+with <a class="reference" href="pattern.html">pattern</a>.  On <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>, successive
 elements from the result are matched with
 <a class="reference" href="pattern.html">pattern</a>.  When the result is exhausted, the clause fails.</p>
 <p class="last">This has the effect of offering each element of the result, one at a
@@ -108,7 +108,7 @@ individually.</p>
 <dt>'check' python_exp</dt>
 <dd><em>python_exp</em> is evaluated.  If the result is
 Python &quot;true&quot; the clause succeeds, otherwise
-it fails.  The clause always fails on <a class="reference" href="../logic_programming/rules/backward_chaining.html#backtracking">backtracking</a>.</dd>
+it fails.  The clause always fails on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>.</dd>
 </dl>
 </div>
 <div class="section">
@@ -120,7 +120,7 @@ python_statements ::= 'python' python_statement
                       DEINDENT
 </pre>
 <p>This clause allows the inclusion of arbitrary Python statements in your
-<a class="reference" href="../logic_programming/rules/index.html">rules</a>.  This premise always succeeds; and fails on backtracking.</p>
+<a class="reference" href="../../logic_programming/rules/index.html">rules</a>.  This premise always succeeds; and fails on backtracking.</p>
 <div class="tip">
 <p class="first admonition-title">Tip</p>
 <p>It is important to always keep in mind the difference between <a class="reference" href="patternvariable_">pattern
@@ -135,11 +135,11 @@ use the special <a class="reference" href="pattern.html#pattern-variable">patter
 statement, it must be bound to a value that does not contain any unbound
 <a class="reference" href="patternvariable_">pattern variables</a>.</p>
 <p>Python variables are not visible to the inference engine.  They are local
-variables that are also not visible to Python code in other <a class="reference" href="../logic_programming/rules/index.html">rules</a> or other
-invocations of the same <a class="reference" href="../logic_programming/rules/index.html">rule</a>.</p>
+variables that are also not visible to Python code in other <a class="reference" href="../../logic_programming/rules/index.html">rules</a> or other
+invocations of the same <a class="reference" href="../../logic_programming/rules/index.html">rule</a>.</p>
 <p>Finally, Python variables in the <a class="reference" href="bc_rule.html#when-clause">when clause</a> of a <a class="reference" href="bc_rule.html">backward-chaining
 rule</a> are not visible to the Python code in the <a class="reference" href="bc_rule.html#with-clause">with clause</a> of the same
-<a class="reference" href="../logic_programming/rules/index.html">rule</a>.  (These end up in two different Python functions after the <a class="reference" href="index.html">.krb
+<a class="reference" href="../../logic_programming/rules/index.html">rule</a>.  (These end up in two different Python functions after the <a class="reference" href="index.html">.krb
 file</a> is compiled).  So this won't work:</p>
 <pre class="literal-block">
 some_bc_rule
@@ -197,15 +197,16 @@ some_bc_rule
     <tfoot id="foot">
         <tr id="foot2">
           <td id="copyright" colspan="3">
-            Copyright &copy; 2007 Bruce Frederiksen
+            Copyright &copy; 2007-2008 Bruce Frederiksen
           </td>
         </tr>
     </tfoot>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, Aug 12 2008.
+    Page last modified Sat, Aug 16 2008.
   </div>
 
 </body>
 </html>
+
