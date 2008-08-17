@@ -70,4 +70,3 @@ Examples:
    You can use ``(*$foo)`` to only match a tuple.  It will bind ``$foo`` to
    the entire tuple, but will fail to match any other data type.
 
-

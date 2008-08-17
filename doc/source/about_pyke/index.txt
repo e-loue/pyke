@@ -146,10 +146,3 @@ i's and crossed all the t's".
 
 
 
-.. _home page: index.html
-.. _plan: logic_programming/rules/backward_chaining/plans.html
-.. _Python: http://www.python.org
-.. _siege: http://www.joedog.org/JoeDog/Siege
-.. _sqlgen: examples.html#sqlgen
-.. _web_framework: examples.html#web-framework
-.. _programming in the large: http://portal.acm.org/citation.cfm?id=808431

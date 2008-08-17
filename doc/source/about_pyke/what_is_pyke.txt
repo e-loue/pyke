@@ -110,6 +110,3 @@ Potential Pyke Applications:
   or situation.
 
 
-.. _web_framework: examples.html#web-framework
-.. _Logic Programming: http://en.wikipedia.org/wiki/Logic_programming
-.. _Prolog: http://en.wikipedia.org/wiki/Prolog

@@ -110,9 +110,3 @@ The two notable exceptions to Python conventions are:
 
    - So ``(1)`` is the same as ``(1,)``.
 
-.. _knowledge bases: FIX
-.. _fact bases: FIX
-.. _rule bases: FIX
-.. _question bases: FIX
-.. _string.Template: http://docs.python.org/lib/node40.html
-.. _regular expression syntax: http://docs.python.org/lib/re-syntax.html

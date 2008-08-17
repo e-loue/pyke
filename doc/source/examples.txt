@@ -131,17 +131,3 @@ or constructing the SQL statements.
 The demo is packaged as a WSGI_ application and also demonstrates the use of
 multiple `rule bases`_ by using the sqlgen example above.
 
-.. _knapsack problem: http://en.wikipedia.org/wiki/Knapsack_problem
-.. _PyCon 2008: http://us.pycon.org/2008/about/
-.. _.krb files: krb_syntax/index.html
-.. _how to call Pyke: using_pyke.html
-.. _facts: knowledge_bases/fact_bases.html#facts
-.. _forward-chaining: logic_programming/rules/forward_chaining.html
-.. _backward-chaining: logic_programming/rules/backward_chaining.html
-.. _plans: logic_programming/rules/plans.html
-.. _krb_traceback: using_pyke.html#krb-traceback
-.. _rule bases: knowledge_bases/rule_bases.html
-.. _print_stats: using_pyke.html#other-functions
-.. _MySQL: http://www.mysql.com/
-.. _WSGI: http://www.python.org/dev/peps/pep-0333/
-.. _HTMLTemplates: http://py-templates.sourceforge.net/htmltemplate/index.html

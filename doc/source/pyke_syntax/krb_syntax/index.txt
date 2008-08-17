@@ -131,13 +131,3 @@ file.
 .. __: bc_rule_
 
 
-.. _backward-chaining: ../logic_programming/rules/backward_chaining.html
-.. _bc_rule: bc_rule.html
-.. _fc_rule: fc_rule.html
-.. _forward-chaining: ../logic_programming/rules/forward_chaining.html
-.. _inherits: knowledge_bases/rule_bases.html#rule-base-inheritance
-.. _plan: ../logic_programming/rules/plans.html
-.. _plans: plan_
-.. _rule: ../logic_programming/rules/index.html
-.. _rules: rule_
-.. _rule base: knowledge_bases/rule_bases.html

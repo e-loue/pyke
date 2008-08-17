@@ -103,8 +103,3 @@ Here's an example of setting this attribute::
     engine.ask_module = ask_wx
 
 
-.. _.kqb file: ../../kqb_syntax.html
-.. _.kqb files: `.kqb file`_
-.. _knowledge_engine.engine: ../../using_pyke.html#initializing-pyke
-.. _engine.reset: ../../using_pyke.html#setting-up-each-case
-.. _wxpython: http://www.wxpython.org/

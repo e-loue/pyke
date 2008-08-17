@@ -57,15 +57,3 @@ small Pyke module.
 Pyke also provides an end user question_ capability, as well as the capability
 to run commands_ on the local system to guide the inferencing.
 
-.. _activated: ../using_pyke.html#setting-up-each-case
-.. _backtracking: rules/backward_chaining.html#backtracking
-.. _backward-chaining: rules/backward_chaining.html
-.. _question: ../knowledge_bases/question_bases.html
-.. _commands: ../knowledge_bases/special.html#running-commands
-.. _facts: ../knowledge_bases/fact_bases.html#facts
-.. _forward-chaining: rules/forward_chaining.html
-.. _pickled: plans.html#running-and-pickling-plans
-.. _plan: plans.html
-.. _plans: plan_
-.. _reset: activated_
-.. _rules: rules/index.html

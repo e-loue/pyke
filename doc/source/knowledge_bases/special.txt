@@ -186,19 +186,6 @@ The ``$output`` is a three tuple: (exit_status, stdout, stderr).  Both stdout
 and stderr are single strings (with embedded newlines).
 
 
-.. _backtracked: ../rules/backward_chaining.html#backtracking
-.. _cut operator: http://en.wikipedia.org/wiki/Cut_%28logic_programming%29
-.. _facts: fact_bases.html#facts
-.. _goal: ../rules/backward_chaining.html
-.. _goals: goal_
-.. _knowledge base: index.html
-.. _knowledge bases: `knowledge base`_
-.. _.krb file: ../../krb_syntax/index.html
-.. _premise: ../../krb_syntax/bc_rule.html#when-clause
-.. _premises: premise_
-.. _Prolog: http://en.wikipedia.org/wiki/Prolog
-.. _prove: ../../using_pyke.html#proving-goals
-.. _rule: ../rules/index.html
-.. _rules: rule_
-.. _subprocess.Popen: http://docs.python.org/lib/node528.html
-.. _subprocess.CalledProcessError: http://docs.python.org/lib/node530.html
+.. _goals: ../logic_programming/rules/backward_chaining.html
+
+

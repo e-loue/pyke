@@ -76,7 +76,7 @@ NOTES
 
   * So no two of them, regardless of their type, may have the same name.
 
-.. _question base: question_bases.html
-.. _fact bases: fact_bases.html
-.. _special: special.html
+
 .. _rule bases: rule_bases.html
+
+

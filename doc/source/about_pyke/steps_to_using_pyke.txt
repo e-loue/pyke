@@ -98,16 +98,3 @@ Steps to Using Pyke
       prepare it for the next use case.
 
 
-.. _backward-chaining: logic_programming/rules/backward_chaining_rules.html
-.. _commands: knowledge_bases/special.html#running-commands
-.. _forward-chaining: logic_programming/rules/forward_chaining_rules.html
-.. _goal: FIX
-.. _knowledge engine: logic_programming/statements.html
-.. _pattern variables: logic_programming/pattern_matching/pattern_variables.html
-.. _pickle: http://docs.python.org/lib/module-pickle.html
-.. _plan: FIX
-.. _prove: FIX
-.. _reset: FIX
-.. _questions: knowledge_bases/question_bases.html
-.. _rules: logic_programming/statements.html
-.. _statements: logic_programming/statements.html

@@ -386,25 +386,3 @@ These rules could be run as follows:
     son_of('thomas', 'frederik')
     son_of('frederik', 'hiram')
 
-.. _activated: ../../using_pyke.html#setting-up-each-case
-.. _anonymous variable: FIX
-.. _assert: activated_
-.. _asserted: assert_
-.. _asserts: assert_
-.. _backtracking: FIX
-.. _backward-chaining: FIX
-.. _fact: ../../knowledge_bases/fact_bases.html#facts
-.. _facts: fact_
-.. _inherited: ../../knowledge_bases/rule_bases.html#rule-base-inheritance
-.. _.krb file: ../../krb_syntax/index.html
-.. _pattern: ../../krb_syntax/pattern.html
-.. _patterns: pattern_
-.. _pattern variable: ../../krb_syntax/pattern.html#pattern-variable
-.. _pattern variables: `pattern variable`_
-.. _rule base: ../../knowledge_bases/rule_bases.html
-.. _rule: index.html
-.. _rule's: rule_
-.. _rules: rule_
-.. _fact base: FIX
-.. _statements: statement_
-.. _statement: FIX

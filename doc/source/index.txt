@@ -76,8 +76,3 @@ Pyke on Google Groups
 
 Please join Pyke_ on Google Groups for questions and discussion!
 
-.. _Pyke: http://groups.google.com/group/pyke
-.. _web_framework: examples.html#web-framework
-.. _Logic Programming: http://en.wikipedia.org/wiki/Logic_programming
-.. _Prolog: http://en.wikipedia.org/wiki/Prolog
-.. _program in the large: http://portal.acm.org/citation.cfm?id=808431

@@ -301,14 +301,14 @@ There are a few more functions that may be useful in special situations.
 
 The first two of these provide more general access to the fact_ lookup and
 goal proof mechanisms.  The catch is that you must first convert **all**
-arguments into patterns_ and create a *context* for these patterns_.  This is
+arguments into patterns__ and create a *context* for these patterns.  This is
 discussed below_.
 
 *some_engine*.lookup(kb_name, entity_name, pattern_context, patterns)
-    This is a generator that binds patterns_ to successive facts_.  Yields None
+    This is a generator that binds patterns__ to successive facts_.  Yields None
     for each successful match.
 *some_engine*.prove(kb_name, entity_name, pattern_context, patterns)
-    A generator that binds patterns_ to successive proofs.  Yields a
+    A generator that binds patterns__ to successive proofs.  Yields a
     *prototype_plan* or ``None`` for each successful match.  To turn the
     prototype_plan into a Python function, use *prototype_plan*.create_plan().
     This returns the plan_ function.
@@ -335,14 +335,16 @@ The remaining functions are:
     Note that one backward-chaining rule may succeed many times through
     backtracking.
 
+.. __: #creating-your-own-patterns
+
 Creating Your Own Patterns
 ----------------------------------
 
-You'll need two more Pyke modules to create your own patterns_ and contexts:
+You'll need two more Pyke modules to create your own patterns__ and contexts:
 
     >>> from pyke import pattern, contexts
 
-There are four kinds of patterns_:
+There are four kinds of patterns:
 
 pattern.pattern_literal(data)
     This matches the ``data`` provided.
@@ -372,32 +374,9 @@ proof is yielded. This is done by either:
     | *some_context*.lookup_data(*variable_name*)
     | *some_variable*.as_data(*some_context*)
 
+.. __: logic_programming/pattern_matching/index.txt
 
 .. _below: `Creating Your Own Patterns`_
+.. _rule: pyke_syntax/krb_syntax/bc_rule.html
 
-.. _backward chaining: logic_programming/rules/backward_chaining.html
-.. _case specific facts: knowledge_bases/fact_bases.html#case-specific-facts
-.. _copy_reg: http://docs.python.org/lib/module-copyreg.html
-.. _fact: knowledge_bases/fact_bases.html#facts
-.. _fact_base: knowledge_bases/fact_bases.html
-.. _facts: fact_
-.. _functools.partial: http://docs.python.org/lib/module-functools.html
-.. _knowledge base: knowledge_bases/index.html
-.. _.kfb file: kfb_syntax.html
-.. _.kfb files: `.kfb file`_
-.. _.kqb file: kqb_syntax.html
-.. _.kqb files: `.kqb file`_
-.. _.krb file: krb_syntax/index.html
-.. _.krb files: `.krb file`_
-.. _pattern: krb_syntax/pattern.html
-.. _pattern variables: krb_syntax/pattern.html#pattern-variable
-.. _patterns: pattern_
-.. _plan: logic_programming/rules/plans.html
-.. _plans: plan_
-.. _rule: logic_programming/rules/index.html
-.. _rules: rule_
-.. _rule base: knowledge_bases/rule_bases.html
-.. _rule base category: knowledge_bases/rule_bases.html#rule-base-categories
-.. _rule bases: `rule base`_
-.. _taking clause: krb_syntax/bc_rule.html#taking-clause
-.. _traceback: http://docs.python.org/lib/module-traceback.html
+

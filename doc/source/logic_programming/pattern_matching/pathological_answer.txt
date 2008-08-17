@@ -107,4 +107,3 @@ And so ``$y`` is ``(ho, ho, ho)``!
 .. note::
    If you got this right, you should really be using Pyke!
 
-

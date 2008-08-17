@@ -184,12 +184,3 @@ This will regenerate the files in ``doc/html``, except for those in
 and placed the generated html files in subversion so that you can checkout
 the documentation without having to run ``r2w``.
 
-.. _Docutils: http://sourceforge.net/projects/docutils
-.. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
-.. _PLY 2.3: http://www.dabeaz.com/ply/
-.. _Pyke project download page:
-        http://sourceforge.net/project/showfiles.php?group_id=207724
-.. _pypi: http://pypi.python.org/pypi
-.. _Python 2.5: http://python.org
-.. _Rest2web: http://sourceforge.net/projects/rest2web
-.. _Examples: examples.html

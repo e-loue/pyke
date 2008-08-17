@@ -79,9 +79,3 @@ to generalize statements_.  One example is to turn statements into questions.
 
 
 
-.. _statements: FIX
-.. _Literal patterns: literal_patterns.html
-.. _Pattern variables: pattern_variables.html
-.. _Tuple patterns: tuple_patterns.html
-.. _matching two patterns together: matching_patterns.html
-.. _pathological question: matching_patterns.html#pathological-question

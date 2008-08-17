@@ -116,5 +116,6 @@ following two tuple patterns:
 
 The answer is here_ (but no peeking!).
 
-.. _rules: FIX
-.. _here: pathological_answer.html
+.. _here: logic_programming/pattern_matching/pathological_answer.html
+
+

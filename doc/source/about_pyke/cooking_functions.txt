@@ -170,7 +170,3 @@ And, finally, you should start to get a sense for how "programming in the
 large" with Pyke dovetails with "programming in the small" with Python.
 
 
-.. _Plans: FIX
-.. _Logic Programming in Pyke: FIX
-.. _functools: http://docs.python.org/lib/module-functools.html
-.. _About Pyke: FIX

@@ -61,5 +61,3 @@ Syntax for KFB File
            | '(' [{data,}] ')'
 
 
-.. _fact base: fact_bases.html
-.. _KRB files: krb_syntax/index.html#lexical-structure

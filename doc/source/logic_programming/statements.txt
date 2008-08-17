@@ -163,9 +163,3 @@ So the complete statement for our family_relations example is::
 
     family.son_of(Bruce, Thomas, Norma)
 
-.. _backward-chaining rules: rules/backward_chaining.html
-.. _rule base: ../knowledge_bases/rule_bases.html
-.. _rule base category: FIX
-.. _knowledge bases: FIX
-.. _family_relations: FIX
-.. _Prolog: FIX

@@ -85,7 +85,3 @@ calling::
 
 Typically, all universal facts are added once at `program startup`_.
 
-.. _forward-chaining: ../rules/forward_chaining.html
-.. _program startup: ../../using_pyke.html#initializing-pyke
-.. _reset: ../../using_pyke.html#setting-up-each-case
-.. _.kfb file: ../../kfb_syntax.html
