@@ -605,3 +605,6 @@ domains.  Pyke is in alpha status now and is ready to start to lean on.
 This paper is licensed under a `Creative Commons Attribution 3.0 Unported
 License`__.
 
+.. __: http://creativecommons.org/licenses/by/3.0/
+
+
