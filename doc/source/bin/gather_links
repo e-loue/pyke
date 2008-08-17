@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# gather_links
+
+usage() {
+    echo "usage: gather_links" >&2
+    exit 2
+}
+
+[ $# -eq 0 ] || usage
+
+set -e
+
+find . -name '*.txt' | xargs python gather_links.py

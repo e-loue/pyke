@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# gen_html
+
+# This must be executed in the doc/source directory!
+
+if ! expr `pwd` : '.*/doc/source$' > /dev/null
+then
+    echo "gen_html: must be executed in doc/source directory" >&2
+    exit 2
+fi
+
+set -e
+
+bin/add_links
+
+(cd ..; r2w r2w.ini)
+status=$?
+
+bin/strip_links
+
+exit $?

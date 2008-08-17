@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# add_links
+
+# This must be executed in the doc/source directory!
+
+MASTER_LINKS=links
+TMP_FILE=/tmp/add_links.$$
+
+usage() {
+    echo "usage: add_links" >&2
+    exit 2
+}
+
+[ $# -eq 0 ] || usage
+
+if ! expr `pwd` : '.*/doc/source$' > /dev/null
+then
+    echo "add_links: must be executed in doc/source directory" >&2
+    exit 2
+fi
+
+set -e
+
+find . -name .svn -prune -o -type d -print | while read dir
+do
+    echo "Doing $dir"
+    bin/get_links.py "$dir" $TMP_FILE
+    for file in "$dir"/*.txt
+    do
+        if [ "$file" != ./template.txt -a "$file" != ./PyCon2008-paper.txt -a \
+             -e "$file" ]
+        then
+            echo "$file"
+            cat $TMP_FILE >> "$file"
+        fi
+    done
+    rm -f $TMP_FILE
+done
+

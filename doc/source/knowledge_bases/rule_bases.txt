@@ -100,9 +100,9 @@ Rule Base Inheritance
 The rule bases within the same category_ share rules amongst themselves
 through rule base inheritance.
 
-Rule bases use single inheritance to inherit_ the rules_ from another rule
+Rule bases use single inheritance to inherit the rules_ from another rule
 base.  This can go on to any depth.  Both forward-chaining_ and
-backward-chaining_ rules_ are inherited_.
+backward-chaining_ rules_ are inherited.
 
 This allows mutually exclusive rule bases to share common rules in a parent
 rule base without having to duplicate these rules amongst themselves.

@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# strip_links
+
+usage() {
+    echo "usage: strip_links" >&2
+    exit 2
+}
+
+[ $# -eq 0 ] || usage
+
+if ! expr `pwd` : '.*/doc/source$' > /dev/null
+then
+    echo "strip_links: must be executed in doc/source directory" >&2
+    exit 2
+fi
+
+set -e
+
+find . -name '*.txt' | while read filename
+do
+    if [ "$filename" != ./template.txt -a \
+         "$filename" != ./PyCon2008-paper.txt -a \
+         -e "$filename" ]
+    then
+        #echo "$filename"
+        if true
+        then
+            ed -s "$filename" <<-'!'
+		H
+		$
+		?^[ 	]*$?
+		.,$d
+		w
+		q
+		!
+        fi
+    fi
+done

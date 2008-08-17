@@ -4,7 +4,7 @@
 .. _activation: activate_
 .. _active: using_pyke.html#setting-up-each-case
 .. _ask_tty: knowledge_bases/question_bases.html#presenting-questions-to-your-end-users
-.. _assert: activate_
+.. _assert: using_pyke.html#setting-up-each-case
 .. _asserted: assert_
 .. _asserts: assert_
 .. _backtracked: backtracking_
@@ -41,11 +41,8 @@
 .. _home page: index.html
 .. _how to call Pyke: using_pyke.html
 .. _HTMLTemplates: http://py-templates.sourceforge.net/htmltemplate/index.html
-.. _inherited: inherit_
-.. _inherited: knowledge_bases/rule_bases.html#rule-base-inheritance
-.. _inherit: ../krb_syntax/index.html#extending-clause
+.. _inherit: knowledge_bases/rule_bases.html#rule-base-inheritance
 .. _inherits: inherit_
-.. _inherits: pyke_syntax/krb_syntax/knowledge_bases/rule_bases.html#rule-base-inheritance
 .. _.kfb file: pyke_syntax/kfb_syntax.html
 .. _.kfb files: `.kfb file`_
 .. _knapsack problem: http://en.wikipedia.org/wiki/Knapsack_problem
@@ -55,7 +52,6 @@
 .. _knowledge engine: `knowledge_engine.engine`_
 .. _.kqb file: pyke_syntax/kqb_syntax.html
 .. _.kqb files: `.kqb file`_
-.. _.krb file: `.krb`_
 .. _.krb file: pyke_syntax/krb_syntax/index.html
 .. _.krb files: `.krb file`_
 .. _.krb: `.krb file`_
@@ -90,7 +86,7 @@
 .. _Pyke: http://groups.google.com/group/pyke
 .. _Pyke project download page: http://sourceforge.net/project/showfiles.php?group_id=207724
 .. _pypi: http://pypi.python.org/pypi
-.. _Python 2.5: http://python.org
+.. _Python 2.5: http://www.python.org
 .. _Python: http://www.python.org
 .. _python_premise: pyke_syntax/krb_syntax/python_premise.html
 .. _python_statements: pyke_syntax/krb_syntax/python_premise.html#python-statements
