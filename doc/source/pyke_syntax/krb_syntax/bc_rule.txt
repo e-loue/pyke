@@ -95,7 +95,7 @@ premises that must be true for this rule to succeed.
 
 If the ``when`` clause is omitted, the only
 requirement for the rule_ to succeed is that the ``use`` clause
-patterns_ match the goal.
+`pattern matches`_ the goal.
 
 If the ``when`` clause is specified, the rule_ succeeds for each
 combination of true premises.

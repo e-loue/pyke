@@ -1,5 +1,5 @@
-.. _activate: using_pyke.html#setting-up-each-case
 .. _activated: activate_
+.. _activate: using_pyke.html#setting-up-each-case
 .. _activating: activate_
 .. _activation: activate_
 .. _active: using_pyke.html#setting-up-each-case
@@ -16,7 +16,6 @@
 .. _bc_rule: backward-chaining rule_
 .. _Bc_rule Syntax: bc_rule_
 .. _case specific facts: knowledge_bases/fact_bases.html#case-specific-facts
-.. _rule base category: FIX
 .. _commands: knowledge_bases/special.html#running-commands
 .. _compound_premise: pyke_syntax/krb_syntax/compound_premise.html
 .. _copy_reg: http://docs.python.org/lib/module-copyreg.html
@@ -37,12 +36,8 @@
 .. _forward-chaining rules: forward-chaining rule_
 .. _functools: http://docs.python.org/lib/module-functools.html
 .. _functools.partial: functools_
-    .. _goal: backward-chaining_
-    .. _goal: FIX
-.. _goal: rules/backward_chaining.html
+.. _goal: logic_programming/rules/backward_chaining.html
 .. _goals: goal_
-    .. _goals: krb_syntax/bc_rule.html#use-clause
-    .. _here: logic_programming/pattern_matching/pathological_answer.html
 .. _home page: index.html
 .. _how to call Pyke: using_pyke.html
 .. _HTMLTemplates: http://py-templates.sourceforge.net/htmltemplate/index.html
@@ -56,15 +51,13 @@
 .. _knapsack problem: http://en.wikipedia.org/wiki/Knapsack_problem
 .. _knowledge base: knowledge_bases/index.html
 .. _knowledge bases: `knowledge base`_
-    .. _knowledge bases: pyke_syntax/FIX
 .. _knowledge_engine.engine: using_pyke.html#initializing-pyke
-    .. _knowledge engine: logic_programming/statements.html
+.. _knowledge engine: `knowledge_engine.engine`_
 .. _.kqb file: pyke_syntax/kqb_syntax.html
 .. _.kqb files: `.kqb file`_
 .. _.krb file: `.krb`_
 .. _.krb file: pyke_syntax/krb_syntax/index.html
 .. _.krb files: `.krb file`_
-    .. _KRB files: pyke_syntax/krb_syntax/index.html#lexical-structure
 .. _.krb: `.krb file`_
 .. _krb_traceback: using_pyke.html#krb-traceback
 .. _Literal patterns: logic_programming/pattern_matching/literal_patterns.html
@@ -72,21 +65,17 @@
 .. _Logic Programming: http://en.wikipedia.org/wiki/Logic_programming
 .. _matching two patterns together: logic_programming/pattern_matching/matching_patterns.html
 .. _MySQL: http://www.mysql.com/
-    .. _Notes on Forall and Notany Premises: pyke_syntax/krb_syntax/#notes-on-forall-and-notany-premises
-    .. _pathological question: logic_programming/pattern_matching/matching_patterns.html#pathological-question
-.. _pattern: pyke_syntax/krb_syntax/pattern.html
-    .. _patterns: pattern_
+.. _pathological question: logic_programming/pattern_matching/matching_patterns.html#pathological-question
+.. _pattern: logic_programming/pattern_matching/index.html
+.. _pattern matches: logic_programming/pattern_matching/index.html
 .. _pattern variable: logic_programming/pattern_matching/pattern_variables.html
-    .. _pattern variable: pyke_syntax/krb_syntax/pattern.html#pattern-variable
-    .. _pattern variables: pattern variable_
+.. _pattern variables: pattern variable_
 .. _pickled: logic_programming/plans.html#running-and-pickling-plans
 .. _pickle: http://docs.python.org/lib/module-pickle.html
-    .. _plan: FIX
 .. _plan: logic_programming/plans.html
 .. _plan_spec: pyke_syntax/krb_syntax/bc_rule.html#plan-spec
 .. _plans: plan_
 .. _PLY 2.3: http://www.dabeaz.com/ply/
-    .. _premise: pyke_syntax/krb_syntax/bc_rule.html#when-clause
 .. _premise: logic_programming/rules/index.html#premises-and-conclusions
 .. _premises: premise_
 .. _print_stats: using_pyke.html#other-functions
@@ -94,8 +83,8 @@
 .. _program startup: using_pyke.html#initializing-pyke
 .. _Prolog: http://en.wikipedia.org/wiki/Prolog
 .. _prove_1: prove_
-.. _prove: using_pyke.html#proving-goals
 .. _prove_n: `prove_1`_
+.. _prove: using_pyke.html#proving-goals
 .. _proving: prove_
 .. _PyCon 2008: http://us.pycon.org/2008/about/
 .. _Pyke: http://groups.google.com/group/pyke
@@ -107,22 +96,18 @@
 .. _python_statements: pyke_syntax/krb_syntax/python_premise.html#python-statements
 .. _question base: knowledge_bases/question_bases.html
 .. _question bases: question base_
-    .. _question: knowledge_bases/question_bases.html
-    .. _questions: question_
+.. _question: knowledge_bases/question_bases.html
+.. _questions: question_
 .. _regular expression syntax: http://docs.python.org/lib/re-syntax.html
-    .. _reset: FIX
 .. _reset: using_pyke.html#setting-up-each-case
 .. _Rest2web: http://sourceforge.net/projects/rest2web
 .. _rule base category: knowledge_bases/rule_bases.html#rule-base-categories
-    .. _Rule Base Category: `Rule Base Categories`_
-.. _rule base: knowledge_bases/rule_bases.html
-.. _rule bases: rule base_
-    .. _rule bases: pyke_syntax/FIX
+.. _rule base: pyke_syntax/krb_syntax/index.html
 .. _rule base's: `rule base`_
+.. _rule bases: rule base_
 .. _rule: logic_programming/rules/index.html
-.. _rules: rule_
-    .. _rules: logic_programming/statements.html
 .. _rule's: rule_
+.. _rules: rule_
 .. _siege: http://www.joedog.org/JoeDog/Siege
 .. _special: knowledge_bases/special.html
 .. _sqlgen: examples.html#sqlgen
