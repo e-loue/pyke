@@ -10,6 +10,7 @@
 .. _backtracked: backtracking_
 .. _backtracking: logic_programming/rules/index.html#backtracking
 .. _backward chaining: logic_programming/rules/backward_chaining.html
+.. _backward-chaining: backward chaining_
 .. _backward-chaining rule: logic_programming/rules/backward_chaining.html
 .. _backward-chaining rules: backward-chaining rule_
 .. _bc_premise: pyke_syntax/krb_syntax/bc_rule.html#when-clause

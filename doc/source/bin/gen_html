@@ -19,4 +19,4 @@ status=$?
 
 bin/strip_links
 
-exit $?
+exit $status

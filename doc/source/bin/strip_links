@@ -28,8 +28,8 @@ do
         then
             ed -s "$filename" <<-'!'
 		H
-		$
-		?^[ 	]*$?
+		$; # hush!
+		?^[ 	]*$?; # hush!
 		.,$d
 		w
 		q

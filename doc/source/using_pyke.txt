@@ -207,7 +207,7 @@ Running and Pickling Plans
 
 Once you've obtained a plan_ from ``prove_1`` or ``prove_n``, you just call
 it like a normal Python function.  The arguments required are simply those
-specified, if any, in the `taking clause`_ of the rule_ proving the top-level
+specified, if any, in the `taking clause`_ of the rule__ proving the top-level
 goal.
 
 You may call the plan_ function any number of times.  You may even pickle
@@ -223,6 +223,8 @@ before pickling the plan_:
 No special code is required to unpickle a plan_.  Just unpickle and call it.
 (Unpickling the plan_ only imports one small Pyke module to be able to run
 the plan_).
+
+.. __: pyke_syntax/krb_syntax/bc_rule.html
 
 Tracing Rules
 -------------
@@ -304,6 +306,8 @@ goal proof mechanisms.  The catch is that you must first convert **all**
 arguments into patterns__ and create a *context* for these patterns.  This is
 discussed below_.
 
+.. __: #creating-your-own-patterns
+
 *some_engine*.lookup(kb_name, entity_name, pattern_context, patterns)
     This is a generator that binds patterns__ to successive facts_.  Yields None
     for each successful match.
@@ -312,6 +316,8 @@ discussed below_.
     *prototype_plan* or ``None`` for each successful match.  To turn the
     prototype_plan into a Python function, use *prototype_plan*.create_plan().
     This returns the plan_ function.
+
+.. __: #creating-your-own-patterns
 
 The remaining functions are:
 
@@ -334,8 +340,6 @@ The remaining functions are:
     and how many backward-chaining rules matched, succeeded and failed.
     Note that one backward-chaining rule may succeed many times through
     backtracking.
-
-.. __: #creating-your-own-patterns
 
 Creating Your Own Patterns
 ----------------------------------
@@ -377,6 +381,5 @@ proof is yielded. This is done by either:
 .. __: logic_programming/pattern_matching/index.txt
 
 .. _below: `Creating Your Own Patterns`_
-.. _rule: pyke_syntax/krb_syntax/bc_rule.html
 
 
