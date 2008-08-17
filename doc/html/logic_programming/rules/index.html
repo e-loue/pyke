@@ -88,8 +88,8 @@ then
 often called <em>if-then</em> rules.</p>
 <div class="admonition-and-what-are-a-b-c-d-and-e admonition">
 <p class="first admonition-title">And what are A, B, C, D and E?</p>
-<p class="last">They are simply <a class="reference" href="FIX">statements</a>.  Specifically, they are generalized statements
-containing <a class="reference" href="FIX">patterns</a> as arguments.  You'll see more about this later.</p>
+<p class="last">They are simply <a class="reference" href="../statements.html">statements</a>.  Specifically, they are generalized statements
+containing <a class="reference" href="../pattern_matching/index.html">patterns</a> as arguments.  You'll see more about this later.</p>
 </div>
 <div class="section">
 <h2><a id="premises-and-conclusions" name="premises-and-conclusions">Premises and Conclusions</a></h2>
@@ -100,8 +100,8 @@ called the <em>conclusions</em>).</p>
 <p class="first admonition-title">Note</p>
 <p class="last">Pyke doesn't use the words <strong>if</strong> and <strong>then</strong>, as you'll see shortly.</p>
 </div>
-<p>Each of these <strong>if</strong> and <strong>then</strong> parts contain one or more <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> or <a class="reference" href="../../krb_syntax/bc_rule.html#use-clause">goals</a>
-which are just generalized <a class="reference" href="FIX">statements</a> (meaning statements with <a class="reference" href="FIX">patterns</a> as
+<p>Each of these <strong>if</strong> and <strong>then</strong> parts contain one or more <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> or <a class="reference" href="backward_chaining.html">goals</a>
+which are just generalized <a class="reference" href="../statements.html">statements</a> (meaning statements with <a class="reference" href="../pattern_matching/index.html">patterns</a> as
 arguments).</p>
 </div>
 <div class="section">
@@ -152,11 +152,11 @@ how to combine these rules to accomplish some larger task.  This is called
 <ul class="simple">
 <li>All <a class="reference" href="forward_chaining.html">forward-chaining</a> rules are processed when a <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> is <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a>.<ul>
 <li>Forward-chaining rules may <a class="reference" href="../../using_pyke.html#setting-up-each-case">assert</a> new facts, and <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific
-<a class="reference" href="../../knowledge_bases/rule_bases.html">rule bases</a>.</li>
+<a class="reference" href="rulebase_">rule bases</a>.</li>
 </ul>
 </li>
-<li><a class="reference" href="backward_chaining.html">Backward-chaining</a> rules are processed when your program asks Pyke to
-<a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a specific <em>goal</em> (i.e., asks Pyke a <a class="reference" href="FIX">question</a>).<ul>
+<li><a class="reference" href="backwardchaining_">Backward-chaining</a> rules are processed when your program asks Pyke to
+<a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a specific <em>goal</em> (i.e., asks Pyke a <a class="reference" href="../../knowledge_bases/question_bases.html">question</a>).<ul>
 <li>These rules are designed to answer a question rather than assert new
 facts or activate more specific rule bases.</li>
 <li>They also have the ability to assemble Python functions into a customized
@@ -168,7 +168,7 @@ call graph or program, called a <a class="reference" href="../plans.html">plan</
 <p class="first admonition-title">Note</p>
 <p class="last">Forward-chaining and backward-chaining rules may both be included within
 the same <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a>.  Pyke knows the difference between forward-chaining
-and backward-chaining rules because they have different <a class="reference" href="FIX">syntax</a>.</p>
+and backward-chaining rules because they have different <a class="reference" href="../../pyke_syntax/krb_syntax/index.html">syntax</a>.</p>
 </div>
 </div>
 </div>
@@ -197,15 +197,16 @@ works.</p>
     <tfoot id="foot">
         <tr id="foot2">
           <td id="copyright" colspan="3">
-            Copyright &copy; 2007 Bruce Frederiksen
+            Copyright &copy; 2007-2008 Bruce Frederiksen
           </td>
         </tr>
     </tfoot>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 15 2008.
+    Page last modified Sat, Aug 16 2008.
   </div>
 
 </body>
 </html>
+

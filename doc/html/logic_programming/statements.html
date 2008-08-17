@@ -74,7 +74,7 @@
 the bread and butter of Pyke.  Statements are the data values that Pyke acts
 upon.</p>
 <p>You might also think of a statement as a spoken sentence.  For example, the
-Pyke <a class="reference" href="FIX">family_relations</a> example deals with sentences like:</p>
+Pyke <a class="reference" href="../examples.html#family-relations">family_relations</a> example deals with sentences like:</p>
 <pre class="literal-block">
 &quot;Bruce is the son of Thomas (his father) and Norma (his mother).&quot;
 </pre>
@@ -147,7 +147,7 @@ Bruce, but the second statement says that Norma is the father!</p>
 <div class="section">
 <h2><a id="syntactic-structure-of-statements" name="syntactic-structure-of-statements">Syntactic Structure of Statements</a></h2>
 <p>So we see that statements in Pyke are very structured.</p>
-<p>Pyke stores statements in statement repositories called <a class="reference" href="FIX">knowledge bases</a>.
+<p>Pyke stores statements in statement repositories called <a class="reference" href="../knowledge_bases/index.html">knowledge bases</a>.
 You create knowledge bases to help you organize your statements.
 A <em>knowledge base</em> in Pyke roughly corresponds to a <em>module</em> in Python.</p>
 <div class="note">
@@ -171,9 +171,9 @@ statement ::= IDENTIFIER '.' IDENTIFIER '(' {argument,} ')'
 family_relations example, this is <tt class="docutils literal"><span class="pre">family</span></tt>.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">You'll see that within <a class="reference" href="rules/backward_chaining.html">backward-chaining rules</a>, the name of the
+<p class="last">You'll see that within <a class="reference" href="backward-chainingrule_">backward-chaining rules</a>, the name of the
 knowledge base may be omitted.  It defaults to the currently selected
-<a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a> for this <a class="reference" href="FIX">rule base category</a>.  You'll learn more about this
+<a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a> for this <a class="reference" href="../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>.  You'll learn more about this
 later.</p>
 </div>
 <p>The second IDENTIFIER is the name of the relationship between the arguments.
@@ -184,7 +184,7 @@ Currently, statements are supposed to be immutable, so all of the arguments
 are immutable.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last"><a class="reference" href="FIX">Prolog</a> allows arguments to be other statements.  But Pyke needs to
+<p class="last"><a class="reference" href="http://en.wikipedia.org/wiki/Prolog">Prolog</a> allows arguments to be other statements.  But Pyke needs to
 integrate into Python and Python has no concept of a &quot;statement&quot;.  So we
 just use tuples in Pyke because Python is very happy with tuples!</p>
 </div>
@@ -221,15 +221,16 @@ family.son_of(Bruce, Thomas, Norma)
     <tfoot id="foot">
         <tr id="foot2">
           <td id="copyright" colspan="3">
-            Copyright &copy; 2007 Bruce Frederiksen
+            Copyright &copy; 2007-2008 Bruce Frederiksen
           </td>
         </tr>
     </tfoot>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, Aug 12 2008.
+    Page last modified Sat, Aug 16 2008.
   </div>
 
 </body>
 </html>
+

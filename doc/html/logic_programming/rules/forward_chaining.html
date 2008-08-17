@@ -79,12 +79,12 @@
 <p>Forward chaining <a class="reference" href="index.html">rules</a> are processed automatically as each <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> is
 <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a>.</p>
 <p>When a rule base is <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a>, all of its forward-chaining <a class="reference" href="index.html">rules</a> are run
-in the order that they appear in the <a class="reference" href="../../krb_syntax/index.html">.krb file</a> for that rule base.</p>
+in the order that they appear in the <a class="reference" href="../../pyke_syntax/krb_syntax/index.html">.krb file</a> for that rule base.</p>
 <div class="section">
 <h2><a id="overview-of-forward-chaining" name="overview-of-forward-chaining">Overview of Forward-Chaining</a></h2>
 <p>To do forward-chaining, Pyke finds rules whose <em>if</em> clause matches Pyke's list
 of already known facts (the <em>if</em> clause may match, or <em>succeed</em>, multiple time;
-see <a class="reference" href="FIX">backtracking</a>).  Each time a rule succeeds, it <em>fires</em> this rule, which
+see <a class="reference" href="index.html#backtracking">backtracking</a>).  Each time a rule succeeds, it <em>fires</em> this rule, which
 adds the facts in the <em>then</em> clause of that rule to the list of already known
 facts.</p>
 <p>These new facts may fire other forward-chaining rules by matching their
@@ -110,7 +110,7 @@ manner that we normally think of using rules, it's called <em>forward</em> chain
 <div class="section">
 <h2><a id="foreach-assert-rather-than-if-then" name="foreach-assert-rather-than-if-then">&quot;Foreach&quot;, &quot;Assert&quot; Rather than &quot;If&quot;, &quot;Then&quot;</a></h2>
 <p>Finally, since the statements within the <em>if</em> clause of the rule contain
-<a class="reference" href="../../krb_syntax/pattern.html">patterns</a>; they may each match several facts.  In this case, the rule will
+<a class="reference" href="../pattern_matching/index.html">patterns</a>; they may each match several facts.  In this case, the rule will
 succeed and be fired multiple times.</p>
 <p>The statements in the <em>then</em> clause of the rule also contain patterns.
 Each time the rule is fired, the pattern variables within the <em>then</em>
@@ -130,7 +130,7 @@ forward-chaining rule.</p>
 <p>This example will figure out the paternal ancestry of individuals given a list
 of starting statements about who the sons of each person are.  (Daughters and
 mothers are omitted to keep the example brief).  These facts are stored in a
-<a class="reference" href="FIX">fact base</a> called <tt class="docutils literal"><span class="pre">family</span></tt>:</p>
+<a class="reference" href="../../knowledge_bases/fact_bases.html">fact base</a> called <tt class="docutils literal"><span class="pre">family</span></tt>:</p>
 <pre class="literal-block">
 1  son_of(michael, bruce)
 2  son_of(bruce, thomas)
@@ -171,7 +171,7 @@ son_father relationships, <tt class="docutils literal"><span class="pre">(grand)
 </pre>
 <div class="section">
 <h4><a id="the-use-of-pattern-variables" name="the-use-of-pattern-variables">The Use of Pattern Variables</a></h4>
-<p>This demonstrates how <a class="reference" href="../../krb_syntax/pattern.html#pattern-variable">pattern variables</a> are used to transfer values from
+<p>This demonstrates how <a class="reference" href="patternvariable_">pattern variables</a> are used to transfer values from
 one statement within a rule into another statement within the rule.</p>
 <p>This rule has a single statement in its <tt class="docutils literal"><span class="pre">foreach</span></tt> clause (on line 3).  This
 statement matches all four <tt class="docutils literal"><span class="pre">son_of</span></tt> facts, so the rule succeeds four times;
@@ -220,11 +220,11 @@ this:</p>
 <div class="section">
 <h4><a id="the-use-of-backtracking" name="the-use-of-backtracking">The Use of Backtracking</a></h4>
 <p>The <tt class="docutils literal"><span class="pre">grand_son_father</span></tt> <a class="reference" href="index.html">rule</a> is run for all combinations of <tt class="docutils literal"><span class="pre">son_father</span></tt>
-<a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> that satisfy the two <tt class="docutils literal"><span class="pre">foreach</span></tt> <a class="reference" href="FIX">statements</a> (on lines 8 and 9) and
+<a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> that satisfy the two <tt class="docutils literal"><span class="pre">foreach</span></tt> <a class="reference" href="../statements.html">statements</a> (on lines 8 and 9) and
 <a class="reference" href="../../using_pyke.html#setting-up-each-case">asserts</a> a <tt class="docutils literal"><span class="pre">(grand)</span></tt> <tt class="docutils literal"><span class="pre">son_father</span></tt> statement (on line 11) for each
 combination.</p>
-<p>This rule is a good first example for <a class="reference" href="FIX">backtracking</a> and will help later in
-your understanding of backtracking with <a class="reference" href="FIX">backward-chaining</a>.  So let's follow
+<p>This rule is a good first example for <a class="reference" href="index.html#backtracking">backtracking</a> and will help later in
+your understanding of backtracking with <a class="reference" href="backwardchaining_">backward-chaining</a>.  So let's follow
 the backtracking in the execution of this rule.</p>
 <p>The <tt class="docutils literal"><span class="pre">foreach</span></tt> clause has two statements (on lines 8 and 9) in it that are
 both looking for <tt class="docutils literal"><span class="pre">son_father</span></tt> facts with a prefix of <tt class="docutils literal"><span class="pre">()</span></tt>:</p>
@@ -262,7 +262,7 @@ from it that it can, so it continues as if it had a failure (i.e., as if it's
 not happy with this answer).</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">You'll see later that Pyke doesn't do this with <a class="reference" href="FIX">backward-chaining</a> rules.</p>
+<p class="last">You'll see later that Pyke doesn't do this with <a class="reference" href="backwardchaining_">backward-chaining</a> rules.</p>
 </div>
 <p>So Pyke <em>fails</em> back <em>up</em> to the second premise and looks for another
 <tt class="docutils literal"><span class="pre">son_father</span></tt> after fact 6 with <tt class="docutils literal"><span class="pre">bruce</span></tt> as the first argument.  This
@@ -440,15 +440,16 @@ works.</p>
     <tfoot id="foot">
         <tr id="foot2">
           <td id="copyright" colspan="3">
-            Copyright &copy; 2007 Bruce Frederiksen
+            Copyright &copy; 2007-2008 Bruce Frederiksen
           </td>
         </tr>
     </tfoot>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 15 2008.
+    Page last modified Sat, Aug 16 2008.
   </div>
 
 </body>
 </html>
+

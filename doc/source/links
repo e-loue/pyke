@@ -1,3 +1,4 @@
+.. _about pyke: about_pyke/index.html
 .. _activated: activate_
 .. _activate: using_pyke.html#setting-up-each-case
 .. _activating: activate_
@@ -61,6 +62,7 @@
 .. _Literal patterns: logic_programming/pattern_matching/literal_patterns.html
 .. _loading: `knowledge_engine.engine`_
 .. _Logic Programming: http://en.wikipedia.org/wiki/Logic_programming
+.. _logic programming in pyke: logic_programming/index.html
 .. _matching two patterns together: logic_programming/pattern_matching/matching_patterns.html
 .. _MySQL: http://www.mysql.com/
 .. _pathological question: logic_programming/pattern_matching/matching_patterns.html#pathological-question
@@ -68,6 +70,7 @@
 .. _pattern matches: logic_programming/pattern_matching/index.html
 .. _pattern variable: logic_programming/pattern_matching/pattern_variables.html
 .. _pattern variables: pattern variable_
+.. _patterns: pattern_
 .. _pickled: logic_programming/plans.html#running-and-pickling-plans
 .. _pickle: http://docs.python.org/lib/module-pickle.html
 .. _plan: logic_programming/plans.html

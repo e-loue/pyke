@@ -186,6 +186,3 @@ The ``$output`` is a three tuple: (exit_status, stdout, stderr).  Both stdout
 and stderr are single strings (with embedded newlines).
 
 
-.. _goals: ../logic_programming/rules/backward_chaining.html
-
-

@@ -70,20 +70,20 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="plans-and-automatic-program-generation">
 <h1 class="title">Plans and Automatic Program Generation</h1>
-<p>Once you understand how <a class="reference" href="rules/backward_chaining.html">backward-chaining</a> works, it is relatively easy to
+<p>Once you understand how <a class="reference" href="backwardchaining_">backward-chaining</a> works, it is relatively easy to
 do automatic program generation.</p>
 <div class="section">
 <h2><a id="adding-plans-to-backward-chaining-rules" name="adding-plans-to-backward-chaining-rules">Adding Plans to Backward-Chaining Rules</a></h2>
 <p>The way this is done is by attaching Python functions to
-<a class="reference" href="rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="rules/index.html">rules</a>.  These functions are written in the <em>with</em>
-clause at the end of each <a class="reference" href="rules/index.html">rule</a> in the <a class="reference" href="../krb_syntax/index.html">.krb file</a>.  They don't affect how
+<a class="reference" href="backwardchaining_">backward-chaining</a> <a class="reference" href="rules/index.html">rules</a>.  These functions are written in the <em>with</em>
+clause at the end of each <a class="reference" href="rules/index.html">rule</a> in the <a class="reference" href="../pyke_syntax/krb_syntax/index.html">.krb file</a>.  They don't affect how
 the <a class="reference" href="rules/index.html">rules</a> run to prove a goal, but are
-gathered up to form a call graph that is returned along with the <a class="reference" href="../krb_syntax/pattern.html#pattern-variable">pattern
+gathered up to form a call graph that is returned along with the <a class="reference" href="pattern_matching/pattern_variables.html">pattern
 variable</a> bindings that <a class="reference" href="../using_pyke.html#proving-goals">prove</a> the top-level goal.</p>
 </div>
 <div class="section">
 <h2><a id="example" name="example">Example</a></h2>
-<p>Consider a small <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> to construct programs to transfer money between
+<p>Consider a small <a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a> to construct programs to transfer money between
 bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two forms:</p>
 <ol class="arabic simple">
 <li>(name, account_type)<ul>
@@ -164,16 +164,16 @@ plan function will be defined to take an &quot;amount&quot; parameter because of
 subordinate plan functions in lines 5 and 7.</p>
 <p>The plan function generated for the &quot;withdraw&quot; rule on line 13 will have
 the single line taken from line 16 in the <em>with</em> clause.  The &quot;$who&quot; and
-&quot;$acct_type&quot; <a class="reference" href="../krb_syntax/pattern.html#pattern-variable">pattern variables</a> will be expanded to constant values taken
-from the values bound to these <a class="reference" href="../krb_syntax/pattern.html#pattern-variable">pattern variables</a> after the top-level
+&quot;$acct_type&quot; <a class="reference" href="patternvariable_">pattern variables</a> will be expanded to constant values taken
+from the values bound to these <a class="reference" href="patternvariable_">pattern variables</a> after the top-level
 (transfer) goal has been proven.</p>
 <p>Finally, the plan function generated for the &quot;transfer_ach1&quot; rule on line
 21 will have three lines: two from the <em>when</em> clause (lines 25 and 27)
 followed by one from the <em>with</em> clause (line 29).  These lines will be
 generated at the same indent level in the plan function even though they
-are at different indent levels in the <a class="reference" href="../krb_syntax/index.html">.krb file</a>.</p>
+are at different indent levels in the <a class="reference" href="../pyke_syntax/krb_syntax/index.html">.krb file</a>.</p>
 <p>For more detailed information about the options available for plans in the
-<a class="reference" href="../krb_syntax/index.html">.krb file</a>, see <a class="reference" href="../krb_syntax/bc_rule.html">Bc_rule Syntax</a>.</p>
+<a class="reference" href="../pyke_syntax/krb_syntax/index.html">.krb file</a>, see <a class="reference" href="backward-chainingrule_">Bc_rule Syntax</a>.</p>
 </div>
 </div>
 <div class="section">
@@ -224,7 +224,7 @@ deposit 50 to bruce savings
 </pre>
 </blockquote>
 <p>Notice the strings: <tt class="docutils literal"><span class="pre">bruce</span></tt>, <tt class="docutils literal"><span class="pre">checking</span></tt> and <tt class="docutils literal"><span class="pre">savings</span></tt> in the output.
-These were specified as <a class="reference" href="../krb_syntax/pattern.html#pattern-variable">pattern variables</a> in the code and are cooked
+These were specified as <a class="reference" href="patternvariable_">pattern variables</a> in the code and are cooked
 into the plan along with the function call graph.</p>
 <p>Let's create a second program:</p>
 <blockquote>
@@ -307,7 +307,7 @@ still be called successfully, resulting in different calls from the initial
 <p>So you can see that it quite easy to use Pyke to automatically combine
 Python functions into programs!</p>
 <p>It also allows data within each Python function to
-be specified using a <a class="reference" href="../krb_syntax/pattern.html#pattern-variable">pattern variable</a> so that Pyke can customize these
+be specified using a <a class="reference" href="pattern_matching/pattern_variables.html">pattern variable</a> so that Pyke can customize these
 values to match the specific situation.</p>
 </div>
 </div>
@@ -338,15 +338,16 @@ values to match the specific situation.</p>
     <tfoot id="foot">
         <tr id="foot2">
           <td id="copyright" colspan="3">
-            Copyright &copy; 2007 Bruce Frederiksen
+            Copyright &copy; 2007-2008 Bruce Frederiksen
           </td>
         </tr>
     </tfoot>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Aug 14 2008.
+    Page last modified Sat, Aug 16 2008.
   </div>
 
 </body>
 </html>
+

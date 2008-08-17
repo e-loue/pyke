@@ -139,5 +139,8 @@ how to combine these rules to accomplish some larger task.  This is called
 
    Forward-chaining and backward-chaining rules may both be included within
    the same `rule base`_.  Pyke knows the difference between forward-chaining
-   and backward-chaining rules because they have different syntax_.
+   and backward-chaining rules because they have different syntax__.
+
+.. __: ../../pyke_syntax/krb_syntax/index.html
+
 

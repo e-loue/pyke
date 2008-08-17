@@ -77,21 +77,21 @@ when the question is asked.  In this case, different parameter values are
 treated as different questions.</p>
 <p>The answers to all questions are automatically remembered so that if multiple
 rules ask the same question, the end user only sees it once.  These answers
-are erased when an <a class="reference" href="../../using_pyke.html#setting-up-each-case">engine.reset</a> is done.</p>
+are erased when an <a class="reference" href="../using_pyke.html#setting-up-each-case">engine.reset</a> is done.</p>
 <p>Finally, questions may have <em>reviews</em> attached to them to automatically
 display different canned messages (with parameter substitution) depending on
 the end user's answer.</p>
 <div class="section">
 <h2><a id="kqb-files" name="kqb-files">KQB files</a></h2>
-<p>Each question base is defined by a <a class="reference" href="../../kqb_syntax.html">.kqb file</a>.  The name of each question
-base is the filename of the <a class="reference" href="../../kqb_syntax.html">.kqb file</a> (with the <tt class="docutils literal"><span class="pre">.kqb</span></tt> suffix removed).
+<p>Each question base is defined by a <a class="reference" href="../pyke_syntax/kqb_syntax.html">.kqb file</a>.  The name of each question
+base is the filename of the <a class="reference" href="../pyke_syntax/kqb_syntax.html">.kqb file</a> (with the <tt class="docutils literal"><span class="pre">.kqb</span></tt> suffix removed).
 This must be a legal Python identifier.</p>
-<p>These <a class="reference" href="../../kqb_syntax.html">.kqb files</a> are compiled and loaded automatically when you create your
-<a class="reference" href="../../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object.</p>
-<p>The <a class="reference" href="../../kqb_syntax.html">.kqb file</a> contains all of the information about the question needed to
+<p>These <a class="reference" href="../pyke_syntax/kqb_syntax.html">.kqb files</a> are compiled and loaded automatically when you create your
+<a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object.</p>
+<p>The <a class="reference" href="../pyke_syntax/kqb_syntax.html">.kqb file</a> contains all of the information about the question needed to
 ask the question, validate the answer and output the appropriate <em>review</em>
 text.</p>
-<p>The <a class="reference" href="../../kqb_syntax.html">.kqb file</a> also specifies which parameter contains the answer.  All
+<p>The <a class="reference" href="../pyke_syntax/kqb_syntax.html">.kqb file</a> also specifies which parameter contains the answer.  All
 parameters, except this one, must be bound to values before testing the
 question.</p>
 </div>
@@ -114,10 +114,10 @@ modules provided by Pyke for guidance.</p>
 <blockquote>
 <ul class="simple">
 <li>the question_base object</li>
-<li>then the <a class="reference" href="../../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object</li>
+<li>then the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object</li>
 </ul>
 </blockquote>
-<p>If the <a class="reference" href="../../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object does not have an <tt class="docutils literal"><span class="pre">ask_module</span></tt>
+<p>If the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object does not have an <tt class="docutils literal"><span class="pre">ask_module</span></tt>
 attribute, ask_tty is imported by default and stored there.</p>
 <p>Here's an example of setting this attribute:</p>
 <pre class="literal-block">
@@ -157,15 +157,16 @@ are compiled and loaded into your Python program.</p>
     <tfoot id="foot">
         <tr id="foot2">
           <td id="copyright" colspan="3">
-            Copyright &copy; 2007 Bruce Frederiksen
+            Copyright &copy; 2007-2008 Bruce Frederiksen
           </td>
         </tr>
     </tfoot>
   </table>
 
   <div id="last-modified">
-    Page last modified Tue, Aug 12 2008.
+    Page last modified Sat, Aug 16 2008.
   </div>
 
 </body>
 </html>
+
