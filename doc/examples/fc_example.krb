@@ -21,24 +21,24 @@
 # THE SOFTWARE.
 
 
-direct_son_father
+direct_father_son
     foreach
         family.son_of($son, $father)
     assert
-        family.son_father($son, $father, ())
+        family.father_son($father, $son, ())
 
-grand_son_father
+grand_father_son
     foreach
-        family.son_father($grand_son, $father, ())
-        family.son_father($father, $grand_father, ())
+        family.father_son($father, $grand_son, ())
+        family.father_son($grand_father, $father, ())
     assert
-        family.son_father($grand_son, $grand_father, (grand))
+        family.father_son($grand_father, $grand_son, (grand))
 
-great_grand_son_father
+great_grand_father_son
     foreach
-        family.son_father($gg_child, $parent, ())
-        family.son_father($parent, $gg_parent, ($prefix1, *$rest_prefixes))
+        family.father_son($parent, $gg_child, ())
+        family.father_son($gg_parent, $parent, ($prefix1, *$rest_prefixes))
     assert
-        family.son_father($gg_child, $gg_parent,
+        family.father_son($gg_parent, $gg_child,
                             (great, $prefix1, *$rest_prefixes))
 

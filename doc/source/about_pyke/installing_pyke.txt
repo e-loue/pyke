@@ -175,12 +175,20 @@ If you want to regenerate these documents, you'll also need:
 
 The sources for the documentation are in ``doc/sources``.
 
-To regenerate the documentation, in the ``doc`` directory run::
+To regenerate the documentation, in the ``doc/sources`` directory run::
 
-    $ r2w r2w.ini
+    $ bin/gen_html
 
-This will regenerate the files in ``doc/html``, except for those in
-``doc/html/stylesheets`` and ``doc/html/images``.  I've gone ahead
-and placed the generated html files in subversion so that you can checkout
-the documentation without having to run ``r2w``.
+This:
+
+#. Temporarily appends hyperlink references onto all of the \*.txt files.
+#. Runs ``r2w`` to regenerate the files in ``doc/html``
+
+   - except for those in ``doc/html/stylesheets`` and ``doc/html/images``.
+
+#. Then strips all of the hyperlink references from the \*.txt files.
+
+I've gone ahead and placed the generated html files in subversion so that
+you can checkout the documentation without having to run ``bin/gen_html``.
+
 

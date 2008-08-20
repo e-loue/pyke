@@ -123,8 +123,8 @@ python_statements ::= 'python' python_statement
 <a class="reference" href="../../logic_programming/rules/index.html">rules</a>.  This premise always succeeds; and fails on backtracking.</p>
 <div class="tip">
 <p class="first admonition-title">Tip</p>
-<p>It is important to always keep in mind the difference between <a class="reference" href="patternvariable_">pattern
-variables</a> and Python variables.  <a class="reference" href="patternvariable_">Pattern variables</a> are always
+<p>It is important to always keep in mind the difference between <a class="reference" href="pattern.html#pattern-variable">pattern
+variables</a> and Python variables.  <a class="reference" href="pattern.html#pattern-variable">Pattern variables</a> are always
 indicated with a <tt class="docutils literal"><span class="pre">$</span></tt> and are only bound to a value during inferencing.
 Thus, a <tt class="docutils literal"><span class="pre">python_statement</span></tt> may not set a <a class="reference" href="pattern.html#pattern-variable">pattern variable</a>; you must
 use the special <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> assignment:</p>
@@ -133,7 +133,7 @@ use the special <a class="reference" href="pattern.html#pattern-variable">patter
 </pre>
 <p>Also, when a <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> is used within a Python expression or
 statement, it must be bound to a value that does not contain any unbound
-<a class="reference" href="patternvariable_">pattern variables</a>.</p>
+<a class="reference" href="pattern.html#pattern-variable">pattern variables</a>.</p>
 <p>Python variables are not visible to the inference engine.  They are local
 variables that are also not visible to Python code in other <a class="reference" href="../../logic_programming/rules/index.html">rules</a> or other
 invocations of the same <a class="reference" href="../../logic_programming/rules/index.html">rule</a>.</p>
@@ -204,7 +204,7 @@ some_bc_rule
   </table>
 
   <div id="last-modified">
-    Page last modified Sat, Aug 16 2008.
+    Page last modified Wed, Aug 20 2008.
   </div>
 
 </body>

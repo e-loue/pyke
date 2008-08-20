@@ -78,54 +78,66 @@ this statement "when" these other statements can be proven.
 
 .. note::
 
-   Unlike forward-chaining_ rules, Pyke only allows one statement in the
-   *use* clause.
+   Unlike the *assert* clause in forward-chaining_ rules, Pyke only allows
+   one statement in the *use* clause.
 
 Example
 =================
 
 Consider this example::
 
-     1  son_father
-     2      use child_parent($son, $father, (), son, father)
+     1  direct_father_son
+     2      use father_son($father, $son, ())
      3      when
-     4          family.son_of($son, $father, $_)
+     4          family.son_of($son, $father)
         
-     5  son_mother
-     6      use child_parent($son, $mother, (), son, mother)
+     5  grand_father_son
+     6      use father_son($grand_father, $grand_son, (grand))
      7      when
-     8          family.son_of($son, $_, $mother)
+     8          father_son($father, $grand_son, ())
+     9          father_son($grand_father, $father, ())
         
-     9  daughter_father
-    10      use child_parent($daughter, $father, (), daughter, father)
-    11      when
-    12          family.daughter_of($daughter, $father, $_)
-        
-    13  daughter_mother
-    14      use child_parent($daughter, $mother, (), daughter, mother)
-    15      when
-    16          family.daughter_of($daughter, $_, $mother)
-        
-    17  grand_parent_and_child
-    18      use child_parent($grand_child, $grand_parent, (grand),
-    19                       $grand_child_type, $grand_parent_type)
-    20      when
-    21          child_parent($grand_child, $parent, (), $grand_child_type, $_)
-    22          child_parent($parent, $grand_parent, (), $_, $grand_parent_type)
-        
-    23  great_grand_parent_and_child
-    24      use child_parent($gg_child, $gg_parent, (great, $prefix1, *$rest_prefixes),
-    25                       $gg_child_type, $gg_parent_type)
-    26      when
-    27          child_parent($gg_child, $parent, (), $gg_child_type, $_)
-    28          child_parent($parent, $gg_parent, ($prefix1, *$rest_prefixes),
-    29                       $_, $gg_parent_type)
+    10  great_grand_father_son
+    11      use father_son($gg_father, $gg_son, (great, $prefix1, *$rest_prefixes))
+    12      when
+    13          father_son($father, $gg_son, ())
+    14          father_son($gg_father, $father, ($prefix1, *$rest_prefixes))
+
+    15  brothers
+    16      use brothers($brother1, $brother2)
+    17      when
+    18          father_son($father, $brother1, ())
+    19          father_son($father, $brother2, ())
+    20          check $brother1 != $brother2
+
+    21  uncle_nephew
+    22      use uncle_nephew($uncle, $nephew, $prefix)
+    23      when
+    24          brothers($uncle, $father)
+    25          father_son($father, $nephew, $prefix1)
+    26          $prefix = ('great',) * len($prefix1)
+
+    27  cousins
+    28      use cousins($cousin1, $cousin2, $distance, $removed)
+    29      when
+    30          uncle_nephew($uncle, $cousin1, $prefix1)
+    31          father_son($uncle, $cousin2, $prefix2)
+    32          $distance = min(len($prefixes1), len($prefixes2)) + 1
+    33          $removed = abs(len($prefixes1) - len($prefixes2))
 
 .. note::
-   These rules_ draw the same conclusions as the forward-chaining_ example_.
+   These rules_ draw the same conclusions as the forward-chaining_ example_,
+   with the addition of the *brothers*, *uncle_nephew* and *cousins* rules.
 
-How Backward-Chaining Rules are Run
-====================================
+We can draw something similar to a function call graph with these rules:
+
+.. figure:: ../../images/bc_rules.png
+   :width: 509
+   :height: 583
+   :scale: 100
+   :align: center
+
+   Example Rules
 
 These rules_ are not used until you ask Pyke to prove_ a goal.
 
@@ -141,51 +153,123 @@ that you pass plus the number of variable arguments that you specify.
 Both functions return the variable bindings for the number of variable
 arguments you specified as a tuple, along with the plan_.
 
+Backtracking with Backward-Chaining Rules
+=========================================
+
+For this example, these are the starting set of ``family`` facts::
+
+     1  son_of(tim, thomas)
+     2  son_of(fred, thomas)
+     3  son_of(bruce, thomas)
+     4  son_of(michael, bruce)
+
+And we want to know who fred's nephews are.  So we'd ask ``uncle_nephew(fred,
+$nephew, $prefix)``.
+
+Here are the steps in the inferencing up until the first failure is
+encountered::
+
+    (1)   22  use uncle_nephew(fred, $nephew, $prefix)
+              25  brothers(fred, $father)
+    (2)           25  use brothers(fred, $brother2)
+                      18  father_son($father, fred, ())
+    (3)                   2  use father_son($father, fred, ())
+                              4  family.son_of(fred, $father)
+                      19  father_son(thomas, $brother2, ())
+    (4)                   2  use father_son(thomas, $son, ())
+                              4  family.son_of($son, thomas)
+                      20  check fred != tim
+              24  father_son(tim, $nephew, $prefix1)
+    (5.1)         2  use father_son(tim, $son, ())
+                      4  family.son_of($son, tim)                                => FAILS
+    (5.2)         6  use father_son(tim, $grand_son, (grand))
+                      8  father_son(tim, $grand_son, ())
+                          2  use father_son(tim, $son, ())
+                              4  family.son_of($son, tim)                        => FAILS
+    (5.3)         11 use father_son(tim, $gg_son, (great, $prefix1, *$rest_prefixes))
+                      13 father_son(tim, $gg_son, ())
+                          2  use father_son(tim, $son, ())
+                              4  family.son_of($son, tim)                        => FAILS
+
+Each rule invokation is numbered (in parenthesis) as a step number.  Step 5
+has tried 3 different rules and they have all failed (5.1, 5.2 and 5.3).
+
+If you think of the rules as functions, the situation now looks like this
+(the step numbers that succeeded circled in black, and steps that failed
+circled in red):
+
+.. figure:: ../../images/bc_backtracking.png
+   :width: 590
+   :height: 465
+   :scale: 100
+   :align: center
+
+   We Need to Backtrack!
+
+At this point, Pyke has hit a dead end and must backtrack.  The way that
+backtracking proceeds is to go back up the list of steps executed, combining
+the steps from all rules into one list.  Thus, when step 5 fails, Pyke backs
+up to step 4 and tries to find another solution to that step.
+
+If another solution is found, Pyke proceeds forward again from that point.  If
+no other solutions are found, Pyke backs up another step.
+
+When Pyke goes back to step 4, the next solution binds ``$son`` to ``fred``.
+This fails the subsequent check in the ``brothers`` rule::
+
+    20          check $brother1 != $brother2
+
+And so Pyke goes back to step 4 once again.  The next solution binds ``$son``
+to ``bruce``.  This succeeds for ``brother`` and is passed down to
+``father_son`` which returns ``michael`` as ``tim's`` nephew.
+
+Further backtracking reveals no other solutions.
+
+Backtracking Summary
+--------------------
+
+Thus we see:
+
+#. The backtracking_ algorithm: "**fail** goes *up* (or *back*) while
+   **success** goes *down* (or *forward*)" is not limited to the steps within a
+   *single* rule's ``when`` clause; but includes the *entire* chain of
+   inferencing from the very start of trying to prove the top level goal.
+#. This execution model is not available within traditional programming
+   languages like Python.
+#. The ability to go back to *any* point in the computation to try an
+   alternate solution is where backward-chaining systems get their power!
+
 Running the Example
 ========================
 
     >>> from pyke import knowledge_engine
     >>> engine = knowledge_engine.engine('examples')
-    >>> engine.assert_('family', 'son_of', ('michael', 'bruce', 'marilyn'))
-    >>> engine.assert_('family', 'son_of', ('bruce', 'thomas', 'norma'))
-    >>> engine.assert_('family', 'daughter_of', ('norma', 'allen', 'ismay'))
+    >>> engine.assert_('family', 'son_of', ('tim', 'thomas'))
+    >>> engine.assert_('family', 'son_of', ('fred', 'thomas'))
+    >>> engine.assert_('family', 'son_of', ('bruce', 'thomas'))
+    >>> engine.assert_('family', 'son_of', ('michael', 'bruce'))
     >>> engine.activate('bc_example')
 
-Noting happens this time when we activate the rule base, because there are no
+Nothing happens this time when we activate the rule base, because there are no
 forward-chaining rules here.
 
-We want to ask the question: "What is Michael's ancestry?".  This translates
-into the Pyke statement:
-``bc_example.child_parent(michael, $v1, $v2, $v3, $v4)``.
+We want to ask the question: "How are Tim's nephews?".  This translates
+into the Pyke statement: ``bc_example.uncle_nephew(fred, $v1, $v2)``.
 
 .. note::
    Note that we're using the name of the rule base, ``bc_example`` rather than
-   the fact base, ``family`` here.  We expect this answer to come from the
-   ``bc_example`` rule base.
+   the fact base, ``family`` here; because we expect this answer to come from
+   the ``bc_example`` rule base.
 
-This is 'bc_example', 'child_parent', with ('michael',) followed by 4 pattern
+This is 'bc_example', 'uncle_nephew', with ('fred',) followed by 2 pattern
 variables as arguments:
 
-    >>> for vars, no_plan in engine.prove_n('bc_example', 'child_parent',
-    ...                                     ('michael',), 4):
+    >>> for vars, no_plan in engine.prove_n('bc_example', 'uncle_nephew',
+    ...                                     ('fred',), 2):
     ...     print vars
-    ('bruce', (), 'son', 'father')
-    ('marilyn', (), 'son', 'mother')
-    ('thomas', ('grand',), 'son', 'father')
-    ('norma', ('grand',), 'son', 'mother')
-    ('allen', ('great', 'grand'), 'son', 'father')
-    ('ismay', ('great', 'grand'), 'son', 'mother')
-
-We get six answers.  Each answer is a tuple of the final 4 pattern variables.
-So the six proofs found were::
-
-    bc_example.child_parent(michael, bruce, (), son, father)
-    bc_example.child_parent(michael, marilyn, (), son, mother)
-    bc_example.child_parent(michael, thomas, (grand), son, father)
-    bc_example.child_parent(michael, norma, (grand), son, mother)
-    bc_example.child_parent(michael, allen, (great, grand), son, father)
-    bc_example.child_parent(michael, ismay, (great, grand), son, mother)
+    ('michael', ())
 
 
 .. _example: forward_chaining.html#example
+
 

@@ -79,10 +79,10 @@
                 <div class="document" id="compound-premise-syntax">
 <h1 class="title">Compound Premise Syntax</h1>
 <p>There are three kinds of compound premises.  These can be used in both
-<a class="reference" href="forward-chainingrule_">forward-chaining rules</a> and <a class="reference" href="backward-chainingrule_">backward-chaining rules</a>, but the nested
+<a class="reference" href="fc_rule.html">forward-chaining rules</a> and <a class="reference" href="bc_rule.html">backward-chaining rules</a>, but the nested
 premises are restricted to the kind of premises legal for that kind of rule:
-<a class="reference" href="fc_rule.html#foreach-clause">fc_premise</a> for <a class="reference" href="forward-chainingrule_">forward-chaining rules</a>, and <a class="reference" href="bc_rule.html#when-clause">bc_premise</a> for
-<a class="reference" href="backward-chainingrule_">backward-chaining rules</a>.</p>
+<a class="reference" href="fc_rule.html#foreach-clause">fc_premise</a> for <a class="reference" href="fc_rule.html">forward-chaining rules</a>, and <a class="reference" href="bc_rule.html#when-clause">bc_premise</a> for
+<a class="reference" href="bc_rule.html">backward-chaining rules</a>.</p>
 <pre class="literal-block">
 compound_premise ::= first_premise
                    | forall_premise
@@ -100,8 +100,8 @@ first_premise ::= ['!'] 'first' premise
                              {premise NL}
                           DEINDENT
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">!</span></tt> option can only be used in <a class="reference" href="backward-chainingrule_">backward-chaining rules</a>.</p>
-<p>The nested premises may include any type of <a class="reference" href="bc_rule.html#plan-spec">plan_spec</a> in <a class="reference" href="backward-chainingrule_">backward-chaining
+<p>The <tt class="docutils literal"><span class="pre">!</span></tt> option can only be used in <a class="reference" href="bc_rule.html">backward-chaining rules</a>.</p>
+<p>The nested premises may include any type of <a class="reference" href="bc_rule.html#plan-spec">plan_spec</a> in <a class="reference" href="bc_rule.html">backward-chaining
 rules</a>.</p>
 </div>
 <div class="section">
@@ -150,7 +150,7 @@ values produced by prior premises; but to generate values for subsequent
 premises the values must be captured in Python variables within the
 <tt class="docutils literal"><span class="pre">forall</span></tt> or <tt class="docutils literal"><span class="pre">notany</span></tt> clause before the <cite>pattern variables</cite> are unbound
 (see <a class="reference" href="#computing-sets-of-values">Computing Sets of Values</a>, below).</li>
-<li>When used in <a class="reference" href="backward-chainingrule_">backward-chaining rules</a>, the only <a class="reference" href="bc_rule.html#plan-spec">plan_spec</a> allowed in
+<li>When used in <a class="reference" href="bc_rule.html">backward-chaining rules</a>, the only <a class="reference" href="bc_rule.html#plan-spec">plan_spec</a> allowed in
 nested premises is the <tt class="docutils literal"><span class="pre">as</span></tt> clause.</li>
 </ol>
 </div>
@@ -334,7 +334,7 @@ $y_list = tuple(y_list)
   </table>
 
   <div id="last-modified">
-    Page last modified Sat, Aug 16 2008.
+    Page last modified Wed, Aug 20 2008.
   </div>
 
 </body>

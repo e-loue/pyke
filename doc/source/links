@@ -11,14 +11,14 @@
 .. _backtracked: backtracking_
 .. _backtracking: logic_programming/rules/index.html#backtracking
 .. _backward chaining: logic_programming/rules/backward_chaining.html
-.. _backward-chaining: backward chaining_
+.. _backward-chaining: `backward chaining`_
 .. _backward-chaining rule: logic_programming/rules/backward_chaining.html
-.. _backward-chaining rules: backward-chaining rule_
+.. _backward-chaining rules: `backward-chaining rule`_
 .. _bc_premise: pyke_syntax/krb_syntax/bc_rule.html#when-clause
-.. _bc_rule: backward-chaining rule_
+.. _bc_rule: `backward-chaining rule`_
 .. _Bc_rule Syntax: bc_rule_
 .. _case specific facts: knowledge_bases/fact_bases.html#case-specific-facts
-.. _category: rule base category_
+.. _category: `rule base category`_
 .. _commands: knowledge_bases/special.html#running-commands
 .. _compound_premise: pyke_syntax/krb_syntax/compound_premise.html
 .. _copy_reg: http://docs.python.org/lib/module-copyreg.html
@@ -29,14 +29,15 @@
 .. _Examples: examples.html
 .. _extending: pyke_syntax/krb_syntax/index.html#extending-clause
 .. _fact base: knowledge_bases/fact_bases.html
-.. _fact bases: fact base_
+.. _fact bases: `fact base`_
 .. _fact: knowledge_bases/fact_bases.html#facts
 .. _facts: fact_
 .. _family_relations: examples.html#family-relations
 .. _fc_premise: pyke_syntax/krb_syntax/fc_rule.html#foreach-clause
 .. _fc_rule: pyke_syntax/krb_syntax/fc_rule.html
 .. _forward-chaining: logic_programming/rules/forward_chaining.html
-.. _forward-chaining rules: forward-chaining rule_
+.. _forward-chaining rule: forward-chaining_
+.. _forward-chaining rules: `forward-chaining rule`_
 .. _functools: http://docs.python.org/lib/module-functools.html
 .. _functools.partial: functools_
 .. _goal: logic_programming/rules/backward_chaining.html
@@ -68,8 +69,9 @@
 .. _pathological question: logic_programming/pattern_matching/matching_patterns.html#pathological-question
 .. _pattern: logic_programming/pattern_matching/index.html
 .. _pattern matches: logic_programming/pattern_matching/index.html
+.. _pattern matching: `pattern matches`_
 .. _pattern variable: logic_programming/pattern_matching/pattern_variables.html
-.. _pattern variables: pattern variable_
+.. _pattern variables: `pattern variable`_
 .. _patterns: pattern_
 .. _pickled: logic_programming/plans.html#running-and-pickling-plans
 .. _pickle: http://docs.python.org/lib/module-pickle.html
@@ -81,7 +83,7 @@
 .. _premises: premise_
 .. _print_stats: using_pyke.html#other-functions
 .. _programming in the large: http://portal.acm.org/citation.cfm?id=808431
-.. _program in the large: programming in the large_
+.. _program in the large: `programming in the large`_
 .. _program startup: using_pyke.html#initializing-pyke
 .. _Prolog: http://en.wikipedia.org/wiki/Prolog
 .. _prove_1: prove_
@@ -97,7 +99,7 @@
 .. _python_premise: pyke_syntax/krb_syntax/python_premise.html
 .. _python_statements: pyke_syntax/krb_syntax/python_premise.html#python-statements
 .. _question base: knowledge_bases/question_bases.html
-.. _question bases: question base_
+.. _question bases: `question base`_
 .. _question: knowledge_bases/question_bases.html
 .. _questions: question_
 .. _regular expression syntax: http://docs.python.org/lib/re-syntax.html
@@ -106,7 +108,7 @@
 .. _rule base category: knowledge_bases/rule_bases.html#rule-base-categories
 .. _rule base: pyke_syntax/krb_syntax/index.html
 .. _rule base's: `rule base`_
-.. _rule bases: rule base_
+.. _rule bases: `rule base`_
 .. _rule: logic_programming/rules/index.html
 .. _rule's: rule_
 .. _rules: rule_

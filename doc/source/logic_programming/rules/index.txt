@@ -99,12 +99,12 @@ clause:
   * Pyke will back *up* to the prior premise in the list and try to find
     another solution for it.  The process starts over at the prior premise,
     going back down or further up the list depending on whether another
-    solution can be found or not.
+    solution can be found to the prior premise or not.
   * Trying to back *up* from the *first* premise in the list (when it fails)
     causes the rule to *fail*.
 
 .. figure:: ../../images/backtracking.png
-   :alt: backtracking flow diagram
+   :alt: Backtracking Flow Diagram
    :align: center
 
    Backtracking Flow Diagram

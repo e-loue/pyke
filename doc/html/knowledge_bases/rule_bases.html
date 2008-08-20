@@ -71,7 +71,7 @@
                 <div class="document" id="rule-bases">
 <h1 class="title">Rule Bases</h1>
 <p>Rule bases are collections of <a class="reference" href="../logic_programming/rules/index.html">rules</a>.  A single rule base may contain both
-<a class="reference" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> and <a class="reference" href="backwardchaining_">backward-chaining</a> rules.</p>
+<a class="reference" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> and <a class="reference" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> rules.</p>
 <p>Rule bases are created by writing a <em>knowledge rule base</em> (or <a class="reference" href="../pyke_syntax/krb_syntax/index.html">.krb</a>) file
 with your favorite text editor.  Place all of your <a class="reference" href="../pyke_syntax/krb_syntax/index.html">.krb files</a> into a
 directory structure.  Then include this directory as an argument to the
@@ -119,11 +119,11 @@ used within the <a class="reference" href="../pyke_syntax/krb_syntax/index.html"
 </div>
 <div class="section">
 <h2><a id="rule-base-inheritance" name="rule-base-inheritance">Rule Base Inheritance</a></h2>
-<p>The rule bases within the same <a class="reference" href="rulebasecategory_">category</a> share rules amongst themselves
+<p>The rule bases within the same <a class="reference" href="rule_bases.html#rule-base-categories">category</a> share rules amongst themselves
 through rule base inheritance.</p>
 <p>Rule bases use single inheritance to inherit the <a class="reference" href="../logic_programming/rules/index.html">rules</a> from another rule
 base.  This can go on to any depth.  Both <a class="reference" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> and
-<a class="reference" href="backwardchaining_">backward-chaining</a> <a class="reference" href="../logic_programming/rules/index.html">rules</a> are inherited.</p>
+<a class="reference" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../logic_programming/rules/index.html">rules</a> are inherited.</p>
 <p>This allows mutually exclusive rule bases to share common rules in a parent
 rule base without having to duplicate these rules amongst themselves.</p>
 <p>Here is the definition, then, of a <a class="reference" href="rule_bases.html#rule-base-categories">rule base category</a>:</p>
@@ -151,10 +151,10 @@ all in the <tt class="docutils literal"><span class="pre">database</span></tt> <
 knowledge base name <em>database</em> to refer to <a class="reference" href="../pyke_syntax/krb_syntax/bc_rule.html#use-clause">goals</a> within this <a class="reference" href="rule_bases.html#rule-base-categories">rule base
 category</a>, for example, <tt class="docutils literal"><span class="pre">database.insert(...)</span></tt>.</p>
 <p>In this way, all of the <a class="reference" href="../logic_programming/rules/index.html">rules</a> will work no matter which rule base is
-active within the database <a class="reference" href="rulebasecategory_">category</a>.</p>
+active within the database <a class="reference" href="rule_bases.html#rule-base-categories">category</a>.</p>
 <div class="section">
 <h3><a id="rule-inheritance" name="rule-inheritance">Rule Inheritance</a></h3>
-<p>There is an important difference between how <a class="reference" href="backwardchaining_">backward-chaining</a> rule
+<p>There is an important difference between how <a class="reference" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> rule
 inheritance works within Pyke rule bases and how method inheritance works
 within Python classes:</p>
 <ul>
@@ -164,8 +164,8 @@ method.  I.e., only the derived method is used when a call is made
 to it.</p>
 </li>
 <li><p class="first">In contrast, when a derived rule base in Pyke defines a
-<a class="reference" href="backwardchaining_">backward-chaining</a> <a class="reference" href="../logic_programming/rules/index.html">rule</a> for a
-goal that also has <a class="reference" href="backwardchaining_">backward-chaining</a> <a class="reference" href="../logic_programming/rules/index.html">rules</a> defined for it in the
+<a class="reference" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../logic_programming/rules/index.html">rule</a> for a
+goal that also has <a class="reference" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../logic_programming/rules/index.html">rules</a> defined for it in the
 parent rule base, the derived <a class="reference" href="../logic_programming/rules/index.html">rule</a> <em>extends</em> the set of <a class="reference" href="../logic_programming/rules/index.html">rules</a> that may
 be used to try to prove this <a class="reference" href="../pyke_syntax/krb_syntax/bc_rule.html#use-clause">goal</a>.  All of the derived <a class="reference" href="../logic_programming/rules/index.html">rules</a> will
 be tried before any of the parent <a class="reference" href="../logic_programming/rules/index.html">rules</a> are tried.</p>
@@ -175,7 +175,7 @@ statement at the beginning of the derived rule base.</p>
 </li>
 <li><p class="first">All <a class="reference" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> <a class="reference" href="../logic_programming/rules/index.html">rules</a> in the parent rule base are always
 included in the derived rule base.  The <tt class="docutils literal"><span class="pre">without</span></tt> clause only
-applies to <a class="reference" href="backwardchaining_">backward-chaining</a> <a class="reference" href="../logic_programming/rules/index.html">rules</a>.</p>
+applies to <a class="reference" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="../logic_programming/rules/index.html">rules</a>.</p>
 </li>
 </ul>
 </div>
@@ -235,7 +235,7 @@ are compiled and loaded into your Python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Sat, Aug 16 2008.
+    Page last modified Wed, Aug 20 2008.
   </div>
 
 </body>

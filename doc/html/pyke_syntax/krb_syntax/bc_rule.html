@@ -80,7 +80,7 @@
 <h1 class="title">Bc_rule Syntax</h1>
 <div class="section">
 <h2><a id="bc-rule" name="bc-rule">Bc_rule</a></h2>
-<p><a class="reference" href="backwardchaining_">Backward-chaining</a> <a class="reference" href="../../logic_programming/rules/index.html">rules</a> have four parts:</p>
+<p><a class="reference" href="../../logic_programming/rules/backward_chaining.html">Backward-chaining</a> <a class="reference" href="../../logic_programming/rules/index.html">rules</a> have four parts:</p>
 <ol class="arabic simple">
 <li>A unique name.</li>
 <li>A <tt class="docutils literal"><span class="pre">use</span></tt> clause.</li>
@@ -158,11 +158,11 @@ name) is assumed.</p>
 <p>If two <em>names</em> are used in the <em>bc_premise</em>, the first may name a <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule
 base category</a> or a <a class="reference" href="../../knowledge_bases/fact_bases.html">fact base</a>.</p>
 <p>If a <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name is used (or assumed),
-the currently <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a> <a class="reference" href="index.html">rule base</a> for that <a class="reference" href="rulebasecategory_">category</a> is used to prove the
+the currently <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a> <a class="reference" href="index.html">rule base</a> for that <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">category</a> is used to prove the
 premise.  Note that if the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name is omitted, and
 therefore assumed to be the current <a class="reference" href="index.html">rule base's</a> <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>,
 the current <a class="reference" href="index.html">rule base</a> does not have to be the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a> <a class="reference" href="index.html">rule base</a> for that
-<a class="reference" href="rulebasecategory_">category</a>.  It could be the case that a derived <a class="reference" href="index.html">rule base</a> is the
+<a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">category</a>.  It could be the case that a derived <a class="reference" href="index.html">rule base</a> is the
 <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a> <a class="reference" href="index.html">rule base</a>.  In that case, the derived <a class="reference" href="index.html">rule base</a> is used to
 prove the premise.</p>
 <div class="section">
@@ -210,7 +210,7 @@ premise.</p>
 <p>The <tt class="docutils literal"><span class="pre">with</span></tt> clause contains Python
 statements to include in the <a class="reference" href="../../logic_programming/plans.html">plan</a> produced by this <a class="reference" href="../../logic_programming/rules/index.html">rule</a>.  These Python
 statements may
-include <a class="reference" href="patternvariable_">pattern variables</a> whose values will be substituted into the
+include <a class="reference" href="pattern.html#pattern-variable">pattern variables</a> whose values will be substituted into the
 statements when finalizing the final top-level <a class="reference" href="../../logic_programming/plans.html">plan</a>.</p>
 <pre class="literal-block">
 with ::= 'with' NL INDENT
@@ -224,15 +224,15 @@ all of the automatic calls to the subordinate <a class="reference" href="../../l
 (excluding <em>as</em> specs), a <a class="reference" href="../../logic_programming/plans.html">plan</a> function is still generated for this
 <a class="reference" href="../../logic_programming/rules/index.html">rule</a> so that the subordinate <a class="reference" href="../../logic_programming/plans.html">plan</a> functions are still called.</p>
 <p>The <em>python_statements</em> are not parsed.  They are simply scanned for <tt class="docutils literal"><span class="pre">$</span></tt>
-<a class="reference" href="patternvariable_">pattern variables</a> that don't occur in string literals or comments.
+<a class="reference" href="pattern.html#pattern-variable">pattern variables</a> that don't occur in string literals or comments.
 The resulting <a class="reference" href="../../logic_programming/plans.html">plan</a> will substitute the values bound to these <a class="reference" href="pattern.html#pattern-variable">variables</a>
 into the code.</p>
-<p>All <a class="reference" href="patternvariable_">pattern variables</a> used in <em>python_statements</em> (both in the
+<p>All <a class="reference" href="pattern.html#pattern-variable">pattern variables</a> used in <em>python_statements</em> (both in the
 <tt class="docutils literal"><span class="pre">plan_specs</span></tt> and the <tt class="docutils literal"><span class="pre">when</span></tt> clause) must be bound to a value.  This
 value is a constant value that never changes for this <a class="reference" href="../../logic_programming/plans.html">plan</a>.</p>
 <p>But note that this <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> substitution isn't done until
 <em>after</em> the entire top-level goal has been proven.  So it is permissible to use
-unbound <a class="reference" href="patternvariable_">pattern variables</a>, so long as they will become bound to values by
+unbound <a class="reference" href="pattern.html#pattern-variable">pattern variables</a>, so long as they will become bound to values by
 subsequent <a class="reference" href="../../logic_programming/rules/index.html">rules</a> required to prove higher-level goals before the top-level
 goal has been proven.</p>
 </div>
@@ -273,7 +273,7 @@ goal has been proven.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Sat, Aug 16 2008.
+    Page last modified Wed, Aug 20 2008.
   </div>
 
 </body>

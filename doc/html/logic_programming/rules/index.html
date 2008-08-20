@@ -127,14 +127,14 @@ succeeds) causes the rule to <em>succeed</em>.</li>
 <li>Pyke will back <em>up</em> to the prior premise in the list and try to find
 another solution for it.  The process starts over at the prior premise,
 going back down or further up the list depending on whether another
-solution can be found or not.</li>
+solution can be found to the prior premise or not.</li>
 <li>Trying to back <em>up</em> from the <em>first</em> premise in the list (when it fails)
 causes the rule to <em>fail</em>.</li>
 </ul>
 </li>
 </ul>
 <div align="center" class="figure">
-<img alt="backtracking flow diagram" src="../../images/backtracking.png" />
+<img alt="Backtracking Flow Diagram" src="../../images/backtracking.png" />
 <p class="caption">Backtracking Flow Diagram</p>
 </div>
 <p>Thus, execution within each rule's <tt class="docutils literal"><span class="pre">if</span></tt> clause proceeds both backwards and
@@ -152,10 +152,10 @@ how to combine these rules to accomplish some larger task.  This is called
 <ul class="simple">
 <li>All <a class="reference" href="forward_chaining.html">forward-chaining</a> rules are processed when a <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> is <a class="reference" href="../../using_pyke.html#setting-up-each-case">activated</a>.<ul>
 <li>Forward-chaining rules may <a class="reference" href="../../using_pyke.html#setting-up-each-case">assert</a> new facts, and <a class="reference" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific
-<a class="reference" href="rulebase_">rule bases</a>.</li>
+<a class="reference" href="../../knowledge_bases/rule_bases.html">rule bases</a>.</li>
 </ul>
 </li>
-<li><a class="reference" href="backwardchaining_">Backward-chaining</a> rules are processed when your program asks Pyke to
+<li><a class="reference" href="backward_chaining.html">Backward-chaining</a> rules are processed when your program asks Pyke to
 <a class="reference" href="../../using_pyke.html#proving-goals">prove</a> a specific <em>goal</em> (i.e., asks Pyke a <a class="reference" href="../../knowledge_bases/question_bases.html">question</a>).<ul>
 <li>These rules are designed to answer a question rather than assert new
 facts or activate more specific rule bases.</li>
@@ -204,7 +204,7 @@ works.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Sat, Aug 16 2008.
+    Page last modified Wed, Aug 20 2008.
   </div>
 
 </body>

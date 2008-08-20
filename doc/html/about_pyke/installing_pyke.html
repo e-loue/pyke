@@ -195,14 +195,21 @@ You can browse these on your hard drive if you'd like.</p>
 <li><a class="reference" href="http://sourceforge.net/projects/docutils">Docutils</a></li>
 </ul>
 <p>The sources for the documentation are in <tt class="docutils literal"><span class="pre">doc/sources</span></tt>.</p>
-<p>To regenerate the documentation, in the <tt class="docutils literal"><span class="pre">doc</span></tt> directory run:</p>
+<p>To regenerate the documentation, in the <tt class="docutils literal"><span class="pre">doc/sources</span></tt> directory run:</p>
 <pre class="literal-block">
-$ r2w r2w.ini
+$ bin/gen_html
 </pre>
-<p>This will regenerate the files in <tt class="docutils literal"><span class="pre">doc/html</span></tt>, except for those in
-<tt class="docutils literal"><span class="pre">doc/html/stylesheets</span></tt> and <tt class="docutils literal"><span class="pre">doc/html/images</span></tt>.  I've gone ahead
-and placed the generated html files in subversion so that you can checkout
-the documentation without having to run <tt class="docutils literal"><span class="pre">r2w</span></tt>.</p>
+<p>This:</p>
+<ol class="arabic simple">
+<li>Temporarily appends hyperlink references onto all of the *.txt files.</li>
+<li>Runs <tt class="docutils literal"><span class="pre">r2w</span></tt> to regenerate the files in <tt class="docutils literal"><span class="pre">doc/html</span></tt><ul>
+<li>except for those in <tt class="docutils literal"><span class="pre">doc/html/stylesheets</span></tt> and <tt class="docutils literal"><span class="pre">doc/html/images</span></tt>.</li>
+</ul>
+</li>
+<li>Then strips all of the hyperlink references from the *.txt files.</li>
+</ol>
+<p>I've gone ahead and placed the generated html files in subversion so that
+you can checkout the documentation without having to run <tt class="docutils literal"><span class="pre">bin/gen_html</span></tt>.</p>
 </div>
 </div>
 
@@ -240,7 +247,7 @@ of links).</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Sat, Aug 16 2008.
+    Page last modified Wed, Aug 20 2008.
   </div>
 
 </body>
