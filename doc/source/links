@@ -21,6 +21,8 @@
 .. _category: `rule base category`_
 .. _commands: knowledge_bases/special.html#running-commands
 .. _compound_premise: pyke_syntax/krb_syntax/compound_premise.html
+.. _cooked: `cooking functions`_
+.. _cooking functions: about_pyke/cooking_functions.html
 .. _copy_reg: http://docs.python.org/lib/module-copyreg.html
 .. _cut operator: http://en.wikipedia.org/wiki/Cut_%28logic_programming%29
 .. _Docutils: http://sourceforge.net/projects/docutils

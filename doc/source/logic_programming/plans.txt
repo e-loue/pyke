@@ -164,18 +164,15 @@ The plan is created as a byproduct of proving_ the goal:
 
 ``plan1`` is now a program to transfer X amount
 from 'bruce', 'checking' to 'bruce', 'savings'.  Using the above rule names
-as function names, plan1 looks like this::
+as function names, plan1 looks like this:
 
-                        +-----------+
-                        | transfer1 |
-                        +-----+-----+
-                             / \
-                       +----+   +----+
-                       |             |
-                       V             V
-                 +----------+   +---------+
-                 | withdraw |   | deposit |
-                 +----------+   +---------+
+.. figure:: ../images/plan1.png
+   :width: 187
+   :height: 118
+   :scale: 100
+   :align: center
+
+   Plan1
 
 And can be called like a standard function, passing the parameters
 specified in the *taking* clause of the rules for the top-level goal
@@ -192,7 +189,7 @@ The program may be used multiple times:
     deposit 50 to bruce savings
 
 Notice the strings: ``bruce``, ``checking`` and ``savings`` in the output.
-These were specified as `pattern variables`_ in the code and are cooked
+These were specified as `pattern variables`_ in the code and are cooked_
 into the plan along with the function call graph.
 
 Let's create a second program:
@@ -204,23 +201,15 @@ Let's create a second program:
 
 ``plan2`` is now a program to transfer X amount
 from 'my_other_bank', 'bruce', 'checking' to 'bruce', 'savings'.
-Plan2 looks like this::
+Plan2 looks like this:
 
-                        +-----------+
-                        | transfer2 |
-                        +-----+-----+
-                              |
-                              V
-                      +---------------+
-                      | transfer_ach1 |
-                      +-------+-------+
-                             / \
-                       +----+   +----+
-                       |             |
-                       V             V
-                 +----------+   +---------+
-                 | withdraw |   | deposit |
-                 +----------+   +---------+
+.. figure:: ../images/plan2.png
+   :width: 187
+   :height: 195
+   :scale: 100
+   :align: center
+
+   Plan2
 
 And is run just like plan1, but produces different results:
 
@@ -240,23 +229,15 @@ And the final use case:
     withdraw 150 from central_accts ach_recv_acct
     deposit 150 to bruce savings
 
-Plan3 looks like this::
+Plan3 looks like this:
 
-                        +-----------+
-                        | transfer2 |
-                        +-----+-----+
-                              |
-                              V
-                      +---------------+
-                      | transfer_ach2 |
-                      +-------+-------+
-                             /|\
-                +-----------+ | +-----------+
-                |             |             |
-                V             V             V
-          +---------+   +----------+   +---------+
-          | get_ach |   | withdraw |   | deposit |
-          +---------+   +----------+   +---------+
+.. figure:: ../images/plan3.png
+   :width: 264
+   :height: 198
+   :scale: 100
+   :align: center
+
+   Plan3
 
 Note that the same *transfer2* function is calling two different functions
 (*transfer_ach1* and *transfer_ach2*) in plan2 and plan3.  This shows how
@@ -271,7 +252,11 @@ Conclusion
 So you can see that it quite easy to use Pyke to automatically combine
 Python functions into programs!
 
-It also allows data within each Python function to
-be specified using a `pattern variable`_ so that Pyke can customize these
-values to match the specific situation.
+It also allows data within each Python function to be specified using a
+`pattern variable`_ so that Pyke can customize these values to match the
+specific situation.
+
+If you would like to know more about how Pyke *cooks* (or customizes) your
+Python functions, see `Cooking Functions`_.
+
 

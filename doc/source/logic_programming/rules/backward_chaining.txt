@@ -166,8 +166,9 @@ For this example, these are the starting set of ``family`` facts::
 And we want to know who fred's nephews are.  So we'd ask ``uncle_nephew(fred,
 $nephew, $prefix)``.
 
-Here are the steps in the inferencing up until the first failure is
-encountered::
+Here are the steps (in parenthesis) in the inferencing up until the first
+failure is encountered (with the line number from the example preceeding each
+line)::
 
     (1)   22  use uncle_nephew(fred, $nephew, $prefix)
               25  brothers(fred, $father)
