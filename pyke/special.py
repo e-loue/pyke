@@ -186,8 +186,8 @@ class command(special_both):
                                     patterns[3] if len(patterns) > 3 else None)
         if retcode != 0:
             raise subprocess.CalledProcessError(
-                      "Command '%s' returned non-zero exit status %d" %
-                        (str(patterns[1].as_data(pat_context)), retcode))
+                                retcode,
+                                ' '.join(patterns[1].as_data(pat_context)))
         mark = bindings.mark(True)
         try:
             outlines = tuple(out.rstrip('\n').split('\n'))

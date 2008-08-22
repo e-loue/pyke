@@ -68,10 +68,10 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="knowledge-bases">
 <h1 class="title">Knowledge Bases</h1>
-<p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are organized
-into named repositories called <em>knowledge bases</em>.  A knowledge base is like
-a directory for files on disk, except that knowledge bases may not be
-nested.  Therefore, facts and goals always have a two-level name.</p>
+<p>Knowledge is organized into named repositories called <em>knowledge bases</em>.
+A knowledge base is like a directory for files on disk, except that knowledge
+bases may not be nested.  Therefore, the <em>entities</em> within a knowledge base
+always have a two-level name: <em>knowledge_base_name.knowledge_entity_name</em>.</p>
 <p>Here are some examples of facts you might see in a web server application:</p>
 <pre class="literal-block">
 header.cookie('session=123456789;remember=the_alamo')
@@ -87,25 +87,61 @@ request.path_segment(-1, 'site.html')
 </pre>
 <p>Note that three different knowledge bases (all <a class="reference" href="fact_bases.html">fact bases</a>) are shown here
 named <tt class="docutils literal"><span class="pre">header</span></tt>, <tt class="docutils literal"><span class="pre">cookie</span></tt>, and <tt class="docutils literal"><span class="pre">request</span></tt>; each with multiple facts.</p>
-<p>There are different types of knowledge bases.</p>
-<ul class="simple">
-<li>Those that contain facts are called <a class="reference" href="fact_bases.html">fact bases</a>.</li>
-<li>Those that contain rules are called <a class="reference" href="rule_bases.html">rule bases</a>.</li>
-<li>It is also possible to create other kinds of knowledge bases that lookup
-facts and prove goals in different ways.  Pyke provides two of these:<ul>
-<li>The <a class="reference" href="question_bases.html">question base</a> which asks an end user questions.</li>
-<li>The <a class="reference" href="special.html">special</a> knowledge base which only has one instance.</li>
-</ul>
-</li>
-</ul>
+<p>The second part of the two-part name is the name of the <em>knowledge entity</em>.
+You can think of knowledge entities as <a class="reference" href="../logic_programming/statements.html">statement</a> <em>types</em> or <em>topics</em>.  So:</p>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">request:</th><td class="field-body">is the name of the <em>knowledge base</em>.</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">request.path_segment:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">is the name of the <em>knowledge entity</em>, or statement topic.</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">request.path_segment(-1, 'site.html'):</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">is a specific statement about the topic of request.path_segments.</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <div class="section">
-<h2><a id="notes" name="notes">NOTES</a></h2>
+<h2><a id="what-do-knowledge-bases-do" name="what-do-knowledge-bases-do">What do Knowledge Bases Do?</a></h2>
+<p>Ultimately Pyke is interested in proving statements, or answering the question
+&quot;Is statement X true&quot;?  There are several different types of knowledge bases.
+Each type of knowledge base represents a different way of doing this:</p>
 <ul class="simple">
-<li>All knowledge bases share the same name space.<ul>
-<li>So no two of them, regardless of their type, may have the same name.</li>
+<li>Those that contain simple lists of statements of fact (as you see in the
+example above) are called <a class="reference" href="fact_bases.html">fact bases</a>.<ul>
+<li>These determine whether a statement is true by simply checking to see if
+that statement is in their list of known facts.</li>
+</ul>
+</li>
+<li>Those that contain <em>if-then</em> <a class="reference" href="../logic_programming/rules/index.html">rules</a> are called <a class="reference" href="rule_bases.html">rule bases</a>.<ul>
+<li>These determine whether a statement is true by running their if-then rules
+to try to construct a proof for that statement.</li>
+<li>Rule bases may include both <a class="reference" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> and <a class="reference" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> rules.</li>
+</ul>
+</li>
+<li>It is also possible to create other kinds of knowledge bases that determine
+the truth of statements in other ways.  Pyke provides two of these:<ul>
+<li>The <a class="reference" href="question_bases.html">question base</a> which justs poses the statement to an end user as a
+question.</li>
+<li>The <a class="reference" href="special.html">special</a> knowledge base which has several special one-off knowledge
+entities to do different things like run a <a class="reference" href="special.html#running-commands">command</a> on the underlying
+system and examine its output and/or exit status.<ul>
+<li>There is only has one instance of this knowledge base -- called
+<tt class="docutils literal"><span class="pre">special</span></tt>.</li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">All knowledge bases share the same name space.  So no two of them,
+regardless of their type, may have the same name.</p>
+</div>
 </div>
 </div>
 
@@ -125,7 +161,7 @@ are compiled and loaded into your Python program.</p>
 </div>
 <div class="right-item"><a href="question_bases.html">Question Bases</a><p>Explanation of question bases and .kqb files.</p>
 </div>
-<div class="right-item"><a href="special.html">Special</a><p>Explanation of the special knowledge base.</p>
+<div class="right-item"><a href="special.html">Special</a><p>Explanation of the <tt class="docutils literal"><span class="pre">special</span></tt> knowledge base.</p>
 </div>
 
             </div>
@@ -143,7 +179,7 @@ are compiled and loaded into your Python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Aug 21 2008.
+    Page last modified Fri, Aug 22 2008.
   </div>
 
 </body>

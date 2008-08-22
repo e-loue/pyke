@@ -40,9 +40,9 @@ KFB Syntax
 This uses the same lexical structure as `KRB files`_, except that the only
 keywords are:
 
-   - None
-   - True
-   - False
+- None
+- True
+- False
 
 The name of the `fact base`_ is simply the filename with the ``.kfb`` suffix
 stripped.  This must be a valid Python identifier.
@@ -52,7 +52,7 @@ Syntax for KFB File
 
 ::
 
-    file ::= [NL] {fact}
+    file ::= [NL] {fact NL}
 
     fact ::= IDENTIFIER '(' [{data,}] ')'
 

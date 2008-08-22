@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007 Bruce Frederiksen
+.. Copyright © 2007-2008 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@
 restindex
     crumb: Special
     page-description:
-        Explanation of the special knowledge base.
+        Explanation of the ``special`` knowledge base.
     /description
     format: rest
     encoding: utf8
@@ -32,16 +32,18 @@ restindex
     initialheaderlevel: 2
 /restindex
 
-=============================================
+=======
 Special
-=============================================
+=======
 
-Other kinds of `knowledge bases`_ may be created that act in different ways
-when they are asked to lookup facts_ or prove_ goals_.  Pyke includes one of
-these named ``special``.  There is only one instance of this 'special'
-knowledge base (called ``special``).
+There is only one instance of this 'special' knowledge base, called
+``special``.
 
-Each entity in this `knowledge base`_ is a Python function that does
+The ``special`` knowledge base is a collection of miscellanious helper
+*knowledge entities* that determine whether a statement is true or not in
+various interesting ways.
+
+Thus, each entity in this `knowledge base`_ is a Python function that does
 something "special" when run.
 
 The ``special`` functions are:
@@ -62,14 +64,14 @@ This acts like the Prolog_ `cut operator`_.
 
 In general there are multiple rules_ that might be used to try to prove_ any
 goal_.  They are each tried in the order that they appear in the `.krb file`_.
-If one rule_ fails, the next rule_ is tried.  The goal_ itself doesn't fail
-until all of the rules_ for it have failed.
+If one rule fails, the next rule is tried.  The goal itself doesn't fail
+until all of the rules for it have failed.
 
 Example
 -------
 
 Suppose I want to translate a number, N, into the phrase "N dogs".  I could
-use the following rules_::
+use the following rules::
 
     one_dog
         use n_dogs(1, '1 dog')
@@ -79,8 +81,8 @@ use the following rules_::
         when
             $phrase = "%d dogs" % $n
 
-The problem here is that both rules_ might be used when ``n`` is 1, but the
-second rule_ isn't appropriate in this case.  ``Special.claim_goal()`` may
+The problem here is that both rules might be used when ``n`` is 1, but the
+second rule isn't appropriate in this case.  ``Special.claim_goal()`` may
 be used to fix this, as follows::
 
     one_dog
@@ -93,24 +95,24 @@ be used to fix this, as follows::
         when
             $phrase = "%d dogs" % $n
 
-The ``special.claim_goal()`` prevents the second rule_ from being used when
+The ``special.claim_goal()`` prevents the second rule from being used when
 ``n`` is 1.
 
 Explanation
 -----------
 
 When a rule_ executes ``special.claim_goal()`` in its ``when``
-clause, none of the rest of the rules_ will be tried for that goal_.
-Thus, when ``special.claim_goal()`` is backtracked_ over, the goal_ fails
-immediately without trying any more rules_ for it.
+clause, none of the rest of the rules will be tried for that goal_.
+Thus, when ``special.claim_goal()`` is backtracked_ over, the goal fails
+immediately without trying any more rules for it.
 
 This ends up acting like an "else".  You place it in the ``when`` clause 
-after the premises_ that show that this rule_ **must** be
-the correct one to use.  Then the subsequent rules_ will only be tried if
-these premises_ fail, such that ``special.claim_goal()`` is never executed.
+after the premises_ that show that this rule **must** be the correct one
+to use.  Then the subsequent rules will only be tried if these premises
+fail, such that ``special.claim_goal()`` is never executed.
 
-This means that you don't need to add extra premises_ in each subsequent rule
-to make sure that these premises_ have **not** occurred.
+This means that you don't need to add extra premises in each subsequent rule
+to make sure that these premises have **not** occurred.
 
 Without the ``special.claim_goal()`` in the prior example, you would have to
 write::
@@ -125,28 +127,42 @@ write::
             $phrase = "%d dogs" % $n
 
 This is a simple example where it is easy to add the check in the second
-rule_.  But in general, it can be difficult to check for prior conditions,
-especially when many rules_ are involved that each has its own condition.
+rule.  But in general, it can be difficult to check for prior conditions,
+especially when many rules are involved that each has its own condition.
 
 Running Commands
 ================
 
 The remaining three functions deal with running programs (commands) on the
-computer that is running the Pyke program.  Their difference is in what kind
-of output they are looking for from the commands.
+host computer that is running your Pyke program.  Their difference is in what
+kind of output they provide from the command.
 
-There are three parameters that are given to the standard Python library
-`subprocess.Popen`_ function:
+These functions all use the `subprocess.Popen`_ function from the standard
+Python library.
 
-    - The ``$command`` parameter (must always be present).  This is a tuple,
-      such as ``(ls, '-l')``.
-    - The ``$cwd`` parameter (optional).  This specifies the current working
-      directory that the command should be run in.  This may be omitted or
-      ``None`` to run the command in the same current working directory as
-      the Pyke program running the command.
-    - The ``$stdin`` parameter (optional).  This is a string (with embedded
-      newlines, if the command expects multiple lines).  It is fed to the
-      command as its stdin input.
+Thus, each of these functions accept these three parameters that are passed
+on to subprocess.Popen:
+
+    - The ``$command`` parameter (required).
+    
+      - This is a tuple indicating the program to run along with its command
+        line arguments, such as ``(ls, '-l')``.
+
+    - The ``$cwd`` parameter (optional).
+    
+      - This specifies the *current working directory* to run the command in.
+      - If omitted or ``None`` the current working directory is not changed.
+
+    - The ``$stdin`` parameter (optional).
+    
+      - This is a string that is fed to the command as its stdin.
+
+        - If the command expects multiple lines of input, this string must
+          include embedded newlines (e.g., ``'line 1\nline 2\n'``).
+
+      - If omitted or ``None``, no stdin is provided to the command.
+
+All of these functions fail on backtracking_.
 
 Check_command
 -------------
@@ -156,7 +172,16 @@ Check_command
     special.check_command($command [, $cwd [, $stdin]])
 
 Succeeds if the command returns a zero exit status.  Fails otherwise.  Any
-output from the command to stdout or stderr is not available.
+output from the command to stdout or stderr is unavailable.
+
+    >>> from pyke import knowledge_engine
+    >>> engine = knowledge_engine.engine()
+    >>> engine.prove_1('special', 'check_command', (('true',),), 0)
+    ((), None)
+    >>> engine.prove_1('special', 'check_command', (('false',),), 0)
+    Traceback (most recent call last):
+        ...
+    CanNotProve: Can not prove special.check_command((false))
 
 Command
 -------
@@ -166,12 +191,49 @@ Command
     special.command($stdout, $command [, $cwd [, $stdin]])
 
 This just looks at the stdout of the command.  Any output from the command
-to stderr is not available.
+to stderr is unavailable.
 
 The ``$stdout`` is a tuple of lines with the trailing newlines removed.
 
 This raises `subprocess.CalledProcessError`_ if the command returns a non-zero
 exit status.
+
+    >>> from pyke import pattern, contexts
+    >>> def run_command(entity, command, cwd=None, stdin=None):
+    ...     my_context = contexts.simple_context()
+    ...     output = contexts.variable('output')
+    ...     for no_plan in engine.prove('special', entity, my_context,
+    ...                                 (output,
+    ...                                  pattern.pattern_literal(command),
+    ...                                  pattern.pattern_literal(cwd),
+    ...                                  pattern.pattern_literal(stdin))):
+    ...         print output.as_data(my_context)
+    >>> run_command('command', ('echo', 'hi', 'mom'))
+    ('hi mom',)
+    >>> run_command('command', ('ls',))   # doctest: +NORMALIZE_WHITESPACE
+    ('ast_syntax', 'cheatsheets', 'compiled_krb', 'examples', 'html',
+     'PyKE.mm', 'r2w.ini', 'source', 'syntax', 'testdocs', 'todo')
+    >>> run_command('command', ('ls', '-l', 'r2w.ini'))
+    ('-rw-r--r-- 1 bruce bruce 338 2008-03-10 14:23 r2w.ini',)
+    >>> run_command('command', ('tail', '-n', '5', 'template.txt', '-'),
+    ...             'source',   # cwd
+    ...             'stdin: line 1\nstdin: line 2\nstdin: line 3\n')
+    ...     # doctest: +NORMALIZE_WHITESPACE
+    ('==> template.txt <==',
+     '  </div>',
+     '',
+     '</body>',
+     '</html>',
+     '',
+     '',
+     '==> standard input <==',
+     'stdin: line 1',
+     'stdin: line 2',
+     'stdin: line 3')
+    >>> run_command('command', ('false',))
+    Traceback (most recent call last):
+        ...
+    CalledProcessError: Command 'false' returned non-zero exit status 1
 
 General_command
 ---------------
@@ -184,5 +246,16 @@ This is the fully general form that gives you all output from the command.
 
 The ``$output`` is a three tuple: (exit_status, stdout, stderr).  Both stdout
 and stderr are single strings (with embedded newlines).
+
+    >>> run_command('general_command', ('echo', 'hi', 'mom'))
+    (0, 'hi mom\n', '')
+    >>> run_command('general_command', ('cat', 'foobar'))
+    (1, '', 'cat: foobar: No such file or directory\n')
+    >>> run_command('general_command', ('tail', '-n', '5', 'r2w.ini', 'foobar'))
+    ...     # doctest: +NORMALIZE_WHITESPACE
+    (1,
+     "==> r2w.ini <==\ntarget_directory = 'html'\nmacros =
+         ''\n\n[uservalues]\nversion = '0.2'\n",
+     "tail: cannot open `foobar' for reading: No such file or directory\n")
 
 

@@ -19,7 +19,8 @@
 .. _Bc_rule Syntax: bc_rule_
 .. _case specific facts: knowledge_bases/fact_bases.html#case-specific-facts
 .. _category: `rule base category`_
-.. _commands: knowledge_bases/special.html#running-commands
+.. _command: knowledge_bases/special.html#running-commands
+.. _commands: command_
 .. _compound_premise: pyke_syntax/krb_syntax/compound_premise.html
 .. _cooked: `cooking functions`_
 .. _cooking functions: about_pyke/cooking_functions.html
@@ -27,6 +28,7 @@
 .. _cut operator: http://en.wikipedia.org/wiki/Cut_%28logic_programming%29
 .. _Docutils: http://sourceforge.net/projects/docutils
 .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
+.. _engine: `knowledge engine`_
 .. _engine.reset: using_pyke.html#setting-up-each-case
 .. _Examples: examples.html
 .. _extending: pyke_syntax/krb_syntax/index.html#extending-clause
@@ -77,6 +79,7 @@
 .. _patterns: pattern_
 .. _pickled: logic_programming/plans.html#running-and-pickling-plans
 .. _pickle: http://docs.python.org/lib/module-pickle.html
+.. _pickles: pickle_
 .. _plan: logic_programming/plans.html
 .. _plan_spec: pyke_syntax/krb_syntax/bc_rule.html#plan-spec
 .. _plans: plan_
@@ -108,7 +111,7 @@
 .. _reset: using_pyke.html#setting-up-each-case
 .. _Rest2web: http://sourceforge.net/projects/rest2web
 .. _rule base category: knowledge_bases/rule_bases.html#rule-base-categories
-.. _rule base: pyke_syntax/krb_syntax/index.html
+.. _rule base: knowledge_bases/rule_bases.html
 .. _rule base's: `rule base`_
 .. _rule bases: `rule base`_
 .. _rule: logic_programming/rules/index.html

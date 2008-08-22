@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007 Bruce Frederiksen
+.. Copyright © 2007-2008 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -38,10 +38,10 @@ restindex
 Knowledge Bases
 ====================
 
-Knowledge is made up of both *facts* and *rules*.  These are organized
-into named repositories called *knowledge bases*.  A knowledge base is like
-a directory for files on disk, except that knowledge bases may not be
-nested.  Therefore, facts and goals always have a two-level name.
+Knowledge is organized into named repositories called *knowledge bases*.
+A knowledge base is like a directory for files on disk, except that knowledge
+bases may not be nested.  Therefore, the *entities* within a knowledge base
+always have a two-level name: *knowledge_base_name.knowledge_entity_name*.
 
 Here are some examples of facts you might see in a web server application::
 
@@ -59,23 +59,52 @@ Here are some examples of facts you might see in a web server application::
 Note that three different knowledge bases (all `fact bases`_) are shown here
 named ``header``, ``cookie``, and ``request``; each with multiple facts.
 
-There are different types of knowledge bases.
+The second part of the two-part name is the name of the *knowledge entity*.
+You can think of knowledge entities as statement_ *types* or *topics*.  So:
 
-- Those that contain facts are called `fact bases`_.
-- Those that contain rules are called `rule bases`__.
-- It is also possible to create other kinds of knowledge bases that lookup
-  facts and prove goals in different ways.  Pyke provides two of these:
+    :request:
+        is the name of the *knowledge base*.
+    :request.path_segment:
+        is the name of the *knowledge entity*, or statement topic.
+    :request.path_segment(-1, 'site.html'):
+        is a specific statement about the topic of request.path_segments.
 
-  - The `question base`_ which asks an end user questions.
-  - The special_ knowledge base which only has one instance.
+What do Knowledge Bases Do?
+===========================
+
+Ultimately Pyke is interested in proving statements, or answering the question
+"Is statement X true"?  There are several different types of knowledge bases.
+Each type of knowledge base represents a different way of doing this:
+
+- Those that contain simple lists of statements of fact (as you see in the
+  example above) are called `fact bases`_.
+
+  - These determine whether a statement is true by simply checking to see if
+    that statement is in their list of known facts. 
+
+- Those that contain *if-then* rules_ are called `rule bases`__.
+
+  - These determine whether a statement is true by running their if-then rules
+    to try to construct a proof for that statement.
+  - Rule bases may include both forward-chaining_ and backward-chaining_ rules.
+
+- It is also possible to create other kinds of knowledge bases that determine
+  the truth of statements in other ways.  Pyke provides two of these:
+
+  - The `question base`_ which justs poses the statement to an end user as a
+    question.
+  - The special_ knowledge base which has several special one-off knowledge
+    entities to do different things like run a command_ on the underlying
+    system and examine its output and/or exit status.
+
+    - There is only has one instance of this knowledge base -- called
+      ``special``.
 
 .. __: rule_bases.html
 
-NOTES
-------------
+.. note::
 
-* All knowledge bases share the same name space.
-
-  * So no two of them, regardless of their type, may have the same name.
+    All knowledge bases share the same name space.  So no two of them,
+    regardless of their type, may have the same name.
 
 

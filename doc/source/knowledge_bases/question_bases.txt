@@ -37,10 +37,10 @@ Question Bases
 =============================================
 
 Question bases contain questions for end users.  These questions can be of
-various types (e.g., yes/no, multiple_choice).  The questions can be
+various types (e.g., yes/no, multiple_choice).  The questions may be
 parameterized, with the parameter values substituted into the question text
 when the question is asked.  In this case, different parameter values are
-treated as different questions.
+treated as different question statements_.
 
 The answers to all questions are automatically remembered so that if multiple
 rules ask the same question, the end user only sees it once.  These answers
@@ -55,44 +55,72 @@ KQB files
 ==========
 
 Each question base is defined by a `.kqb file`_.  The name of each question
-base is the filename of the `.kqb file`_ (with the ``.kqb`` suffix removed).
+base is the filename of the .kqb file (with the ``.kqb`` suffix removed).
 This must be a legal Python identifier.
 
-These `.kqb files`_ are compiled and loaded automatically when you create your 
+These .kqb files are compiled and loaded automatically when you create your 
 `knowledge_engine.engine`_ object.
 
-The `.kqb file`_ contains all of the information about the question needed to
-ask the question, validate the answer and output the appropriate *review*
+The .kqb file contains all of the information about the question needed to
+ask the question, validate the answer, and output the appropriate *review*
 text.
 
-The `.kqb file`_ also specifies which parameter contains the answer.  All
+The .kqb file also specifies which parameter contains the answer.  All
 parameters, except this one, must be bound to values before testing the
 question.
 
+
+Example
+=======
+
+In writing a program to diagnose car problems, you might have a
+``user_question`` question base with questions like::
+
+    engine_starts($ans)
+        Can you start the engine?
+        ---
+        $ans = yn
+
+    mileage($ans)
+        How many miles are on the car?
+        ---
+        $ans = integer([1-999999])
+        [199999-] ! Wow, that's a lot of miles!
+
+    noise_from($location, $ans)
+        Do you hear a noise from $location?
+        ---
+        $ans = yn
+
+These would look like the following statements_ within rules_::
+
+    user_question.engine_starts(True)
+    user_question.mileage($mileage)
+    user_question.noise_from('under the hood', False)
 
 Presenting Questions to Your End Users
 ======================================
 
 Pyke provides two modules to actually present a question to your end user:
 
-  - ask_tty
+- ask_tty
     
-    This presents the question on stdout and reads stdin for the answer.
+  This presents the question on stdout and reads stdin for the answer.
 
-  - ask_wx
+- ask_wx
 
-    This presents the question in a dialog box for use with wxpython_.
+  This presents the question in a dialog box for use with wxpython_.
 
 You may write your own module to present questions to end users.  Look at the
 modules provided by Pyke for guidance.
 
 To ask a question, Pyke looks for an ``ask_module`` attribute on:
 
-  - the question_base object
-  - then the `knowledge_engine.engine`_ object
+#. the question_base object, then
+#. the `knowledge_engine.engine`_ object
 
 If the `knowledge_engine.engine`_ object does not have an ``ask_module``
-attribute, ask_tty is imported by default and stored there.
+attribute, ask_tty is imported (by default) and stored there.
 
 Here's an example of setting this attribute::
 

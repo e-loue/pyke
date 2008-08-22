@@ -82,7 +82,7 @@ the <tt class="docutils literal"><span class="pre">paths</span></tt> argument.  
 for Pyke source files (<a class="reference" href="pyke_syntax/kfb_syntax.html">.kfb files</a>, <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a>, and <a class="reference" href="pyke_syntax/kqb_syntax.html">.kqb files</a>).
 Each source file that it finds is compiled, if out of date, and then
 imported (depending on <tt class="docutils literal"><span class="pre">load_fc</span></tt>, <tt class="docutils literal"><span class="pre">load_bc</span></tt>, <tt class="docutils literal"><span class="pre">load_fb</span></tt> and
-<tt class="docutils literal"><span class="pre">load_qb</span></tt>).  This causes all of the <a class="reference" href="pyke_syntax/krb_syntax/index.html">rule bases</a> to be loaded and made
+<tt class="docutils literal"><span class="pre">load_qb</span></tt>).  This causes all of the <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a> to be loaded and made
 ready to <em>activate</em> (see below).</p>
 <p>All generated Python files are placed in a mirror directory structure
 under the <em>gen_root_location</em> directory in <em>gen_root_pkg</em>.  Thus, by
@@ -124,12 +124,12 @@ son_of('david', 'bruce')
 <h2><a id="setting-up-each-case" name="setting-up-each-case">Setting up Each Case</a></h2>
 <p>Pyke is designed to be run multiple times for multiple <em>cases</em>.  In
 general each case has its own set of starting <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> and may use different
-<a class="reference" href="pyke_syntax/krb_syntax/index.html">rule bases</a>, depending on the situation.</p>
+<a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>, depending on the situation.</p>
 <p>Three functions initialize each case:</p>
 <dl class="docutils">
 <dt><em>some_engine</em>.reset()</dt>
 <dd>The <tt class="docutils literal"><span class="pre">reset</span></tt> function is called once to delete all of the <a class="reference" href="knowledge_bases/fact_bases.html#case-specific-facts">case specific
-facts</a> from the last run.  It also deactivates all <a class="reference" href="pyke_syntax/krb_syntax/index.html">rule bases</a>.</dd>
+facts</a> from the last run.  It also deactivates all <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>.</dd>
 <dt><em>some_engine</em>.assert_(kb_name, fact_name, arguments)</dt>
 <dd><p class="first">Call <tt class="docutils literal"><span class="pre">assert_</span></tt> (or the equivalent, <tt class="docutils literal"><span class="pre">add_case_specific_fact</span></tt>,
 see <a class="reference" href="#other-functions">Other Functions</a>, below) for each starting <a class="reference" href="knowledge_bases/fact_bases.html#facts">fact</a> for this case.
@@ -163,7 +163,7 @@ son_of('david', 'bruce')
 </pre>
 </dd>
 <dt><em>some_engine</em>.activate(*rb_names)</dt>
-<dd><p class="first">Then call <tt class="docutils literal"><span class="pre">activate</span></tt> to activate the appropriate <a class="reference" href="pyke_syntax/krb_syntax/index.html">rule bases</a>.  This
+<dd><p class="first">Then call <tt class="docutils literal"><span class="pre">activate</span></tt> to activate the appropriate <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>.  This
 may be called more than once, if desired, or it can simply take multiple
 arguments.</p>
 <pre class="last doctest-block">
@@ -181,7 +181,7 @@ functions are provided in <a class="reference" href="#other-functions">Other Fun
 <dt><em>some_engine</em>.prove_1(kb_name, entity_name, fixed_args, num_returns)</dt>
 <dd><p class="first"><tt class="docutils literal"><span class="pre">Kb_name</span></tt> may name either a <a class="reference" href="knowledge_bases/fact_bases.html">fact base</a> or an activated
 <a class="reference" href="knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>.  The <tt class="docutils literal"><span class="pre">entity_name</span></tt> is the fact_name for fact_bases,
-or the name of the <a class="reference" href="logic_programming/rules/backward_chaining.html">backward chaining</a> goal for <a class="reference" href="pyke_syntax/krb_syntax/index.html">rule bases</a>.
+or the name of the <a class="reference" href="logic_programming/rules/backward_chaining.html">backward chaining</a> goal for <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>.
 The <tt class="docutils literal"><span class="pre">fixed_args</span></tt> are a tuple of Python values.  These form the first
 group of arguments to the proof.  <tt class="docutils literal"><span class="pre">Num_returns</span></tt> specifies the number of
 additional <a class="reference" href="logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> to be appended to the arguments for the
@@ -344,12 +344,12 @@ This returns the <a class="reference" href="logic_programming/plans.html">plan</
 <dd>This is an alternate to the <tt class="docutils literal"><span class="pre">assert_</span></tt> function.</dd>
 <dt><em>some_engine</em>.get_kb(kb_name)</dt>
 <dd>Finds and returns the <a class="reference" href="knowledge_bases/index.html">knowledge base</a> by the name <tt class="docutils literal"><span class="pre">kb_name</span></tt>.  Raises
-KeyError if not found.  Note that for <a class="reference" href="pyke_syntax/krb_syntax/index.html">rule bases</a>, this returns the
-active <a class="reference" href="pyke_syntax/krb_syntax/index.html">rule base</a> where <tt class="docutils literal"><span class="pre">kb_name</span></tt> is the <a class="reference" href="knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name.
-Thus, not all <a class="reference" href="pyke_syntax/krb_syntax/index.html">rule bases</a> are accessible through this call.</dd>
+KeyError if not found.  Note that for <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>, this returns the
+active <a class="reference" href="knowledge_bases/rule_bases.html">rule base</a> where <tt class="docutils literal"><span class="pre">kb_name</span></tt> is the <a class="reference" href="knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name.
+Thus, not all <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a> are accessible through this call.</dd>
 <dt><em>some_engine</em>.get_rb(rb_name)</dt>
-<dd>Finds and returns the <a class="reference" href="pyke_syntax/krb_syntax/index.html">rule base</a> by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
-KeyError if not found.  This works for any <a class="reference" href="pyke_syntax/krb_syntax/index.html">rule base</a>, whether it is
+<dd>Finds and returns the <a class="reference" href="knowledge_bases/rule_bases.html">rule base</a> by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
+KeyError if not found.  This works for any <a class="reference" href="knowledge_bases/rule_bases.html">rule base</a>, whether it is
 active or not.</dd>
 <dt><em>some_engine</em>.print_stats([f = sys.stdout])</dt>
 <dd>Prints a brief set of statistics for each knowledge base to file <tt class="docutils literal"><span class="pre">f</span></tt>.
@@ -445,7 +445,7 @@ into named repositories called <em>knowledge bases</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Aug 21 2008.
+    Page last modified Fri, Aug 22 2008.
   </div>
 
 </body>

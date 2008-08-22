@@ -110,9 +110,9 @@ use ::= 'use' IDENTIFIER '(' {pattern,} ')' ['taking' '(' &lt;python_arg_spec&gt
          INDENT 'taking' '(' &lt;python_arg_spec&gt; ')' NL
          DEINDENT
 </pre>
-<p>Notice that it uses a single <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.  The <a class="reference" href="index.html">rule base</a> name is implied
+<p>Notice that it uses a single <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.  The <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> name is implied
 as the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name (the name of the root rule base) for the
-<a class="reference" href="index.html">rule base</a> containing this <a class="reference" href="../../logic_programming/rules/index.html">rule</a>.</p>
+<a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> containing this <a class="reference" href="../../logic_programming/rules/index.html">rule</a>.</p>
 <div class="section">
 <h3><a id="taking-clause" name="taking-clause">Taking Clause</a></h3>
 <p>The <tt class="docutils literal"><span class="pre">use</span></tt> clause also defines parameters to the <a class="reference" href="../../logic_programming/plans.html">plan</a> function (if one is
@@ -153,17 +153,17 @@ premise fails on the first try.  This can help in debugging.</p>
 it has already succeeded at least once).</p>
 </div>
 <p>If a single <em>name</em> is used in the <em>bc_premise</em>,
-the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> for the current <a class="reference" href="index.html">rule base</a> (the root rule base
+the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> for the current <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> (the root rule base
 name) is assumed.</p>
 <p>If two <em>names</em> are used in the <em>bc_premise</em>, the first may name a <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule
 base category</a> or a <a class="reference" href="../../knowledge_bases/fact_bases.html">fact base</a>.</p>
 <p>If a <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name is used (or assumed),
-the currently <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a> <a class="reference" href="index.html">rule base</a> for that <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">category</a> is used to prove the
+the currently <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a> <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> for that <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">category</a> is used to prove the
 premise.  Note that if the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name is omitted, and
-therefore assumed to be the current <a class="reference" href="index.html">rule base's</a> <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>,
-the current <a class="reference" href="index.html">rule base</a> does not have to be the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a> <a class="reference" href="index.html">rule base</a> for that
-<a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">category</a>.  It could be the case that a derived <a class="reference" href="index.html">rule base</a> is the
-<a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a> <a class="reference" href="index.html">rule base</a>.  In that case, the derived <a class="reference" href="index.html">rule base</a> is used to
+therefore assumed to be the current <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base's</a> <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>,
+the current <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> does not have to be the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a> <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> for that
+<a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">category</a>.  It could be the case that a derived <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> is the
+<a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a> <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a>.  In that case, the derived <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> is used to
 prove the premise.</p>
 <div class="section">
 <h3><a id="plan-spec" name="plan-spec">Plan_spec</a></h3>
@@ -273,7 +273,7 @@ goal has been proven.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Aug 21 2008.
+    Page last modified Fri, Aug 22 2008.
   </div>
 
 </body>

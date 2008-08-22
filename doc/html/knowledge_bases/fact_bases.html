@@ -70,11 +70,13 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="fact-bases">
 <h1 class="title">Fact Bases</h1>
-<p>Facts are organized into fact bases.  The fact bases are created
-automatically as new facts are asserted.</p>
+<p>When statements of fact are stored in Pyke, they are stored in <em>fact bases</em>.
+Pyke allows you to have as many fact bases as you like to help you organize
+your facts.  The fact bases are created automatically, as needed, as new facts
+are asserted.</p>
 <div class="section">
 <h2><a id="facts" name="facts">Facts</a></h2>
-<p>Think of a fact as a simple statement.  It has a name and a set of
+<p>Think of a fact as a simple <a class="reference" href="../logic_programming/statements.html">statement</a>.  It has a name and a set of
 arguments.  The arguments may be:</p>
 <ul class="simple">
 <li>strings<ul>
@@ -89,15 +91,16 @@ arguments.  The arguments may be:</p>
 </li>
 </ul>
 <p>Duplicate facts are not allowed.  An attempt to assert a fact that already
-exists is silently ignored.  But note that to be a duplicate, all of the
-arguments must be the same too!</p>
-<p>Facts are immutable.  They may not be changed or retracted.  That's why
-dictionaries, lists and user-defined objects are not allowed as arguments.</p>
+exists is silently ignored.  But note that to be a duplicate, <em>all</em> of the
+arguments must be the same!</p>
+<p>Currently facts are thought to be immutable, meaning that they may not be
+changed or retracted.  That's why dictionaries, lists and user-defined
+objects are not recommended as arguments.</p>
 <div class="section">
 <h3><a id="case-specific-facts" name="case-specific-facts">Case Specific Facts</a></h3>
-<p>Most facts are case specific facts.  This means that they will be deleted
-when a <a class="reference" href="../using_pyke.html#setting-up-each-case">reset</a> is done to prepare for another run of the inference engine.
-Case specific facts are asserted through either:</p>
+<p>Most facts are <em>case specific</em> facts.  This means that they will be deleted
+when an <a class="reference" href="../using_pyke.html#initializing-pyke">engine</a> <a class="reference" href="../using_pyke.html#setting-up-each-case">reset</a> is done to prepare for another run of the inference
+engine.  Case specific facts are asserted through either:</p>
 <pre class="literal-block">
 some_engine.assert_(kb_name, fact_name, arguments)
 some_engine.add_case_specific_fact(kb_name, fact_name, arguments)
@@ -106,8 +109,8 @@ some_engine.add_case_specific_fact(kb_name, fact_name, arguments)
 </div>
 <div class="section">
 <h3><a id="universal-facts" name="universal-facts">Universal Facts</a></h3>
-<p>Universal facts are never deleted, specifically, when a <a class="reference" href="../using_pyke.html#setting-up-each-case">reset</a> is done.  You
-can specify universal facts in a <cite>.kfb file</cite>, or add universal facts by
+<p>Universal facts are never deleted (specifically, when a <a class="reference" href="../using_pyke.html#setting-up-each-case">reset</a> is done).  You
+can specify universal facts in a <a class="reference" href="../pyke_syntax/kfb_syntax.html">.kfb file</a>, or add universal facts by
 calling:</p>
 <pre class="literal-block">
 some_engine.add_universal_fact(kb_name, fact_name, arguments)
@@ -133,7 +136,7 @@ are compiled and loaded into your Python program.</p>
 </div>
 <div class="right-item"><a href="question_bases.html">Question Bases</a><p>Explanation of question bases and .kqb files.</p>
 </div>
-<div class="right-item"><a href="special.html">Special</a><p>Explanation of the special knowledge base.</p>
+<div class="right-item"><a href="special.html">Special</a><p>Explanation of the <tt class="docutils literal"><span class="pre">special</span></tt> knowledge base.</p>
 </div>
 
             </div>
@@ -151,7 +154,7 @@ are compiled and loaded into your Python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Aug 21 2008.
+    Page last modified Fri, Aug 22 2008.
   </div>
 
 </body>

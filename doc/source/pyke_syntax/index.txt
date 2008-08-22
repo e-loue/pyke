@@ -37,6 +37,9 @@ restindex
 Pyke Syntax
 ===========
 
+Source Files
+============
+
 Pyke has three different kinds of source files for the three main types of
 `knowledge bases`_:
 
@@ -44,7 +47,35 @@ Pyke has three different kinds of source files for the three main types of
 #. *Knowledge Rule Base* (KRB) files for `rule bases`_.
 #. *Knowledge Question Base* (KQB) files for `question bases`_.
 
-Each type of source file ends in a different file suffix: .kfb, .krb or .kqb.
+Each type of source file ends in a different file suffix: ``.kfb``,
+``.krb`` or ``.kqb``.
+
+Place all of these source files into a directory structure.  Then include this
+directory as an argument to the `knowledge_engine.engine`_ constructor.
+This will recursively search your directory for these three types of files,
+compile them, and load them into the engine.  How you organize these files
+into subdirectories is up to you -- the directory structure does not matter to
+Pyke.
+
+The ``.kfb`` and ``.kqb`` files are compiled into Python pickles_ with
+``.fbc`` and ``.qbc`` suffixes.
+
+The ``.krb`` files are compiled into up to three ``.py`` source files.
+The names of these ``.py`` files are the same as the ``.krb`` file, but with
+different endings:
+
+- ``_fc`` (if there are any forward-chaining_ rules)
+- ``_bc`` (if there are any backward-chaining_ rules) and
+- ``_plans`` (if any of the backward-chaining rules have a plan_)
+
+These ``.py`` files are then automatically imported to define the rule base.
+This causes Python to compile them into ``.pyc`` or ``.pyo`` files.
+
+Subsequent runs of the `knowledge_engine.engine`_ constructor only recompile
+the Pyke source files that have changed since the last time they were compiled.
+
+The name of each knowledge base is the filename of the Pyke source file with
+the suffix removed.  This must be a legal Python identifier.
 
 Syntax Legend
 ==============

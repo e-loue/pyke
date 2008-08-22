@@ -67,14 +67,40 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="pyke-syntax">
 <h1 class="title">Pyke Syntax</h1>
+<div class="section">
+<h2><a id="source-files" name="source-files">Source Files</a></h2>
 <p>Pyke has three different kinds of source files for the three main types of
 <a class="reference" href="../knowledge_bases/index.html">knowledge bases</a>:</p>
 <ol class="arabic simple">
 <li><em>Knowledge Fact Base</em> (KFB) files for <a class="reference" href="../knowledge_bases/fact_bases.html">fact bases</a>.</li>
-<li><em>Knowledge Rule Base</em> (KRB) files for <a class="reference" href="krb_syntax/index.html">rule bases</a>.</li>
+<li><em>Knowledge Rule Base</em> (KRB) files for <a class="reference" href="../knowledge_bases/rule_bases.html">rule bases</a>.</li>
 <li><em>Knowledge Question Base</em> (KQB) files for <a class="reference" href="../knowledge_bases/question_bases.html">question bases</a>.</li>
 </ol>
-<p>Each type of source file ends in a different file suffix: .kfb, .krb or .kqb.</p>
+<p>Each type of source file ends in a different file suffix: <tt class="docutils literal"><span class="pre">.kfb</span></tt>,
+<tt class="docutils literal"><span class="pre">.krb</span></tt> or <tt class="docutils literal"><span class="pre">.kqb</span></tt>.</p>
+<p>Place all of these source files into a directory structure.  Then include this
+directory as an argument to the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> constructor.
+This will recursively search your directory for these three types of files,
+compile them, and load them into the engine.  How you organize these files
+into subdirectories is up to you -- the directory structure does not matter to
+Pyke.</p>
+<p>The <tt class="docutils literal"><span class="pre">.kfb</span></tt> and <tt class="docutils literal"><span class="pre">.kqb</span></tt> files are compiled into Python <a class="reference" href="http://docs.python.org/lib/module-pickle.html">pickles</a> with
+<tt class="docutils literal"><span class="pre">.fbc</span></tt> and <tt class="docutils literal"><span class="pre">.qbc</span></tt> suffixes.</p>
+<p>The <tt class="docutils literal"><span class="pre">.krb</span></tt> files are compiled into up to three <tt class="docutils literal"><span class="pre">.py</span></tt> source files.
+The names of these <tt class="docutils literal"><span class="pre">.py</span></tt> files are the same as the <tt class="docutils literal"><span class="pre">.krb</span></tt> file, but with
+different endings:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">_fc</span></tt> (if there are any <a class="reference" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> rules)</li>
+<li><tt class="docutils literal"><span class="pre">_bc</span></tt> (if there are any <a class="reference" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> rules) and</li>
+<li><tt class="docutils literal"><span class="pre">_plans</span></tt> (if any of the backward-chaining rules had a <a class="reference" href="../logic_programming/plans.html">plan</a>)</li>
+</ul>
+<p>These <tt class="docutils literal"><span class="pre">.py</span></tt> files are then automatically imported to define the rule base.
+This causes Python to compile them into <tt class="docutils literal"><span class="pre">.pyc</span></tt> or <tt class="docutils literal"><span class="pre">.pyo</span></tt> files.</p>
+<p>Subsequent runs of the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> constructor only recompile
+the Pyke source files that have changed since the last time they were compiled.</p>
+<p>The name of each knowledge base is the filename of the Pyke source file with
+the suffix removed.  This must be a legal Python identifier.</p>
+</div>
 <div class="section">
 <h2><a id="syntax-legend" name="syntax-legend">Syntax Legend</a></h2>
 <p>To describe this syntax, the following punctuation is used:</p>
@@ -175,7 +201,7 @@ write your end user questions.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Aug 21 2008.
+    Page last modified Fri, Aug 22 2008.
   </div>
 
 </body>

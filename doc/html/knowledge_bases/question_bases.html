@@ -71,10 +71,10 @@
                 <div class="document" id="question-bases">
 <h1 class="title">Question Bases</h1>
 <p>Question bases contain questions for end users.  These questions can be of
-various types (e.g., yes/no, multiple_choice).  The questions can be
+various types (e.g., yes/no, multiple_choice).  The questions may be
 parameterized, with the parameter values substituted into the question text
 when the question is asked.  In this case, different parameter values are
-treated as different questions.</p>
+treated as different question <a class="reference" href="../logic_programming/statements.html">statements</a>.</p>
 <p>The answers to all questions are automatically remembered so that if multiple
 rules ask the same question, the end user only sees it once.  These answers
 are erased when an <a class="reference" href="../using_pyke.html#setting-up-each-case">engine.reset</a> is done.</p>
@@ -84,21 +84,48 @@ the end user's answer.</p>
 <div class="section">
 <h2><a id="kqb-files" name="kqb-files">KQB files</a></h2>
 <p>Each question base is defined by a <a class="reference" href="../pyke_syntax/kqb_syntax.html">.kqb file</a>.  The name of each question
-base is the filename of the <a class="reference" href="../pyke_syntax/kqb_syntax.html">.kqb file</a> (with the <tt class="docutils literal"><span class="pre">.kqb</span></tt> suffix removed).
+base is the filename of the .kqb file (with the <tt class="docutils literal"><span class="pre">.kqb</span></tt> suffix removed).
 This must be a legal Python identifier.</p>
-<p>These <a class="reference" href="../pyke_syntax/kqb_syntax.html">.kqb files</a> are compiled and loaded automatically when you create your
+<p>These .kqb files are compiled and loaded automatically when you create your
 <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object.</p>
-<p>The <a class="reference" href="../pyke_syntax/kqb_syntax.html">.kqb file</a> contains all of the information about the question needed to
-ask the question, validate the answer and output the appropriate <em>review</em>
+<p>The .kqb file contains all of the information about the question needed to
+ask the question, validate the answer, and output the appropriate <em>review</em>
 text.</p>
-<p>The <a class="reference" href="../pyke_syntax/kqb_syntax.html">.kqb file</a> also specifies which parameter contains the answer.  All
+<p>The .kqb file also specifies which parameter contains the answer.  All
 parameters, except this one, must be bound to values before testing the
 question.</p>
 </div>
 <div class="section">
+<h2><a id="example" name="example">Example</a></h2>
+<p>In writing a program to diagnose car problems, you might have a
+<tt class="docutils literal"><span class="pre">user_question</span></tt> question base with questions like:</p>
+<pre class="literal-block">
+engine_starts($ans)
+    Can you start the engine?
+    ---
+    $ans = yn
+
+mileage($ans)
+    How many miles are on the car?
+    ---
+    $ans = integer([1-999999])
+    [199999-] ! Wow, that's a lot of miles!
+
+noise_from($location, $ans)
+    Do you hear a noise from $location?
+    ---
+    $ans = yn
+</pre>
+<p>These would look like the following <a class="reference" href="../logic_programming/statements.html">statements</a> within <a class="reference" href="../logic_programming/rules/index.html">rules</a>:</p>
+<pre class="literal-block">
+user_question.engine_starts(True)
+user_question.mileage($mileage)
+user_question.noise_from('under the hood', False)
+</pre>
+</div>
+<div class="section">
 <h2><a id="presenting-questions-to-your-end-users" name="presenting-questions-to-your-end-users">Presenting Questions to Your End Users</a></h2>
 <p>Pyke provides two modules to actually present a question to your end user:</p>
-<blockquote>
 <ul>
 <li><p class="first">ask_tty</p>
 <p>This presents the question on stdout and reads stdin for the answer.</p>
@@ -107,18 +134,15 @@ question.</p>
 <p>This presents the question in a dialog box for use with <a class="reference" href="http://www.wxpython.org/">wxpython</a>.</p>
 </li>
 </ul>
-</blockquote>
 <p>You may write your own module to present questions to end users.  Look at the
 modules provided by Pyke for guidance.</p>
 <p>To ask a question, Pyke looks for an <tt class="docutils literal"><span class="pre">ask_module</span></tt> attribute on:</p>
-<blockquote>
-<ul class="simple">
-<li>the question_base object</li>
-<li>then the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object</li>
-</ul>
-</blockquote>
+<ol class="arabic simple">
+<li>the question_base object, then</li>
+<li>the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object</li>
+</ol>
 <p>If the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object does not have an <tt class="docutils literal"><span class="pre">ask_module</span></tt>
-attribute, ask_tty is imported by default and stored there.</p>
+attribute, ask_tty is imported (by default) and stored there.</p>
 <p>Here's an example of setting this attribute:</p>
 <pre class="literal-block">
 from pyke import knowledge_engine
@@ -146,7 +170,7 @@ are compiled and loaded into your Python program.</p>
 </div>
 <div class="right-item"><a href="question_bases.html">Question Bases</a><p>Explanation of question bases and .kqb files.</p>
 </div>
-<div class="right-item"><a href="special.html">Special</a><p>Explanation of the special knowledge base.</p>
+<div class="right-item"><a href="special.html">Special</a><p>Explanation of the <tt class="docutils literal"><span class="pre">special</span></tt> knowledge base.</p>
 </div>
 
             </div>
@@ -164,7 +188,7 @@ are compiled and loaded into your Python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Thu, Aug 21 2008.
+    Page last modified Fri, Aug 22 2008.
   </div>
 
 </body>

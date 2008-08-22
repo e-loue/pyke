@@ -117,25 +117,28 @@ Syntactic Structure of Statements
 
 So we see that statements in Pyke are very structured.
 
-Pyke stores statements in statement repositories called `knowledge bases`_.
-You create knowledge bases to help you organize your statements.
-A *knowledge base* in Pyke roughly corresponds to a *module* in Python.
+Pyke catagorizes statements into `knowledge bases`_.  You create knowledge
+bases to help you organize your statements.  A *knowledge base* in Pyke
+roughly corresponds to a *module* in Python.
 
 .. note::
    Pyke does not allow knowledge bases to contain other knowledge bases, only
-   statements.  Thus, there is only one level of knowledge bases; and beneath
-   each knowledge base, one level of statements. 
+   information about statements.  Thus, there is only one level of knowledge
+   bases; and beneath each knowledge base, one level of statements. 
 
 So statements have three components:
 
 #. The name of a knowledge base.  For example, ``family``.
-#. The name of the relationship between the arguments.  For example, ``son_of``.
+#. The name of a *knowledge entity*.  For example, ``son_of``.
 #. The statement arguments.  These are just Python data.  Currently in Pyke,
    there is a push for these arguments to be immutable.
 
 The syntax for a statement looks like this::
 
     statement ::= IDENTIFIER '.' IDENTIFIER '(' {argument,} ')'
+
+Knowledge Base
+--------------
 
 The first IDENTIFIER is the name of the knowledge base.  In our
 family_relations example, this is ``family``.
@@ -146,17 +149,27 @@ family_relations example, this is ``family``.
    `rule base`_ for this `rule base category`_.  You'll learn more about this
    later.
 
-The second IDENTIFIER is the name of the relationship between the arguments.
-Pyke calls this a *knowledge entity* or tidbit of knowledge.
+Knowledge Entity
+----------------
+
+The second IDENTIFIER is the name of the *knowledge entity*.  This is the
+relationship between the arguments.  You could also think of this as the
+statement *type* or *topic*.  For example, ``son_of`` is a *type* of statement
+with three arguments: (son, father, mother).  Or the (son, father, mother)
+arguments are about the *topic* ``son_of``.
+
+Arguments
+---------
 
 The arguments can be any simple Python data value (numbers, strings, None,
 True or False) or tuples of these values (including nested tuples).
 Currently, statements are supposed to be immutable, so all of the arguments
-are immutable.
+are immutable.  The arguments relate to the topic, above, to make a complete
+statement.
 
 .. note::
-   Prolog_ allows arguments to be other statements.  But Pyke needs to
-   integrate into Python and Python has no concept of a "statement".  So we
+   Prolog_ allows arguments to be other statements (functors).  But Pyke needs
+   to integrate into Python and Python has no concept of a "statement".  So we
    just use tuples in Pyke because Python is very happy with tuples!
 
 So the complete statement for our family_relations example is::
