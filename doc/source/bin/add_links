@@ -31,8 +31,11 @@ do
         if [ "$file" != ./template.txt -a "$file" != ./PyCon2008-paper.txt -a \
              -e "$file" ]
         then
-            echo "$file"
+            #echo "$file"
+            mtime=`stat -c '%y' "$file"`
+            echo ".. ADD_LINKS MARKER" >> "$file"
             cat $TMP_FILE >> "$file"
+            touch -d "$mtime" "$file"
         fi
     done
     rm -f $TMP_FILE

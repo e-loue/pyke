@@ -26,14 +26,17 @@ do
         #echo "$filename"
         if true
         then
+            mtime=`stat -c '%y' "$filename"`
             ed -s "$filename" <<-'!'
 		H
-		$; # hush!
-		?^[ 	]*$?; # hush!
-		.,$d
+                /^\.\. ADD_LINKS MARKER$/,$d
 		w
 		q
 		!
+	    #	$; # hush!
+	    #	?^[ 	]*$?; # hush!
+	    #	.,$d
+            touch -d "$mtime" "$filename"
         fi
     fi
 done
