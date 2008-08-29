@@ -2,7 +2,7 @@
 
     >>> import test
 
-    >>> test.test()
+    >>> test.fc_test()
     egon has ('harald', 'claudia') as cousins
     ralf has ('harald', 'claudia') as cousins
     hilde has () as cousins

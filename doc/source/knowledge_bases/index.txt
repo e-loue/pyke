@@ -91,7 +91,7 @@ Each type of knowledge base represents a different way of doing this:
 - It is also possible to create other kinds of knowledge bases that determine
   the truth of statements in other ways.  Pyke provides two of these:
 
-  - The `question base`_ which justs poses the statement to an end user as a
+  - The `question base`_ which just poses the statement to an end user as a
     question.
   - The special_ knowledge base which has several special one-off knowledge
     entities to do different things like run a command_ on the underlying

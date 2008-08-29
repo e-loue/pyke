@@ -38,9 +38,9 @@ Compound Premise Syntax
 
 There are three kinds of compound premises.  These can be used in both
 `forward-chaining rules`_ and `backward-chaining rules`_, but the nested
-premises are restricted to the kind of premises legal for that kind of rule:
-fc_premise_ for `forward-chaining rules`_, and bc_premise_ for
-`backward-chaining rules`_.
+premises within each of these are restricted to the kind of premises legal
+for that kind of rule: fc_premise_ for forward-chaining rules, and
+bc_premise_ for backward-chaining rules.
 
 ::
 
@@ -53,7 +53,7 @@ First Premise
 
 The ``first`` premise is used to prevent backtracking_ from finding subsequent
 solutions to a set of premises.  The ``first`` premise always fails on
-backtracking_, but does do backtracking_ within the nested premises.
+backtracking (but does do backtracking *within* the nested premises).
 
 ::
 
@@ -63,16 +63,17 @@ backtracking_, but does do backtracking_ within the nested premises.
                                  {premise NL}
                               DEINDENT
 
-The ``!`` option can only be used in `backward-chaining rules`_.
+The ``!`` option can only be used in backward-chaining rules.
 
-The nested premises may include any type of plan_spec_ in `backward-chaining
-rules`_.
+When used within backward-chaining rules, the nested premises may include any
+type of plan_spec_.
 
 Forall Premise
 =====================
 
-The ``forall`` premise forces backtracking within the nested premises to
-process all of the possible solutions found.
+The ``forall`` premise forces backtracking_ within the nested premises to
+process all of the possible solutions found before the ``forall`` succeeds.
+After the first success, the ``forall`` fails on backtracking.
 
 ::
 
@@ -85,15 +86,16 @@ process all of the possible solutions found.
                             {premise NL}
                          DEINDENT ]
 
-The premises within the ``require`` clause are tried for each solution found.
-If these fail for any solution, then the entire ``forall`` premise fails.
-Thus, the ``forall`` only succeeds if the ``require`` premises are true for
-all solutions generated within the ``forall`` clause.
+The premises within the ``require`` clause are tried for each solution found
+to the ``forall`` clause.  If these fail for any solution, then the entire
+``forall`` premise fails.  Thus, the ``forall`` only succeeds if the
+``require`` premises are true for *all* solutions generated within the
+``forall`` clause.  Thus, the ``forall`` clause may be read: "Forall X,
+require Y".
 
-The ``forall`` always succeeds if the ``require`` clause is omitted.  This can
-be used in conjunction with python_statements_ to gather a list of results.
-
-The ``forall`` premise always fails on backtracking.
+The ``forall`` always succeeds if the ``require`` clause is omitted (even if
+no solutions are found to the nested premises).  This can be used in
+conjunction with python_statements_ to gather a list of results.
 
 See `Notes on Forall and Notany Premises`_ and Examples_, below.
 
@@ -101,7 +103,7 @@ Notany Premise
 =====================
 
 The ``notany`` premise only succeeds if no solution can be found to the nested
-premises.
+premises.  ``Notany`` always fails on backtracking_.
 
 ::
 
@@ -122,18 +124,24 @@ Notes on Forall and Notany Premises
    values produced by prior premises; but to generate values for subsequent
    premises the values must be captured in Python variables within the
    ``forall`` or ``notany`` clause before the `pattern variables` are unbound
-   (see `Computing Sets of Values`_, below).
+   (see `Computing a Value for Each Generated Value`_, below).
 
-#. When used in `backward-chaining rules`_, the only plan_spec_ allowed in
+#. When used within `backward-chaining rules`_, the only plan_spec_ allowed in
    nested premises is the ``as`` clause.
 
 Examples
 =============
 
+- `Finding the First Solution From a Set of Values`_
+- `Testing Every Generated Value`_
+- `Computing a Value for Each Generated Value`_
+- `Iterating on Tuples`_
+- `Computing Values for All Generated Values that Pass a Test`_
+
 These examples use the following subgoals:
 
-* ``generate_x($x)`` generates multiple solutions (as ``$x``) that will looped
-  over
+* ``generate_x($x)`` generates multiple solutions (as ``$x``) that will be
+  looped over
 * ``test_x($x)`` does some test on ``$x``
 * ``compute_y($x, $y)`` takes ``$x`` as input and computes a ``$y`` value
 
@@ -156,10 +164,10 @@ And::
 
 The difference is that the first example will find other ``$x`` values that
 pass ``test_x($x)`` on backtracking_, while the second example will stop after
-the first value is found and fail on backtracking_.
+the first value is found and fail on backtracking.
 
-Testing Sets of Values
--------------------------
+Testing Every Generated Value
+-----------------------------
 
 There are two general cases.  You might want to verify that ``test_x($x)``
 *succeeds* for all generated ``$x`` values::
@@ -170,13 +178,14 @@ There are two general cases.  You might want to verify that ``test_x($x)``
         test_x($x)
 
 .. Note::
+
    While ``$x`` is set and used within the ``forall`` premise to transfer
    values from the ``generate_x($x)`` goal to the ``test_x($x)`` goal, it is
    no longer set afterwards and can not be referenced in the premises
    following the ``forall`` premise.
 
 The second case that you might want to verify is that ``test_x($x)`` *fails*
-for all generated ``$x`` values::
+for every generated ``$x`` value::
 
     forall
         generate_x($x)
@@ -190,8 +199,8 @@ Or, more simply::
         generate_x($x)
         test_x($x)
 
-Computing Sets of Values
-------------------------------
+Computing a Value for Each Generated Value
+------------------------------------------
 
 If you want a tuple of computed ``$y`` values for all of the ``$x`` values::
 
@@ -203,9 +212,10 @@ If you want a tuple of computed ``$y`` values for all of the ``$x`` values::
         python y_list.append($y)
     $y_list = tuple(y_list)
 
-This will only succeed if ``compute_y`` succeeds for every ``$x`` value.  If
-you want to skip over ``$x`` values that ``compute_y`` fails on, you might
-try::
+This will only succeed if ``compute_y`` succeeds for every ``$x`` value.
+
+If you want to skip over ``$x`` values that ``compute_y`` fails on, you
+*might* try::
 
     python y_list = []
     forall
@@ -214,10 +224,10 @@ try::
         python y_list.append($y)
     $y_list = tuple(y_list)
 
-But note that if ``compute_y`` might compute multiple solutions on
-backtracking_, you would end up including all of these solutions for each
-``$x`` in your ``$y_list``.  To only get the first computed value for each
-``$x``::
+But note that if ``compute_y`` computes multiple solutions for a single
+``$x`` value on backtracking_, you would end up including all of these
+solutions in your ``$y_list``.  To only get the first computed value for each
+``$x`` value::
 
     python y_list = []
     forall
@@ -227,18 +237,26 @@ backtracking_, you would end up including all of these solutions for each
             python y_list.append($y)
     $y_list = tuple(y_list)
 
+Iterating on Tuples
+-------------------
+
 A simple common case of ``generate_x`` is when you are computing values for
 each element of a tuple::
 
     python y_list = []
     forall
         $x in $x_list
-        first
-            compute_x($x, $y)
-            python y_list.append($y)
+    require
+        compute_x($x, $y)
+        python y_list.append($y)
     $y_list = tuple(y_list)
 
-This can also be done by creating a new subgoal that recurses on ``$x_list``::
+This can also be done by creating a new subgoal that recurses on ``$x_list``.
+If you call the new subgoal ``compute_list``, you would use it like this::
+
+    compute_list($x_list, $y_list)
+
+And define it like this::
 
     compute_list_done
         use compute_list((), ())
@@ -249,17 +267,23 @@ This can also be done by creating a new subgoal that recurses on ``$x_list``::
             compute_y($x, $y)
             compute_list($x_rest, $y_rest)
 
-Note that there is an important difference between these two examples if
-``compute_y`` may find alternate ``$y`` values for any given ``$x`` value on
-backtracking_.
+.. important::
 
-The first example will only generate one ``$y_list``.  If that ``$y_list``
-doesn't work in subsequent premises, the ``forall`` fails on backtracking_,
-so no solution will be found.
+   Note that there is an important difference between these two examples if
+   ``compute_y`` may find alternate ``$y`` values for any given ``$x`` value
+   on backtracking_.
 
-The second example will not fail in this situation, but will produce all
-possible combinations of solutions to ``computer_y`` for each ``$x`` on
-backtracking_ until a resulting ``$y_list`` satisfies the subsequent premises.
+   The first example will only generate one ``$y_list``.  If that ``$y_list``
+   doesn't work for subsequent premises, the ``forall`` fails on backtracking,
+   so no overall solution will be found.
+
+   The second example will not fail in this situation, but will produce all
+   possible combinations of solutions to ``compute_y`` for each ``$x`` on
+   backtracking until a resulting ``$y_list`` satisfies the subsequent
+   premises so that an overall solution *is* found.
+
+Computing Values for All Generated Values that Pass a Test
+----------------------------------------------------------
 
 Finally, if you want to gather only the computed ``$y`` values for ``$x``
 values that pass ``test_x($x)``::
@@ -272,4 +296,5 @@ values that pass ``test_x($x)``::
         compute_x($x, $y)
         python y_list.append($y)
     $y_list = tuple(y_list)
+
 

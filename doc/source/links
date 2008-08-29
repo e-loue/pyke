@@ -4,6 +4,7 @@
 .. _activating: activate_
 .. _activation: activate_
 .. _active: knowledge_bases/rule_bases.html#rule-base-activation
+.. _anonymous variable: logic_programming/pattern_matching/pattern_variables.html#anonymous-pattern-variables
 .. _ask_tty: knowledge_bases/question_bases.html#presenting-questions-to-your-end-users
 .. _assert: using_pyke.html#setting-up-each-case
 .. _asserted: assert_
@@ -32,6 +33,7 @@
 .. _engine.reset: using_pyke.html#setting-up-each-case
 .. _Examples: examples.html
 .. _extending: pyke_syntax/krb_syntax/index.html#extending-clause
+.. _extending clause: extending_
 .. _fact base: knowledge_bases/fact_bases.html
 .. _fact bases: `fact base`_
 .. _fact: knowledge_bases/fact_bases.html#facts
@@ -39,9 +41,12 @@
 .. _family_relations: examples.html#family-relations
 .. _fc_premise: pyke_syntax/krb_syntax/fc_rule.html#foreach-clause
 .. _fc_rule: pyke_syntax/krb_syntax/fc_rule.html
+.. _forall: pyke_syntax/krb_syntax/compound_premise.html#forall-premise
+.. _forall premise: forall_
 .. _forward-chaining: logic_programming/rules/forward_chaining.html
 .. _forward-chaining rule: forward-chaining_
 .. _forward-chaining rules: `forward-chaining rule`_
+.. _fully bound: logic_programming/pattern_matching/matching_patterns.html#binding-to-a-tuple-pattern
 .. _functools: http://docs.python.org/lib/module-functools.html
 .. _functools.partial: functools_
 .. _goal: logic_programming/rules/backward_chaining.html
@@ -68,8 +73,11 @@
 .. _loading: `knowledge_engine.engine`_
 .. _Logic Programming: http://en.wikipedia.org/wiki/Logic_programming
 .. _logic programming in pyke: logic_programming/index.html
+.. _matched: `pattern matches`_
 .. _matching two patterns together: logic_programming/pattern_matching/matching_patterns.html
 .. _MySQL: http://www.mysql.com/
+.. _notany: pyke_syntax/krb_syntax/compound_premise.html#notany-premise
+.. _notany premise: notany_
 .. _pathological question: logic_programming/pattern_matching/matching_patterns.html#pathological-question
 .. _pattern: logic_programming/pattern_matching/index.html
 .. _pattern matches: logic_programming/pattern_matching/index.html
@@ -128,6 +136,7 @@
 .. _taking clause: krb_syntax/bc_rule.html#taking-clause
 .. _traceback: http://docs.python.org/lib/module-traceback.html
 .. _Tuple patterns: logic_programming/pattern_matching/tuple_patterns.html
+.. _TurboGears 2: http://turbogears.org/2.0/
 .. _variables: `pattern variable`_
 .. _web_framework: examples.html#web-framework
 .. _when clause: pyke_syntax/krb_syntax/bc_rule.html#when-clause

@@ -37,7 +37,7 @@ Tuple Patterns
 ================
 
 Tuple patterns only match tuples.  They are written as simply a comma
-seperated list of patterns within parenthesis::
+separated list of patterns within parenthesis::
 
     (1, $x, "buckle my shoe")
 

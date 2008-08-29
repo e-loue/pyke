@@ -474,6 +474,7 @@ div.warning p.admonition-title {
   color: #cc0000;
   /* font-family was misspelled here... */
   font-family: arial, helvetica, geneva, sans-serif;
+  font-size: 120%;
   text-align: center;
   background-color: #999999;
   display: block;

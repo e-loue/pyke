@@ -1,0 +1,49 @@
+# towers2.krb
+
+# This is the same solution as towers_of_hanoi.krb, but with one 'move' rule
+# rather than 6 rules.
+
+solve
+    use solve($n, $moves)
+    when
+        $disks = tuple(range($n))
+        solve2(($disks, (), ()), ((), (), $disks), 1, (($disks, (), ())),
+               $moves)
+
+solve2_done
+    use solve2(($a, $b, $c), ($a, $b, $c), $_last_move, $_frozen_boards, ())
+
+solve2_not_done
+    use solve2(($a1, $b1, $c1), ($a2, $b2, $c2), $last_move, $frozen_boards,
+               (($from, $to), *$moves))
+    when
+        move(($a1, $b1, $c1), ($a, $b, $c), ($from, $to))
+        check $from != $last_move
+        $freeze = ($a, $b, $c)
+        check $freeze not in $frozen_boards
+        solve2(($a, $b, $c), ($a2, $b2, $c2), $to, ($freeze, *$frozen_boards),
+               $moves)
+
+move
+    use move($old_board, $new_board, ($from, $to))
+    when
+        $from in range(3)
+        check len($old_board[$from]) > 0
+        $to in range(3)
+        check $from != $to
+        $top = $old_board[$from][0]
+        $to_pile = $old_board[$to]
+        ok($top, $to_pile)
+        $new_board = tuple((pile[1:] if i == $from
+                                     else ($top,) + pile if i == $to
+                                                         else pile)
+                           for i, pile in enumerate($old_board))
+
+ok_empty
+    use ok($_disc, ())
+
+ok_smaller
+    use ok($disc, ($top, *$_rest))
+    when
+        check $disc < $top
+

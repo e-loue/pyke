@@ -1,0 +1,12 @@
+      Date & Time,  Trans,  Elap Time,  Data Trans,  Resp Time,  Trans Rate,  Throughput,  Concurrent,    OKAY,   Failed
+2008-08-06 19:09:00,    734,       9.68,           0,       0.03,       75.83,        0.00,        1.99,     734,       0
+2008-08-06 19:10:46,   7570,       9.57,           3,       0.00,      791.01,        0.31,        1.98,    7570,       0
+2008-08-06 19:13:29,  13079,      10.20,           6,       0.00,     1282.25,        0.59,        1.97,   13079,       0
+
+
+These tests were run on a laptop computer with 2 cores and running MySQL and
+siege on the same computer as the web server.
+
+The first line is TurboGears 2.0 running single threaded.
+The second line is Pyke running single threaded (simple_server).
+The third line is Pyke running preforked with 2 processes (preforked_server).

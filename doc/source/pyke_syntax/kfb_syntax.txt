@@ -61,3 +61,28 @@ Syntax for KFB File
            | '(' [{data,}] ')'
 
 
+Example
+=======
+
+This is taken from the family_relations_ example::
+
+    # family.kfb
+
+    son_of(bruce, thomas, norma)
+    son_of(fred_a, thomas, norma)
+    son_of(tim, thomas, norma)
+    daughter_of(vicki, thomas, norma)
+    daughter_of(jill, thomas, norma)
+
+    daughter_of(nanette, arthur2, kathleen)
+    son_of(arthur3, arthur2, kathleen)
+    daughter_of(sue, arthur2, kathleen)
+    son_of(ed, arthur2, kathleen)
+    daughter_of(marilyn, arthur2, kathleen)
+    son_of(david_b, arthur2, kathleen)
+    daughter_of(m_helen, arthur2, kathleen)
+
+    son_of(m_thomas, bruce, marilyn)
+    son_of(david_a, bruce, marilyn)
+
+

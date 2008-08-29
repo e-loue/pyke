@@ -1,0 +1,13 @@
+# These are all of the legal urls:
+http://localhost:8080/movie/1
+http://localhost:8080/movie/2
+http://localhost:8080/movie/3
+http://localhost:8080/movie/4
+http://localhost:8080/movie/5
+http://localhost:8080/movie/6
+http://localhost:8080/movie2/1
+http://localhost:8080/movie2/2
+http://localhost:8080/movie2/3
+http://localhost:8080/movie2/4
+http://localhost:8080/movie2/5
+http://localhost:8080/movie2/6

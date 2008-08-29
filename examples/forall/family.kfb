@@ -1,0 +1,10 @@
+# family.kfb
+
+child_of(arthur2, arthur1, bertha_o)
+child_of(helen, arthur1, bertha_o)
+child_of(roberta, arthur1, bertha_o)
+
+child_of(gladis, john, bertha_c)
+child_of(sarah_r, john, bertha_c)
+child_of(alice, marshall1, bertha_c)
+child_of(edmond, marshall1, bertha_c)

@@ -72,7 +72,7 @@
 <h1 class="title">Question Bases</h1>
 <p>Question bases contain questions for end users.  These questions can be of
 various types (e.g., yes/no, multiple_choice).  The questions may be
-parameterized, with the parameter values substituted into the question text
+parametrized, with the parameter values substituted into the question text
 when the question is asked.  In this case, different parameter values are
 treated as different question <a class="reference" href="../logic_programming/statements.html">statements</a>.</p>
 <p>The answers to all questions are automatically remembered so that if multiple
@@ -108,8 +108,8 @@ engine_starts($ans)
 mileage($ans)
     How many miles are on the car?
     ---
-    $ans = integer([1-999999])
-    [199999-] ! Wow, that's a lot of miles!
+    $ans = integer(1-999999)
+    200000- ! Wow, that's a lot of miles!
 
 noise_from($location, $ans)
     Do you hear a noise from $location?
@@ -189,7 +189,7 @@ are compiled and loaded into your Python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 22 2008.
+    Page last modified Fri, Aug 29 2008.
   </div>
 
 </body>

@@ -164,7 +164,7 @@ statement matches all four ``son_of`` facts, so the rule succeeds four times;
 but with different bindings for the ``$son`` and ``$father`` pattern variables.
 This causes different facts to be asserted when the same ``assert`` clause (on
 line 5) is run four times; because each time line 5 is run, the values for
-``$son`` and ``$father`` are transfered from the statement on line 3 to the
+``$son`` and ``$father`` are transferred from the statement on line 3 to the
 statement on line 5.
 
 When the rule fires matching line 3 to::

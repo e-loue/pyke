@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007 Bruce Frederiksen
+.. Copyright © 2007-2008 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -32,12 +32,12 @@ restindex
     initialheaderlevel: 2
 /restindex
 
-=============================================
+=====================
 Python Premise Syntax
-=============================================
+=====================
 
 Python_premise
-================
+==============
 
 ::
 
@@ -50,25 +50,23 @@ Each of these clauses results in a Python expression being executed.  Their
 meaning is as follows:
 
 pattern_ '=' python_exp
-    *python_exp* is evaluated and the result matched
-    with pattern_.  If the result does not match,
-    the clause fails and backtracking_ is initiated.
+    *python_exp* is evaluated and the result matched_ with pattern_.
+    If the result does not match, the clause fails.
+
     The clause always fails on backtracking_, meaning that it only produces
     a single result (contrasted with ``in``).
 pattern_ 'in' python_exp
-    *python_exp* is evaluated and the first element
-    from the resulting *iterable* is matched
-    with pattern_.  On backtracking_, successive
-    elements from the result are matched with
+    *python_exp* is evaluated to produce a Python *iterable* and the first
+    element from the resulting iterable is matched_ with pattern_.  On
+    backtracking_, successive elements from the iterable are matched with
     pattern_.  When the result is exhausted, the clause fails.
 
     This has the effect of offering each element of the result, one at a
-    time, to the subsequent premise clauses.  Each element is thus acted on
+    time, to the subsequent premise clauses.  Each element is thus acted upon
     individually.
 'check' python_exp
-    *python_exp* is evaluated.  If the result is
-    Python "true" the clause succeeds, otherwise
-    it fails.  The clause always fails on backtracking_.
+    *python_exp* is evaluated.  If the result is Python "true" the clause
+    succeeds, otherwise it fails.  The clause always fails on backtracking_.
 
 
 Python_statements
@@ -82,50 +80,52 @@ Python_statements
                           DEINDENT
 
 This clause allows the inclusion of arbitrary Python statements in your
-rules_.  This premise always succeeds; and fails on backtracking.
+rules_.  This premise always succeeds; and then fails on backtracking_.
 
-.. Tip::
-   It is important to always keep in mind the difference between `pattern
-   variables`_ and Python variables.  `Pattern variables`_ are always
-   indicated with a ``$`` and are only bound to a value during inferencing.
-   Thus, a ``python_statement`` may not set a `pattern variable`_; you must
-   use the special `pattern variable`_ assignment::
+.. caution::
 
-        <pattern> = <some python expression>
+   Always keep in mind the difference between `pattern variables`_ and
+   *Python variables*.  Pattern variables are always indicated with a ``$``
+   and are only bound to a value during inferencing.
+
+   #. Thus, a ``python_statement`` may not set a pattern variable.  Storing a
+      value computed by Python into a pattern variable can only be done using
+      the python_premise::
+
+          <pattern> = <some python expression>
    
-   Also, when a `pattern variable`_ is used within a Python expression or
-   statement, it must be bound to a value that does not contain any unbound
-   `pattern variables`_.
+   #. When a pattern variable is used within a Python expression or statement,
+      it must be `fully bound`_.
 
-   Python variables are not visible to the inference engine.  They are local
-   variables that are also not visible to Python code in other rules_ or other
-   invocations of the same rule_.
+   #. Python variables are not visible to the inference engine.  They are local
+      variables that are also not visible to Python code in other rules_ or
+      other invocations of the same rule.
 
-   Finally, Python variables in the `when clause`_ of a `backward-chaining
-   rule`_ are not visible to the Python code in the `with clause`_ of the same
-   rule_.  (These end up in two different Python functions after the `.krb
-   file`_ is compiled).  So this won't work::
+   #. Finally, Python variables in the `when clause`_ of a `backward-chaining
+      rule`_ are not visible to the Python code in the `with clause`_ of the
+      same rule.  (These end up in two different Python functions after the
+      `.krb file`_ is compiled).  So this won't work::
 
-        some_bc_rule
-            use some_goal(...)
-            when
-                ...
-                python x_list = <some python expression>
-                ...
-            with
-                for x in x_list: process(x)
+          some_bc_rule
+              use some_goal(...)
+              when
+                  ...
+                  python x_list = <some python expression>
+                  ...
+              with
+                  for x in x_list: process(x)
 
-   In this case, assign the value of the Python variable to a `pattern
-   variable`_ in the `when clause`_ and then use that `pattern variable`_ in
-   the `with clause`_::
+      In this case, assign the value of the Python variable to a pattern
+      variable in the when clause and then use that pattern variable in the
+      with clause::
 
-        some_bc_rule
-            use some_goal(...)
-            when
-                ...
-                python x_list = <some python expression>
-                ...
-                $x_list = tuple(x_list)
-            with
-                for x in $x_list: process(x)
+          some_bc_rule
+              use some_goal(...)
+              when
+                  ...
+                  python x_list = <some python expression>
+                  ...
+                  $x_list = tuple(x_list)
+              with
+                  for x in $x_list: process(x)
 

@@ -2,7 +2,7 @@
 
     >>> import test
 
-    >>> test.test()
+    >>> test.fc_test()
     egon has no uncle
     ralf has no uncle
     anton has no uncle

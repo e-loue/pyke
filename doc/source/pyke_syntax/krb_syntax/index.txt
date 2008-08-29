@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007 Bruce Frederiksen
+.. Copyright © 2007-2008 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -95,13 +95,13 @@ from this inheritance.
 Forward-Chaining Section
 --------------------------
 
-If the krb file contains any forward-chaining_ rules_, a Python source file
+If the krb file contains any forward-chaining_ rules, a Python source file
 will be created named <rb_name>_fc.py, where <rb_name> is the `rule base`_
 name.
 
-The syntax of a forward-chaining_ rule_ (fc_rule_) is defined elsewhere__.
+The syntax of a forward-chaining rule (fc_rule_) is defined here__.
 
-The ``fc_extras`` can only be used if there are forward-chaining_ rules_.
+The ``fc_extras`` may only be used if there are forward-chaining rules.
 This allows you to add other Python code (for example, ``import`` statements)
 to the generated Python source file.
 
@@ -110,20 +110,20 @@ to the generated Python source file.
 Backward-Chaining Section
 --------------------------
 
-If the krb file contains any backward-chaining_ rules_, a Python source file
+If the krb file contains any backward-chaining_ rules, a Python source file
 will be created named <rb_name>_bc.py, where <rb_name> is the `rule base`_
 name.
 
-The syntax of a backward-chaining_ rule_ (bc_rule_) is defined elsewhere__.
+The syntax of a backward-chaining rule (bc_rule_) is defined here__.
 
-The ``bc_extras`` can only be used if there are backward-chaining_ rules_.
+The ``bc_extras`` can only be used if there are backward-chaining rules.
 This allows you to add other Python code (for example, ``import`` statements)
 to the generated Python source file.
 
-In addition, if any of the backward-chaining_ rules_ have plan_ code (for
-example, a ``with`` clause or subgoals in the ``when`` clause that produce
-plans_), a Python source file will be created name <rb_name>_plans.py, where
-<rb_name> is the `rule base`_ name.
+In addition, if any of the backward-chaining rules have plan_ code (a
+`with clause`_ or any subgoals in the `when clause`_ with a plan_spec_),
+a Python source file will be created named <rb_name>_plans.py,
+where <rb_name> is the `rule base` name.
 
 You use the ``plan_extras`` to include arbitrary Python code in this plans
 file.

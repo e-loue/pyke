@@ -1,0 +1,72 @@
+# towers_of_hanoi.krb
+
+# Solves the towers of hanoi puzzle through brute force but with the
+# restrictions of never repeating a board position and never moving the
+# same disc twice in a row.
+
+# 1 disc has 1 solution
+# 2 discs has 2 solutions
+# 3 discs has 12 solutions
+# 4 discs has 1872 solutions
+#
+# Sure enough, if the number of solutions for n discs is N, the number of
+# solutions for n+1 discs is: N**3 + N**2.
+
+solve
+    use solve($n, $moves)
+    when
+        $disks = tuple(range($n))
+        solve2($disks, (), (), (), (), $disks, 1, (($disks, (), ())), $moves)
+
+solve2_done
+    use solve2($a, $b, $c, $a, $b, $c, $_last_move, $_frozen_boards, ())
+
+solve2_not_done
+    use solve2($a1, $b1, $c1, $a2, $b2, $c2, $last_move, $frozen_boards,
+               (($from, $to), *$moves))
+    when
+        move($a1, $b1, $c1, $a, $b, $c, ($from, $to))
+        check $from != $last_move
+        $freeze = ($a, $b, $c)
+        check $freeze not in $frozen_boards
+        solve2($a, $b, $c, $a2, $b2, $c2, $to, ($freeze, *$frozen_boards),
+               $moves)
+
+move_01
+    use move(($a1, *$as), $b, $c,   $as, ($a1, *$b), $c,   (0, 1))
+    when
+        ok($a1, $b)
+
+move_02
+    use move(($a1, *$as), $b, $c,   $as, $b, ($a1, *$c),   (0, 2))
+    when
+        ok($a1, $c)
+
+move_10
+    use move($a, ($b1, *$bs), $c,   ($b1, *$a), $bs, $c,   (1, 0))
+    when
+        ok($b1, $a)
+
+move_12
+    use move($a, ($b1, *$bs), $c,   $a, $bs, ($b1, *$c),   (1, 2))
+    when
+        ok($b1, $c)
+
+move_20
+    use move($a, $b, ($c1, *$cs),   ($c1, *$a), $b, $cs,   (2, 0))
+    when
+        ok($c1, $a)
+
+move_21
+    use move($a, $b, ($c1, *$cs),   $a, ($c1, *$b), $cs,   (2, 1))
+    when
+        ok($c1, $b)
+
+ok_empty
+    use ok($_disc, ())
+
+ok_smaller
+    use ok($disc, ($top, *$_rest))
+    when
+        check $disc < $top
+

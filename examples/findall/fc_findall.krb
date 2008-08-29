@@ -1,4 +1,3 @@
-#
 # fc_findall.krb
 
 collect_siblings
@@ -32,7 +31,6 @@ collect_cousins
         
         forall
             family.siblings_of($mother, $mother_siblings)
-
             forall
                 $mother_sibling in $mother_siblings
                 family.child_of($cousin, $_, $mother_sibling)

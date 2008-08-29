@@ -71,7 +71,7 @@
 <dd><p class="first">The Pyke inference engine is offered
 as a class so that you can instantiate multiple copies of it with different
 rule bases to accomplish different tasks.
-Once you have a knowledge_engine.engine object; generally, all of
+Once you have a <tt class="docutils literal"><span class="pre">knowledge_engine.engine</span></tt> object; generally, all of
 the functions that you need are provided directly by this object:</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
@@ -83,22 +83,22 @@ for Pyke source files (<a class="reference" href="pyke_syntax/kfb_syntax.html">.
 Each source file that it finds is compiled, if out of date, and then
 imported (depending on <tt class="docutils literal"><span class="pre">load_fc</span></tt>, <tt class="docutils literal"><span class="pre">load_bc</span></tt>, <tt class="docutils literal"><span class="pre">load_fb</span></tt> and
 <tt class="docutils literal"><span class="pre">load_qb</span></tt>).  This causes all of the <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a> to be loaded and made
-ready to <em>activate</em> (see below).</p>
+ready to <a class="reference" href="using_pyke.html#setting-up-each-case">activate</a>.</p>
 <p>All generated Python files are placed in a mirror directory structure
-under the <em>gen_root_location</em> directory in <em>gen_root_pkg</em>.  Thus, by
-default, this mirrored directory structure would be rooted under the
+under the <tt class="docutils literal"><span class="pre">gen_root_location</span></tt> directory in <tt class="docutils literal"><span class="pre">gen_root_pkg</span></tt>.  Thus, by
+default, this mirrored directory structure would be rooted in the
 &quot;./compiled_krb&quot; directory.  You probably want to add <tt class="docutils literal"><span class="pre">compiled_krb</span></tt> to
-your subversion <tt class="docutils literal"><span class="pre">global-ignores</span></tt> option.  <em>Gen_root_pkg</em>,
-<em>gen_root_location</em> and the mirrored directory structure will be created
-automatically if any of them do not already exist.</p>
+your subversion <tt class="docutils literal"><span class="pre">global-ignores</span></tt> option.  <tt class="docutils literal"><span class="pre">Gen_root_pkg</span></tt>,
+<tt class="docutils literal"><span class="pre">gen_root_location</span></tt> and the mirrored directory structure will be
+created automatically if any of them do not already exist.</p>
 <p class="last">If you change some of your Pyke source files, you can create a new engine
 object to compile and reload the generated Python modules without
 restarting your program.  But note that you'll need to rerun your
 <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> calls.</p>
 </dd>
 <dt><em>some_engine</em>.add_universal_fact(kb_name, fact_name, arguments)</dt>
-<dd><p class="first">The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference" href="knowledge_bases/fact_bases.html#facts">fact</a>.  These <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a>
-are never deleted and apply to all <em>cases</em>.</p>
+<dd><p class="first">The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference" href="knowledge_bases/fact_bases.html#facts">fact</a>.  These
+<a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> are never deleted and apply to all <em>cases</em>.</p>
 <p>Alternatively, you can place universal facts in a <a class="reference" href="pyke_syntax/kfb_syntax.html">.kfb file</a> so that
 they are loaded automatically.</p>
 <pre class="doctest-block">
@@ -115,7 +115,7 @@ they are loaded automatically.</p>
 son_of('bruce', 'thomas')
 son_of('david', 'bruce')
 </pre>
-<p class="last">These facts are accessed as <em>kb_name.fact_name(arguments)</em> within the
+<p class="last">These facts are accessed as <tt class="docutils literal"><span class="pre">kb_name.fact_name(arguments)</span></tt> within the
 <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a>.</p>
 </dd>
 </dl>
@@ -124,7 +124,7 @@ son_of('david', 'bruce')
 <h2><a id="setting-up-each-case" name="setting-up-each-case">Setting up Each Case</a></h2>
 <p>Pyke is designed to be run multiple times for multiple <em>cases</em>.  In
 general each case has its own set of starting <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> and may use different
-<a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>, depending on the situation.</p>
+<a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>, depending upon the situation.</p>
 <p>Three functions initialize each case:</p>
 <dl class="docutils">
 <dt><em>some_engine</em>.reset()</dt>
@@ -150,9 +150,9 @@ son_of('fred', 'thomas')
 son_of('bruce', 'thomas')
 son_of('david', 'bruce')
 </pre>
-<p>There is no difference within the .krb files of how universal facts
+<p>There is no difference within the <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a> of how universal facts
 verses specific facts are used.  The only difference between the two
-types of facts is that the specific facts are deleted when a reset is
+types of facts is that the specific facts are deleted when a <tt class="docutils literal"><span class="pre">reset</span></tt> is
 done.</p>
 <pre class="last doctest-block">
 &gt;&gt;&gt; my_engine.reset()
@@ -179,21 +179,23 @@ arguments.</p>
 functions are provided in <a class="reference" href="#other-functions">Other Functions</a>, below.</p>
 <dl class="docutils">
 <dt><em>some_engine</em>.prove_1(kb_name, entity_name, fixed_args, num_returns)</dt>
-<dd><p class="first"><tt class="docutils literal"><span class="pre">Kb_name</span></tt> may name either a <a class="reference" href="knowledge_bases/fact_bases.html">fact base</a> or an activated
-<a class="reference" href="knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>.  The <tt class="docutils literal"><span class="pre">entity_name</span></tt> is the fact_name for fact_bases,
-or the name of the <a class="reference" href="logic_programming/rules/backward_chaining.html">backward chaining</a> goal for <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>.
-The <tt class="docutils literal"><span class="pre">fixed_args</span></tt> are a tuple of Python values.  These form the first
-group of arguments to the proof.  <tt class="docutils literal"><span class="pre">Num_returns</span></tt> specifies the number of
-additional <a class="reference" href="logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> to be appended to the arguments for the
-proof.  The bindings of these pattern variables will be returned as the
-answer for the proof.  For example:</p>
+<dd><p class="first"><tt class="docutils literal"><span class="pre">Kb_name</span></tt> may name either a <a class="reference" href="knowledge_bases/fact_bases.html">fact base</a>, <a class="reference" href="knowledge_bases/question_bases.html">question base</a> or
+<a class="reference" href="knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>.</p>
+<p>The <tt class="docutils literal"><span class="pre">entity_name</span></tt> is the fact name for fact bases, question name for
+question bases or the name of the <a class="reference" href="logic_programming/rules/backward_chaining.html">backward chaining</a> goal for
+<a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>.</p>
+<p>The <tt class="docutils literal"><span class="pre">fixed_args</span></tt> are a tuple of Python values.  These form the first
+set of arguments to the proof.  <tt class="docutils literal"><span class="pre">Num_returns</span></tt> specifies the number of
+additional <a class="reference" href="logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> to be appended to these arguments for the
+proof.  The bindings of these pattern variables will be returned as a
+tuple in the answer for the proof.  For example:</p>
 <blockquote>
 <em>some_engine</em>.prove_1(<em>some_rule_base_category</em>, <em>some_goal</em>, (1, 2, 3), 2)</blockquote>
 <p>Proves the goal:</p>
 <blockquote>
 <em>some_rule_base_category.some_goal</em> (1, 2, 3, $ans_0, $ans_1)</blockquote>
-<p>And will return the bindings for <tt class="docutils literal"><span class="pre">$ans_0</span></tt> and <tt class="docutils literal"><span class="pre">$ans_1</span></tt> produced by
-the proof.</p>
+<p>And will return the bindings produced by the proof as (<tt class="docutils literal"><span class="pre">$ans_0</span></tt>,
+<tt class="docutils literal"><span class="pre">$ans_1</span></tt>).</p>
 <p class="last">Returns the first proof found as a 2-tuple: a tuple of the bindings for
 the <tt class="docutils literal"><span class="pre">num_returns</span></tt> pattern variables, and a <a class="reference" href="logic_programming/plans.html">plan</a>.  The <a class="reference" href="logic_programming/plans.html">plan</a> is <tt class="docutils literal"><span class="pre">None</span></tt>
 if no <a class="reference" href="logic_programming/plans.html">plan</a> was generated; otherwise, it is a Python function as
@@ -207,17 +209,18 @@ described <a class="reference" href="#running-and-pickling-plans">below</a>.</p>
 </pre>
 <p>Raises <tt class="docutils literal"><span class="pre">pyke.knowledge_engine.CanNotProve</span></tt> if no proof is found.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.prove_1('bc_example', 'bogus', ('thomas', 'david'), 1)
+&gt;&gt;&gt; my_engine.prove_1('bc_example', 'father_son', ('thomas', 'bogus'), 1)
 Traceback (most recent call last):
     ...
-CanNotProve: Can not prove bc_example.bogus(thomas, david, $ans_0)
+CanNotProve: Can not prove bc_example.father_son(thomas, bogus, $ans_0)
 </pre>
 </blockquote>
 <dl class="docutils">
 <dt><em>some_engine</em>.prove_n(kb_name, entity_name, fixed_args, num_returns)</dt>
-<dd><p class="first">This is a generator yielding 2-tuples, a tuple whose length == num_returns
-and a <a class="reference" href="logic_programming/plans.html">plan</a>, for each possible proof.  Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>, the <a class="reference" href="logic_programming/plans.html">plan</a> is None
-if no <a class="reference" href="logic_programming/plans.html">plan</a> was generated.</p>
+<dd><p class="first">This is a generator yielding 2-tuples, a tuple whose length ==
+<tt class="docutils literal"><span class="pre">num_returns</span></tt> and a <a class="reference" href="logic_programming/plans.html">plan</a>, for each possible proof.  Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>,
+the <a class="reference" href="logic_programming/plans.html">plan</a> is None if no <a class="reference" href="logic_programming/plans.html">plan</a> was generated.  Unlike <tt class="docutils literal"><span class="pre">prove_1</span></tt> it does
+not raise an exception if no proof is found.</p>
 <pre class="last doctest-block">
 &gt;&gt;&gt; for ans in my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2):
 ...     print ans
@@ -274,13 +277,13 @@ in effect until you call <tt class="docutils literal"><span class="pre">untrace<
 <div class="section">
 <h3><a id="krb-traceback" name="krb-traceback">Krb_traceback</a></h3>
 <p>A handy traceback module is provided to convert Python functions, lines and
-line numbers to the <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb file</a> rule names, lines and line numbers in Python
-traceback.  This makes it much easier to read the tracebacks that occur
+line numbers to the <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb file</a> rule names, lines and line numbers in a
+Python traceback.  This makes it much easier to read the tracebacks that occur
 during proofs.</p>
-<p>The krb_traceback module has exactly the same functions as the standard
+<p>The <tt class="docutils literal"><span class="pre">krb_traceback</span></tt> module has exactly the same functions as the standard
 Python <a class="reference" href="http://docs.python.org/lib/module-traceback.html">traceback</a> module, but they convert the generated Python function
-information into <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb file</a> information.  They also delete the
-intervening Python functions between subgoal proofs.</p>
+information into <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb file</a> information.  They also delete the intervening
+Python functions between subgoal proofs.</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; import sys
@@ -330,8 +333,8 @@ arguments into <a class="reference" href="#creating-your-own-patterns">patterns<
 discussed <a class="reference" href="#creating-your-own-patterns">below</a>.</p>
 <dl class="docutils">
 <dt><em>some_engine</em>.lookup(kb_name, entity_name, pattern_context, patterns)</dt>
-<dd>This is a generator that binds <a class="reference" href="#creating-your-own-patterns">patterns</a> to successive <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a>.  Yields None
-for each successful match.</dd>
+<dd>This is a generator that binds <a class="reference" href="#creating-your-own-patterns">patterns</a> to successive <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a>.  Yields
+<tt class="docutils literal"><span class="pre">None</span></tt> for each successful match.</dd>
 <dt><em>some_engine</em>.prove(kb_name, entity_name, pattern_context, patterns)</dt>
 <dd>A generator that binds <a class="reference" href="#creating-your-own-patterns">patterns</a> to successive proofs.  Yields a
 <em>prototype_plan</em> or <tt class="docutils literal"><span class="pre">None</span></tt> for each successful match.  To turn the
@@ -344,19 +347,19 @@ This returns the <a class="reference" href="logic_programming/plans.html">plan</
 <dd>This is an alternate to the <tt class="docutils literal"><span class="pre">assert_</span></tt> function.</dd>
 <dt><em>some_engine</em>.get_kb(kb_name)</dt>
 <dd>Finds and returns the <a class="reference" href="knowledge_bases/index.html">knowledge base</a> by the name <tt class="docutils literal"><span class="pre">kb_name</span></tt>.  Raises
-KeyError if not found.  Note that for <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>, this returns the
+<tt class="docutils literal"><span class="pre">KeyError</span></tt> if not found.  Note that for <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>, this returns the
 active <a class="reference" href="knowledge_bases/rule_bases.html">rule base</a> where <tt class="docutils literal"><span class="pre">kb_name</span></tt> is the <a class="reference" href="knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name.
 Thus, not all <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a> are accessible through this call.</dd>
 <dt><em>some_engine</em>.get_rb(rb_name)</dt>
 <dd>Finds and returns the <a class="reference" href="knowledge_bases/rule_bases.html">rule base</a> by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
-KeyError if not found.  This works for any <a class="reference" href="knowledge_bases/rule_bases.html">rule base</a>, whether it is
-active or not.</dd>
+<tt class="docutils literal"><span class="pre">KeyError</span></tt> if not found.  This works for any <a class="reference" href="knowledge_bases/rule_bases.html">rule base</a>, whether it
+is <a class="reference" href="knowledge_bases/rule_bases.html#rule-base-activation">active</a> or not.</dd>
 <dt><em>some_engine</em>.print_stats([f = sys.stdout])</dt>
 <dd>Prints a brief set of statistics for each knowledge base to file <tt class="docutils literal"><span class="pre">f</span></tt>.
 These are reset by the <tt class="docutils literal"><span class="pre">reset</span></tt> function.  This will show how many facts
 were asserted, and counts of how many forward-chaining rules were fired
-and rerun, as well as counts of how many backward-chaining goals were tried,
-and how many backward-chaining rules matched, succeeded and failed.
+and rerun, as well as counts of how many backward-chaining goals were
+tried, and how many backward-chaining rules matched, succeeded and failed.
 Note that one backward-chaining rule may succeed many times through
 backtracking.</dd>
 </dl>
@@ -378,15 +381,15 @@ match the first <em>n</em> elements of the tuple.  <tt class="docutils literal">
 variable (or anonymous).  It will match the rest of the tuple and is
 always bound to a (possibly empty) tuple.</dd>
 <dt>contexts.variable(name)</dt>
-<dd>This will match anything the first time it is encountered.  But then
-must match the first value each additional time it is encountered.
-Calling the constructor twice with the same name produces the same
-variable and must match the same value in all of the places that it is
-used.</dd>
+<dd>This will match anything the first time it is encountered and becomes
+bound to that value.  After that, it only matches this bound value each
+additional time it is encountered.  Calling the constructor twice with
+the same name produces the same variable and must match the same value
+in all of the places that it is used.</dd>
 <dt>contexts.anonymous(name)</dt>
-<dd>This will match anything each time it is encountered.
-Calling the constructor many times with the same name is not a problem.
-The name must start with an underscore.</dd>
+<dd>This will match anything each time it is encountered.  Calling the
+constructor many times with the same name is not a problem.  The name
+must start with an underscore.</dd>
 </dl>
 <p>Finally, to create a <em>pattern context</em>, you need:</p>
 <blockquote>
@@ -446,7 +449,7 @@ into named repositories called <em>knowledge bases</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 22 2008.
+    Page last modified Fri, Aug 29 2008.
   </div>
 
 </body>

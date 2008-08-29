@@ -85,14 +85,14 @@ pattern ::= 'None' | 'True' | 'False'
           | NUMBER | IDENTIFIER | STRING | variable
           | '(' [{pattern,}] ['*' variable] ')'
 </pre>
-<p>IDENTIFIER acts like STRING here, meaning that it is taken as a literal
+<p>IDENTIFIER acts like a STRING here, meaning that it is taken as a literal
 value.  All variables in patterns must be preceded by a <tt class="docutils literal"><span class="pre">$</span></tt>.</p>
 <p>Pyke does not currently support complex NUMBERS (for no good reason -- email
 me if you need them).</p>
 </div>
 <div class="section">
 <h2><a id="pattern-variable" name="pattern-variable">Pattern Variable</a></h2>
-<p>Pattern variables are simply called <em>variable</em> in the syntax:</p>
+<p><a class="reference" href="pattern.html#pattern-variable">Pattern variables</a> are simply called <em>variable</em> in the syntax:</p>
 <pre class="literal-block">
 variable ::= '$'IDENTIFIER
 </pre>
@@ -101,7 +101,7 @@ variable ::= '$'IDENTIFIER
 <div class="section">
 <h2><a id="anonymous-variable" name="anonymous-variable">Anonymous Variable</a></h2>
 <p>If the pattern variable IDENTIFIER begins with an underscore (_), the variable
-is an <em>anonymous</em> variable.  It acts like a &quot;don't care&quot;.  Technically, this
+is an <a class="reference" href="../../logic_programming/pattern_matching/pattern_variables.html#anonymous-pattern-variables">anonymous variable</a>.  It acts like a &quot;don't care&quot;.  Technically, this
 means that multiple uses of the same IDENTIFIER may stand for different
 values.  The name of the IDENTIFIER after the underscore is ignored and may be
 used to document the use of the anonymous variable.</p>
@@ -109,7 +109,7 @@ used to document the use of the anonymous variable.</p>
 <div class="section">
 <h2><a id="rest-variable" name="rest-variable">Rest Variable</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">*variable</span></tt> at the end of a tuple pattern will match the rest of the
-tuple.  Thus, <tt class="docutils literal"><span class="pre">variable</span></tt> is always bound to a (possibly empty) tuple.</p>
+tuple.  Thus, <tt class="docutils literal"><span class="pre">variable</span></tt> is <em>always</em> bound to a (possibly empty) tuple.</p>
 <p>The syntax is taken from rest parameter syntax in Python function definitions.
 The difference here is that the variable needs a <tt class="docutils literal"><span class="pre">$</span></tt> on it.</p>
 <p>You may use either a named variable or an anonymous variable here.</p>
@@ -152,7 +152,7 @@ The difference here is that the variable needs a <tt class="docutils literal"><s
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 22 2008.
+    Page last modified Sun, Aug 24 2008.
   </div>
 
 </body>

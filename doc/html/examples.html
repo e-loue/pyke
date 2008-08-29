@@ -63,16 +63,17 @@
                 <div class="document" id="examples">
 <h1 class="title">Examples</h1>
 <p>Several examples are included to help you become familiar with Pyke.  If you
-did an svn checkout, these should all be included in the <tt class="docutils literal"><span class="pre">examples</span></tt> directory.
+did an svn checkout, these are all included in the <tt class="docutils literal"><span class="pre">examples</span></tt> directory.
 If you used easy_install for Pyke, you'll need to download the pyke_examples
 tar file separately <a class="reference" href="http://sourceforge.net/project/showfiles.php?group_id=207724">here</a>.</p>
 <p>Each example is in its own sub-directory and has a README file to get you
 started.  They all have <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a> and a Python module to run the example
 that also demonstrates <a class="reference" href="using_pyke.html">how to call Pyke</a> from your Python program.</p>
 <div class="section">
-<h2><a id="family-relations" name="family-relations">family_relations</a></h2>
-<p>This is a good basic example to start with.</p>
-<p>The family_relations example takes an initial set of <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> about people:</p>
+<h2><a id="family-relations" name="family-relations">Family_relations</a></h2>
+<p>This is a very good basic example to start with.</p>
+<p>The family_relations example takes an initial set of <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> about people
+(stated in a <a class="reference" href="pyke_syntax/kfb_syntax.html">.kfb file</a>):</p>
 <pre class="literal-block">
 son_of(david_r2, david_r, sarah_r)
 daughter_of(shirley, david_r, sarah_r)
@@ -95,49 +96,61 @@ too.</li>
 <a class="reference" href="using_pyke.html#other-functions">print_stats</a> function.</p>
 </div>
 <div class="section">
-<h2><a id="knapsack" name="knapsack">knapsack</a></h2>
+<h2><a id="knapsack" name="knapsack">Knapsack</a></h2>
 <p>At the <a class="reference" href="http://us.pycon.org/2008/about/">PyCon 2008</a> conference, somebody asked about the <a class="reference" href="http://en.wikipedia.org/wiki/Knapsack_problem">knapsack problem</a>.
 We found a solution in Prolog <a class="reference" href="http://www.ise.gmu.edu/~duminda/classes/fall03/set3.ppt">here</a> (starting on page 19), and rewrote it in
 Pyke.  This is a quick simple little example.</p>
 </div>
 <div class="section">
-<h2><a id="sqlgen" name="sqlgen">sqlgen</a></h2>
+<h2><a id="sqlgen" name="sqlgen">Sqlgen</a></h2>
 <p>Pyke was originally developed as the control component for a web framework.
 This example shows how Pyke can automatically generate SQL SELECT statements,
 given a set of tables that the calling program has keys to and a tuple of the
-desired column names.  Column names specified in the top-level tuple are
-expected to produce a single value each.  Nested tuples are used when multiple
-rows are expected.  The column names in nested tuples make up the columns in
-the result rows.</p>
+desired column names.  Column names specified at the top-level in this tuple
+are expected to have a single value each.  Nested tuples are used when
+multiple rows are expected.  The column names in nested tuples make up the
+columns in the result rows.</p>
 <p>The data model used for the requested columns is that tables inherit the
 columns from tables they link to.  So if there is a 1-many relationship
 between tables A and B (1 A row has many B rows), the B table inherits the
-columns from table A through it's link to table A.  Thus, the Pyke rules will
-automatically figure out the table joins.</p>
+columns from table A through it's link to table A.  The Pyke rules will
+automatically figure out the table joins for this.</p>
 <p>The program automatically introspects the schema information.  For this
-example, it assumes that <cite>id</cite> is the primary key for each table, and that
+example, it assumes that <tt class="docutils literal"><span class="pre">id</span></tt> is the primary key for each table, and that
 when one table links to another, it uses the target table name suffixed with
-<cite>_id</cite> as the column name.</p>
+<tt class="docutils literal"><span class="pre">_id</span></tt> as the column name.</p>
 <p>This example uses <a class="reference" href="http://www.mysql.com/">MySQL</a> and includes the .sql files to create the database,
 tables, and example data.  It lacks more general capabilities that would be
-required for real use, but may serve as a starting point for something more
-complete.</p>
-<p>This example also has much more elaborate rules than the prior two examples.</p>
+required for real use, but may serve as a starting point for another project
+that's more complete.</p>
+<p>This example also has much more elaborate rules than the prior two examples
+and is a very real example of generating <a class="reference" href="logic_programming/plans.html">plans</a>.</p>
 </div>
 <div class="section">
-<h2><a id="web-framework" name="web-framework">web_framework</a></h2>
-<p>This example completes the web framework demo by adding rules to automatically
-generate code to render <a class="reference" href="http://py-templates.sourceforge.net/htmltemplate/index.html">HTMLTemplates</a>.  This uses the sqlgen example, above,
-to generate the SQL statements.</p>
+<h2><a id="web-framework" name="web-framework">Web_framework</a></h2>
+<p>This example completes the Python web framework demo by adding rules to
+automatically generate code to render HTML templates from the <a class="reference" href="http://py-templates.sourceforge.net/htmltemplate/index.html">HTMLTemplates</a>
+package.  This uses the <a class="reference" href="examples.html#sqlgen">sqlgen</a> example, above, to generate the SQL
+statements.</p>
 <p>The HTMLTemplates do not include anything resembling program code in them, so
 that your graphics designers can completely own the html files without the
 developers having to modify them in any way.</p>
-<p>Note that the code generated here is fully &quot;cooked&quot; code, custom built for that
-schema and HTML template.  This should run extremely fast because there is
-nothing left at run-time concerning parsing and figuring out the HTML template
-or constructing the SQL statements.</p>
-<p>The demo is packaged as a <a class="reference" href="http://www.python.org/dev/peps/pep-0333/">WSGI</a> application and also demonstrates the use of
-multiple <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a> by using the sqlgen example above.</p>
+<p>Note that the code generated here is fully <a class="reference" href="about_pyke/cooking_functions.html">cooked</a> code, custom built for
+that specific schema and HTML template.  This runs extremely fast because
+there is nothing left at run-time concerning parsing and figuring out the
+HTML template, or constructing the SQL statements.</p>
+<p>A test was done comparing this web framework example to the same example
+done in <a class="reference" href="http://turbogears.org/2.0/">TurboGears 2</a> running against the same MySQL database.  The results
+of the <a class="reference" href="http://www.joedog.org/JoeDog/Siege">siege</a> benchmark tests show that Pyke is just over 10 times faster than
+TurboGears 2:</p>
+<pre class="literal-block">
+- Pyke: 791 trans/sec
+- TurboGears 2: 76 trans/sec
+</pre>
+<p>The demo is packaged as a <a class="reference" href="http://www.python.org/dev/peps/pep-0333/">WSGI</a> application.  It also demonstrates the use of
+multiple <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a> by using the sqlgen example above, as well as the
+caching and reuse of <a class="reference" href="logic_programming/plans.html">plans</a> to achieve the order of magnitude improvement in
+performance over current practice.</p>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>
@@ -184,7 +197,7 @@ into named repositories called <em>knowledge bases</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 22 2008.
+    Page last modified Fri, Aug 29 2008.
   </div>
 
 </body>

@@ -167,7 +167,7 @@ And we want to know who fred's nephews are.  So we'd ask ``uncle_nephew(fred,
 $nephew, $prefix)``.
 
 Here are the steps (in parenthesis) in the inferencing up until the first
-failure is encountered (with the line number from the example preceeding each
+failure is encountered (with the line number from the example preceding each
 line)::
 
     (1)   22  use uncle_nephew(fred, $nephew, $prefix)
@@ -192,7 +192,7 @@ line)::
                           2  use father_son(tim, $son, ())
                               4  family.son_of($son, tim)                        => FAILS
 
-Each rule invokation is numbered (in parenthesis) as a step number.  Step 5
+Each rule invocation is numbered (in parenthesis) as a step number.  Step 5
 has tried 3 different rules and they have all failed (5.1, 5.2 and 5.3).
 
 If you think of the rules as functions, the situation now looks like this

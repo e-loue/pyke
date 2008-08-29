@@ -80,10 +80,10 @@
 <tt class="docutils literal"><span class="pre">.krb</span></tt> or <tt class="docutils literal"><span class="pre">.kqb</span></tt>.</p>
 <p>Place all of these source files into a directory structure.  Then include this
 directory as an argument to the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> constructor.
-This will recursively search your directory for these three types of files,
-compile them, and load them into the engine.  How you organize these files
-into subdirectories is up to you -- the directory structure does not matter to
-Pyke.</p>
+This will recursively search your directory for these three types of source
+files, compile them, and load them into the engine.  How you organize these
+files into subdirectories is up to you -- the directory structure does not
+matter to Pyke.</p>
 <p>The <tt class="docutils literal"><span class="pre">.kfb</span></tt> and <tt class="docutils literal"><span class="pre">.kqb</span></tt> files are compiled into Python <a class="reference" href="http://docs.python.org/lib/module-pickle.html">pickles</a> with
 <tt class="docutils literal"><span class="pre">.fbc</span></tt> and <tt class="docutils literal"><span class="pre">.qbc</span></tt> suffixes.</p>
 <p>The <tt class="docutils literal"><span class="pre">.krb</span></tt> files are compiled into up to three <tt class="docutils literal"><span class="pre">.py</span></tt> source files.
@@ -125,19 +125,19 @@ Examples: <em>'Hi Mom!'</em>, <em>u&quot;Hi Dad!\n&quot;</em>, <em>r'''don't gob
 <em>ur&quot;&quot;&quot;leave \'s alone!&quot;&quot;&quot;</em>.</dd>
 <dt>TEXT</dt>
 <dd>Only used in KQB files.  This signifies any text (any characters) other
-than then the delimiter characters containing the TEXT.</dd>
-<dt>PARAMETERIZED_TEXT</dt>
+than the delimiter characters containing the TEXT.</dd>
+<dt>PARAMETRIZED_TEXT</dt>
 <dd>Only used in KQB files.  This signifies any text (any characters) through
 the end of the line and all text on subsequent lines that are indented at
-least as much as the character position on the line of the first
-PARAMETERIZED_TEXT line.  All PARAMETERIZED_TEXT is treated as a
-<a class="reference" href="http://docs.python.org/lib/node40.html">string.Template</a> and may include <tt class="docutils literal"><span class="pre">$IDENTIFIER</span></tt> or <tt class="docutils literal"><span class="pre">${IDENTIFIER}</span></tt>
-parameters.  All other <tt class="docutils literal"><span class="pre">$</span></tt> characters must be doubled (<tt class="docutils literal"><span class="pre">$$</span></tt>).</dd>
+least as much as the first PARAMETRIZED_TEXT character on the first line.
+All PARAMETRIZED_TEXT is treated as a <a class="reference" href="http://docs.python.org/lib/node40.html">string.Template</a> and may include
+<tt class="docutils literal"><span class="pre">$IDENTIFIER</span></tt> or <tt class="docutils literal"><span class="pre">${IDENTIFIER}</span></tt> parameters.  All other <tt class="docutils literal"><span class="pre">$</span></tt>
+characters must be doubled (<tt class="docutils literal"><span class="pre">$$</span></tt>).</dd>
 <dt>REGEXP_TEXT</dt>
 <dd>Only used in KQB files.  This signifies any text (any characters) excluding
-unescaped backslashes (<tt class="docutils literal"><span class="pre">\\</span></tt>).  These are given to the Python's <tt class="docutils literal"><span class="pre">re</span></tt>
-module as regular expressions and must follow Python's <a class="reference" href="http://docs.python.org/lib/re-syntax.html">regular expression
-syntax</a>.</dd>
+an unescaped backslash (<tt class="docutils literal"><span class="pre">\</span></tt>) at the end.  These are given to the Python's
+<tt class="docutils literal"><span class="pre">re</span></tt> module as regular expressions and must follow Python's
+<a class="reference" href="http://docs.python.org/lib/re-syntax.html">regular expression syntax</a>.</dd>
 <dt>NL</dt>
 <dd>One or more newlines.</dd>
 <dt>INDENT</dt>
@@ -184,7 +184,7 @@ write your universal facts.</p>
 write your rules.</p>
 </div>
 <div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of <em>Knowledge Question Base</em> (KQB) files, which is where you
-write your end user questions.</p>
+spell out your end user questions.</p>
 </div>
 
             </div>
@@ -202,7 +202,7 @@ write your end user questions.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 22 2008.
+    Page last modified Fri, Aug 29 2008.
   </div>
 
 </body>

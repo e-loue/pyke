@@ -90,25 +90,23 @@ python_premise ::= pattern '=' python_exp
 meaning is as follows:</p>
 <dl class="docutils">
 <dt><a class="reference" href="pattern.html">pattern</a> '=' python_exp</dt>
-<dd><em>python_exp</em> is evaluated and the result matched
-with <a class="reference" href="pattern.html">pattern</a>.  If the result does not match,
-the clause fails and <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a> is initiated.
-The clause always fails on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>, meaning that it only produces
-a single result (contrasted with <tt class="docutils literal"><span class="pre">in</span></tt>).</dd>
+<dd><p class="first"><em>python_exp</em> is evaluated and the result <a class="reference" href="../../logic_programming/pattern_matching/index.html">matched</a> with <a class="reference" href="pattern.html">pattern</a>.
+If the result does not match, the clause fails.</p>
+<p class="last">The clause always fails on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>, meaning that it only produces
+a single result (contrasted with <tt class="docutils literal"><span class="pre">in</span></tt>).</p>
+</dd>
 <dt><a class="reference" href="pattern.html">pattern</a> 'in' python_exp</dt>
-<dd><p class="first"><em>python_exp</em> is evaluated and the first element
-from the resulting <em>iterable</em> is matched
-with <a class="reference" href="pattern.html">pattern</a>.  On <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>, successive
-elements from the result are matched with
+<dd><p class="first"><em>python_exp</em> is evaluated to produce a Python <em>iterable</em> and the first
+element from the resulting iterable is <a class="reference" href="../../logic_programming/pattern_matching/index.html">matched</a> with <a class="reference" href="pattern.html">pattern</a>.  On
+<a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>, successive elements from the iterable are matched with
 <a class="reference" href="pattern.html">pattern</a>.  When the result is exhausted, the clause fails.</p>
 <p class="last">This has the effect of offering each element of the result, one at a
-time, to the subsequent premise clauses.  Each element is thus acted on
+time, to the subsequent premise clauses.  Each element is thus acted upon
 individually.</p>
 </dd>
 <dt>'check' python_exp</dt>
-<dd><em>python_exp</em> is evaluated.  If the result is
-Python &quot;true&quot; the clause succeeds, otherwise
-it fails.  The clause always fails on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>.</dd>
+<dd><em>python_exp</em> is evaluated.  If the result is Python &quot;true&quot; the clause
+succeeds, otherwise it fails.  The clause always fails on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>.</dd>
 </dl>
 </div>
 <div class="section">
@@ -120,27 +118,31 @@ python_statements ::= 'python' python_statement
                       DEINDENT
 </pre>
 <p>This clause allows the inclusion of arbitrary Python statements in your
-<a class="reference" href="../../logic_programming/rules/index.html">rules</a>.  This premise always succeeds; and fails on backtracking.</p>
-<div class="tip">
-<p class="first admonition-title">Tip</p>
-<p>It is important to always keep in mind the difference between <a class="reference" href="pattern.html#pattern-variable">pattern
-variables</a> and Python variables.  <a class="reference" href="pattern.html#pattern-variable">Pattern variables</a> are always
-indicated with a <tt class="docutils literal"><span class="pre">$</span></tt> and are only bound to a value during inferencing.
-Thus, a <tt class="docutils literal"><span class="pre">python_statement</span></tt> may not set a <a class="reference" href="pattern.html#pattern-variable">pattern variable</a>; you must
-use the special <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> assignment:</p>
+<a class="reference" href="../../logic_programming/rules/index.html">rules</a>.  This premise always succeeds; and then fails on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>.</p>
+<div class="caution">
+<p class="first admonition-title">Caution!</p>
+<p>Always keep in mind the difference between <a class="reference" href="pattern.html#pattern-variable">pattern variables</a> and
+<em>Python variables</em>.  Pattern variables are always indicated with a <tt class="docutils literal"><span class="pre">$</span></tt>
+and are only bound to a value during inferencing.</p>
+<ol class="last arabic">
+<li><p class="first">Thus, a <tt class="docutils literal"><span class="pre">python_statement</span></tt> may not set a pattern variable.  Storing a
+value computed by Python into a pattern variable can only be done using
+the python_premise:</p>
 <pre class="literal-block">
 &lt;pattern&gt; = &lt;some python expression&gt;
 </pre>
-<p>Also, when a <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> is used within a Python expression or
-statement, it must be bound to a value that does not contain any unbound
-<a class="reference" href="pattern.html#pattern-variable">pattern variables</a>.</p>
-<p>Python variables are not visible to the inference engine.  They are local
-variables that are also not visible to Python code in other <a class="reference" href="../../logic_programming/rules/index.html">rules</a> or other
-invocations of the same <a class="reference" href="../../logic_programming/rules/index.html">rule</a>.</p>
-<p>Finally, Python variables in the <a class="reference" href="bc_rule.html#when-clause">when clause</a> of a <a class="reference" href="bc_rule.html">backward-chaining
-rule</a> are not visible to the Python code in the <a class="reference" href="bc_rule.html#with-clause">with clause</a> of the same
-<a class="reference" href="../../logic_programming/rules/index.html">rule</a>.  (These end up in two different Python functions after the <a class="reference" href="index.html">.krb
-file</a> is compiled).  So this won't work:</p>
+</li>
+<li><p class="first">When a pattern variable is used within a Python expression or statement,
+it must be <a class="reference" href="../../logic_programming/pattern_matching/matching_patterns.html#binding-to-a-tuple-pattern">fully bound</a>.</p>
+</li>
+<li><p class="first">Python variables are not visible to the inference engine.  They are local
+variables that are also not visible to Python code in other <a class="reference" href="../../logic_programming/rules/index.html">rules</a> or
+other invocations of the same rule.</p>
+</li>
+<li><p class="first">Finally, Python variables in the <a class="reference" href="bc_rule.html#when-clause">when clause</a> of a <a class="reference" href="bc_rule.html">backward-chaining
+rule</a> are not visible to the Python code in the <a class="reference" href="bc_rule.html#with-clause">with clause</a> of the
+same rule.  (These end up in two different Python functions after the
+<a class="reference" href="index.html">.krb file</a> is compiled).  So this won't work:</p>
 <pre class="literal-block">
 some_bc_rule
     use some_goal(...)
@@ -151,10 +153,10 @@ some_bc_rule
     with
         for x in x_list: process(x)
 </pre>
-<p>In this case, assign the value of the Python variable to a <a class="reference" href="pattern.html#pattern-variable">pattern
-variable</a> in the <a class="reference" href="bc_rule.html#when-clause">when clause</a> and then use that <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> in
-the <a class="reference" href="bc_rule.html#with-clause">with clause</a>:</p>
-<pre class="last literal-block">
+<p>In this case, assign the value of the Python variable to a pattern
+variable in the when clause and then use that pattern variable in the
+with clause:</p>
+<pre class="literal-block">
 some_bc_rule
     use some_goal(...)
     when
@@ -165,6 +167,8 @@ some_bc_rule
     with
         for x in $x_list: process(x)
 </pre>
+</li>
+</ol>
 </div>
 <!-- ADD_LINKS MARKER -->
 </div>
@@ -205,7 +209,7 @@ some_bc_rule
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 22 2008.
+    Page last modified Sun, Aug 24 2008.
   </div>
 
 </body>

@@ -1,80 +1,76 @@
 # fc_notany.krb
-        
+
 brothers
-	foreach
-		family.son_of($brother1, $father, $mother)
-		family.son_of($brother2, $father, $mother)
-		check $brother1 != $brother2
-	assert
-		family.siblings($brother1, $brother2, brother, brother)
-		
+    foreach
+        family.son_of($brother1, $father, $mother)
+        family.son_of($brother2, $father, $mother)
+        check $brother1 != $brother2
+    assert
+        family.siblings($brother1, $brother2, brother, brother)
+        
 sisters
-	foreach
-		family.daughter_of($sister1, $father, $mother)
-		family.daughter_of($sister2, $father, $mother)
-		check $sister1 != $sister2
-	assert 
-		family.siblings($sister1, $sister2, sister, sister)
+    foreach
+        family.daughter_of($sister1, $father, $mother)
+        family.daughter_of($sister2, $father, $mother)
+        check $sister1 != $sister2
+    assert 
+        family.siblings($sister1, $sister2, sister, sister)
 
 brother_sister
-	foreach
-		family.daughter_of($sister, $father, $mother)
-		family.son_of($brother, $father, $mother)
-	assert 
-		family.siblings($sister, $brother, brother, sister)
+    foreach
+        family.daughter_of($sister, $father, $mother)
+        family.son_of($brother, $father, $mother)
+    assert 
+        family.siblings($sister, $brother, brother, sister)
 
 sister_brother
-	foreach
-		family.son_of($brother, $father, $mother)
-		family.daughter_of($sister, $father, $mother)
-	assert
-		family.siblings($brother, $sister, sister, brother)
+    foreach
+        family.son_of($brother, $father, $mother)
+        family.daughter_of($sister, $father, $mother)
+    assert
+        family.siblings($brother, $sister, sister, brother)
 
     
 no_uncle_1
-	foreach
-		family.son_of($child, $father, $mother)
-		notany
-			family.siblings($father, $uncle1, $gender1, $_)
-			check $gender1 == 'brother'
-		notany
-			family.siblings($mother, $uncle2, $gender2, $_)
-			check $gender2 == 'brother'
-	assert
-		python print $child, "has no uncle"
+    foreach
+        family.son_of($child, $father, $mother)
+        notany
+            family.siblings($father, $uncle1, $gender1, $_)
+            check $gender1 == 'brother'
+        notany
+            family.siblings($mother, $uncle2, $gender2, $_)
+            check $gender2 == 'brother'
+    assert
+        python print $child, "has no uncle"
 
 no_uncle_2
-	foreach
-		family.daughter_of($child, $father, $mother)
-		notany
-			family.siblings($father, $uncle1, $gender, $_)
-			check $gender == 'brother'
-		notany
-			family.siblings($mother, $uncle2, $gender, $_)
-			check $gender == 'brother'
-	assert
-		python print $child, "has no uncle"
+    foreach
+        family.daughter_of($child, $father, $mother)
+        notany
+            family.siblings($father, $uncle1, $gender, $_)
+            check $gender == 'brother'
+        notany
+            family.siblings($mother, $uncle2, $gender, $_)
+            check $gender == 'brother'
+    assert
+        python print $child, "has no uncle"
             
 no_aunt_1
-	foreach
-		family.son_of($child, $father, $mother)
-		notany
-			family.siblings($father, $aunt1, $gender,$_)
-			check $gender == 'sister'
-		notany
-			family.siblings($mother, $aunt2, $gender, $_)
-			check $gender == 'sister'
-	assert
-		python print $child, "has no aunt"
-			
+    foreach
+        family.son_of($child, $father, $mother)
+        notany
+            family.siblings($father, $aunt1, sister, $_)
+        notany
+            family.siblings($mother, $aunt2, sister, $_)
+    assert
+        python print $child, "has no aunt"
+            
 no_aunt_2
-	foreach
-		family.daughter_of($child, $father, $mother)
-		notany
-			family.siblings($father, $aunt1, $gender, $_)
-			check $gender == 'sister'
-		notany
-			family.siblings($mother, $aunt2, $gender, $_)
-			check $gender == 'sister'
-	assert
-		python print $child, "has no aunt"
+    foreach
+        family.daughter_of($child, $father, $mother)
+        notany
+            family.siblings($father, $aunt1, sister, $_)
+        notany
+            family.siblings($mother, $aunt2, sister, $_)
+    assert
+        python print $child, "has no aunt"

@@ -108,7 +108,7 @@ By taking this approach, your library will be an order of magnitude faster
 than competing database access libraries because you've used Pyke to
 essentially compile custom code for each database access.
 
-The sqlgen_ example demonstates this approach.
+The sqlgen_ example demonstrates this approach.
 
 
 HTML Templating Library
@@ -123,9 +123,10 @@ By taking this approach, your library will be an order of magnitude faster
 than competing HTML templating libraries because you've used Pyke to
 essentially compile custom code for each HTML template.
 
-The web_framework_ example demonstates this approach.  It uses the sqlgen_
+The web_framework_ example demonstrates this approach.  It uses the sqlgen_
 example to make a little web framework.  The 2 HTML templates in this example
-were also done in TurboGears 2 and then a siege_ benchmark test done on both:
+were also done in `TurboGears 2`_ and then a siege_ benchmark test done on
+both:
 
 - TurboGears 2 ran 75.83 transactions/sec
 - The Pyke example ran 791.01 transactions/sec

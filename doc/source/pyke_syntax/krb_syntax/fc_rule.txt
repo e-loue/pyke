@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007 Bruce Frederiksen
+.. Copyright © 2007-2008 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -39,11 +39,11 @@ Fc_rule Syntax
 Fc_rule
 =============
 
-Forward-chaining_ rules_ have three parts:
+Forward-chaining_ rules have three parts:
 
 #. A unique name.
-#. An optional ``foreach`` clause.
-#. An ``assert`` clause.
+#. An optional `foreach clause`_.
+#. An `assert clause`_.
 
 ::
 
@@ -73,10 +73,10 @@ Foreach clause
 Here are links to the definitions for pattern_, compound_premise_ and
 python_premise_.
 
-If the ``foreach`` clause is **not** used, the rule_ is always fired once.
+If the ``foreach`` clause is omitted, the rule_ is always fired once.
 
-If the ``foreach`` clause **is** used, the rule_ is fired for each
-combination of true premises.
+If the ``foreach`` clause is present, the rule is fired for each combination
+of true premises.
 
 Assert clause
 =================
@@ -96,5 +96,5 @@ The ``assert`` clause lists new facts_ to assert, and/or Python
 statements to execute each time the rule_ is fired.  Each of these may
 include `pattern variables`_ which should also appear in the ``foreach``
 clause where they are bound to a value.  These values will then be substituted
-into the facts_ and Python statements.
+into the facts and Python statements.
 

@@ -39,7 +39,7 @@ Special
 There is only one instance of this 'special' knowledge base, called
 ``special``.
 
-The ``special`` knowledge base is a collection of miscellanious helper
+The ``special`` knowledge base is a collection of miscellaneous helper
 *knowledge entities* that determine whether a statement is true or not in
 various interesting ways.
 

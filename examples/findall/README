@@ -1,0 +1,15 @@
+This is a small example of the 'forall' clause used to gather a list of
+answers in both forward-chaining and backward-chaining rules.
+
+The forward-chaining and backward-chaining rules are in two different .krb
+files showing examples of use of the 'forall' clause in both cases.
+
+Rather than finding individual siblings and cousins, these rules find all
+siblings and all cousins and assert them in a single fact (as a tuple).
+
+    >>> import test
+    >>> test.fc_test()
+    ... prints out all cousins information using fc_findall.krb ...
+    >>> test.bc_test()
+    ... prints out all cousins information using bc_findall.krb ...
+

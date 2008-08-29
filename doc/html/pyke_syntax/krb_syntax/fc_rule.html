@@ -80,11 +80,11 @@
 <h1 class="title">Fc_rule Syntax</h1>
 <div class="section">
 <h2><a id="fc-rule" name="fc-rule">Fc_rule</a></h2>
-<p><a class="reference" href="../../logic_programming/rules/forward_chaining.html">Forward-chaining</a> <a class="reference" href="../../logic_programming/rules/index.html">rules</a> have three parts:</p>
+<p><a class="reference" href="../../logic_programming/rules/forward_chaining.html">Forward-chaining</a> rules have three parts:</p>
 <ol class="arabic simple">
 <li>A unique name.</li>
-<li>An optional <tt class="docutils literal"><span class="pre">foreach</span></tt> clause.</li>
-<li>An <tt class="docutils literal"><span class="pre">assert</span></tt> clause.</li>
+<li>An optional <a class="reference" href="#foreach-clause">foreach clause</a>.</li>
+<li>An <a class="reference" href="#assert-clause">assert clause</a>.</li>
 </ol>
 <pre class="literal-block">
 fc_rule ::= IDENTIFIER NL INDENT
@@ -110,9 +110,9 @@ fact_pattern ::= IDENTIFIER '.' IDENTIFIER '(' [{pattern,}] ')'
 </pre>
 <p>Here are links to the definitions for <a class="reference" href="pattern.html">pattern</a>, <a class="reference" href="compound_premise.html">compound_premise</a> and
 <a class="reference" href="python_premise.html">python_premise</a>.</p>
-<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause is <strong>not</strong> used, the <a class="reference" href="../../logic_programming/rules/index.html">rule</a> is always fired once.</p>
-<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause <strong>is</strong> used, the <a class="reference" href="../../logic_programming/rules/index.html">rule</a> is fired for each
-combination of true premises.</p>
+<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause is omitted, the <a class="reference" href="../../logic_programming/rules/index.html">rule</a> is always fired once.</p>
+<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause is present, the rule is fired for each combination
+of true premises.</p>
 </div>
 <div class="section">
 <h2><a id="assert-clause" name="assert-clause">Assert clause</a></h2>
@@ -129,7 +129,7 @@ assertion ::= fact_pattern
 statements to execute each time the <a class="reference" href="../../logic_programming/rules/index.html">rule</a> is fired.  Each of these may
 include <a class="reference" href="pattern.html#pattern-variable">pattern variables</a> which should also appear in the <tt class="docutils literal"><span class="pre">foreach</span></tt>
 clause where they are bound to a value.  These values will then be substituted
-into the <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> and Python statements.</p>
+into the facts and Python statements.</p>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>
@@ -169,7 +169,7 @@ into the <a class="reference" href="../../knowledge_bases/fact_bases.html#facts"
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 22 2008.
+    Page last modified Sun, Aug 24 2008.
   </div>
 
 </body>

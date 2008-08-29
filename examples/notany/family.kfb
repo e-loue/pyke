@@ -1,0 +1,8 @@
+# family.kfb
+
+son_of(egon, anton, brigitte)
+son_of(ralf, anton, brigitte)
+son_of(anton, johann, maria)
+daughter_of(elisabeth, johann, maria)    
+daughter_of(karin, karl, margit)
+daughter_of(sabine, karl, margit)

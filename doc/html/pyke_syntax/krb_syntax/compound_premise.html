@@ -80,9 +80,9 @@
 <h1 class="title">Compound Premise Syntax</h1>
 <p>There are three kinds of compound premises.  These can be used in both
 <a class="reference" href="fc_rule.html">forward-chaining rules</a> and <a class="reference" href="bc_rule.html">backward-chaining rules</a>, but the nested
-premises are restricted to the kind of premises legal for that kind of rule:
-<a class="reference" href="fc_rule.html#foreach-clause">fc_premise</a> for <a class="reference" href="fc_rule.html">forward-chaining rules</a>, and <a class="reference" href="bc_rule.html#when-clause">bc_premise</a> for
-<a class="reference" href="bc_rule.html">backward-chaining rules</a>.</p>
+premises within each of these are restricted to the kind of premises legal
+for that kind of rule: <a class="reference" href="fc_rule.html#foreach-clause">fc_premise</a> for forward-chaining rules, and
+<a class="reference" href="bc_rule.html#when-clause">bc_premise</a> for backward-chaining rules.</p>
 <pre class="literal-block">
 compound_premise ::= first_premise
                    | forall_premise
@@ -92,7 +92,7 @@ compound_premise ::= first_premise
 <h2><a id="first-premise" name="first-premise">First Premise</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">first</span></tt> premise is used to prevent <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a> from finding subsequent
 solutions to a set of premises.  The <tt class="docutils literal"><span class="pre">first</span></tt> premise always fails on
-<a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>, but does do <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a> within the nested premises.</p>
+backtracking (but does do backtracking <em>within</em> the nested premises).</p>
 <pre class="literal-block">
 first_premise ::= ['!'] 'first' premise
                 | ['!'] 'first' NL
@@ -100,14 +100,15 @@ first_premise ::= ['!'] 'first' premise
                              {premise NL}
                           DEINDENT
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">!</span></tt> option can only be used in <a class="reference" href="bc_rule.html">backward-chaining rules</a>.</p>
-<p>The nested premises may include any type of <a class="reference" href="bc_rule.html#plan-spec">plan_spec</a> in <a class="reference" href="bc_rule.html">backward-chaining
-rules</a>.</p>
+<p>The <tt class="docutils literal"><span class="pre">!</span></tt> option can only be used in backward-chaining rules.</p>
+<p>When used within backward-chaining rules, the nested premises may include any
+type of <a class="reference" href="bc_rule.html#plan-spec">plan_spec</a>.</p>
 </div>
 <div class="section">
 <h2><a id="forall-premise" name="forall-premise">Forall Premise</a></h2>
-<p>The <tt class="docutils literal"><span class="pre">forall</span></tt> premise forces backtracking within the nested premises to
-process all of the possible solutions found.</p>
+<p>The <tt class="docutils literal"><span class="pre">forall</span></tt> premise forces <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a> within the nested premises to
+process all of the possible solutions found before the <tt class="docutils literal"><span class="pre">forall</span></tt> succeeds.
+After the first success, the <tt class="docutils literal"><span class="pre">forall</span></tt> fails on backtracking.</p>
 <pre class="literal-block">
 forall_premise ::= 'forall' NL
                      INDENT
@@ -118,19 +119,21 @@ forall_premise ::= 'forall' NL
                         {premise NL}
                      DEINDENT ]
 </pre>
-<p>The premises within the <tt class="docutils literal"><span class="pre">require</span></tt> clause are tried for each solution found.
-If these fail for any solution, then the entire <tt class="docutils literal"><span class="pre">forall</span></tt> premise fails.
-Thus, the <tt class="docutils literal"><span class="pre">forall</span></tt> only succeeds if the <tt class="docutils literal"><span class="pre">require</span></tt> premises are true for
-all solutions generated within the <tt class="docutils literal"><span class="pre">forall</span></tt> clause.</p>
-<p>The <tt class="docutils literal"><span class="pre">forall</span></tt> always succeeds if the <tt class="docutils literal"><span class="pre">require</span></tt> clause is omitted.  This can
-be used in conjunction with <a class="reference" href="python_premise.html#python-statements">python_statements</a> to gather a list of results.</p>
-<p>The <tt class="docutils literal"><span class="pre">forall</span></tt> premise always fails on backtracking.</p>
+<p>The premises within the <tt class="docutils literal"><span class="pre">require</span></tt> clause are tried for each solution found
+to the <tt class="docutils literal"><span class="pre">forall</span></tt> clause.  If these fail for any solution, then the entire
+<tt class="docutils literal"><span class="pre">forall</span></tt> premise fails.  Thus, the <tt class="docutils literal"><span class="pre">forall</span></tt> only succeeds if the
+<tt class="docutils literal"><span class="pre">require</span></tt> premises are true for <em>all</em> solutions generated within the
+<tt class="docutils literal"><span class="pre">forall</span></tt> clause.  Thus, the <tt class="docutils literal"><span class="pre">forall</span></tt> clause may be read: &quot;Forall X,
+require Y&quot;.</p>
+<p>The <tt class="docutils literal"><span class="pre">forall</span></tt> always succeeds if the <tt class="docutils literal"><span class="pre">require</span></tt> clause is omitted (even if
+no solutions are found to the nested premises).  This can be used in
+conjunction with <a class="reference" href="python_premise.html#python-statements">python_statements</a> to gather a list of results.</p>
 <p>See <a class="reference" href="#notes-on-forall-and-notany-premises">Notes on Forall and Notany Premises</a> and <a class="reference" href="../../examples.html">Examples</a>, below.</p>
 </div>
 <div class="section">
 <h2><a id="notany-premise" name="notany-premise">Notany Premise</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">notany</span></tt> premise only succeeds if no solution can be found to the nested
-premises.</p>
+premises.  <tt class="docutils literal"><span class="pre">Notany</span></tt> always fails on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>.</p>
 <pre class="literal-block">
 notany_premise ::= 'notany' NL
                      INDENT
@@ -149,17 +152,24 @@ Thus, <tt class="docutils literal"><span class="pre">forall</span></tt> and <tt 
 values produced by prior premises; but to generate values for subsequent
 premises the values must be captured in Python variables within the
 <tt class="docutils literal"><span class="pre">forall</span></tt> or <tt class="docutils literal"><span class="pre">notany</span></tt> clause before the <cite>pattern variables</cite> are unbound
-(see <a class="reference" href="#computing-sets-of-values">Computing Sets of Values</a>, below).</li>
-<li>When used in <a class="reference" href="bc_rule.html">backward-chaining rules</a>, the only <a class="reference" href="bc_rule.html#plan-spec">plan_spec</a> allowed in
+(see <a class="reference" href="#computing-a-value-for-each-generated-value">Computing a Value for Each Generated Value</a>, below).</li>
+<li>When used within <a class="reference" href="bc_rule.html">backward-chaining rules</a>, the only <a class="reference" href="bc_rule.html#plan-spec">plan_spec</a> allowed in
 nested premises is the <tt class="docutils literal"><span class="pre">as</span></tt> clause.</li>
 </ol>
 </div>
 <div class="section">
 <h2><a id="examples" name="examples">Examples</a></h2>
+<ul class="simple">
+<li><a class="reference" href="#finding-the-first-solution-from-a-set-of-values">Finding the First Solution From a Set of Values</a></li>
+<li><a class="reference" href="#testing-every-generated-value">Testing Every Generated Value</a></li>
+<li><a class="reference" href="#computing-a-value-for-each-generated-value">Computing a Value for Each Generated Value</a></li>
+<li><a class="reference" href="#iterating-on-tuples">Iterating on Tuples</a></li>
+<li><a class="reference" href="#computing-values-for-all-generated-values-that-pass-a-test">Computing Values for All Generated Values that Pass a Test</a></li>
+</ul>
 <p>These examples use the following subgoals:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">generate_x($x)</span></tt> generates multiple solutions (as <tt class="docutils literal"><span class="pre">$x</span></tt>) that will looped
-over</li>
+<li><tt class="docutils literal"><span class="pre">generate_x($x)</span></tt> generates multiple solutions (as <tt class="docutils literal"><span class="pre">$x</span></tt>) that will be
+looped over</li>
 <li><tt class="docutils literal"><span class="pre">test_x($x)</span></tt> does some test on <tt class="docutils literal"><span class="pre">$x</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">compute_y($x,</span> <span class="pre">$y)</span></tt> takes <tt class="docutils literal"><span class="pre">$x</span></tt> as input and computes a <tt class="docutils literal"><span class="pre">$y</span></tt> value</li>
 </ul>
@@ -181,10 +191,10 @@ first
 </pre>
 <p>The difference is that the first example will find other <tt class="docutils literal"><span class="pre">$x</span></tt> values that
 pass <tt class="docutils literal"><span class="pre">test_x($x)</span></tt> on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>, while the second example will stop after
-the first value is found and fail on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>.</p>
+the first value is found and fail on backtracking.</p>
 </div>
 <div class="section">
-<h3><a id="testing-sets-of-values" name="testing-sets-of-values">Testing Sets of Values</a></h3>
+<h3><a id="testing-every-generated-value" name="testing-every-generated-value">Testing Every Generated Value</a></h3>
 <p>There are two general cases.  You might want to verify that <tt class="docutils literal"><span class="pre">test_x($x)</span></tt>
 <em>succeeds</em> for all generated <tt class="docutils literal"><span class="pre">$x</span></tt> values:</p>
 <pre class="literal-block">
@@ -201,7 +211,7 @@ no longer set afterwards and can not be referenced in the premises
 following the <tt class="docutils literal"><span class="pre">forall</span></tt> premise.</p>
 </div>
 <p>The second case that you might want to verify is that <tt class="docutils literal"><span class="pre">test_x($x)</span></tt> <em>fails</em>
-for all generated <tt class="docutils literal"><span class="pre">$x</span></tt> values:</p>
+for every generated <tt class="docutils literal"><span class="pre">$x</span></tt> value:</p>
 <pre class="literal-block">
 forall
     generate_x($x)
@@ -217,7 +227,7 @@ notany
 </pre>
 </div>
 <div class="section">
-<h3><a id="computing-sets-of-values" name="computing-sets-of-values">Computing Sets of Values</a></h3>
+<h3><a id="computing-a-value-for-each-generated-value" name="computing-a-value-for-each-generated-value">Computing a Value for Each Generated Value</a></h3>
 <p>If you want a tuple of computed <tt class="docutils literal"><span class="pre">$y</span></tt> values for all of the <tt class="docutils literal"><span class="pre">$x</span></tt> values:</p>
 <pre class="literal-block">
 python y_list = []
@@ -228,9 +238,9 @@ require
     python y_list.append($y)
 $y_list = tuple(y_list)
 </pre>
-<p>This will only succeed if <tt class="docutils literal"><span class="pre">compute_y</span></tt> succeeds for every <tt class="docutils literal"><span class="pre">$x</span></tt> value.  If
-you want to skip over <tt class="docutils literal"><span class="pre">$x</span></tt> values that <tt class="docutils literal"><span class="pre">compute_y</span></tt> fails on, you might
-try:</p>
+<p>This will only succeed if <tt class="docutils literal"><span class="pre">compute_y</span></tt> succeeds for every <tt class="docutils literal"><span class="pre">$x</span></tt> value.</p>
+<p>If you want to skip over <tt class="docutils literal"><span class="pre">$x</span></tt> values that <tt class="docutils literal"><span class="pre">compute_y</span></tt> fails on, you
+<em>might</em> try:</p>
 <pre class="literal-block">
 python y_list = []
 forall
@@ -239,10 +249,10 @@ forall
     python y_list.append($y)
 $y_list = tuple(y_list)
 </pre>
-<p>But note that if <tt class="docutils literal"><span class="pre">compute_y</span></tt> might compute multiple solutions on
-<a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>, you would end up including all of these solutions for each
-<tt class="docutils literal"><span class="pre">$x</span></tt> in your <tt class="docutils literal"><span class="pre">$y_list</span></tt>.  To only get the first computed value for each
-<tt class="docutils literal"><span class="pre">$x</span></tt>:</p>
+<p>But note that if <tt class="docutils literal"><span class="pre">compute_y</span></tt> computes multiple solutions for a single
+<tt class="docutils literal"><span class="pre">$x</span></tt> value on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>, you would end up including all of these
+solutions in your <tt class="docutils literal"><span class="pre">$y_list</span></tt>.  To only get the first computed value for each
+<tt class="docutils literal"><span class="pre">$x</span></tt> value:</p>
 <pre class="literal-block">
 python y_list = []
 forall
@@ -252,18 +262,26 @@ forall
         python y_list.append($y)
 $y_list = tuple(y_list)
 </pre>
+</div>
+<div class="section">
+<h3><a id="iterating-on-tuples" name="iterating-on-tuples">Iterating on Tuples</a></h3>
 <p>A simple common case of <tt class="docutils literal"><span class="pre">generate_x</span></tt> is when you are computing values for
 each element of a tuple:</p>
 <pre class="literal-block">
 python y_list = []
 forall
     $x in $x_list
-    first
-        compute_x($x, $y)
-        python y_list.append($y)
+require
+    compute_x($x, $y)
+    python y_list.append($y)
 $y_list = tuple(y_list)
 </pre>
-<p>This can also be done by creating a new subgoal that recurses on <tt class="docutils literal"><span class="pre">$x_list</span></tt>:</p>
+<p>This can also be done by creating a new subgoal that recurses on <tt class="docutils literal"><span class="pre">$x_list</span></tt>.
+If you call the new subgoal <tt class="docutils literal"><span class="pre">compute_list</span></tt>, you would use it like this:</p>
+<pre class="literal-block">
+compute_list($x_list, $y_list)
+</pre>
+<p>And define it like this:</p>
 <pre class="literal-block">
 compute_list_done
     use compute_list((), ())
@@ -274,15 +292,22 @@ compute_list_step
         compute_y($x, $y)
         compute_list($x_rest, $y_rest)
 </pre>
+<div class="important">
+<p class="first admonition-title">Important</p>
 <p>Note that there is an important difference between these two examples if
-<tt class="docutils literal"><span class="pre">compute_y</span></tt> may find alternate <tt class="docutils literal"><span class="pre">$y</span></tt> values for any given <tt class="docutils literal"><span class="pre">$x</span></tt> value on
-<a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>.</p>
+<tt class="docutils literal"><span class="pre">compute_y</span></tt> may find alternate <tt class="docutils literal"><span class="pre">$y</span></tt> values for any given <tt class="docutils literal"><span class="pre">$x</span></tt> value
+on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>.</p>
 <p>The first example will only generate one <tt class="docutils literal"><span class="pre">$y_list</span></tt>.  If that <tt class="docutils literal"><span class="pre">$y_list</span></tt>
-doesn't work in subsequent premises, the <tt class="docutils literal"><span class="pre">forall</span></tt> fails on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>,
-so no solution will be found.</p>
-<p>The second example will not fail in this situation, but will produce all
-possible combinations of solutions to <tt class="docutils literal"><span class="pre">computer_y</span></tt> for each <tt class="docutils literal"><span class="pre">$x</span></tt> on
-<a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a> until a resulting <tt class="docutils literal"><span class="pre">$y_list</span></tt> satisfies the subsequent premises.</p>
+doesn't work for subsequent premises, the <tt class="docutils literal"><span class="pre">forall</span></tt> fails on backtracking,
+so no overall solution will be found.</p>
+<p class="last">The second example will not fail in this situation, but will produce all
+possible combinations of solutions to <tt class="docutils literal"><span class="pre">compute_y</span></tt> for each <tt class="docutils literal"><span class="pre">$x</span></tt> on
+backtracking until a resulting <tt class="docutils literal"><span class="pre">$y_list</span></tt> satisfies the subsequent
+premises so that an overall solution <em>is</em> found.</p>
+</div>
+</div>
+<div class="section">
+<h3><a id="computing-values-for-all-generated-values-that-pass-a-test" name="computing-values-for-all-generated-values-that-pass-a-test">Computing Values for All Generated Values that Pass a Test</a></h3>
 <p>Finally, if you want to gather only the computed <tt class="docutils literal"><span class="pre">$y</span></tt> values for <tt class="docutils literal"><span class="pre">$x</span></tt>
 values that pass <tt class="docutils literal"><span class="pre">test_x($x)</span></tt>:</p>
 <pre class="literal-block">
@@ -335,7 +360,7 @@ $y_list = tuple(y_list)
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 22 2008.
+    Page last modified Sun, Aug 24 2008.
   </div>
 
 </body>

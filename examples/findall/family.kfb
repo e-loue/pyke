@@ -1,0 +1,9 @@
+# family.kfb
+
+child_of(egon, anton, hilde)
+child_of(ralf, anton, hilde)
+child_of(hilde, stefan, brigitte)
+child_of(diethelm, stefan, brigitte)
+child_of(harald, diethelm, gitte)
+child_of(claudia, diethelm, gitte)
+

@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007 Bruce Frederiksen
+.. Copyright © 2007-2008 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -42,9 +42,9 @@ Bc_rule
 Backward-chaining_ rules_ have four parts:
 
 #. A unique name.
-#. A ``use`` clause.
-#. An optional ``when`` clause.
-#. An optional ``with`` clause.
+#. A `use clause`_.
+#. An optional `when clause`_.
+#. An optional `with clause`_.
 
 ::
 
@@ -56,15 +56,15 @@ Backward-chaining_ rules_ have four parts:
 
 The ``IDENTIFIER`` is the unique name for this rule_ and is used as the
 corresponding Python function name in the generated <rb_name>_bc.py file
-and also for the Python function name of the plan function (if any)
+and also for the Python function name of the plan_ function (if any)
 associated with the rule.  This name will show up in stack traces
-associated with exceptions raised during the inferencing or plan execution.
+associated with exceptions raised during inferencing or plan execution.
 
 Use Clause
 ============
 
-The ``use`` clause is the **then** part of the rule_.  It identifies the
-*goal* that this rule_ is trying to prove.
+The ``use`` clause is the **then** part of the rule.  It identifies the
+*goal* that this rule is prepared to prove.
 
 ::
 
@@ -74,8 +74,8 @@ The ``use`` clause is the **then** part of the rule_.  It identifies the
              DEINDENT
 
 Notice that it uses a single ``IDENTIFIER``.  The `rule base`_ name is implied
-as the `rule base category`_ name (the name of the root rule base) for the
-`rule base`_ containing this rule_.
+as the `rule base category`_ name (the name of the root rule base, see
+`extending clause`_) for the rule base containing this rule.
 
 Taking Clause
 ----------------
@@ -84,8 +84,8 @@ The ``use`` clause also defines parameters to the plan_ function (if one is
 used for this rule_) with the optional ``taking`` sub-clause.
 
 The *python_arg_spec* is not parsed by Pyke, but simply copied to the
-output plan_ function.  Do **not** use ``$`` with these parameter names (or
-default values).
+output plan function.  Do **not** use ``$`` with these parameter names (or
+their default values).
 
 When Clause
 ==============
@@ -94,11 +94,11 @@ The ``when`` clause is the **if** part of the rule_.  It defines the
 premises that must be true for this rule to succeed.
 
 If the ``when`` clause is omitted, the only
-requirement for the rule_ to succeed is that the ``use`` clause
+requirement for the rule to succeed is that the ``use`` clause
 `pattern matches`_ the goal.
 
-If the ``when`` clause is specified, the rule_ succeeds for each
-combination of true premises.
+If the ``when`` clause is specified, the rule succeeds for each combination
+of true premises (see backtracking_).
 
 ::
 
@@ -125,32 +125,36 @@ premise fails on the first try.  This can help in debugging.
 
 If a single *name* is used in the *bc_premise*,
 the `rule base category`_ for the current `rule base`_ (the root rule base
-name) is assumed.
+name, see `extending clause`_) is assumed.
 
-If two *names* are used in the *bc_premise*, the first may name a `rule
-base category`_ or a `fact base`_.
+If two *names* are used in the *bc_premise*, the first may name a rule
+base category or some other `knowledge base`_.
 
-If a `rule base category`_ name is used (or assumed),
-the currently active_ `rule base`_ for that category_ is used to prove the
-premise.  Note that if the `rule base category`_ name is omitted, and
-therefore assumed to be the current `rule base's`_ `rule base category`_,
-the current `rule base`_ does not have to be the active_ `rule base`_ for that
-category_.  It could be the case that a derived `rule base`_ is the
-active_ `rule base`_.  In that case, the derived `rule base`_ is used to
-prove the premise.
+If a rule base category name is used (or assumed), the currently active_
+`rule base`_ for that category is used to prove the premise.
+
+.. note::
+
+   If the rule base category name is omitted, and therefore assumed
+   to be the current rule base's rule base category, the current rule base
+   does *not* have to be the active rule base for that category.  It could be
+   the case that a derived rule base is the active rule base.  In that case,
+   the derived rule base is used to prove the premise.
+
+   In this way, different rules may be used to prove the same premise,
+   depending upon which rule base has been activated.
 
 Plan_spec
 ------------
 
-A *plan_spec* is required for all premises that return subordinate plans_.
-These show what this rule's plan_ function should do with each of the
-subordinate plan_ functions.
+A *plan_spec* is required for each premise that returns a subordinate plan_.
+This shows what should be done with that subordinate plan_ function.
 
-Thus, a rule's plan_ function is composed first of the collected
+Thus, a rule's plan function is composed first of the collected
 python_statements taken from its plan_specs (as described below), followed by
-the python_statements within its *with* clause (if any).  The inclusion of
-any plan_spec with a python_statement will cause a plan_ function to be
-generated for this rule_, even if the rule_ lacks a ``with`` clause.
+the python_statements within its `with clause`_ (if any).  The inclusion of
+any plan_spec containing a python_statement will cause a plan_ function to be
+generated for this rule, even if the rule lacks a ``with`` clause.
 
 ::
 
@@ -159,41 +163,38 @@ generated for this rule_, even if the rule_ lacks a ``with`` clause.
                   DEINDENT
                 | 'as' '$'IDENTIFIER NL
 
-Within each python_statement, the subordinate plan_ function is indicated by
-``$$``.
-The result of this function
-may be assigned to a Python variable, but not a `pattern variable`_
-(``$variable``).
+Within each python_statement, the subordinate plan function is indicated by
+``$$``.  The result of this function may be assigned to a Python variable,
+but not a `pattern variable`_ (``$variable``).
 Parameters from the rule's ``taking`` clause may be passed on to the
 subordinate plan_ functions.
 
 When multiple premises have python_statements in their *plan_specs*, the
 python_statements in plan_specs *without* a ``step`` clause are executed first
-in the order that they appear in this rule's ``when`` clause.
+in the order that they appear in the ``when`` clause.
 
-Then the python_statements in plan_specs
-*with* a ``step`` clause are executed in ascending NUMBER sequence.
-It is permissible for the NUMBER to be negative or a float.
+Then the python_statements in plan_specs *with* a ``step`` clause are
+executed in ascending NUMBER sequence.  It is permissible for the NUMBER
+to be negative or a float.
 
-If the ``as`` clause is used, the plan_ function is bound to the
-`pattern variable`_ as a Python function, but not automatically executed.
+If the ``as`` clause is used, the plan function is bound to the
+pattern variable as a Python function, but not automatically executed.
 This allows you to call the function (or not) when and as many times as you
-please.
-The parameters
-required are defined in the ``taking`` clause of the rule_ used to prove the
-premise.
+please.  The parameters required are defined in the ``taking`` clause of the
+rule used to prove the premise.
 
-Note that within a ``forall``, ``require`` or ``notany`` clause, the only
-``plan_spec`` that may be used is the ``as`` clause.
+.. note::
+
+   Within a forall_ or notany_ premise, the only ``plan_spec`` that may be
+   used is the ``as`` clause.
 
 With Clause
 ==============
 
-The ``with`` clause contains Python
-statements to include in the plan_ produced by this rule_.  These Python
-statements may
-include `pattern variables`_ whose values will be substituted into the
-statements when finalizing the final top-level plan_.
+The ``with`` clause contains Python statements to include in the plan_
+produced by this rule_.  These Python statements may include
+`pattern variables`_ whose values will be cooked_ into these statements
+when the plan is created.
 
 ::
 
@@ -201,26 +202,27 @@ statements when finalizing the final top-level plan_.
                  {<python_statement> NL}
              DEINDENT
 
-These *python_statements* are included in the rule's plan_ function after
-all of the automatic calls to the subordinate plan_ functions from the
-*plan_specs* in the ``when`` clause.
+The *python_statements* are included in the rule's plan function after
+all of the calls to the subordinate plan functions made from the
+*plan_specs* in the `when clause`_.
 
 If the ``with`` clause is omitted, but the ``when`` clause has *plan_specs*
-(excluding *as* specs), a plan_ function is still generated for this
-rule_ so that the subordinate plan_ functions are still called.
+(excluding the *as* clause), a plan function is still generated for this
+rule so that the subordinate plan functions are still called.
 
 The *python_statements* are not parsed.  They are simply scanned for ``$``
-`pattern variables`_ that don't occur in string literals or comments.
-The resulting plan_ will substitute the values bound to these variables_
-into the code.
+pattern variables that don't occur within string literals or comments.
+The values bound to these variables are cooked_ into the code to produce the
+plan.
 
-All `pattern variables`_ used in *python_statements* (both in the
+Thus, all pattern variables used within *python_statements* (both in the
 ``plan_specs`` and the ``when`` clause) must be bound to a value.  This
 value is a constant value that never changes for this plan_.
 
-But note that this `pattern variable`_ substitution isn't done until
-*after* the entire top-level goal has been proven.  So it is permissible to use
-unbound `pattern variables`_, so long as they will become bound to values by
-subsequent rules_ required to prove higher-level goals before the top-level
-goal has been proven.
+.. note::
+
+   This occurs after the entire top-level goal is proven so that it is
+   permissible to bind these pattern variables to values *following* the
+   execution of the rule containing them.
+
 

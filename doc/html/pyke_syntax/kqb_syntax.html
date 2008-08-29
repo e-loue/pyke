@@ -71,32 +71,86 @@
 <h1 class="title">KQB Syntax</h1>
 <p>This uses a different lexical structure than <a class="reference" href="krb_syntax/index.html#lexical-structure">KRB files</a>.  Textual parameter
 substitution is done with the standard Python <a class="reference" href="http://docs.python.org/lib/node40.html">string.Template</a> class, which
-specifies parameters with <tt class="docutils literal"><span class="pre">$</span></tt>, much like <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a>.  In the
+specifies parameters with a <tt class="docutils literal"><span class="pre">$</span></tt>, much like <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a>.  In the
 following descriptions, substitution parameters are acted upon in
-<tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt>, but not in <tt class="docutils literal"><span class="pre">TEXT</span></tt>.</p>
+<tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>, but not in <tt class="docutils literal"><span class="pre">TEXT</span></tt>.</p>
 <p>The name of the <a class="reference" href="../knowledge_bases/question_bases.html">question base</a> is simple the filename with the <tt class="docutils literal"><span class="pre">.kqb</span></tt>
 suffix stripped.  This must be a valid Python identifier.</p>
+<div class="section">
+<h2><a id="parametrized-text" name="parametrized-text">PARAMETRIZED_TEXT</a></h2>
+<p><tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> may span multiple lines.  Each subsequent line must
+be indented at least as much as the first character of <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>
+on the first line.  Line breaks and indentation are preserved.  So syntax
+like:</p>
+<pre class="literal-block">
+match '!' PARAMETRIZED_TEXT
+</pre>
+<p>Could be:</p>
+<pre class="literal-block">
+2-10 ! This is the start of the
+       parametrized text.
+       ^
+       |
+       +------ all lines must be indented at least this far!
+
+          - what do you think?
+</pre>
+<p>The <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> here would be:</p>
+<pre class="literal-block">
+This is the start of the
+parametrized text.
+^
+|
++------ all lines must be indented at least this far!
+
+   - what do you think?
+</pre>
+<p>But this is not legal:</p>
+<pre class="literal-block">
+2-10 ! An example of PARAMETRIZED_TEXT
+      with a second line that's not indented enough!
+</pre>
+</div>
 <div class="section">
 <h2><a id="syntax-for-kqb-file" name="syntax-for-kqb-file">Syntax for KQB File</a></h2>
 <pre class="literal-block">
 file ::= [NL] {question}
 
-question ::= IDENTIFIER '(' [{parameter,}] ')' NL
-                INDENT {PARAMETERIZED_TEXT NL}
+question ::= IDENTIFIER '(' [{parameter,}] ')' NL INDENT
+                {PARAMETRIZED_TEXT NL}
                 '---' NL
                 parameter '=' question_type
              DEINDENT
 
 parameter ::= '$' IDENTIFIER
 </pre>
-<p>Each question has a name and a fixed number of parameters.  One of these
-parameters is designated as the <em>answer</em> parameter on the line immediately
-following the termination of the question <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt> (<tt class="docutils literal"><span class="pre">'---'</span></tt>).</p>
-<p>The question is referenced in the <a class="reference" href="krb_syntax/bc_rule.html#when-clause">premise</a> of a <a class="reference" href="../logic_programming/rules/index.html">rule</a> as:</p>
+<p>Each question has a name and a fixed number of parameters.  This is followed
+by one or more lines of <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> that will be presented as the
+question to answer.  These are terminated by a line containing only <tt class="docutils literal"><span class="pre">---</span></tt>.</p>
+<p>One of the parameters is designated as the <em>answer</em> parameter on the line
+immediately following the terminating <tt class="docutils literal"><span class="pre">---</span></tt>.  This is the only parameter
+that may be unbound when a rule uses this question.</p>
+<p>For example, the file <tt class="docutils literal"><span class="pre">user_questions.kqb</span></tt> might contain:</p>
 <pre class="literal-block">
-question_base_name.question_name(parameter...)
+ate($meal, $ans)
+    Did you eat $meal?
+    ---
+    $ans = yn
 </pre>
-<p>There are several different kinds of <tt class="docutils literal"><span class="pre">question_types</span></tt>:</p>
+<p>This question could be referenced in the <a class="reference" href="krb_syntax/bc_rule.html#when-clause">premise</a> of a <a class="reference" href="../logic_programming/rules/index.html">rule</a> as:</p>
+<pre class="literal-block">
+user_questions.ate(lunch, $ans)
+</pre>
+<p>or:</p>
+<pre class="literal-block">
+user_questions.ate(lunch, False)
+</pre>
+<p>But not:</p>
+<pre class="literal-block">
+user_questions.ate($meal, False)
+</pre>
+<p>There are several different kinds of <tt class="docutils literal"><span class="pre">question_types</span></tt>, each corresponding to
+a different way that the user might answer the question:</p>
 <pre class="literal-block">
 question_type ::= yn_type
                 | integer_type
@@ -106,6 +160,20 @@ question_type ::= yn_type
                 | select_1_type
                 | select_n_type
 </pre>
+<p>The <tt class="docutils literal"><span class="pre">integer_type</span></tt>, <tt class="docutils literal"><span class="pre">number_type</span></tt>, <tt class="docutils literal"><span class="pre">float_type</span></tt> and <tt class="docutils literal"><span class="pre">string_type</span></tt> may
+include a <a class="reference" href="#match">match</a> to force the user to enter a sensible answer.</p>
+<p>All of these may also include a <a class="reference" href="#review">review</a>, which is just <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>
+that will be displayed when the user's answer matches a certain <a class="reference" href="#match">match</a> value.</p>
+<p>Question_type links:</p>
+<ul class="simple">
+<li><a class="reference" href="#yn-type">yn_type</a></li>
+<li><a class="reference" href="#integer-type">integer_type</a></li>
+<li><a class="reference" href="#number-type">number_type</a></li>
+<li><a class="reference" href="#float-type">float_type</a></li>
+<li><a class="reference" href="#string-type">string_type</a></li>
+<li><a class="reference" href="#select-1-type">select_1_type</a></li>
+<li><a class="reference" href="#select-n-type">select_n_type</a></li>
+</ul>
 </div>
 <div class="section">
 <h2><a id="yn-type" name="yn-type">YN_type</a></h2>
@@ -114,8 +182,14 @@ yn_type ::= 'yn' NL [review]
 </pre>
 <p>The user answers &quot;yes&quot; or &quot;no&quot;.  The answer returned is True or False.  If the
 <a class="reference" href="../knowledge_bases/question_bases.html#presenting-questions-to-your-end-users">ask_tty</a> module is used, the user may type &quot;yes&quot;, &quot;y&quot;, &quot;true&quot; or &quot;t&quot; for
-True and &quot;no&quot;, &quot;n&quot;, &quot;false&quot;, or &quot;f&quot; for False.  These comparisons are case
-insensitive.</p>
+True and &quot;no&quot;, &quot;n&quot;, &quot;false&quot;, or &quot;f&quot; for False.  These are case insensitive.</p>
+<p>Example:</p>
+<pre class="literal-block">
+ate($meal, $ans)
+    Did you eat $meal?
+    ---
+    $ans = yn
+</pre>
 <p>See <a class="reference" href="#review">review</a>, below.</p>
 </div>
 <div class="section">
@@ -125,6 +199,13 @@ integer_type ::= 'integer' ['(' match ')'] NL [review]
 </pre>
 <p>The user enters an integer.  If the <a class="reference" href="#match">match</a> is specified, the integer must
 match it or the user is asked to try again.</p>
+<p>Example:</p>
+<pre class="literal-block">
+hours_since_last_meal($ans)
+    How many hours has it been since you last ate?
+    ---
+    $ans = integer(0-48)
+</pre>
 <p>See <a class="reference" href="#review">review</a>, below.</p>
 </div>
 <div class="section">
@@ -137,6 +218,13 @@ enters an integer, a Python <tt class="docutils literal"><span class="pre">int</
 is returned.</p>
 <p>If the <a class="reference" href="#match">match</a> is specified, the number must match it or the user is asked
 to try again.</p>
+<p>Example:</p>
+<pre class="literal-block">
+miles_to($dest, $ans)
+    How many miles did you travel to get to $dest?
+    ---
+    $ans = number(0.1-3000)
+</pre>
 <p>See <a class="reference" href="#review">review</a>, below.</p>
 </div>
 <div class="section">
@@ -144,10 +232,17 @@ to try again.</p>
 <pre class="literal-block">
 float_type ::= 'float' ['(' match ')'] NL [review]
 </pre>
-<p>The user enters an integer or a floating point number.  The number is always
-returned as a Python <tt class="docutils literal"><span class="pre">float</span></tt>.</p>
+<p>The user enters an integer or a floating point number.  But the answer
+returned is always a Python <tt class="docutils literal"><span class="pre">float</span></tt>.</p>
 <p>If the <a class="reference" href="#match">match</a> is specified, the number must match it or the user is asked
 to try again.</p>
+<p>Example:</p>
+<pre class="literal-block">
+price($object, $price)
+    What did you pay for $object?
+    ---
+    $price = float
+</pre>
 <p>See <a class="reference" href="#review">review</a>, below.</p>
 </div>
 <div class="section">
@@ -155,68 +250,141 @@ to try again.</p>
 <pre class="literal-block">
 string_type ::= 'string' ['(' match ')'] NL [review]
 </pre>
-<p>The user enters a string.  If the <a class="reference" href="#match">match</a> is specified, the string must match
-it or the user is asked to try again.</p>
+<p>The user enters a string (text).  If the <a class="reference" href="#match">match</a> is specified, the string must
+match it or the user is asked to try again.</p>
+<p>Example:</p>
+<pre class="literal-block">
+users_name($name)
+    What's your name?
+        - Please don't enter a fictitious (screen) name.
+    ---
+    $name = string(2-40)
+</pre>
 <p>See <a class="reference" href="#review">review</a>, below.</p>
 </div>
 <div class="section">
 <h2><a id="match" name="match">Match</a></h2>
+<p>There are several kinds of simple_matches that may be or-ed together with
+<tt class="docutils literal"><span class="pre">|</span></tt>:</p>
 <pre class="literal-block">
 match ::= simple_match {'|' simple_match}
 </pre>
-<p>A match may be made up of several <tt class="docutils literal"><span class="pre">simple_matches</span></tt> or-ed together.  The
-match succeeds if any of the <tt class="docutils literal"><span class="pre">simple_matches</span></tt> succeed.</p>
+<p>The match succeeds if any of the <tt class="docutils literal"><span class="pre">simple_matches</span></tt> succeed.</p>
 <pre class="literal-block">
 simple_match ::= '(' match ')'
                | [ STRING ] [ '[' TEXT ']' ] '/' REGEXP_TEXT '/'
                | [NUMBER] '-' NUMBER
                | NUMBER '-'
-               | value
                | value '=' simple_match
+               | value
 </pre>
 <div class="section">
 <h3><a id="regexp-match" name="regexp-match">Regexp Match</a></h3>
-<p>A regexp match matches if the regexp matches.</p>
-<p>If the regexp contains a single group, that group is returned rather than the
-entire string.</p>
-<p>If the regexp contains multiple groups, a tuple of the groups is returned
-rather than entire string.</p>
-<p>If the initial STRING is specified on a regexp, it is used in the error
-message if the regexp fails.  The error message is &quot;Answer should be $msg, got
-$string&quot;.</p>
-<p>If the '[' TEXT ']' is specified on a regexp, it is used in the prompt for the
-end user.  Generally, this prompt message is enclosed in '[' and ']' when it
-is displayed to the user.</p>
+<pre class="literal-block">
+simple_match ::= [ STRING ] [ '[' TEXT ']' ] '/' REGEXP_TEXT '/'
+</pre>
+<p>A regexp match can only be used with <a class="reference" href="#string-type">string_type</a> questions.  It matches if
+the regexp matches.</p>
+<p>If the regexp contains a single group, that group is returned as the
+question's answer rather than the entire string.</p>
+<p>If the regexp contains multiple groups, a tuple of the groups is returned as
+the question's answer rather than entire string.</p>
+<p>If STRING is specified on a regexp, it is used in the error message if the
+regexp fails.  The error message is &quot;Answer should be $error_msg, got $string&quot;.</p>
+<p>If '[' TEXT ']' is specified on a regexp, it is used in the prompt for the
+end user to inform him of what is expected.  Generally, this prompt message
+is enclosed in '[' and ']' when it is displayed to the user.</p>
+<p>Example:</p>
+<pre class="literal-block">
+state_code($state)
+    Enter your two digit state code.
+    ---
+    $state = string('uppercase'[uppercase]/[A-Z][A-Z]/)
+</pre>
 </div>
 <div class="section">
 <h3><a id="range-match" name="range-match">Range Match</a></h3>
+<pre class="literal-block">
+simple_match ::= [NUMBER] '-' NUMBER
+               | NUMBER '-'
+</pre>
 <p>A range match has a '-' in it.  It matches if the answer is between the two
-values.  If either value is omitted, it is not tested.  If matched to a
-string, it matches the length of the string.</p>
+values.  If either value is omitted, that limit is not tested.  If matched to
+a string, it matches the length of the string.</p>
+<p>Example:</p>
+<pre class="literal-block">
+age($years)
+    How old are you?
+    ---
+    $years = integer(1-130)
+</pre>
 </div>
 <div class="section">
 <h3><a id="value-match" name="value-match">Value '=' Match</a></h3>
-<p>The '=' means &quot;map&quot;.  The match fails if the match after the '=' fails.
-Otherwise it returns the value before the '=' rather than what the user
-entered.</p>
+<pre class="literal-block">
+simple_match ::= value '=' simple_match
+</pre>
+<p>The '=' means &quot;substituted for&quot;.  The <a class="reference" href="#match">match</a> fails if the match after the '='
+fails.  Otherwise it returns the value before the '=' rather than what the
+user entered.  Note that you can or (<tt class="docutils literal"><span class="pre">|</span></tt>) several of these together to
+translate several different matched values.</p>
+<p>Example:</p>
+<pre class="literal-block">
+age($period_of_life)
+    How old are you?
+    ---
+    $period_of_life = integer(childhood=1-12 |
+                              teenager=13-19 |
+                              young_adult=20-35 |
+                              middle_age=35-64 |
+                              elder=65-130)
+</pre>
 </div>
 <div class="section">
 <h3><a id="id1" name="id1">Value Match</a></h3>
 <pre class="literal-block">
+simple_match ::= value
+
 value ::= STRING | IDENTIFIER | NUMBER | 'None' | 'True' | 'False'
 </pre>
-<p>A value match, only matches that one value.</p>
+<p>A value match, only matches that one value.  An IDENTIFIER is treated as a
+STRING.  These are mostly used in reviews.</p>
 </div>
 </div>
 <div class="section">
 <h2><a id="review" name="review">Review</a></h2>
 <pre class="literal-block">
-review ::= {match '!' PARAMETERIZED_TEXT}
+review ::= {match '!' PARAMETRIZED_TEXT NL}
 </pre>
-<p>The review is applied after the answer has been validated (which possibly
+<p>All of the <tt class="docutils literal"><span class="pre">reviews</span></tt> must be at the same indent level.</p>
+<p>The review is applied after the answer has been validated (validation possibly
 changes the value).</p>
-<p>Each match is checked and all matching review's <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt>
+<p>Each <a class="reference" href="#match">match</a> is checked and all of the matching review's <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>
 messages are displayed to the user.</p>
+<p>Examples:</p>
+<pre class="literal-block">
+stupid_question($ans)
+    question text
+    that can be several lines long ...
+    ---
+    $ans = yn
+        True  ! Correct!  This is true because the
+                          sky is blue!
+        False ! Nope!  Remember that the sky is blue!
+
+wood($ans)
+    How much wood would a woodchuck chuck if a woodchuck could chuck wood?
+    ---
+    $ans = integer(0-100)
+        -10   ! more than that!
+        10-20 ! bingo!
+        21-   ! I guess they're not as strong as you think ...
+</pre>
+<p>In this case, answering &quot;y&quot; to <tt class="docutils literal"><span class="pre">stupid_question</span></tt> will display:</p>
+<pre class="literal-block">
+Correct!  This is true because the
+          sky is blue!
+</pre>
 </div>
 <div class="section">
 <h2><a id="select-1-type" name="select-1-type">Select_1_type</a></h2>
@@ -225,6 +393,27 @@ select_1_type ::= 'select_1' NL alternatives
 </pre>
 <p>This is a multiple choice question.  The <a class="reference" href="#alternatives">alternatives</a> are displayed to the
 user, and he picks one (and only one).</p>
+<p>Example:</p>
+<pre class="literal-block">
+another_question($arg1, $arg2, $ans)
+    question text with $arg1 stuff in it.
+    on multiple lines
+        - possibly indented
+        - for who knows what reason...
+            - maybe for $arg2?
+    ---
+    $ans = select_1
+        1: prompt for this selection with $arg2 in it too
+           which can span multiple lines
+               - and be indented ...
+           ! Nope!  Remember that the sky is blue!
+        2: next prompt
+           ! =1     # same review as 1:
+        3: pick me! pick me!!!
+           ! Correct!  You certainly know about $arg1!
+             yep, multiple review lines too...
+                - and indented...
+</pre>
 </div>
 <div class="section">
 <h2><a id="select-n-type" name="select-n-type">Select_n_type</a></h2>
@@ -233,22 +422,40 @@ select_n_type ::= 'select_n' NL alternatives
 </pre>
 <p>This is a multiple choice question.  The <a class="reference" href="#alternatives">alternatives</a> are displayed to the
 user, and he picks as many as he likes.</p>
+<p>Example:</p>
+<pre class="literal-block">
+problems($list)
+    Which of these problems are you experiencing?
+        - select all that apply
+    ---
+    $list = select_n
+        boot: The system won't boot.
+        os: I hate Windows!
+        internet: I can't connect to the internet.
+        slow: The system is running too slow.
+        ouch: Help!  I've fallen and I can't get up!
+        freeze: The system freezes or does not respond to input.
+        printer: The printer doesn't work.
+        senile: What's email?
+</pre>
 </div>
 <div class="section">
 <h2><a id="alternatives" name="alternatives">Alternatives</a></h2>
 <pre class="literal-block">
-alternatives ::= {value ':' PARAMETERIZED_TEXT NL [alt_review]}
+alternatives ::= {value ':' PARAMETRIZED_TEXT NL [alt_review]}
 </pre>
-<p>The user only sees the <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt> values.  The <tt class="docutils literal"><span class="pre">value</span></tt>
-associated with the selected <tt class="docutils literal"><span class="pre">PARAMETERIZED_TEXT</span></tt> is returned (but the user
+<p>All of the <tt class="docutils literal"><span class="pre">alternatives</span></tt> must be at the same indent level.</p>
+<p>The user only sees the <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> values.  The <tt class="docutils literal"><span class="pre">value</span></tt>
+associated with the selected <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> is returned (but the user
 never sees it).  The <tt class="docutils literal"><span class="pre">value</span></tt> <em>tags</em> the alternative.</p>
 <pre class="literal-block">
 alt_review ::= '!' '=' value NL
-             | '!' PARAMETERIZED_TEXT NL
+             | '!' PARAMETRIZED_TEXT NL
 </pre>
 <p>Each alternative may have it's own review associated with it.</p>
 <p>The <tt class="docutils literal"><span class="pre">'!'</span> <span class="pre">'='</span> <span class="pre">value</span></tt> form uses the same review text as the previous
-alternative with that <em>tag</em>.</p>
+alternative with that <em>tag</em>.  Note that this can not refer forward to a
+following alternative.</p>
 <p>The second form specifies the review text for this alternative directly.</p>
 <!-- ADD_LINKS MARKER -->
 </div>
@@ -270,7 +477,7 @@ write your universal facts.</p>
 write your rules.</p>
 </div>
 <div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of <em>Knowledge Question Base</em> (KQB) files, which is where you
-write your end user questions.</p>
+spell out your end user questions.</p>
 </div>
 
             </div>
@@ -288,7 +495,7 @@ write your end user questions.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 22 2008.
+    Page last modified Fri, Aug 29 2008.
   </div>
 
 </body>

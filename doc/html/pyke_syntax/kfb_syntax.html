@@ -89,6 +89,30 @@ data ::= 'None' | 'True' | 'False'
        | NUMBER | IDENTIFIER | STRING
        | '(' [{data,}] ')'
 </pre>
+</div>
+<div class="section">
+<h2><a id="example" name="example">Example</a></h2>
+<p>This is taken from the <a class="reference" href="../examples.html#family-relations">family_relations</a> example:</p>
+<pre class="literal-block">
+# family.kfb
+
+son_of(bruce, thomas, norma)
+son_of(fred_a, thomas, norma)
+son_of(tim, thomas, norma)
+daughter_of(vicki, thomas, norma)
+daughter_of(jill, thomas, norma)
+
+daughter_of(nanette, arthur2, kathleen)
+son_of(arthur3, arthur2, kathleen)
+daughter_of(sue, arthur2, kathleen)
+son_of(ed, arthur2, kathleen)
+daughter_of(marilyn, arthur2, kathleen)
+son_of(david_b, arthur2, kathleen)
+daughter_of(m_helen, arthur2, kathleen)
+
+son_of(m_thomas, bruce, marilyn)
+son_of(david_a, bruce, marilyn)
+</pre>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>
@@ -109,7 +133,7 @@ write your universal facts.</p>
 write your rules.</p>
 </div>
 <div class="right-item"><a href="kqb_syntax.html">KQB Syntax</a><p>The syntax of <em>Knowledge Question Base</em> (KQB) files, which is where you
-write your end user questions.</p>
+spell out your end user questions.</p>
 </div>
 
             </div>
@@ -127,7 +151,7 @@ write your end user questions.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 22 2008.
+    Page last modified Sat, Aug 23 2008.
   </div>
 
 </body>

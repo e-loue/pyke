@@ -117,7 +117,7 @@ Syntactic Structure of Statements
 
 So we see that statements in Pyke are very structured.
 
-Pyke catagorizes statements into `knowledge bases`_.  You create knowledge
+Pyke categorizes statements into `knowledge bases`_.  You create knowledge
 bases to help you organize your statements.  A *knowledge base* in Pyke
 roughly corresponds to a *module* in Python.
 

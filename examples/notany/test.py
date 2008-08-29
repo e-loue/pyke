@@ -6,20 +6,7 @@ from pyke import krb_traceback
 
 engine = knowledge_engine.engine()
 
-def init(engine):
-    def add_fact(predicate, child, father, mother):
-        engine.add_universal_fact('family', predicate, (child, father, mother))
-
-    add_fact('son_of', 'egon', 'anton', 'brigitte')
-    add_fact('son_of', 'ralf', 'anton', 'brigitte')
-    add_fact('son_of', 'anton', 'johann', 'maria')
-    add_fact('daughter_of', 'elisabeth', 'johann', 'maria')    
-    add_fact('daughter_of', 'karin', 'karl', 'margit')
-    add_fact('daughter_of', 'sabine', 'karl', 'margit')
-
-init(engine)
-
-def test():
+def fc_test():
     engine.reset()
     try:
         engine.activate('fc_notany')
