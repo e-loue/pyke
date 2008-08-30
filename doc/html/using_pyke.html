@@ -197,8 +197,8 @@ tuple in the answer for the proof.  For example:</p>
 <p>And will return the bindings produced by the proof as (<tt class="docutils literal"><span class="pre">$ans_0</span></tt>,
 <tt class="docutils literal"><span class="pre">$ans_1</span></tt>).</p>
 <p class="last">Returns the first proof found as a 2-tuple: a tuple of the bindings for
-the <tt class="docutils literal"><span class="pre">num_returns</span></tt> pattern variables, and a <a class="reference" href="logic_programming/plans.html">plan</a>.  The <a class="reference" href="logic_programming/plans.html">plan</a> is <tt class="docutils literal"><span class="pre">None</span></tt>
-if no <a class="reference" href="logic_programming/plans.html">plan</a> was generated; otherwise, it is a Python function as
+the <tt class="docutils literal"><span class="pre">num_returns</span></tt> pattern variables, and a <a class="reference" href="logic_programming/plans.html">plan</a>.  The plan is <tt class="docutils literal"><span class="pre">None</span></tt>
+if no plan was generated; otherwise, it is a Python function as
 described <a class="reference" href="#running-and-pickling-plans">below</a>.</p>
 </dd>
 </dl>
@@ -219,7 +219,7 @@ CanNotProve: Can not prove bc_example.father_son(thomas, bogus, $ans_0)
 <dt><em>some_engine</em>.prove_n(kb_name, entity_name, fixed_args, num_returns)</dt>
 <dd><p class="first">This is a generator yielding 2-tuples, a tuple whose length ==
 <tt class="docutils literal"><span class="pre">num_returns</span></tt> and a <a class="reference" href="logic_programming/plans.html">plan</a>, for each possible proof.  Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>,
-the <a class="reference" href="logic_programming/plans.html">plan</a> is None if no <a class="reference" href="logic_programming/plans.html">plan</a> was generated.  Unlike <tt class="docutils literal"><span class="pre">prove_1</span></tt> it does
+the plan is None if no plan was generated.  Unlike <tt class="docutils literal"><span class="pre">prove_1</span></tt> it does
 not raise an exception if no proof is found.</p>
 <pre class="last doctest-block">
 &gt;&gt;&gt; for ans in my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2):
@@ -233,12 +233,12 @@ not raise an exception if no proof is found.</p>
 <h3><a id="running-and-pickling-plans" name="running-and-pickling-plans">Running and Pickling Plans</a></h3>
 <p>Once you've obtained a <a class="reference" href="logic_programming/plans.html">plan</a> from <tt class="docutils literal"><span class="pre">prove_1</span></tt> or <tt class="docutils literal"><span class="pre">prove_n</span></tt>, you just call
 it like a normal Python function.  The arguments required are simply those
-specified, if any, in the <a class="reference" href="krb_syntax/bc_rule.html#taking-clause">taking clause</a> of the <a class="reference" href="pyke_syntax/krb_syntax/bc_rule.html">rule</a> proving the top-level
+specified, if any, in the <a class="reference" href="pyke_syntax/krb_syntax/bc_rule.html#taking-clause">taking clause</a> of the <a class="reference" href="pyke_syntax/krb_syntax/bc_rule.html">rule</a> proving the top-level
 goal.</p>
-<p>You may call the <a class="reference" href="logic_programming/plans.html">plan</a> function any number of times.  You may even pickle
-the <a class="reference" href="logic_programming/plans.html">plan</a> for later use.  But the <a class="reference" href="logic_programming/plans.html">plans</a> are constructed out of
+<p>You may call the plan function any number of times.  You may even pickle
+the plan for later use.  But the plans are constructed out of
 <a class="reference" href="http://docs.python.org/lib/module-functools.html">functools.partial</a> functions, so you need to register this with <a class="reference" href="http://docs.python.org/lib/module-copyreg.html">copy_reg</a>
-before pickling the <a class="reference" href="logic_programming/plans.html">plan</a>:</p>
+before pickling the plan:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; import copy_reg
@@ -247,9 +247,9 @@ before pickling the <a class="reference" href="logic_programming/plans.html">pla
 ...                 lambda p: (functools.partial, (p.func,) + p.args))
 </pre>
 </blockquote>
-<p>No special code is required to unpickle a <a class="reference" href="logic_programming/plans.html">plan</a>.  Just unpickle and call it.
-(Unpickling the <a class="reference" href="logic_programming/plans.html">plan</a> only imports one small Pyke module to be able to run
-the <a class="reference" href="logic_programming/plans.html">plan</a>).</p>
+<p>No special code is required to unpickle a plan.  Just unpickle and call it.
+(Unpickling the plan only imports one small Pyke module to be able to run
+the plan).</p>
 </div>
 <div class="section">
 <h3><a id="tracing-rules" name="tracing-rules">Tracing Rules</a></h3>
@@ -282,7 +282,7 @@ Python traceback.  This makes it much easier to read the tracebacks that occur
 during proofs.</p>
 <p>The <tt class="docutils literal"><span class="pre">krb_traceback</span></tt> module has exactly the same functions as the standard
 Python <a class="reference" href="http://docs.python.org/lib/module-traceback.html">traceback</a> module, but they convert the generated Python function
-information into <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb file</a> information.  They also delete the intervening
+information into .krb file information.  They also delete the intervening
 Python functions between subgoal proofs.</p>
 <blockquote>
 <pre class="doctest-block">
@@ -365,7 +365,7 @@ backtracking.</dd>
 </dl>
 <div class="section">
 <h3><a id="creating-your-own-patterns" name="creating-your-own-patterns">Creating Your Own Patterns</a></h3>
-<p>You'll need two more Pyke modules to create your own <a class="reference" href="logic_programming/pattern_matching/index.txt">patterns</a> and contexts:</p>
+<p>You'll need two more Pyke modules to create your own <a class="reference" href="logic_programming/pattern_matching/index.html">patterns</a> and contexts:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import pattern, contexts

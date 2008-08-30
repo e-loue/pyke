@@ -1,0 +1,8 @@
+In the doc directory:
+
+$ checklink -sr file:///home/bruce/python/workareas/sf.trunk/doc/html/index.html > checklink.out 2>&1 &
+$ tail -f checklink.out
+
+Then check the checklink.out file.
+
+checklink is in the w3c-linkchecker ubuntu package.

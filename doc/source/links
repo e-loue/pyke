@@ -85,7 +85,7 @@
 .. _pattern variable: logic_programming/pattern_matching/pattern_variables.html
 .. _pattern variables: `pattern variable`_
 .. _patterns: pattern_
-.. _pickled: logic_programming/plans.html#running-and-pickling-plans
+.. _pickled: using_pyke.html#running-and-pickling-plans
 .. _pickle: http://docs.python.org/lib/module-pickle.html
 .. _pickles: pickle_
 .. _plan: logic_programming/plans.html
@@ -133,7 +133,7 @@
 .. _string.Template: http://docs.python.org/lib/node40.html
 .. _subprocess.CalledProcessError: http://docs.python.org/lib/node530.html
 .. _subprocess.Popen: http://docs.python.org/lib/node528.html
-.. _taking clause: krb_syntax/bc_rule.html#taking-clause
+.. _taking clause: pyke_syntax/krb_syntax/bc_rule.html#taking-clause
 .. _traceback: http://docs.python.org/lib/module-traceback.html
 .. _Tuple patterns: logic_programming/pattern_matching/tuple_patterns.html
 .. _TurboGears 2: http://turbogears.org/2.0/
