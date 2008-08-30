@@ -104,7 +104,12 @@ class kqb_parser(object):
                           (self.f.name, self.lineno, self.column + 1,
                            self.line))
     def push_token(self):
+        #print "push_token:", self.last_token  # FIX
         self.pushed_token = self.last_token
+        self.pushed_indent = self.indent
+        self.pushed_column = self.column
+        self.indent = self.last_indent
+        self.column = self.last_column
     def get_token(self, check_token=None):
         r'''
             >>> from StringIO import StringIO
@@ -153,19 +158,24 @@ class kqb_parser(object):
         '''
         if self.pushed_token:
             ans = self.pushed_token
-            self.pushed_token = None
+            self.indent = self.pushed_indent
+            self.column = self.pushed_column
+            self.pushed_token = self.pushed_column = self.pushed_indent = None
             if check_token and check_token != ans[0]:
                 self.SyntaxError("expected %s, got %s" % (check_token, ans[0]))
+            #print "get_token: returning pushed_token", ans  # FIX
             return ans
         if self.column < len(self.line): self.skip_spaces()
         if self.column >= len(self.line):
             self.readline()
             if self.eof:
                 self.last_token = None, None
+                #print "get_token: returning EOF"  # FIX
                 return self.last_token
         self.last_line = self.line
         self.last_lineno = self.lineno
         self.last_column = self.column
+        self.last_indent = self.indent
         match = self.tokenizer.match(self.line, self.column)
         if not match: self.SyntaxError("Scanner error: no legal token")
         token = match.lastgroup
@@ -198,8 +208,9 @@ class kqb_parser(object):
         if check_token and check_token != token:
             self.SyntaxError("expected %s, got %s" % (check_token, token))
         self.last_token = str(token), value
+        #print "get_token: returning", self.last_token  # FIX
         return self.last_token
-    def get_block_string(self, stop=None, hanging=False):
+    def get_block_string(self, stop=None, hanging=False, ending_newlines=False):
         r'''
             >>> from StringIO import StringIO
             >>> f = StringIO(r"""
@@ -252,10 +263,13 @@ class kqb_parser(object):
         while not self.eof:
             last_lineno = self.lineno
             self.readline()
+            if ending_newlines:
+                for i in range(self.lineno - last_lineno - 1): ans.append('')
             if self.eof or self.indent < indent or \
                stop and self.line[self.column:].startswith(stop):
                 break
-            for i in range(self.lineno - last_lineno - 1): ans.append('')
+            if not ending_newlines:
+                for i in range(self.lineno - last_lineno - 1): ans.append('')
             ans.append(' ' * (self.indent - indent) + self.line[self.column:])
         if not ans: self.SyntaxError("expected block string", False)
         return u'\n'.join(scanner.unquote(str) for str in ans)
@@ -431,7 +445,11 @@ class kqb_parser(object):
         '''
         if self.column >= len(self.line):
             self.readline()
-        if self.eof or self.indent == 0: return None
+        if self.eof or self.indent == 0:
+            #print "parse_review: None"  # FIX
+            return None
+        #print "parse_review: self.indent", self.indent, \
+        #      "self.column", self.column   # FIX
         indent = self.indent
         review = []
         while not self.eof and self.indent == indent:
@@ -441,6 +459,7 @@ class kqb_parser(object):
                 (match, Template(self.get_block_string(hanging=True))))
         if not self.eof and self.indent > indent:
             self.SyntaxError("unexpected indent", False)
+        #print "parse_review:", tuple(review)   # FIX
         return tuple(review)
     def parse_questions(self):
         r''' question_base.question generator.
@@ -488,7 +507,7 @@ class kqb_parser(object):
                         self.SyntaxError("expected comma or rparen, got %s" %
                                          token)
                     token, param = self.get_token()
-            format = self.get_block_string(stop='---')
+            format = self.get_block_string(stop='---', ending_newlines=True)
             self.readline()     # ---
             token, answer_param = self.get_token('param')
             self.get_token('equal')

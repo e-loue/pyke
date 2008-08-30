@@ -113,7 +113,7 @@ the suffix removed.  This must be a legal Python identifier.</p>
 <dd>Optional <em>a</em>.</dd>
 <dt>{<em>a</em>}</dt>
 <dd>One or more <em>a</em>'s.  <strong>But</strong> it is understood that if <em>a</em> ends in a comma,
-the comma after the last <em>a</em> is optional.</dd>
+the last comma is optional.</dd>
 <dt>IDENTIFIER</dt>
 <dd>Any legal Python identifier.  Example: <em>foobar</em></dd>
 <dt>NUMBER</dt>
@@ -125,14 +125,14 @@ Examples: <em>'Hi Mom!'</em>, <em>u&quot;Hi Dad!\n&quot;</em>, <em>r'''don't gob
 <em>ur&quot;&quot;&quot;leave \'s alone!&quot;&quot;&quot;</em>.</dd>
 <dt>TEXT</dt>
 <dd>Only used in KQB files.  This signifies any text (any characters) other
-than the delimiter characters containing the TEXT.</dd>
+than the delimiter characters containing the <tt class="docutils literal"><span class="pre">TEXT</span></tt>.</dd>
 <dt>PARAMETRIZED_TEXT</dt>
 <dd>Only used in KQB files.  This signifies any text (any characters) through
 the end of the line and all text on subsequent lines that are indented at
-least as much as the first PARAMETRIZED_TEXT character on the first line.
-All PARAMETRIZED_TEXT is treated as a <a class="reference" href="http://docs.python.org/lib/node40.html">string.Template</a> and may include
-<tt class="docutils literal"><span class="pre">$IDENTIFIER</span></tt> or <tt class="docutils literal"><span class="pre">${IDENTIFIER}</span></tt> parameters.  All other <tt class="docutils literal"><span class="pre">$</span></tt>
-characters must be doubled (<tt class="docutils literal"><span class="pre">$$</span></tt>).</dd>
+least as much as the first <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> character on the first
+line.  All <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> is treated as a <a class="reference" href="http://docs.python.org/lib/node40.html">string.Template</a> and
+may include <tt class="docutils literal"><span class="pre">$IDENTIFIER</span></tt> or <tt class="docutils literal"><span class="pre">${IDENTIFIER}</span></tt> parameters.  All other
+<tt class="docutils literal"><span class="pre">$</span></tt> characters must be doubled (<tt class="docutils literal"><span class="pre">$$</span></tt>).</dd>
 <dt>REGEXP_TEXT</dt>
 <dd>Only used in KQB files.  This signifies any text (any characters) excluding
 an unescaped backslash (<tt class="docutils literal"><span class="pre">\</span></tt>) at the end.  These are given to the Python's

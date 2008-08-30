@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/">
+<head>
+  <title py:content="m.title">Your title goes here</title>
+</head>
+<body>
+    <h1 py:content="m.title">Movie Title</h1>
+    <h2>Year</h2>
+      <p py:content="m.year">1998</p>
+    <h2>Length</h2>
+      <p py:content="m.length">1:33</p>
+    <h2>Directors</h2>
+    <ol>
+      <li py:for="mdlink in m.getDirectorLinks()[:]">
+        <span py:content="mdlink.getDirector().director_name">Director</span>
+      </li>
+    </ol>
+</body>
+</html>

@@ -345,10 +345,10 @@ translate several different matched values.
 
 Example::
 
-    age($period_of_life)
+    age_category($period_of_life)
         How old are you?
         ---
-        $period_of_life = integer(childhood=1-12 |
+        $period_of_life = integer(child=1-12 |
                                   teenager=13-19 |
                                   young_adult=20-35 |
                                   middle_age=35-64 |
@@ -386,8 +386,8 @@ messages are displayed to the user.
 Examples::
 
     stupid_question($ans)
-        question text
-        that can be several lines long ...
+        Can you answer a question
+        that is several lines long?
         ---
         $ans = yn
             True  ! Correct!  This is true because the
@@ -402,10 +402,31 @@ Examples::
             10-20 ! bingo!
             21-   ! I guess they're not as strong as you think ...
 
-In this case, answering "y" to ``stupid_question`` will display::
+Asking ``stupid_question`` and answering "y" to it::
 
+    >>> from pyke import knowledge_engine
+
+    >>> engine = knowledge_engine.engine('examples')
+
+    >>> from StringIO import StringIO
+    >>> import sys
+    >>> class echo(object):
+    ...     def __init__(self, f): self.f = f
+    ...     def readline(self):
+    ...         ans = self.f.readline()
+    ...         sys.stdout.write(ans)
+    ...         return ans
+    >>> sys.stdin = echo(StringIO('y\n'))
+
+displays::
+
+    >>> engine.prove_1('user_questions', 'stupid_question', (), 1)
+    ______________________________________________________________________________
+    Can you answer a question
+    that is several lines long? (y/n) y
     Correct!  This is true because the
               sky is blue!
+    ((True,), None)
 
 
 Select_1_type

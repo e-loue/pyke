@@ -90,7 +90,7 @@ To describe this syntax, the following punctuation is used:
    Optional *a*.
 {*a*}
    One or more *a*'s.  **But** it is understood that if *a* ends in a comma,
-   the comma after the last *a* is optional.
+   the last comma is optional.
 IDENTIFIER
    Any legal Python identifier.  Example: *foobar*
 NUMBER
@@ -102,14 +102,14 @@ STRING
    *ur"""leave \\'s alone!"""*.
 TEXT
    Only used in KQB files.  This signifies any text (any characters) other
-   than the delimiter characters containing the TEXT.
+   than the delimiter characters containing the ``TEXT``.
 PARAMETRIZED_TEXT
    Only used in KQB files.  This signifies any text (any characters) through
    the end of the line and all text on subsequent lines that are indented at
-   least as much as the first PARAMETRIZED_TEXT character on the first line.
-   All PARAMETRIZED_TEXT is treated as a `string.Template`_ and may include
-   ``$IDENTIFIER`` or ``${IDENTIFIER}`` parameters.  All other ``$``
-   characters must be doubled (``$$``).
+   least as much as the first ``PARAMETRIZED_TEXT`` character on the first
+   line.  All ``PARAMETRIZED_TEXT`` is treated as a `string.Template`_ and
+   may include ``$IDENTIFIER`` or ``${IDENTIFIER}`` parameters.  All other
+   ``$`` characters must be doubled (``$$``).
 REGEXP_TEXT
    Only used in KQB files.  This signifies any text (any characters) excluding
    an unescaped backslash (``\``) at the end.  These are given to the Python's

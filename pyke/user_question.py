@@ -82,7 +82,7 @@ class match_args(user_question):
             self.match = parser.parse_match()
             parser.get_token('rparen')
         else:
-            parse.push_token(token, value)
+            parser.push_token()
 
 class integer(match_args): pass
 class float(match_args): pass

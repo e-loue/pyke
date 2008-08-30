@@ -330,10 +330,10 @@ user entered.  Note that you can or (<tt class="docutils literal"><span class="p
 translate several different matched values.</p>
 <p>Example:</p>
 <pre class="literal-block">
-age($period_of_life)
+age_category($period_of_life)
     How old are you?
     ---
-    $period_of_life = integer(childhood=1-12 |
+    $period_of_life = integer(child=1-12 |
                               teenager=13-19 |
                               young_adult=20-35 |
                               middle_age=35-64 |
@@ -364,8 +364,8 @@ messages are displayed to the user.</p>
 <p>Examples:</p>
 <pre class="literal-block">
 stupid_question($ans)
-    question text
-    that can be several lines long ...
+    Can you answer a question
+    that is several lines long?
     ---
     $ans = yn
         True  ! Correct!  This is true because the
@@ -380,10 +380,31 @@ wood($ans)
         10-20 ! bingo!
         21-   ! I guess they're not as strong as you think ...
 </pre>
-<p>In this case, answering &quot;y&quot; to <tt class="docutils literal"><span class="pre">stupid_question</span></tt> will display:</p>
+<p>Asking <tt class="docutils literal"><span class="pre">stupid_question</span></tt> and answering &quot;y&quot; to it:</p>
 <pre class="literal-block">
+&gt;&gt;&gt; from pyke import knowledge_engine
+
+&gt;&gt;&gt; engine = knowledge_engine.engine('examples')
+
+&gt;&gt;&gt; from StringIO import StringIO
+&gt;&gt;&gt; import sys
+&gt;&gt;&gt; class echo(object):
+...     def __init__(self, f): self.f = f
+...     def readline(self):
+...         ans = self.f.readline()
+...         sys.stdout.write(ans)
+...         return ans
+&gt;&gt;&gt; sys.stdin = echo(StringIO('y\n'))
+</pre>
+<p>displays:</p>
+<pre class="literal-block">
+&gt;&gt;&gt; engine.prove_1('user_questions', 'stupid_question', (), 1)
+______________________________________________________________________________
+Can you answer a question
+that is several lines long? (y/n) y
 Correct!  This is true because the
           sky is blue!
+((True,), None)
 </pre>
 </div>
 <div class="section">
@@ -495,7 +516,7 @@ spell out your end user questions.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 29 2008.
+    Page last modified Sat, Aug 30 2008.
   </div>
 
 </body>
