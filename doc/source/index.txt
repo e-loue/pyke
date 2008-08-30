@@ -36,7 +36,7 @@ restindex
 Welcome to Pyke
 =============================
 -----------------------------
-Release 0.3
+Release 0.4
 -----------------------------
 
 Pyke introduces a form of `Logic Programming`_ (inspired by Prolog_) to the

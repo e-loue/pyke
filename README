@@ -1,6 +1,6 @@
 Pyke: Python Knowledge Engine
 
-Version: 0.3
+Version: 0.4
 
 Both forward-chaining and backward-chaining rules (which may include python
 code) are compiled into python. Can also automatically assemble python
@@ -20,7 +20,7 @@ The documentation is at:
 
 You can download a copy of this documentation to your hard drive:
 
-    pyke_doc_html-0.3.tar.gz
+    pyke_doc_html-0.4.tar.gz
 
 See the end of this file for how to regenerate the html files.
 
@@ -45,7 +45,7 @@ If you don't have easy_install, you should install it:
     download: http://peak.telecommunity.com/dist/ez_setup.py
     then (as root) run: $ python2.5 ez_setup.py
 
-Otherwise, you'll also need ply 2.3 from:
+Otherwise, you'll also need ply 2.3 or later from:
 
     http://www.dabeaz.com/ply/
 
@@ -57,7 +57,7 @@ This can be checked as follows:
 
 Then you got two choices for pyke:
 
-    pyke-0.3-py2.5.egg
+    pyke-0.4-py2.5.egg
  or the source distribution (see below)
 
 
@@ -65,7 +65,7 @@ SOURCE DISTRIBUTION:
 
 The pyke source distribution is the file:
 
-    pyke-0.3.tar.gz
+    pyke-0.4.tar.gz
 
 This contains the pyke source code, documentation (both source and html), and
 examples.
@@ -75,7 +75,7 @@ EXAMPLES:
 Pyke examples may be downloaded separately from sourceforge if you've used
 easy_install to install pyke (or installed the .egg file):
 
-    pyke_examples-0.3.tar.gz
+    pyke_examples-0.4.tar.gz
 
 Each example has a README file that explains how to run it.
 
@@ -100,7 +100,13 @@ for each request.  This should make this run very fast!  The example includes
 a wsgiref simple_server setup to run it as an http server so that you can
 access it through your browser.
 
-The findall, forall, knapsack and notany examples are each very small.
+The learn_pyke example is an incomplete attempt at a computer based training
+program.  It only deals with the topic of pattern matching.  It is left here
+as an example of using question bases.
+
+The findall, forall, knapsack, notany and towers_of_hanoi examples are each
+very small.
+
 
 TO INSTALL FROM THE SOURCES:
 
@@ -154,15 +160,16 @@ use easy_install, you can get them at:
     http://sourceforge.net/projects/docutils
     http://sourceforge.net/projects/rest2web
 
-To regenerate the html, cd to the doc directory and:
+To regenerate the html:
 
-    $ r2w r2w.ini
+    $ cd doc/source
+    $ bin/gen_html
 
 This regenerates everything from doc/source into doc/html.  It takes about
-3 seconds to run.
+8 seconds to run.
 
-If you want to run doctest on all of the *.txt files in doc/source,
-cd to doc and:
+If you want to run doctest on all of the *.txt files in doc/source:
 
+    $ cd doc
     $ ./testdocs
 

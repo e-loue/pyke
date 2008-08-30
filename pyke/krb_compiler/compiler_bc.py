@@ -3,7 +3,7 @@
 import itertools
 from pyke import contexts, pattern, bc_rule
 
-version = '0.3'
+version = '0.4'
 
 def file(rule, arg_patterns, arg_context):
   engine = rule.rule_base.engine

@@ -17,9 +17,9 @@ FILES TO CHANGE:
         - line  3: Version: 0.2
         - line 23:     pyke_doc_html-0.2.tar.gz
         - line 60:     pyke-0.2-py2.5.egg
-        - line 67:     pyke-0.2.tar.gz
-        - line 72: Add any new examples
-        - line 77:     pyke_examples-0.2.tar.gz
+        - line 68:     pyke-0.2.tar.gz
+        - line 73: Add any new examples
+        - line 78:     pyke_examples-0.2.tar.gz
     - setup.py
         - line 11:     version = "0.2",
         - line 35:         "http://downloads.sourceforge.net/..."
@@ -30,8 +30,17 @@ FILES TO CHANGE:
 
 REBUILD DOCUMENTS
 
-    $ cd doc
-    $ r2w r2w.ini
+    $ cd doc/source
+    $ bin/gen_html
+
+REBUILD compiler_bc.py
+
+    $ cd ../../pyke/krb_compiler
+    $ python
+    >>> from pyke import krb_compiler
+    >>> krb_compiler.compile('.', 'compiled_krb', ('compiler.krb',))
+    $ cp compiled_krb/compiler_bc.py .
+    $ rm -rf compiled_krb
 
 COMMIT SVN UPDATES
 
