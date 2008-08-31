@@ -46,7 +46,7 @@ COMMIT SVN UPDATES
 
 BUILD RELEASE
 
-    $ cd ..
+    $ cd ../..
     $ rm -rf build
     $ python setup.py bdist_egg sdist
     $ ./make_doc_tarball dist/pyke_doc_html-0.2.tar.gz
@@ -59,8 +59,12 @@ TAG RELEASE
 
 UPLOAD DIST FILES TO SOURCEFORGE:
 
-    In the browser, go to: https://frs.sourceforge.net/webupload and upload the
-    files.
+    In the browser, go to: https://frs.sourceforge.net/webupload and upload
+    the 4 files:
+                pyke-0.4-py2.5.egg 
+                pyke-0.4.tar.gz
+                pyke_doc_html-0.4.tar.gz
+                pyke_examples-0.4.tar.gz
 
     Go to: Admin -> File Releases
     Click on "Add Release", Enter: 0.2
@@ -97,3 +101,13 @@ CREATE NEWS ANNOUNCEMENT ON SOURCEFORGE
 UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
 
     see web.upload cheatsheet
+
+TO TEST:
+
+    $ cd ~/python
+    $ virtualenv --no-site-packages pyketest
+    $ cd pyketest
+    $ bash
+    $ unset PYTHONPATH
+    $ source bin/activate
+
