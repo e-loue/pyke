@@ -13,6 +13,8 @@ ERRORFILES="/tmp/testexamples.$$"
 > $ERRORFILES
 NUM_ERRORS=0
 
+find . -name compiled_krb -exec rm -rf "{}" +
+
 for f in `find . -name .svn -prune -o -name '*.tst' -print`
 do
     #echo Testing "$f"
