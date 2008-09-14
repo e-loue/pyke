@@ -22,6 +22,7 @@
 # THE SOFTWARE.
 
 import subprocess
+import contextlib
 from pyke import knowledge_base, rule_base
 
 # claim_goal, fact, prove_all, gather_all
@@ -56,12 +57,14 @@ class claim_goal(special_fn):
         >>> class stub(object):
         ...     def add_fn(self, fn): pass
         >>> cg = claim_goal(stub())
-        >>> gen = cg.prove(None, None, None)
+        >>> mgr = cg.prove(None, None, None)
+        >>> gen = iter(mgr.__enter__())
         >>> gen.next()
         >>> gen.next()
         Traceback (most recent call last):
             ...
         StopProof
+        >>> mgr.__exit__(None, None, None)
         >>> cg.lookup(None, None, None)
         Traceback (most recent call last):
             ...
@@ -70,8 +73,10 @@ class claim_goal(special_fn):
     def __init__(self, special_base):
         super(claim_goal, self).__init__(special_base, 'claim_goal')
     def prove(self, bindings, pat_context, patterns):
-        yield
-        raise rule_base.StopProof
+        def gen():
+            yield
+            raise rule_base.StopProof
+        return contextlib.closing(gen())
 
 def run_cmd(pat_context, cmd_pat, cwd_pat=None, stdin_pat=None):
     r'''
@@ -113,7 +118,8 @@ class check_command(special_both):
         ...     def add_fn(self, fn): pass
         >>> cc = check_command(stub())
         >>> ctxt = contexts.simple_context()
-        >>> gen = cc.lookup(ctxt, ctxt, (pattern.pattern_literal(('true',)),))
+        >>> mgr = cc.lookup(ctxt, ctxt, (pattern.pattern_literal(('true',)),))
+        >>> gen = iter(mgr.__enter__())
         >>> gen.next()
         >>> ctxt.dump()
         >>> gen.next()
@@ -121,13 +127,17 @@ class check_command(special_both):
             ...
         StopIteration
         >>> ctxt.dump()
-        >>> gen = cc.lookup(ctxt, ctxt, (pattern.pattern_literal(('false',)),))
+        >>> mgr.__exit__(None, None, None)
+        >>> mgr = cc.lookup(ctxt, ctxt, (pattern.pattern_literal(('false',)),))
+        >>> gen = iter(mgr.__enter__())
         >>> gen.next()
         Traceback (most recent call last):
             ...
         StopIteration
         >>> ctxt.dump()
-        >>> gen = cc.prove(ctxt, ctxt, (pattern.pattern_literal(('true',)),))
+        >>> mgr.__exit__(None, None, None)
+        >>> mgr = cc.prove(ctxt, ctxt, (pattern.pattern_literal(('true',)),))
+        >>> gen = iter(mgr.__enter__())
         >>> gen.next()
         >>> ctxt.dump()
         >>> gen.next()
@@ -135,15 +145,19 @@ class check_command(special_both):
             ...
         StopIteration
         >>> ctxt.dump()
+        >>> mgr.__exit__(None, None, None)
     '''
     def __init__(self, special_base):
         super(check_command, self).__init__(special_base, 'check_command')
     def lookup(self, bindings, pat_context, patterns):
-        if len(patterns) < 1: return
+        if len(patterns) < 1: return knowledge_base.Gen_empty
         retcode, out, err = run_cmd(pat_context, patterns[0],
-                                    patterns[1] if len(patterns) > 1 else None,
-                                    patterns[2] if len(patterns) > 2 else None)
-        if retcode == 0: yield
+                                    patterns[1] if len(patterns) > 1
+                                                else None,
+                                    patterns[2] if len(patterns) > 2
+                                                else None)
+        if retcode: return knowledge_base.Gen_empty
+        return knowledge_base.Gen_once
 
 class command(special_both):
     r'''
@@ -152,9 +166,10 @@ class command(special_both):
         ...     def add_fn(self, fn): pass
         >>> c = command(stub())
         >>> ctxt = contexts.simple_context()
-        >>> gen = c.lookup(ctxt, ctxt,
+        >>> mgr = c.lookup(ctxt, ctxt,
         ...                (contexts.variable('ans'),
         ...                 pattern.pattern_literal(('echo', 'hi'))))
+        >>> gen = iter(mgr.__enter__())
         >>> gen.next()
         >>> ctxt.dump()
         ans: ('hi',)
@@ -163,11 +178,13 @@ class command(special_both):
             ...
         StopIteration
         >>> ctxt.dump()
-        >>> gen = c.lookup(ctxt, ctxt,
+        >>> mgr.__exit__(None, None, None)
+        >>> mgr = c.lookup(ctxt, ctxt,
         ...                (contexts.variable('ans'),
         ...                 pattern.pattern_literal(('cat',)),
         ...                 pattern.pattern_literal(None),
         ...                 pattern.pattern_literal('line1\nline2\nline3\n')))
+        >>> gen = iter(mgr.__enter__())
         >>> gen.next()
         >>> ctxt.dump()
         ans: ('line1', 'line2', 'line3')
@@ -176,28 +193,33 @@ class command(special_both):
             ...
         StopIteration
         >>> ctxt.dump()
+        >>> mgr.__exit__(None, None, None)
     '''
     def __init__(self, special_base):
         super(command, self).__init__(special_base, 'command')
     def lookup(self, bindings, pat_context, patterns):
-        if len(patterns) < 2: return
+        if len(patterns) < 2: return knowledge_base.Gen_empty
         retcode, out, err = run_cmd(pat_context, patterns[1],
-                                    patterns[2] if len(patterns) > 2 else None,
-                                    patterns[3] if len(patterns) > 3 else None)
+                                    patterns[2] if len(patterns) > 2
+                                                else None,
+                                    patterns[3] if len(patterns) > 3
+                                                else None)
         if retcode != 0:
             raise subprocess.CalledProcessError(
                                 retcode,
                                 ' '.join(patterns[1].as_data(pat_context)))
-        mark = bindings.mark(True)
-        try:
-            outlines = tuple(out.rstrip('\n').split('\n'))
-            if patterns[0].match_data(bindings, pat_context, outlines):
-                bindings.end_save_all_undo()
-                yield
-            else:
-                bindings.end_save_all_undo()
-        finally:
-            bindings.undo_to_mark(mark)
+        def gen():
+            mark = bindings.mark(True)
+            try:
+                outlines = tuple(out.rstrip('\n').split('\n'))
+                if patterns[0].match_data(bindings, pat_context, outlines):
+                    bindings.end_save_all_undo()
+                    yield
+                else:
+                    bindings.end_save_all_undo()
+            finally:
+                bindings.undo_to_mark(mark)
+        return contextlib.closing(gen())
 
 class general_command(special_both):
     r'''
@@ -207,9 +229,10 @@ class general_command(special_both):
         >>> gc = general_command(stub())
         >>> ctxt = contexts.simple_context()
         >>> ctxt.dump()
-        >>> gen = gc.lookup(ctxt, ctxt,
+        >>> mgr = gc.lookup(ctxt, ctxt,
         ...                 (contexts.variable('ans'),
         ...                  pattern.pattern_literal(('echo', 'hi'))))
+        >>> gen = iter(mgr.__enter__())
         >>> gen.next()
         >>> ctxt.dump()
         ans: (0, 'hi\n', '')
@@ -218,23 +241,26 @@ class general_command(special_both):
             ...
         StopIteration
         >>> ctxt.dump()
+        >>> mgr.__exit__(None, None, None)
     '''
     def __init__(self, special_base):
         super(general_command, self).__init__(special_base, 'general_command')
     def lookup(self, bindings, pat_context, patterns):
-        if len(patterns) < 2: return
+        if len(patterns) < 2: return knowledge_base.Gen_empty
         ans = run_cmd(pat_context, patterns[1],
                       patterns[2] if len(patterns) > 2 else None,
                       patterns[3] if len(patterns) > 3 else None)
-        mark = bindings.mark(True)
-        try:
-            if patterns[0].match_data(bindings, pat_context, ans):
-                bindings.end_save_all_undo()
-                yield
-            else:
-                bindings.end_save_all_undo()
-        finally:
-            bindings.undo_to_mark(mark)
+        def gen():
+            mark = bindings.mark(True)
+            try:
+                if patterns[0].match_data(bindings, pat_context, ans):
+                    bindings.end_save_all_undo()
+                    yield
+                else:
+                    bindings.end_save_all_undo()
+            finally:
+                bindings.undo_to_mark(mark)
+        return contextlib.closing(gen())
 
 def create_for(engine):
     special_base = special_knowledge_base(engine)

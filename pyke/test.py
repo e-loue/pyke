@@ -22,6 +22,7 @@
 # THE SOFTWARE.
 
 
+from __future__ import with_statement
 import types
 from pyke import knowledge_engine, krb_traceback, pattern, contexts
 
@@ -225,17 +226,17 @@ def run(rule_bases_to_activate,
         context = contexts.simple_context()
         try:
             Engine.activate(*rule_bases_to_activate)
-            for prototype_plan \
-             in Engine.prove(rb_name, goal, context, goal_args):
-                final = {}
-                print "got: %s%s" % \
-                      (goal, tuple(arg.as_data(context, True, final)
-                                   for arg in goal_args))
-                if not prototype_plan:
-                    print "no plan returned"
-                else:
-                    plan = prototype_plan.create_plan(final)
-                    fn_to_run_plan(plan_globals, locals())
+            with Engine.prove(rb_name, goal, context, goal_args) as it:
+                for prototype_plan in it:
+                    final = {}
+                    print "got: %s%s" % \
+                          (goal, tuple(arg.as_data(context, True, final)
+                                       for arg in goal_args))
+                    if not prototype_plan:
+                        print "no plan returned"
+                    else:
+                        plan = prototype_plan.create_plan(final)
+                        fn_to_run_plan(plan_globals, locals())
         except:
             krb_traceback.print_exc(100)
 

@@ -87,6 +87,7 @@
 '''
 
 import itertools
+import contextlib
 from pyke import knowledge_base, contexts
 
 class fact_base(knowledge_base.knowledge_base):
@@ -153,23 +154,26 @@ class fact_list(knowledge_base.knowledge_entity_list):
                              tuple(index[0] for index in indices),
                              tuple(index[1].as_data(pat_context)
                                    for index in indices))
-        if other_arg_lists:
-            for args in other_arg_lists:
-                mark = bindings.mark(True)
-                end_done = False
-                try:
-                    if all(itertools.imap(lambda i, arg:
-                                            patterns[i].match_data(bindings,
-                                                                   pat_context,
-                                                                   arg),
-                                          other_indices,
-                                          args)):
-                        bindings.end_save_all_undo()
-                        end_done = True
-                        yield
-                finally:
-                    if not end_done: bindings.end_save_all_undo()
-                    bindings.undo_to_mark(mark)
+        def gen():
+            if other_arg_lists:
+                for args in other_arg_lists:
+                    mark = bindings.mark(True)
+                    end_done = False
+                    try:
+                        if all(itertools.imap(
+                                   lambda i, arg:
+                                       patterns[i].match_data(bindings,
+                                                              pat_context,
+                                                              arg),
+                                   other_indices,
+                                   args)):
+                            bindings.end_save_all_undo()
+                            end_done = True
+                            yield
+                    finally:
+                        if not end_done: bindings.end_save_all_undo()
+                        bindings.undo_to_mark(mark)
+        return contextlib.closing(gen())
     def _get_hashed(self, len, indices, args):
         ans = self.hashes.get((len, indices))
         if ans is None: ans = self._hash(len, indices)

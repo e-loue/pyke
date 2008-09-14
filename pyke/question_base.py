@@ -22,6 +22,7 @@
 # THE SOFTWARE.
 
 
+import contextlib
 import unique
 from pyke import knowledge_base
 
@@ -86,17 +87,19 @@ class question(knowledge_base.knowledge_entity_list):
         if ans is self.not_found:
             ans = self.cache[input_params] = \
                 self.user_question.ask(format_params)
-        mark = bindings.mark(True)
-        end_done = False
-        try:
-            if patterns[self.answer_param_position] \
-                   .match_data(bindings, pat_context, ans):
-                bindings.end_save_all_undo()
-                end_done = True
-                yield
-        finally:
-            if not end_done: bindings.end_save_all_undo()
-            bindings.undo_to_mark(mark)
+        def gen():
+            mark = bindings.mark(True)
+            end_done = False
+            try:
+                if patterns[self.answer_param_position] \
+                       .match_data(bindings, pat_context, ans):
+                    bindings.end_save_all_undo()
+                    end_done = True
+                    yield
+            finally:
+                if not end_done: bindings.end_save_all_undo()
+                bindings.undo_to_mark(mark)
+        return contextlib.closing(gen())
     def reset(self):
         self.cache.clear()
 

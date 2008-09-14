@@ -157,11 +157,11 @@ fc_premise
                    $patterns_in, $patterns_in)
     when
         gen_fc_for($kb_name, $entity_name, $start_lineno, $end_lineno,
-                   $multi_match, $clause_num, $fn_head, $fn_tail1)
+                   $multi_match, $clause_num, $fn_head)
         $fn_tail = (() if $break_cond is None
                        else "if %s: break" % $break_cond,
                     'POPINDENT',
-                    $fn_tail1),
+                    'POPINDENT',),
         $next_clause_num = $clause_num + 1
         $decl_lines = ("('%s', '%s'," % ($kb_name, $entity_name),
                        ('INDENT', 1),
@@ -172,40 +172,41 @@ fc_premise
 
 gen_fc_for_false
     use gen_fc_for($kb_name, $entity_name, $start_lineno, $end_lineno, False,
-                   $clause_num, $fn_head, $fn_tail)
+                   $clause_num, $fn_head)
     when
-        $fn_head = ("for dummy in (None,) if index == %d else \\" % $clause_num,
+        $fn_head = (('STARTING_LINENO', $start_lineno),
+                    "with knowledge_base.Gen_once if index == %d \\" % \
+                        $clause_num,
+                    ('INDENT', 9),
+                      "else engine.lookup('%s', '%s', context," % \
+                          ($kb_name, $entity_name),
+                      ('INDENT', 19),
+                        "rule.foreach_patterns(%d)) \\" % $clause_num,
+                        'POPINDENT',
+                      'POPINDENT',
                     ('INDENT', 2),
-                      ('INDENT', 11),
-                        ('STARTING_LINENO', $start_lineno),
-                        "engine.lookup('%s', '%s', context, "
-                            "rule.foreach_patterns(%d)):" %
-                                ($kb_name, $entity_name, $clause_num),
-                        ('ENDING_LINENO', $end_lineno),
-                        'POPINDENT',)
-        $fn_tail = ()
+                      "as gen_%d:" % $clause_num,
+                      "for dummy in gen_%d:" % $clause_num,
+                      ('ENDING_LINENO', $end_lineno),
+                      ('INDENT', 2),
+                   )
+
 
 gen_fc_for_true
     use gen_fc_for($kb_name, $entity_name, $start_lineno, $end_lineno, True,
-                   $clause_num, $fn_head, $fn_tail)
+                   $clause_num, $fn_head)
     when
         $fn_head = (('STARTING_LINENO', $start_lineno),
-                    "gen_%d = "
-                    "engine.lookup('%s', '%s', context, "
-                                   "rule.foreach_patterns(%d))" %
-                                  ($clause_num, $kb_name, $entity_name, $clause_num),
-                    "for x_%d in gen_%d: " % ($clause_num, $clause_num),
-                    ('ENDING_LINENO', $end_lineno),
-                    ('INDENT', 2)
-                    )
-        $fn_tail = ("if hasattr(gen_%d, '__iter__'): " % $clause_num,
+                    "with engine.lookup('%s', '%s', context, \\" % \
+                        ($kb_name, $entity_name),
+                    ('INDENT', 19),
+                      "rule.foreach_patterns(%d)) \\" % $clause_num,
+                      'POPINDENT',
                     ('INDENT', 2),
-                    "if not gen_%d.__iter__ == None: " % $clause_num,
-                    ('INDENT', 2),
-                    "gen_%d.close()" % ($clause_num),
-                    "POPINDENT",
-                    "POPINDENT") 
-
+                      "as gen_%d:" % $clause_num,
+                      "for dummy in gen_%d:" % $clause_num,
+                      ('ENDING_LINENO', $end_lineno),
+                      ('INDENT', 2))
 
 fc_first
     use fc_premise($rule_name, $clause_num, $next_clause_num,
@@ -426,42 +427,20 @@ bc_premise
         ($pat_nums, $patterns_out1) = \
             helpers.merge_patterns($arg_patterns, $patterns_in)
         $fn_head1 = (('STARTING_LINENO', $start_lineno),
-                     "gen_%(clause_num)d = "
-                     "engine.prove(%(kb_name)s, %(entity_name)s, context," %
-                         {'clause_num': $clause_num,
-                          'kb_name': $kb_name2,
-                          'entity_name': $entity_name},
+                     "with engine.prove(%s, %s, context," %
+                         ($kb_name2, $entity_name),
                      ('INDENT', 2),
-                     ('INDENT', 22),
-                     helpers.list_format(('rule.pattern(%d)' % pat_num
-                                          for pat_num in $pat_nums),
-                                         '(', '))'),
-                     "POPINDENT", 
-                     "POPINDENT",
-                     "for x_%d in gen_%d: " % ($clause_num, $clause_num),
-                     ('INDENT', 2)
+                       ('INDENT', 16),
+                         helpers.list_format(('rule.pattern(%d)' % pat_num
+                                              for pat_num in $pat_nums),
+                                             '(', ')) \\'),
+                         'POPINDENT',
+                       "as gen_%d:" % $clause_num,
+                       "for x_%d in gen_%d:" % ($clause_num, $clause_num),
+                       ('INDENT', 2),
                     )
-        $fn_tail1 = ("if hasattr(gen_%d, 'iterator'): " % $clause_num,
-                     ('INDENT', 2),
-                     "if not gen_%d.iterator == None: " % $clause_num,
-                     ('INDENT', 2),
-                     "gen_%d.iterator.close()" % $clause_num,
-#                     "print 'called iterator.close()'",
-                     "POPINDENT",
-                     "POPINDENT",
-                     "else: ",
-                     ('INDENT', 2),
-                     "if hasattr(gen_%d, '__iter__'): " % $clause_num,
-                     ('INDENT', 2),
-                     "if not gen_%d.__iter__ == None: " % $clause_num,
-                     ('INDENT', 2),
-                     "gen_%d.close()" % ($clause_num),
-#                     "print 'called generated.close()'",
-                     "POPINDENT",
-                     "POPINDENT",
-                     "POPINDENT") 
         !add_required($required, $rb_name, $rule_name, $clause_num,
-                      $fn_head1, (POPINDENT), $fn_head2, $fn_tail2)
+                      $fn_head1, (POPINDENT, POPINDENT), $fn_head2, $fn_tail2)
         !gen_plan_lines($rb_name, $rule_name, $clause_num,
                         $plan_spec, $allow_plan,
                         $patterns_out1, $patterns_out,
@@ -472,8 +451,7 @@ bc_premise
         $fn_tail = ($fn_tail3,
                     () if $break_cond is None
                        else "if %s: break" % $break_cond,
-                    $fn_tail2,
-                    $fn_tail1)
+                    $fn_tail2)
 
 bc_first
     use bc_premise($rb_name, $rule_name, $clause_num, $next_clause_num,

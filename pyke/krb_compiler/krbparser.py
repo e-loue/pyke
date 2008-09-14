@@ -485,8 +485,11 @@ def p_tuple(p):
     p[0] = '(' + ' '.join(str(x) + ',' for x in p[2]) + ')'
 
 def p_error(t):
-    raise SyntaxError("invalid syntax",
-                      scanner.syntaxerror_params(t.lexpos, t.lineno))
+    if t is None:
+        raise SyntaxError("invalid syntax", scanner.syntaxerror_params())
+    else:
+        raise SyntaxError("invalid syntax",
+                          scanner.syntaxerror_params(t.lexpos, t.lineno))
 
 # Use the first line for normal use, the second for testing changes in the
 # grammer (the first line does not report grammer errors!).

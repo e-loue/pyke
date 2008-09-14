@@ -27,7 +27,8 @@ def fc_head(rb_name):
     return (
         "# %s_fc.py" % rb_name,
         "",
-        "from pyke import contexts, pattern, fc_rule",
+        "from __future__ import with_statement",
+        "from pyke import contexts, pattern, fc_rule, knowledge_base",
         "",
         "version = %s" % repr(pyke.version)
     )
@@ -36,6 +37,7 @@ def bc_head(rb_name):
     return (
         "# %s_bc.py" % rb_name,
         "",
+        "from __future__ import with_statement",
         "import itertools",
         "from pyke import contexts, pattern, bc_rule",
         "",

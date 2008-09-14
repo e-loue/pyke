@@ -26,6 +26,15 @@ from pyke import knowledge_base
 
 class StopProof(Exception): pass
 
+class stopIteratorContext(object):
+    def __init__(self, rule_base, iterator_context):
+        self.rule_base = rule_base
+        self.context = iterator_context
+    def __enter__(self):
+        return stopIterator(self.rule_base, self.context.__enter__())
+    def __exit__(self, type, value, tb):
+        self.context.__exit__(type, value, tb)
+
 class stopIterator(object):
     def __init__(self, rule_base, iterator):
         self.rule_base = rule_base
@@ -39,6 +48,32 @@ class stopIterator(object):
                 self.iterator = None
                 self.rule_base.num_bc_rule_failures += 1
         raise StopIteration
+
+class chain_context(object):
+    def __init__(self, outer_it):
+        self.outer_it = outer_iterable(outer_it)
+    def __enter__(self):
+        return itertools.chain.from_iterable(self.outer_it)
+    def __exit__(self, type, value, tb): self.outer_it.close()
+
+class outer_iterable(object):
+    def __init__(self, outer_it):
+        self.outer_it = iter(outer_it)
+        self.inner_it = None
+    def __iter__(self): return self
+    def close(self):
+        if hasattr(self.inner_it, '__exit__'):
+            self.inner_it.__exit__(None, None, None)
+        elif hasattr(self.inner_it, 'close'): self.inner_it.close()
+        if hasattr(self.outer_it, 'close'): self.outer_it.close()
+    def next(self):
+        ans = self.outer_it.next()
+        if hasattr(ans, '__enter__'):
+            self.inner_it = ans
+            return ans.__enter__()
+        ans = iter(ans)
+        self.inner_it = ans
+        return ans
 
 class rule_base(knowledge_base.knowledge_base):
     def __init__(self, engine, name, parent = None, exclude_list = ()):
@@ -127,8 +162,8 @@ class rule_base(knowledge_base.knowledge_base):
                 break
     def prove(self, bindings, pat_context, goal_name, patterns):
         self.num_prove_calls += 1
-        return stopIterator(self,
-                   itertools.chain.from_iterable(
+        return stopIteratorContext(self,
+                   chain_context(
                        rl.prove(bindings, pat_context, patterns)
                        for rl in self.gen_rule_lists_for(goal_name)))
     def print_stats(self, f):
@@ -164,7 +199,7 @@ class rule_list(knowledge_base.knowledge_entity_list):
             successful match.  Undoes bindings upon continuation, so that no
             bindings remain at StopIteration.
         """
-        return itertools.chain.from_iterable(
+        return chain_context(
                    bc_rule.bc_fn(bc_rule, patterns, pat_context)
                    for bc_rule in self.bc_rules)
     def num_bc_rules(self):

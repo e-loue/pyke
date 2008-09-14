@@ -21,6 +21,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+class gen_tuple(object):
+    def __init__(self, tup): self.tup = tup
+    def __enter__(self): return self.tup
+    def __exit__(self, type, value, tb): pass
+
+Gen_empty = gen_tuple(())
+Gen_once = gen_tuple((None,))
+
 class knowledge_base(object):
     ''' This object is a master repository for knowledge entities of different
         names.  These knowledge entities could be facts or rules.  The
@@ -78,7 +86,7 @@ class knowledge_base(object):
         return ans
     def lookup(self, bindings, pat_context, entity_name, patterns):
         entity = self.entity_lists.get(entity_name)
-        if entity is None: return ()
+        if entity is None: return Gen_empty
         return entity.lookup(bindings, pat_context, patterns)
     def prove(self, bindings, pat_context, entity_name, patterns):
         entity = self.entity_lists.get(entity_name)

@@ -625,7 +625,8 @@ def syntaxerror_params(pos = None, lineno = None):
     if pos is None: pos = lexer.lexpos
     start = pos
     if lineno is None: lineno = lexer.lineno
-    while start > 0 and lexer.lexdata[start] in '\r\n':
+    while start > 0 and (start >= len(lexer.lexdata) or
+                         lexer.lexdata[start] in '\r\n'):
         start -= 1
     end = start
     if debug: print "pos", pos, "lineno", lineno, "start", start

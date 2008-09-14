@@ -1,5 +1,6 @@
 # compiler_bc.py
 
+from __future__ import with_statement
 import itertools
 from pyke import contexts, pattern, bc_rule
 
@@ -30,112 +31,94 @@ def file(rule, arg_patterns, arg_context):
                     helpers.plan_head(context.lookup_data('rb_name'))):
               context.end_save_all_undo()
               flag_4 = False
-              gen_4 = engine.prove(rule.rule_base.root_name, 'rule_decl', context,
-                                      (rule.pattern(3),
-                                       rule.pattern(4),
-                                       rule.pattern(5),))
-              for x_4 in gen_4: 
-                flag_4 = True
-                assert x_4 is None, \
-                  "compiler.file: got unexpected plan from when clause 4"
-                flag_5 = False
-                gen_5 = engine.prove(rule.rule_base.root_name, 'fc_rules', context,
-                                        (rule.pattern(6),
-                                         rule.pattern(7),
-                                         rule.pattern(8),))
-                for x_5 in gen_5: 
-                  flag_5 = True
-                  assert x_5 is None, \
-                    "compiler.file: got unexpected plan from when clause 5"
-                  flag_6 = False
-                  gen_6 = engine.prove(rule.rule_base.root_name, 'bc_rules', context,
-                                          (rule.pattern(3),
-                                           rule.pattern(9),
-                                           rule.pattern(10),
-                                           rule.pattern(11),
-                                           rule.pattern(12),))
-                  for x_6 in gen_6: 
-                    flag_6 = True
-                    assert x_6 is None, \
-                      "compiler.file: got unexpected plan from when clause 6"
-                    mark7 = context.mark(True)
-                    if rule.pattern(13).match_data(context, context,
-                            (context.lookup_data('fc_head'),
-                           context.lookup_data('fc_fun_lines'),
-                           "",
-                           "def populate(engine):",
-                           ('INDENT', 2),
-                           context.lookup_data('decl_line'),
-                           context.lookup_data('fc_init_lines'),
-                           'POPINDENT',
-                           "",
-                           context.lookup_data('fc_extra_lines'),
-                           ) \
-                                                   if context.lookup_data('fc_fun_lines') \
-                                                   else ()):
-                      context.end_save_all_undo()
-                      mark8 = context.mark(True)
-                      if rule.pattern(14).match_data(context, context,
-                              (context.lookup_data('plan_head'),
-                             context.lookup_data('bc_plan_lines'),
-                             "",
-                             context.lookup_data('plan_extra_lines')) \
-                                                     if context.lookup_data('bc_plan_lines') \
-                                                     else ()):
-                        context.end_save_all_undo()
-                        mark9 = context.mark(True)
-                        if rule.pattern(15).match_data(context, context,
-                                (context.lookup_data('bc_head'),
-                               ("import %s_plans" % context.lookup_data('rb_name')
-                               if context.lookup_data('bc_plan_lines')
-                               else ()),
-                               context.lookup_data('bc_bc_fun_lines'),
-                               "",
-                               "def populate(engine):",
-                               ('INDENT', 2),
-                               context.lookup_data('decl_line'),
-                               context.lookup_data('bc_bc_init_lines'),
-                               'POPINDENT',
-                               "",
-                               context.lookup_data('bc_extra_lines')) \
-                                                       if context.lookup_data('bc_bc_fun_lines') \
-                                                       else ()):
-                          context.end_save_all_undo()
-                          rule.rule_base.num_bc_rule_successes += 1
-                          yield
-                        else: context.end_save_all_undo()
-                        context.undo_to_mark(mark9)
-                      else: context.end_save_all_undo()
-                      context.undo_to_mark(mark8)
-                    else: context.end_save_all_undo()
-                    context.undo_to_mark(mark7)
-                  if not flag_6:
-                    raise AssertionError("compiler.file: 'when' clause 6 failed")
-                  if hasattr(gen_6, 'iterator'): 
-                    if not gen_6.iterator == None: 
-                      gen_6.iterator.close()
-                  else: 
-                    if hasattr(gen_6, '__iter__'): 
-                      if not gen_6.__iter__ == None: 
-                        gen_6.close()
-                if not flag_5:
-                  raise AssertionError("compiler.file: 'when' clause 5 failed")
-                if hasattr(gen_5, 'iterator'): 
-                  if not gen_5.iterator == None: 
-                    gen_5.iterator.close()
-                else: 
-                  if hasattr(gen_5, '__iter__'): 
-                    if not gen_5.__iter__ == None: 
-                      gen_5.close()
+              with engine.prove(rule.rule_base.root_name, 'rule_decl', context,
+                                (rule.pattern(3),
+                                 rule.pattern(4),
+                                 rule.pattern(5),)) \
+                as gen_4:
+                for x_4 in gen_4:
+                  flag_4 = True
+                  assert x_4 is None, \
+                    "compiler.file: got unexpected plan from when clause 4"
+                  flag_5 = False
+                  with engine.prove(rule.rule_base.root_name, 'fc_rules', context,
+                                    (rule.pattern(6),
+                                     rule.pattern(7),
+                                     rule.pattern(8),)) \
+                    as gen_5:
+                    for x_5 in gen_5:
+                      flag_5 = True
+                      assert x_5 is None, \
+                        "compiler.file: got unexpected plan from when clause 5"
+                      flag_6 = False
+                      with engine.prove(rule.rule_base.root_name, 'bc_rules', context,
+                                        (rule.pattern(3),
+                                         rule.pattern(9),
+                                         rule.pattern(10),
+                                         rule.pattern(11),
+                                         rule.pattern(12),)) \
+                        as gen_6:
+                        for x_6 in gen_6:
+                          flag_6 = True
+                          assert x_6 is None, \
+                            "compiler.file: got unexpected plan from when clause 6"
+                          mark7 = context.mark(True)
+                          if rule.pattern(13).match_data(context, context,
+                                  (context.lookup_data('fc_head'),
+                                 context.lookup_data('fc_fun_lines'),
+                                 "",
+                                 "def populate(engine):",
+                                 ('INDENT', 2),
+                                 context.lookup_data('decl_line'),
+                                 context.lookup_data('fc_init_lines'),
+                                 'POPINDENT',
+                                 "",
+                                 context.lookup_data('fc_extra_lines'),
+                                 ) \
+                                                         if context.lookup_data('fc_fun_lines') \
+                                                         else ()):
+                            context.end_save_all_undo()
+                            mark8 = context.mark(True)
+                            if rule.pattern(14).match_data(context, context,
+                                    (context.lookup_data('plan_head'),
+                                   context.lookup_data('bc_plan_lines'),
+                                   "",
+                                   context.lookup_data('plan_extra_lines')) \
+                                                           if context.lookup_data('bc_plan_lines') \
+                                                           else ()):
+                              context.end_save_all_undo()
+                              mark9 = context.mark(True)
+                              if rule.pattern(15).match_data(context, context,
+                                      (context.lookup_data('bc_head'),
+                                     ("import %s_plans" % context.lookup_data('rb_name')
+                                     if context.lookup_data('bc_plan_lines')
+                                     else ()),
+                                     context.lookup_data('bc_bc_fun_lines'),
+                                     "",
+                                     "def populate(engine):",
+                                     ('INDENT', 2),
+                                     context.lookup_data('decl_line'),
+                                     context.lookup_data('bc_bc_init_lines'),
+                                     'POPINDENT',
+                                     "",
+                                     context.lookup_data('bc_extra_lines')) \
+                                                             if context.lookup_data('bc_bc_fun_lines') \
+                                                             else ()):
+                                context.end_save_all_undo()
+                                rule.rule_base.num_bc_rule_successes += 1
+                                yield
+                              else: context.end_save_all_undo()
+                              context.undo_to_mark(mark9)
+                            else: context.end_save_all_undo()
+                            context.undo_to_mark(mark8)
+                          else: context.end_save_all_undo()
+                          context.undo_to_mark(mark7)
+                      if not flag_6:
+                        raise AssertionError("compiler.file: 'when' clause 6 failed")
+                  if not flag_5:
+                    raise AssertionError("compiler.file: 'when' clause 5 failed")
               if not flag_4:
                 raise AssertionError("compiler.file: 'when' clause 4 failed")
-              if hasattr(gen_4, 'iterator'): 
-                if not gen_4.iterator == None: 
-                  gen_4.iterator.close()
-              else: 
-                if hasattr(gen_4, '__iter__'): 
-                  if not gen_4.__iter__ == None: 
-                    gen_4.close()
             else: context.end_save_all_undo()
             context.undo_to_mark(mark3)
           else: context.end_save_all_undo()
@@ -227,43 +210,31 @@ def fc_rules1(rule, arg_patterns, arg_context):
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
-        gen_1 = engine.prove(rule.rule_base.root_name, 'fc_rule', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),))
-        for x_1 in gen_1: 
-          flag_1 = True
-          assert x_1 is None, \
-            "compiler.fc_rules1: got unexpected plan from when clause 1"
-          flag_2 = False
-          gen_2 = engine.prove(rule.rule_base.root_name, 'fc_rules', context,
-                                  (rule.pattern(3),
-                                   rule.pattern(4),
-                                   rule.pattern(5),))
-          for x_2 in gen_2: 
-            flag_2 = True
-            assert x_2 is None, \
-              "compiler.fc_rules1: got unexpected plan from when clause 2"
-            rule.rule_base.num_bc_rule_successes += 1
-            yield
-          if not flag_2:
-            raise AssertionError("compiler.fc_rules1: 'when' clause 2 failed")
-          if hasattr(gen_2, 'iterator'): 
-            if not gen_2.iterator == None: 
-              gen_2.iterator.close()
-          else: 
-            if hasattr(gen_2, '__iter__'): 
-              if not gen_2.__iter__ == None: 
-                gen_2.close()
+        with engine.prove(rule.rule_base.root_name, 'fc_rule', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            flag_1 = True
+            assert x_1 is None, \
+              "compiler.fc_rules1: got unexpected plan from when clause 1"
+            flag_2 = False
+            with engine.prove(rule.rule_base.root_name, 'fc_rules', context,
+                              (rule.pattern(3),
+                               rule.pattern(4),
+                               rule.pattern(5),)) \
+              as gen_2:
+              for x_2 in gen_2:
+                flag_2 = True
+                assert x_2 is None, \
+                  "compiler.fc_rules1: got unexpected plan from when clause 2"
+                rule.rule_base.num_bc_rule_successes += 1
+                yield
+            if not flag_2:
+              raise AssertionError("compiler.fc_rules1: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.fc_rules1: 'when' clause 1 failed")
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -281,88 +252,76 @@ def fc_rule_(rule, arg_patterns, arg_context):
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
-        gen_1 = engine.prove(rule.rule_base.root_name, 'fc_premises', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),
-                                 rule.pattern(5),
-                                 rule.pattern(6),
-                                 rule.pattern(7),
-                                 rule.pattern(8),
-                                 rule.pattern(9),
-                                 rule.pattern(10),))
-        for x_1 in gen_1: 
-          flag_1 = True
-          assert x_1 is None, \
-            "compiler.fc_rule_: got unexpected plan from when clause 1"
-          flag_2 = False
-          gen_2 = engine.prove(rule.rule_base.root_name, 'assertions', context,
-                                  (rule.pattern(11),
-                                   rule.pattern(12),
-                                   rule.pattern(10),
-                                   rule.pattern(13),))
-          for x_2 in gen_2: 
-            flag_2 = True
-            assert x_2 is None, \
-              "compiler.fc_rule_: got unexpected plan from when clause 2"
-            mark3 = context.mark(True)
-            if rule.pattern(14).match_data(context, context,
-                    ("",
-                   "def %s(rule, context = None, index = None):" % context.lookup_data('rule_name'),
-                   ("INDENT", 2),
-                   "engine = rule.rule_base.engine",
-                   "if context is None: context = contexts.simple_context()",
-                   "try:",
-                   ("INDENT", 2),
-                   context.lookup_data('prem_fn_head'),
-                   context.lookup_data('asserts_fn_lines'),
-                   "rule.rule_base.num_fc_rules_triggered += 1",
-                   context.lookup_data('prem_fn_tail'),
-                   "POPINDENT",
-                   "finally:",
-                   ("INDENT", 2),
-                   "context.done()",
-                   "POPINDENT",
-                   "POPINDENT",
-                   )):
-              context.end_save_all_undo()
-              mark4 = context.mark(True)
-              if rule.pattern(15).match_data(context, context,
-                      ("",
-                     "fc_rule.fc_rule('%(name)s', This_rule_base, %(name)s," %
-                     {'name': context.lookup_data('rule_name')},
-                     ("INDENT", 2),
-                     helpers.add_brackets(context.lookup_data('prem_decl_lines'), '(', '),'),
-                     helpers.list_format(context.lookup_data('patterns_out'), '(', '))'),
-                     "POPINDENT",
-                     )):
-                context.end_save_all_undo()
-                rule.rule_base.num_bc_rule_successes += 1
-                yield
-              else: context.end_save_all_undo()
-              context.undo_to_mark(mark4)
-            else: context.end_save_all_undo()
-            context.undo_to_mark(mark3)
-          if not flag_2:
-            raise AssertionError("compiler.fc_rule_: 'when' clause 2 failed")
-          if hasattr(gen_2, 'iterator'): 
-            if not gen_2.iterator == None: 
-              gen_2.iterator.close()
-          else: 
-            if hasattr(gen_2, '__iter__'): 
-              if not gen_2.__iter__ == None: 
-                gen_2.close()
+        with engine.prove(rule.rule_base.root_name, 'fc_premises', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),
+                           rule.pattern(3),
+                           rule.pattern(4),
+                           rule.pattern(5),
+                           rule.pattern(6),
+                           rule.pattern(7),
+                           rule.pattern(8),
+                           rule.pattern(9),
+                           rule.pattern(10),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            flag_1 = True
+            assert x_1 is None, \
+              "compiler.fc_rule_: got unexpected plan from when clause 1"
+            flag_2 = False
+            with engine.prove(rule.rule_base.root_name, 'assertions', context,
+                              (rule.pattern(11),
+                               rule.pattern(12),
+                               rule.pattern(10),
+                               rule.pattern(13),)) \
+              as gen_2:
+              for x_2 in gen_2:
+                flag_2 = True
+                assert x_2 is None, \
+                  "compiler.fc_rule_: got unexpected plan from when clause 2"
+                mark3 = context.mark(True)
+                if rule.pattern(14).match_data(context, context,
+                        ("",
+                       "def %s(rule, context = None, index = None):" % context.lookup_data('rule_name'),
+                       ("INDENT", 2),
+                       "engine = rule.rule_base.engine",
+                       "if context is None: context = contexts.simple_context()",
+                       "try:",
+                       ("INDENT", 2),
+                       context.lookup_data('prem_fn_head'),
+                       context.lookup_data('asserts_fn_lines'),
+                       "rule.rule_base.num_fc_rules_triggered += 1",
+                       context.lookup_data('prem_fn_tail'),
+                       "POPINDENT",
+                       "finally:",
+                       ("INDENT", 2),
+                       "context.done()",
+                       "POPINDENT",
+                       "POPINDENT",
+                       )):
+                  context.end_save_all_undo()
+                  mark4 = context.mark(True)
+                  if rule.pattern(15).match_data(context, context,
+                          ("",
+                         "fc_rule.fc_rule('%(name)s', This_rule_base, %(name)s," %
+                         {'name': context.lookup_data('rule_name')},
+                         ("INDENT", 2),
+                         helpers.add_brackets(context.lookup_data('prem_decl_lines'), '(', '),'),
+                         helpers.list_format(context.lookup_data('patterns_out'), '(', '))'),
+                         "POPINDENT",
+                         )):
+                    context.end_save_all_undo()
+                    rule.rule_base.num_bc_rule_successes += 1
+                    yield
+                  else: context.end_save_all_undo()
+                  context.undo_to_mark(mark4)
+                else: context.end_save_all_undo()
+                context.undo_to_mark(mark3)
+            if not flag_2:
+              raise AssertionError("compiler.fc_rule_: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.fc_rule_: 'when' clause 1 failed")
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -398,65 +357,53 @@ def fc_premises1(rule, arg_patterns, arg_context):
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
-        gen_1 = engine.prove(rule.rule_base.root_name, 'fc_premise', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),
-                                 rule.pattern(5),
-                                 rule.pattern(6),
-                                 rule.pattern(7),
-                                 rule.pattern(8),
-                                 rule.pattern(9),
-                                 rule.pattern(10),))
-        for x_1 in gen_1: 
-          flag_1 = True
-          assert x_1 is None, \
-            "compiler.fc_premises1: got unexpected plan from when clause 1"
-          flag_2 = False
-          gen_2 = engine.prove(rule.rule_base.root_name, 'fc_premises', context,
-                                  (rule.pattern(0),
-                                   rule.pattern(2),
-                                   rule.pattern(11),
-                                   rule.pattern(12),
-                                   rule.pattern(4),
-                                   rule.pattern(5),
-                                   rule.pattern(13),
-                                   rule.pattern(14),
-                                   rule.pattern(15),
-                                   rule.pattern(10),
-                                   rule.pattern(16),))
-          for x_2 in gen_2: 
-            flag_2 = True
-            assert x_2 is None, \
-              "compiler.fc_premises1: got unexpected plan from when clause 2"
-            mark3 = context.mark(True)
-            if rule.pattern(17).match_data(context, context,
-                    context.lookup_data('decl_lines1') + context.lookup_data('decl_lines2')):
-              context.end_save_all_undo()
-              rule.rule_base.num_bc_rule_successes += 1
-              yield
-            else: context.end_save_all_undo()
-            context.undo_to_mark(mark3)
-          if not flag_2:
-            raise AssertionError("compiler.fc_premises1: 'when' clause 2 failed")
-          if hasattr(gen_2, 'iterator'): 
-            if not gen_2.iterator == None: 
-              gen_2.iterator.close()
-          else: 
-            if hasattr(gen_2, '__iter__'): 
-              if not gen_2.__iter__ == None: 
-                gen_2.close()
+        with engine.prove(rule.rule_base.root_name, 'fc_premise', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),
+                           rule.pattern(3),
+                           rule.pattern(4),
+                           rule.pattern(5),
+                           rule.pattern(6),
+                           rule.pattern(7),
+                           rule.pattern(8),
+                           rule.pattern(9),
+                           rule.pattern(10),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            flag_1 = True
+            assert x_1 is None, \
+              "compiler.fc_premises1: got unexpected plan from when clause 1"
+            flag_2 = False
+            with engine.prove(rule.rule_base.root_name, 'fc_premises', context,
+                              (rule.pattern(0),
+                               rule.pattern(2),
+                               rule.pattern(11),
+                               rule.pattern(12),
+                               rule.pattern(4),
+                               rule.pattern(5),
+                               rule.pattern(13),
+                               rule.pattern(14),
+                               rule.pattern(15),
+                               rule.pattern(10),
+                               rule.pattern(16),)) \
+              as gen_2:
+              for x_2 in gen_2:
+                flag_2 = True
+                assert x_2 is None, \
+                  "compiler.fc_premises1: got unexpected plan from when clause 2"
+                mark3 = context.mark(True)
+                if rule.pattern(17).match_data(context, context,
+                        context.lookup_data('decl_lines1') + context.lookup_data('decl_lines2')):
+                  context.end_save_all_undo()
+                  rule.rule_base.num_bc_rule_successes += 1
+                  yield
+                else: context.end_save_all_undo()
+                context.undo_to_mark(mark3)
+            if not flag_2:
+              raise AssertionError("compiler.fc_premises1: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.fc_premises1: 'when' clause 1 failed")
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -473,53 +420,46 @@ def fc_premise(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
-        gen_1 = engine.prove(rule.rule_base.root_name, 'gen_fc_for', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),
-                                 rule.pattern(5),
-                                 rule.pattern(6),
-                                 rule.pattern(7),))
-        for x_1 in gen_1: 
-          assert x_1 is None, \
-            "compiler.fc_premise: got unexpected plan from when clause 1"
-          mark2 = context.mark(True)
-          if rule.pattern(8).match_data(context, context,
-                  (() if context.lookup_data('break_cond') is None
-                 else "if %s: break" % context.lookup_data('break_cond'),
-                 'POPINDENT',
-                 context.lookup_data('fn_tail1')),):
-            context.end_save_all_undo()
-            mark3 = context.mark(True)
-            if rule.pattern(9).match_data(context, context,
-                    context.lookup_data('clause_num') + 1):
+        with engine.prove(rule.rule_base.root_name, 'gen_fc_for', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),
+                           rule.pattern(3),
+                           rule.pattern(4),
+                           rule.pattern(5),
+                           rule.pattern(6),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            assert x_1 is None, \
+              "compiler.fc_premise: got unexpected plan from when clause 1"
+            mark2 = context.mark(True)
+            if rule.pattern(7).match_data(context, context,
+                    (() if context.lookup_data('break_cond') is None
+                   else "if %s: break" % context.lookup_data('break_cond'),
+                   'POPINDENT',
+                   'POPINDENT',),):
               context.end_save_all_undo()
-              mark4 = context.mark(True)
-              if rule.pattern(10).match_data(context, context,
-                      ("('%s', '%s'," % (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
-                     ('INDENT', 1),
-                     helpers.list_format(context.lookup_data('arg_patterns'), '(', '),'),
-                     "%s)," % context.lookup_data('multi_match'),
-                     "POPINDENT",
-                     )):
+              mark3 = context.mark(True)
+              if rule.pattern(8).match_data(context, context,
+                      context.lookup_data('clause_num') + 1):
                 context.end_save_all_undo()
-                rule.rule_base.num_bc_rule_successes += 1
-                yield
+                mark4 = context.mark(True)
+                if rule.pattern(9).match_data(context, context,
+                        ("('%s', '%s'," % (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
+                       ('INDENT', 1),
+                       helpers.list_format(context.lookup_data('arg_patterns'), '(', '),'),
+                       "%s)," % context.lookup_data('multi_match'),
+                       "POPINDENT",
+                       )):
+                  context.end_save_all_undo()
+                  rule.rule_base.num_bc_rule_successes += 1
+                  yield
+                else: context.end_save_all_undo()
+                context.undo_to_mark(mark4)
               else: context.end_save_all_undo()
-              context.undo_to_mark(mark4)
+              context.undo_to_mark(mark3)
             else: context.end_save_all_undo()
-            context.undo_to_mark(mark3)
-          else: context.end_save_all_undo()
-          context.undo_to_mark(mark2)
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
+            context.undo_to_mark(mark2)
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -538,24 +478,25 @@ def gen_fc_for_false(rule, arg_patterns, arg_context):
         rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
-                ("for dummy in (None,) if index == %d else \\" % context.lookup_data('clause_num'),
+                (('STARTING_LINENO', context.lookup_data('start_lineno')),
+               "with knowledge_base.Gen_once if index == %d \\" % \
+                                       context.lookup_data('clause_num'),
+               ('INDENT', 9),
+               "else engine.lookup('%s', '%s', context," % \
+                                         (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
+               ('INDENT', 19),
+               "rule.foreach_patterns(%d)) \\" % context.lookup_data('clause_num'),
+               'POPINDENT',
+               'POPINDENT',
                ('INDENT', 2),
-               ('INDENT', 11),
-               ('STARTING_LINENO', context.lookup_data('start_lineno')),
-               "engine.lookup('%s', '%s', context, "
-               "rule.foreach_patterns(%d)):" %
-               (context.lookup_data('kb_name'), context.lookup_data('entity_name'), context.lookup_data('clause_num')),
+               "as gen_%d:" % context.lookup_data('clause_num'),
+               "for dummy in gen_%d:" % context.lookup_data('clause_num'),
                ('ENDING_LINENO', context.lookup_data('end_lineno')),
-               'POPINDENT',)):
+               ('INDENT', 2),
+               )):
           context.end_save_all_undo()
-          mark2 = context.mark(True)
-          if rule.pattern(1).match_data(context, context,
-                  ()):
-            context.end_save_all_undo()
-            rule.rule_base.num_bc_rule_successes += 1
-            yield
-          else: context.end_save_all_undo()
-          context.undo_to_mark(mark2)
+          rule.rule_base.num_bc_rule_successes += 1
+          yield
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
         rule.rule_base.num_bc_rule_failures += 1
@@ -577,29 +518,19 @@ def gen_fc_for_true(rule, arg_patterns, arg_context):
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 (('STARTING_LINENO', context.lookup_data('start_lineno')),
-               "gen_%d = "
-               "engine.lookup('%s', '%s', context, "
-               "rule.foreach_patterns(%d))" %
-               (context.lookup_data('clause_num'), context.lookup_data('kb_name'), context.lookup_data('entity_name'), context.lookup_data('clause_num')),
-               "for x_%d in gen_%d: " % (context.lookup_data('clause_num'), context.lookup_data('clause_num')),
+               "with engine.lookup('%s', '%s', context, \\" % \
+                                       (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
+               ('INDENT', 19),
+               "rule.foreach_patterns(%d)) \\" % context.lookup_data('clause_num'),
+               'POPINDENT',
+               ('INDENT', 2),
+               "as gen_%d:" % context.lookup_data('clause_num'),
+               "for dummy in gen_%d:" % context.lookup_data('clause_num'),
                ('ENDING_LINENO', context.lookup_data('end_lineno')),
-               ('INDENT', 2)
-               )):
+               ('INDENT', 2))):
           context.end_save_all_undo()
-          mark2 = context.mark(True)
-          if rule.pattern(1).match_data(context, context,
-                  ("if hasattr(gen_%d, '__iter__'): " % context.lookup_data('clause_num'),
-                 ('INDENT', 2),
-                 "if not gen_%d.__iter__ == None: " % context.lookup_data('clause_num'),
-                 ('INDENT', 2),
-                 "gen_%d.close()" % (context.lookup_data('clause_num')),
-                 "POPINDENT",
-                 "POPINDENT") ):
-            context.end_save_all_undo()
-            rule.rule_base.num_bc_rule_successes += 1
-            yield
-          else: context.end_save_all_undo()
-          context.undo_to_mark(mark2)
+          rule.rule_base.num_bc_rule_successes += 1
+          yield
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
         rule.rule_base.num_bc_rule_failures += 1
@@ -623,45 +554,39 @@ def fc_first(rule, arg_patterns, arg_context):
                 "first%d_worked" % context.lookup_data('clause_num')):
           context.end_save_all_undo()
           flag_2 = False
-          gen_2 = engine.prove(rule.rule_base.root_name, 'fc_premises', context,
-                                  (rule.pattern(1),
-                                   rule.pattern(2),
-                                   rule.pattern(3),
-                                   rule.pattern(4),
-                                   rule.pattern(0),
-                                   rule.pattern(5),
-                                   rule.pattern(6),
-                                   rule.pattern(7),
-                                   rule.pattern(8),
-                                   rule.pattern(9),
-                                   rule.pattern(10),))
-          for x_2 in gen_2: 
-            flag_2 = True
-            assert x_2 is None, \
-              "compiler.fc_first: got unexpected plan from when clause 2"
-            mark3 = context.mark(True)
-            if rule.pattern(11).match_data(context, context,
-                    "%s = False" % context.lookup_data('break_cond')):
-              context.end_save_all_undo()
-              mark4 = context.mark(True)
-              if rule.pattern(12).match_data(context, context,
-                      "%s = True" % context.lookup_data('break_cond')):
+          with engine.prove(rule.rule_base.root_name, 'fc_premises', context,
+                            (rule.pattern(1),
+                             rule.pattern(2),
+                             rule.pattern(3),
+                             rule.pattern(4),
+                             rule.pattern(0),
+                             rule.pattern(5),
+                             rule.pattern(6),
+                             rule.pattern(7),
+                             rule.pattern(8),
+                             rule.pattern(9),
+                             rule.pattern(10),)) \
+            as gen_2:
+            for x_2 in gen_2:
+              flag_2 = True
+              assert x_2 is None, \
+                "compiler.fc_first: got unexpected plan from when clause 2"
+              mark3 = context.mark(True)
+              if rule.pattern(11).match_data(context, context,
+                      "%s = False" % context.lookup_data('break_cond')):
                 context.end_save_all_undo()
-                rule.rule_base.num_bc_rule_successes += 1
-                yield
+                mark4 = context.mark(True)
+                if rule.pattern(12).match_data(context, context,
+                        "%s = True" % context.lookup_data('break_cond')):
+                  context.end_save_all_undo()
+                  rule.rule_base.num_bc_rule_successes += 1
+                  yield
+                else: context.end_save_all_undo()
+                context.undo_to_mark(mark4)
               else: context.end_save_all_undo()
-              context.undo_to_mark(mark4)
-            else: context.end_save_all_undo()
-            context.undo_to_mark(mark3)
+              context.undo_to_mark(mark3)
           if not flag_2:
             raise AssertionError("compiler.fc_first: 'when' clause 2 failed")
-          if hasattr(gen_2, 'iterator'): 
-            if not gen_2.iterator == None: 
-              gen_2.iterator.close()
-          else: 
-            if hasattr(gen_2, '__iter__'): 
-              if not gen_2.__iter__ == None: 
-                gen_2.close()
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
         rule.rule_base.num_bc_rule_failures += 1
@@ -681,39 +606,33 @@ def fc_forall_None(rule, arg_patterns, arg_context):
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
-        gen_1 = engine.prove(rule.rule_base.root_name, 'fc_premises', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),
-                                 rule.pattern(5),
-                                 rule.pattern(6),
-                                 rule.pattern(7),
-                                 rule.pattern(8),
-                                 rule.pattern(9),
-                                 rule.pattern(10),))
-        for x_1 in gen_1: 
-          flag_1 = True
-          assert x_1 is None, \
-            "compiler.fc_forall_None: got unexpected plan from when clause 1"
-          mark2 = context.mark(True)
-          if rule.pattern(11).match_data(context, context,
-                  context.lookup_data('fn_head1') + context.lookup_data('fn_tail1')):
-            context.end_save_all_undo()
-            rule.rule_base.num_bc_rule_successes += 1
-            yield
-          else: context.end_save_all_undo()
-          context.undo_to_mark(mark2)
+        with engine.prove(rule.rule_base.root_name, 'fc_premises', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),
+                           rule.pattern(3),
+                           rule.pattern(4),
+                           rule.pattern(5),
+                           rule.pattern(6),
+                           rule.pattern(7),
+                           rule.pattern(8),
+                           rule.pattern(9),
+                           rule.pattern(10),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            flag_1 = True
+            assert x_1 is None, \
+              "compiler.fc_forall_None: got unexpected plan from when clause 1"
+            mark2 = context.mark(True)
+            if rule.pattern(11).match_data(context, context,
+                    context.lookup_data('fn_head1') + context.lookup_data('fn_tail1')):
+              context.end_save_all_undo()
+              rule.rule_base.num_bc_rule_successes += 1
+              yield
+            else: context.end_save_all_undo()
+            context.undo_to_mark(mark2)
         if not flag_1:
           raise AssertionError("compiler.fc_forall_None: 'when' clause 1 failed")
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -739,81 +658,69 @@ def fc_forall_require(rule, arg_patterns, arg_context):
                   "not forall%d_worked" % context.lookup_data('start_lineno')):
             context.end_save_all_undo()
             flag_3 = False
-            gen_3 = engine.prove(rule.rule_base.root_name, 'fc_premises', context,
-                                    (rule.pattern(2),
-                                     rule.pattern(3),
-                                     rule.pattern(4),
-                                     rule.pattern(5),
-                                     rule.pattern(1),
-                                     rule.pattern(6),
-                                     rule.pattern(7),
-                                     rule.pattern(8),
-                                     rule.pattern(9),
-                                     rule.pattern(10),
-                                     rule.pattern(11),))
-            for x_3 in gen_3: 
-              flag_3 = True
-              assert x_3 is None, \
-                "compiler.fc_forall_require: got unexpected plan from when clause 3"
-              flag_4 = False
-              gen_4 = engine.prove(rule.rule_base.root_name, 'fc_premises', context,
-                                      (rule.pattern(2),
-                                       rule.pattern(4),
-                                       rule.pattern(12),
-                                       rule.pattern(13),
-                                       rule.pattern(0),
-                                       rule.pattern(6),
-                                       rule.pattern(14),
-                                       rule.pattern(15),
-                                       rule.pattern(16),
-                                       rule.pattern(11),
-                                       rule.pattern(17),))
-              for x_4 in gen_4: 
-                flag_4 = True
-                assert x_4 is None, \
-                  "compiler.fc_forall_require: got unexpected plan from when clause 4"
-                mark5 = context.mark(True)
-                if rule.pattern(18).match_data(context, context,
-                        ("forall%d_worked = True" % context.lookup_data('start_lineno'),
-                       context.lookup_data('fn_head1'),
-                       "forall%d_worked = False" % context.lookup_data('start_lineno'),
-                       context.lookup_data('fn_head2'),
-                       ('INDENT', 2),
-                       "forall%d_worked = True" % context.lookup_data('start_lineno'),
-                       'POPINDENT',
-                       context.lookup_data('fn_tail2'),
-                       context.lookup_data('fn_tail1'),
-                       "if forall%d_worked:" % context.lookup_data('start_lineno'),
-                       ("INDENT", 2))):
-                  context.end_save_all_undo()
-                  mark6 = context.mark(True)
-                  if rule.pattern(19).match_data(context, context,
-                          context.lookup_data('decl_lines1') + context.lookup_data('decl_lines2')):
-                    context.end_save_all_undo()
-                    rule.rule_base.num_bc_rule_successes += 1
-                    yield
-                  else: context.end_save_all_undo()
-                  context.undo_to_mark(mark6)
-                else: context.end_save_all_undo()
-                context.undo_to_mark(mark5)
-              if not flag_4:
-                raise AssertionError("compiler.fc_forall_require: 'when' clause 4 failed")
-              if hasattr(gen_4, 'iterator'): 
-                if not gen_4.iterator == None: 
-                  gen_4.iterator.close()
-              else: 
-                if hasattr(gen_4, '__iter__'): 
-                  if not gen_4.__iter__ == None: 
-                    gen_4.close()
+            with engine.prove(rule.rule_base.root_name, 'fc_premises', context,
+                              (rule.pattern(2),
+                               rule.pattern(3),
+                               rule.pattern(4),
+                               rule.pattern(5),
+                               rule.pattern(1),
+                               rule.pattern(6),
+                               rule.pattern(7),
+                               rule.pattern(8),
+                               rule.pattern(9),
+                               rule.pattern(10),
+                               rule.pattern(11),)) \
+              as gen_3:
+              for x_3 in gen_3:
+                flag_3 = True
+                assert x_3 is None, \
+                  "compiler.fc_forall_require: got unexpected plan from when clause 3"
+                flag_4 = False
+                with engine.prove(rule.rule_base.root_name, 'fc_premises', context,
+                                  (rule.pattern(2),
+                                   rule.pattern(4),
+                                   rule.pattern(12),
+                                   rule.pattern(13),
+                                   rule.pattern(0),
+                                   rule.pattern(6),
+                                   rule.pattern(14),
+                                   rule.pattern(15),
+                                   rule.pattern(16),
+                                   rule.pattern(11),
+                                   rule.pattern(17),)) \
+                  as gen_4:
+                  for x_4 in gen_4:
+                    flag_4 = True
+                    assert x_4 is None, \
+                      "compiler.fc_forall_require: got unexpected plan from when clause 4"
+                    mark5 = context.mark(True)
+                    if rule.pattern(18).match_data(context, context,
+                            ("forall%d_worked = True" % context.lookup_data('start_lineno'),
+                           context.lookup_data('fn_head1'),
+                           "forall%d_worked = False" % context.lookup_data('start_lineno'),
+                           context.lookup_data('fn_head2'),
+                           ('INDENT', 2),
+                           "forall%d_worked = True" % context.lookup_data('start_lineno'),
+                           'POPINDENT',
+                           context.lookup_data('fn_tail2'),
+                           context.lookup_data('fn_tail1'),
+                           "if forall%d_worked:" % context.lookup_data('start_lineno'),
+                           ("INDENT", 2))):
+                      context.end_save_all_undo()
+                      mark6 = context.mark(True)
+                      if rule.pattern(19).match_data(context, context,
+                              context.lookup_data('decl_lines1') + context.lookup_data('decl_lines2')):
+                        context.end_save_all_undo()
+                        rule.rule_base.num_bc_rule_successes += 1
+                        yield
+                      else: context.end_save_all_undo()
+                      context.undo_to_mark(mark6)
+                    else: context.end_save_all_undo()
+                    context.undo_to_mark(mark5)
+                if not flag_4:
+                  raise AssertionError("compiler.fc_forall_require: 'when' clause 4 failed")
             if not flag_3:
               raise AssertionError("compiler.fc_forall_require: 'when' clause 3 failed")
-            if hasattr(gen_3, 'iterator'): 
-              if not gen_3.iterator == None: 
-                gen_3.iterator.close()
-            else: 
-              if hasattr(gen_3, '__iter__'): 
-                if not gen_3.__iter__ == None: 
-                  gen_3.close()
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
@@ -843,44 +750,38 @@ def fc_notany(rule, arg_patterns, arg_context):
                   "not notany%d_worked" % context.lookup_data('start_lineno')):
             context.end_save_all_undo()
             flag_3 = False
-            gen_3 = engine.prove(rule.rule_base.root_name, 'fc_premises', context,
-                                    (rule.pattern(2),
-                                     rule.pattern(3),
-                                     rule.pattern(4),
-                                     rule.pattern(5),
-                                     rule.pattern(1),
-                                     rule.pattern(6),
-                                     rule.pattern(7),
-                                     rule.pattern(8),
-                                     rule.pattern(9),
-                                     rule.pattern(10),
-                                     rule.pattern(11),))
-            for x_3 in gen_3: 
-              flag_3 = True
-              assert x_3 is None, \
-                "compiler.fc_notany: got unexpected plan from when clause 3"
-              mark4 = context.mark(True)
-              if rule.pattern(12).match_data(context, context,
-                      ("notany%d_worked = True" % context.lookup_data('start_lineno'),
-                     context.lookup_data('fn_head1'),
-                     "notany%d_worked = False" % context.lookup_data('start_lineno'),
-                     context.lookup_data('fn_tail1'),
-                     "if notany%d_worked:" % context.lookup_data('start_lineno'),
-                     ("INDENT", 2))):
-                context.end_save_all_undo()
-                rule.rule_base.num_bc_rule_successes += 1
-                yield
-              else: context.end_save_all_undo()
-              context.undo_to_mark(mark4)
+            with engine.prove(rule.rule_base.root_name, 'fc_premises', context,
+                              (rule.pattern(2),
+                               rule.pattern(3),
+                               rule.pattern(4),
+                               rule.pattern(5),
+                               rule.pattern(1),
+                               rule.pattern(6),
+                               rule.pattern(7),
+                               rule.pattern(8),
+                               rule.pattern(9),
+                               rule.pattern(10),
+                               rule.pattern(11),)) \
+              as gen_3:
+              for x_3 in gen_3:
+                flag_3 = True
+                assert x_3 is None, \
+                  "compiler.fc_notany: got unexpected plan from when clause 3"
+                mark4 = context.mark(True)
+                if rule.pattern(12).match_data(context, context,
+                        ("notany%d_worked = True" % context.lookup_data('start_lineno'),
+                       context.lookup_data('fn_head1'),
+                       "notany%d_worked = False" % context.lookup_data('start_lineno'),
+                       context.lookup_data('fn_tail1'),
+                       "if notany%d_worked:" % context.lookup_data('start_lineno'),
+                       ("INDENT", 2))):
+                  context.end_save_all_undo()
+                  rule.rule_base.num_bc_rule_successes += 1
+                  yield
+                else: context.end_save_all_undo()
+                context.undo_to_mark(mark4)
             if not flag_3:
               raise AssertionError("compiler.fc_notany: 'when' clause 3 failed")
-            if hasattr(gen_3, 'iterator'): 
-              if not gen_3.iterator == None: 
-                gen_3.iterator.close()
-            else: 
-              if hasattr(gen_3, '__iter__'): 
-                if not gen_3.__iter__ == None: 
-                  gen_3.close()
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
@@ -901,26 +802,20 @@ def fc_python_premise(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
-        gen_1 = engine.prove(rule.rule_base.root_name, 'python_premise', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),
-                                 rule.pattern(5),
-                                 rule.pattern(6),))
-        for x_1 in gen_1: 
-          assert x_1 is None, \
-            "compiler.fc_python_premise: got unexpected plan from when clause 1"
-          rule.rule_base.num_bc_rule_successes += 1
-          yield
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
+        with engine.prove(rule.rule_base.root_name, 'python_premise', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),
+                           rule.pattern(3),
+                           rule.pattern(4),
+                           rule.pattern(5),
+                           rule.pattern(6),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            assert x_1 is None, \
+              "compiler.fc_python_premise: got unexpected plan from when clause 1"
+            rule.rule_base.num_bc_rule_successes += 1
+            yield
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -956,45 +851,33 @@ def assertions_n(rule, arg_patterns, arg_context):
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
-        gen_1 = engine.prove(rule.rule_base.root_name, 'assertion', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),))
-        for x_1 in gen_1: 
-          flag_1 = True
-          assert x_1 is None, \
-            "compiler.assertions_n: got unexpected plan from when clause 1"
-          flag_2 = False
-          gen_2 = engine.prove(rule.rule_base.root_name, 'assertions', context,
-                                  (rule.pattern(4),
-                                   rule.pattern(5),
-                                   rule.pattern(3),
-                                   rule.pattern(6),))
-          for x_2 in gen_2: 
-            flag_2 = True
-            assert x_2 is None, \
-              "compiler.assertions_n: got unexpected plan from when clause 2"
-            rule.rule_base.num_bc_rule_successes += 1
-            yield
-          if not flag_2:
-            raise AssertionError("compiler.assertions_n: 'when' clause 2 failed")
-          if hasattr(gen_2, 'iterator'): 
-            if not gen_2.iterator == None: 
-              gen_2.iterator.close()
-          else: 
-            if hasattr(gen_2, '__iter__'): 
-              if not gen_2.__iter__ == None: 
-                gen_2.close()
+        with engine.prove(rule.rule_base.root_name, 'assertion', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),
+                           rule.pattern(3),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            flag_1 = True
+            assert x_1 is None, \
+              "compiler.assertions_n: got unexpected plan from when clause 1"
+            flag_2 = False
+            with engine.prove(rule.rule_base.root_name, 'assertions', context,
+                              (rule.pattern(4),
+                               rule.pattern(5),
+                               rule.pattern(3),
+                               rule.pattern(6),)) \
+              as gen_2:
+              for x_2 in gen_2:
+                flag_2 = True
+                assert x_2 is None, \
+                  "compiler.assertions_n: got unexpected plan from when clause 2"
+                rule.rule_base.num_bc_rule_successes += 1
+                yield
+            if not flag_2:
+              raise AssertionError("compiler.assertions_n: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.assertions_n: 'when' clause 1 failed")
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -1088,53 +971,41 @@ def bc_rules1(rule, arg_patterns, arg_context):
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
-        gen_1 = engine.prove(rule.rule_base.root_name, 'bc_rule', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),))
-        for x_1 in gen_1: 
-          flag_1 = True
-          assert x_1 is None, \
-            "compiler.bc_rules1: got unexpected plan from when clause 1"
-          flag_2 = False
-          gen_2 = engine.prove(rule.rule_base.root_name, 'bc_rules', context,
-                                  (rule.pattern(0),
-                                   rule.pattern(5),
-                                   rule.pattern(6),
-                                   rule.pattern(7),
-                                   rule.pattern(8),))
-          for x_2 in gen_2: 
-            flag_2 = True
-            assert x_2 is None, \
-              "compiler.bc_rules1: got unexpected plan from when clause 2"
-            mark3 = context.mark(True)
-            if rule.pattern(9).match_data(context, context,
-                    context.lookup_data('bc_plan1') + context.lookup_data('plan_rest')):
-              context.end_save_all_undo()
-              rule.rule_base.num_bc_rule_successes += 1
-              yield
-            else: context.end_save_all_undo()
-            context.undo_to_mark(mark3)
-          if not flag_2:
-            raise AssertionError("compiler.bc_rules1: 'when' clause 2 failed")
-          if hasattr(gen_2, 'iterator'): 
-            if not gen_2.iterator == None: 
-              gen_2.iterator.close()
-          else: 
-            if hasattr(gen_2, '__iter__'): 
-              if not gen_2.__iter__ == None: 
-                gen_2.close()
+        with engine.prove(rule.rule_base.root_name, 'bc_rule', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),
+                           rule.pattern(3),
+                           rule.pattern(4),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            flag_1 = True
+            assert x_1 is None, \
+              "compiler.bc_rules1: got unexpected plan from when clause 1"
+            flag_2 = False
+            with engine.prove(rule.rule_base.root_name, 'bc_rules', context,
+                              (rule.pattern(0),
+                               rule.pattern(5),
+                               rule.pattern(6),
+                               rule.pattern(7),
+                               rule.pattern(8),)) \
+              as gen_2:
+              for x_2 in gen_2:
+                flag_2 = True
+                assert x_2 is None, \
+                  "compiler.bc_rules1: got unexpected plan from when clause 2"
+                mark3 = context.mark(True)
+                if rule.pattern(9).match_data(context, context,
+                        context.lookup_data('bc_plan1') + context.lookup_data('plan_rest')):
+                  context.end_save_all_undo()
+                  rule.rule_base.num_bc_rule_successes += 1
+                  yield
+                else: context.end_save_all_undo()
+                context.undo_to_mark(mark3)
+            if not flag_2:
+              raise AssertionError("compiler.bc_rules1: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.bc_rules1: 'when' clause 1 failed")
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -1152,60 +1023,54 @@ def bc_rule_(rule, arg_patterns, arg_context):
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
-        gen_1 = engine.prove(rule.rule_base.root_name, 'bc_premises', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),
-                                 rule.pattern(5),
-                                 rule.pattern(6),
-                                 rule.pattern(7),))
-        for x_1 in gen_1: 
-          flag_1 = True
-          assert x_1 is None, \
-            "compiler.bc_rule_: got unexpected plan from when clause 1"
-          mark2 = context.mark(True)
-          if rule.pattern(8).match_data(context, context,
-                  \
-                             helpers.goal(context.lookup_data('rb_name'), context.lookup_data('name'), context.lookup_data('goal'),
-                 context.lookup_data('prem_plan_lines'), context.lookup_data('python_lines'))):
-            context.end_save_all_undo()
-            mark3 = context.mark(True)
-            if rule.pattern(9).match_data(context, context,
-                    (context.lookup_data('goal_fn_head'),
-                   context.lookup_data('prem_fn_head'),
-                   'rule.rule_base.num_bc_rule_successes += 1',
-                   'yield context' if context.lookup_data('plan_lines') else 'yield',
-                   context.lookup_data('prem_fn_tail'),
-                   'rule.rule_base.num_bc_rule_failures += 1',
-                   context.lookup_data('goal_fn_tail'),
-                   )):
+        with engine.prove(rule.rule_base.root_name, 'bc_premises', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),
+                           rule.pattern(3),
+                           rule.pattern(4),
+                           rule.pattern(5),
+                           rule.pattern(6),
+                           rule.pattern(7),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            flag_1 = True
+            assert x_1 is None, \
+              "compiler.bc_rule_: got unexpected plan from when clause 1"
+            mark2 = context.mark(True)
+            if rule.pattern(8).match_data(context, context,
+                    \
+                               helpers.goal(context.lookup_data('rb_name'), context.lookup_data('name'), context.lookup_data('goal'),
+                   context.lookup_data('prem_plan_lines'), context.lookup_data('python_lines'))):
               context.end_save_all_undo()
-              mark4 = context.mark(True)
-              if rule.pattern(10).match_data(context, context,
-                      (context.lookup_data('goal_decl_lines'),
-                     context.lookup_data('prem_decl_lines'),
-                     "POPINDENT",
+              mark3 = context.mark(True)
+              if rule.pattern(9).match_data(context, context,
+                      (context.lookup_data('goal_fn_head'),
+                     context.lookup_data('prem_fn_head'),
+                     'rule.rule_base.num_bc_rule_successes += 1',
+                     'yield context' if context.lookup_data('plan_lines') else 'yield',
+                     context.lookup_data('prem_fn_tail'),
+                     'rule.rule_base.num_bc_rule_failures += 1',
+                     context.lookup_data('goal_fn_tail'),
                      )):
                 context.end_save_all_undo()
-                rule.rule_base.num_bc_rule_successes += 1
-                yield
+                mark4 = context.mark(True)
+                if rule.pattern(10).match_data(context, context,
+                        (context.lookup_data('goal_decl_lines'),
+                       context.lookup_data('prem_decl_lines'),
+                       "POPINDENT",
+                       )):
+                  context.end_save_all_undo()
+                  rule.rule_base.num_bc_rule_successes += 1
+                  yield
+                else: context.end_save_all_undo()
+                context.undo_to_mark(mark4)
               else: context.end_save_all_undo()
-              context.undo_to_mark(mark4)
+              context.undo_to_mark(mark3)
             else: context.end_save_all_undo()
-            context.undo_to_mark(mark3)
-          else: context.end_save_all_undo()
-          context.undo_to_mark(mark2)
+            context.undo_to_mark(mark2)
         if not flag_1:
           raise AssertionError("compiler.bc_rule_: 'when' clause 1 failed")
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -1223,62 +1088,56 @@ def bc_premises(rule, arg_patterns, arg_context):
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
-        gen_1 = engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),
-                                 rule.pattern(5),
-                                 rule.pattern(6),
-                                 rule.pattern(7),
-                                 rule.pattern(8),
-                                 rule.pattern(9),
-                                 rule.pattern(10),
-                                 rule.pattern(11),
-                                 rule.pattern(12),
-                                 rule.pattern(13),))
-        for x_1 in gen_1: 
-          flag_1 = True
-          assert x_1 is None, \
-            "compiler.bc_premises: got unexpected plan from when clause 1"
-          mark2 = context.mark(True)
-          if rule.pattern(14).match_data(context, context,
-                  helpers.list_format(context.lookup_data('patterns'), '(', '))')):
-            context.end_save_all_undo()
-            mark3 = context.mark(True)
-            if rule.pattern(15).match_data(context, context,
-                    ('(' + ' '.join(tuple(repr(plan_var_name) + ','
-                   for plan_var_name
-                   in context.lookup_data('plan_var_names'))) +
-                   '),',) + context.lookup_data('pat_lines')):
+        with engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),
+                           rule.pattern(3),
+                           rule.pattern(4),
+                           rule.pattern(5),
+                           rule.pattern(6),
+                           rule.pattern(7),
+                           rule.pattern(8),
+                           rule.pattern(9),
+                           rule.pattern(10),
+                           rule.pattern(11),
+                           rule.pattern(12),
+                           rule.pattern(13),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            flag_1 = True
+            assert x_1 is None, \
+              "compiler.bc_premises: got unexpected plan from when clause 1"
+            mark2 = context.mark(True)
+            if rule.pattern(14).match_data(context, context,
+                    helpers.list_format(context.lookup_data('patterns'), '(', '))')):
               context.end_save_all_undo()
-              mark4 = context.mark(True)
-              if rule.pattern(16).match_data(context, context,
-                      tuple(itertools.chain.from_iterable(itertools.chain(
-                     (lines for step, lines in context.lookup_data('plan_lines1') if step is None),
-                     (lines for step, lines
-                     in sorted(((step, lines) for step, lines in context.lookup_data('plan_lines1')
-                     if step is not None),
-                     key=lambda (step, lines): step)))))):
+              mark3 = context.mark(True)
+              if rule.pattern(15).match_data(context, context,
+                      ('(' + ' '.join(tuple(repr(plan_var_name) + ','
+                     for plan_var_name
+                     in context.lookup_data('plan_var_names'))) +
+                     '),',) + context.lookup_data('pat_lines')):
                 context.end_save_all_undo()
-                rule.rule_base.num_bc_rule_successes += 1
-                yield
+                mark4 = context.mark(True)
+                if rule.pattern(16).match_data(context, context,
+                        tuple(itertools.chain.from_iterable(itertools.chain(
+                       (lines for step, lines in context.lookup_data('plan_lines1') if step is None),
+                       (lines for step, lines
+                       in sorted(((step, lines) for step, lines in context.lookup_data('plan_lines1')
+                       if step is not None),
+                       key=lambda (step, lines): step)))))):
+                  context.end_save_all_undo()
+                  rule.rule_base.num_bc_rule_successes += 1
+                  yield
+                else: context.end_save_all_undo()
+                context.undo_to_mark(mark4)
               else: context.end_save_all_undo()
-              context.undo_to_mark(mark4)
+              context.undo_to_mark(mark3)
             else: context.end_save_all_undo()
-            context.undo_to_mark(mark3)
-          else: context.end_save_all_undo()
-          context.undo_to_mark(mark2)
+            context.undo_to_mark(mark2)
         if not flag_1:
           raise AssertionError("compiler.bc_premises: 'when' clause 1 failed")
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -1314,83 +1173,71 @@ def bc_premises1_n(rule, arg_patterns, arg_context):
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
-        gen_1 = engine.prove(rule.rule_base.root_name, 'bc_premise', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),
-                                 rule.pattern(5),
-                                 rule.pattern(6),
-                                 rule.pattern(7),
-                                 rule.pattern(8),
-                                 rule.pattern(9),
-                                 rule.pattern(10),
-                                 rule.pattern(11),
-                                 rule.pattern(12),
-                                 rule.pattern(13),))
-        for x_1 in gen_1: 
-          flag_1 = True
-          assert x_1 is None, \
-            "compiler.bc_premises1_n: got unexpected plan from when clause 1"
-          flag_2 = False
-          gen_2 = engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
-                                  (rule.pattern(0),
-                                   rule.pattern(1),
-                                   rule.pattern(3),
-                                   rule.pattern(14),
-                                   rule.pattern(15),
-                                   rule.pattern(5),
-                                   rule.pattern(6),
-                                   rule.pattern(8),
-                                   rule.pattern(16),
-                                   rule.pattern(10),
-                                   rule.pattern(17),
-                                   rule.pattern(18),
-                                   rule.pattern(19),
-                                   rule.pattern(20),))
-          for x_2 in gen_2: 
-            flag_2 = True
-            assert x_2 is None, \
-              "compiler.bc_premises1_n: got unexpected plan from when clause 2"
-            mark3 = context.mark(True)
-            if rule.pattern(21).match_data(context, context,
-                    context.lookup_data('plan_lines1') + context.lookup_data('plan_lines2')):
-              context.end_save_all_undo()
-              mark4 = context.mark(True)
-              if rule.pattern(22).match_data(context, context,
-                      context.lookup_data('fn_head1') + context.lookup_data('fn_head2')):
-                context.end_save_all_undo()
-                mark5 = context.mark(True)
-                if rule.pattern(23).match_data(context, context,
-                        context.lookup_data('fn_tail2') + context.lookup_data('fn_tail1')):
+        with engine.prove(rule.rule_base.root_name, 'bc_premise', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),
+                           rule.pattern(3),
+                           rule.pattern(4),
+                           rule.pattern(5),
+                           rule.pattern(6),
+                           rule.pattern(7),
+                           rule.pattern(8),
+                           rule.pattern(9),
+                           rule.pattern(10),
+                           rule.pattern(11),
+                           rule.pattern(12),
+                           rule.pattern(13),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            flag_1 = True
+            assert x_1 is None, \
+              "compiler.bc_premises1_n: got unexpected plan from when clause 1"
+            flag_2 = False
+            with engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                              (rule.pattern(0),
+                               rule.pattern(1),
+                               rule.pattern(3),
+                               rule.pattern(14),
+                               rule.pattern(15),
+                               rule.pattern(5),
+                               rule.pattern(6),
+                               rule.pattern(8),
+                               rule.pattern(16),
+                               rule.pattern(10),
+                               rule.pattern(17),
+                               rule.pattern(18),
+                               rule.pattern(19),
+                               rule.pattern(20),)) \
+              as gen_2:
+              for x_2 in gen_2:
+                flag_2 = True
+                assert x_2 is None, \
+                  "compiler.bc_premises1_n: got unexpected plan from when clause 2"
+                mark3 = context.mark(True)
+                if rule.pattern(21).match_data(context, context,
+                        context.lookup_data('plan_lines1') + context.lookup_data('plan_lines2')):
                   context.end_save_all_undo()
-                  rule.rule_base.num_bc_rule_successes += 1
-                  yield
+                  mark4 = context.mark(True)
+                  if rule.pattern(22).match_data(context, context,
+                          context.lookup_data('fn_head1') + context.lookup_data('fn_head2')):
+                    context.end_save_all_undo()
+                    mark5 = context.mark(True)
+                    if rule.pattern(23).match_data(context, context,
+                            context.lookup_data('fn_tail2') + context.lookup_data('fn_tail1')):
+                      context.end_save_all_undo()
+                      rule.rule_base.num_bc_rule_successes += 1
+                      yield
+                    else: context.end_save_all_undo()
+                    context.undo_to_mark(mark5)
+                  else: context.end_save_all_undo()
+                  context.undo_to_mark(mark4)
                 else: context.end_save_all_undo()
-                context.undo_to_mark(mark5)
-              else: context.end_save_all_undo()
-              context.undo_to_mark(mark4)
-            else: context.end_save_all_undo()
-            context.undo_to_mark(mark3)
-          if not flag_2:
-            raise AssertionError("compiler.bc_premises1_n: 'when' clause 2 failed")
-          if hasattr(gen_2, 'iterator'): 
-            if not gen_2.iterator == None: 
-              gen_2.iterator.close()
-          else: 
-            if hasattr(gen_2, '__iter__'): 
-              if not gen_2.__iter__ == None: 
-                gen_2.close()
+                context.undo_to_mark(mark3)
+            if not flag_2:
+              raise AssertionError("compiler.bc_premises1_n: 'when' clause 2 failed")
         if not flag_1:
           raise AssertionError("compiler.bc_premises1_n: 'when' clause 1 failed")
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -1423,118 +1270,80 @@ def bc_premise(rule, arg_patterns, arg_context):
               mark4 = context.mark(True)
               if rule.pattern(3).match_data(context, context,
                       (('STARTING_LINENO', context.lookup_data('start_lineno')),
-                     "gen_%(clause_num)d = "
-                     "engine.prove(%(kb_name)s, %(entity_name)s, context," %
-                     {'clause_num': context.lookup_data('clause_num'),
-                     'kb_name': context.lookup_data('kb_name2'),
-                     'entity_name': context.lookup_data('entity_name')},
+                     "with engine.prove(%s, %s, context," %
+                     (context.lookup_data('kb_name2'), context.lookup_data('entity_name')),
                      ('INDENT', 2),
-                     ('INDENT', 22),
+                     ('INDENT', 16),
                      helpers.list_format(('rule.pattern(%d)' % pat_num
                      for pat_num in context.lookup_data('pat_nums')),
-                     '(', '))'),
-                     "POPINDENT", 
-                     "POPINDENT",
-                     "for x_%d in gen_%d: " % (context.lookup_data('clause_num'), context.lookup_data('clause_num')),
-                     ('INDENT', 2)
+                     '(', ')) \\'),
+                     'POPINDENT',
+                     "as gen_%d:" % context.lookup_data('clause_num'),
+                     "for x_%d in gen_%d:" % (context.lookup_data('clause_num'), context.lookup_data('clause_num')),
+                     ('INDENT', 2),
                      )):
                 context.end_save_all_undo()
-                mark5 = context.mark(True)
-                if rule.pattern(4).match_data(context, context,
-                        ("if hasattr(gen_%d, 'iterator'): " % context.lookup_data('clause_num'),
-                       ('INDENT', 2),
-                       "if not gen_%d.iterator == None: " % context.lookup_data('clause_num'),
-                       ('INDENT', 2),
-                       "gen_%d.iterator.close()" % context.lookup_data('clause_num'),
-                       "POPINDENT",
-                       "POPINDENT",
-                       "else: ",
-                       ('INDENT', 2),
-                       "if hasattr(gen_%d, '__iter__'): " % context.lookup_data('clause_num'),
-                       ('INDENT', 2),
-                       "if not gen_%d.__iter__ == None: " % context.lookup_data('clause_num'),
-                       ('INDENT', 2),
-                       "gen_%d.close()" % (context.lookup_data('clause_num')),
-                       "POPINDENT",
-                       "POPINDENT",
-                       "POPINDENT") ):
-                  context.end_save_all_undo()
-                  flag_6 = False
-                  gen_6 = engine.prove(rule.rule_base.root_name, 'add_required', context,
-                                          (rule.pattern(5),
-                                           rule.pattern(6),
-                                           rule.pattern(7),
-                                           rule.pattern(8),
-                                           rule.pattern(3),
-                                           rule.pattern(9),
-                                           rule.pattern(10),
-                                           rule.pattern(11),))
-                  for x_6 in gen_6: 
-                    flag_6 = True
-                    assert x_6 is None, \
-                      "compiler.bc_premise: got unexpected plan from when clause 6"
-                    flag_7 = False
-                    gen_7 = engine.prove(rule.rule_base.root_name, 'gen_plan_lines', context,
-                                            (rule.pattern(6),
-                                             rule.pattern(7),
-                                             rule.pattern(8),
-                                             rule.pattern(12),
-                                             rule.pattern(13),
-                                             rule.pattern(14),
-                                             rule.pattern(15),
-                                             rule.pattern(16),
-                                             rule.pattern(17),
-                                             rule.pattern(18),
-                                             rule.pattern(19),))
-                    for x_7 in gen_7: 
-                      flag_7 = True
-                      assert x_7 is None, \
-                        "compiler.bc_premise: got unexpected plan from when clause 7"
-                      mark8 = context.mark(True)
-                      if rule.pattern(20).match_data(context, context,
-                              helpers.merge_patterns(context.lookup_data('plan_vars_needed'),
-                             context.lookup_data('plan_var_names_in'))):
-                        context.end_save_all_undo()
-                        mark9 = context.mark(True)
-                        if rule.pattern(21).match_data(context, context,
-                                context.lookup_data('fn_head2') + context.lookup_data('fn_head3') + (('ENDING_LINENO', context.lookup_data('end_lineno')),)):
+                flag_5 = False
+                with engine.prove(rule.rule_base.root_name, 'add_required', context,
+                                  (rule.pattern(4),
+                                   rule.pattern(5),
+                                   rule.pattern(6),
+                                   rule.pattern(7),
+                                   rule.pattern(3),
+                                   rule.pattern(8),
+                                   rule.pattern(9),
+                                   rule.pattern(10),)) \
+                  as gen_5:
+                  for x_5 in gen_5:
+                    flag_5 = True
+                    assert x_5 is None, \
+                      "compiler.bc_premise: got unexpected plan from when clause 5"
+                    flag_6 = False
+                    with engine.prove(rule.rule_base.root_name, 'gen_plan_lines', context,
+                                      (rule.pattern(5),
+                                       rule.pattern(6),
+                                       rule.pattern(7),
+                                       rule.pattern(11),
+                                       rule.pattern(12),
+                                       rule.pattern(13),
+                                       rule.pattern(14),
+                                       rule.pattern(15),
+                                       rule.pattern(16),
+                                       rule.pattern(17),
+                                       rule.pattern(18),)) \
+                      as gen_6:
+                      for x_6 in gen_6:
+                        flag_6 = True
+                        assert x_6 is None, \
+                          "compiler.bc_premise: got unexpected plan from when clause 6"
+                        mark7 = context.mark(True)
+                        if rule.pattern(19).match_data(context, context,
+                                helpers.merge_patterns(context.lookup_data('plan_vars_needed'),
+                               context.lookup_data('plan_var_names_in'))):
                           context.end_save_all_undo()
-                          mark10 = context.mark(True)
-                          if rule.pattern(22).match_data(context, context,
-                                  (context.lookup_data('fn_tail3'),
-                                 () if context.lookup_data('break_cond') is None
-                                 else "if %s: break" % context.lookup_data('break_cond'),
-                                 context.lookup_data('fn_tail2'),
-                                 context.lookup_data('fn_tail1'))):
+                          mark8 = context.mark(True)
+                          if rule.pattern(20).match_data(context, context,
+                                  context.lookup_data('fn_head2') + context.lookup_data('fn_head3') + (('ENDING_LINENO', context.lookup_data('end_lineno')),)):
                             context.end_save_all_undo()
-                            rule.rule_base.num_bc_rule_successes += 1
-                            yield
+                            mark9 = context.mark(True)
+                            if rule.pattern(21).match_data(context, context,
+                                    (context.lookup_data('fn_tail3'),
+                                   () if context.lookup_data('break_cond') is None
+                                   else "if %s: break" % context.lookup_data('break_cond'),
+                                   context.lookup_data('fn_tail2'))):
+                              context.end_save_all_undo()
+                              rule.rule_base.num_bc_rule_successes += 1
+                              yield
+                            else: context.end_save_all_undo()
+                            context.undo_to_mark(mark9)
                           else: context.end_save_all_undo()
-                          context.undo_to_mark(mark10)
+                          context.undo_to_mark(mark8)
                         else: context.end_save_all_undo()
-                        context.undo_to_mark(mark9)
-                      else: context.end_save_all_undo()
-                      context.undo_to_mark(mark8)
-                    if not flag_7:
-                      raise AssertionError("compiler.bc_premise: 'when' clause 7 failed")
-                    if hasattr(gen_7, 'iterator'): 
-                      if not gen_7.iterator == None: 
-                        gen_7.iterator.close()
-                    else: 
-                      if hasattr(gen_7, '__iter__'): 
-                        if not gen_7.__iter__ == None: 
-                          gen_7.close()
-                  if not flag_6:
-                    raise AssertionError("compiler.bc_premise: 'when' clause 6 failed")
-                  if hasattr(gen_6, 'iterator'): 
-                    if not gen_6.iterator == None: 
-                      gen_6.iterator.close()
-                  else: 
-                    if hasattr(gen_6, '__iter__'): 
-                      if not gen_6.__iter__ == None: 
-                        gen_6.close()
-                else: context.end_save_all_undo()
-                context.undo_to_mark(mark5)
+                        context.undo_to_mark(mark7)
+                    if not flag_6:
+                      raise AssertionError("compiler.bc_premise: 'when' clause 6 failed")
+                if not flag_5:
+                  raise AssertionError("compiler.bc_premise: 'when' clause 5 failed")
               else: context.end_save_all_undo()
               context.undo_to_mark(mark4)
             else: context.end_save_all_undo()
@@ -1564,71 +1373,59 @@ def bc_first(rule, arg_patterns, arg_context):
                 "first%d_worked" % context.lookup_data('clause_num')):
           context.end_save_all_undo()
           flag_2 = False
-          gen_2 = engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
-                                  (rule.pattern(1),
-                                   rule.pattern(2),
-                                   rule.pattern(3),
-                                   rule.pattern(4),
-                                   rule.pattern(5),
-                                   rule.pattern(0),
-                                   rule.pattern(6),
-                                   rule.pattern(7),
-                                   rule.pattern(8),
-                                   rule.pattern(9),
-                                   rule.pattern(10),
-                                   rule.pattern(11),
-                                   rule.pattern(12),
-                                   rule.pattern(13),))
-          for x_2 in gen_2: 
-            flag_2 = True
-            assert x_2 is None, \
-              "compiler.bc_first: got unexpected plan from when clause 2"
-            flag_3 = False
-            gen_3 = engine.prove(rule.rule_base.root_name, 'add_required', context,
-                                    (rule.pattern(14),
-                                     rule.pattern(1),
-                                     rule.pattern(2),
-                                     rule.pattern(3),
-                                     rule.pattern(12),
-                                     rule.pattern(13),
-                                     rule.pattern(15),
-                                     rule.pattern(16),))
-            for x_3 in gen_3: 
-              flag_3 = True
-              assert x_3 is None, \
-                "compiler.bc_first: got unexpected plan from when clause 3"
-              mark4 = context.mark(True)
-              if rule.pattern(17).match_data(context, context,
-                      "%s = False" % context.lookup_data('break_cond')):
-                context.end_save_all_undo()
-                mark5 = context.mark(True)
-                if rule.pattern(18).match_data(context, context,
-                        "%s = True" % context.lookup_data('break_cond')):
-                  context.end_save_all_undo()
-                  rule.rule_base.num_bc_rule_successes += 1
-                  yield
-                else: context.end_save_all_undo()
-                context.undo_to_mark(mark5)
-              else: context.end_save_all_undo()
-              context.undo_to_mark(mark4)
-            if not flag_3:
-              raise AssertionError("compiler.bc_first: 'when' clause 3 failed")
-            if hasattr(gen_3, 'iterator'): 
-              if not gen_3.iterator == None: 
-                gen_3.iterator.close()
-            else: 
-              if hasattr(gen_3, '__iter__'): 
-                if not gen_3.__iter__ == None: 
-                  gen_3.close()
+          with engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                            (rule.pattern(1),
+                             rule.pattern(2),
+                             rule.pattern(3),
+                             rule.pattern(4),
+                             rule.pattern(5),
+                             rule.pattern(0),
+                             rule.pattern(6),
+                             rule.pattern(7),
+                             rule.pattern(8),
+                             rule.pattern(9),
+                             rule.pattern(10),
+                             rule.pattern(11),
+                             rule.pattern(12),
+                             rule.pattern(13),)) \
+            as gen_2:
+            for x_2 in gen_2:
+              flag_2 = True
+              assert x_2 is None, \
+                "compiler.bc_first: got unexpected plan from when clause 2"
+              flag_3 = False
+              with engine.prove(rule.rule_base.root_name, 'add_required', context,
+                                (rule.pattern(14),
+                                 rule.pattern(1),
+                                 rule.pattern(2),
+                                 rule.pattern(3),
+                                 rule.pattern(12),
+                                 rule.pattern(13),
+                                 rule.pattern(15),
+                                 rule.pattern(16),)) \
+                as gen_3:
+                for x_3 in gen_3:
+                  flag_3 = True
+                  assert x_3 is None, \
+                    "compiler.bc_first: got unexpected plan from when clause 3"
+                  mark4 = context.mark(True)
+                  if rule.pattern(17).match_data(context, context,
+                          "%s = False" % context.lookup_data('break_cond')):
+                    context.end_save_all_undo()
+                    mark5 = context.mark(True)
+                    if rule.pattern(18).match_data(context, context,
+                            "%s = True" % context.lookup_data('break_cond')):
+                      context.end_save_all_undo()
+                      rule.rule_base.num_bc_rule_successes += 1
+                      yield
+                    else: context.end_save_all_undo()
+                    context.undo_to_mark(mark5)
+                  else: context.end_save_all_undo()
+                  context.undo_to_mark(mark4)
+              if not flag_3:
+                raise AssertionError("compiler.bc_first: 'when' clause 3 failed")
           if not flag_2:
             raise AssertionError("compiler.bc_first: 'when' clause 2 failed")
-          if hasattr(gen_2, 'iterator'): 
-            if not gen_2.iterator == None: 
-              gen_2.iterator.close()
-          else: 
-            if hasattr(gen_2, '__iter__'): 
-              if not gen_2.__iter__ == None: 
-                gen_2.close()
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
         rule.rule_base.num_bc_rule_failures += 1
@@ -1648,42 +1445,36 @@ def bc_forall_None(rule, arg_patterns, arg_context):
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
         flag_1 = False
-        gen_1 = engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
-                                (rule.pattern(0),
-                                 rule.pattern(1),
-                                 rule.pattern(2),
-                                 rule.pattern(3),
-                                 rule.pattern(4),
-                                 rule.pattern(5),
-                                 rule.pattern(6),
-                                 rule.pattern(7),
-                                 rule.pattern(8),
-                                 rule.pattern(9),
-                                 rule.pattern(10),
-                                 rule.pattern(11),
-                                 rule.pattern(12),
-                                 rule.pattern(13),))
-        for x_1 in gen_1: 
-          flag_1 = True
-          assert x_1 is None, \
-            "compiler.bc_forall_None: got unexpected plan from when clause 1"
-          mark2 = context.mark(True)
-          if rule.pattern(14).match_data(context, context,
-                  context.lookup_data('fn_head1') + context.lookup_data('fn_tail')):
-            context.end_save_all_undo()
-            rule.rule_base.num_bc_rule_successes += 1
-            yield
-          else: context.end_save_all_undo()
-          context.undo_to_mark(mark2)
+        with engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                          (rule.pattern(0),
+                           rule.pattern(1),
+                           rule.pattern(2),
+                           rule.pattern(3),
+                           rule.pattern(4),
+                           rule.pattern(5),
+                           rule.pattern(6),
+                           rule.pattern(7),
+                           rule.pattern(8),
+                           rule.pattern(9),
+                           rule.pattern(10),
+                           rule.pattern(11),
+                           rule.pattern(12),
+                           rule.pattern(13),)) \
+          as gen_1:
+          for x_1 in gen_1:
+            flag_1 = True
+            assert x_1 is None, \
+              "compiler.bc_forall_None: got unexpected plan from when clause 1"
+            mark2 = context.mark(True)
+            if rule.pattern(14).match_data(context, context,
+                    context.lookup_data('fn_head1') + context.lookup_data('fn_tail')):
+              context.end_save_all_undo()
+              rule.rule_base.num_bc_rule_successes += 1
+              yield
+            else: context.end_save_all_undo()
+            context.undo_to_mark(mark2)
         if not flag_1:
           raise AssertionError("compiler.bc_forall_None: 'when' clause 1 failed")
-        if hasattr(gen_1, 'iterator'): 
-          if not gen_1.iterator == None: 
-            gen_1.iterator.close()
-        else: 
-          if hasattr(gen_1, '__iter__'): 
-            if not gen_1.__iter__ == None: 
-              gen_1.close()
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -1709,79 +1500,67 @@ def bc_forall_require(rule, arg_patterns, arg_context):
                   "not forall%d_worked" % context.lookup_data('start_lineno')):
             context.end_save_all_undo()
             flag_3 = False
-            gen_3 = engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
-                                    (rule.pattern(2),
-                                     rule.pattern(3),
-                                     rule.pattern(4),
-                                     rule.pattern(5),
-                                     rule.pattern(6),
-                                     rule.pattern(1),
-                                     rule.pattern(7),
-                                     rule.pattern(8),
-                                     rule.pattern(9),
-                                     rule.pattern(10),
-                                     rule.pattern(11),
-                                     rule.pattern(12),
-                                     rule.pattern(13),
-                                     rule.pattern(14),))
-            for x_3 in gen_3: 
-              flag_3 = True
-              assert x_3 is None, \
-                "compiler.bc_forall_require: got unexpected plan from when clause 3"
-              flag_4 = False
-              gen_4 = engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
-                                      (rule.pattern(2),
-                                       rule.pattern(3),
-                                       rule.pattern(5),
-                                       rule.pattern(15),
-                                       rule.pattern(16),
-                                       rule.pattern(0),
-                                       rule.pattern(7),
-                                       rule.pattern(9),
-                                       rule.pattern(17),
-                                       rule.pattern(11),
-                                       rule.pattern(18),
-                                       rule.pattern(12),
-                                       rule.pattern(19),
-                                       rule.pattern(20),))
-              for x_4 in gen_4: 
-                flag_4 = True
-                assert x_4 is None, \
-                  "compiler.bc_forall_require: got unexpected plan from when clause 4"
-                mark5 = context.mark(True)
-                if rule.pattern(21).match_data(context, context,
-                        ("forall%d_worked = True" % context.lookup_data('start_lineno'),
-                       context.lookup_data('fn_head1'),
-                       "forall%d_worked = False" % context.lookup_data('start_lineno'),
-                       context.lookup_data('fn_head2'),
-                       "forall%d_worked = True" % context.lookup_data('start_lineno'),
-                       context.lookup_data('fn_tail2'),
-                       context.lookup_data('fn_tail1'),
-                       "if forall%d_worked:" % context.lookup_data('start_lineno'),
-                       ("INDENT", 2))):
-                  context.end_save_all_undo()
-                  rule.rule_base.num_bc_rule_successes += 1
-                  yield
-                else: context.end_save_all_undo()
-                context.undo_to_mark(mark5)
-              if not flag_4:
-                raise AssertionError("compiler.bc_forall_require: 'when' clause 4 failed")
-              if hasattr(gen_4, 'iterator'): 
-                if not gen_4.iterator == None: 
-                  gen_4.iterator.close()
-              else: 
-                if hasattr(gen_4, '__iter__'): 
-                  if not gen_4.__iter__ == None: 
-                    gen_4.close()
+            with engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                              (rule.pattern(2),
+                               rule.pattern(3),
+                               rule.pattern(4),
+                               rule.pattern(5),
+                               rule.pattern(6),
+                               rule.pattern(1),
+                               rule.pattern(7),
+                               rule.pattern(8),
+                               rule.pattern(9),
+                               rule.pattern(10),
+                               rule.pattern(11),
+                               rule.pattern(12),
+                               rule.pattern(13),
+                               rule.pattern(14),)) \
+              as gen_3:
+              for x_3 in gen_3:
+                flag_3 = True
+                assert x_3 is None, \
+                  "compiler.bc_forall_require: got unexpected plan from when clause 3"
+                flag_4 = False
+                with engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                                  (rule.pattern(2),
+                                   rule.pattern(3),
+                                   rule.pattern(5),
+                                   rule.pattern(15),
+                                   rule.pattern(16),
+                                   rule.pattern(0),
+                                   rule.pattern(7),
+                                   rule.pattern(9),
+                                   rule.pattern(17),
+                                   rule.pattern(11),
+                                   rule.pattern(18),
+                                   rule.pattern(12),
+                                   rule.pattern(19),
+                                   rule.pattern(20),)) \
+                  as gen_4:
+                  for x_4 in gen_4:
+                    flag_4 = True
+                    assert x_4 is None, \
+                      "compiler.bc_forall_require: got unexpected plan from when clause 4"
+                    mark5 = context.mark(True)
+                    if rule.pattern(21).match_data(context, context,
+                            ("forall%d_worked = True" % context.lookup_data('start_lineno'),
+                           context.lookup_data('fn_head1'),
+                           "forall%d_worked = False" % context.lookup_data('start_lineno'),
+                           context.lookup_data('fn_head2'),
+                           "forall%d_worked = True" % context.lookup_data('start_lineno'),
+                           context.lookup_data('fn_tail2'),
+                           context.lookup_data('fn_tail1'),
+                           "if forall%d_worked:" % context.lookup_data('start_lineno'),
+                           ("INDENT", 2))):
+                      context.end_save_all_undo()
+                      rule.rule_base.num_bc_rule_successes += 1
+                      yield
+                    else: context.end_save_all_undo()
+                    context.undo_to_mark(mark5)
+                if not flag_4:
+                  raise AssertionError("compiler.bc_forall_require: 'when' clause 4 failed")
             if not flag_3:
               raise AssertionError("compiler.bc_forall_require: 'when' clause 3 failed")
-            if hasattr(gen_3, 'iterator'): 
-              if not gen_3.iterator == None: 
-                gen_3.iterator.close()
-            else: 
-              if hasattr(gen_3, '__iter__'): 
-                if not gen_3.__iter__ == None: 
-                  gen_3.close()
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
@@ -1811,47 +1590,41 @@ def bc_notany(rule, arg_patterns, arg_context):
                   "not notany%d_worked" % context.lookup_data('start_lineno')):
             context.end_save_all_undo()
             flag_3 = False
-            gen_3 = engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
-                                    (rule.pattern(2),
-                                     rule.pattern(3),
-                                     rule.pattern(4),
-                                     rule.pattern(5),
-                                     rule.pattern(6),
-                                     rule.pattern(1),
-                                     rule.pattern(7),
-                                     rule.pattern(8),
-                                     rule.pattern(9),
-                                     rule.pattern(10),
-                                     rule.pattern(11),
-                                     rule.pattern(12),
-                                     rule.pattern(13),
-                                     rule.pattern(14),))
-            for x_3 in gen_3: 
-              flag_3 = True
-              assert x_3 is None, \
-                "compiler.bc_notany: got unexpected plan from when clause 3"
-              mark4 = context.mark(True)
-              if rule.pattern(15).match_data(context, context,
-                      ("notany%d_worked = True" % context.lookup_data('start_lineno'),
-                     context.lookup_data('fn_head1'),
-                     "notany%d_worked = False" % context.lookup_data('start_lineno'),
-                     context.lookup_data('fn_tail1'),
-                     "if notany%d_worked:" % context.lookup_data('start_lineno'),
-                     ("INDENT", 2))        ):
-                context.end_save_all_undo()
-                rule.rule_base.num_bc_rule_successes += 1
-                yield
-              else: context.end_save_all_undo()
-              context.undo_to_mark(mark4)
+            with engine.prove(rule.rule_base.root_name, 'bc_premises1', context,
+                              (rule.pattern(2),
+                               rule.pattern(3),
+                               rule.pattern(4),
+                               rule.pattern(5),
+                               rule.pattern(6),
+                               rule.pattern(1),
+                               rule.pattern(7),
+                               rule.pattern(8),
+                               rule.pattern(9),
+                               rule.pattern(10),
+                               rule.pattern(11),
+                               rule.pattern(12),
+                               rule.pattern(13),
+                               rule.pattern(14),)) \
+              as gen_3:
+              for x_3 in gen_3:
+                flag_3 = True
+                assert x_3 is None, \
+                  "compiler.bc_notany: got unexpected plan from when clause 3"
+                mark4 = context.mark(True)
+                if rule.pattern(15).match_data(context, context,
+                        ("notany%d_worked = True" % context.lookup_data('start_lineno'),
+                       context.lookup_data('fn_head1'),
+                       "notany%d_worked = False" % context.lookup_data('start_lineno'),
+                       context.lookup_data('fn_tail1'),
+                       "if notany%d_worked:" % context.lookup_data('start_lineno'),
+                       ("INDENT", 2))        ):
+                  context.end_save_all_undo()
+                  rule.rule_base.num_bc_rule_successes += 1
+                  yield
+                else: context.end_save_all_undo()
+                context.undo_to_mark(mark4)
             if not flag_3:
               raise AssertionError("compiler.bc_notany: 'when' clause 3 failed")
-            if hasattr(gen_3, 'iterator'): 
-              if not gen_3.iterator == None: 
-                gen_3.iterator.close()
-            else: 
-              if hasattr(gen_3, '__iter__'): 
-                if not gen_3.__iter__ == None: 
-                  gen_3.close()
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
         else: context.end_save_all_undo()
@@ -1910,29 +1683,23 @@ def as_plan(rule, arg_patterns, arg_context):
                context.lookup_data('patterns_in'))):
           context.end_save_all_undo()
           flag_2 = False
-          gen_2 = engine.prove(rule.rule_base.root_name, 'plan_bindings', context,
-                                  (rule.pattern(1),
-                                   rule.pattern(2),
-                                   rule.pattern(3),
-                                   rule.pattern(4),
-                                   rule.pattern(5),
-                                   rule.pattern(6),
-                                   rule.pattern(7),))
-          for x_2 in gen_2: 
-            flag_2 = True
-            assert x_2 is None, \
-              "compiler.as_plan: got unexpected plan from when clause 2"
-            rule.rule_base.num_bc_rule_successes += 1
-            yield
+          with engine.prove(rule.rule_base.root_name, 'plan_bindings', context,
+                            (rule.pattern(1),
+                             rule.pattern(2),
+                             rule.pattern(3),
+                             rule.pattern(4),
+                             rule.pattern(5),
+                             rule.pattern(6),
+                             rule.pattern(7),)) \
+            as gen_2:
+            for x_2 in gen_2:
+              flag_2 = True
+              assert x_2 is None, \
+                "compiler.as_plan: got unexpected plan from when clause 2"
+              rule.rule_base.num_bc_rule_successes += 1
+              yield
           if not flag_2:
             raise AssertionError("compiler.as_plan: 'when' clause 2 failed")
-          if hasattr(gen_2, 'iterator'): 
-            if not gen_2.iterator == None: 
-              gen_2.iterator.close()
-          else: 
-            if hasattr(gen_2, '__iter__'): 
-              if not gen_2.__iter__ == None: 
-                gen_2.close()
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
         rule.rule_base.num_bc_rule_failures += 1
@@ -1958,29 +1725,23 @@ def plan_spec(rule, arg_patterns, arg_context):
                context.lookup_data('patterns_in'))):
           context.end_save_all_undo()
           flag_2 = False
-          gen_2 = engine.prove(rule.rule_base.root_name, 'plan_bindings', context,
-                                  (rule.pattern(1),
-                                   rule.pattern(2),
-                                   rule.pattern(3),
-                                   rule.pattern(4),
-                                   rule.pattern(5),
-                                   rule.pattern(6),
-                                   rule.pattern(7),))
-          for x_2 in gen_2: 
-            flag_2 = True
-            assert x_2 is None, \
-              "compiler.plan_spec: got unexpected plan from when clause 2"
-            rule.rule_base.num_bc_rule_successes += 1
-            yield
+          with engine.prove(rule.rule_base.root_name, 'plan_bindings', context,
+                            (rule.pattern(1),
+                             rule.pattern(2),
+                             rule.pattern(3),
+                             rule.pattern(4),
+                             rule.pattern(5),
+                             rule.pattern(6),
+                             rule.pattern(7),)) \
+            as gen_2:
+            for x_2 in gen_2:
+              flag_2 = True
+              assert x_2 is None, \
+                "compiler.plan_spec: got unexpected plan from when clause 2"
+              rule.rule_base.num_bc_rule_successes += 1
+              yield
           if not flag_2:
             raise AssertionError("compiler.plan_spec: 'when' clause 2 failed")
-          if hasattr(gen_2, 'iterator'): 
-            if not gen_2.iterator == None: 
-              gen_2.iterator.close()
-          else: 
-            if hasattr(gen_2, '__iter__'): 
-              if not gen_2.__iter__ == None: 
-                gen_2.close()
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
         rule.rule_base.num_bc_rule_failures += 1
@@ -2135,26 +1896,20 @@ def bc_python_premise(rule, arg_patterns, arg_context):
         if rule.pattern(0).match_data(context, context,
                 context.lookup_data('clause_num') + 1):
           context.end_save_all_undo()
-          gen_2 = engine.prove(rule.rule_base.root_name, 'python_premise', context,
-                                  (rule.pattern(1),
-                                   rule.pattern(2),
-                                   rule.pattern(3),
-                                   rule.pattern(4),
-                                   rule.pattern(5),
-                                   rule.pattern(6),
-                                   rule.pattern(7),))
-          for x_2 in gen_2: 
-            assert x_2 is None, \
-              "compiler.bc_python_premise: got unexpected plan from when clause 2"
-            rule.rule_base.num_bc_rule_successes += 1
-            yield
-          if hasattr(gen_2, 'iterator'): 
-            if not gen_2.iterator == None: 
-              gen_2.iterator.close()
-          else: 
-            if hasattr(gen_2, '__iter__'): 
-              if not gen_2.__iter__ == None: 
-                gen_2.close()
+          with engine.prove(rule.rule_base.root_name, 'python_premise', context,
+                            (rule.pattern(1),
+                             rule.pattern(2),
+                             rule.pattern(3),
+                             rule.pattern(4),
+                             rule.pattern(5),
+                             rule.pattern(6),
+                             rule.pattern(7),)) \
+            as gen_2:
+            for x_2 in gen_2:
+              assert x_2 is None, \
+                "compiler.bc_python_premise: got unexpected plan from when clause 2"
+              rule.rule_base.num_bc_rule_successes += 1
+              yield
         else: context.end_save_all_undo()
         context.undo_to_mark(mark1)
         rule.rule_base.num_bc_rule_failures += 1
@@ -2493,7 +2248,6 @@ def populate(engine):
                    contexts.variable('multi_match'),
                    contexts.variable('clause_num'),
                    contexts.variable('fn_head'),
-                   contexts.variable('fn_tail1'),
                    contexts.variable('fn_tail'),
                    contexts.variable('next_clause_num'),
                    contexts.variable('decl_lines'),))
@@ -2506,11 +2260,9 @@ def populate(engine):
                    contexts.variable('end_lineno'),
                    pattern.pattern_literal(False),
                    contexts.variable('clause_num'),
-                   contexts.variable('fn_head'),
-                   contexts.variable('fn_tail'),),
+                   contexts.variable('fn_head'),),
                   (),
-                  (contexts.variable('fn_head'),
-                   contexts.variable('fn_tail'),))
+                  (contexts.variable('fn_head'),))
   
   bc_rule.bc_rule('gen_fc_for_true', This_rule_base, 'gen_fc_for',
                   gen_fc_for_true, None,
@@ -2520,11 +2272,9 @@ def populate(engine):
                    contexts.variable('end_lineno'),
                    pattern.pattern_literal(True),
                    contexts.variable('clause_num'),
-                   contexts.variable('fn_head'),
-                   contexts.variable('fn_tail'),),
+                   contexts.variable('fn_head'),),
                   (),
-                  (contexts.variable('fn_head'),
-                   contexts.variable('fn_tail'),))
+                  (contexts.variable('fn_head'),))
   
   bc_rule.bc_rule('fc_first', This_rule_base, 'fc_premise',
                   fc_first, None,
@@ -2869,12 +2619,11 @@ def populate(engine):
                    contexts.variable('kb_name2'),
                    pattern.pattern_tuple((contexts.variable('pat_nums'), contexts.variable('patterns_out1'),), None),
                    contexts.variable('fn_head1'),
-                   contexts.variable('fn_tail1'),
                    contexts.variable('required'),
                    contexts.variable('rb_name'),
                    contexts.variable('rule_name'),
                    contexts.variable('clause_num'),
-                   pattern.pattern_literal(('POPINDENT',)),
+                   pattern.pattern_literal(('POPINDENT', 'POPINDENT',)),
                    contexts.variable('fn_head2'),
                    contexts.variable('fn_tail2'),
                    contexts.variable('plan_spec'),
@@ -3233,162 +2982,159 @@ def populate(engine):
                   ())
 
 from pyke.krb_compiler import helpers
-Krb_filename = 'D:\Projekte\Pyke\trunk\pyke\krb_compiler\compiler.krb'
+Krb_filename = '/home/bruce/python/workareas/sf.trunk/pyke/krb_compiler/compiler.krb'
 Krb_lineno_map = (
-    ((14, 18), (24, 28)),
-    ((22, 22), (30, 30)),
-    ((26, 26), (31, 31)),
-    ((30, 30), (32, 32)),
-    ((33, 40), (33, 33)),
-    ((42, 49), (34, 34)),
-    ((51, 60), (35, 36)),
-    ((63, 75), (37, 49)),
-    ((79, 84), (50, 55)),
-    ((88, 102), (56, 70)),
-    ((155, 159), (73, 73)),
-    ((163, 163), (75, 75)),
-    ((179, 183), (78, 78)),
-    ((187, 189), (80, 82)),
-    ((205, 209), (85, 85)),
-    ((223, 227), (88, 90)),
-    ((230, 237), (92, 92)),
-    ((239, 246), (93, 93)),
-    ((277, 281), (96, 97)),
-    ((284, 299), (99, 101)),
-    ((301, 309), (102, 103)),
-    ((312, 329), (104, 121)),
-    ((333, 340), (122, 129)),
-    ((376, 380), (132, 133)),
-    ((394, 398), (136, 139)),
-    ((401, 416), (141, 144)),
-    ((418, 433), (145, 148)),
-    ((436, 436), (149, 149)),
-    ((470, 474), (152, 157)),
-    ((476, 487), (159, 160)),
-    ((490, 493), (161, 164)),
-    ((497, 497), (165, 165)),
-    ((501, 506), (166, 171)),
-    ((533, 537), (174, 175)),
-    ((541, 549), (177, 185)),
-    ((553, 553), (186, 186)),
-    ((571, 575), (189, 190)),
-    ((579, 587), (192, 200)),
-    ((591, 597), (201, 207)),
-    ((615, 619), (211, 214)),
-    ((623, 623), (216, 216)),
-    ((626, 641), (217, 220)),
-    ((644, 644), (221, 221)),
-    ((648, 648), (222, 222)),
-    ((677, 681), (225, 228)),
-    ((684, 699), (230, 233)),
-    ((702, 702), (234, 234)),
-    ((727, 731), (237, 240)),
-    ((735, 735), (242, 242)),
-    ((739, 739), (243, 243)),
-    ((742, 757), (244, 247)),
-    ((759, 774), (248, 251)),
-    ((777, 787), (252, 262)),
-    ((791, 791), (263, 263)),
-    ((831, 835), (266, 269)),
-    ((839, 839), (271, 271)),
-    ((843, 843), (272, 272)),
-    ((846, 861), (273, 276)),
-    ((864, 869), (277, 282)),
-    ((898, 902), (285, 288)),
-    ((904, 914), (290, 292)),
-    ((934, 938), (295, 295)),
-    ((952, 956), (298, 299)),
-    ((959, 967), (301, 301)),
-    ((969, 977), (302, 302)),
-    ((1008, 1012), (305, 307)),
-    ((1016, 1017), (309, 310)),
-    ((1021, 1030), (311, 320)),
-    ((1048, 1052), (323, 328)),
-    ((1066, 1070), (331, 331)),
-    ((1084, 1088), (334, 337)),
-    ((1091, 1100), (339, 339)),
-    ((1102, 1111), (340, 341)),
-    ((1114, 1114), (342, 342)),
-    ((1148, 1152), (345, 347)),
-    ((1155, 1167), (349, 351)),
-    ((1170, 1172), (352, 354)),
-    ((1176, 1183), (355, 362)),
-    ((1187, 1190), (363, 366)),
-    ((1219, 1223), (369, 371)),
-    ((1226, 1244), (373, 376)),
-    ((1247, 1247), (377, 377)),
-    ((1251, 1254), (378, 381)),
-    ((1258, 1263), (382, 387)),
-    ((1292, 1296), (390, 392)),
-    ((1310, 1314), (395, 399)),
-    ((1317, 1335), (401, 405)),
-    ((1337, 1355), (406, 410)),
-    ((1358, 1358), (411, 411)),
-    ((1362, 1362), (412, 412)),
-    ((1366, 1366), (413, 413)),
-    ((1404, 1408), (416, 422)),
-    ((1412, 1412), (424, 424)),
-    ((1416, 1416), (425, 425)),
-    ((1420, 1421), (426, 427)),
-    ((1425, 1440), (428, 443)),
-    ((1444, 1460), (444, 462)),
-    ((1463, 1475), (463, 464)),
-    ((1477, 1492), (465, 468)),
-    ((1495, 1496), (469, 470)),
-    ((1500, 1500), (471, 471)),
-    ((1504, 1508), (472, 476)),
-    ((1556, 1560), (479, 483)),
-    ((1564, 1564), (485, 485)),
-    ((1567, 1585), (486, 490)),
-    ((1587, 1599), (491, 492)),
-    ((1602, 1602), (493, 493)),
-    ((1606, 1606), (494, 494)),
-    ((1644, 1648), (497, 501)),
-    ((1651, 1669), (503, 507)),
-    ((1672, 1672), (508, 508)),
-    ((1697, 1701), (511, 515)),
-    ((1705, 1705), (517, 517)),
-    ((1709, 1709), (518, 518)),
-    ((1712, 1730), (519, 523)),
-    ((1732, 1750), (524, 528)),
-    ((1753, 1761), (529, 539)),
-    ((1799, 1803), (542, 546)),
-    ((1807, 1807), (549, 549)),
-    ((1811, 1811), (550, 550)),
-    ((1814, 1832), (551, 555)),
-    ((1835, 1840), (556, 561)),
-    ((1869, 1873), (564, 566)),
-    ((1877, 1884), (568, 575)),
-    ((1900, 1904), (578, 582)),
-    ((1908, 1910), (584, 586)),
-    ((1913, 1924), (587, 588)),
-    ((1948, 1952), (591, 596)),
-    ((1956, 1958), (598, 600)),
-    ((1961, 1972), (601, 602)),
-    ((1996, 2000), (605, 607)),
-    ((2004, 2005), (609, 610)),
-    ((2021, 2025), (613, 614)),
-    ((2029, 2049), (616, 636)),
-    ((2053, 2053), (637, 637)),
-    ((2071, 2075), (640, 641)),
-    ((2089, 2093), (644, 645)),
-    ((2097, 2100), (647, 650)),
-    ((2104, 2110), (651, 657)),
-    ((2128, 2132), (660, 664)),
-    ((2136, 2136), (666, 666)),
-    ((2138, 2148), (667, 669)),
-    ((2170, 2174), (672, 676)),
-    ((2178, 2179), (678, 679)),
-    ((2183, 2183), (680, 680)),
-    ((2187, 2197), (681, 691)),
-    ((2201, 2203), (692, 694)),
-    ((2225, 2229), (697, 701)),
-    ((2233, 2234), (703, 704)),
-    ((2238, 2238), (705, 705)),
-    ((2242, 2254), (706, 718)),
-    ((2258, 2267), (719, 728)),
-    ((2289, 2293), (731, 736)),
-    ((2297, 2297), (738, 738)),
-    ((2301, 2308), (739, 746)),
-    ((2326, 2330), (749, 757)),
+    ((15, 19), (24, 28)),
+    ((23, 23), (30, 30)),
+    ((27, 27), (31, 31)),
+    ((31, 31), (32, 32)),
+    ((34, 42), (33, 33)),
+    ((44, 52), (34, 34)),
+    ((54, 64), (35, 36)),
+    ((67, 79), (37, 49)),
+    ((83, 88), (50, 55)),
+    ((92, 106), (56, 70)),
+    ((138, 142), (73, 73)),
+    ((146, 146), (75, 75)),
+    ((162, 166), (78, 78)),
+    ((170, 172), (80, 82)),
+    ((188, 192), (85, 85)),
+    ((206, 210), (88, 90)),
+    ((213, 221), (92, 92)),
+    ((223, 231), (93, 93)),
+    ((248, 252), (96, 97)),
+    ((255, 271), (99, 101)),
+    ((273, 282), (102, 103)),
+    ((285, 302), (104, 121)),
+    ((306, 313), (122, 129)),
+    ((335, 339), (132, 133)),
+    ((353, 357), (136, 139)),
+    ((360, 376), (141, 144)),
+    ((378, 394), (145, 148)),
+    ((397, 397), (149, 149)),
+    ((417, 421), (152, 157)),
+    ((423, 434), (159, 160)),
+    ((437, 440), (161, 164)),
+    ((444, 444), (165, 165)),
+    ((448, 453), (166, 171)),
+    ((473, 477), (174, 175)),
+    ((481, 496), (177, 192)),
+    ((512, 516), (196, 197)),
+    ((520, 530), (199, 209)),
+    ((546, 550), (212, 215)),
+    ((554, 554), (217, 217)),
+    ((557, 573), (218, 221)),
+    ((576, 576), (222, 222)),
+    ((580, 580), (223, 223)),
+    ((602, 606), (226, 229)),
+    ((609, 625), (231, 234)),
+    ((628, 628), (235, 235)),
+    ((646, 650), (238, 241)),
+    ((654, 654), (243, 243)),
+    ((658, 658), (244, 244)),
+    ((661, 677), (245, 248)),
+    ((679, 695), (249, 252)),
+    ((698, 708), (253, 263)),
+    ((712, 712), (264, 264)),
+    ((738, 742), (267, 270)),
+    ((746, 746), (272, 272)),
+    ((750, 750), (273, 273)),
+    ((753, 769), (274, 277)),
+    ((772, 777), (278, 283)),
+    ((799, 803), (286, 289)),
+    ((805, 816), (291, 293)),
+    ((829, 833), (296, 296)),
+    ((847, 851), (299, 300)),
+    ((854, 863), (302, 302)),
+    ((865, 874), (303, 303)),
+    ((891, 895), (306, 308)),
+    ((899, 900), (310, 311)),
+    ((904, 913), (312, 321)),
+    ((931, 935), (324, 329)),
+    ((949, 953), (332, 332)),
+    ((967, 971), (335, 338)),
+    ((974, 984), (340, 340)),
+    ((986, 996), (341, 342)),
+    ((999, 999), (343, 343)),
+    ((1019, 1023), (346, 348)),
+    ((1026, 1039), (350, 352)),
+    ((1042, 1044), (353, 355)),
+    ((1048, 1055), (356, 363)),
+    ((1059, 1062), (364, 367)),
+    ((1084, 1088), (370, 372)),
+    ((1091, 1110), (374, 377)),
+    ((1113, 1113), (378, 378)),
+    ((1117, 1120), (379, 382)),
+    ((1124, 1129), (383, 388)),
+    ((1151, 1155), (391, 393)),
+    ((1169, 1173), (396, 400)),
+    ((1176, 1195), (402, 406)),
+    ((1197, 1216), (407, 411)),
+    ((1219, 1219), (412, 412)),
+    ((1223, 1223), (413, 413)),
+    ((1227, 1227), (414, 414)),
+    ((1251, 1255), (417, 423)),
+    ((1259, 1259), (425, 425)),
+    ((1263, 1263), (426, 426)),
+    ((1267, 1268), (427, 428)),
+    ((1272, 1284), (429, 441)),
+    ((1287, 1300), (442, 443)),
+    ((1302, 1318), (444, 447)),
+    ((1321, 1322), (448, 449)),
+    ((1326, 1326), (450, 450)),
+    ((1330, 1333), (451, 454)),
+    ((1365, 1369), (457, 461)),
+    ((1373, 1373), (463, 463)),
+    ((1376, 1395), (464, 468)),
+    ((1397, 1410), (469, 470)),
+    ((1413, 1413), (471, 471)),
+    ((1417, 1417), (472, 472)),
+    ((1441, 1445), (475, 479)),
+    ((1448, 1467), (481, 485)),
+    ((1470, 1470), (486, 486)),
+    ((1488, 1492), (489, 493)),
+    ((1496, 1496), (495, 495)),
+    ((1500, 1500), (496, 496)),
+    ((1503, 1522), (497, 501)),
+    ((1524, 1543), (502, 506)),
+    ((1546, 1554), (507, 517)),
+    ((1578, 1582), (520, 524)),
+    ((1586, 1586), (527, 527)),
+    ((1590, 1590), (528, 528)),
+    ((1593, 1612), (529, 533)),
+    ((1615, 1620), (534, 539)),
+    ((1642, 1646), (542, 544)),
+    ((1650, 1657), (546, 553)),
+    ((1673, 1677), (556, 560)),
+    ((1681, 1683), (562, 564)),
+    ((1686, 1698), (565, 566)),
+    ((1715, 1719), (569, 574)),
+    ((1723, 1725), (576, 578)),
+    ((1728, 1740), (579, 580)),
+    ((1757, 1761), (583, 585)),
+    ((1765, 1766), (587, 588)),
+    ((1782, 1786), (591, 592)),
+    ((1790, 1810), (594, 614)),
+    ((1814, 1814), (615, 615)),
+    ((1832, 1836), (618, 619)),
+    ((1850, 1854), (622, 623)),
+    ((1858, 1861), (625, 628)),
+    ((1865, 1871), (629, 635)),
+    ((1889, 1893), (638, 642)),
+    ((1897, 1897), (644, 644)),
+    ((1899, 1910), (645, 647)),
+    ((1925, 1929), (650, 654)),
+    ((1933, 1934), (656, 657)),
+    ((1938, 1938), (658, 658)),
+    ((1942, 1952), (659, 669)),
+    ((1956, 1958), (670, 672)),
+    ((1980, 1984), (675, 679)),
+    ((1988, 1989), (681, 682)),
+    ((1993, 1993), (683, 683)),
+    ((1997, 2009), (684, 696)),
+    ((2013, 2022), (697, 706)),
+    ((2044, 2048), (709, 714)),
+    ((2052, 2052), (716, 716)),
+    ((2056, 2063), (717, 724)),
+    ((2081, 2085), (727, 735)),
 )
