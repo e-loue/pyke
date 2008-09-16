@@ -1,7 +1,7 @@
 # $Id$
 # coding=utf-8
 # 
-# Copyright © 2007 Bruce Frederiksen
+# Copyright © 2007-2008 Bruce Frederiksen
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,10 @@ from __future__ import with_statement
 import os.path
 import sys
 
-# FIX: Take this out:
-use_test = False
-
 import pyke
 from pyke import knowledge_engine
 
-if use_test:
-    from pyke.krb_compiler import compiler_test_bc
-else:
-    from pyke.krb_compiler import compiler_bc
+from pyke.krb_compiler import compiler_bc
 from pyke.krb_compiler import krbparser
 
 #from pyke import contexts
@@ -111,24 +105,24 @@ def compile_file(engine, gen_root_location, gen_root_pkg, filename):
             # dump(ast)
             # sys.stderr.write('\n\n')
             engine.reset()
-            if use_test:
-                engine.activate('compiler_test')
-                (fc_lines, bc_lines, plan_lines), plan = \
-                    engine.prove_1('compiler_test', 'compile', (rb_name, ast),
-                                   3)
-            else:
-                engine.activate('compiler')
-                (fc_lines, bc_lines, plan_lines), plan = \
-                    engine.prove_1('compiler', 'compile', (rb_name, ast), 3)
+            engine.activate('compiler')
+            (fc_lines, bc_lines, plan_lines), plan = \
+                engine.prove_1('compiler', 'compile', (rb_name, ast), 3)
             krb_filename = os.path.abspath(filename)
             if fc_lines:
                 sys.stderr.write("writing %s\n" % fc_path)
-                write_file(fc_lines + ("Krb_filename = '%s'" % krb_filename,),
+                write_file(fc_lines +
+                           ("",
+                            "Krb_filename = '%s'" % krb_filename,
+                            "Krb_source_filename = '%s'" % filename,),
                            fc_path)
             elif os.path.lexists(fc_path): os.remove(fc_path)
             if bc_lines:
                 sys.stderr.write("writing %s\n" % bc_path)
-                write_file(bc_lines + ("Krb_filename = '%s'" % krb_filename,),
+                write_file(bc_lines +
+                           ("",
+                            "Krb_filename = '%s'" % krb_filename,
+                            "Krb_source_filename = '%s'" % filename,),
                            bc_path)
             elif os.path.lexists(bc_path): os.remove(bc_path)
             if plan_lines:
@@ -136,7 +130,10 @@ def compile_file(engine, gen_root_location, gen_root_pkg, filename):
                 #sys.stderr.write("plan_lines:\n")
                 #for line in plan_lines:
                 #    sys.stderr.write("  " + repr(line) + "\n")
-                write_file(plan_lines + ("Krb_filename = '%s'" % krb_filename,),
+                write_file(plan_lines +
+                           ("",
+                            "Krb_filename = '%s'" % krb_filename,
+                            "Krb_source_filename = '%s'" % filename,),
                            plan_path)
             elif os.path.lexists(plan_path): os.remove(plan_path)
             #sys.stderr.write("done!\n")
@@ -157,6 +154,7 @@ def compile_file(engine, gen_root_location, gen_root_pkg, filename):
             sys.stderr.write("writing %s\n" % fbc_path)
             with open(fbc_path, 'wb') as f:
                 pickle.dump(pyke.version, f)
+                pickle.dump(filename, f)
                 pickle.dump(fb, f)
         except:
             if os.path.lexists(fbc_path): os.remove(fbc_path)
@@ -175,6 +173,7 @@ def compile_file(engine, gen_root_location, gen_root_pkg, filename):
             sys.stderr.write("writing %s\n" % qbc_path)
             with open(qbc_path, 'wb') as f:
                 pickle.dump(pyke.version, f)
+                pickle.dump(filename, f)
                 pickle.dump(qb, f)
         except:
             if os.path.lexists(qbc_path): os.remove(qbc_path)

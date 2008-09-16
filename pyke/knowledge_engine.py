@@ -1,7 +1,7 @@
 # $Id$
 # coding=utf-8
 # 
-# Copyright © 2007 Bruce Frederiksen
+# Copyright © 2007-2008 Bruce Frederiksen
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -428,6 +428,11 @@ def _load_file(engine, filename, gen_root_location, gen_root_pkg,
            (not hasattr(module, 'version') or module.version != pyke.version):
             #print "load_module(%s, %s) => False" % (filename, type)
             return False
+        if module is not None and \
+           module.Krb_source_filename != filename:
+            raise AssertionError("duplicate knowledge base names, from files: "
+                                 "%s and %s" %
+                                 (module.Krb_source_filename, filename))
         if do_import: module.populate(engine)
         #print "load_module(%s, %s) => True" % (filename, type)
         return True
@@ -437,12 +442,12 @@ def _load_file(engine, filename, gen_root_location, gen_root_pkg,
         if not load_module('_plans', False): return False
         if not load_module('_bc'): return False
     if load_fb and filename.endswith('.kfb'):
-        return _load_pickle(base + '.fbc', engine)
+        return _load_pickle(base + '.fbc', filename, engine)
     if load_qb and filename.endswith('.kqb'):
-        return _load_pickle(base + '.qbc', engine)
+        return _load_pickle(base + '.qbc', filename, engine)
     return True
 
-def _load_pickle(filename, engine):
+def _load_pickle(filename, source_filename, engine):
     global pickle
     try:
         pickle      # test to see whether this has already been loaded
@@ -455,6 +460,11 @@ def _load_pickle(filename, engine):
     try:
         version = pickle.load(f)
         if version != pyke.version: return False
+        pickled_source_filename = pickle.load(f)
+        if pickled_source_filename != source_filename:
+            raise AssertionError("duplicate knowledge base names, from files: "
+                                 "%s and %s" %
+                                 (pickled_source_filename, source_filename))
         pickle.load(f).register(engine)
     finally:
         f.close()
