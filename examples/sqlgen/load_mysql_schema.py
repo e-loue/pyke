@@ -80,23 +80,26 @@ def _create_column(engine, table_name, col_name, type, null, key, default,
 def _links_to(engine, depth):
     ans = False
     if depth == 1:
-        for (from_table, to_table, from_columns, to_columns), bogus_plan \
-         in engine.prove_n("schema", "many_to_1", (), 4):
-            _add_fact(engine, "links_to",
-                      (1, from_table, to_table,
-                       ((to_table, from_table, from_columns, to_columns),)))
-            ans = True
-        return ans
-    for (from_table, to_table, joins), bogus_plan1 \
-     in engine.prove_n("schema", "links_to", (depth - 1,), 3):
-        for (end_table, to_columns, end_columns), bogus_plan2 \
-         in engine.prove_n("schema", "many_to_1", (to_table,), 3):
-            if end_table != from_table and \
-               not any(end_table == join_clause[0] for join_clause in joins):
+        with engine.prove_n("schema", "many_to_1", (), 4) as gen1:
+            for (from_table, to_table, from_columns, to_columns), bogus_plan \
+             in gen1:
                 _add_fact(engine, "links_to",
-                    (depth, from_table, end_table,
-                     joins + ((end_table, to_table, to_columns, end_columns),)))
+                          (1, from_table, to_table,
+                           ((to_table, from_table, from_columns, to_columns),)))
                 ans = True
+        return ans
+    with engine.prove_n("schema", "links_to", (depth - 1,), 3) as gen2:
+        for (from_table, to_table, joins), bogus_plan1 in gen2:
+            with engine.prove_n("schema", "many_to_1", (to_table,), 3) as gen3:
+                for (end_table, to_columns, end_columns), bogus_plan2 in gen3:
+                    if end_table != from_table and \
+                       not any(end_table == join_clause[0]
+                               for join_clause in joins):
+                        _add_fact(engine, "links_to",
+                            (depth, from_table, end_table,
+                             joins + ((end_table, to_table, to_columns,
+                                       end_columns),)))
+                        ans = True
     return ans
 
 def _add_fact(engine, fact, args):

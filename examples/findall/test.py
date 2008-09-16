@@ -1,5 +1,6 @@
 # test.py
 
+from __future__ import with_statement
 import sys
 from pyke import knowledge_engine
 from pyke import krb_traceback
@@ -18,9 +19,9 @@ def bc_test():
     engine.reset()
     try:
         engine.activate('bc_findall')
-        for (child, cousins), plan \
-         in engine.prove_n('bc_findall', 'cousins_of', (), 2):
-            print "%s has %s as cousins" % (child, cousins)
+        with engine.prove_n('bc_findall', 'cousins_of', (), 2) as gen:
+            for (child, cousins), plan in gen:
+                print "%s has %s as cousins" % (child, cousins)
     except:
         krb_traceback.print_exc()
         sys.exit(1)

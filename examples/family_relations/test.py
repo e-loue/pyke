@@ -60,9 +60,9 @@ def fc_test(person1 = 'bruce'):
     fc_time = fc_end_time - start_time
 
     print "doing proof"
-    for (person2, relationship), plan \
-     in engine.prove_n('family', 'how_related', (person1,), 2):
-        print "%s, %s are %s" % (person1, person2, relationship)
+    with engine.prove_n('family', 'how_related', (person1,), 2) as gen:
+        for (person2, relationship), plan in gen:
+            print "%s, %s are %s" % (person1, person2, relationship)
     prove_time = time.time() - fc_end_time
     print
     print "done"
@@ -80,9 +80,9 @@ def bc_test(person1 = 'bruce'):
 
     print "doing proof"
     try:
-        for (person2, relationship), plan \
-         in engine.prove_n('bc_example', 'how_related', (person1,), 2):
-            print "%s, %s are %s" % (person1, person2, relationship)
+        with engine.prove_n('bc_example', 'how_related', (person1,), 2) as gen:
+            for (person2, relationship), plan in gen:
+                print "%s, %s are %s" % (person1, person2, relationship)
     except StandardError:
         # This converts stack frames of generated python functions back to the
         # .krb file.
@@ -105,9 +105,9 @@ def bc2_test(person1 = 'bruce'):
 
     print "doing proof"
     try:
-        for (person2, relationship), plan \
-         in engine.prove_n('bc2_example', 'how_related', (person1,), 2):
-            print "%s, %s are %s" % (person1, person2, relationship)
+        with engine.prove_n('bc2_example', 'how_related', (person1,), 2) as gen:
+            for (person2, relationship), plan in gen:
+                print "%s, %s are %s" % (person1, person2, relationship)
     except StandardError:
         # This converts stack frames of generated python functions back to the
         # .krb file.
@@ -133,9 +133,9 @@ def test(person1 = 'bruce'):
     print "doing proof"
     try:
         # In this case, the relationship is returned when you run the plan.
-        for (person2,), plan \
-         in engine.prove_n('example', 'how_related', (person1,), 1):
-            print "%s, %s are %s" % (person1, person2, plan())
+        with engine.prove_n('example', 'how_related', (person1,), 1) as gen:
+            for (person2,), plan in gen:
+                print "%s, %s are %s" % (person1, person2, plan())
     except StandardError:
         # This converts stack frames of generated python functions back to the
         # .krb file.

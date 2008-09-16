@@ -195,9 +195,10 @@ class rule_list(knowledge_base.knowledge_entity_list):
     def add_bc_rule(self, bc_rule):
         self.bc_rules.append(bc_rule)
     def prove(self, bindings, pat_context, patterns):
-        """ Binds patterns to successive facts, yielding None for each
-            successful match.  Undoes bindings upon continuation, so that no
-            bindings remain at StopIteration.
+        """ Returns a context manager for a generator that binds patterns to
+            successively proven goals, yielding the plan (or None, if no plan)
+            for each successful match.  Undoes bindings upon continuation,
+            so that no bindings remain at StopIteration.
         """
         return chain_context(
                    bc_rule.bc_fn(bc_rule, patterns, pat_context)

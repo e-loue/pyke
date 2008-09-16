@@ -144,11 +144,12 @@ These rules_ are not used until you ask Pyke to prove_ a goal.
 The easiest way to do this is with *some_engine.prove_1* or
 *some_engine.prove_n*.  Prove_1_ only returns the first proof found and
 then stops (or raises ``pyke.knowledge_engine.CanNotProve``).  Prove_n_
-is a generator that generates all possible proofs (which, in some cases,
-might be infinite).  In both cases, you pass a tuple of data arguments and
-the number of variable arguments as the last two parameters.  The total number
-of arguments for the goal is the sum of the length of the data arguments
-that you pass plus the number of variable arguments that you specify.
+returns a context manager for a generator that generates all possible proofs
+(which, in some cases, might be infinite).  In both cases, you pass a tuple
+of data arguments and the number of variable arguments as the last two
+parameters.  The total number of arguments for the goal is the sum of the
+length of the data arguments that you pass plus the number of variable
+arguments that you specify.
 
 Both functions return the variable bindings for the number of variable
 arguments you specified as a tuple, along with the plan_.
@@ -265,9 +266,10 @@ into the Pyke statement: ``bc_example.uncle_nephew(fred, $v1, $v2)``.
 This is 'bc_example', 'uncle_nephew', with ('fred',) followed by 2 pattern
 variables as arguments:
 
-    >>> for vars, no_plan in engine.prove_n('bc_example', 'uncle_nephew',
-    ...                                     ('fred',), 2):
-    ...     print vars
+    >>> from __future__ import with_statement
+    >>> with engine.prove_n('bc_example', 'uncle_nephew', ('fred',), 2) as gen:
+    ...     for vars, no_plan in gen:
+    ...         print vars
     ('michael', ())
 
 

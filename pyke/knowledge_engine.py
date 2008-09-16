@@ -27,6 +27,7 @@ import types
 import os
 import os.path
 import re
+import contextlib
 
 if sys.version_info[0] < 3:
     import itertools
@@ -156,42 +157,43 @@ class engine(object):
         return self.get_kb(kb_name).prove(pat_context, pat_context,
                                           entity_name, patterns)
     def prove_n(self, kb_name, entity_name, fixed_args = (), num_returns = 0):
-        ''' Generates: a tuple of len == num_returns, and a plan (or None).
+        ''' Returns a context manager for a generator of:
+                a tuple of len == num_returns, and a plan (or None).
         '''
         if isinstance(fixed_args, types.StringTypes):
             raise TypeError("engine.prove_n: fixed_args must not be a string, "
                             "did you forget a , (%(arg)s) => (%(arg)s,)?" %
                             {'arg': repr(fixed_args)})
-        context = contexts.simple_context()
-        vars = self._Variables[:num_returns]
-        try:
-            with self.prove(kb_name, entity_name, context,
-                            tuple(pattern.pattern_literal(arg)
-                                  for arg in fixed_args) + vars) \
-              as it:
-                for plan in it:
-                    final = {}
-                    ans = tuple(context.lookup_data(var.name, final = final)
-                                for var in vars)
-                    if plan: plan = plan.create_plan(final)
-                    yield ans, plan
-        finally:
-            context.done()
+        def gen():
+            context = contexts.simple_context()
+            vars = self._Variables[:num_returns]
+            try:
+                with self.prove(kb_name, entity_name, context,
+                                tuple(pattern.pattern_literal(arg)
+                                      for arg in fixed_args) + vars) \
+                  as it:
+                    for plan in it:
+                        final = {}
+                        ans = tuple(context.lookup_data(var.name, final = final)
+                                    for var in vars)
+                        if plan: plan = plan.create_plan(final)
+                        yield ans, plan
+            finally:
+                context.done()
+        return contextlib.closing(gen())
     def prove_1(self, kb_name, entity_name, fixed_args = (), num_returns = 0):
         ''' Returns a tuple of len == num_returns, and a plan (or None).
         '''
         try:
             # All we need is the first one!
-            it = iter(self.prove_n(kb_name, entity_name, fixed_args,
-                                   num_returns))
-            return it.next()
+            with self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
+              as it:
+                return iter(it).next()
         except StopIteration:
             raise CanNotProve("Can not prove %s.%s%s" %
                                (kb_name, entity_name,
                                  condensedPrint.cprint(
                                    fixed_args + self._Variables[:num_returns])))
-        finally:
-            it.close()
     def print_stats(self, f = sys.stdout):
         for kb \
          in sorted(self.knowledge_bases.itervalues(), key=lambda kb: kb.name):

@@ -1,5 +1,6 @@
 # pyketest.py
 
+from __future__ import with_statement
 import types
 import unittest
 from pyke import knowledge_engine
@@ -49,16 +50,17 @@ class bc_tests(pyketest):
             raise
     def bc_test(self, *args):
         ans = []
-        for ret_args, plan \
-         in self.engine.prove_n(self.rb_name, self.goal, args, self.num_return):
-            if plan_args is None and plan_kws is None:
-                self.assert_(plan is None, "unexpected plan")
-                ans.append(ret_args)
-            else:
-                self.assert_(plan is not None, "expected plan")
-                if plan_args is None: plan_ans = plan(**plan_kws)
-                elif plan_kws is None: plan_ans = plan(*plan_args)
-                else: plan_ans = plan(*plan_args, **plan_vars)
-                ans.append((ret_args, plan_ans))
+        with self.engine.prove_n(self.rb_name, self.goal, args,
+                                 self.num_return) as gen:
+            for ret_args, plan in gen:
+                if plan_args is None and plan_kws is None:
+                    self.assert_(plan is None, "unexpected plan")
+                    ans.append(ret_args)
+                else:
+                    self.assert_(plan is not None, "expected plan")
+                    if plan_args is None: plan_ans = plan(**plan_kws)
+                    elif plan_kws is None: plan_ans = plan(*plan_args)
+                    else: plan_ans = plan(*plan_args, **plan_vars)
+                    ans.append((ret_args, plan_ans))
         return ans
 

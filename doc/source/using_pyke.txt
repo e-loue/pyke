@@ -198,13 +198,16 @@ functions are provided in `Other Functions`_, below.
     CanNotProve: Can not prove bc_example.father_son(thomas, bogus, $ans_0)
 
 *some_engine*.prove_n(kb_name, entity_name, fixed_args, num_returns)
-    This is a generator yielding 2-tuples, a tuple whose length ==
-    ``num_returns`` and a plan_, for each possible proof.  Like ``prove_1``,
-    the plan is None if no plan was generated.  Unlike ``prove_1`` it does
-    not raise an exception if no proof is found. 
+    This is a context managere for a generator yielding 2-tuples, a tuple
+    whose length == ``num_returns`` and a plan_, for each possible proof.
+    Like ``prove_1``, the plan is None if no plan was generated.  Unlike
+    ``prove_1`` it does not raise an exception if no proof is found. 
 
-    >>> for ans in my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2):
-    ...     print ans
+    >>> from __future__ import with_statement
+    >>> with my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2) \
+    ...   as gen:
+    ...     for ans in gen:
+    ...         print ans
     (('bruce', ()), None)
     (('david', ('grand',)), None)
 

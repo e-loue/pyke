@@ -1,5 +1,6 @@
 # test.py
 
+from __future__ import with_statement
 import sys
 from pyke import knowledge_engine
 from pyke import krb_traceback
@@ -18,9 +19,9 @@ def bc_test():
     engine.reset()
     try:
         engine.activate('bc_forall')
-        for (child,), plan \
-         in engine.prove_n('bc_forall', 'no_step_siblings', (), 1):
-            print child
+        with engine.prove_n('bc_forall', 'no_step_siblings', (), 1) as gen:
+            for (child,), plan in gen:
+                print child
     except:
         krb_traceback.print_exc()
         sys.exit(1)

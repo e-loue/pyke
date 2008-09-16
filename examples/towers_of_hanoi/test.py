@@ -1,5 +1,6 @@
 # test.py
 
+from __future__ import with_statement
 import sys
 from pyke import knowledge_engine
 from pyke import krb_traceback
@@ -11,10 +12,9 @@ def test(num_disks):
     try:
         engine.activate('towers_of_hanoi')
   
-        for i, ((moves,), no_plan) \
-         in enumerate(engine.prove_n('towers_of_hanoi', 'solve',
-                                     (num_disks,), 1)):
-            print "got %d:" % (i + 1), moves
+        with engine.prove_n('towers_of_hanoi', 'solve', (num_disks,), 1) as gen:
+            for i, ((moves,), no_plan) in enumerate(gen):
+                print "got %d:" % (i + 1), moves
     except:
         krb_traceback.print_exc()
         sys.exit(1)

@@ -694,11 +694,12 @@ bc_extras
     def find_at_depth1(engine, depth, column, table):
         got_depth = False
         ans_joins = []
-        for (to_table, joins), bogus_plan1 \
-         in engine.prove_n("schema", "links_to", (depth, table), 2):
-            got_depth = True
-            for bogus_vars, bogus_plan1 \
-             in engine.prove_n("schema", "column", (to_table, column), 5):
-                ans_joins.append((table,) + joins)
+        with engine.prove_n("schema", "links_to", (depth, table), 2) as gen1:
+            for (to_table, joins), bogus_plan1 in gen1:
+                got_depth = True
+                with engine.prove_n("schema", "column", (to_table, column), 5) \
+                  as gen2:
+                    for bogus_vars, bogus_plan1 in gen2:
+                        ans_joins.append((table,) + joins)
         return got_depth, tuple(ans_joins)
 

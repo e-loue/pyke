@@ -143,9 +143,10 @@ class fact_list(knowledge_base.knowledge_entity_list):
     def get_affected_fc_rules(self):
         return (fc_rule for fc_rule, foreach_index in self.fc_rule_refs)
     def lookup(self, bindings, pat_context, patterns):
-        """ Binds patterns to successive facts, yielding None for each
-            successful match.  Undoes bindings upon continuation, so that no
-            bindings remain at StopIteration.
+        """ Returns a context manager for a generator that binds patterns to
+            successive facts, yielding None for each successful match.
+            Undoes bindings upon continuation, so that no bindings remain at
+            StopIteration.
         """
         indices = tuple(enum for enum in enumerate(patterns)
                              if enum[1].is_data(pat_context))
