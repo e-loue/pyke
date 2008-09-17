@@ -29,7 +29,7 @@ then
     echo Testing compiler.krb
     cd krb_compiler
     rm -rf compiled_krb
-    if python2.5 -c "from pyke import krb_compiler; krb_compiler.compile('.', 'compiled_krb', ('compiler.krb',))"
+    if python2.5 -c "from pyke import krb_compiler; krb_compiler.compile('compiled_krb', ('compiler.krb',))"
     then
         # Ignore differences in Krb_filename from being compiled on different
         # boxes...

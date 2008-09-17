@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007 Bruce Frederiksen
+.. Copyright © 2007-2008 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,7 @@ Initializing Pyke
 
 There are two steps to initializing a Pyke knowledge engine:
 
-knowledge_engine.engine(paths = ('.',), gen_root_location = '.', gen_root_pkg = 'compiled_krb', load_fc = True, load_bc = True, load_fb = True, load_qb = True)
+knowledge_engine.engine(paths = ('.',), generated_root_dir = 'compiled_krb', load_fc = True, load_bc = True, load_fb = True, load_qb = True)
     The Pyke inference engine is offered
     as a class so that you can instantiate multiple copies of it with different
     rule bases to accomplish different tasks.
@@ -62,13 +62,11 @@ knowledge_engine.engine(paths = ('.',), gen_root_location = '.', gen_root_pkg = 
     ``load_qb``).  This causes all of the `rule bases`_ to be loaded and made
     ready to activate_.
 
-    All generated Python files are placed in a mirror directory structure
-    under the ``gen_root_location`` directory in ``gen_root_pkg``.  Thus, by
-    default, this mirrored directory structure would be rooted in the
-    "./compiled_krb" directory.  You probably want to add ``compiled_krb`` to
-    your subversion ``global-ignores`` option.  ``Gen_root_pkg``,
-    ``gen_root_location`` and the mirrored directory structure will be
-    created automatically if any of them do not already exist.
+    All generated Python source files and pickle files are placed in the
+    ``generated_root_dir`` directory.  By default, this directory is
+    "compiled_krb".  You probably want to add ``compiled_krb`` to your
+    subversion ``global-ignores`` option.  The ``generated_root_dir`` will be
+    created automatically if it does not already exist.
 
     If you change some of your Pyke source files, you can create a new engine
     object to compile and reload the generated Python modules without

@@ -80,21 +80,22 @@ def dump(ast, f = sys.stderr, need_nl = False, indent = 0):
     f.write(')')
     return did_nl
 
-def compile(gen_root_location, gen_root_pkg, filenames):
+def compile(generated_root_dir, filenames):
     engine = knowledge_engine.engine(compiler_bc)
+    if not os.path.exists(generated_root_dir): os.makedirs(generated_root_dir)
+    init_file_path = os.path.join(generated_root_dir, '__init__.py')
+    if not os.path.exists(init_file_path): open(init_file_path, 'w').close()
     for filename in filenames:
-        compile_file(engine, gen_root_location, gen_root_pkg, filename)
+        compile_file(engine, generated_root_dir, filename)
 
-def compile_file(engine, gen_root_location, gen_root_pkg, filename):
+def compile_file(engine, generated_root_dir, filename):
     global pickle, kqb_parser, kfbparser
     rb_name = os.path.basename(filename)
     suffix = rb_name[-4:]
     rb_name = rb_name[:-4]
     if not knowledge_engine.Name_test.match(rb_name):
         raise ValueError("compile: %s illegal as python identifier" % rb_name)
-    base_path, ignore = \
-        knowledge_engine._get_base_path(filename, gen_root_location,
-                                        gen_root_pkg, True)
+    base_path = os.path.join(generated_root_dir, rb_name)
     if suffix == '.krb':
         fc_path = base_path + '_fc.py'
         bc_path = base_path + '_bc.py'

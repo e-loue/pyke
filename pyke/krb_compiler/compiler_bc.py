@@ -2982,7 +2982,9 @@ def populate(engine):
                   ())
 
 from pyke.krb_compiler import helpers
+
 Krb_filename = '/home/bruce/python/workareas/sf.trunk/pyke/krb_compiler/compiler.krb'
+Krb_source_filename = 'compiler.krb'
 Krb_lineno_map = (
     ((15, 19), (24, 28)),
     ((23, 23), (30, 30)),
