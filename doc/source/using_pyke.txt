@@ -196,14 +196,13 @@ functions are provided in `Other Functions`_, below.
     CanNotProve: Can not prove bc_example.father_son(thomas, bogus, $ans_0)
 
 *some_engine*.prove_n(kb_name, entity_name, fixed_args, num_returns)
-    This is a context managere for a generator yielding 2-tuples, a tuple
+    This returns a context manager for a generator yielding 2-tuples, a tuple
     whose length == ``num_returns`` and a plan_, for each possible proof.
     Like ``prove_1``, the plan is None if no plan was generated.  Unlike
     ``prove_1`` it does not raise an exception if no proof is found. 
 
     >>> from __future__ import with_statement
-    >>> with my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2) \
-    ...   as gen:
+    >>> with my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2) as gen:
     ...     for ans in gen:
     ...         print ans
     (('bruce', ()), None)
@@ -279,17 +278,17 @@ Python functions between subgoal proofs.
     ... except:
     ...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
     Traceback (most recent call last):
-      File "<doctest using_pyke.txt[31]>", line 2, in <module>
+      File "<doctest using_pyke.txt[32]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
-      File "...knowledge_engine.py", line 182, in prove_1
-        return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
-      File "...knowledge_engine.py", line 169, in prove_n
-        for arg in fixed_args) + vars):
-      File "...rule_base.py", line 37, in next
+      File "...knowledge_engine.py", line 207, in prove_1
+        return iter(it).next()
+      File "...knowledge_engine.py", line 191, in gen
+        for plan in it:
+      File "...rule_base.py", line 46, in next
         return self.iterator.next()
-      File "...knowledge_engine.py", line 39, in from_iterable
+      File "...knowledge_engine.py", line 41, in from_iterable
         for x in iterable: yield x
-      File "...knowledge_engine.py", line 39, in from_iterable
+      File "...knowledge_engine.py", line 41, in from_iterable
         for x in iterable: yield x
       File "...error_test.krb", line 26, in rule1
         goal2()
@@ -317,13 +316,13 @@ discussed below_.
 .. __: #creating-your-own-patterns
 
 *some_engine*.lookup(kb_name, entity_name, pattern_context, patterns)
-    This is a generator that binds patterns__ to successive facts_.  Yields
-    ``None`` for each successful match.
+    This returns a context manager for a generator that binds patterns__ to
+    successive facts_.  Yields ``None`` for each successful match.
 *some_engine*.prove(kb_name, entity_name, pattern_context, patterns)
-    A generator that binds patterns__ to successive proofs.  Yields a
-    *prototype_plan* or ``None`` for each successful match.  To turn the
-    prototype_plan into a Python function, use *prototype_plan*.create_plan().
-    This returns the plan_ function.
+    Returns a context manager for a generator that binds patterns__ to
+    successive proofs.  Yields a *prototype_plan* or ``None`` for each
+    successful match.  To turn the prototype_plan into a Python function,
+    use *prototype_plan*.create_plan().  This returns the plan_ function.
 
 .. __: #creating-your-own-patterns
 .. __: #creating-your-own-patterns

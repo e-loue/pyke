@@ -67,7 +67,7 @@
 <h2><a id="initializing-pyke" name="initializing-pyke">Initializing Pyke</a></h2>
 <p>There are two steps to initializing a Pyke knowledge engine:</p>
 <dl class="docutils">
-<dt>knowledge_engine.engine(paths = ('.',), gen_root_location = '.', gen_root_pkg = 'compiled_krb', load_fc = True, load_bc = True, load_fb = True, load_qb = True)</dt>
+<dt>knowledge_engine.engine(paths = ('.',), generated_root_dir = 'compiled_krb', load_fc = True, load_bc = True, load_fb = True, load_qb = True)</dt>
 <dd><p class="first">The Pyke inference engine is offered
 as a class so that you can instantiate multiple copies of it with different
 rule bases to accomplish different tasks.
@@ -84,13 +84,11 @@ Each source file that it finds is compiled, if out of date, and then
 imported (depending on <tt class="docutils literal"><span class="pre">load_fc</span></tt>, <tt class="docutils literal"><span class="pre">load_bc</span></tt>, <tt class="docutils literal"><span class="pre">load_fb</span></tt> and
 <tt class="docutils literal"><span class="pre">load_qb</span></tt>).  This causes all of the <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a> to be loaded and made
 ready to <a class="reference" href="using_pyke.html#setting-up-each-case">activate</a>.</p>
-<p>All generated Python files are placed in a mirror directory structure
-under the <tt class="docutils literal"><span class="pre">gen_root_location</span></tt> directory in <tt class="docutils literal"><span class="pre">gen_root_pkg</span></tt>.  Thus, by
-default, this mirrored directory structure would be rooted in the
-&quot;./compiled_krb&quot; directory.  You probably want to add <tt class="docutils literal"><span class="pre">compiled_krb</span></tt> to
-your subversion <tt class="docutils literal"><span class="pre">global-ignores</span></tt> option.  <tt class="docutils literal"><span class="pre">Gen_root_pkg</span></tt>,
-<tt class="docutils literal"><span class="pre">gen_root_location</span></tt> and the mirrored directory structure will be
-created automatically if any of them do not already exist.</p>
+<p>All generated Python source files and pickle files are placed in the
+<tt class="docutils literal"><span class="pre">generated_root_dir</span></tt> directory.  By default, this directory is
+&quot;compiled_krb&quot;.  You probably want to add <tt class="docutils literal"><span class="pre">compiled_krb</span></tt> to your
+subversion <tt class="docutils literal"><span class="pre">global-ignores</span></tt> option.  The <tt class="docutils literal"><span class="pre">generated_root_dir</span></tt> will be
+created automatically if it does not already exist.</p>
 <p class="last">If you change some of your Pyke source files, you can create a new engine
 object to compile and reload the generated Python modules without
 restarting your program.  But note that you'll need to rerun your
@@ -217,13 +215,15 @@ CanNotProve: Can not prove bc_example.father_son(thomas, bogus, $ans_0)
 </blockquote>
 <dl class="docutils">
 <dt><em>some_engine</em>.prove_n(kb_name, entity_name, fixed_args, num_returns)</dt>
-<dd><p class="first">This is a generator yielding 2-tuples, a tuple whose length ==
-<tt class="docutils literal"><span class="pre">num_returns</span></tt> and a <a class="reference" href="logic_programming/plans.html">plan</a>, for each possible proof.  Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>,
-the plan is None if no plan was generated.  Unlike <tt class="docutils literal"><span class="pre">prove_1</span></tt> it does
-not raise an exception if no proof is found.</p>
+<dd><p class="first">This returns a context manager for a generator yielding 2-tuples, a tuple
+whose length == <tt class="docutils literal"><span class="pre">num_returns</span></tt> and a <a class="reference" href="logic_programming/plans.html">plan</a>, for each possible proof.
+Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>, the plan is None if no plan was generated.  Unlike
+<tt class="docutils literal"><span class="pre">prove_1</span></tt> it does not raise an exception if no proof is found.</p>
 <pre class="last doctest-block">
-&gt;&gt;&gt; for ans in my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2):
-...     print ans
+&gt;&gt;&gt; from __future__ import with_statement
+&gt;&gt;&gt; with my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2) as gen:
+...     for ans in gen:
+...         print ans
 (('bruce', ()), None)
 (('david', ('grand',)), None)
 </pre>
@@ -297,17 +297,17 @@ Python functions between subgoal proofs.</p>
 ... except:
 ...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
 Traceback (most recent call last):
-  File &quot;&lt;doctest using_pyke.txt[31]&gt;&quot;, line 2, in &lt;module&gt;
+  File &quot;&lt;doctest using_pyke.txt[32]&gt;&quot;, line 2, in &lt;module&gt;
     my_engine.prove_1('error_test', 'goal', (), 0)
-  File &quot;...knowledge_engine.py&quot;, line 182, in prove_1
-    return self.prove_n(kb_name, entity_name, fixed_args, num_returns) \
-  File &quot;...knowledge_engine.py&quot;, line 169, in prove_n
-    for arg in fixed_args) + vars):
-  File &quot;...rule_base.py&quot;, line 37, in next
+  File &quot;...knowledge_engine.py&quot;, line 207, in prove_1
+    return iter(it).next()
+  File &quot;...knowledge_engine.py&quot;, line 191, in gen
+    for plan in it:
+  File &quot;...rule_base.py&quot;, line 46, in next
     return self.iterator.next()
-  File &quot;...knowledge_engine.py&quot;, line 39, in from_iterable
+  File &quot;...knowledge_engine.py&quot;, line 41, in from_iterable
     for x in iterable: yield x
-  File &quot;...knowledge_engine.py&quot;, line 39, in from_iterable
+  File &quot;...knowledge_engine.py&quot;, line 41, in from_iterable
     for x in iterable: yield x
   File &quot;...error_test.krb&quot;, line 26, in rule1
     goal2()
@@ -333,13 +333,13 @@ arguments into <a class="reference" href="#creating-your-own-patterns">patterns<
 discussed <a class="reference" href="#creating-your-own-patterns">below</a>.</p>
 <dl class="docutils">
 <dt><em>some_engine</em>.lookup(kb_name, entity_name, pattern_context, patterns)</dt>
-<dd>This is a generator that binds <a class="reference" href="#creating-your-own-patterns">patterns</a> to successive <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a>.  Yields
-<tt class="docutils literal"><span class="pre">None</span></tt> for each successful match.</dd>
+<dd>This returns a context manager for a generator that binds <a class="reference" href="#creating-your-own-patterns">patterns</a> to
+successive <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a>.  Yields <tt class="docutils literal"><span class="pre">None</span></tt> for each successful match.</dd>
 <dt><em>some_engine</em>.prove(kb_name, entity_name, pattern_context, patterns)</dt>
-<dd>A generator that binds <a class="reference" href="#creating-your-own-patterns">patterns</a> to successive proofs.  Yields a
-<em>prototype_plan</em> or <tt class="docutils literal"><span class="pre">None</span></tt> for each successful match.  To turn the
-prototype_plan into a Python function, use <em>prototype_plan</em>.create_plan().
-This returns the <a class="reference" href="logic_programming/plans.html">plan</a> function.</dd>
+<dd>Returns a context manager for a generator that binds <a class="reference" href="#creating-your-own-patterns">patterns</a> to
+successive proofs.  Yields a <em>prototype_plan</em> or <tt class="docutils literal"><span class="pre">None</span></tt> for each
+successful match.  To turn the prototype_plan into a Python function,
+use <em>prototype_plan</em>.create_plan().  This returns the <a class="reference" href="logic_programming/plans.html">plan</a> function.</dd>
 </dl>
 <p>The remaining functions are:</p>
 <dl class="docutils">
@@ -449,7 +449,7 @@ into named repositories called <em>knowledge bases</em>.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 29 2008.
+    Page last modified Wed, Sep 24 2008.
   </div>
 
 </body>

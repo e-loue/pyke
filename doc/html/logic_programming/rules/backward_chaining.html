@@ -171,11 +171,12 @@ with the addition of the <em>brothers</em>, <em>uncle_nephew</em> and <em>cousin
 <p>The easiest way to do this is with <em>some_engine.prove_1</em> or
 <em>some_engine.prove_n</em>.  <a class="reference" href="../../using_pyke.html#proving-goals">Prove_1</a> only returns the first proof found and
 then stops (or raises <tt class="docutils literal"><span class="pre">pyke.knowledge_engine.CanNotProve</span></tt>).  <a class="reference" href="../../using_pyke.html#proving-goals">Prove_n</a>
-is a generator that generates all possible proofs (which, in some cases,
-might be infinite).  In both cases, you pass a tuple of data arguments and
-the number of variable arguments as the last two parameters.  The total number
-of arguments for the goal is the sum of the length of the data arguments
-that you pass plus the number of variable arguments that you specify.</p>
+returns a context manager for a generator that generates all possible proofs
+(which, in some cases, might be infinite).  In both cases, you pass a tuple
+of data arguments and the number of variable arguments as the last two
+parameters.  The total number of arguments for the goal is the sum of the
+length of the data arguments that you pass plus the number of variable
+arguments that you specify.</p>
 <p>Both functions return the variable bindings for the number of variable
 arguments you specified as a tuple, along with the <a class="reference" href="../plans.html">plan</a>.</p>
 </div>
@@ -282,9 +283,10 @@ the <tt class="docutils literal"><span class="pre">bc_example</span></tt> rule b
 variables as arguments:</p>
 <blockquote>
 <pre class="doctest-block">
-&gt;&gt;&gt; for vars, no_plan in engine.prove_n('bc_example', 'uncle_nephew',
-...                                     ('fred',), 2):
-...     print vars
+&gt;&gt;&gt; from __future__ import with_statement
+&gt;&gt;&gt; with engine.prove_n('bc_example', 'uncle_nephew', ('fred',), 2) as gen:
+...     for vars, no_plan in gen:
+...         print vars
 ('michael', ())
 </pre>
 </blockquote>
@@ -323,7 +325,7 @@ works.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 29 2008.
+    Page last modified Tue, Sep 16 2008.
   </div>
 
 </body>

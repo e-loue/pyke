@@ -174,7 +174,6 @@ Check_command
 Succeeds if the command returns a zero exit status.  Fails otherwise.  Any
 output from the command to stdout or stderr is unavailable.
 
-    >>> from __future__ import with_statement
     >>> from pyke import knowledge_engine
     >>> engine = knowledge_engine.engine()
     >>> engine.prove_1('special', 'check_command', (('true',),), 0)
@@ -199,6 +198,7 @@ The ``$stdout`` is a tuple of lines with the trailing newlines removed.
 This raises `subprocess.CalledProcessError`_ if the command returns a non-zero
 exit status.
 
+    >>> from __future__ import with_statement
     >>> from pyke import pattern, contexts
     >>> def run_command(entity, command, cwd=None, stdin=None):
     ...     my_context = contexts.simple_context()

@@ -221,16 +221,19 @@ to stderr is unavailable.</p>
 exit status.</p>
 <blockquote>
 <pre class="doctest-block">
+&gt;&gt;&gt; from __future__ import with_statement
 &gt;&gt;&gt; from pyke import pattern, contexts
 &gt;&gt;&gt; def run_command(entity, command, cwd=None, stdin=None):
 ...     my_context = contexts.simple_context()
 ...     output = contexts.variable('output')
-...     for no_plan in engine.prove('special', entity, my_context,
-...                                 (output,
-...                                  pattern.pattern_literal(command),
-...                                  pattern.pattern_literal(cwd),
-...                                  pattern.pattern_literal(stdin))):
-...         print output.as_data(my_context)
+...     with engine.prove('special', entity, my_context,
+...                       (output,
+...                        pattern.pattern_literal(command),
+...                        pattern.pattern_literal(cwd),
+...                        pattern.pattern_literal(stdin))) \
+...       as gen:
+...         for no_plan in gen:
+...             print output.as_data(my_context)
 &gt;&gt;&gt; run_command('command', ('echo', 'hi', 'mom'))
 ('hi mom',)
 &gt;&gt;&gt; run_command('command', ('ls',))   # doctest: +NORMALIZE_WHITESPACE
@@ -321,7 +324,7 @@ are compiled and loaded into your Python program.</p>
   </table>
 
   <div id="last-modified">
-    Page last modified Fri, Aug 29 2008.
+    Page last modified Wed, Sep 24 2008.
   </div>
 
 </body>

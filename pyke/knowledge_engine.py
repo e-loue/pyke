@@ -317,7 +317,8 @@ def _load_file(engine, filename, generated_root_dir, root_package,
             #print "load_module(%s, %s) => False" % (filename, type)
             return False
         if module is not None and \
-           module.Krb_source_filename != filename:
+           os.path.normpath(module.Krb_source_filename) != \
+              os.path.normpath(filename):
             raise AssertionError("duplicate knowledge base names, from files: "
                                  "%s and %s" %
                                  (module.Krb_source_filename, filename))
@@ -349,7 +350,8 @@ def _load_pickle(filename, source_filename, engine):
         version = pickle.load(f)
         if version != pyke.version: return False
         pickled_source_filename = pickle.load(f)
-        if pickled_source_filename != source_filename:
+        if os.path.normpath(pickled_source_filename) != \
+           os.path.normpath(source_filename):
             raise AssertionError("duplicate knowledge base names, from files: "
                                  "%s and %s" %
                                  (pickled_source_filename, source_filename))

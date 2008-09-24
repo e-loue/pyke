@@ -1,7 +1,7 @@
 # $Id$
 # coding=utf-8
 # 
-# Copyright © 2007 Bruce Frederiksen
+# Copyright © 2007-2008 Bruce Frederiksen
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import with_statement
 import os
 import os.path
 import sys
@@ -35,7 +36,9 @@ def test(filepath, chdir=False):
             sys.path.insert(0, '')
     else:
         dir, base = '', filepath
-    sys.exit(doctest.testfile(base, False)[0])
+    sys.exit(doctest.testfile(base, False,
+                              globs={'with_statement': with_statement})
+                    [0])
 
 if __name__ == "__main__":
     test(*sys.argv[1:])
