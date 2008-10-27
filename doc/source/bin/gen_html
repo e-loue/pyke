@@ -19,4 +19,10 @@ status=$?
 
 bin/strip_links
 
-exit $status
+if [ "$status" -ne 0 ]
+then
+    exit $status
+fi
+
+bin/make_sitemap > ../html/sitemap.xml
+

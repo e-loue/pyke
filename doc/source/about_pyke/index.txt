@@ -73,7 +73,7 @@ Pyke helps programmers to achieve order of magnitude improvements in:
 
   - Thus, your application or library takes on the characteristics of a
     Domain Specific Language to achieve an order of magnitude increase in
-    adaptability without a corresponding increase your program's "surface
+    adaptability without a corresponding increase in your program's "surface
     area" to your users.
 
 - Performance

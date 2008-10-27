@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# make_sitemap
+
+STATUS_FILE=/tmp/make_sitemap.$$
+
+set -e
+set -o pipefail
+
+svn status | sed 's/ \{6\}/	/' | sort > $STATUS_FILE
+
+trap "rm $STATUS_FILE" 0
+
+echo '<?xml version="1.0" encoding="UTF-8"?>'
+echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+
+find . -name '*.txt' |
+while read f
+do
+    if [ "$f" != ./template.txt ]
+    then
+	f_clean=`expr "$f" : '\./\(.*\)'`
+        code=`sed -n '\,^\(.\)	'"$f_clean"'$,s,,\1,p' "$STATUS_FILE" | tr -d '\n'`
+	#echo "$f_clean: >$code<" >&2
+        if [ "$code" != D ]
+        then
+            html=`expr "$f_clean" : '\(.*\)\.txt'`.html
+            url="http://pyke.sourceforge.net/$html"
+            if [ "$code" ]
+            then
+                date=`date --iso-8601 -u`
+                #echo "$f_clean: using system date: $date" >&2
+            else
+                date=`sed -n '1s/.*\([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}\).*/\1/p' "$f"`
+                if [ ! "$date" ]
+                then
+                    echo "$f: missing date" >&2
+                    exit 1
+                fi
+                #echo "$f_clean: using svn date: $date" >&2
+            fi
+            cat <<-!
+		 <url>
+		  <loc>$url</loc>
+		  <lastmod>$date</lastmod>
+		  <changefreq>monthly</changefreq>
+		 </url>
+		!
+        fi
+    fi
+done
+
+echo '</urlset>'
+
