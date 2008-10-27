@@ -32,6 +32,10 @@ restindex
     initialheaderlevel: 2
 /restindex
 
+uservalues
+    filedate: $Id$
+/uservalues
+
 =======
 Special
 =======

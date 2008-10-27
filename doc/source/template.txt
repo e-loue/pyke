@@ -89,7 +89,16 @@
   </table>
 
   <div id="last-modified">
-    Page last modified <% formattime(t=modified, format="%a, %b %d %Y") %>.
+    Page last modified
+    <# 
+       import datetime
+       import re
+       print datetime.date(*(int(x)
+                           for x in re.search(r'([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})',
+                                              filedate)
+                                      .groups())
+                          ).strftime("%a, %b %d %Y") + '.'
+    #>
   </div>
 
 </body>

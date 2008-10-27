@@ -32,6 +32,10 @@ restindex
     initialheaderlevel: 1
 /restindex
 
+uservalues
+    filedate: $Id$
+/uservalues
+
 =========================================================================
 Applying Expert System Technology to Code Reuse with Pyke
 =========================================================================
