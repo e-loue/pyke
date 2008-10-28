@@ -57,6 +57,14 @@ TAG RELEASE
     $ svn copy https://pyke.svn.sourceforge.net/svnroot/pyke/trunk \
                https://pyke.svn.sourceforge.net/svnroot/pyke/tags/0.2
 
+ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
+
+    Admin -> Tracker -> "Tracker Administration" link
+
+    Do: Bugs, Support Requests, and Patches
+
+    Add release through "Add/Update Groups"
+
 UPLOAD DIST FILES TO SOURCEFORGE:
 
     In the browser, go to: https://frs.sourceforge.net/webupload and upload
@@ -82,25 +90,17 @@ UPLOAD DIST FILES TO SOURCEFORGE:
         Pick ".gz" for the doc .gz file.
         Pick ".gz" for the examples .gz file.
 
+UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
+
+    see web.upload cheatsheet
+
 UPDATE PYPI LINK:
 
     $ python setup.py register
 
-ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
-
-    Admin -> Tracker -> "Tracker Administration" link
-
-    Do: Bugs, Support Requests, and Patches
-
-    Add release through "Add/Update Groups"
-
 CREATE NEWS ANNOUNCEMENT ON SOURCEFORGE
 
     Go to: Admin -> News -> Submit
-
-UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
-
-    see web.upload cheatsheet
 
 TO TEST:
 
