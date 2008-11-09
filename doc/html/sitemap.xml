@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
  <url>
-  <loc>http://pyke.sourceforge.net/index.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/examples.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/about_pyke/what_is_pyke.html</loc>
+  <loc>http://pyke.sourceforge.net/about_pyke/cooking_functions.html</loc>
   <lastmod>2008-10-27</lastmod>
   <changefreq>monthly</changefreq>
  </url>
@@ -31,82 +21,17 @@
   <changefreq>monthly</changefreq>
  </url>
  <url>
-  <loc>http://pyke.sourceforge.net/about_pyke/cooking_functions.html</loc>
+  <loc>http://pyke.sourceforge.net/about_pyke/what_is_pyke.html</loc>
   <lastmod>2008-10-27</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
-  <loc>http://pyke.sourceforge.net/using_pyke.html</loc>
+  <loc>http://pyke.sourceforge.net/examples.html</loc>
   <lastmod>2008-10-27</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
-  <loc>http://pyke.sourceforge.net/PyCon2008-paper.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/index.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/literal_patterns.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/pattern_variables.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/tuple_patterns.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/matching_patterns.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/pathological_answer.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/rules/index.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/rules/backward_chaining.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/rules/forward_chaining.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/statements.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/index.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/logic_programming/plans.html</loc>
-  <lastmod>2008-10-27</lastmod>
-  <changefreq>monthly</changefreq>
- </url>
- <url>
-  <loc>http://pyke.sourceforge.net/knowledge_bases/question_bases.html</loc>
+  <loc>http://pyke.sourceforge.net/index.html</loc>
   <lastmod>2008-10-27</lastmod>
   <changefreq>monthly</changefreq>
  </url>
@@ -121,12 +46,82 @@
   <changefreq>monthly</changefreq>
  </url>
  <url>
+  <loc>http://pyke.sourceforge.net/knowledge_bases/question_bases.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
   <loc>http://pyke.sourceforge.net/knowledge_bases/rule_bases.html</loc>
   <lastmod>2008-10-27</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/knowledge_bases/special.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/index.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/index.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/literal_patterns.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/matching_patterns.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/pathological_answer.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/pattern_variables.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/pattern_matching/tuple_patterns.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/plans.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/rules/backward_chaining.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/rules/forward_chaining.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/rules/index.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/logic_programming/statements.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/PyCon2008-paper.html</loc>
   <lastmod>2008-10-27</lastmod>
   <changefreq>monthly</changefreq>
  </url>
@@ -146,7 +141,12 @@
   <changefreq>monthly</changefreq>
  </url>
  <url>
-  <loc>http://pyke.sourceforge.net/pyke_syntax/krb_syntax/index.html</loc>
+  <loc>http://pyke.sourceforge.net/pyke_syntax/krb_syntax/bc_rule.html</loc>
+  <lastmod>2008-10-27</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/pyke_syntax/krb_syntax/compound_premise.html</loc>
   <lastmod>2008-10-27</lastmod>
   <changefreq>monthly</changefreq>
  </url>
@@ -156,12 +156,12 @@
   <changefreq>monthly</changefreq>
  </url>
  <url>
-  <loc>http://pyke.sourceforge.net/pyke_syntax/krb_syntax/pattern.html</loc>
+  <loc>http://pyke.sourceforge.net/pyke_syntax/krb_syntax/index.html</loc>
   <lastmod>2008-10-27</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
-  <loc>http://pyke.sourceforge.net/pyke_syntax/krb_syntax/bc_rule.html</loc>
+  <loc>http://pyke.sourceforge.net/pyke_syntax/krb_syntax/pattern.html</loc>
   <lastmod>2008-10-27</lastmod>
   <changefreq>monthly</changefreq>
  </url>
@@ -171,7 +171,7 @@
   <changefreq>monthly</changefreq>
  </url>
  <url>
-  <loc>http://pyke.sourceforge.net/pyke_syntax/krb_syntax/compound_premise.html</loc>
+  <loc>http://pyke.sourceforge.net/using_pyke.html</loc>
   <lastmod>2008-10-27</lastmod>
   <changefreq>monthly</changefreq>
  </url>

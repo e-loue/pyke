@@ -1,6 +1,6 @@
-0.5 RELEASE NOTES Nov 7, 2008
+0.5 RELEASE NOTES Nov 9, 2008
 
-I expect to move Pyke to beta status soon.
+This is the first beta release of Pyke.
 
 Please report bugs to http://sourceforge.net/projects/pyke at either:
 
@@ -10,50 +10,56 @@ Please report bugs to http://sourceforge.net/projects/pyke at either:
 
 INCOMPATIBILITIES WITH 0.4 RELEASE:
 
-    - Two parameters to knowledge_engine.engine have changed name (but not
-      meaning):
-        - gen_dir      is now gen_root_location
-        - gen_root_dir is now gen_root_pkg
+    - The following functions now return a context manager rather than a
+      generator.  Note that the parameters to these functions have _not_
+      changed:
+        - engine.prove_n
+        - engine.prove
+        - engine.lookup
+        - NOTE: engine.prove_1 is not affected by this change.
+
+        - YOU NEED TO CHANGE ALL CALLS TO THESE FUNCTIONS FROM:
+
+            def your_function():
+                for vars, plan in engine.prove_n(...):
+                    <for loop body>
+                <code after for loop>
+          
+          TO:
+
+            from __future__ import with_statement
+
+            def your_function():
+                with engine.prove_n(...) as it:
+                    for vars, plan in it:
+                        <for loop body>
+                <code after for loop>
+
+    - Pyke no longer replicates the source code directory structure under the
+      compiled_krb directory.  So the compiled_krb directory now has no
+      subdirectories.
+        - YOU SHOULD DELETE ALL compiled_krb DIRECTORIES PRIOR TO RUNNING PYKE
+          0.5.
+    - The two parameters, gen_root_location and gen_root_pkg, to
+      knowledge_engine.engine.__init__ have been merged into one parameter.
+      The default values produce the same result, so you only need to make
+      source changes here if you specified values for either of the old
+      parameters.
+        - generated_root_dir = 'compiled_krb'
 
 FEATURE ENHANCEMENTS:
 
 Added the following features:
 
-    - Added 'special' commands to be able to run programs from rules and examine
-      their results:
-        - special.check_command -- runs program and checks exit status
-        - special.command -- runs program and returns stdout as tuple of lines
-        - special.general_command -- runs program and returns (exit_status,
-                                     stdout, stderr)
-    - Added .kfb files to make universal facts easier.
-    - Added question bases and .kqb files so that rules can ask an end user
-      questions.
-    - Added a database trace_cursor to examples/web_framework/wsgi_app.py
-      which is enabled by setting the TRACE_SQL env variable to anything other
-      than 'False'.
-    - Added performance testing and profiling harnesses to
-      examples/web_framework.
-    - Added default parameter values to engine.prove_1 and engine.prove_n for
-      fixed_args and num_returns parameters.
+    - Changed "Page Last Modified" date to be last svn commit date in html
+      documentation.
+    - Added sitemap.xml to doc/html
 
-Added the following web pages:
-
-    - The web pages have been extensively revised with many new pages to help
-      the person new to logic programming.
-
-Added the following examples:
-
-    - learn_pyke as unfinished Computer Based Training example using the new
-      queston bases.
-    - towers_of_hanoi as a brute force solution to the Towers of Hanoi puzzle.
-      This generates multiple solutions (though only one is optimal).
 
 BUGS FIXED:
 
 The following bugs have been fixed:
 
-    - Fixed bug 2041883: installation error "Sorry: IndentationError"
-    - Fixed: the web_framework example does not do database commits.
-    - Fixed: small bug in examples/sqlgen/test.py cursor.execute parameters.
-    - Fixed: examples/web_framework not placing the returned document into a
-      singleton tuple as per WSGI spec.
+    - Fixed bug 2062109: Pyke does not run on IronPython 2.0B3 and Jython 2.5a1
+        - But this fix can not be tested until new releases of IronPython and
+          Jython are produced.
