@@ -24,9 +24,9 @@ FILES TO CHANGE:
         - line 11:     version = "0.2",
         - line 35:         "http://downloads.sourceforge.net/..."
     - pyke/__init__.py
-        - line 36: version = '0.2'
+        - line 3: version = '0.2'
     - doc/source/index.txt
-        - line 39: Release 0.2
+        - line 43: Release 0.2
 
 REBUILD DOCUMENTS
 

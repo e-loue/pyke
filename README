@@ -1,6 +1,6 @@
 Pyke: Python Knowledge Engine
 
-Version: 0.4
+Version: 0.5
 
 Both forward-chaining and backward-chaining rules (which may include python
 code) are compiled into python. Can also automatically assemble python
@@ -20,7 +20,7 @@ The documentation is at:
 
 You can download a copy of this documentation to your hard drive:
 
-    pyke_doc_html-0.4.tar.gz
+    pyke_doc_html-0.5.tar.gz
 
 See the end of this file for how to regenerate the html files.
 
@@ -57,7 +57,7 @@ This can be checked as follows:
 
 Then you got two choices for pyke:
 
-    pyke-0.4-py2.5.egg
+    pyke-0.5-py2.5.egg
  or the source distribution (see below)
 
 
@@ -65,7 +65,7 @@ SOURCE DISTRIBUTION:
 
 The pyke source distribution is the file:
 
-    pyke-0.4.tar.gz
+    pyke-0.5.tar.gz
 
 This contains the pyke source code, documentation (both source and html), and
 examples.
@@ -75,7 +75,7 @@ EXAMPLES:
 Pyke examples may be downloaded separately from sourceforge if you've used
 easy_install to install pyke (or installed the .egg file):
 
-    pyke_examples-0.4.tar.gz
+    pyke_examples-0.5.tar.gz
 
 Each example has a README file that explains how to run it.
 

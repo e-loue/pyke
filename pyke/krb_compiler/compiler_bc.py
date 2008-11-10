@@ -4,7 +4,7 @@ from __future__ import with_statement
 import itertools
 from pyke import contexts, pattern, bc_rule
 
-version = '0.4'
+version = '0.5'
 
 def file(rule, arg_patterns, arg_context):
   engine = rule.rule_base.engine
@@ -2983,7 +2983,7 @@ def populate(engine):
 
 from pyke.krb_compiler import helpers
 
-Krb_filename = '/home/bruce/python/workareas/sf.trunk/pyke/krb_compiler/compiler.krb'
+Krb_filename = '/home/bruce/workareas/sf.trunk/pyke/krb_compiler/compiler.krb'
 Krb_source_filename = 'compiler.krb'
 Krb_lineno_map = (
     ((15, 19), (24, 28)),
