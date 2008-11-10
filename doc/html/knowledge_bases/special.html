@@ -239,8 +239,8 @@ exit status.</p>
 &gt;&gt;&gt; run_command('command', ('ls',))   # doctest: +NORMALIZE_WHITESPACE
 ('ast_syntax', 'cheatsheets', 'compiled_krb', 'examples', 'html',
  'PyKE.mm', 'r2w.ini', 'source', 'syntax', 'testdocs', 'todo')
-&gt;&gt;&gt; run_command('command', ('ls', '-l', 'r2w.ini'))
-('-rw-r--r-- 1 bruce bruce 338 2008-03-10 14:23 r2w.ini',)
+&gt;&gt;&gt; run_command('command', ('ls', '-l', 'r2w.ini')) # doctest: +ELLIPSIS
+('-rw-r--r-- 1 ... r2w.ini',)
 &gt;&gt;&gt; run_command('command', ('tail', '-n', '5', 'template.txt', '-'),
 ...             'source',   # cwd
 ...             'stdin: line 1\nstdin: line 2\nstdin: line 3\n')
