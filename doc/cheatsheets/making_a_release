@@ -98,9 +98,11 @@ UPDATE PYPI LINK:
 
     $ python setup.py register
 
-CREATE NEWS ANNOUNCEMENT ON SOURCEFORGE
+CREATE NEWS ANNOUNCEMENTS
 
-    Go to: Admin -> News -> Submit
+    On Sourceforge: Admin -> News -> Submit
+
+    On Google Groups: http://groups.google.com/group/pyke
 
 TO TEST:
 
