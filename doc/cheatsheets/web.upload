@@ -1,6 +1,6 @@
 ./make_doc_tarball /tmp/pyke.html.tar
-scp /tmp/pyke.html.tar mtnyogi@shell.sourceforge.net:
-ssh -l mtnyogi shell.sourceforge.net
+scp /tmp/pyke.html.tar mtnyogi@web.sourceforge.net:
+ssh -t mtnyogi,pyke@shell.sourceforge.net create
 cd /home/groups/p/py/pyke
 tar xzf ~/pyke.html.tar
 chmod g+w html
