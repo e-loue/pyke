@@ -90,7 +90,7 @@ class knowledge_base(object):
         return entity.lookup(bindings, pat_context, patterns)
     def prove(self, bindings, pat_context, entity_name, patterns):
         entity = self.entity_lists.get(entity_name)
-        if entity is None: return ()
+        if entity is None: return Gen_empty
         return entity.prove(bindings, pat_context, patterns)
     def add_fc_rule_ref(self, entity_name, fc_rule, foreach_index):
         self.get_entity_list(entity_name) \

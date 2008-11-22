@@ -227,8 +227,8 @@ exit status.
     ...             'stdin: line 1\nstdin: line 2\nstdin: line 3\n')
     ...     # doctest: +NORMALIZE_WHITESPACE
     ('==> template.txt <==',
-     '  </div>',
-     '',
+     '   } catch(err) {}',
+     '  </script>',
      '</body>',
      '</html>',
      '',

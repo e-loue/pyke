@@ -1,0 +1,11 @@
+# rules.krb
+
+rule1
+    use rule1($x)
+    when
+        facts.fact1($x)
+
+rule2
+    use rule2($x)
+    when
+        facts.fact2($x)
