@@ -46,7 +46,7 @@ def init():
     with contextlib.closing(db.connect(user="movie_user", passwd="user_pw",
                                        db="movie_db")) \
            as conn:
-        load_mysql_schema.load_schema(test.Engine, conn)
+        load_mysql_schema.load_schema(test.Engine, db, conn)
 
 def run_plan(globals, locals):
     plan = locals['plan']

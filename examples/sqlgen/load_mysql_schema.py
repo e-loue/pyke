@@ -27,7 +27,8 @@
 
     All facts are put in the "schema" fact base.
 
-    It adds two kinds of facts:
+    It adds five kinds of facts:
+        paramstyle(style)
         column(table_name, col_name, type, null, key, default, extra)
         primary_key(table_name, columns)
         many_to_1(table_many, table_1, table_many_columns, table_1_columns)
@@ -46,7 +47,8 @@ import contextlib
 
 debug = False
 
-def load_schema(engine, connection):
+def load_schema(engine, dbi_module, connection):
+    _add_fact(engine, "paramstyle", (dbi_module.paramstyle))
     with contextlib.closing(connection.cursor()) as table_cursor:
         table_cursor.execute("show tables")
         with contextlib.closing(connection.cursor()) as column_cursor:

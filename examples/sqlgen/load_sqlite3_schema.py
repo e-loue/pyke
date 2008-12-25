@@ -66,7 +66,7 @@ def _load_table(engine, cursor, table_name):
 
 def _create_column(engine, table_name, col_name, type, null, key, default,
                    extra):
-    null = null.upper() == 'YES'
+    #null = null.upper() == 'YES'
     if not key: key = None
     if not default: default = None
     if not extra: extra = None
