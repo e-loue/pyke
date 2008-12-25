@@ -26,6 +26,7 @@
 
 from __future__ import with_statement
 import string
+import os, os.path
 from ply import lex
 
 debug=0
@@ -362,7 +363,7 @@ def t_IDENTIFIER_TOK(t):
 
 # numbers:
 def t_float(t):
-    r'[-+]?([0-9]+(\.[0-9]*([eE][-+][0-9]+)?|[eE][-+][0-9]+)|\.[0-9]+([eE][-+][0-9]+)?)'
+    r'[-+]?([0-9]+(\.[0-9]*([eE][-+]?[0-9]+)?|[eE][-+]?[0-9]+)|\.[0-9]+([eE][-+]?[0-9]+)?)'
     t.value = float(t.value)
     t.type = 'NUMBER_TOK'
     return t
@@ -529,8 +530,6 @@ def unquote(s):
     ans.append(s[start:])
     return ''.join(ans)
 
-lexer = lex.lex(debug=0)
-
 class token_iterator(object):
     ''' This is only used for testing the scanner.
     '''
@@ -545,6 +544,8 @@ class token_iterator(object):
 
 def tokenize(s):
     r'''
+        >>> from pyke.krb_compiler import scanner
+        >>> init(scanner, 0, True)
         >>> tokenize("# This is a comment\n# line 2 of comment\n\n"
         ...          "# comment after blank line\n")
         LexToken(NL_TOK,'\n# line 2 of comment\n\n# comment after blank line\n',1,19)
@@ -564,6 +565,8 @@ def tokenize(s):
 def tokenize_file(filename = 'TEST/scan_test'):
     r""" Used for testing.
 
+        >>> from pyke.krb_compiler import scanner
+        >>> init(scanner, 0, True)
         >>> import os, os.path
         >>> tokenize_file('TEST/scan_test'
         ...               if os.path.split(os.getcwd())[1] == 'krb_compiler'
@@ -589,8 +592,7 @@ def tokenize_file(filename = 'TEST/scan_test'):
         LexToken(NUMBER_TOK,0.98999999999999999,9,134)
         LexToken(NUMBER_TOK,3.0,10,143)
         LexToken(NUMBER_TOK,0.29999999999999999,10,146)
-        LexToken(NUMBER_TOK,3,10,149)
-        LexToken(IDENTIFIER_TOK,'e6',10,150)
+        LexToken(NUMBER_TOK,3000000.0,10,149)
         LexToken(NUMBER_TOK,3.0000000000000001e-06,10,153)
         LexToken(NL_TOK,'\n',10,158)
         LexToken(DEINDENT_TOK,'\n    ',11,158)
@@ -641,11 +643,38 @@ def syntaxerror_params(pos = None, lineno = None):
     if debug: print "start", start, "column", column, "end", end
     return (lexer.filename, lineno, column, lexer.lexdata[start:end])
 
-def init(kfb = False):
-    global indent_levels, nesting_level, kfb_mode
+lexer = None
+
+def init(this_module, debug_param, check_tables = False, kfb = False):
+    global indent_levels, nesting_level, kfb_mode, lexer, debug
     indent_levels = []
     nesting_level = 0
     kfb_mode = kfb
+    debug = debug_param
+    if lexer is None:
+        if debug_param:
+            lexer = lex.lex(module=this_module, debug=1)
+        else:
+            if check_tables:
+                scanner_mtime = os.path.getmtime(this_module.__file__)
+                tables_name = \
+                    os.path.join(os.path.dirname(this_module.__file__),
+                                 'scanner_tables.py')
+                try:
+                    ok = os.path.getmtime(tables_name) >= scanner_mtime
+                except OSError:
+                    ok = False
+                if not ok:
+                    #print "regenerating scanner_tables"
+                    try: os.remove(tables_name)
+                    except OSError: pass
+                    try: os.remove(tables_name + 'c')
+                    except OSError: pass
+                    try: os.remove(tables_name + 'o')
+                    except OSError: pass
+            lexer = lex.lex(module=this_module, optimize=1,
+                            lextab='pyke.krb_compiler.scanner_tables',
+                            outputdir=os.path.dirname(this_module.__file__))
 
 def test():
     import doctest

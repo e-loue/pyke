@@ -101,7 +101,7 @@ def compile_file(engine, generated_root_dir, filename):
         bc_path = base_path + '_bc.py'
         plan_path = base_path + '_plans.py'
         try:
-            ast = krbparser.parse(filename)
+            ast = krbparser.parse(krbparser, filename)
             #sys.stderr.write("got ast\n")
             # dump(ast)
             # sys.stderr.write('\n\n')
@@ -151,7 +151,7 @@ def compile_file(engine, generated_root_dir, filename):
             from pyke.krb_compiler import kfbparser
         fbc_path = base_path + '.fbc'
         try:
-            fb = kfbparser.parse(filename)
+            fb = kfbparser.parse(kfbparser, filename)
             sys.stderr.write("writing %s\n" % fbc_path)
             with open(fbc_path, 'wb') as f:
                 pickle.dump(pyke.version, f)

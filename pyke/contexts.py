@@ -288,7 +288,7 @@ class variable(pattern.pattern):
     def __new__(cls, name):
         var = cls.Variables.get(name)
         if var is None:
-            var = super(variable, cls).__new__(cls, name)
+            var = super(variable, cls).__new__(cls)
             cls.Variables[name] = var
         return var
     def __init__(self, name):

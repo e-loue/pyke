@@ -27,6 +27,7 @@
 from __future__ import with_statement
 import itertools
 import warnings
+import os, os.path
 from ply import yacc
 from pyke.krb_compiler import scanner
 
@@ -491,28 +492,56 @@ def p_error(t):
         raise SyntaxError("invalid syntax",
                           scanner.syntaxerror_params(t.lexpos, t.lineno))
 
+parser = None
+
 # Use the first line for normal use, the second for testing changes in the
 # grammer (the first line does not report grammer errors!).
-parser = yacc.yacc(write_tables=0, debug=0)
-#parser = yacc.yacc(write_tables=0)
-
-def parse(filename, debug = 0):
+def parse(this_module, filename, check_tables = False, debug = 0):
+#def parse(this_module, filename, check_tables = False, debug = 1):
+    global parser
+    if parser is None:
+        outputdir = os.path.dirname(this_module.__file__)
+        if debug:
+            parser = yacc.yacc(module=this_module, write_tables=0,
+                               debug=debug, debugfile='krbparser.yacc.out',
+                               outputdir=outputdir)
+        else:
+            if check_tables:
+                krbparser_mtime = os.path.getmtime(this_module.__file__)
+                tables_name = os.path.join(outputdir, 'krbparser_tables.py')
+                try:
+                    ok = os.path.getmtime(tables_name) >= krbparser_mtime
+                except OSError:
+                    ok = False
+                if not ok:
+                    #print "regenerating krbparser_tables"
+                    try: os.remove(tables_name)
+                    except OSError: pass
+                    try: os.remove(tables_name + 'c')
+                    except OSError: pass
+                    try: os.remove(tables_name + 'o')
+                    except OSError: pass
+            parser = yacc.yacc(module=this_module, debug=0,
+                               optimize=1, write_tables=1,
+                               tabmodule='pyke.krb_compiler.krbparser_tables',
+                               outputdir=outputdir)
     with open(filename) as f:
-        scanner.init()
+        scanner.init(scanner, debug, check_tables)
         scanner.lexer.lineno = 1
         scanner.lexer.filename = filename
-        scanner.debug = debug
         #parser.restart()
         return parser.parse(f.read(), lexer=scanner.lexer, tracking=True,
                             debug=debug)
 
-def run(filename='TEST/parse_test'):
+def run(this_module, filename='TEST/krbparse_test.krb'):
     r""" Used for testing.
 
         >>> import os, os.path
-        >>> run('TEST/parse_test'
+        >>> from pyke.krb_compiler import krbparser
+        >>> run(krbparser,
+        ...     'TEST/krbparse_test.krb'
         ...     if os.path.split(os.getcwd())[1] == 'krb_compiler'
-        ...     else 'krb_compiler/TEST/parse_test')
+        ...     else 'krb_compiler/TEST/krbparse_test.krb')
         ('file',
          None,
          ((('fc_rule',
@@ -611,7 +640,7 @@ def run(filename='TEST/parse_test'):
 
     """
     import pprint
-    pprint.pprint(parse(filename))
+    pprint.pprint(parse(this_module, filename, True))
 
 def test():
     import doctest

@@ -48,7 +48,9 @@ debug = False
 
 def load_schema(engine, connection):
     with contextlib.closing(connection.cursor()) as table_cursor:
-        table_cursor.execute("show tables")
+        table_cursor.execute("""select name from sqlite_master
+                                 where type='table'
+                             """)
         with contextlib.closing(connection.cursor()) as column_cursor:
             for name, in table_cursor.fetchall():
                 _load_table(engine, column_cursor, name)
@@ -57,14 +59,14 @@ def load_schema(engine, connection):
 
 def _load_table(engine, cursor, table_name):
     # This doesn't allow sql parameters!
-    cursor.execute("show columns from " + table_name)
-    for col_name, type, null, key, default, extra in cursor.fetchall():
-        _create_column(engine, table_name, col_name, type,
-                       null.upper() == 'YES', key, default, extra)
+    cursor.execute("pragma table_info(%s)" % table_name)
+    for col_num, col_name, type, null_flag, default, key in cursor.fetchall():
+        _create_column(engine, table_name, col_name, type, null_flag != 99,
+                       key, default, None)
 
 def _create_column(engine, table_name, col_name, type, null, key, default,
                    extra):
-    #null = null.upper() == 'YES'
+    null = null.upper() == 'YES'
     if not key: key = None
     if not default: default = None
     if not extra: extra = None

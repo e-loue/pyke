@@ -1,0 +1,10 @@
+# This is a comment
+# line 2 of comment
+
+# comment after blank line
+fact1()
+fact1(a, b)
+fact1(1, 2.0)
+fact1((a, b))
+
+fact2((1, 2.0, 3e3, (1e-3, -4), -4.5), -5e+2, -5e-1)

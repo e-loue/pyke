@@ -25,7 +25,7 @@
 """ 
 
 from __future__ import with_statement
-import os.path
+import os, os.path
 from ply import yacc
 from pyke.krb_compiler import scanner
 from pyke import fact_base
@@ -101,21 +101,55 @@ def p_error(t):
     raise SyntaxError("invalid syntax",
                       scanner.syntaxerror_params(t.lexpos, t.lineno))
 
+parser = None
+
 # Use the first line for normal use, the second for testing changes in the
 # grammer (the first line does not report grammer errors!).
-parser = yacc.yacc(write_tables=0, debug=0)
-#parser = yacc.yacc(write_tables=0)
-
-def parse(filename, debug = 0):
-    global Fact_base
+def parse(this_module, filename, check_tables = False, debug = 0):
+#def parse(this_module, filename, check_tables = False, debug = 1):
+    '''
+        >>> from pyke.krb_compiler import kfbparser
+        >>> kfbparser.parse(kfbparser,
+        ...                 'TEST/kfbparse_test.kfb'
+        ...                 if os.path.split(os.getcwd())[1] == 'krb_compiler'
+        ...                 else 'krb_compiler/TEST/kfbparse_test.kfb',
+        ...                 True)
+        <fact_base kfbparse_test>
+    '''
+    global parser, Fact_base
+    if parser is None:
+        outputdir = os.path.dirname(this_module.__file__)
+        if debug:
+            parser = yacc.yacc(module=this_module, write_tables=0,
+                               debug=debug, debugfile='kfbparser.yacc.out',
+                               outputdir=outputdir)
+        else:
+            if check_tables:
+                kfbparser_mtime = os.path.getmtime(this_module.__file__)
+                tables_name = os.path.join(outputdir, 'kfbparser_tables.py')
+                try:
+                    ok = os.path.getmtime(tables_name) >= kfbparser_mtime
+                except OSError:
+                    ok = False
+                if not ok:
+                    #print "regenerating kfbparser_tables"
+                    try: os.remove(tables_name)
+                    except OSError: pass
+                    try: os.remove(tables_name + 'c')
+                    except OSError: pass
+                    try: os.remove(tables_name + 'o')
+                    except OSError: pass
+            parser = yacc.yacc(module=this_module, debug=0,
+                               optimize=1, write_tables=1,
+                               tabmodule='pyke.krb_compiler.kfbparser_tables',
+                               outputdir=outputdir)
     dirs, base = os.path.split(filename)
     name = base[:-4]
     Fact_base = fact_base.fact_base(None, name, False)
     with open(filename) as f:
-        scanner.init(True)
+        scanner.init(scanner, debug, check_tables, True)
         scanner.lexer.lineno = 1
         scanner.lexer.filename = filename
-        scanner.debug = debug
         #parser.restart()
         parser.parse(f.read(), lexer=scanner.lexer, tracking=True, debug=debug)
     ans = Fact_base
