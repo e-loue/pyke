@@ -48,7 +48,7 @@ import contextlib
 debug = False
 
 def load_schema(engine, dbi_module, connection):
-    _add_fact(engine, "paramstyle", (dbi_module.paramstyle))
+    _add_fact(engine, "paramstyle", (dbi_module.paramstyle,))
     with contextlib.closing(connection.cursor()) as table_cursor:
         table_cursor.execute("show tables")
         with contextlib.closing(connection.cursor()) as column_cursor:

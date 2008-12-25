@@ -44,7 +44,7 @@ class cursor(object):
 def init():
     test.init()
     with contextlib.closing(db.connect("sqlite3.db")) as conn:
-        load_sqlite3_schema.load_schema(test.Engine, conn)
+        load_sqlite3_schema.load_schema(test.Engine, db, conn)
 
 def run_plan(globals, locals):
     plan = locals['plan']
