@@ -40,7 +40,7 @@ First, fire up the server:
     >>> server.stderr.read(4)
     '>>> '
     >>> server.stdin.write("simple_server.run()\n")
-    >>> time.sleep(0.4)
+    >>> time.sleep(0.8)
 
 Then interact with it:
 
@@ -63,7 +63,7 @@ Then interact with it:
         <h2>Year</h2>
           <p>1963</p>
         <h2>Length</h2>
-          <p>3:12:00</p>
+          <p>3:12</p>
         <h2>Directors</h2>
         <ol>
           <li>Stanley Kramer
@@ -86,7 +86,7 @@ Then interact with it:
         <h2>Year</h2>
           <p>1966</p>
         <h2>Length</h2>
-          <p>1:39:00</p>
+          <p>1:39</p>
         <h2>Directors</h2>
         <ol>
           <li>Richard Lester
@@ -109,7 +109,7 @@ Then interact with it:
         <h2>Year:</h2>
           <p>1966</p>
         <h2>Length:</h2>
-          <p>1:39:00</p>
+          <p>1:39</p>
         <h2>Directors:</h2>
         <ol>
           <li>Richard Lester
@@ -139,7 +139,7 @@ Then interact with it:
         <h2>Year:</h2>
           <p>1967</p>
         <h2>Length:</h2>
-          <p>2:11:00</p>
+          <p>2:11</p>
         <h2>Directors:</h2>
         <ol>
           <li>Val Guest

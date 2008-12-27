@@ -1,5 +1,6 @@
 This example automatically generates programs to render HTMLTemplates
-(http://py-templates.sourceforge.net/htmltemplate/index.html).
+(http://py-templates.sourceforge.net/htmltemplate/index.html).  You can use
+easy_install to install the HTMLTemplate package.
 
 It uses the sqlgen example on the back-end to generate and run SQL statements.
 You'll need to first set up the sqlgen example database before using this
@@ -11,7 +12,8 @@ This is also an example of using multiple rule bases (its own rule base, and
 the sqlgen/database.krb rule base).
 
 This example also caches the plans returned from pyke so it should be extremely
-fast!
+fast.  In fact, in siege tests compared to this same example running in
+TurboGears 2.0, this web framework is a full 10 times faster than TurboGears!
 
 To run this example:
 

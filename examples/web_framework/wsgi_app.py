@@ -41,8 +41,6 @@ from examples.sqlgen import load_mysql_schema
 #     wsgi.multithread: True
 #     wsgi.run_once: False
 
-Initialized = False
-
 class trace_cursor(object):
     def __init__(self, cursor):
         self.cursor = cursor
@@ -54,15 +52,13 @@ class trace_cursor(object):
     def __getattr__(self, attr):
         return getattr(self.cursor, attr)
 
-def init(trace_sql=False):
-    global Initialized, Engine, Db_connection, Db_cursor
+def init(db_connection, trace_sql=False):
+    global Engine, Db_connection, Db_cursor
     Engine = knowledge_engine.engine(('.', '../sqlgen'))
-    Db_connection = db.connect(user="movie_user", passwd="user_pw",
-                               db="movie_db")
-    Db_cursor = Db_connection.cursor()
+    Db_connection = db_connection
+    Db_cursor = db_connection.cursor()
     if trace_sql: Db_cursor = trace_cursor(Db_cursor)
-    load_mysql_schema.load_schema(Engine, Db_connection)
-    Initialized = True
+    return Engine
 
 Debug = 0
 
@@ -134,8 +130,6 @@ Plans_cache = {}
 
 def wsgi_app(environ, start_response):
     global Plans_cache
-
-    if not Initialized: init(environ.get('TRACE_SQL', 'False') != 'False')
 
     # Parse the path:
     components = environ["PATH_INFO"].lstrip('/').split('/')

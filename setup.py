@@ -12,11 +12,11 @@ setup(
     packages = ['pyke', 'pyke.krb_compiler'],
     package_data = {'pyke.krb_compiler': ['*.krb']},
 
-    install_requires = ['ply>=2.3'],
+    install_requires = ['ply>=2.5'],
     extras_require = {
         'regen_docs': ["rest2web>=0.5"],
+        'examples': ["HTMLTemplate>=1.5"],
     },
-    dependency_links = ['http://www.dabeaz.com/ply/'],
 
     # Metadata for upload to PyPI
     author = "Bruce Frederiksen",

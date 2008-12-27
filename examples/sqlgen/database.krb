@@ -546,14 +546,24 @@ run_query
         #python print "make_from_clause(%s, %s, $from_clause)" % \
         #                ($table, $joins)
         !make_from_clause($table, $joins, $from_clause)
-        $sql_command = "select %s\n  from %s\n where %s.id = %%(id)s" % \
-                           (', '.join($select_columns), $from_clause, $table)
+        command_parameters($param, id, $param_fn)
+        $sql_command = "select %s\n  from %s\n where %s.id = %s" % \
+                           (', '.join($select_columns), $from_clause, $table,
+                            $param)
     with
-        db_cursor.execute($sql_command, {'id': starting_keys[$table]})
-        assert db_cursor.rowcount == 1, \
-            'expected unique row, got %d rows from "%s"' % \
-              (db_cursor.rowcount, $sql_command)
-        dict.update(zip($dict_keys, db_cursor.fetchone()))
+        db_cursor.execute($sql_command, $param_fn(starting_keys[$table]))
+        if db_cursor.rowcount != -1 and db_cursor.rowcount is not None:
+            assert db_cursor.rowcount == 1, \
+                'expected unique row, got %d rows from "%s"' % \
+                  (db_cursor.rowcount, $sql_command)
+            dict.update(zip($dict_keys, db_cursor.fetchone()))
+        else:
+            row = db_cursor.fetchone()
+            assert row is not None, \
+                'expected unique row, got 0 rows from "%s"' % ($sql_command,)
+            dict.update(zip($dict_keys, row))
+            assert db_cursor.fetchone() is None, \
+                'expected unique row, got >1 rows from "%s"' % ($sql_command,)
 
 # make_from_clause($table, $joins, $from_clause)
 #
@@ -682,13 +692,26 @@ run_multi_query
         taking (db_cursor, starting_keys)
     when
         !make_from_clause($table1, $joins1, $from_clause)
+        command_parameters($param, id, $param_fn)
         # FIX: Add order_by
-        $sql_command = "select %s\n  from %s\n where %s.%s = %%(id)s" % \
+        $sql_command = "select %s\n  from %s\n where %s.%s = %s" % \
                            (', '.join($select_columns), $from_clause,
-                            $table1, $multi_link_column)
+                            $table1, $multi_link_column, $param)
     with
-        db_cursor.execute($sql_command, {'id': starting_keys[$unique_table]})
+        db_cursor.execute($sql_command, $param_fn(starting_keys[$unique_table]))
         return tuple(dict(zip($dict_keys, row)) for row in db_cursor.fetchall())
+
+format_params
+    use command_parameters('%s', $_param_name, $param_fn)
+    when
+        schema.paramstyle(format)
+        $param_fn = lambda param, prev_params = (): prev_params + (param,)
+
+qmark_params
+    use command_parameters('?', $_param_name, $param_fn)
+    when
+        schema.paramstyle(qmark)
+        $param_fn = lambda param, prev_params = (): prev_params + (param,)
 
 bc_extras
     def find_at_depth1(engine, depth, column, table):

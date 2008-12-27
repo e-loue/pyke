@@ -27,7 +27,24 @@ import wsgiref.simple_server
 class RequestHandlerNoLogging(wsgiref.simple_server.WSGIRequestHandler):
     def log_request(self, code='-', size='-'): pass
 
-def run(port = 8080, logging = True):
+def init(trace_sql = False, db_engine = 'sqlite3'):
+    if db_engine.lower() == 'sqlite3':
+        import sqlite3 as db
+        import examples.sqlgen.load_sqlite3_schema as load_schema
+        db_connection = db.connect('../sqlgen/sqlite3.db')
+    elif db_engine.lower() == 'mysql':
+        import MySQLdb as db
+        import examples.sqlgen.load_mysql_schema as load_schema
+        db_connection = db.connect(user="movie_user", passwd="user_pw",
+                                   db="movie_db")
+    else:
+        raise ValueError("simple_server.init: unrecognized db_engine: " +
+                         db_engine)
+    load_schema.load_schema(wsgi_app.init(db_connection, trace_sql), db,
+                            db_connection)
+
+def run(port = 8080, logging = True, trace_sql = False, db_engine = 'sqlite3'):
+    init(trace_sql, db_engine)
     server_address = ('', port)
     httpd = wsgiref.simple_server.WSGIServer(
                 server_address,

@@ -4,9 +4,11 @@ import cProfile
 import pstats
 import simple_server
 
-def run(port=8080, logging=False):
-    cProfile.runctx('simple_server.run(port=%d, logging=%s)' % (port, logging),
-                    globals(), locals(), 'profile.out')
+def run(port=8080, logging=False, trace_sql=False, db_engine='sqlite3'):
+    cProfile.runctx(
+        'simple_server.run(port=%d, logging=%s, trace_sql=%s, db_engine="%s")'
+            % (port, logging, trace_sql, db_engine),
+        globals(), locals(), 'profile.out')
 
 def stats():
     p = pstats.Stats('profile.out')

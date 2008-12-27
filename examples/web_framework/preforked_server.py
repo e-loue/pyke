@@ -39,29 +39,52 @@ class RequestHandlerNoLogging(wsgiref.simple_server.WSGIRequestHandler):
     def log_request(self, code='-', size='-'): pass
 
 class server(wsgiref.simple_server.WSGIServer):
-    def __init__(self, server_address, rq_handler_class, num_processes):
+    def __init__(self, server_address, rq_handler_class, num_processes,
+                 trace_sql, db_engine):
         self.num_processes = num_processes
+        self.trace_sql = trace_sql
+        self.db_engine = db_engine
         wsgiref.simple_server.WSGIServer.__init__(self, server_address,
                                                         rq_handler_class)
+    def init_wsgi(self):
+        if self.db_engine.lower() == 'sqlite3':
+            import sqlite3 as db
+            import examples.sqlgen.load_sqlite3_schema as load_schema
+            db_connection = db.connect('../sqlgen/sqlite3.db')
+        elif self.db_engine.lower() == 'mysql':
+            import MySQLdb as db
+            import examples.sqlgen.load_mysql_schema as load_schema
+            db_connection = db.connect(user="movie_user", passwd="user_pw",
+                                       db="movie_db")
+        else:
+            raise ValueError("prefork_server.init_wsgi: "
+                             "unrecognized db_engine: " +
+                             self.db_engine)
+        load_schema.load_schema(wsgi_app.init(db_connection, self.trace_sql),
+                                db, db_connection)
     def name(self): return "prefork_server(%d)" % self.num_processes
     def server_activate(self):
         wsgiref.simple_server.WSGIServer.server_activate(self)
         pids = []
         for i in xrange(self.num_processes - 1):
             pid = os.fork()
-            if pid == 0: break
+            if pid == 0:
+                self.init_wsgi()
+                break
             pids.append(pid)
         else:
             # only run by parent process
+            self.init_wsgi()
             signal.signal(signal.SIGINT, functools.partial(kill, pids))
 
-def run(num_processes = 2, port = 8080, logging = False):
+def run(num_processes = 2, port = 8080, logging = False, trace_sql = False,
+        db_engine = 'sqlite3'):
     server_address = ('', port)
     httpd = server(server_address,
                    wsgiref.simple_server.WSGIRequestHandler 
                        if logging
                        else RequestHandlerNoLogging,
-                   num_processes)
+                   num_processes, trace_sql, db_engine)
     httpd.set_app(wsgi_app.wsgi_app)
     httpd.serve_forever()
 

@@ -207,13 +207,14 @@ bc_extras
     # Kludge!  HTMLTemplate needs methods to query the structure...
     def structure(template):
         try:
-            stdout_save = sys.stdout 
-            sys.stdout = StringIO.StringIO()
+            # This was stdout in earlier releases of HTMLTemplate!
+            stderr_save = sys.stderr
+            sys.stderr = StringIO.StringIO()
             template.structure()
-            lines = sys.stdout.getvalue().split('\n')
+            lines = sys.stderr.getvalue().split('\n')
         finally:
-            sys.stdout.close()
-            sys.stdout = stdout_save
+            sys.stderr.close()
+            sys.stderr = stderr_save
         return get_info(lines, '\t')[1]
 
     def get_info(lines, prefix, start = 0):
