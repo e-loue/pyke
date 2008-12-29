@@ -284,15 +284,15 @@ Python functions between subgoal proofs.
     Traceback (most recent call last):
       File "<doctest using_pyke.txt[32]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
-      File "...knowledge_engine.py", line 207, in prove_1
+      File "...knowledge_engine.py", line 234, in prove_1
         return iter(it).next()
-      File "...knowledge_engine.py", line 191, in gen
+      File "...knowledge_engine.py", line 218, in gen
         for plan in it:
       File "...rule_base.py", line 46, in next
         return self.iterator.next()
-      File "...knowledge_engine.py", line 41, in from_iterable
+      File "...knowledge_engine.py", line 40, in from_iterable
         for x in iterable: yield x
-      File "...knowledge_engine.py", line 41, in from_iterable
+      File "...knowledge_engine.py", line 40, in from_iterable
         for x in iterable: yield x
       File "...error_test.krb", line 26, in rule1
         goal2()

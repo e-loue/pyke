@@ -1,9 +1,11 @@
 # run.py
 
 import sys
+import os.path
 from pyke import knowledge_engine, krb_traceback
 
-engine = knowledge_engine.engine()
+engine = knowledge_engine.engine(os.path.dirname(__file__),
+                                 'examples.learn_pyke.compiled_krb')
 
 def run():
     engine.reset()

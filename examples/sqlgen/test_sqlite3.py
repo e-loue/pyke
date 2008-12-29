@@ -23,10 +23,14 @@
 
 
 from __future__ import with_statement
+import os.path
 import contextlib
 import sqlite3 as db
 from pyke import test
 import load_sqlite3_schema
+
+Sqlgen_dir = os.path.dirname(load_sqlite3_schema.__file__)
+Sqlite3_db = os.path.join(Sqlgen_dir, "sqlite3.db")
 
 class cursor(object):
     rowcount = 1        # This is only check for unique queries...
@@ -43,7 +47,7 @@ class cursor(object):
 
 def init():
     test.init()
-    with contextlib.closing(db.connect("sqlite3.db")) as conn:
+    with contextlib.closing(db.connect(Sqlite3_db)) as conn:
         load_sqlite3_schema.load_schema(test.Engine, db, conn)
 
 def run_plan(globals, locals):
@@ -59,7 +63,7 @@ def run_plan(globals, locals):
         if not data_values: break
         starting_keys = dict(zip(args[0], data_values))
         print "executing the plan with real database cursor"
-        with contextlib.closing(db.connect("sqlite3.db")) as conn:
+        with contextlib.closing(db.connect(Sqlite3_db)) as conn:
             with contextlib.closing(conn.cursor()) as cur:
                 ans = plan(cur, starting_keys)
         print "plan returned:", ans

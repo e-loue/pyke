@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 
 from __future__ import with_statement
-import os.path
+import os, os.path
 import sys
 
 import pyke
@@ -80,15 +80,15 @@ def dump(ast, f = sys.stderr, need_nl = False, indent = 0):
     f.write(')')
     return did_nl
 
-def compile(generated_root_dir, filenames):
+def compile(generated_root_pkg, generated_root_dir, filenames):
     engine = knowledge_engine.engine(compiler_bc)
-    if not os.path.exists(generated_root_dir): os.makedirs(generated_root_dir)
+    if not os.path.exists(generated_root_dir): os.mkdir(generated_root_dir)
     init_file_path = os.path.join(generated_root_dir, '__init__.py')
     if not os.path.exists(init_file_path): open(init_file_path, 'w').close()
     for filename in filenames:
-        compile_file(engine, generated_root_dir, filename)
+        compile_file(engine, generated_root_pkg, generated_root_dir, filename)
 
-def compile_file(engine, generated_root_dir, filename):
+def compile_file(engine, generated_root_pkg, generated_root_dir, filename):
     global pickle, kqb_parser, kfbparser
     rb_name = os.path.basename(filename)
     suffix = rb_name[-4:]
@@ -108,7 +108,8 @@ def compile_file(engine, generated_root_dir, filename):
             engine.reset()
             engine.activate('compiler')
             (fc_lines, bc_lines, plan_lines), plan = \
-                engine.prove_1('compiler', 'compile', (rb_name, ast), 3)
+                engine.prove_1('compiler', 'compile',
+                               (generated_root_pkg, rb_name, ast), 3)
             krb_filename = os.path.abspath(filename)
             if fc_lines:
                 sys.stderr.write("writing %s\n" % fc_path)

@@ -40,13 +40,15 @@
 
 from __future__ import with_statement
 import contextlib
+import os.path
 import sys
 import time
 
 from pyke import knowledge_engine, krb_traceback
 
 # Compile and load .krb files in '.' directory (recursively).
-engine = knowledge_engine.engine('.')
+engine = knowledge_engine.engine(os.path.dirname(__file__),
+                                 'examples.family_relations.compiled_krb')
 
 def fc_test(person1 = 'bruce'):
     '''

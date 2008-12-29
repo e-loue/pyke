@@ -24,8 +24,7 @@
 from __future__ import with_statement
 import sys
 import types
-import os
-import os.path
+import os, os.path
 import re
 import contextlib
 
@@ -54,33 +53,58 @@ Bad_name_char = re.compile('[^a-zA-Z0-9_]')
 class engine(object):
     _Variables = tuple(contexts.variable('ans_%d' % i) for i in range(100))
     
-    def __init__(self, paths = ('.',), generated_root_dir = 'compiled_krb',
+    def __init__(self, paths = ('.',), generated_root_pkg = 'compiled_krb',
                  load_fc = True, load_bc = True, load_fb = True,
                  load_qb = True):
-        gen_root_location, root_package = os.path.split(generated_root_dir)
-        if not Name_test.match(root_package):
-            raise ValueError(
-                "engine.__init__: generated_root_dir (%s) must end with a "
-                "legal python identifier" % (generated_root_dir,))
+
+        #if not Name_test.match(root_package):
+        #    raise ValueError(
+        #        "engine.__init__: generated_root_dir (%s) must end with a "
+        #        "legal python identifier" % (generated_root_dir,))
+
         self.knowledge_bases = {}
         self.rule_bases = {}
         special.create_for(self)
+
         if paths != '*test*':
             if isinstance(paths, types.ModuleType):
                 # secret hook for the compiler to initialize itself (so the
                 # compiled python module can be in an egg).
                 paths.populate(self)
             else:
+                generated_root_path = tuple(generated_root_pkg.split('.'))
+                # Figure out generated_root_dir:
+                try:
+                    root_pkg = _import(generated_root_path)
+                    assert not (hasattr(root_pkg, '__loader__') and 
+                                root_pkg.__loader__.__class__.__name__
+                                    == 'zipimporter'), \
+                           "knowledge_engine.engine: " \
+                           "loading from zip archives (.egg files) not yet " \
+                           "supported"
+                    generated_root_dir = os.path.dirname(root_pkg.__file__)
+                except ImportError:
+                    if len(generated_root_path) == 1:
+                        generated_parent_dir = '.'
+                    else:
+                        parent_pkg = _import(generated_root_path[:-1])
+                        generated_parent_dir = \
+                            os.path.dirname(parent_pkg.__file__)
+                    generated_root_dir = os.path.join(generated_parent_dir,
+                                                      generated_root_path[-1])
+
                 # Make sure gen_root_location is on sys.path.
-                if gen_root_location == '.' or gen_root_location == '':
-                    if '' not in sys.path \
-                       and os.path.abspath(gen_root_location) not in sys.path:
-                        sys.path.insert(0, '')
-                else:
-                    if os.path.abspath(gen_root_location) not in sys.path:
-                        sys.path.insert(0, os.path.abspath(gen_root_location))
+                #if gen_root_location == '.' or gen_root_location == '':
+                #    if '' not in sys.path \
+                #       and os.path.abspath(gen_root_location) not in sys.path:
+                #        sys.path.insert(0, '')
+                #else:
+                #    if os.path.abspath(gen_root_location) not in sys.path:
+                #        sys.path.insert(0, os.path.abspath(gen_root_location))
 
                 if isinstance(paths, types.StringTypes): paths = (paths,)
+
+                paths = tuple((path or '.') for path in paths)
 
                 # Generate list of files that need to be recompiled.
                 compile_list = _get_compile_list(paths, generated_root_dir)
@@ -88,25 +112,28 @@ class engine(object):
                 # Compile files.
                 if compile_list:
                     from pyke import krb_compiler
-                    krb_compiler.compile(generated_root_dir, compile_list)
+                    krb_compiler.compile(generated_root_pkg, generated_root_dir,
+                                         compile_list)
                     _check_list(compile_list, generated_root_dir)
 
                 # Load files.  This may produce another list of files that
                 # need to be recompiled due to different embedded pyke version
                 # numbers.
                 compile_list2 = _load_paths(self, paths, generated_root_dir,
-                                            root_package,
+                                            generated_root_path,
                                             load_fc, load_bc, load_fb, load_qb,
                                             compile_list)
 
                 # Compile and load files.
                 if compile_list2:
                     from pyke import krb_compiler
-                    krb_compiler.compile(generated_root_dir, compile_list2)
+                    krb_compiler.compile(generated_root_pkg, generated_root_dir,
+                                         compile_list2)
                     _check_list(compile_list2, generated_root_dir)
                     for full_filename in compile_list2:
                         if not _load_file(self, full_filename,
-                                          generated_root_dir, root_package,
+                                          generated_root_dir,
+                                          generated_root_path,
                                           load_fc, load_bc, load_fb, load_qb,
                                           compile_list2):
                             raise AssertionError("version recompile failed")
@@ -261,13 +288,13 @@ def _get_compile_list(paths, generated_root_dir):
         for dirpath, dirnames, filenames in os.walk(path, onerror=_raise_exc):
             for filename in filenames:
                 if len(filename) > 4 \
-                   and filename[-4:] in ('.krb', '.kfb', '.kqb') \
-                   and _needs_compiling(os.path.join(dirpath, filename),
-                                        generated_root_dir):
-                    ans.append(os.path.join(dirpath, filename))
+                   and filename[-4:] in ('.krb', '.kfb', '.kqb'):
+                    file_path = os.path.join(dirpath, filename)
+                    if _needs_compiling(file_path, generated_root_dir):
+                        ans.append(file_path)
     return ans
 
-def _load_paths(engine, paths, generated_root_dir, root_package,
+def _load_paths(engine, paths, generated_root_dir, generated_root_path,
                 load_fc, load_bc, load_fb, load_qb, compile_list):
     r'''
         Loads the compiled versions of all source files in 'paths'.
@@ -283,14 +310,14 @@ def _load_paths(engine, paths, generated_root_dir, root_package,
                    and filename[-4:] in ('.krb', '.kfb', '.kqb'):
                     full_filename = os.path.join(dirpath, filename)
                     if not _load_file(engine, full_filename,
-                                      generated_root_dir, root_package,
+                                      generated_root_dir, generated_root_path,
                                       load_fc, load_bc, load_fb, load_qb,
                                       compile_list):
                         ans.append(full_filename)
     #print "_load_paths =>", ans
     return ans
 
-def _load_file(engine, filename, generated_root_dir, root_package,
+def _load_file(engine, filename, generated_root_dir, generated_root_path,
                load_fc, load_bc, load_fb, load_qb, compile_list):
     base_modulename = os.path.basename(filename)[:-4]
     base = os.path.join(generated_root_dir, base_modulename)
@@ -299,7 +326,7 @@ def _load_file(engine, filename, generated_root_dir, root_package,
             os.stat(base + type + '.py')
         except OSError:
             return True
-        module_path = (root_package, base_modulename + type)
+        module_path = generated_root_path + (base_modulename + type,)
         full_module_name = '.'.join(module_path)
         #print >> sys.stderr, "loading:", full_module_name
         module = None
@@ -359,28 +386,6 @@ def _load_pickle(filename, source_filename, engine):
     finally:
         f.close()
     return True
-
-""" ******* for testing:
-def trace_import(*args, **kws):
-    if args[0].endswith('_plans'):
-        sys.stderr.write("import: ")
-        if kws: sys.stderr.write("kws.keys(): %s " % (str(kws.keys()),))
-        for arg in args:
-            if isinstance(arg, dict):
-                if '__name__' in arg:
-                    sys.stderr.write('%s[%d] ' % (arg['__name__'], len(arg)))
-                else:
-                    sys.stderr.write(str(len(arg)) + ' ')
-            else:
-                sys.stderr.write(str(arg) + ' ')
-        sys.stderr.write('\n')
-    return old_import(*args)
-
-import __builtin__
-old_import = __builtin__.__import__
-#print "__builtin__:", __builtin__, "old_import:", old_import
-__builtin__.__import__ = trace_import
-********* end testing """
 
 def _import(modulepath):
     ''' modulepath does not include .py

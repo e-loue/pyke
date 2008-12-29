@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 file
-    use compile($rb_name,
+    use compile($generated_root_pkg, $rb_name,
                 (file, $parent,
                        ($fc_rules, $fc_extra_lines),
                        ($bc_rules, $bc_extra_lines, $plan_extra_lines)),
@@ -54,7 +54,8 @@ file
                         if $bc_plan_lines \
                         else ()
         $bc_lines = ($bc_head,
-                     ("import %s_plans" % $rb_name
+                     ("from %s import %s_plans" %
+                        ($generated_root_pkg, $rb_name)
                           if $bc_plan_lines
                           else ()),
                      $bc_bc_fun_lines,

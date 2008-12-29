@@ -24,12 +24,33 @@ do
     fi
 done
 
+cd krb_compiler
+echo Testing scanner_tables.py
+if [ scanner.py -nt scanner_tables.py ]
+then
+    echo "krb_compiler/scanner_tables.py" >> $ERRORFILES
+    NUM_ERRORS=$(($NUM_ERRORS + 1))
+fi
+echo Testing krbparser_tables.py
+if [ scanner.py -nt krbparser_tables.py -o \
+     krbparser.py -nt krbparser_tables.py ]
+then
+    echo "krb_compiler/krbparser_tables.py" >> $ERRORFILES
+    NUM_ERRORS=$(($NUM_ERRORS + 1))
+fi
+echo Testing kfbparser_tables.py
+if [ scanner.py -nt kfbparser_tables.py -o \
+     kfbparser.py -nt kfbparser_tables.py ]
+then
+    echo "krb_compiler/kfbparser_tables.py" >> $ERRORFILES
+    NUM_ERRORS=$(($NUM_ERRORS + 1))
+fi
+
 if [ $NUM_ERRORS -eq 0 ]
 then
     echo Testing compiler.krb
-    cd krb_compiler
     rm -rf compiled_krb
-    if python2.5 -c "from pyke import krb_compiler; krb_compiler.compile('compiled_krb', ('compiler.krb',))"
+    if python2.5 -c "from pyke import krb_compiler; krb_compiler.compile('compiled_krb', 'compiled_krb', ('compiler.krb',))"
     then
         # Ignore differences in Krb_filename from being compiled on different
         # boxes...
@@ -50,8 +71,9 @@ then
         echo "krb_compiler/compiler.krb" >> $ERRORFILES
         NUM_ERRORS=$(($NUM_ERRORS + 1))
     fi
-    cd ..
 fi
+
+cd ..
 
 if [ $NUM_ERRORS -eq 0 ]
 then

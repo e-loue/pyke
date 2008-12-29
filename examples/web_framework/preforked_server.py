@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 
 import sys
-import os
+import os, os.path
 import signal
 import functools
 import wsgiref.simple_server
@@ -50,7 +50,9 @@ class server(wsgiref.simple_server.WSGIServer):
         if self.db_engine.lower() == 'sqlite3':
             import sqlite3 as db
             import examples.sqlgen.load_sqlite3_schema as load_schema
-            db_connection = db.connect('../sqlgen/sqlite3.db')
+            db_connection = \
+                db.connect(os.path.join(os.path.dirname(load_schema.__file__),
+                                        'sqlite3.db'))
         elif self.db_engine.lower() == 'mysql':
             import MySQLdb as db
             import examples.sqlgen.load_mysql_schema as load_schema

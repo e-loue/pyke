@@ -1,8 +1,10 @@
 # test.py
 
+import os.path
 from pyke import knowledge_engine
 
-Engine = knowledge_engine.engine()
+Engine = knowledge_engine.engine(os.path.dirname(__file__),
+                                 'Test.CanNotProve.compiled_krb')
 
 def test(kb, ke, arg):
     Engine.reset()

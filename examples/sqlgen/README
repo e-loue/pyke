@@ -1,15 +1,18 @@
 NOTE: This example is only a proof-of-concept and is not intended for
       production use!
 
-This example generates SQL statements, given a tuple of column names.  It uses
-MySQL, but should be easy to port to other database engines.
+This example generates SQL statements, given a tuple of column names.  It was
+originally written for MySQL but now also supports Sqlite3.  It is relatively
+easy to port to other database engines.
 
-The following files can be used to create and populate the database:
+The following files can be used to create and populate the database.  A
+pre-populated Sqlite3 database is included in this directory as 'sqlite3.db'.
 
     create_database.sql
         Creates movie_db database and users: movie_admin/admin_pw and
         movie_user/user_pw.
-    create_tables.sql
+    create_tables.sql       # for MySQL
+    create_tables.sqlite3   # for Sqlite3
         movie
             id                  int auto_increment
             title               varchar(100)
@@ -34,7 +37,8 @@ The following files can be used to create and populate the database:
 
 This shell script loads 6 movies:
 
-    load_tables
+    load_tables    # for MySQL
+    load_sqlite3   # for Sqlite3
         Loads the following files in the indicated order:
             genre.txt
             movie.txt
@@ -43,16 +47,18 @@ This shell script loads 6 movies:
             catalog.txt
 
 load_mysql_schema.py
-    This provides one function which loads the "schema" fact base from the
-    MySQL connection provided:
+load_sqlite3_schema.py
+    These provide one function which loads the "schema" fact base from the
+    database connection provided:
 
-        load_schema(pyke_engine, db_connection)
+        load_schema(pyke_engine, dbi_module, db_connection)
 
     All facts are asserted as universal facts so that they remain after an
     engine.reset() is done.
 
     The following facts are asserted:
 
+        schema.paramstyle(paramstyle) # e.g.: format, qmark
         schema.column(table_name, col_name, type, null, key, default, extra)
         schema.primary_key(table_name, columns)
         schema.many_to_1(table_many, table_1,
@@ -81,25 +87,26 @@ database.krb
     database.
 
 test.py
-    This has several items of possible broader interest for debugging.
-
-        - A debug "cursor" class to use instead of a real database cursor.
-        - A "parse(str)" function that recognizes numbers, string literals and
-            symbols (but not True/False/None at this point) and tuples (but
-            not requiring a trailing comma for singleton tuples).
-        - An "as_pattern(data)" function that converts data into a pattern.
-            Strings starting with "$" are converted to pattern variables.
-            Tuples ending with a string starting with "*$" are converted into
-            tuple patterns with rest variables.
+test_sqlite3.py
+    These have a debug "cursor" class that can be used instead of a real
+    database cursor.  The debug cursor class does not require a database
+    connection and returns dummy data from any SELECT call.
 
     Test functions:
 
         init()
-            Creates a pyke engine and calls load_mysql_schema.load_schema.
+            Creates a pyke engine and calls load_schema.
         run()
             Loops on "goal: " prompt.  Type a goal, or trace/untrace rule_name.
-            Empty string terminates the loop.  When the plan is run, it first
-            runs it with the debug cursor, then enters a loop prompting for the
-            starting_keys values.  These should be entered space separated.
-            An empty line terminates the plan loop.
+            Empty string terminates the loop.  Examples:
+
+                goal: get_data((movie), (title, year, length))
+                goal: get_data((director), (director_name, (movies, (), title, year))
+
+            When the plan is run, it first runs it with the debug cursor, then
+            enters a loop prompting for the starting_keys values.  These
+            should be entered space separated.  An empty line terminates the
+            plan loop.  For example:
+
+                ('movie',): 1
 
