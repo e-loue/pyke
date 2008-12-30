@@ -7,7 +7,7 @@ First, fire up the server:
     >>> import signal
     >>> import time
     >>> import subprocess
-    >>> server = subprocess.Popen(("python2.5", "-i"),
+    >>> server = subprocess.Popen((sys.executable, "-i"),
     ...                           stdin=subprocess.PIPE,
     ...                           stdout=subprocess.PIPE,
     ...                           stderr=subprocess.PIPE,

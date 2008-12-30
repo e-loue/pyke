@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# testpyke [ errorfiles_file ]
+# testpyke [-p python_command] [ errorfiles_file ]
 #
 # no arguments.
 #
@@ -11,13 +11,21 @@
 ERRORFILES="/tmp/testpyke.$$"
 TMPFILE="/tmp/testpyke2.$$"
 
+PYTHON=python2.5
+
+if [ $# -ge 2 -a "x$1" = x-p ]
+then
+    PYTHON="$2"
+    shift 2
+fi
+
 > $ERRORFILES
 NUM_ERRORS=0
 
 for f in `find . -name '*.py' ! -name '*_[bf]c.py'`
 do
     echo Testing "$f"
-    if ! python2.5 "$f"
+    if ! "$PYTHON" "$f"
     then
         echo "$f" >> $ERRORFILES
         NUM_ERRORS=$(($NUM_ERRORS + 1))
@@ -50,7 +58,7 @@ if [ $NUM_ERRORS -eq 0 ]
 then
     echo Testing compiler.krb
     rm -rf compiled_krb
-    if python2.5 -c "from pyke import krb_compiler; krb_compiler.compile('compiled_krb', 'compiled_krb', ('compiler.krb',))"
+    if "$PYTHON" -c "from pyke import krb_compiler; krb_compiler.compile('compiled_krb', 'compiled_krb', ('compiler.krb',))"
     then
         # Ignore differences in Krb_filename from being compiled on different
         # boxes...

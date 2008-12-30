@@ -91,7 +91,7 @@ def get_answer(question, match_prompt, conv_fn=None, test=None, review=None):
             if test: ans = qa_helpers.match(ans, test)
             break
         except ValueError, e:
-            print "answer should be %s, got %s" % (e.message, repr(ans))
+            print "answer should be %s, got %s" % (str(e), repr(ans))
             print
             print "Try Again:"
     if review:
