@@ -48,10 +48,10 @@ Initializing Pyke
 
 There are two steps to initializing a Pyke knowledge engine:
 
-knowledge_engine.engine(paths = ('.',), generated_root_dir = 'compiled_krb', load_fc = True, load_bc = True, load_fb = True, load_qb = True)
-    The Pyke inference engine is offered
-    as a class so that you can instantiate multiple copies of it with different
-    rule bases to accomplish different tasks.
+knowledge_engine.engine(paths = ('.',), generated_root_pkg = 'compiled_krb', load_fc = True, load_bc = True, load_fb = True, load_qb = True)
+    The Pyke inference engine is offered as a class so that you can
+    instantiate multiple copies of it with different rule bases to accomplish
+    different tasks.
     Once you have a ``knowledge_engine.engine`` object; generally, all of
     the functions that you need are provided directly by this object:
 
@@ -67,15 +67,21 @@ knowledge_engine.engine(paths = ('.',), generated_root_dir = 'compiled_krb', loa
     ready to activate_.
 
     All generated Python source files and pickle files are placed in the
-    ``generated_root_dir`` directory.  By default, this directory is
-    "compiled_krb".  You probably want to add ``compiled_krb`` to your
-    subversion ``global-ignores`` option.  The ``generated_root_dir`` will be
-    created automatically if it does not already exist.
+    ``generated_root_pkg``.  By default, this is the package "compiled_krb"
+    in the program's current working directory.  The ``generated_root_pkg``
+    may be a dotted module path.  In this case, the module path must be on
+    Python's search path for modules.
+    
+    The last component of the ``generated_root_pkg`` will be created
+    automatically if it does not already exist.
+
+    You probably want to add ``compiled_krb`` to your subversion
+    ``global-ignores`` option.
 
     If you change some of your Pyke source files, you can create a new engine
     object to compile and reload the generated Python modules without
-    restarting your program.  But note that you'll need to rerun your
-    ``add_universal_fact`` calls.
+    restarting your program.  But note that you'll need to rerun the
+    ``add_universal_fact`` calls that you made outside of your `.kfb files`_.
 *some_engine*.add_universal_fact(kb_name, fact_name, arguments)
     The ``add_universal_fact`` function is called once per fact_.  These
     facts_ are never deleted and apply to all *cases*.

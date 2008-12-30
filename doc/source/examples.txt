@@ -42,9 +42,12 @@ Examples
 =============================
 
 Several examples are included to help you become familiar with Pyke.  If you
-did an svn checkout, these are all included in the ``examples`` directory.
+did an svn checkout, these are all included in the ``examples`` directory and
+should already be on your PYTHON PATH.
+
 If you used easy_install for Pyke, you'll need to download the pyke_examples
-tar file separately here__.
+tar file separately here__ and then expand the tar file in a directory on your
+PYTHON PATH.
 
 Each example is in its own sub-directory and has a README file to get you
 started.  They all have `.krb files`_ and a Python module to run the example
@@ -103,6 +106,14 @@ are expected to have a single value each.  Nested tuples are used when
 multiple rows are expected.  The column names in nested tuples make up the
 columns in the result rows.
 
+The top-level goal returns a plan_ that takes the key values for the initial
+set of tables given to the goal and returns an immutable dictionary mapping
+the column names to the values retrieved from the database.  The plan may be
+used repeatedly without re-running the rules each time to figure out the
+SELECT statements.  Thus, this acts like a SELECT statement compiler resulting
+in queries with virtually no extra overhead.  It is *not*, however, an Object
+Relational Mapper (ORM).
+
 The data model used for the requested columns is that tables inherit the
 columns from tables they link to.  So if there is a 1-many relationship
 between tables A and B (1 A row has many B rows), the B table inherits the
@@ -114,10 +125,14 @@ example, it assumes that ``id`` is the primary key for each table, and that
 when one table links to another, it uses the target table name suffixed with
 ``_id`` as the column name.
 
-This example uses MySQL_ and includes the .sql files to create the database,
-tables, and example data.  It lacks more general capabilities that would be
-required for real use, but may serve as a starting point for another project
-that's more complete.
+This example was originally done using MySQL_ and includes the .sql files to
+create the database, tables, and example data.  The example has since been
+converted to use the Sqlite3 database to make it easier to run, as Sqlite3
+does not require any setup (the Sqlite3 database file is included in the
+example).
+
+Sqlgen lacks more general capabilities that would be required for real use,
+but may serve as a starting point for another project that's more complete.
 
 This example also has much more elaborate rules than the prior two examples
 and is a very real example of generating plans_.
@@ -128,8 +143,8 @@ Web_framework
 
 This example completes the Python web framework demo by adding rules to
 automatically generate code to render HTML templates from the HTMLTemplates_
-package.  This uses the sqlgen_ example, above, to generate the SQL
-statements.
+package (you can run ``easy_install HTMLTemplate`` to install this package).
+This uses the sqlgen_ example, above, to generate the SQL statements.
 
 The HTMLTemplates do not include anything resembling program code in them, so
 that your graphics designers can completely own the html files without the
