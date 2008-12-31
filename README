@@ -1,6 +1,6 @@
 Pyke: Python Knowledge Engine
 
-Version: 0.5
+Version: 0.6
 
 Both forward-chaining and backward-chaining rules (which may include python
 code) are compiled into python. Can also automatically assemble python
@@ -20,7 +20,7 @@ The documentation is at:
 
 You can download a copy of this documentation to your hard drive:
 
-    pyke_doc_html-0.5.tar.gz
+    pyke_doc_html-0.6.tar.gz
 
 See the end of this file for how to regenerate the html files.
 
@@ -40,12 +40,11 @@ To install pyke with easy_install, at the shell prompt just type:
 
     $ easy_install-2.5 pyke
 
-If you don't have easy_install, you should install it:
+If you don't have easy_install, you should install it.  See:
 
-    download: http://peak.telecommunity.com/dist/ez_setup.py
-    then (as root) run: $ python2.5 ez_setup.py
+    http://peak.telecommunity.com/DevCenter/EasyInstall
 
-Otherwise, you'll also need ply 2.3 or later from:
+Otherwise, you'll also need ply 2.5 or later from:
 
     http://www.dabeaz.com/ply/
 
@@ -55,9 +54,9 @@ This can be checked as follows:
     >>> from ply import lex
     >>> lex.__version__
 
-Then you got two choices for pyke:
+Then you've got two choices for pyke:
 
-    pyke-0.5-py2.5.egg
+    pyke-0.6-py2.5.egg
  or the source distribution (see below)
 
 
@@ -65,7 +64,7 @@ SOURCE DISTRIBUTION:
 
 The pyke source distribution is the file:
 
-    pyke-0.5.tar.gz
+    pyke-0.6.tar.gz
 
 This contains the pyke source code, documentation (both source and html), and
 examples.
@@ -75,7 +74,9 @@ EXAMPLES:
 Pyke examples may be downloaded separately from sourceforge if you've used
 easy_install to install pyke (or installed the .egg file):
 
-    pyke_examples-0.5.tar.gz
+    pyke_examples-0.6.tar.gz
+
+You need to unpack this into a directory that is on your PYTHON PATH.
 
 Each example has a README file that explains how to run it.
 
@@ -84,21 +85,24 @@ solutions to the same problem.  It also has an example of a few rule
 optimizations that result in a 100 times performance improvement on this
 problem.
 
-The sqlgen example uses MySQL and the python MySQLdb module.  It has a
-function that reads the schema information into pyke facts.  Then the rules in
-database.krb automatically figure out how to join tables together to retrieve
-a list of column names, generate the SQL select statement and return a plan to
-execute this SQL statement and return the results as a dictionary.
+The sqlgen example uses Sqlite3 (or MySQL) and the python sqlite3 (or MySQLdb)
+modules.  It has a function that reads the schema information into pyke facts.
+Then the rules in database.krb automatically figure out how to join tables
+together to retrieve a list of column names, generate the SQL select
+statements and return a plan to execute this SQL statement and return the
+results as a dictionary.
 
 The web_framework example uses the sqlgen example.  This demonstrates the use
 of multiple rule bases.  The web_framework is a WSGI application that uses the
-HTMLTemplate package.  It gets the column names from the HTMLTemplate and
+HTMLTemplate package (install this with "easy_install HTMLTemplate", be sure to
+get version 1.5 or later).  It gets the column names from the HTMLTemplate and
 feeds those to the sqlgen example to generate a plan to retrieve the data.  It
 then builds a plan to populate the template and return the finished HTML
 document.  It also caches the plans so that they don't have to be re-generated
-for each request.  This should make this run very fast!  The example includes
-a wsgiref simple_server setup to run it as an http server so that you can
-access it through your browser.
+for each request.  This makes it run a full 10 times faster than the same
+example done in TurboGears 2!  The example includes a wsgiref simple_server
+setup to run it as an http server so that you can access it through your
+browser.
 
 The learn_pyke example is an incomplete attempt at a computer based training
 program.  It only deals with the topic of pattern matching.  It is left here
@@ -131,7 +135,7 @@ In pyke/krb_compiler:
 
     $ python2.5
     >>> from pyke import krb_compiler
-    >>> krb_compiler.compile('.', 'compiled_krb', ('compiler.krb',))
+    >>> krb_compiler.compile('compiled_krb', 'compiled_krb', ('compiler.krb',))
     $ cp compiled_krb/compiler_bc.py .
     $ rm -rf compiled_krb
 

@@ -1,0 +1,69 @@
+0.6 RELEASE NOTES Dec 30, 2008
+
+This fixes a reported bug in Pyke and also sets up the examples to be easier
+to run by not requiring that they be run from a certain directory.  This makes
+them easier to run from Windows.  The sqlgen and web_framework examples were
+also changed to use the Sqlite3 database rather than MySQL, again, to make the
+examples easier to run.
+
+Pyke's use of the PLY lex and yacc modules has been changed to avoid compiling
+the scanner and parsers each time Pyke is run.  These changes should also help
+when running Pyke on IronPython as PLY has some incompatibilities with
+IronPython.
+
+Finally, Pyke has been upgraded to run on Python 2.6 without any Deprecation
+Warnings.  (And Pyke still runs fine on Python 2.5).  But to run Pyke on
+Python 2.6 you will need the development version of PLY (from subversion)
+until PLY comes out with it's release 2.6.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 0.5 RELEASE:
+
+    - You must upgrade to PLY version 2.5.  This can be done with:
+        - easy_install --upgrade ply
+
+    - If you want to run the web_framework example, you need to upgrade the
+      HTMLTemplate package to the 1.5 release.  You can use easy_install to
+      install the 1.5 release, but may need to unintall the older release
+      manually (I don't remember the prior release of HTMLTemplate being set
+      up for easy_install). 
+
+    - The meaning of the generated_root_dir parameter to
+      knowledge_engine.engine.__init__ has been changed (as well as its name).
+      The default value produces the same result, so you only need to make
+      source changes here if you specified a value for this parameter.
+
+FEATURE ENHANCEMENTS:
+
+Added the following features:
+
+    - The examples no longer depend on the program's current working
+      directory, making them easier to run from Windows.
+    - The sqlgen and web_framework examples no longer require MySQL.  They
+      have been converted to Sqlite3 and the Sqlite3 database is included in
+      the examples directory.  So these examples no longer require setting up
+      the database first.
+    - Pyke runs on Python 2.6 without any Deprecation Warnings.
+        - But you need the development version of PLY until PLY comes out with
+          its release 2.6.
+    - Changed Pyke's use of PLY to save the compiled scanner and parser tables
+      rather than regenerating them each time Pyke is run.  These changes
+      should also avoid incompatibilities between IronPython and PLY.
+
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug 2339448: BC rules with nonexistent dependencies
+    - Fixed bug 2062109: Pyke does not run on IronPython 2.0B3 and Jython 2.5a1
+        - This fix has now been tested and runs OK on Jython.
+        - The test on IronPython exposed a bug in IronPython that has been
+          reported to the IronPython project (as item# 20143 on their bug
+          tracking list).
+
