@@ -11,7 +11,7 @@ _lr_action_items = {'NONE_TOK':([7,9,20,23,],[8,8,8,8,]),'LP_TOK':([5,7,9,20,23,
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
    for _x,_y in zip(_v[0],_v[1]):
-      if not _x in _lr_action:  _lr_action[_x] = { }
+      if not _lr_action.has_key(_x):  _lr_action[_x] = { }
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
@@ -20,7 +20,7 @@ _lr_goto_items = {'nl_opt':([0,],[1,]),'comma_opt':([19,],[24,]),'data_list':([7
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
    for _x,_y in zip(_v[0],_v[1]):
-       if not _x in _lr_goto: _lr_goto[_x] = { }
+       if not _lr_goto.has_key(_x): _lr_goto[_x] = { }
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [

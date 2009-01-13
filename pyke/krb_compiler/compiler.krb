@@ -73,12 +73,12 @@ file
 rule_decl
     use rule_decl($rb_name, None, $decl_line)
     when
-        $decl_line = "This_rule_base = engine.get_create('%s')" % $rb_name
+        $decl_line = "This_rule_base = engine.get_create(%r)" % $rb_name
 
 rule_decl_with_parent
     use rule_decl($rb_name, (parent, $parent, $excluded_symbols), $decl_line)
     when
-        $decl_line = "This_rule_base = engine.get_create('%s', '%s', %s)" % \
+        $decl_line = "This_rule_base = engine.get_create(%r, %r, %s)" % \
                          ($rb_name, $parent,
                           tuple(repr(sym) for sym in $excluded_symbols))
 
@@ -164,7 +164,7 @@ fc_premise
                     'POPINDENT',
                     'POPINDENT',),
         $next_clause_num = $clause_num + 1
-        $decl_lines = ("('%s', '%s'," % ($kb_name, $entity_name),
+        $decl_lines = ("(%r, %r," % ($kb_name, $entity_name),
                        ('INDENT', 1),
                          helpers.list_format($arg_patterns, '(', '),'),
                          "%s)," % $multi_match,
@@ -179,7 +179,7 @@ gen_fc_for_false
                     "with knowledge_base.Gen_once if index == %d \\" % \
                         $clause_num,
                     ('INDENT', 9),
-                      "else engine.lookup('%s', '%s', context," % \
+                      "else engine.lookup(%r, %r, context," % \
                           ($kb_name, $entity_name),
                       ('INDENT', 19),
                         "rule.foreach_patterns(%d)) \\" % $clause_num,
@@ -198,7 +198,7 @@ gen_fc_for_true
                    $clause_num, $fn_head)
     when
         $fn_head = (('STARTING_LINENO', $start_lineno),
-                    "with engine.lookup('%s', '%s', context, \\" % \
+                    "with engine.lookup(%r, %r, context, \\" % \
                         ($kb_name, $entity_name),
                     ('INDENT', 19),
                       "rule.foreach_patterns(%d)) \\" % $clause_num,
@@ -311,7 +311,7 @@ assertion
         ($pat_nums, $patterns_out) = \
             helpers.merge_patterns($patterns, $patterns_in)
         $fn_lines = (('STARTING_LINENO', $start_lineno),
-                     "engine.assert_('%s', '%s'," % ($kb_name, $entity_name),
+                     "engine.assert_(%r, %r," % ($kb_name, $entity_name),
                      ('INDENT', 15),
                      helpers.list_format(
                        ("rule.pattern(%d).as_data(context)" % pat_num
@@ -561,7 +561,7 @@ as_plan
                        (), ())
     when
         ($pat_num, $patterns_out) = \
-            helpers.merge_pattern("contexts.variable('%s')" % $pat_var_name,
+            helpers.merge_pattern("contexts.variable(%r)" % $pat_var_name,
                                   $patterns_in)
         !plan_bindings($rb_name, $rule_name, $clause_num, $pat_var_name,
                        $pat_num, $fn_head, $fn_tail)
@@ -575,7 +575,7 @@ plan_spec
                        (($step_num, $python_code),), $plan_vars_needed)
     when
         ($pat_num, $patterns_out) = \
-            helpers.merge_pattern("contexts.variable('%s')" % $plan_var_name,
+            helpers.merge_pattern("contexts.variable(%r)" % $plan_var_name,
                                   $patterns_in)
         !plan_bindings($rb_name, $rule_name, $clause_num, $plan_var_name,
                        $pat_num, $fn_head, $fn_tail)

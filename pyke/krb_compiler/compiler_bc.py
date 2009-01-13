@@ -144,7 +144,7 @@ def rule_decl(rule, arg_patterns, arg_context):
         rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
-                "This_rule_base = engine.get_create('%s')" % context.lookup_data('rb_name')):
+                "This_rule_base = engine.get_create(%r)" % context.lookup_data('rb_name')):
           context.end_save_all_undo()
           rule.rule_base.num_bc_rule_successes += 1
           yield
@@ -168,7 +168,7 @@ def rule_decl_with_parent(rule, arg_patterns, arg_context):
         rule.rule_base.num_bc_rules_matched += 1
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
-                "This_rule_base = engine.get_create('%s', '%s', %s)" % \
+                "This_rule_base = engine.get_create(%r, %r, %s)" % \
                                         (context.lookup_data('rb_name'), context.lookup_data('parent'),
                tuple(repr(sym) for sym in context.lookup_data('excluded_symbols')))):
           context.end_save_all_undo()
@@ -446,7 +446,7 @@ def fc_premise(rule, arg_patterns, arg_context):
                 context.end_save_all_undo()
                 mark4 = context.mark(True)
                 if rule.pattern(9).match_data(context, context,
-                        ("('%s', '%s'," % (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
+                        ("(%r, %r," % (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
                        ('INDENT', 1),
                        helpers.list_format(context.lookup_data('arg_patterns'), '(', '),'),
                        "%s)," % context.lookup_data('multi_match'),
@@ -483,7 +483,7 @@ def gen_fc_for_false(rule, arg_patterns, arg_context):
                "with knowledge_base.Gen_once if index == %d \\" % \
                                        context.lookup_data('clause_num'),
                ('INDENT', 9),
-               "else engine.lookup('%s', '%s', context," % \
+               "else engine.lookup(%r, %r, context," % \
                                          (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
                ('INDENT', 19),
                "rule.foreach_patterns(%d)) \\" % context.lookup_data('clause_num'),
@@ -519,7 +519,7 @@ def gen_fc_for_true(rule, arg_patterns, arg_context):
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 (('STARTING_LINENO', context.lookup_data('start_lineno')),
-               "with engine.lookup('%s', '%s', context, \\" % \
+               "with engine.lookup(%r, %r, context, \\" % \
                                        (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
                ('INDENT', 19),
                "rule.foreach_patterns(%d)) \\" % context.lookup_data('clause_num'),
@@ -903,7 +903,7 @@ def assertion(rule, arg_patterns, arg_context):
           mark2 = context.mark(True)
           if rule.pattern(1).match_data(context, context,
                   (('STARTING_LINENO', context.lookup_data('start_lineno')),
-                 "engine.assert_('%s', '%s'," % (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
+                 "engine.assert_(%r, %r," % (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
                  ('INDENT', 15),
                  helpers.list_format(
                  ("rule.pattern(%d).as_data(context)" % pat_num
@@ -1680,7 +1680,7 @@ def as_plan(rule, arg_patterns, arg_context):
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 \
-                           helpers.merge_pattern("contexts.variable('%s')" % context.lookup_data('pat_var_name'),
+                           helpers.merge_pattern("contexts.variable(%r)" % context.lookup_data('pat_var_name'),
                context.lookup_data('patterns_in'))):
           context.end_save_all_undo()
           flag_2 = False
@@ -1722,7 +1722,7 @@ def plan_spec(rule, arg_patterns, arg_context):
         mark1 = context.mark(True)
         if rule.pattern(0).match_data(context, context,
                 \
-                           helpers.merge_pattern("contexts.variable('%s')" % context.lookup_data('plan_var_name'),
+                           helpers.merge_pattern("contexts.variable(%r)" % context.lookup_data('plan_var_name'),
                context.lookup_data('patterns_in'))):
           context.end_save_all_undo()
           flag_2 = False
@@ -2985,8 +2985,7 @@ def populate(engine):
 
 from pyke.krb_compiler import helpers
 
-Krb_filename = '/home/bruce/python/workareas/sf.trunk/pyke/krb_compiler/compiler.krb'
-Krb_source_filename = 'compiler.krb'
+Krb_filename = '../compiler.krb'
 Krb_lineno_map = (
     ((15, 19), (24, 28)),
     ((23, 23), (30, 30)),

@@ -80,109 +80,95 @@ def dump(ast, f = sys.stderr, need_nl = False, indent = 0):
     f.write(')')
     return did_nl
 
-def compile(generated_root_pkg, generated_root_dir, filenames):
-    engine = knowledge_engine.engine(compiler_bc)
-    if not os.path.exists(generated_root_dir): os.mkdir(generated_root_dir)
-    init_file_path = os.path.join(generated_root_dir, '__init__.py')
-    if not os.path.exists(init_file_path): open(init_file_path, 'w').close()
-    for filename in filenames:
-        compile_file(engine, generated_root_pkg, generated_root_dir, filename)
+def to_relative(from_path, to_path):
+    '''
+        >>> to_relative('/a/b/c', '/a/b/d/e')
+        '../d/e'
+        >>> to_relative('/a/b/c', '/b/d/e')
+        '/b/d/e'
+        >>> to_relative('/a/b/c', '/a/b/c/e')
+        'e'
+    '''
+    from_path = os.path.abspath(from_path)
+    to_path = os.path.abspath(to_path)
+    prefix = ''
+    while os.path.join(from_path, to_path[len(from_path) + 1:]) != to_path:
+        new_from_path = os.path.dirname(from_path)
+        if new_from_path == from_path: return to_path
+        from_path = new_from_path
+        prefix = os.path.join(prefix, '..')
+    return os.path.join(prefix, to_path[len(from_path) + 1:])
 
-def compile_file(engine, generated_root_pkg, generated_root_dir, filename):
-    global pickle, kqb_parser, kfbparser
-    rb_name = os.path.basename(filename)
-    suffix = rb_name[-4:]
-    rb_name = rb_name[:-4]
-    if not knowledge_engine.Name_test.match(rb_name):
-        raise ValueError("compile: %s illegal as python identifier" % rb_name)
-    base_path = os.path.join(generated_root_dir, rb_name)
-    if suffix == '.krb':
-        fc_path = base_path + '_fc.py'
-        bc_path = base_path + '_bc.py'
-        plan_path = base_path + '_plans.py'
-        try:
-            ast = krbparser.parse(krbparser, filename)
-            #sys.stderr.write("got ast\n")
-            # dump(ast)
-            # sys.stderr.write('\n\n')
-            engine.reset()
-            engine.activate('compiler')
-            (fc_lines, bc_lines, plan_lines), plan = \
-                engine.prove_1('compiler', 'compile',
-                               (generated_root_pkg, rb_name, ast), 3)
-            krb_filename = os.path.abspath(filename)
-            if fc_lines:
-                sys.stderr.write("writing %s\n" % fc_path)
-                write_file(fc_lines +
-                           ("",
-                            "Krb_filename = '%s'" % krb_filename,
-                            "Krb_source_filename = '%s'" % filename,),
-                           fc_path)
-            elif os.path.lexists(fc_path): os.remove(fc_path)
-            if bc_lines:
-                sys.stderr.write("writing %s\n" % bc_path)
-                write_file(bc_lines +
-                           ("",
-                            "Krb_filename = '%s'" % krb_filename,
-                            "Krb_source_filename = '%s'" % filename,),
-                           bc_path)
-            elif os.path.lexists(bc_path): os.remove(bc_path)
-            if plan_lines:
-                sys.stderr.write("writing %s\n" % plan_path)
-                #sys.stderr.write("plan_lines:\n")
-                #for line in plan_lines:
-                #    sys.stderr.write("  " + repr(line) + "\n")
-                write_file(plan_lines +
-                           ("",
-                            "Krb_filename = '%s'" % krb_filename,
-                            "Krb_source_filename = '%s'" % filename,),
-                           plan_path)
-            elif os.path.lexists(plan_path): os.remove(plan_path)
-            #sys.stderr.write("done!\n")
-        except:
-            if os.path.lexists(fc_path): os.remove(fc_path)
-            if os.path.lexists(bc_path): os.remove(bc_path)
-            if os.path.lexists(plan_path): os.remove(plan_path)
-            raise
-    elif suffix == '.kfb':
-        try:
-            kfbparser
-        except NameError:
-            import cPickle as pickle
-            from pyke.krb_compiler import kfbparser
-        fbc_path = base_path + '.fbc'
-        try:
-            fb = kfbparser.parse(kfbparser, filename)
-            sys.stderr.write("writing %s\n" % fbc_path)
-            with open(fbc_path, 'wb') as f:
-                pickle.dump(pyke.version, f)
-                pickle.dump(filename, f)
-                pickle.dump(fb, f)
-        except:
-            if os.path.lexists(fbc_path): os.remove(fbc_path)
-            raise
-    elif suffix == '.kqb':
-        try:
-            kqb_parser
-        except NameError:
-            import cPickle as pickle
-            from pyke.krb_compiler import kqb_parser
-            import copy_reg
-            copy_reg.pickle(slice, lambda s: (slice, (s.start, s.stop, s.step)))
-        qbc_path = base_path + '.qbc'
-        try:
-            qb = kqb_parser.parse_kqb(filename)
-            sys.stderr.write("writing %s\n" % qbc_path)
-            with open(qbc_path, 'wb') as f:
-                pickle.dump(pyke.version, f)
-                pickle.dump(filename, f)
-                pickle.dump(qb, f)
-        except:
-            if os.path.lexists(qbc_path): os.remove(qbc_path)
-            raise
-    else:
-        raise ValueError("compile: filename, %s, must end with .krb or .kqb" %
-                         filename)
+def compile_krb(rb_name, generated_root_pkg, generated_root_dir, filename):
+    engine = knowledge_engine.engine(compiler_bc)
+    try:
+        fc_name = rb_name + '_fc.py'
+        bc_name = rb_name + '_bc.py'
+        plan_name = rb_name + '_plans.py'
+        fc_path = os.path.join(generated_root_dir, fc_name)
+        bc_path = os.path.join(generated_root_dir, bc_name)
+        plan_path = os.path.join(generated_root_dir, plan_name)
+        ast = krbparser.parse(krbparser, filename)
+        #sys.stderr.write("got ast\n")
+        # dump(ast)
+        # sys.stderr.write('\n\n')
+        engine.reset()
+        engine.activate('compiler')
+        (fc_lines, bc_lines, plan_lines), plan = \
+            engine.prove_1('compiler', 'compile',
+                           (generated_root_pkg, rb_name, ast), 3)
+        krb_filename = to_relative(generated_root_dir, filename)
+        ans = []
+        if fc_lines:
+            sys.stderr.write("writing %s\n" % fc_path)
+            write_file(fc_lines +
+                       ("",
+                        "Krb_filename = %r" % krb_filename,),
+                       fc_path)
+            ans.append(fc_name)
+        elif os.path.lexists(fc_path): os.remove(fc_path)
+        if bc_lines:
+            sys.stderr.write("writing %s\n" % bc_path)
+            write_file(bc_lines +
+                       ("",
+                        "Krb_filename = %r" % krb_filename,),
+                       bc_path)
+            ans.append(bc_name)
+        elif os.path.lexists(bc_path): os.remove(bc_path)
+        if plan_lines:
+            sys.stderr.write("writing %s\n" % plan_path)
+            #sys.stderr.write("plan_lines:\n")
+            #for line in plan_lines:
+            #    sys.stderr.write("  " + repr(line) + "\n")
+            write_file(plan_lines +
+                       ("",
+                        "Krb_filename = %r" % krb_filename,),
+                       plan_path)
+            ans.insert(len(ans) - 1, plan_name)  # want this loaded before _bc
+        elif os.path.lexists(plan_path): os.remove(plan_path)
+        #sys.stderr.write("done!\n")
+        return ans
+    except:
+        if os.path.lexists(fc_path): os.remove(fc_path)
+        if os.path.lexists(bc_path): os.remove(bc_path)
+        if os.path.lexists(plan_path): os.remove(plan_path)
+        raise
+
+def compile_kfb(filename):
+    global kfbparser
+    try:
+        kfbparser
+    except NameError:
+        from pyke.krb_compiler import kfbparser
+    return kfbparser.parse(kfbparser, filename)
+
+def compile_kqb(filename):
+    global kqb_parser
+    try:
+        kqb_parser
+    except NameError:
+        from pyke.krb_compiler import kqb_parser
+    return kqb_parser.parse_kqb(filename)
 
 def write_file(lines, filename):
     with open(filename, 'w') as f:

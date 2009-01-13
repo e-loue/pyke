@@ -62,12 +62,20 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="examples">
 <h1 class="title">Examples</h1>
-<p>Several examples are included to help you become familiar with Pyke.  If you
-did an svn checkout, these are all included in the <tt class="docutils literal"><span class="pre">examples</span></tt> directory and
-should already be on your PYTHON PATH.</p>
+<p>Several examples are included to help you become familiar with Pyke.  These
+are all in an <tt class="docutils literal"><span class="pre">examples</span></tt> directory, which forms the top-level Python package
+for importing:</p>
+<pre class="literal-block">
+&gt;&gt;&gt; from examples.family_relations import test
+&gt;&gt;&gt; test.bc_test()
+</pre>
+<p>Thus the directory containing the <tt class="docutils literal"><span class="pre">examples</span></tt> directory must be on your
+Python path.</p>
+<p>If you did an svn checkout, the entire source directory should already be on
+your Python path in order to import pyke, so you're all set!</p>
 <p>If you used easy_install for Pyke, you'll need to download the pyke_examples
 tar file separately <a class="reference" href="http://sourceforge.net/project/showfiles.php?group_id=207724">here</a> and then expand the tar file in a directory on your
-PYTHON PATH.</p>
+Python path.</p>
 <p>Each example is in its own sub-directory and has a README file to get you
 started.  They all have <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a> and a Python module to run the example
 that also demonstrates <a class="reference" href="using_pyke.html">how to call Pyke</a> from your Python program.</p>

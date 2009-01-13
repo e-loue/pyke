@@ -3,13 +3,11 @@
 # test.py
 
 from __future__ import with_statement
-import os.path
 from pyke import knowledge_engine
 from pyke import krb_traceback 
 
 def run(pantry, capacity):
-    engine = knowledge_engine.engine(os.path.dirname(__file__),
-                                     'examples.knapsack.compiled_krb')
+    engine = knowledge_engine.engine('examples.knapsack')
     engine.activate('knapsack')
     max = 0
     ans = None

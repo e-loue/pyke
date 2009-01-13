@@ -52,10 +52,8 @@ class trace_cursor(object):
 
 def init(db_connection, trace_sql=False):
     global Engine, Db_connection, Db_cursor
-    my_path = os.path.dirname(__file__)
-    Engine = knowledge_engine.engine((my_path,
-                                      os.path.join(my_path, '../sqlgen')),
-                                     'examples.web_framework.compiled_krb')
+    Engine = knowledge_engine.engine('examples.sqlgen',
+                                     'examples.web_framework')
     Db_connection = db_connection
     Db_cursor = db_connection.cursor()
     if trace_sql: Db_cursor = trace_cursor(Db_cursor)

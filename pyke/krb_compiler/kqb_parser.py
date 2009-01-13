@@ -54,6 +54,7 @@ class kqb_parser(object):
         ) [ \t\f\r\v]* (?: \#.* )? ''', re.UNICODE | re.VERBOSE)
     pushed_token = None
     def __init__(self, f):
+        # f needs readline() and name.
         self.f = f
         self.lineno = 0
         self.line = ''
@@ -316,11 +317,11 @@ class kqb_parser(object):
             >>> do(r'/reg\exp/ bob')
             <regexp /reg\exp/>
             >>> do(r'"msg"/reg\exp/ bob')
-            <regexp "msg"/reg\exp/>
+            <regexp 'msg'/reg\exp/>
             >>> do(r'[prompt]/reg\exp/ bob')
             <regexp [prompt]/reg\exp/>
             >>> do(r'"msg"[prompt]/reg\exp/ bob')
-            <regexp "msg"[prompt]/reg\exp/>
+            <regexp 'msg'[prompt]/reg\exp/>
             >>> do(r"44 = id")
             <map 44 = 'id'>
             >>> do(r"-5 bob")

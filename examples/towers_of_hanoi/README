@@ -14,6 +14,6 @@ is so to the reader! :-)
 This would mean that 5 discs has 6,563,711,232 solutions, but I haven't run
 this to verify the answer...
 
-    >>> import test
+    >>> from examples.towers_of_hanoi import test
     >>> test.test(num_disks)
 

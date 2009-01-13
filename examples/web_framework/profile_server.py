@@ -6,7 +6,7 @@ import simple_server
 
 def run(port=8080, logging=False, trace_sql=False, db_engine='sqlite3'):
     cProfile.runctx(
-        'simple_server.run(port=%d, logging=%s, trace_sql=%s, db_engine="%s")'
+        'simple_server.run(port=%d, logging=%s, trace_sql=%s, db_engine=%r)'
             % (port, logging, trace_sql, db_engine),
         globals(), locals(), 'profile.out')
 

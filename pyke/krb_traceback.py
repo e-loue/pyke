@@ -110,7 +110,9 @@ def convert_tb(extracted_tb):
                         if krb_lineno is not None:
                             if not ans: ans = batch
                             batch = []
-                            krb_filename = module.Krb_filename
+                            krb_filename = \
+                                os.path.join(os.path.dirname(module.__file__),
+                                             module.Krb_filename)
                             linecache.checkcache(krb_filename)
                             line = linecache.getline(krb_filename, krb_lineno)
                             if line: line = line.strip()

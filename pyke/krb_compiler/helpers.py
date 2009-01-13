@@ -139,7 +139,7 @@ def goal(rb_name, rule_name,
                      )
     goal_decl_lines = (
         "",
-        "bc_rule.bc_rule('%s', This_rule_base, '%s'," % (rule_name, goal_name),
+        "bc_rule.bc_rule(%r, This_rule_base, %r," % (rule_name, goal_name),
         ("INDENT", 16),
         "%s, %s," % (rule_name, plan_fn_name),
     ) + list_format(pattern_args, "(", "),")

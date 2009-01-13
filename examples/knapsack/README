@@ -23,9 +23,10 @@ test.py
 
         The final example on page 36 at the site above would be:
 
-        run((('bread',4,9200),
-             ('pasta',2,4500),
-             ('peanutButter',1,6700),
-             ('babyFood',3,6900)),
-            4)
+        >>> from examples.knapsack import test
+        >>> test.run((('bread',4,9200),
+                      ('pasta',2,4500),
+                      ('peanutButter',1,6700),
+                      ('babyFood',3,6900)),
+                     4)
 

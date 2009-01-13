@@ -57,8 +57,12 @@ fi
 if [ $NUM_ERRORS -eq 0 ]
 then
     echo Testing compiler.krb
-    rm -rf compiled_krb
-    if "$PYTHON" -c "from pyke import krb_compiler; krb_compiler.compile('compiled_krb', 'compiled_krb', ('compiler.krb',))"
+    if [ ! -d compiled_krb ]
+    then
+        mkdir compiled_krb
+    fi
+    rm -f compiled_krb/compiler_bc.py*
+    if "$PYTHON" -c "from pyke import krb_compiler; krb_compiler.compile_krb('compiler', 'compiled_krb', 'compiled_krb', 'compiler.krb')"
     then
         # Ignore differences in Krb_filename from being compiled on different
         # boxes...
@@ -73,7 +77,7 @@ then
             echo "krb_compiler/compiler.krb not compiled!" >> $ERRORFILES
             NUM_ERRORS=$(($NUM_ERRORS + 1))
         else
-            rm -rf compiled_krb
+            rm -f compiled_krb/compiler_bc.py*
         fi
     else
         echo "krb_compiler/compiler.krb" >> $ERRORFILES

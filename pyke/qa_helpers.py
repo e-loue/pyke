@@ -29,7 +29,7 @@ class regexp(object):
     r'''
         >>> m = regexp(ur'(hi)\s*there', u'the msg', u'the prompt')
         >>> m
-        <regexp "the msg"[the prompt]/(hi)\s*there/>
+        <regexp u'the msg'[the prompt]/(hi)\s*there/>
         >>> m.msg
         u'the msg'
         >>> m.prompt
@@ -45,9 +45,9 @@ class regexp(object):
     def __repr__(self):
         if self.msg:
             if self.prompt:
-                return '<regexp "%s"[%s]/%s/>' % \
+                return '<regexp %r[%s]/%s/>' % \
                        (self.msg, str(self.prompt), self.pattern)
-            return '<regexp "%s"/%s/>' % (self.msg, self.pattern)
+            return '<regexp %r/%s/>' % (self.msg, self.pattern)
         if self.prompt:
             return '<regexp [%s]/%s/>' % (self.prompt, self.pattern)
         return '<regexp /%s/>' % self.pattern

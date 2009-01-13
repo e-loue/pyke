@@ -27,7 +27,7 @@ example.krb
 
 test.py
     Driver program.  Run:
-        >>> import test
+        >>> from examples.family_relations import test
         >>> test.fc_test([person1='bruce'])
         >>> test.bc_test([person1='bruce'])
         >>> test.bc2_test([person1='bruce'])
