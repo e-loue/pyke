@@ -2,7 +2,7 @@
 
 r"""
 
-    >>> import test
+    >>> from Test.CanNotProve import test
     >>> test.dotests()
 
 """

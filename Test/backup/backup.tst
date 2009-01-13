@@ -2,7 +2,7 @@
 
 r"""
 
-    >>> import test
+    >>> from Test.backup import test
     >>> test.test()
     Traceback (most recent call last):
         ...

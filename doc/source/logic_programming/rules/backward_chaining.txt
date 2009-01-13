@@ -249,7 +249,7 @@ Running the Example
 ========================
 
     >>> from pyke import knowledge_engine
-    >>> engine = knowledge_engine.engine('examples')
+    >>> engine = knowledge_engine.engine('doc.examples')
     >>> engine.assert_('family', 'son_of', ('tim', 'thomas'))
     >>> engine.assert_('family', 'son_of', ('fred', 'thomas'))
     >>> engine.assert_('family', 'son_of', ('bruce', 'thomas'))

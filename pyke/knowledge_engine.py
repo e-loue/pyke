@@ -57,48 +57,62 @@ class engine(object):
             kws can be: load_fc, load_bc, load_fb and load_qb.
             They all default to True.
         '''
+        for keyword in kws.iterkeys():
+            if keyword not in ('load_fc', 'load_bc', 'load_fb', 'load_qb'):
+                raise TypeError("engine.__init__() got an unexpected keyword "
+                                "argument %r" %
+                                  keyword)
         self.knowledge_bases = {}
         self.rule_bases = {}
         special.create_for(self)
 
         if paths != ('*test*',):
-            if len(paths) == 1 and isinstance(paths[0], types.ModuleType):
+            if len(paths) == 1 and isinstance(paths[0], tuple) and \
+               paths[0][0] == '*direct*' and \
+               isinstance(paths[0][1], types.ModuleType):
                 # secret hook for the compiler to initialize itself (so the
                 # compiled python module can be in an egg).
-                paths[0].populate(self)
+                paths[0][1].populate(self)
             else:
-                for path in paths:
-                    target_package = self._init_path(path)
+                target_pkgs = {}  # {target_package_name: target_pkg}
+                for path in paths: self._init_path(path, target_pkgs)
+                for target_package in target_pkgs.itervalues():
+                    if debug:
+                        print >>sys.stderr, "target_package:", target_package
                     target_package.compile(self)
                     target_package.write()
                     target_package.load(self, **kws)
         for kb in self.knowledge_bases.itervalues(): kb.init2()
         for rb in self.rule_bases.itervalues(): rb.init2()
-    def _init_path(self, path):
+    def _init_path(self, path, target_pkgs):
         if debug: print >> sys.stderr, "engine._init_path:", path
         # Does target_pkg.add_source_package.
-        # Returns the target_pkg object.
+        source_package_name = None
+        target_package_name = '.compiled_krb'
+        if isinstance(path, (tuple, list)):
+            path, target_package_name = path
         if isinstance(path, types.StringTypes):
-            source_package = path
-            target_package_name = '.compiled_krb'
-        else:
-            source_package, target_package_name = path
+            source_package_name = path
+        elif isinstance(path, types.ModuleType):
+            source_package_name = path.__name__
         if debug:
-            print >> sys.stderr, "_init_path source_package:", source_package
+            print >> sys.stderr, "_init_path source_package_name:", \
+                                 source_package_name
             print >> sys.stderr, "_init_path target_package_name:", \
                                  target_package_name
-        if source_package is None:
+        if source_package_name is None:
             assert target_package_name[0] != '.', \
                    "engine: relative target, %s, illegal " \
                    "with no source package" % \
                        target_package_name
-            # This import must succeed!
-            return getattr(target_pkg.import_(target_package_name + 
-                                                '.compiled_pyke_files'),
-                           'targets')
-        if isinstance(source_package, types.StringTypes):
-            source_package = target_pkg.import_(source_package)
-        source_package_name = source_package.__name__
+            if target_package_name not in target_pkgs:
+                # This import must succeed!
+                tp = getattr(target_pkg.import_(target_package_name + 
+                                                  '.compiled_pyke_files'),
+                             'targets')
+                tp.reset()
+                target_pkgs[target_package_name] = tp
+            return
         if debug:
             print >> sys.stderr, "_init_path source_package_name:", \
                                  source_package_name
@@ -116,59 +130,67 @@ class engine(object):
         if debug:
             print >> sys.stderr, "_init_path target_package_name:", \
                                  target_package_name
-        target_name = target_package_name + '.compiled_pyke_files'
-        if debug: print >> sys.stderr, "_init_path target_name:", target_name
-        try:
-            # See if compiled_pyke_files already exists.
-            ans = getattr(target_pkg.import_(target_name), 'targets')
-        except ImportError:
-            if debug: print >> sys.stderr, "_init_path: no target module"
-            # Create a new target_pkg.
+        if target_package_name in target_pkgs:
+            tp = target_pkgs[target_package_name]
+        else:
+            target_name = target_package_name + '.compiled_pyke_files'
+            if debug:
+                print >> sys.stderr, "_init_path target_name:", target_name
             try:
-                # See if the target_package exists.
-                target_package_dir = \
-                    os.path.dirname(target_pkg.import_(target_package_name)
-                                              .__file__)
+                # See if compiled_pyke_files already exists.
+                tp = getattr(target_pkg.import_(target_name), 'targets')
             except ImportError:
-                if debug: print >> sys.stderr, "_init_path: no target package"
-                # Create the target_package.
-                last_dot = target_package_name.rfind('.')
-                if last_dot < 0:
-                    package_parent_dir = '.'
-                else:
-                    package_parent_dir = \
-                        os.path.dirname(
+                if debug: print >> sys.stderr, "_init_path: no target module"
+                # Create a new target_pkg object.
+                try:
+                    # See if the target_package exists.
+                    target_package_dir = \
+                        os.path.dirname(target_pkg.import_(target_package_name)
+                                                  .__file__)
+                except ImportError:
+                    if debug:
+                        print >> sys.stderr, "_init_path: no target package"
+                    # Create the target_package.
+                    last_dot = target_package_name.rfind('.')
+                    if last_dot < 0:
+                        package_parent_dir = '.'
+                    else:
+                        package_parent_dir = \
+                          os.path.dirname(
                             # This import better work!
                             target_pkg.import_(target_package_name[:last_dot]) \
                                       .__file__)
-                if debug:
-                    print >> sys.stderr, "_init_path package_parent_dir:", \
-                                         package_parent_dir
-                target_package_dir = \
-                    os.path.join(package_parent_dir,
-                                 target_package_name[last_dot + 1:])
-                if debug:
-                    print >> sys.stderr, "_init_path target_package_dir:", \
-                                         target_package_dir
-                if not os.path.lexists(target_package_dir):
                     if debug:
-                        print >> sys.stderr, "_init_path: mkdir", \
+                        print >> sys.stderr, "_init_path package_parent_dir:", \
+                                             package_parent_dir
+                    target_package_dir = \
+                        os.path.join(package_parent_dir,
+                                     target_package_name[last_dot + 1:])
+                    if debug:
+                        print >> sys.stderr, "_init_path target_package_dir:", \
                                              target_package_dir
-                    os.mkdir(target_package_dir)
-                init_filepath = os.path.join(target_package_dir, '__init__.py')
-                if debug:
-                    print >> sys.stderr, "_init_path init_filepath:", \
-                                         init_filepath
-                if not os.path.lexists(init_filepath):
+                    if not os.path.lexists(target_package_dir):
+                        if debug:
+                            print >> sys.stderr, "_init_path: mkdir", \
+                                                 target_package_dir
+                        os.mkdir(target_package_dir)
+                    init_filepath = \
+                        os.path.join(target_package_dir, '__init__.py')
                     if debug:
-                        print >> sys.stderr, "_init_path: creating", \
+                        print >> sys.stderr, "_init_path init_filepath:", \
                                              init_filepath
-                    open(init_filepath, 'w').close()
-            ans = target_pkg.target_pkg(target_name,
-                                        os.path.join(target_package_dir,
-                                                     'compiled_pyke_files.py'))
-        ans.add_source_package(source_package_name)
-        return ans
+                    if not os.path.lexists(init_filepath):
+                        if debug:
+                            print >> sys.stderr, "_init_path: creating", \
+                                                 init_filepath
+                        open(init_filepath, 'w').close()
+                tp = target_pkg.target_pkg(
+                       target_name,
+                       os.path.join(target_package_dir,
+                                    'compiled_pyke_files.py'))
+            tp.reset()
+            target_pkgs[target_package_name] = tp
+        tp.add_source_package(source_package_name)
     def get_ask_module(self):
         if not hasattr(self, 'ask_module'):
             from pyke import ask_tty

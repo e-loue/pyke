@@ -1,8 +1,9 @@
 # test.tst
 
     >>> from Test import test
-    >>> import family
-    >>> test.init()
+    >>> import Test.first
+    >>> from Test.first import family
+    >>> test.init(Test.first)
     >>> family.init(test.Engine)
 
     son_of('art', 'art2', 'nana')

@@ -100,7 +100,7 @@ def to_relative(from_path, to_path):
     return os.path.join(prefix, to_path[len(from_path) + 1:])
 
 def compile_krb(rb_name, generated_root_pkg, generated_root_dir, filename):
-    engine = knowledge_engine.engine(compiler_bc)
+    engine = knowledge_engine.engine(('*direct*', compiler_bc))
     try:
         fc_name = rb_name + '_fc.py'
         bc_name = rb_name + '_bc.py'
@@ -120,7 +120,8 @@ def compile_krb(rb_name, generated_root_pkg, generated_root_dir, filename):
         krb_filename = to_relative(generated_root_dir, filename)
         ans = []
         if fc_lines:
-            sys.stderr.write("writing %s\n" % fc_path)
+            sys.stderr.write("writing [%s]/%s\n" %
+                               (generated_root_pkg, os.path.basename(fc_path)))
             write_file(fc_lines +
                        ("",
                         "Krb_filename = %r" % krb_filename,),
@@ -128,7 +129,8 @@ def compile_krb(rb_name, generated_root_pkg, generated_root_dir, filename):
             ans.append(fc_name)
         elif os.path.lexists(fc_path): os.remove(fc_path)
         if bc_lines:
-            sys.stderr.write("writing %s\n" % bc_path)
+            sys.stderr.write("writing [%s]/%s\n" %
+                               (generated_root_pkg, os.path.basename(bc_path)))
             write_file(bc_lines +
                        ("",
                         "Krb_filename = %r" % krb_filename,),
@@ -136,7 +138,9 @@ def compile_krb(rb_name, generated_root_pkg, generated_root_dir, filename):
             ans.append(bc_name)
         elif os.path.lexists(bc_path): os.remove(bc_path)
         if plan_lines:
-            sys.stderr.write("writing %s\n" % plan_path)
+            sys.stderr.write("writing [%s]/%s\n" %
+                               (generated_root_pkg,
+                                os.path.basename(plan_path)))
             #sys.stderr.write("plan_lines:\n")
             #for line in plan_lines:
             #    sys.stderr.write("  " + repr(line) + "\n")

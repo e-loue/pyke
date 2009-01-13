@@ -50,9 +50,6 @@ class target_pkg(object):
         if debug:
             print >> sys.stderr, "target_pkg:", self.package_name, self.filename
         self.loader = loader
-        self.dirty = False
-        self.source_packages = {}  # {source_package_name: source_package_dir}
-        self.compiled_targets = set([])  # set of target_filename
 
         if pyke_version == pyke.version:
             # {(source_package_name, source_filepath):
@@ -64,6 +61,14 @@ class target_pkg(object):
             raise AssertionError("%s: wrong version of pyke, "
                                  "running %s, compiled for %s" % 
                                  (pyke.version, pyke_version))
+    def reset(self):
+        ''' This should be called once by engine.__init__ prior to calling
+            add_source_package.
+        '''
+        self.dirty = False
+        self.source_packages = {}  # {source_package_name: source_package_dir}
+        self.compiled_targets = set([])  # set of target_filename
+        self.rb_names = set()
     def add_source_package(self, source_package_name):
         if debug:
             print >> sys.stderr, "target_pkg.add_source_package:", \
@@ -106,6 +111,9 @@ class target_pkg(object):
         if not Name_test.match(rb_name):
             raise ValueError("%s: %s illegal as python identifier" %
                              (source_filepath, rb_name))
+        if rb_name in self.rb_names:
+            raise ValueError("%s: duplicate knowledge base name" % rb_name)
+        self.rb_names.add(rb_name)
         key = source_package_name, source_filepath
         if debug: print >> sys.stderr, "key:", key
         if self.sources.get(key, (0,))[0] < source_mtime:
@@ -149,7 +157,7 @@ class target_pkg(object):
         try:
             fbc_name = os.path.basename(source_filename)[:-4] + '.fbc'
             fbc_path = os.path.join(self.directory, fbc_name)
-            pickle_it(krb_compiler.compile_kfb(source_filename), fbc_path)
+            self.pickle_it(krb_compiler.compile_kfb(source_filename), fbc_path)
             return (fbc_name,)
         except:
             if os.path.lexists(fbc_path): os.remove(fbc_path)
@@ -159,7 +167,7 @@ class target_pkg(object):
         try:
             qbc_name = os.path.basename(source_filename)[:-4] + '.qbc'
             qbc_path = os.path.join(self.directory, qbc_name)
-            pickle_it(krb_compiler.compile_kqb(source_filename), qbc_path)
+            self.pickle_it(krb_compiler.compile_kqb(source_filename), qbc_path)
             return (qbc_name,)
         except:
             if os.path.lexists(qbc_path): os.remove(qbc_path)
@@ -167,7 +175,9 @@ class target_pkg(object):
     def write(self):
         if debug: print >> sys.stderr, "target_pkg.write"
         if self.dirty:
-            sys.stderr.write('writing %s\n' % self.filename)
+            sys.stderr.write('writing [%s]/%s\n' % 
+                               (self.package_name,
+                                os.path.basename(self.filename)))
             with open(self.filename, 'w') as f:
                 f.write("# compiled_pyke_files.py\n\n")
                 f.write("from pyke import target_pkg\n\n")
@@ -249,10 +259,16 @@ class target_pkg(object):
         if self.loader:
             import contextlib
             import StringIO
+            top_pkg_path = \
+                os.path.dirname(sys.modules[self.package_name.split('.')[0]]
+                                   .__file__)
+            egg_path = os.path.dirname(top_pkg_path)
+            assert filename.startswith(egg_path)
             ctx_lib = \
                 contextlib.closing(
-                    StringIO.StringIO(self.loader.get_data(filename)))
-            # FIX: Figure out correct filename relative to top of zip file!
+                    StringIO.StringIO(
+                        self.loader.get_data(filename[len(egg_path) + 1:])))
+                        # ...   + 1 to drop the '/' too.
         else:
             ctx_lib = open(os.path.join(self.directory, filename), 'rb')
         with ctx_lib as f:
@@ -262,6 +278,19 @@ class target_pkg(object):
                                      "%s, expected %s" %
                                        (filename, version, pyke.version))
             pickle.load(f).register(engine)
+    def pickle_it(self, obj, path):
+        global pickle
+        try:
+            pickle
+        except NameError:
+            import cPickle as pickle
+            import copy_reg
+            copy_reg.pickle(slice, lambda s: (slice, (s.start, s.stop, s.step)))
+        sys.stderr.write("writing [%s]/%s\n" %
+                           (self.package_name, os.path.basename(path)))
+        with open(path, 'wb') as f:
+            pickle.dump(pyke.version, f)
+            pickle.dump(obj, f)
 
 def _raise_exc(exc): raise exc
 
@@ -273,19 +302,6 @@ def import_(modulename):
     for comp in modulename.split('.')[1:]:
         mod = getattr(mod, comp)
     return mod
-
-def pickle_it(obj, path):
-    global pickle
-    try:
-        pickle
-    except NameError:
-        import cPickle as pickle
-        import copy_reg
-        copy_reg.pickle(slice, lambda s: (slice, (s.start, s.stop, s.step)))
-    sys.stderr.write("writing %s\n" % path)
-    with open(path, 'wb') as f:
-        pickle.dump(pyke.version, f)
-        pickle.dump(obj, f)
 
 def test():
     import doctest
