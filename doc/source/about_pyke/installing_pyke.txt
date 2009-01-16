@@ -136,7 +136,7 @@ documentation itself as ``pyke_doc_html-<release>.zip`` file from the
 Subversion Directories
 ==========================
 
-To check out the entire project (including the example and this documentation)
+To check out the entire project (including the examples_ and this documentation)
 into a directory called *foobar*::
 
     $ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/trunk foobar

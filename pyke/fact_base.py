@@ -26,7 +26,7 @@
     and special).
 
         >>> from pyke import knowledge_engine
-        >>> engine = knowledge_engine.engine('*test*')
+        >>> engine = knowledge_engine.engine()
         >>> fb = fact_base(engine, 'fb_name')
         >>> fb
         <fact_base fb_name>

@@ -40,9 +40,8 @@ REBUILD compiler_bc.py
     $ cd ../../pyke/krb_compiler
     $ python
     >>> from pyke import krb_compiler
-    >>> krb_compiler.compile('compiled_krb', 'compiled_krb', ('compiler.krb',))
-    $ cp compiled_krb/compiler_bc.py .
-    $ rm -rf compiled_krb
+    >>> krb_compiler.compile_krb('compiler', 'compiled_krb', 'compiled_krb', 'compiler.krb'))
+    $ mv compiled_krb/compiler_bc.py .
 
 COMMIT SVN UPDATES
 

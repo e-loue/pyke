@@ -135,9 +135,8 @@ In pyke/krb_compiler:
 
     $ python2.5
     >>> from pyke import krb_compiler
-    >>> krb_compiler.compile('compiled_krb', 'compiled_krb', ('compiler.krb',))
-    $ cp compiled_krb/compiler_bc.py .
-    $ rm -rf compiled_krb
+    >>> krb_compiler.compile_krb('compiler', 'compiled_krb', 'compiled_krb', 'compiler.krb')
+    $ mv compiled_krb/compiler_bc.py .
 
 COMPILING THE DOCUMENTATION:
 
@@ -170,7 +169,7 @@ To regenerate the html:
     $ bin/gen_html
 
 This regenerates everything from doc/source into doc/html.  It takes about
-8 seconds to run.
+9 seconds to run.
 
 If you want to run doctest on all of the *.txt files in doc/source:
 

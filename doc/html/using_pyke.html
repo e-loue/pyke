@@ -62,41 +62,68 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="using-pyke">
 <h1 class="title">Using Pyke</h1>
-<p>This describes how to use Pyke from within your Python program.</p>
+<p>This describes how to call Pyke from within your Python program.</p>
 <div class="section">
 <h2><a id="initializing-pyke" name="initializing-pyke">Initializing Pyke</a></h2>
 <p>There are two steps to initializing a Pyke knowledge engine:</p>
 <dl class="docutils">
-<dt>knowledge_engine.engine(paths = ('.',), generated_root_pkg = 'compiled_krb', load_fc = True, load_bc = True, load_fb = True, load_qb = True)</dt>
+<dt>knowledge_engine.engine(*paths, **kws)</dt>
 <dd><p class="first">The Pyke inference engine is offered as a class so that you can
 instantiate multiple copies of it with different rule bases to accomplish
-different tasks.
-Once you have a <tt class="docutils literal"><span class="pre">knowledge_engine.engine</span></tt> object; generally, all of
+different tasks.</p>
+<p>Once you have a <tt class="docutils literal"><span class="pre">knowledge_engine.engine</span></tt> object; generally, all of
 the functions that you need are provided directly by this object:</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
-&gt;&gt;&gt; my_engine = knowledge_engine.engine('examples')
+&gt;&gt;&gt; my_engine = knowledge_engine.engine('doc.examples')
 </pre>
-<p>This expects either a single directory or a sequence of directories as
-the <tt class="docutils literal"><span class="pre">paths</span></tt> argument.  It recursively walks each directory looking
-for Pyke source files (<a class="reference" href="pyke_syntax/kfb_syntax.html">.kfb files</a>, <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a>, and <a class="reference" href="pyke_syntax/kqb_syntax.html">.kqb files</a>).
-Each source file that it finds is compiled, if out of date, and then
-imported (depending on <tt class="docutils literal"><span class="pre">load_fc</span></tt>, <tt class="docutils literal"><span class="pre">load_bc</span></tt>, <tt class="docutils literal"><span class="pre">load_fb</span></tt> and
-<tt class="docutils literal"><span class="pre">load_qb</span></tt>).  This causes all of the <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a> to be loaded and made
-ready to <a class="reference" href="using_pyke.html#setting-up-each-case">activate</a>.</p>
-<p>All generated Python source files and pickle files are placed in the
-<tt class="docutils literal"><span class="pre">generated_root_pkg</span></tt>.  By default, this is the package &quot;compiled_krb&quot;
-in the program's current working directory.  The <tt class="docutils literal"><span class="pre">generated_root_pkg</span></tt>
-may be a dotted module path.  In this case, the module path must be on
-Python's search path for modules.</p>
-<p>The last component of the <tt class="docutils literal"><span class="pre">generated_root_pkg</span></tt> will be created
-automatically if it does not already exist.</p>
-<p>You probably want to add <tt class="docutils literal"><span class="pre">compiled_krb</span></tt> to your subversion
-<tt class="docutils literal"><span class="pre">global-ignores</span></tt> option.</p>
-<p class="last">If you change some of your Pyke source files, you can create a new engine
+<p>Pyke requires that all Pyke source files be placed (either directly or
+indirectly) under a Python <a class="reference" href="http://www.python.org/doc/essays/packages.html">package</a> directory.  These packages must be
+on Python's search path for modules, and the directory for each dotted
+name must include an <tt class="docutils literal"><span class="pre">__init__.py</span></tt> file.</p>
+<p>Each <tt class="docutils literal"><span class="pre">paths</span></tt> argument represents a different Python package directory to
+search for Pyke source files.  These source packages may be passed either
+as package names (as a string in Python's standard dotted notation), or as
+the packages themselves.  Thus, the example above could also be written:</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; from doc import examples
+&gt;&gt;&gt; my_engine = knowledge_engine.engine(examples)
+</pre>
+<p>Pyke recursively walks each source package directory looking for Pyke
+source files (<a class="reference" href="pyke_syntax/kfb_syntax.html">.kfb files</a>, <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a>, and <a class="reference" href="pyke_syntax/kqb_syntax.html">.kqb files</a>).  Each
+source file that it finds is compiled, if out of date, and then imported
+(depending on the keyword arguments, see below).  This causes all of the
+<a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a> to be loaded and made ready to <a class="reference" href="using_pyke.html#setting-up-each-case">activate</a>.</p>
+<p>If you change some of your Pyke source files, you can create a new engine
 object to compile and reload the generated Python modules without
 restarting your program.  But note that you'll need to rerun the
 <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> calls that you made outside of your <a class="reference" href="pyke_syntax/kfb_syntax.html">.kfb files</a>.</p>
+<p>All of the Python source files and pickle files generated from each source
+package are placed, by default, in a <tt class="docutils literal"><span class="pre">compiled_krb</span></tt> package directly
+subordinate to that source package.  You may specify a different
+destination package for any source package by passing that source package
+along with the destination package name as a 2-tuple.  The destination
+package name may be specified as an absolute Python module path; or as a
+relative path (with leading dots), relative to the source package.  Thus,
+specifying the default destination explicitly would look like:</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine = knowledge_engine.engine(('doc.examples', '.compiled_krb'))
+</pre>
+<p>You may specify the same destination package for multiple source packages.</p>
+<p>The last component of the destination package will be created automatically
+if it does not already exist.</p>
+<p>If you use the default <tt class="docutils literal"><span class="pre">.compiled_krb</span></tt>, you probably want to add
+<tt class="docutils literal"><span class="pre">compiled_krb</span></tt> to your subversion <tt class="docutils literal"><span class="pre">global-ignores</span></tt> option.</p>
+<p>There are four optional keyword arguments that you may also pass to the
+<tt class="docutils literal"><span class="pre">engine</span></tt> constructor:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">load_fc</span></tt> -- load forward-chaining rules</li>
+<li><tt class="docutils literal"><span class="pre">load_bc</span></tt> -- load backward-chaining rules</li>
+<li><tt class="docutils literal"><span class="pre">load_fb</span></tt> -- load fact bases and</li>
+<li><tt class="docutils literal"><span class="pre">load_qb</span></tt> -- load question bases</li>
+</ul>
+<p class="last">These parameters must be passed as keyword parameters.  They all default
+to <tt class="docutils literal"><span class="pre">True</span></tt>.</p>
 </dd>
 <dt><em>some_engine</em>.add_universal_fact(kb_name, fact_name, arguments)</dt>
 <dd><p class="first">The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference" href="knowledge_bases/fact_bases.html#facts">fact</a>.  These
@@ -153,9 +180,9 @@ son_of('bruce', 'thomas')
 son_of('david', 'bruce')
 </pre>
 <p>There is no difference within the <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a> of how universal facts
-verses specific facts are used.  The only difference between the two
-types of facts is that the specific facts are deleted when a <tt class="docutils literal"><span class="pre">reset</span></tt> is
-done.</p>
+verses case specific facts are used.  The only difference between the two
+types of facts is that the case specific facts are deleted when a <tt class="docutils literal"><span class="pre">reset</span></tt>
+is done.</p>
 <pre class="last doctest-block">
 &gt;&gt;&gt; my_engine.reset()
 &gt;&gt;&gt; my_engine.get_kb('family').dump_specific_facts()
@@ -294,7 +321,7 @@ Python functions between subgoal proofs.</p>
 &gt;&gt;&gt; from pyke import knowledge_engine
 &gt;&gt;&gt; from pyke import krb_traceback
 &gt;&gt;&gt;
-&gt;&gt;&gt; my_engine = knowledge_engine.engine('examples')
+&gt;&gt;&gt; my_engine = knowledge_engine.engine('doc.examples')
 &gt;&gt;&gt; my_engine.activate('error_test')
 &gt;&gt;&gt; try:                                            # doctest: +ELLIPSIS
 ...     my_engine.prove_1('error_test', 'goal', (), 0)
@@ -303,9 +330,9 @@ Python functions between subgoal proofs.</p>
 Traceback (most recent call last):
   File &quot;&lt;doctest using_pyke.txt[32]&gt;&quot;, line 2, in &lt;module&gt;
     my_engine.prove_1('error_test', 'goal', (), 0)
-  File &quot;...knowledge_engine.py&quot;, line 234, in prove_1
+  File &quot;...knowledge_engine.py&quot;, line 286, in prove_1
     return iter(it).next()
-  File &quot;...knowledge_engine.py&quot;, line 218, in gen
+  File &quot;...knowledge_engine.py&quot;, line 270, in gen
     for plan in it:
   File &quot;...rule_base.py&quot;, line 46, in next
     return self.iterator.next()
@@ -454,7 +481,7 @@ into named repositories called <em>knowledge bases</em>.</p>
 
   <div id="last-modified">
     Page last modified
-    Tue, Dec 30 2008.
+    Tue, Jan 13 2009.
 
   </div>
 

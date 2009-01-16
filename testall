@@ -14,7 +14,7 @@ ARGS="$* $ERRORFILES"
 > $ERRORFILES
 NUM_ERRORS=0
 
-find . -name compiled_krb -exec rm -rf "{}" +
+find . -name krb_compiler -prune -o -name compiled_krb -exec rm -rf "{}" +
 
 cd pyke
 echo pyke/testpyke

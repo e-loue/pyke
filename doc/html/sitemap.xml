@@ -12,7 +12,7 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/about_pyke/installing_pyke.html</loc>
-  <lastmod>2008-10-27</lastmod>
+  <lastmod>2009-01-16</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -27,7 +27,7 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/examples.html</loc>
-  <lastmod>2009-01-10</lastmod>
+  <lastmod>2009-01-13</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -47,7 +47,7 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/knowledge_bases/question_bases.html</loc>
-  <lastmod>2008-10-27</lastmod>
+  <lastmod>2009-01-13</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -57,7 +57,7 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/knowledge_bases/special.html</loc>
-  <lastmod>2008-11-22</lastmod>
+  <lastmod>2009-01-13</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -97,17 +97,17 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/logic_programming/plans.html</loc>
-  <lastmod>2008-10-27</lastmod>
+  <lastmod>2009-01-13</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/logic_programming/rules/backward_chaining.html</loc>
-  <lastmod>2008-10-27</lastmod>
+  <lastmod>2009-01-13</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/logic_programming/rules/forward_chaining.html</loc>
-  <lastmod>2008-10-27</lastmod>
+  <lastmod>2009-01-13</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -137,7 +137,7 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/pyke_syntax/kqb_syntax.html</loc>
-  <lastmod>2008-10-27</lastmod>
+  <lastmod>2009-01-13</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -172,7 +172,7 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/using_pyke.html</loc>
-  <lastmod>2008-12-30</lastmod>
+  <lastmod>2009-01-16</lastmod>
   <changefreq>monthly</changefreq>
  </url>
 </urlset>

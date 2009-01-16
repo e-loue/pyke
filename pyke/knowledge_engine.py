@@ -66,22 +66,21 @@ class engine(object):
         self.rule_bases = {}
         special.create_for(self)
 
-        if paths != ('*test*',):
-            if len(paths) == 1 and isinstance(paths[0], tuple) and \
-               paths[0][0] == '*direct*' and \
-               isinstance(paths[0][1], types.ModuleType):
-                # secret hook for the compiler to initialize itself (so the
-                # compiled python module can be in an egg).
-                paths[0][1].populate(self)
-            else:
-                target_pkgs = {}  # {target_package_name: target_pkg}
-                for path in paths: self._init_path(path, target_pkgs)
-                for target_package in target_pkgs.itervalues():
-                    if debug:
-                        print >>sys.stderr, "target_package:", target_package
-                    target_package.compile(self)
-                    target_package.write()
-                    target_package.load(self, **kws)
+        if len(paths) == 1 and isinstance(paths[0], tuple) and \
+           paths[0][0] == '*direct*' and \
+           isinstance(paths[0][1], types.ModuleType):
+            # secret hook for the compiler to initialize itself (so the
+            # compiled python module can be in an egg).
+            paths[0][1].populate(self)
+        else:
+            target_pkgs = {}  # {target_package_name: target_pkg}
+            for path in paths: self._init_path(path, target_pkgs)
+            for target_package in target_pkgs.itervalues():
+                if debug:
+                    print >>sys.stderr, "target_package:", target_package
+                target_package.compile(self)
+                target_package.write()
+                target_package.load(self, **kws)
         for kb in self.knowledge_bases.itervalues(): kb.init2()
         for rb in self.rule_bases.itervalues(): rb.init2()
     def _init_path(self, path, target_pkgs):

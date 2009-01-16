@@ -78,6 +78,7 @@
 .. _MySQL: http://www.mysql.com/
 .. _notany: pyke_syntax/krb_syntax/compound_premise.html#notany-premise
 .. _notany premise: notany_
+.. _package: http://www.python.org/doc/essays/packages.html
 .. _pathological question: logic_programming/pattern_matching/matching_patterns.html#pathological-question
 .. _pattern: logic_programming/pattern_matching/index.html
 .. _pattern matches: logic_programming/pattern_matching/index.html

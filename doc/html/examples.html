@@ -66,8 +66,10 @@
 are all in an <tt class="docutils literal"><span class="pre">examples</span></tt> directory, which forms the top-level Python package
 for importing:</p>
 <pre class="literal-block">
-&gt;&gt;&gt; from examples.family_relations import test
-&gt;&gt;&gt; test.bc_test()
+&gt;&gt;&gt; from examples.towers_of_hanoi import test
+&gt;&gt;&gt; test.test(2)
+got 1: ((0, 1), (0, 2), (1, 2))
+got 2: ((0, 2), (0, 1), (2, 0), (1, 2), (0, 2))
 </pre>
 <p>Thus the directory containing the <tt class="docutils literal"><span class="pre">examples</span></tt> directory must be on your
 Python path.</p>
@@ -218,7 +220,7 @@ into named repositories called <em>knowledge bases</em>.</p>
 
   <div id="last-modified">
     Page last modified
-    Tue, Dec 30 2008.
+    Tue, Jan 13 2009.
 
   </div>
 

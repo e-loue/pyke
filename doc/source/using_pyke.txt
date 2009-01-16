@@ -40,7 +40,7 @@ uservalues
 Using Pyke
 ===================================
 
-This describes how to use Pyke from within your Python program.
+This describes how to call Pyke from within your Python program.
 
 
 Initializing Pyke
@@ -48,40 +48,70 @@ Initializing Pyke
 
 There are two steps to initializing a Pyke knowledge engine:
 
-knowledge_engine.engine(paths = ('.',), generated_root_pkg = 'compiled_krb', load_fc = True, load_bc = True, load_fb = True, load_qb = True)
+knowledge_engine.engine(\*paths, \*\*kws)
     The Pyke inference engine is offered as a class so that you can
     instantiate multiple copies of it with different rule bases to accomplish
     different tasks.
+
     Once you have a ``knowledge_engine.engine`` object; generally, all of
     the functions that you need are provided directly by this object:
 
     >>> from pyke import knowledge_engine
     >>> my_engine = knowledge_engine.engine('doc.examples')
 
-    This expects either a single directory or a sequence of directories as
-    the ``paths`` argument.  It recursively walks each directory looking
-    for Pyke source files (`.kfb files`_, `.krb files`_, and `.kqb files`_).
-    Each source file that it finds is compiled, if out of date, and then
-    imported (depending on ``load_fc``, ``load_bc``, ``load_fb`` and
-    ``load_qb``).  This causes all of the `rule bases`_ to be loaded and made
-    ready to activate_.
+    Pyke requires that all Pyke source files be placed (either directly or
+    indirectly) under a Python package_ directory.  These packages must be
+    on Python's search path for modules, and the directory for each dotted
+    name must include an ``__init__.py`` file.
 
-    All generated Python source files and pickle files are placed in the
-    ``generated_root_pkg``.  By default, this is the package "compiled_krb"
-    in the program's current working directory.  The ``generated_root_pkg``
-    may be a dotted module path.  In this case, the module path must be on
-    Python's search path for modules.
-    
-    The last component of the ``generated_root_pkg`` will be created
-    automatically if it does not already exist.
+    Each ``paths`` argument represents a different Python package directory to
+    search for Pyke source files.  These source packages may be passed either
+    as package names (as a string in Python's standard dotted notation), or as
+    the packages themselves.  Thus, the example above could also be written:
 
-    You probably want to add ``compiled_krb`` to your subversion
-    ``global-ignores`` option.
+    >>> from doc import examples
+    >>> my_engine = knowledge_engine.engine(examples)
+
+    Pyke recursively walks each source package directory looking for Pyke
+    source files (`.kfb files`_, `.krb files`_, and `.kqb files`_).  Each
+    source file that it finds is compiled, if out of date, and then imported
+    (depending on the keyword arguments, see below).  This causes all of the
+    `rule bases`_ to be loaded and made ready to activate_.
 
     If you change some of your Pyke source files, you can create a new engine
     object to compile and reload the generated Python modules without
     restarting your program.  But note that you'll need to rerun the
     ``add_universal_fact`` calls that you made outside of your `.kfb files`_.
+
+    All of the Python source files and pickle files generated from each source
+    package are placed, by default, in a ``compiled_krb`` package directly
+    subordinate to that source package.  You may specify a different
+    destination package for any source package by passing that source package
+    along with the destination package name as a 2-tuple.  The destination
+    package name may be specified as an absolute Python module path; or as a
+    relative path (with leading dots), relative to the source package.  Thus,
+    specifying the default destination explicitly would look like:
+
+    >>> my_engine = knowledge_engine.engine(('doc.examples', '.compiled_krb'))
+
+    You may specify the same destination package for multiple source packages.
+
+    The last component of the destination package will be created automatically
+    if it does not already exist.
+
+    If you use the default ``.compiled_krb``, you probably want to add
+    ``compiled_krb`` to your subversion ``global-ignores`` option.
+
+    There are four optional keyword arguments that you may also pass to the
+    ``engine`` constructor:
+
+    - ``load_fc`` -- load forward-chaining rules
+    - ``load_bc`` -- load backward-chaining rules
+    - ``load_fb`` -- load fact bases and
+    - ``load_qb`` -- load question bases
+
+    These parameters must be passed as keyword parameters.  They all default
+    to ``True``.
 *some_engine*.add_universal_fact(kb_name, fact_name, arguments)
     The ``add_universal_fact`` function is called once per fact_.  These
     facts_ are never deleted and apply to all *cases*.
@@ -139,9 +169,9 @@ Three functions initialize each case:
     son_of('david', 'bruce')
 
     There is no difference within the `.krb files`_ of how universal facts
-    verses specific facts are used.  The only difference between the two
-    types of facts is that the specific facts are deleted when a ``reset`` is
-    done.
+    verses case specific facts are used.  The only difference between the two
+    types of facts is that the case specific facts are deleted when a ``reset``
+    is done.
 
     >>> my_engine.reset()
     >>> my_engine.get_kb('family').dump_specific_facts()
@@ -288,11 +318,11 @@ Python functions between subgoal proofs.
     ... except:
     ...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
     Traceback (most recent call last):
-      File "<doctest using_pyke.txt[32]>", line 2, in <module>
+      File "<doctest using_pyke.txt[35]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
-      File "...knowledge_engine.py", line 286, in prove_1
+      File "...knowledge_engine.py", line 285, in prove_1
         return iter(it).next()
-      File "...knowledge_engine.py", line 270, in gen
+      File "...knowledge_engine.py", line 269, in gen
         for plan in it:
       File "...rule_base.py", line 46, in next
         return self.iterator.next()

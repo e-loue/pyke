@@ -237,8 +237,9 @@ exit status.</p>
 &gt;&gt;&gt; run_command('command', ('echo', 'hi', 'mom'))
 ('hi mom',)
 &gt;&gt;&gt; run_command('command', ('ls',))   # doctest: +NORMALIZE_WHITESPACE
-('ast_syntax', 'cheatsheets', 'compiled_krb', 'examples', 'html',
- 'PyKE.mm', 'r2w.ini', 'source', 'syntax', 'testdocs', 'todo')
+('ast_syntax', 'cheatsheets', 'examples', 'html', '__init__.py',
+ '__init__.pyc', 'PyKE.mm', 'r2w.ini', 'source', 'syntax', 'testdocs',
+ 'todo')
 &gt;&gt;&gt; run_command('command', ('ls', '-l', 'r2w.ini')) # doctest: +ELLIPSIS
 ('-rw-r--r-- 1 ... r2w.ini',)
 &gt;&gt;&gt; run_command('command', ('tail', '-n', '5', 'template.txt', '-'),
@@ -325,7 +326,7 @@ are compiled and loaded into your Python program.</p>
 
   <div id="last-modified">
     Page last modified
-    Sat, Nov 22 2008.
+    Tue, Jan 13 2009.
 
   </div>
 
