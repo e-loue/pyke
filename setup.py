@@ -8,7 +8,7 @@ from setuptools import setup
 
 setup(
     name = "pyke",
-    version = "0.6",
+    version = "0.7",
     packages = ['pyke', 'pyke.krb_compiler'],
     package_data = {'pyke.krb_compiler': ['*.krb']},
 
@@ -32,7 +32,7 @@ setup(
         backward-chaining rules.
     """,
     download_url =
-        "http://downloads.sourceforge.net/pyke/pyke-0.6-py2.5.egg",
+        "http://downloads.sourceforge.net/pyke/pyke-0.7-py2.5.egg",
     classifiers = [
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",

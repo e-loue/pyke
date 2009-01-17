@@ -40,7 +40,7 @@ uservalues
 Welcome to Pyke
 =============================
 -----------------------------
-Release 0.6
+Release 0.7
 -----------------------------
 
 Pyke introduces a form of `Logic Programming`_ (inspired by Prolog_) to the

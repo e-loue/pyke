@@ -1,4 +1,4 @@
 # $Id$
 
-version = '0.6'
+version = '0.7'
 
