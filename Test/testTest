@@ -10,7 +10,7 @@
 
 ERRORFILES="/tmp/testTest.$$"
 
-PYTHON=python2.5
+PYTHON="python2.5 -Wd"
 
 if [ $# -ge 2 -a "x$1" = x-p ]
 then
@@ -24,7 +24,7 @@ NUM_ERRORS=0
 for f in `find . -name .svn -prune -o -name '*.tst' -print`
 do
     #echo Testing "$f"
-    if ! "$PYTHON" ../doctest_file.py "$f" True
+    if ! $PYTHON ../doctest_file.py "$f" True
     then
         echo "$f" >> $ERRORFILES
         NUM_ERRORS=$(($NUM_ERRORS + 1))

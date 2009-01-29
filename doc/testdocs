@@ -11,7 +11,7 @@
 ERRORFILES="/tmp/testdocs.$$"
 export PYTHONPATH="examples:$PYTHONPATH"
 
-PYTHON=python2.5
+PYTHON="python2.5 -Wd"
 
 if [ $# -ge 2 -a "x$1" = x-p ]
 then
@@ -25,7 +25,7 @@ NUM_ERRORS=0
 for f in `find source -name '*.txt'`
 do
     #echo Testing "$f"
-    if ! "$PYTHON" ../doctest_file.py "$f"
+    if ! $PYTHON ../doctest_file.py "$f"
     then
         echo "$f" >> $ERRORFILES
         NUM_ERRORS=$(($NUM_ERRORS + 1))

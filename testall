@@ -9,7 +9,7 @@
 
 ERRORFILES="/tmp/testall.$$"
 
-ARGS="$* $ERRORFILES"
+ARGS=("$@" "$ERRORFILES")
 
 > $ERRORFILES
 NUM_ERRORS=0
@@ -18,7 +18,7 @@ find . -name krb_compiler -prune -o -name compiled_krb -exec rm -rf "{}" +
 
 cd pyke
 echo pyke/testpyke
-if ./testpyke $ARGS
+if ./testpyke "${ARGS[@]}"
 then
     :
 else
@@ -27,14 +27,14 @@ fi
 
 cd ../doc
 echo doc/testdocs with no doc/compiled_krb
-if ./testdocs $ARGS
+if ./testdocs "${ARGS[@]}"
 then
     :
 else
     NUM_ERRORS=$(($NUM_ERRORS + $?))
 fi
 echo doc/testdocs with doc/compiled_krb
-if ./testdocs $ARGS
+if ./testdocs "${ARGS[@]}"
 then
     :
 else
@@ -43,14 +43,14 @@ fi
 
 cd ../examples
 echo examples/testexamples with no compiled_krb
-if ./testexamples $ARGS
+if ./testexamples "${ARGS[@]}"
 then
     :
 else
     NUM_ERRORS=$(($NUM_ERRORS + $?))
 fi
 echo examples/testexamples with compiled_krb
-if ./testexamples $ARGS
+if ./testexamples "${ARGS[@]}"
 then
     :
 else
@@ -59,14 +59,14 @@ fi
 
 cd ../Test
 echo Test/testTest with no compiled_krb
-if ./testTest $ARGS
+if ./testTest "${ARGS[@]}"
 then
     :
 else
     NUM_ERRORS=$(($NUM_ERRORS + $?))
 fi
 echo Test/testTest with compiled_krb
-if ./testTest $ARGS
+if ./testTest "${ARGS[@]}"
 then
     :
 else
