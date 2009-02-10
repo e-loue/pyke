@@ -1,3 +1,4 @@
 # facts.kfb
 
 fact1(1)
+fact3('hi\nthere')

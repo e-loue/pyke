@@ -82,16 +82,21 @@ rule_decl_with_parent
                          ($rb_name, $parent,
                           tuple(repr(sym) for sym in $excluded_symbols))
 
-fc_rules0
-    use fc_rules((), (), ())
-
-fc_rules1
-    use fc_rules(($fc_rule, *$fc_rest),
-                 ($fc_fun_1, $fc_funs_rest),
-                 ($fc_init_1, $fc_init_rest))
+fc_rules
+    use fc_rules($fc_rules, $fc_funs, $fc_init)
     when
-        !fc_rule($fc_rule, $fc_fun_1, $fc_init_1)
-        !fc_rules($fc_rest, $fc_funs_rest, $fc_init_rest)
+        python
+            fc_funs = []
+            fc_init = []
+        forall
+            $fc_rule in $fc_rules
+        require
+            !fc_rule($fc_rule, $fc_fun_1, $fc_init_1)
+            python
+                fc_funs.append($fc_fun_1)
+                fc_init.append($fc_init_1)
+        $fc_funs = tuple(fc_funs)
+        $fc_init = tuple(fc_init)
 
 fc_rule_
     use fc_rule((fc_rule, $rule_name, $fc_premises, $assertions),
@@ -329,19 +334,24 @@ python_assertion
                    ('ENDING_LINENO', $end_lineno)),
                   $patterns_in, $patterns_in)
 
-bc_rules0
-    use bc_rules($_, (), (), (), ())
-
-bc_rules1
-    use bc_rules($rb_name, ($bc_rule, *$bc_rest),
-                 $bc_plan_lines,
-                 ($bc_bc_fun1, *$bc_bc_funs_rest),
-                 ($bc_bc_init1, *$bc_bc_init_rest))
+bc_rules
+    use bc_rules($rb_name, $bc_rules, $bc_plan_lines, $bc_bc_funs, $bc_bc_init)
     when
-        !bc_rule($rb_name, $bc_rule, $bc_plan1, $bc_bc_fun1, $bc_bc_init1)
-        !bc_rules($rb_name, $bc_rest,
-                  $plan_rest, $bc_bc_funs_rest, $bc_bc_init_rest)
-        $bc_plan_lines = $bc_plan1 + $plan_rest
+        python
+            bc_plan_lines = []
+            bc_bc_funs = []
+            bc_bc_init = []
+        forall
+            $bc_rule in $bc_rules
+        require
+            !bc_rule($rb_name, $bc_rule, $bc_plan1, $bc_bc_fun1, $bc_bc_init1)
+            python
+                bc_plan_lines.extend($bc_plan1)
+                bc_bc_funs.append($bc_bc_fun1)
+                bc_bc_init.append($bc_bc_init1)
+        $bc_plan_lines = tuple(bc_plan_lines)
+        $bc_bc_funs = tuple(bc_bc_funs)
+        $bc_bc_init = tuple(bc_bc_init)
 
 bc_rule_
     use bc_rule($rb_name, (bc_rule, $name, $goal, $bc_premises,

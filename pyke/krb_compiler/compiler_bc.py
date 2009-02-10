@@ -180,7 +180,7 @@ def rule_decl_with_parent(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
-def fc_rules0(rule, arg_patterns, arg_context):
+def fc_rules(rule, arg_patterns, arg_context):
   engine = rule.rule_base.engine
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
@@ -192,50 +192,51 @@ def fc_rules0(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
-        rule.rule_base.num_bc_rule_successes += 1
-        yield
-        rule.rule_base.num_bc_rule_failures += 1
-    finally:
-      context.done()
-
-def fc_rules1(rule, arg_patterns, arg_context):
-  engine = rule.rule_base.engine
-  patterns = rule.goal_arg_patterns()
-  if len(arg_patterns) == len(patterns):
-    context = contexts.bc_context(rule)
-    try:
-      if all(itertools.imap(lambda pat, arg:
-                              pat.match_pattern(context, context,
-                                                arg, arg_context),
-                            patterns,
-                            arg_patterns)):
-        rule.rule_base.num_bc_rules_matched += 1
-        flag_1 = False
-        with engine.prove(rule.rule_base.root_name, 'fc_rule', context,
-                          (rule.pattern(0),
-                           rule.pattern(1),
-                           rule.pattern(2),)) \
-          as gen_1:
-          for x_1 in gen_1:
-            flag_1 = True
-            assert x_1 is None, \
-              "compiler.fc_rules1: got unexpected plan from when clause 1"
-            flag_2 = False
-            with engine.prove(rule.rule_base.root_name, 'fc_rules', context,
-                              (rule.pattern(3),
-                               rule.pattern(4),
-                               rule.pattern(5),)) \
-              as gen_2:
-              for x_2 in gen_2:
-                flag_2 = True
-                assert x_2 is None, \
-                  "compiler.fc_rules1: got unexpected plan from when clause 2"
-                rule.rule_base.num_bc_rule_successes += 1
-                yield
-            if not flag_2:
-              raise AssertionError("compiler.fc_rules1: 'when' clause 2 failed")
-        if not flag_1:
-          raise AssertionError("compiler.fc_rules1: 'when' clause 1 failed")
+        fc_funs = []
+        fc_init = []
+        forall91_worked = True
+        for python_ans in \
+             context.lookup_data('fc_rules'):
+          mark2 = context.mark(True)
+          if rule.pattern(0).match_data(context, context, python_ans):
+            context.end_save_all_undo()
+            forall91_worked = False
+            flag_3 = False
+            with engine.prove(rule.rule_base.root_name, 'fc_rule', context,
+                              (rule.pattern(0),
+                               rule.pattern(1),
+                               rule.pattern(2),)) \
+              as gen_3:
+              for x_3 in gen_3:
+                flag_3 = True
+                assert x_3 is None, \
+                  "compiler.fc_rules: got unexpected plan from when clause 3"
+                fc_funs.append(context.lookup_data('fc_fun_1'))
+                fc_init.append(context.lookup_data('fc_init_1'))
+                forall91_worked = True
+                if forall91_worked: break
+            if not flag_3:
+              raise AssertionError("compiler.fc_rules: 'when' clause 3 failed")
+            if not forall91_worked:
+              context.undo_to_mark(mark2)
+              break
+          else: context.end_save_all_undo()
+          context.undo_to_mark(mark2)
+        if forall91_worked:
+          mark5 = context.mark(True)
+          if rule.pattern(3).match_data(context, context,
+                  tuple(fc_funs)):
+            context.end_save_all_undo()
+            mark6 = context.mark(True)
+            if rule.pattern(4).match_data(context, context,
+                    tuple(fc_init)):
+              context.end_save_all_undo()
+              rule.rule_base.num_bc_rule_successes += 1
+              yield
+            else: context.end_save_all_undo()
+            context.undo_to_mark(mark6)
+          else: context.end_save_all_undo()
+          context.undo_to_mark(mark5)
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -941,7 +942,7 @@ def python_assertion(rule, arg_patterns, arg_context):
     finally:
       context.done()
 
-def bc_rules0(rule, arg_patterns, arg_context):
+def bc_rules(rule, arg_patterns, arg_context):
   engine = rule.rule_base.engine
   patterns = rule.goal_arg_patterns()
   if len(arg_patterns) == len(patterns):
@@ -953,60 +954,61 @@ def bc_rules0(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
-        rule.rule_base.num_bc_rule_successes += 1
-        yield
-        rule.rule_base.num_bc_rule_failures += 1
-    finally:
-      context.done()
-
-def bc_rules1(rule, arg_patterns, arg_context):
-  engine = rule.rule_base.engine
-  patterns = rule.goal_arg_patterns()
-  if len(arg_patterns) == len(patterns):
-    context = contexts.bc_context(rule)
-    try:
-      if all(itertools.imap(lambda pat, arg:
-                              pat.match_pattern(context, context,
-                                                arg, arg_context),
-                            patterns,
-                            arg_patterns)):
-        rule.rule_base.num_bc_rules_matched += 1
-        flag_1 = False
-        with engine.prove(rule.rule_base.root_name, 'bc_rule', context,
-                          (rule.pattern(0),
-                           rule.pattern(1),
-                           rule.pattern(2),
-                           rule.pattern(3),
-                           rule.pattern(4),)) \
-          as gen_1:
-          for x_1 in gen_1:
-            flag_1 = True
-            assert x_1 is None, \
-              "compiler.bc_rules1: got unexpected plan from when clause 1"
-            flag_2 = False
-            with engine.prove(rule.rule_base.root_name, 'bc_rules', context,
-                              (rule.pattern(0),
-                               rule.pattern(5),
-                               rule.pattern(6),
-                               rule.pattern(7),
-                               rule.pattern(8),)) \
-              as gen_2:
-              for x_2 in gen_2:
-                flag_2 = True
-                assert x_2 is None, \
-                  "compiler.bc_rules1: got unexpected plan from when clause 2"
-                mark3 = context.mark(True)
-                if rule.pattern(9).match_data(context, context,
-                        context.lookup_data('bc_plan1') + context.lookup_data('plan_rest')):
-                  context.end_save_all_undo()
-                  rule.rule_base.num_bc_rule_successes += 1
-                  yield
-                else: context.end_save_all_undo()
-                context.undo_to_mark(mark3)
-            if not flag_2:
-              raise AssertionError("compiler.bc_rules1: 'when' clause 2 failed")
-        if not flag_1:
-          raise AssertionError("compiler.bc_rules1: 'when' clause 1 failed")
+        bc_plan_lines = []
+        bc_bc_funs = []
+        bc_bc_init = []
+        forall344_worked = True
+        for python_ans in \
+             context.lookup_data('bc_rules'):
+          mark2 = context.mark(True)
+          if rule.pattern(0).match_data(context, context, python_ans):
+            context.end_save_all_undo()
+            forall344_worked = False
+            flag_3 = False
+            with engine.prove(rule.rule_base.root_name, 'bc_rule', context,
+                              (rule.pattern(1),
+                               rule.pattern(0),
+                               rule.pattern(2),
+                               rule.pattern(3),
+                               rule.pattern(4),)) \
+              as gen_3:
+              for x_3 in gen_3:
+                flag_3 = True
+                assert x_3 is None, \
+                  "compiler.bc_rules: got unexpected plan from when clause 3"
+                bc_plan_lines.extend(context.lookup_data('bc_plan1'))
+                bc_bc_funs.append(context.lookup_data('bc_bc_fun1'))
+                bc_bc_init.append(context.lookup_data('bc_bc_init1'))
+                forall344_worked = True
+                if forall344_worked: break
+            if not flag_3:
+              raise AssertionError("compiler.bc_rules: 'when' clause 3 failed")
+            if not forall344_worked:
+              context.undo_to_mark(mark2)
+              break
+          else: context.end_save_all_undo()
+          context.undo_to_mark(mark2)
+        if forall344_worked:
+          mark5 = context.mark(True)
+          if rule.pattern(5).match_data(context, context,
+                  tuple(bc_plan_lines)):
+            context.end_save_all_undo()
+            mark6 = context.mark(True)
+            if rule.pattern(6).match_data(context, context,
+                    tuple(bc_bc_funs)):
+              context.end_save_all_undo()
+              mark7 = context.mark(True)
+              if rule.pattern(7).match_data(context, context,
+                      tuple(bc_bc_init)):
+                context.end_save_all_undo()
+                rule.rule_base.num_bc_rule_successes += 1
+                yield
+              else: context.end_save_all_undo()
+              context.undo_to_mark(mark7)
+            else: context.end_save_all_undo()
+            context.undo_to_mark(mark6)
+          else: context.end_save_all_undo()
+          context.undo_to_mark(mark5)
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -2136,26 +2138,17 @@ def populate(engine):
                   (),
                   (contexts.variable('decl_line'),))
   
-  bc_rule.bc_rule('fc_rules0', This_rule_base, 'fc_rules',
-                  fc_rules0, None,
-                  (pattern.pattern_literal(()),
-                   pattern.pattern_literal(()),
-                   pattern.pattern_literal(()),),
-                  (),
-                  ())
-  
-  bc_rule.bc_rule('fc_rules1', This_rule_base, 'fc_rules',
-                  fc_rules1, None,
-                  (pattern.pattern_tuple((contexts.variable('fc_rule'),), contexts.variable('fc_rest')),
-                   pattern.pattern_tuple((contexts.variable('fc_fun_1'), contexts.variable('fc_funs_rest'),), None),
-                   pattern.pattern_tuple((contexts.variable('fc_init_1'), contexts.variable('fc_init_rest'),), None),),
+  bc_rule.bc_rule('fc_rules', This_rule_base, 'fc_rules',
+                  fc_rules, None,
+                  (contexts.variable('fc_rules'),
+                   contexts.variable('fc_funs'),
+                   contexts.variable('fc_init'),),
                   (),
                   (contexts.variable('fc_rule'),
                    contexts.variable('fc_fun_1'),
                    contexts.variable('fc_init_1'),
-                   contexts.variable('fc_rest'),
-                   contexts.variable('fc_funs_rest'),
-                   contexts.variable('fc_init_rest'),))
+                   contexts.variable('fc_funs'),
+                   contexts.variable('fc_init'),))
   
   bc_rule.bc_rule('fc_rule_', This_rule_base, 'fc_rule',
                   fc_rule_, None,
@@ -2461,34 +2454,22 @@ def populate(engine):
                   (),
                   ())
   
-  bc_rule.bc_rule('bc_rules0', This_rule_base, 'bc_rules',
-                  bc_rules0, None,
-                  (contexts.anonymous('_'),
-                   pattern.pattern_literal(()),
-                   pattern.pattern_literal(()),
-                   pattern.pattern_literal(()),
-                   pattern.pattern_literal(()),),
-                  (),
-                  ())
-  
-  bc_rule.bc_rule('bc_rules1', This_rule_base, 'bc_rules',
-                  bc_rules1, None,
+  bc_rule.bc_rule('bc_rules', This_rule_base, 'bc_rules',
+                  bc_rules, None,
                   (contexts.variable('rb_name'),
-                   pattern.pattern_tuple((contexts.variable('bc_rule'),), contexts.variable('bc_rest')),
+                   contexts.variable('bc_rules'),
                    contexts.variable('bc_plan_lines'),
-                   pattern.pattern_tuple((contexts.variable('bc_bc_fun1'),), contexts.variable('bc_bc_funs_rest')),
-                   pattern.pattern_tuple((contexts.variable('bc_bc_init1'),), contexts.variable('bc_bc_init_rest')),),
+                   contexts.variable('bc_bc_funs'),
+                   contexts.variable('bc_bc_init'),),
                   (),
-                  (contexts.variable('rb_name'),
-                   contexts.variable('bc_rule'),
+                  (contexts.variable('bc_rule'),
+                   contexts.variable('rb_name'),
                    contexts.variable('bc_plan1'),
                    contexts.variable('bc_bc_fun1'),
                    contexts.variable('bc_bc_init1'),
-                   contexts.variable('bc_rest'),
-                   contexts.variable('plan_rest'),
-                   contexts.variable('bc_bc_funs_rest'),
-                   contexts.variable('bc_bc_init_rest'),
-                   contexts.variable('bc_plan_lines'),))
+                   contexts.variable('bc_plan_lines'),
+                   contexts.variable('bc_bc_funs'),
+                   contexts.variable('bc_bc_init'),))
   
   bc_rule.bc_rule('bc_rule_', This_rule_base, 'bc_rule',
                   bc_rule_, None,
@@ -3002,142 +2983,148 @@ Krb_lineno_map = (
     ((163, 167), (79, 79)),
     ((171, 173), (81, 83)),
     ((189, 193), (86, 86)),
-    ((207, 211), (89, 91)),
-    ((214, 222), (93, 93)),
-    ((224, 232), (94, 94)),
-    ((249, 253), (97, 98)),
-    ((256, 272), (100, 102)),
-    ((274, 283), (103, 104)),
-    ((286, 303), (105, 122)),
-    ((307, 314), (123, 130)),
-    ((336, 340), (133, 134)),
-    ((354, 358), (137, 140)),
-    ((361, 377), (142, 145)),
-    ((379, 395), (146, 149)),
-    ((398, 398), (150, 150)),
-    ((418, 422), (153, 158)),
-    ((424, 435), (160, 161)),
-    ((438, 441), (162, 165)),
-    ((445, 445), (166, 166)),
-    ((449, 454), (167, 172)),
-    ((474, 478), (175, 176)),
-    ((482, 497), (178, 193)),
-    ((513, 517), (197, 198)),
-    ((521, 531), (200, 210)),
-    ((547, 551), (213, 216)),
-    ((555, 555), (218, 218)),
-    ((558, 574), (219, 222)),
-    ((577, 577), (223, 223)),
-    ((581, 581), (224, 224)),
-    ((603, 607), (227, 230)),
-    ((610, 626), (232, 235)),
-    ((629, 629), (236, 236)),
-    ((647, 651), (239, 242)),
-    ((655, 655), (244, 244)),
-    ((659, 659), (245, 245)),
-    ((662, 678), (246, 249)),
-    ((680, 696), (250, 253)),
-    ((699, 709), (254, 264)),
-    ((713, 713), (265, 265)),
-    ((739, 743), (268, 271)),
-    ((747, 747), (273, 273)),
-    ((751, 751), (274, 274)),
-    ((754, 770), (275, 278)),
-    ((773, 778), (279, 284)),
-    ((800, 804), (287, 290)),
-    ((806, 817), (292, 294)),
-    ((830, 834), (297, 297)),
-    ((848, 852), (300, 301)),
-    ((855, 864), (303, 303)),
-    ((866, 875), (304, 304)),
-    ((892, 896), (307, 309)),
-    ((900, 901), (311, 312)),
-    ((905, 914), (313, 322)),
-    ((932, 936), (325, 330)),
-    ((950, 954), (333, 333)),
-    ((968, 972), (336, 339)),
-    ((975, 985), (341, 341)),
-    ((987, 997), (342, 343)),
-    ((1000, 1000), (344, 344)),
-    ((1020, 1024), (347, 349)),
-    ((1027, 1040), (351, 353)),
-    ((1043, 1045), (354, 356)),
-    ((1049, 1056), (357, 364)),
-    ((1060, 1063), (365, 368)),
-    ((1085, 1089), (371, 373)),
-    ((1092, 1111), (375, 378)),
-    ((1114, 1114), (379, 379)),
-    ((1118, 1121), (380, 383)),
-    ((1125, 1130), (384, 389)),
-    ((1152, 1156), (392, 394)),
-    ((1170, 1174), (397, 401)),
-    ((1177, 1196), (403, 407)),
-    ((1198, 1217), (408, 412)),
-    ((1220, 1220), (413, 413)),
-    ((1224, 1224), (414, 414)),
-    ((1228, 1228), (415, 415)),
-    ((1252, 1256), (418, 424)),
-    ((1260, 1260), (426, 426)),
-    ((1264, 1264), (427, 427)),
-    ((1268, 1269), (428, 429)),
-    ((1273, 1285), (430, 442)),
-    ((1288, 1301), (443, 444)),
-    ((1303, 1319), (445, 448)),
-    ((1322, 1323), (449, 450)),
-    ((1327, 1327), (451, 451)),
-    ((1331, 1334), (452, 455)),
-    ((1366, 1370), (458, 462)),
-    ((1374, 1374), (464, 464)),
-    ((1377, 1396), (465, 469)),
-    ((1398, 1411), (470, 471)),
-    ((1414, 1414), (472, 472)),
-    ((1418, 1418), (473, 473)),
-    ((1442, 1446), (476, 480)),
-    ((1449, 1468), (482, 486)),
-    ((1471, 1471), (487, 487)),
-    ((1489, 1493), (490, 494)),
-    ((1497, 1497), (496, 496)),
-    ((1501, 1501), (497, 497)),
-    ((1504, 1523), (498, 502)),
-    ((1525, 1544), (503, 507)),
-    ((1547, 1555), (508, 518)),
-    ((1579, 1583), (521, 525)),
-    ((1587, 1587), (528, 528)),
-    ((1591, 1591), (529, 529)),
-    ((1594, 1613), (530, 534)),
-    ((1616, 1621), (535, 540)),
-    ((1643, 1647), (543, 545)),
-    ((1651, 1658), (547, 554)),
-    ((1674, 1678), (557, 561)),
-    ((1682, 1684), (563, 565)),
-    ((1687, 1699), (566, 567)),
-    ((1716, 1720), (570, 575)),
-    ((1724, 1726), (577, 579)),
-    ((1729, 1741), (580, 581)),
-    ((1758, 1762), (584, 586)),
-    ((1766, 1767), (588, 589)),
-    ((1783, 1787), (592, 593)),
-    ((1791, 1811), (595, 615)),
-    ((1815, 1815), (616, 616)),
-    ((1833, 1837), (619, 620)),
-    ((1851, 1855), (623, 624)),
-    ((1859, 1862), (626, 629)),
-    ((1866, 1872), (630, 636)),
-    ((1890, 1894), (639, 643)),
-    ((1898, 1898), (645, 645)),
-    ((1900, 1911), (646, 648)),
-    ((1926, 1930), (651, 655)),
-    ((1934, 1935), (657, 658)),
-    ((1939, 1939), (659, 659)),
-    ((1943, 1953), (660, 670)),
-    ((1957, 1959), (671, 673)),
-    ((1981, 1985), (676, 680)),
-    ((1989, 1990), (682, 683)),
-    ((1994, 1994), (684, 684)),
-    ((1998, 2010), (685, 697)),
-    ((2014, 2023), (698, 707)),
-    ((2045, 2049), (710, 715)),
-    ((2053, 2053), (717, 717)),
-    ((2057, 2064), (718, 725)),
-    ((2082, 2086), (728, 736)),
+    ((195, 196), (88, 90)),
+    ((199, 199), (92, 92)),
+    ((205, 213), (94, 94)),
+    ((214, 215), (95, 97)),
+    ((228, 228), (98, 98)),
+    ((232, 232), (99, 99)),
+    ((250, 254), (102, 103)),
+    ((257, 273), (105, 107)),
+    ((275, 284), (108, 109)),
+    ((287, 304), (110, 127)),
+    ((308, 315), (128, 135)),
+    ((337, 341), (138, 139)),
+    ((355, 359), (142, 145)),
+    ((362, 378), (147, 150)),
+    ((380, 396), (151, 154)),
+    ((399, 399), (155, 155)),
+    ((419, 423), (158, 163)),
+    ((425, 436), (165, 166)),
+    ((439, 442), (167, 170)),
+    ((446, 446), (171, 171)),
+    ((450, 455), (172, 177)),
+    ((475, 479), (180, 181)),
+    ((483, 498), (183, 198)),
+    ((514, 518), (202, 203)),
+    ((522, 532), (205, 215)),
+    ((548, 552), (218, 221)),
+    ((556, 556), (223, 223)),
+    ((559, 575), (224, 227)),
+    ((578, 578), (228, 228)),
+    ((582, 582), (229, 229)),
+    ((604, 608), (232, 235)),
+    ((611, 627), (237, 240)),
+    ((630, 630), (241, 241)),
+    ((648, 652), (244, 247)),
+    ((656, 656), (249, 249)),
+    ((660, 660), (250, 250)),
+    ((663, 679), (251, 254)),
+    ((681, 697), (255, 258)),
+    ((700, 710), (259, 269)),
+    ((714, 714), (270, 270)),
+    ((740, 744), (273, 276)),
+    ((748, 748), (278, 278)),
+    ((752, 752), (279, 279)),
+    ((755, 771), (280, 283)),
+    ((774, 779), (284, 289)),
+    ((801, 805), (292, 295)),
+    ((807, 818), (297, 299)),
+    ((831, 835), (302, 302)),
+    ((849, 853), (305, 306)),
+    ((856, 865), (308, 308)),
+    ((867, 876), (309, 309)),
+    ((893, 897), (312, 314)),
+    ((901, 902), (316, 317)),
+    ((906, 915), (318, 327)),
+    ((933, 937), (330, 335)),
+    ((951, 955), (338, 338)),
+    ((957, 959), (340, 343)),
+    ((962, 962), (345, 345)),
+    ((968, 978), (347, 347)),
+    ((979, 981), (348, 351)),
+    ((994, 994), (352, 352)),
+    ((998, 998), (353, 353)),
+    ((1002, 1002), (354, 354)),
+    ((1022, 1026), (357, 359)),
+    ((1029, 1042), (361, 363)),
+    ((1045, 1047), (364, 366)),
+    ((1051, 1058), (367, 374)),
+    ((1062, 1065), (375, 378)),
+    ((1087, 1091), (381, 383)),
+    ((1094, 1113), (385, 388)),
+    ((1116, 1116), (389, 389)),
+    ((1120, 1123), (390, 393)),
+    ((1127, 1132), (394, 399)),
+    ((1154, 1158), (402, 404)),
+    ((1172, 1176), (407, 411)),
+    ((1179, 1198), (413, 417)),
+    ((1200, 1219), (418, 422)),
+    ((1222, 1222), (423, 423)),
+    ((1226, 1226), (424, 424)),
+    ((1230, 1230), (425, 425)),
+    ((1254, 1258), (428, 434)),
+    ((1262, 1262), (436, 436)),
+    ((1266, 1266), (437, 437)),
+    ((1270, 1271), (438, 439)),
+    ((1275, 1287), (440, 452)),
+    ((1290, 1303), (453, 454)),
+    ((1305, 1321), (455, 458)),
+    ((1324, 1325), (459, 460)),
+    ((1329, 1329), (461, 461)),
+    ((1333, 1336), (462, 465)),
+    ((1368, 1372), (468, 472)),
+    ((1376, 1376), (474, 474)),
+    ((1379, 1398), (475, 479)),
+    ((1400, 1413), (480, 481)),
+    ((1416, 1416), (482, 482)),
+    ((1420, 1420), (483, 483)),
+    ((1444, 1448), (486, 490)),
+    ((1451, 1470), (492, 496)),
+    ((1473, 1473), (497, 497)),
+    ((1491, 1495), (500, 504)),
+    ((1499, 1499), (506, 506)),
+    ((1503, 1503), (507, 507)),
+    ((1506, 1525), (508, 512)),
+    ((1527, 1546), (513, 517)),
+    ((1549, 1557), (518, 528)),
+    ((1581, 1585), (531, 535)),
+    ((1589, 1589), (538, 538)),
+    ((1593, 1593), (539, 539)),
+    ((1596, 1615), (540, 544)),
+    ((1618, 1623), (545, 550)),
+    ((1645, 1649), (553, 555)),
+    ((1653, 1660), (557, 564)),
+    ((1676, 1680), (567, 571)),
+    ((1684, 1686), (573, 575)),
+    ((1689, 1701), (576, 577)),
+    ((1718, 1722), (580, 585)),
+    ((1726, 1728), (587, 589)),
+    ((1731, 1743), (590, 591)),
+    ((1760, 1764), (594, 596)),
+    ((1768, 1769), (598, 599)),
+    ((1785, 1789), (602, 603)),
+    ((1793, 1813), (605, 625)),
+    ((1817, 1817), (626, 626)),
+    ((1835, 1839), (629, 630)),
+    ((1853, 1857), (633, 634)),
+    ((1861, 1864), (636, 639)),
+    ((1868, 1874), (640, 646)),
+    ((1892, 1896), (649, 653)),
+    ((1900, 1900), (655, 655)),
+    ((1902, 1913), (656, 658)),
+    ((1928, 1932), (661, 665)),
+    ((1936, 1937), (667, 668)),
+    ((1941, 1941), (669, 669)),
+    ((1945, 1955), (670, 680)),
+    ((1959, 1961), (681, 683)),
+    ((1983, 1987), (686, 690)),
+    ((1991, 1992), (692, 693)),
+    ((1996, 1996), (694, 694)),
+    ((2000, 2012), (695, 707)),
+    ((2016, 2025), (708, 717)),
+    ((2047, 2051), (720, 725)),
+    ((2055, 2055), (727, 727)),
+    ((2059, 2066), (728, 735)),
+    ((2084, 2088), (738, 746)),
 )

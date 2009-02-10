@@ -56,11 +56,15 @@ def p_none(p):
     '''
     p[0] = None
 
-def p_first(p):
+def p_number(p):
     ''' data : NUMBER_TOK
-        data : STRING_TOK
     '''
     p[0] = p[1]
+
+def p_string(p):
+    ''' data : STRING_TOK
+    '''
+    p[0] = eval(p[1])
 
 def p_quoted_last(p):
     ''' data : IDENTIFIER_TOK
