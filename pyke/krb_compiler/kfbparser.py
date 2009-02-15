@@ -107,20 +107,8 @@ def p_error(t):
 
 parser = None
 
-# Use the first line for normal use, the second for testing changes in the
-# grammer (the first line does not report grammer errors!).
-def parse(this_module, filename, check_tables = False, debug = 0):
-#def parse(this_module, filename, check_tables = False, debug = 1):
-    '''
-        >>> from pyke.krb_compiler import kfbparser
-        >>> kfbparser.parse(kfbparser,
-        ...                 'TEST/kfbparse_test.kfb'
-        ...                 if os.path.split(os.getcwd())[1] == 'krb_compiler'
-        ...                 else 'krb_compiler/TEST/kfbparse_test.kfb',
-        ...                 True)
-        <fact_base kfbparse_test>
-    '''
-    global parser, Fact_base
+def init(this_module, check_tables = False, debug = 0):
+    global parser
     if parser is None:
         outputdir = os.path.dirname(this_module.__file__)
         if debug:
@@ -147,6 +135,22 @@ def parse(this_module, filename, check_tables = False, debug = 0):
                                optimize=1, write_tables=1,
                                tabmodule='pyke.krb_compiler.kfbparser_tables',
                                outputdir=outputdir)
+
+# Use the first line for normal use, the second for testing changes in the
+# grammer (the first line does not report grammer errors!).
+def parse(this_module, filename, check_tables = False, debug = 0):
+#def parse(this_module, filename, check_tables = False, debug = 1):
+    '''
+        >>> from pyke.krb_compiler import kfbparser
+        >>> kfbparser.parse(kfbparser,
+        ...                 'TEST/kfbparse_test.kfb'
+        ...                 if os.path.split(os.getcwd())[1] == 'krb_compiler'
+        ...                 else 'krb_compiler/TEST/kfbparse_test.kfb',
+        ...                 True)
+        <fact_base kfbparse_test>
+    '''
+    global Fact_base
+    init(this_module, check_tables, debug)
     dirs, base = os.path.split(filename)
     name = base[:-4]
     Fact_base = fact_base.fact_base(None, name, False)

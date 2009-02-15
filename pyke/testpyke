@@ -90,7 +90,7 @@ cd ..
 if [ $NUM_ERRORS -eq 0 ]
 then
     echo "No Errors!"
-    rm -f $ERRORFILES
+    rm -f $ERRORFILES $TMPFILE
 else
     echo "********** ERRORS ************* $NUM_ERRORS files had errors:"
     cat $ERRORFILES
@@ -98,6 +98,6 @@ else
     then
         sed 's,^\.,pyke,' $ERRORFILES >> "$1"
     fi
-    rm -f $ERRORFILES
+    rm -f $ERRORFILES $TMPFILE
     exit $NUM_ERRORS
 fi

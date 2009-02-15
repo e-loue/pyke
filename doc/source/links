@@ -92,7 +92,7 @@
 .. _plan: logic_programming/plans.html
 .. _plan_spec: pyke_syntax/krb_syntax/bc_rule.html#plan-spec
 .. _plans: plan_
-.. _PLY 2.3: http://www.dabeaz.com/ply/
+.. _PLY 2.5: http://www.dabeaz.com/ply/
 .. _premise: logic_programming/rules/index.html#premises-and-conclusions
 .. _premises: premise_
 .. _print_stats: using_pyke.html#other-functions
@@ -108,7 +108,6 @@
 .. _Pyke: http://groups.google.com/group/pyke
 .. _Pyke project download page: http://sourceforge.net/project/showfiles.php?group_id=207724
 .. _pypi: http://pypi.python.org/pypi
-.. _Python 2.5: http://www.python.org
 .. _Python: http://www.python.org
 .. _python_premise: pyke_syntax/krb_syntax/python_premise.html
 .. _python_statements: pyke_syntax/krb_syntax/python_premise.html#python-statements

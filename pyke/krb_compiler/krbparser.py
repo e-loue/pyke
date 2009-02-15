@@ -494,10 +494,7 @@ def p_error(t):
 
 parser = None
 
-# Use the first line for normal use, the second for testing changes in the
-# grammer (the first line does not report grammer errors!).
-def parse(this_module, filename, check_tables = False, debug = 0):
-#def parse(this_module, filename, check_tables = False, debug = 1):
+def init(this_module, check_tables = False, debug = 0):
     global parser
     if parser is None:
         outputdir = os.path.dirname(this_module.__file__)
@@ -525,6 +522,12 @@ def parse(this_module, filename, check_tables = False, debug = 0):
                                optimize=1, write_tables=1,
                                tabmodule='pyke.krb_compiler.krbparser_tables',
                                outputdir=outputdir)
+
+# Use the first line for normal use, the second for testing changes in the
+# grammer (the first line does not report grammer errors!).
+def parse(this_module, filename, check_tables = False, debug = 0):
+#def parse(this_module, filename, check_tables = False, debug = 1):
+    init(this_module, check_tables, debug)
     with open(filename) as f:
         scanner.init(scanner, debug, check_tables)
         scanner.lexer.lineno = 1

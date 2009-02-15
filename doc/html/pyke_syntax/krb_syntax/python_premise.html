@@ -119,6 +119,8 @@ python_statements ::= 'python' python_statement
 </pre>
 <p>This clause allows the inclusion of arbitrary Python statements in your
 <a class="reference" href="../../logic_programming/rules/index.html">rules</a>.  This premise always succeeds; and then fails on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>.</p>
+<p>The current <tt class="docutils literal"><span class="pre">knowledge_engine</span></tt> object is available within python_statements
+as the variable called <tt class="docutils literal"><span class="pre">engine</span></tt>.</p>
 <div class="caution">
 <p class="first admonition-title">Caution!</p>
 <p>Always keep in mind the difference between <a class="reference" href="pattern.html#pattern-variable">pattern variables</a> and

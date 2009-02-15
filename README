@@ -129,6 +129,21 @@ and:
 
     $ ./testall
 
+
+COMPILING kfbparser_tables.py, krbparser_tables.py and scanner_tables.py:
+
+    $ python2.5
+    >>> from pyke.krb_compiler import kfbparser, krbparser, scanner
+    >>> scanner.init(scanner, 0, True)
+    >>> krbparser.init(krbparser, True)
+    >>> kfbparser.init(kfbparser, True)
+
+    or just run testpyke:
+
+    $ cd pyke
+    $ ./testpyke
+
+
 COMPILING THE COMPILER.KRB FILE:
 
 In pyke/krb_compiler:

@@ -86,8 +86,8 @@ System Requirements
 Pyke is 100% Python, so it should run on any platform supported by Python.
 You'll need:
 
-* `Python 2.5`_
-* `PLY 2.3`_ (easy_install_ automatically installs this)
+* `Python`_ 2.5 or 2.6
+* `PLY 2.5`_ (easy_install_ automatically installs this)
 
 
 Installation
@@ -96,12 +96,12 @@ Installation
 Installing the Executables
 ----------------------------
 
-Pyke is registered on pypi_, so once you have `Python 2.5`_ with
+Pyke is registered on pypi_, so once you have `Python`_ 2.5 or 2.6 with
 easy_install_ you can just type::
 
     $ sudo easy_install-2.5 pyke
 
-This will automatically install `PLY 2.3`_ too.
+This will automatically install `PLY 2.5`_ too.
 
 Installing the Sources
 ------------------------
@@ -177,9 +177,9 @@ If you want to regenerate these documents, you'll also need:
 * Rest2web_, which requires:
 * Docutils_
 
-The sources for the documentation are in ``doc/sources``.
+The sources for the documentation are in ``doc/source``.
 
-To regenerate the documentation, in the ``doc/sources`` directory run::
+To regenerate the documentation, in the ``doc/source`` directory run::
 
     $ bin/gen_html
 

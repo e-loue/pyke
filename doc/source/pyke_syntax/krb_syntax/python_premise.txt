@@ -86,6 +86,9 @@ Python_statements
 This clause allows the inclusion of arbitrary Python statements in your
 rules_.  This premise always succeeds; and then fails on backtracking_.
 
+The current ``knowledge_engine`` object is available within python_statements
+as the variable called ``engine``.
+
 .. caution::
 
    Always keep in mind the difference between `pattern variables`_ and
