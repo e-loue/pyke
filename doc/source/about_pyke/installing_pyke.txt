@@ -84,10 +84,7 @@ System Requirements
 ====================
 
 Pyke is 100% Python, so it should run on any platform supported by Python.
-You'll need:
-
-* `Python`_ 2.5 or 2.6
-* `PLY 2.5`_ (easy_install_ automatically installs this)
+So all you'll need is `Python`_ 2.5 or 2.6.
 
 
 Installation
@@ -100,8 +97,6 @@ Pyke is registered on pypi_, so once you have `Python`_ 2.5 or 2.6 with
 easy_install_ you can just type::
 
     $ sudo easy_install-2.5 pyke
-
-This will automatically install `PLY 2.5`_ too.
 
 Installing the Sources
 ------------------------

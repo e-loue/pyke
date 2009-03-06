@@ -26,7 +26,7 @@
 
 from __future__ import with_statement
 import os, os.path
-from ply import yacc
+from pyke.krb_compiler.ply import yacc
 from pyke.krb_compiler import scanner
 from pyke import fact_base
 

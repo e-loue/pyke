@@ -28,7 +28,7 @@ from __future__ import with_statement
 import itertools
 import warnings
 import os, os.path
-from ply import yacc
+from pyke.krb_compiler.ply import yacc
 from pyke.krb_compiler import scanner
 
 tokens = scanner.tokens

@@ -12,7 +12,7 @@ setup(
     packages = ['pyke', 'pyke.krb_compiler'],
     package_data = {'pyke.krb_compiler': ['*.krb']},
 
-    install_requires = ['ply>=2.5'],
+    install_requires = [],
     extras_require = {
         'regen_docs': ["rest2web>=0.5"],
         'examples': ["HTMLTemplate>=1.5"],

@@ -27,7 +27,7 @@
 from __future__ import with_statement
 import string
 import os, os.path
-from ply import lex
+from pyke.krb_compiler.ply import lex
 
 debug=0
 
