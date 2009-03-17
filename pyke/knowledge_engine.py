@@ -93,7 +93,11 @@ class engine(object):
         if isinstance(path, types.StringTypes):
             source_package_name = path
         elif isinstance(path, types.ModuleType):
-            source_package_name = path.__name__
+            if path.__file__.endswith(('__init__.py', '__init__.pyc',
+                                       '__init__.pyo')):
+                source_package_name = path.__name__
+            else:
+                source_package_name = path.__name__.rsplit('.', 1)[0]
         if debug:
             print >> sys.stderr, "_init_path source_package_name:", \
                                  source_package_name

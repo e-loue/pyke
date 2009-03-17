@@ -66,11 +66,17 @@ knowledge_engine.engine(\*paths, \*\*kws)
 
     Each ``paths`` argument represents a different Python package directory to
     search for Pyke source files.  These source packages may be passed either
-    as package names (as a string in Python's standard dotted notation), or as
-    the packages themselves.  Thus, the example above could also be written:
+    as package names (as a string in Python's standard dotted notation), as
+    the packages themselves, or as any module within the package.  Thus, the
+    example above could also be written:
 
     >>> from doc import examples
     >>> my_engine = knowledge_engine.engine(examples)
+
+    or
+
+    >>> from doc.examples import some_module
+    >>> my_engine = knowledge_engine.engine(some_module)
 
     Pyke recursively walks each source package directory looking for Pyke
     source files (`.kfb files`_, `.krb files`_, and `.kqb files`_).  Each
@@ -318,11 +324,11 @@ Python functions between subgoal proofs.
     ... except:
     ...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
     Traceback (most recent call last):
-      File "<doctest using_pyke.txt[35]>", line 2, in <module>
+      File "<doctest using_pyke.txt[37]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
-      File "...knowledge_engine.py", line 285, in prove_1
+      File "...knowledge_engine.py", line 289, in prove_1
         return iter(it).next()
-      File "...knowledge_engine.py", line 269, in gen
+      File "...knowledge_engine.py", line 273, in gen
         for plan in it:
       File "...rule_base.py", line 46, in next
         return self.iterator.next()
