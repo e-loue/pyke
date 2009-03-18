@@ -1,0 +1,38 @@
+1.0 RELEASE NOTES Mar 18, 2009
+
+This fixes two bugs in Pyke and is Pyke's first full release version!
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 0.7 RELEASE:
+
+    <none>
+
+
+FEATURE ENHANCEMENTS:
+
+Added the following features:
+
+    - Changed the .krb parser to iterate, rather than recurse, on the list of
+      rules in the file so that it doesn't hit the recursion limit on large
+      .krb files.
+    - Now including a copy of PLY with the Pyke sources so that I can release
+      the compiled pyke/krb_compiler/*_tables.py files with Pyke and not have
+      PLY try to recompile them (which generally gets a permission violation
+      because normal users can't write the Python's site-packages directory).
+    - Added the option to pass any module within the package to identify the
+      source package to knowledge_engine.engine().
+
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug 2569021: string literals don't work in .kfb files.
+    - Added mention of 'engine' variable within the rules documentation to fix
+      bug 2588191.
+

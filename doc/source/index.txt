@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007-2008 Bruce Frederiksen
+.. Copyright © 2007-2009 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,7 @@ uservalues
 Welcome to Pyke
 =============================
 -----------------------------
-Release 0.7
+Release 1.0
 -----------------------------
 
 Pyke introduces a form of `Logic Programming`_ (inspired by Prolog_) to the

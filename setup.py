@@ -8,9 +8,13 @@ from setuptools import setup
 
 setup(
     name = "pyke",
-    version = "0.7",
-    packages = ['pyke', 'pyke.krb_compiler'],
-    package_data = {'pyke.krb_compiler': ['*.krb']},
+    version = "1.0",
+    packages = ['pyke', 'pyke.krb_compiler', 'pyke.krb_compiler.ply'],
+    package_data = {
+        'pyke.krb_compiler': ['*.krb'],
+        'pyke.krb_compiler.ply': ['COPYING', 'README.pyke'],
+    },
+    data_files = [('pyke', ['copyright_license', 'README'])],
 
     install_requires = [],
     extras_require = {
@@ -32,9 +36,9 @@ setup(
         backward-chaining rules.
     """,
     download_url =
-        "http://downloads.sourceforge.net/pyke/pyke-0.7-py2.5.egg",
+        "http://downloads.sourceforge.net/pyke/pyke-1.0-py2.5.egg",
     classifiers = [
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",

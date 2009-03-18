@@ -16,10 +16,10 @@ FILES TO CHANGE:
         will always change:
         - line  3: Version: 0.2
         - line 23:     pyke_doc_html-0.2.tar.gz
-        - line 59:     pyke-0.2-py2.5.egg
-        - line 67:     pyke-0.2.tar.gz
-        - line 72: Add any new examples
-        - line 77:     pyke_examples-0.2.tar.gz
+        - line 48:     pyke-0.2-py2.5.egg
+        - line 56:     pyke-0.2.tar.gz
+        - line 61: Add any new examples
+        - line 66:     pyke_examples-0.2.tar.gz
     - setup.py
         - line 11:     version = "0.2",
         - line 35:         "http://downloads.sourceforge.net/..."
