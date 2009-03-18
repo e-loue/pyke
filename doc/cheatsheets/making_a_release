@@ -103,7 +103,8 @@ UPDATE PYPI LINK:
 
 CREATE NEWS ANNOUNCEMENTS
 
-    On Sourceforge: Admin -> News -> Submit
+    On Sourceforge: Project Admin -> Feature Settings
+                                  -> Submit (on Project News line)
 
     On Google Groups: http://groups.google.com/group/pyke
 
