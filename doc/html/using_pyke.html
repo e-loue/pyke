@@ -83,11 +83,17 @@ on Python's search path for modules, and the directory for each dotted
 name must include an <tt class="docutils literal"><span class="pre">__init__.py</span></tt> file.</p>
 <p>Each <tt class="docutils literal"><span class="pre">paths</span></tt> argument represents a different Python package directory to
 search for Pyke source files.  These source packages may be passed either
-as package names (as a string in Python's standard dotted notation), or as
-the packages themselves.  Thus, the example above could also be written:</p>
+as package names (as a string in Python's standard dotted notation), as
+the packages themselves, or as any module within the package.  Thus, the
+example above could also be written:</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; from doc import examples
 &gt;&gt;&gt; my_engine = knowledge_engine.engine(examples)
+</pre>
+<p>or</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; from doc.examples import some_module
+&gt;&gt;&gt; my_engine = knowledge_engine.engine(some_module)
 </pre>
 <p>Pyke recursively walks each source package directory looking for Pyke
 source files (<a class="reference" href="pyke_syntax/kfb_syntax.html">.kfb files</a>, <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a>, and <a class="reference" href="pyke_syntax/kqb_syntax.html">.kqb files</a>).  Each
@@ -328,11 +334,11 @@ Python functions between subgoal proofs.</p>
 ... except:
 ...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
 Traceback (most recent call last):
-  File &quot;&lt;doctest using_pyke.txt[35]&gt;&quot;, line 2, in &lt;module&gt;
+  File &quot;&lt;doctest using_pyke.txt[37]&gt;&quot;, line 2, in &lt;module&gt;
     my_engine.prove_1('error_test', 'goal', (), 0)
-  File &quot;...knowledge_engine.py&quot;, line 285, in prove_1
+  File &quot;...knowledge_engine.py&quot;, line 289, in prove_1
     return iter(it).next()
-  File &quot;...knowledge_engine.py&quot;, line 269, in gen
+  File &quot;...knowledge_engine.py&quot;, line 273, in gen
     for plan in it:
   File &quot;...rule_base.py&quot;, line 46, in next
     return self.iterator.next()
@@ -481,7 +487,7 @@ into named repositories called <em>knowledge bases</em>.</p>
 
   <div id="last-modified">
     Page last modified
-    Fri, Jan 16 2009.
+    Tue, Mar 17 2009.
 
   </div>
 

@@ -22,7 +22,7 @@ FILES TO CHANGE:
         - line 66:     pyke_examples-0.2.tar.gz
     - setup.py
         - line 11:     version = "0.2",
-        - line 35:         "http://downloads.sourceforge.net/..."
+        - line 39:         "http://downloads.sourceforge.net/..."
     - pyke/__init__.py
         - line 3: version = '0.2'
     - doc/source/index.txt
@@ -40,7 +40,7 @@ REBUILD compiler_bc.py
     $ cd ../../pyke/krb_compiler
     $ python
     >>> from pyke import krb_compiler
-    >>> krb_compiler.compile_krb('compiler', 'compiled_krb', 'compiled_krb', 'compiler.krb'))
+    >>> krb_compiler.compile_krb('compiler', 'compiled_krb', 'compiled_krb', 'compiler.krb')
     $ mv compiled_krb/compiler_bc.py .
 
 COMMIT SVN UPDATES
