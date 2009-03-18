@@ -60,7 +60,7 @@ TAG RELEASE
 
 ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
 
-    Admin -> Tracker -> "Tracker Administration" link
+    Project Admin -> Feature Settings -> Manage (on Tracker line)
 
     Do: Bugs, Support Requests, and Patches
 
@@ -75,9 +75,11 @@ UPLOAD DIST FILES TO SOURCEFORGE:
                 pyke_doc_html-0.4.tar.gz
                 pyke_examples-0.4.tar.gz
 
-    Go to: Admin -> File Releases
+    Go to: Project Admin -> Feature Settings
+                         -> Manage (on File Release System line)
     Click on "Add Release", Enter: 0.2
-    Click "Preserve my pre-formatted text." on the Release Notes.
+    Click "Preserve my pre-formatted text." on the Release Notes (upload the
+        RELEASE_NOTES-0.4 file).
     Follow the rest of the instructions there...
         After you've selected the files to include, you have to go through
         settings for each file ONE AT A TIME.  (Each file has its own Update
