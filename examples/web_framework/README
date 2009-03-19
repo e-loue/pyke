@@ -17,7 +17,7 @@ TurboGears 2.0, this web framework is a full 10 times faster than TurboGears!
 
 To run this example:
 
-    >>> from examples.web_server import simple_server
+    >>> from examples.web_framework import simple_server
     >>> simple_server.run()
 
 Then point your browser at:
@@ -97,7 +97,7 @@ profile_server.py
         Terminal 1                      Terminal 2
         --------------------------      --------------------------
         $ python                        
-        >>> from examples.web_server import profile_server       
+        >>> from examples.web_framework import profile_server       
         >>> profile_server.run()        
                                         $ siege -c 1 -f siege.urls
         ctl-C                           
@@ -114,7 +114,7 @@ preforked_server.py
     This will fully utilize multiple processors to achieve higher throughputs:
 
         $ python
-        >>> from examples.web_server import preforked_server
+        >>> from examples.web_framework import preforked_server
         >>> preforked_server.run(2)     # 2 is the number of processes
 
         ctl-C

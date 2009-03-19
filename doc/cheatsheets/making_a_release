@@ -66,6 +66,10 @@ ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
 
     Add release through "Add/Update Groups"
 
+UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
+
+    see web.upload cheatsheet
+
 UPLOAD DIST FILES TO SOURCEFORGE:
 
     In the browser, go to: https://frs.sourceforge.net/webupload and upload
@@ -92,10 +96,6 @@ UPLOAD DIST FILES TO SOURCEFORGE:
         Pick "Source .gz" for the source .gz file.
         Pick ".gz" for the doc .gz file.
         Pick ".gz" for the examples .gz file.
-
-UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
-
-    see web.upload cheatsheet
 
 UPDATE PYPI LINK:
 
