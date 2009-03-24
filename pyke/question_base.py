@@ -23,7 +23,7 @@
 
 
 import contextlib
-import unique
+from pyke import unique
 from pyke import knowledge_base
 
 class question_base(knowledge_base.knowledge_base):

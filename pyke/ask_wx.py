@@ -44,7 +44,7 @@ if __name__ != "__main__":
     # installed...
     import wx
 import itertools
-import qa_helpers
+from pyke import qa_helpers
 
 def review_ans(dlg, ans, review=None):
     if review:

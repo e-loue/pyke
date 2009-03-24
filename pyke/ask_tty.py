@@ -40,7 +40,7 @@ r'''
 '''
 
 import itertools
-import qa_helpers
+from pyke import qa_helpers
 
 encoding = 'UTF-8'
 
