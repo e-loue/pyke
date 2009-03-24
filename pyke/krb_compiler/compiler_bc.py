@@ -263,6 +263,8 @@ def fc_rule_(rule, arg_patterns, arg_context):
                            rule.pattern(5),
                            rule.pattern(6),
                            rule.pattern(7),
+                           rule.pattern(1),
+                           rule.pattern(2),
                            rule.pattern(8),
                            rule.pattern(9),
                            rule.pattern(10),)) \
@@ -370,7 +372,9 @@ def fc_premises1(rule, arg_patterns, arg_context):
                            rule.pattern(7),
                            rule.pattern(8),
                            rule.pattern(9),
-                           rule.pattern(10),)) \
+                           rule.pattern(10),
+                           rule.pattern(11),
+                           rule.pattern(12),)) \
           as gen_1:
           for x_1 in gen_1:
             flag_1 = True
@@ -380,22 +384,24 @@ def fc_premises1(rule, arg_patterns, arg_context):
             with engine.prove(rule.rule_base.root_name, 'fc_premises', context,
                               (rule.pattern(0),
                                rule.pattern(2),
-                               rule.pattern(11),
-                               rule.pattern(12),
-                               rule.pattern(4),
-                               rule.pattern(5),
                                rule.pattern(13),
                                rule.pattern(14),
+                               rule.pattern(4),
+                               rule.pattern(5),
                                rule.pattern(15),
-                               rule.pattern(10),
-                               rule.pattern(16),)) \
+                               rule.pattern(16),
+                               rule.pattern(9),
+                               rule.pattern(17),
+                               rule.pattern(18),
+                               rule.pattern(12),
+                               rule.pattern(19),)) \
               as gen_2:
               for x_2 in gen_2:
                 flag_2 = True
                 assert x_2 is None, \
                   "compiler.fc_premises1: got unexpected plan from when clause 2"
                 mark3 = context.mark(True)
-                if rule.pattern(17).match_data(context, context,
+                if rule.pattern(20).match_data(context, context,
                         context.lookup_data('decl_lines1') + context.lookup_data('decl_lines2')):
                   context.end_save_all_undo()
                   rule.rule_base.num_bc_rule_successes += 1
@@ -447,15 +453,21 @@ def fc_premise(rule, arg_patterns, arg_context):
                 context.end_save_all_undo()
                 mark4 = context.mark(True)
                 if rule.pattern(9).match_data(context, context,
-                        ("(%r, %r," % (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
-                       ('INDENT', 1),
-                       helpers.list_format(context.lookup_data('arg_patterns'), '(', '),'),
-                       "%s)," % context.lookup_data('multi_match'),
-                       "POPINDENT",
-                       )):
+                        context.lookup_data('decl_num_in') + 1):
                   context.end_save_all_undo()
-                  rule.rule_base.num_bc_rule_successes += 1
-                  yield
+                  mark5 = context.mark(True)
+                  if rule.pattern(10).match_data(context, context,
+                          ("(%r, %r," % (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
+                         ('INDENT', 1),
+                         helpers.list_format(context.lookup_data('arg_patterns'), '(', '),'),
+                         "%s)," % context.lookup_data('multi_match'),
+                         "POPINDENT",
+                         )):
+                    context.end_save_all_undo()
+                    rule.rule_base.num_bc_rule_successes += 1
+                    yield
+                  else: context.end_save_all_undo()
+                  context.undo_to_mark(mark5)
                 else: context.end_save_all_undo()
                 context.undo_to_mark(mark4)
               else: context.end_save_all_undo()
@@ -482,17 +494,17 @@ def gen_fc_for_false(rule, arg_patterns, arg_context):
         if rule.pattern(0).match_data(context, context,
                 (('STARTING_LINENO', context.lookup_data('start_lineno')),
                "with knowledge_base.Gen_once if index == %d \\" % \
-                                       context.lookup_data('clause_num'),
+                                       context.lookup_data('decl_num'),
                ('INDENT', 9),
                "else engine.lookup(%r, %r, context," % \
                                          (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
                ('INDENT', 19),
-               "rule.foreach_patterns(%d)) \\" % context.lookup_data('clause_num'),
+               "rule.foreach_patterns(%d)) \\" % context.lookup_data('decl_num'),
                'POPINDENT',
                'POPINDENT',
                ('INDENT', 2),
-               "as gen_%d:" % context.lookup_data('clause_num'),
-               "for dummy in gen_%d:" % context.lookup_data('clause_num'),
+               "as gen_%d:" % context.lookup_data('decl_num'),
+               "for dummy in gen_%d:" % context.lookup_data('decl_num'),
                ('ENDING_LINENO', context.lookup_data('end_lineno')),
                ('INDENT', 2),
                )):
@@ -523,11 +535,11 @@ def gen_fc_for_true(rule, arg_patterns, arg_context):
                "with engine.lookup(%r, %r, context, \\" % \
                                        (context.lookup_data('kb_name'), context.lookup_data('entity_name')),
                ('INDENT', 19),
-               "rule.foreach_patterns(%d)) \\" % context.lookup_data('clause_num'),
+               "rule.foreach_patterns(%d)) \\" % context.lookup_data('decl_num'),
                'POPINDENT',
                ('INDENT', 2),
-               "as gen_%d:" % context.lookup_data('clause_num'),
-               "for dummy in gen_%d:" % context.lookup_data('clause_num'),
+               "as gen_%d:" % context.lookup_data('decl_num'),
+               "for dummy in gen_%d:" % context.lookup_data('decl_num'),
                ('ENDING_LINENO', context.lookup_data('end_lineno')),
                ('INDENT', 2))):
           context.end_save_all_undo()
@@ -567,18 +579,20 @@ def fc_first(rule, arg_patterns, arg_context):
                              rule.pattern(7),
                              rule.pattern(8),
                              rule.pattern(9),
-                             rule.pattern(10),)) \
+                             rule.pattern(10),
+                             rule.pattern(11),
+                             rule.pattern(12),)) \
             as gen_2:
             for x_2 in gen_2:
               flag_2 = True
               assert x_2 is None, \
                 "compiler.fc_first: got unexpected plan from when clause 2"
               mark3 = context.mark(True)
-              if rule.pattern(11).match_data(context, context,
+              if rule.pattern(13).match_data(context, context,
                       "%s = False" % context.lookup_data('break_cond')):
                 context.end_save_all_undo()
                 mark4 = context.mark(True)
-                if rule.pattern(12).match_data(context, context,
+                if rule.pattern(14).match_data(context, context,
                         "%s = True" % context.lookup_data('break_cond')):
                   context.end_save_all_undo()
                   rule.rule_base.num_bc_rule_successes += 1
@@ -619,14 +633,16 @@ def fc_forall_None(rule, arg_patterns, arg_context):
                            rule.pattern(7),
                            rule.pattern(8),
                            rule.pattern(9),
-                           rule.pattern(10),)) \
+                           rule.pattern(10),
+                           rule.pattern(11),
+                           rule.pattern(12),)) \
           as gen_1:
           for x_1 in gen_1:
             flag_1 = True
             assert x_1 is None, \
               "compiler.fc_forall_None: got unexpected plan from when clause 1"
             mark2 = context.mark(True)
-            if rule.pattern(11).match_data(context, context,
+            if rule.pattern(13).match_data(context, context,
                     context.lookup_data('fn_head1') + context.lookup_data('fn_tail1')):
               context.end_save_all_undo()
               rule.rule_base.num_bc_rule_successes += 1
@@ -671,7 +687,9 @@ def fc_forall_require(rule, arg_patterns, arg_context):
                                rule.pattern(8),
                                rule.pattern(9),
                                rule.pattern(10),
-                               rule.pattern(11),)) \
+                               rule.pattern(11),
+                               rule.pattern(12),
+                               rule.pattern(13),)) \
               as gen_3:
               for x_3 in gen_3:
                 flag_3 = True
@@ -681,22 +699,24 @@ def fc_forall_require(rule, arg_patterns, arg_context):
                 with engine.prove(rule.rule_base.root_name, 'fc_premises', context,
                                   (rule.pattern(2),
                                    rule.pattern(4),
-                                   rule.pattern(12),
-                                   rule.pattern(13),
-                                   rule.pattern(0),
-                                   rule.pattern(6),
                                    rule.pattern(14),
                                    rule.pattern(15),
+                                   rule.pattern(0),
+                                   rule.pattern(6),
                                    rule.pattern(16),
-                                   rule.pattern(11),
-                                   rule.pattern(17),)) \
+                                   rule.pattern(17),
+                                   rule.pattern(10),
+                                   rule.pattern(18),
+                                   rule.pattern(19),
+                                   rule.pattern(13),
+                                   rule.pattern(20),)) \
                   as gen_4:
                   for x_4 in gen_4:
                     flag_4 = True
                     assert x_4 is None, \
                       "compiler.fc_forall_require: got unexpected plan from when clause 4"
                     mark5 = context.mark(True)
-                    if rule.pattern(18).match_data(context, context,
+                    if rule.pattern(21).match_data(context, context,
                             ("forall%d_worked = True" % context.lookup_data('start_lineno'),
                            context.lookup_data('fn_head1'),
                            "forall%d_worked = False" % context.lookup_data('start_lineno'),
@@ -710,7 +730,7 @@ def fc_forall_require(rule, arg_patterns, arg_context):
                            ("INDENT", 2))):
                       context.end_save_all_undo()
                       mark6 = context.mark(True)
-                      if rule.pattern(19).match_data(context, context,
+                      if rule.pattern(22).match_data(context, context,
                               context.lookup_data('decl_lines1') + context.lookup_data('decl_lines2')):
                         context.end_save_all_undo()
                         rule.rule_base.num_bc_rule_successes += 1
@@ -763,14 +783,16 @@ def fc_notany(rule, arg_patterns, arg_context):
                                rule.pattern(8),
                                rule.pattern(9),
                                rule.pattern(10),
-                               rule.pattern(11),)) \
+                               rule.pattern(11),
+                               rule.pattern(12),
+                               rule.pattern(13),)) \
               as gen_3:
               for x_3 in gen_3:
                 flag_3 = True
                 assert x_3 is None, \
                   "compiler.fc_notany: got unexpected plan from when clause 3"
                 mark4 = context.mark(True)
-                if rule.pattern(12).match_data(context, context,
+                if rule.pattern(14).match_data(context, context,
                         ("notany%d_worked = True" % context.lookup_data('start_lineno'),
                        context.lookup_data('fn_head1'),
                        "notany%d_worked = False" % context.lookup_data('start_lineno'),
@@ -804,20 +826,26 @@ def fc_python_premise(rule, arg_patterns, arg_context):
                             patterns,
                             arg_patterns)):
         rule.rule_base.num_bc_rules_matched += 1
-        with engine.prove(rule.rule_base.root_name, 'python_premise', context,
-                          (rule.pattern(0),
-                           rule.pattern(1),
-                           rule.pattern(2),
-                           rule.pattern(3),
-                           rule.pattern(4),
-                           rule.pattern(5),
-                           rule.pattern(6),)) \
-          as gen_1:
-          for x_1 in gen_1:
-            assert x_1 is None, \
-              "compiler.fc_python_premise: got unexpected plan from when clause 1"
-            rule.rule_base.num_bc_rule_successes += 1
-            yield
+        mark1 = context.mark(True)
+        if rule.pattern(0).match_data(context, context,
+                context.lookup_data('clause_num') + 1):
+          context.end_save_all_undo()
+          with engine.prove(rule.rule_base.root_name, 'python_premise', context,
+                            (rule.pattern(1),
+                             rule.pattern(2),
+                             rule.pattern(3),
+                             rule.pattern(4),
+                             rule.pattern(5),
+                             rule.pattern(6),
+                             rule.pattern(7),)) \
+            as gen_2:
+            for x_2 in gen_2:
+              assert x_2 is None, \
+                "compiler.fc_python_premise: got unexpected plan from when clause 2"
+              rule.rule_base.num_bc_rule_successes += 1
+              yield
+        else: context.end_save_all_undo()
+        context.undo_to_mark(mark1)
         rule.rule_base.num_bc_rule_failures += 1
     finally:
       context.done()
@@ -957,13 +985,13 @@ def bc_rules(rule, arg_patterns, arg_context):
         bc_plan_lines = []
         bc_bc_funs = []
         bc_bc_init = []
-        forall344_worked = True
+        forall358_worked = True
         for python_ans in \
              context.lookup_data('bc_rules'):
           mark2 = context.mark(True)
           if rule.pattern(0).match_data(context, context, python_ans):
             context.end_save_all_undo()
-            forall344_worked = False
+            forall358_worked = False
             flag_3 = False
             with engine.prove(rule.rule_base.root_name, 'bc_rule', context,
                               (rule.pattern(1),
@@ -979,16 +1007,16 @@ def bc_rules(rule, arg_patterns, arg_context):
                 bc_plan_lines.extend(context.lookup_data('bc_plan1'))
                 bc_bc_funs.append(context.lookup_data('bc_bc_fun1'))
                 bc_bc_init.append(context.lookup_data('bc_bc_init1'))
-                forall344_worked = True
-                if forall344_worked: break
+                forall358_worked = True
+                if forall358_worked: break
             if not flag_3:
               raise AssertionError("compiler.bc_rules: 'when' clause 3 failed")
-            if not forall344_worked:
+            if not forall358_worked:
               context.undo_to_mark(mark2)
               break
           else: context.end_save_all_undo()
           context.undo_to_mark(mark2)
-        if forall344_worked:
+        if forall358_worked:
           mark5 = context.mark(True)
           if rule.pattern(5).match_data(context, context,
                   tuple(bc_plan_lines)):
@@ -2183,6 +2211,8 @@ def populate(engine):
                    contexts.anonymous('_'),
                    pattern.pattern_literal(()),
                    pattern.pattern_literal(()),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_in'),
                    pattern.pattern_literal(()),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_in'),),
@@ -2199,6 +2229,8 @@ def populate(engine):
                    contexts.variable('multi_match'),
                    pattern.pattern_tuple((contexts.variable('fn_head1'),), contexts.variable('fn_head2')),
                    pattern.pattern_tuple((contexts.variable('fn_tail2'),), contexts.variable('fn_tail1')),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines'),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_out'),),
@@ -2211,6 +2243,8 @@ def populate(engine):
                    contexts.variable('multi_match'),
                    contexts.variable('fn_head1'),
                    contexts.variable('fn_tail1'),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_out1'),
                    contexts.variable('decl_lines1'),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_out1'),
@@ -2218,6 +2252,7 @@ def populate(engine):
                    contexts.variable('rest_prems'),
                    contexts.variable('fn_head2'),
                    contexts.variable('fn_tail2'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines2'),
                    contexts.variable('patterns_out'),
                    contexts.variable('decl_lines'),))
@@ -2232,6 +2267,8 @@ def populate(engine):
                    contexts.variable('multi_match'),
                    contexts.variable('fn_head'),
                    contexts.variable('fn_tail'),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines'),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_in'),),
@@ -2241,10 +2278,11 @@ def populate(engine):
                    contexts.variable('start_lineno'),
                    contexts.variable('end_lineno'),
                    contexts.variable('multi_match'),
-                   contexts.variable('clause_num'),
+                   contexts.variable('decl_num_in'),
                    contexts.variable('fn_head'),
                    contexts.variable('fn_tail'),
                    contexts.variable('next_clause_num'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines'),))
   
   bc_rule.bc_rule('gen_fc_for_false', This_rule_base, 'gen_fc_for',
@@ -2254,7 +2292,7 @@ def populate(engine):
                    contexts.variable('start_lineno'),
                    contexts.variable('end_lineno'),
                    pattern.pattern_literal(False),
-                   contexts.variable('clause_num'),
+                   contexts.variable('decl_num'),
                    contexts.variable('fn_head'),),
                   (),
                   (contexts.variable('fn_head'),))
@@ -2266,7 +2304,7 @@ def populate(engine):
                    contexts.variable('start_lineno'),
                    contexts.variable('end_lineno'),
                    pattern.pattern_literal(True),
-                   contexts.variable('clause_num'),
+                   contexts.variable('decl_num'),
                    contexts.variable('fn_head'),),
                   (),
                   (contexts.variable('fn_head'),))
@@ -2281,6 +2319,8 @@ def populate(engine):
                    contexts.anonymous('_'),
                    pattern.pattern_tuple((contexts.variable('init_worked'), contexts.variable('fn_head'), contexts.variable('set_worked'),), None),
                    contexts.variable('fn_tail'),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines'),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_out'),),
@@ -2293,6 +2333,8 @@ def populate(engine):
                    pattern.pattern_literal(True),
                    contexts.variable('fn_head'),
                    contexts.variable('fn_tail'),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines'),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_out'),
@@ -2309,6 +2351,8 @@ def populate(engine):
                    contexts.anonymous('_'),
                    contexts.variable('fn_head'),
                    pattern.pattern_literal(()),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines'),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_out'),),
@@ -2321,6 +2365,8 @@ def populate(engine):
                    pattern.pattern_literal(True),
                    contexts.variable('fn_head1'),
                    contexts.variable('fn_tail1'),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines'),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_out'),
@@ -2336,6 +2382,8 @@ def populate(engine):
                    contexts.anonymous('_'),
                    contexts.variable('fn_head'),
                    pattern.pattern_literal(("POPINDENT",)),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines'),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_out'),),
@@ -2349,6 +2397,8 @@ def populate(engine):
                    pattern.pattern_literal(True),
                    contexts.variable('fn_head1'),
                    contexts.variable('fn_tail1'),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_out1'),
                    contexts.variable('decl_lines1'),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_out1'),
@@ -2356,6 +2406,7 @@ def populate(engine):
                    contexts.variable('require'),
                    contexts.variable('fn_head2'),
                    contexts.variable('fn_tail2'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines2'),
                    contexts.variable('patterns_out'),
                    contexts.variable('fn_head'),
@@ -2371,6 +2422,8 @@ def populate(engine):
                    contexts.anonymous('_'),
                    contexts.variable('fn_head'),
                    pattern.pattern_literal(("POPINDENT",)),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines'),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_out'),),
@@ -2384,6 +2437,8 @@ def populate(engine):
                    pattern.pattern_literal(True),
                    contexts.variable('fn_head1'),
                    contexts.variable('fn_tail1'),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_out'),
                    contexts.variable('decl_lines'),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_out'),
@@ -2393,17 +2448,20 @@ def populate(engine):
                   fc_python_premise, None,
                   (contexts.variable('rule_name'),
                    contexts.variable('clause_num'),
-                   contexts.variable('clause_num'),
+                   contexts.variable('next_clause_num'),
                    contexts.variable('python_premise'),
                    contexts.variable('break_cond'),
                    contexts.anonymous('_'),
                    contexts.variable('fn_head'),
                    contexts.variable('fn_tail'),
+                   contexts.variable('decl_num_in'),
+                   contexts.variable('decl_num_in'),
                    pattern.pattern_literal(()),
                    contexts.variable('patterns_in'),
                    contexts.variable('patterns_out'),),
                   (),
-                  (contexts.variable('clause_num'),
+                  (contexts.variable('next_clause_num'),
+                   contexts.variable('clause_num'),
                    contexts.variable('python_premise'),
                    contexts.variable('break_cond'),
                    contexts.variable('patterns_in'),
@@ -2990,141 +3048,143 @@ Krb_lineno_map = (
     ((228, 228), (98, 98)),
     ((232, 232), (99, 99)),
     ((250, 254), (102, 103)),
-    ((257, 273), (105, 107)),
-    ((275, 284), (108, 109)),
-    ((287, 304), (110, 127)),
-    ((308, 315), (128, 135)),
-    ((337, 341), (138, 139)),
-    ((355, 359), (142, 145)),
-    ((362, 378), (147, 150)),
-    ((380, 396), (151, 154)),
-    ((399, 399), (155, 155)),
-    ((419, 423), (158, 163)),
-    ((425, 436), (165, 166)),
-    ((439, 442), (167, 170)),
-    ((446, 446), (171, 171)),
-    ((450, 455), (172, 177)),
-    ((475, 479), (180, 181)),
-    ((483, 498), (183, 198)),
-    ((514, 518), (202, 203)),
-    ((522, 532), (205, 215)),
-    ((548, 552), (218, 221)),
-    ((556, 556), (223, 223)),
-    ((559, 575), (224, 227)),
-    ((578, 578), (228, 228)),
-    ((582, 582), (229, 229)),
-    ((604, 608), (232, 235)),
-    ((611, 627), (237, 240)),
-    ((630, 630), (241, 241)),
-    ((648, 652), (244, 247)),
-    ((656, 656), (249, 249)),
-    ((660, 660), (250, 250)),
-    ((663, 679), (251, 254)),
-    ((681, 697), (255, 258)),
-    ((700, 710), (259, 269)),
-    ((714, 714), (270, 270)),
-    ((740, 744), (273, 276)),
-    ((748, 748), (278, 278)),
-    ((752, 752), (279, 279)),
-    ((755, 771), (280, 283)),
-    ((774, 779), (284, 289)),
-    ((801, 805), (292, 295)),
-    ((807, 818), (297, 299)),
-    ((831, 835), (302, 302)),
-    ((849, 853), (305, 306)),
-    ((856, 865), (308, 308)),
-    ((867, 876), (309, 309)),
-    ((893, 897), (312, 314)),
-    ((901, 902), (316, 317)),
-    ((906, 915), (318, 327)),
-    ((933, 937), (330, 335)),
-    ((951, 955), (338, 338)),
-    ((957, 959), (340, 343)),
-    ((962, 962), (345, 345)),
-    ((968, 978), (347, 347)),
-    ((979, 981), (348, 351)),
-    ((994, 994), (352, 352)),
-    ((998, 998), (353, 353)),
-    ((1002, 1002), (354, 354)),
-    ((1022, 1026), (357, 359)),
-    ((1029, 1042), (361, 363)),
-    ((1045, 1047), (364, 366)),
-    ((1051, 1058), (367, 374)),
-    ((1062, 1065), (375, 378)),
-    ((1087, 1091), (381, 383)),
-    ((1094, 1113), (385, 388)),
-    ((1116, 1116), (389, 389)),
-    ((1120, 1123), (390, 393)),
-    ((1127, 1132), (394, 399)),
-    ((1154, 1158), (402, 404)),
-    ((1172, 1176), (407, 411)),
-    ((1179, 1198), (413, 417)),
-    ((1200, 1219), (418, 422)),
-    ((1222, 1222), (423, 423)),
-    ((1226, 1226), (424, 424)),
-    ((1230, 1230), (425, 425)),
-    ((1254, 1258), (428, 434)),
-    ((1262, 1262), (436, 436)),
-    ((1266, 1266), (437, 437)),
-    ((1270, 1271), (438, 439)),
-    ((1275, 1287), (440, 452)),
-    ((1290, 1303), (453, 454)),
-    ((1305, 1321), (455, 458)),
-    ((1324, 1325), (459, 460)),
-    ((1329, 1329), (461, 461)),
-    ((1333, 1336), (462, 465)),
-    ((1368, 1372), (468, 472)),
-    ((1376, 1376), (474, 474)),
-    ((1379, 1398), (475, 479)),
-    ((1400, 1413), (480, 481)),
-    ((1416, 1416), (482, 482)),
-    ((1420, 1420), (483, 483)),
-    ((1444, 1448), (486, 490)),
-    ((1451, 1470), (492, 496)),
-    ((1473, 1473), (497, 497)),
-    ((1491, 1495), (500, 504)),
-    ((1499, 1499), (506, 506)),
-    ((1503, 1503), (507, 507)),
-    ((1506, 1525), (508, 512)),
-    ((1527, 1546), (513, 517)),
-    ((1549, 1557), (518, 528)),
-    ((1581, 1585), (531, 535)),
-    ((1589, 1589), (538, 538)),
-    ((1593, 1593), (539, 539)),
-    ((1596, 1615), (540, 544)),
-    ((1618, 1623), (545, 550)),
-    ((1645, 1649), (553, 555)),
-    ((1653, 1660), (557, 564)),
-    ((1676, 1680), (567, 571)),
-    ((1684, 1686), (573, 575)),
-    ((1689, 1701), (576, 577)),
-    ((1718, 1722), (580, 585)),
-    ((1726, 1728), (587, 589)),
-    ((1731, 1743), (590, 591)),
-    ((1760, 1764), (594, 596)),
-    ((1768, 1769), (598, 599)),
-    ((1785, 1789), (602, 603)),
-    ((1793, 1813), (605, 625)),
-    ((1817, 1817), (626, 626)),
-    ((1835, 1839), (629, 630)),
-    ((1853, 1857), (633, 634)),
-    ((1861, 1864), (636, 639)),
-    ((1868, 1874), (640, 646)),
-    ((1892, 1896), (649, 653)),
-    ((1900, 1900), (655, 655)),
-    ((1902, 1913), (656, 658)),
-    ((1928, 1932), (661, 665)),
-    ((1936, 1937), (667, 668)),
-    ((1941, 1941), (669, 669)),
-    ((1945, 1955), (670, 680)),
-    ((1959, 1961), (681, 683)),
-    ((1983, 1987), (686, 690)),
-    ((1991, 1992), (692, 693)),
-    ((1996, 1996), (694, 694)),
-    ((2000, 2012), (695, 707)),
-    ((2016, 2025), (708, 717)),
-    ((2047, 2051), (720, 725)),
-    ((2055, 2055), (727, 727)),
-    ((2059, 2066), (728, 735)),
-    ((2084, 2088), (738, 746)),
+    ((257, 275), (105, 107)),
+    ((277, 286), (108, 109)),
+    ((289, 306), (110, 127)),
+    ((310, 317), (128, 135)),
+    ((339, 343), (138, 139)),
+    ((357, 361), (142, 146)),
+    ((364, 382), (148, 152)),
+    ((384, 402), (153, 157)),
+    ((405, 405), (158, 158)),
+    ((425, 429), (161, 167)),
+    ((431, 442), (169, 170)),
+    ((445, 448), (171, 174)),
+    ((452, 452), (175, 175)),
+    ((456, 456), (176, 176)),
+    ((460, 465), (177, 182)),
+    ((487, 491), (185, 186)),
+    ((495, 510), (188, 203)),
+    ((526, 530), (207, 208)),
+    ((534, 544), (210, 220)),
+    ((560, 564), (223, 227)),
+    ((568, 568), (229, 229)),
+    ((571, 589), (230, 234)),
+    ((592, 592), (235, 235)),
+    ((596, 596), (236, 236)),
+    ((618, 622), (239, 242)),
+    ((625, 643), (244, 248)),
+    ((646, 646), (249, 249)),
+    ((664, 668), (252, 256)),
+    ((672, 672), (258, 258)),
+    ((676, 676), (259, 259)),
+    ((679, 697), (260, 264)),
+    ((699, 717), (265, 269)),
+    ((720, 730), (270, 280)),
+    ((734, 734), (281, 281)),
+    ((760, 764), (284, 288)),
+    ((768, 768), (290, 290)),
+    ((772, 772), (291, 291)),
+    ((775, 793), (292, 296)),
+    ((796, 801), (297, 302)),
+    ((823, 827), (305, 308)),
+    ((831, 831), (310, 310)),
+    ((833, 844), (311, 313)),
+    ((859, 863), (316, 316)),
+    ((877, 881), (319, 320)),
+    ((884, 893), (322, 322)),
+    ((895, 904), (323, 323)),
+    ((921, 925), (326, 328)),
+    ((929, 930), (330, 331)),
+    ((934, 943), (332, 341)),
+    ((961, 965), (344, 349)),
+    ((979, 983), (352, 352)),
+    ((985, 987), (354, 357)),
+    ((990, 990), (359, 359)),
+    ((996, 1006), (361, 361)),
+    ((1007, 1009), (362, 365)),
+    ((1022, 1022), (366, 366)),
+    ((1026, 1026), (367, 367)),
+    ((1030, 1030), (368, 368)),
+    ((1050, 1054), (371, 373)),
+    ((1057, 1070), (375, 377)),
+    ((1073, 1075), (378, 380)),
+    ((1079, 1086), (381, 388)),
+    ((1090, 1093), (389, 392)),
+    ((1115, 1119), (395, 397)),
+    ((1122, 1141), (399, 402)),
+    ((1144, 1144), (403, 403)),
+    ((1148, 1151), (404, 407)),
+    ((1155, 1160), (408, 413)),
+    ((1182, 1186), (416, 418)),
+    ((1200, 1204), (421, 425)),
+    ((1207, 1226), (427, 431)),
+    ((1228, 1247), (432, 436)),
+    ((1250, 1250), (437, 437)),
+    ((1254, 1254), (438, 438)),
+    ((1258, 1258), (439, 439)),
+    ((1282, 1286), (442, 448)),
+    ((1290, 1290), (450, 450)),
+    ((1294, 1294), (451, 451)),
+    ((1298, 1299), (452, 453)),
+    ((1303, 1315), (454, 466)),
+    ((1318, 1331), (467, 468)),
+    ((1333, 1349), (469, 472)),
+    ((1352, 1353), (473, 474)),
+    ((1357, 1357), (475, 475)),
+    ((1361, 1364), (476, 479)),
+    ((1396, 1400), (482, 486)),
+    ((1404, 1404), (488, 488)),
+    ((1407, 1426), (489, 493)),
+    ((1428, 1441), (494, 495)),
+    ((1444, 1444), (496, 496)),
+    ((1448, 1448), (497, 497)),
+    ((1472, 1476), (500, 504)),
+    ((1479, 1498), (506, 510)),
+    ((1501, 1501), (511, 511)),
+    ((1519, 1523), (514, 518)),
+    ((1527, 1527), (520, 520)),
+    ((1531, 1531), (521, 521)),
+    ((1534, 1553), (522, 526)),
+    ((1555, 1574), (527, 531)),
+    ((1577, 1585), (532, 542)),
+    ((1609, 1613), (545, 549)),
+    ((1617, 1617), (552, 552)),
+    ((1621, 1621), (553, 553)),
+    ((1624, 1643), (554, 558)),
+    ((1646, 1651), (559, 564)),
+    ((1673, 1677), (567, 569)),
+    ((1681, 1688), (571, 578)),
+    ((1704, 1708), (581, 585)),
+    ((1712, 1714), (587, 589)),
+    ((1717, 1729), (590, 591)),
+    ((1746, 1750), (594, 599)),
+    ((1754, 1756), (601, 603)),
+    ((1759, 1771), (604, 605)),
+    ((1788, 1792), (608, 610)),
+    ((1796, 1797), (612, 613)),
+    ((1813, 1817), (616, 617)),
+    ((1821, 1841), (619, 639)),
+    ((1845, 1845), (640, 640)),
+    ((1863, 1867), (643, 644)),
+    ((1881, 1885), (647, 648)),
+    ((1889, 1892), (650, 653)),
+    ((1896, 1902), (654, 660)),
+    ((1920, 1924), (663, 667)),
+    ((1928, 1928), (669, 669)),
+    ((1930, 1941), (670, 672)),
+    ((1956, 1960), (675, 679)),
+    ((1964, 1965), (681, 682)),
+    ((1969, 1969), (683, 683)),
+    ((1973, 1983), (684, 694)),
+    ((1987, 1989), (695, 697)),
+    ((2011, 2015), (700, 704)),
+    ((2019, 2020), (706, 707)),
+    ((2024, 2024), (708, 708)),
+    ((2028, 2040), (709, 721)),
+    ((2044, 2053), (722, 731)),
+    ((2075, 2079), (734, 739)),
+    ((2083, 2083), (741, 741)),
+    ((2087, 2094), (742, 749)),
+    ((2112, 2116), (752, 760)),
 )
