@@ -368,7 +368,7 @@ class kqb_parser(object):
             ...    alt, review = p.parse_alternatives()
             ...    for tag, msg in alt:
             ...        print '%s: %s' % (repr(tag), repr(msg.template))
-            ...    for key, msg in sorted(review, key=lambda x: x[0]):
+            ...    for key, msg in sorted(review, key=lambda x: repr(x[0])):
             ...        print repr(key), '!', repr(msg.template)
             >>> do(r"""
             ...     1: hi mom
@@ -430,7 +430,7 @@ class kqb_parser(object):
             ...    ans.name = 'StringIO'
             ...    p = kqb_parser(ans)
             ...    review = p.parse_review()
-            ...    for key, msg in sorted(review, key=lambda x: x[0]):
+            ...    for key, msg in sorted(review, key=lambda x: repr(x[0])):
             ...        print repr(key), '!', repr(msg.template)
             >>> do(r"""
             ...     1 ! hi mom
@@ -440,9 +440,9 @@ class kqb_parser(object):
             ...     3-5! nope, this is just 44
             ... next
             ... """)
+            'bob' ! u'yep this is bob'
             1 ! u'hi mom\nhow are you?\n! Just reward!'
             slice(3, 5, None) ! u'nope, this is just 44'
-            'bob' ! u'yep this is bob'
         '''
         if self.column >= len(self.line):
             self.readline()
