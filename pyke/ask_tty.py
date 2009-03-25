@@ -27,7 +27,7 @@ r'''
             - msg (for error message)
             - prompt (without the [])
             - match(str) returns converted value (None if no match)
-        - an instance of qa_helpers.map
+        - an instance of qa_helpers.qmap
             - test (a match)
             - value (value to use)
         - an instance of slice (step must be None)
@@ -39,6 +39,7 @@ r'''
     "Alternatives" here is a tuple of (tag, label_string)
 '''
 
+import sys
 import itertools
 from pyke import qa_helpers
 
@@ -51,7 +52,6 @@ no_match = ('n', 'no', 'f', 'false')
 def get_answer(question, match_prompt, conv_fn=None, test=None, review=None):
     r'''
         >>> from StringIO import StringIO
-        >>> import sys
         >>> sys.stdin = StringIO('4\n')
         >>> get_answer(u'enter number?', '[0-10]', qa_helpers.to_int,
         ...            slice(3,5))
@@ -86,7 +86,7 @@ def get_answer(question, match_prompt, conv_fn=None, test=None, review=None):
         print "_" * 78
         ans = raw_input(question)
         try:
-            if encoding: ans = ans.decode(encoding)
+            if encoding and sys.version_info[0] < 3: ans = ans.decode(encoding)
             if conv_fn: ans = conv_fn(ans)
             if test: ans = qa_helpers.match(ans, test)
             break
@@ -114,7 +114,6 @@ def get_answer(question, match_prompt, conv_fn=None, test=None, review=None):
 def ask_yn(question, review=None):
     r'''
         >>> from StringIO import StringIO
-        >>> import sys
         >>> sys.stdin = StringIO('yes\n')
         >>> ask_yn(u'got it?')
         ______________________________________________________________________________
@@ -125,14 +124,13 @@ def ask_yn(question, review=None):
         got it? (y/n) False
     '''
     return get_answer(question, u"(y/n)", conv_fn=lambda str: str.lower(),
-                      test=(qa_helpers.map(yes_match, True),
-                            qa_helpers.map(no_match, False)),
+                      test=(qa_helpers.qmap(yes_match, True),
+                            qa_helpers.qmap(no_match, False)),
                       review=review)
 
 def ask_integer(question, match=None, review=None):
     r'''
         >>> from StringIO import StringIO
-        >>> import sys
         >>> sys.stdin = StringIO('4\n')
         >>> ask_integer(u'enter number?')
         ______________________________________________________________________________
@@ -147,7 +145,6 @@ def ask_integer(question, match=None, review=None):
 def ask_float(question, match=None, review=None):
     r'''
         >>> from StringIO import StringIO
-        >>> import sys
         >>> sys.stdin = StringIO('4\n')
         >>> ask_float(u'enter number?')
         ______________________________________________________________________________
@@ -162,7 +159,6 @@ def ask_float(question, match=None, review=None):
 def ask_number(question, match=None, review=None):
     r'''
         >>> from StringIO import StringIO
-        >>> import sys
         >>> sys.stdin = StringIO('4\n')
         >>> ask_number(u'enter number?')
         ______________________________________________________________________________
@@ -177,7 +173,6 @@ def ask_number(question, match=None, review=None):
 def ask_string(question, match=None, review=None):
     r'''
         >>> from StringIO import StringIO
-        >>> import sys
         >>> sys.stdin = StringIO('yes\n')
         >>> ask_string(u'enter string?')
         ______________________________________________________________________________
@@ -191,7 +186,6 @@ def ask_string(question, match=None, review=None):
 def ask_select_1(question, alternatives, review=None):
     r'''
         >>> from StringIO import StringIO
-        >>> import sys
         >>> sys.stdin = StringIO('2\n')
         >>> ask_select_1(u'which one?',
         ...              (('a', u'first one'), ('b', u'second one'),
@@ -216,7 +210,6 @@ def ask_select_1(question, alternatives, review=None):
 def ask_select_n(question, alternatives, review=None):
     r'''
         >>> from StringIO import StringIO
-        >>> import sys
         >>> sys.stdin = StringIO('1,3\n')
         >>> ask_select_n(u'which one?',
         ...              (('a', u'first one'), ('b', u'second one'),
@@ -243,7 +236,6 @@ def ask_select_n(question, alternatives, review=None):
 
 def test():
     import doctest
-    import sys
     sys.exit(doctest.testmod()[0])
 
 if __name__ == "__main__":

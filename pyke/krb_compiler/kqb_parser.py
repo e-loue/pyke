@@ -285,7 +285,7 @@ class kqb_parser(object):
             if next_token == 'regexp' and token == 'str':
                 return qa_helpers.regexp(next_value, value)
             if next_token == 'equal':
-                return qa_helpers.map(self.parse_simple_match(), value)
+                return qa_helpers.qmap(self.parse_simple_match(), value)
             if next_token == 'hyphen' and token == 'number':
                 final_token, final_value = self.get_token()
                 if final_token == 'number':
@@ -323,7 +323,7 @@ class kqb_parser(object):
             >>> do(r'"msg"[prompt]/reg\exp/ bob')
             <regexp 'msg'[prompt]/reg\exp/>
             >>> do(r"44 = id")
-            <map 44 = 'id'>
+            <qmap 44 = 'id'>
             >>> do(r"-5 bob")
             slice(None, 5, None)
             >>> do(r"0-5 bob")

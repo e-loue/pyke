@@ -27,7 +27,7 @@ r'''
             - msg (for error message)
             - prompt (without the [])
             - match(str) returns converted value (None if no match)
-        - an instance of qa_helpers.map
+        - an instance of qa_helpers.qmap
             - test (a match)
             - value (value to use)
         - an instance of slice (step must be None)
@@ -39,7 +39,10 @@ r'''
     "Alternatives" here is a tuple of (tag, label_string)
 '''
 
-if __name__ != "__main__":
+import sys
+if __name__ != "__main__" \
+   and ('__main__' not in sys.modules
+        or 'doctest' not in sys.modules['__main__'].__file__):
     # So we don't screw up doctest runs on boxes that don't have wxPython
     # installed...
     import wx
@@ -170,7 +173,6 @@ def ask_select_n(question, alternatives, review=None):
 
 def test():
     import doctest
-    import sys
     sys.exit(doctest.testmod()[0])
 
 if __name__ == "__main__":

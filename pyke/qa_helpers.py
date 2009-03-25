@@ -24,6 +24,7 @@
 
 import types
 import re
+import sys
 
 class regexp(object):
     r'''
@@ -63,11 +64,11 @@ class regexp(object):
             if m.lastindex == 1: return m.group(1)
             return str
 
-class map(object):
+class qmap(object):
     r'''
-        >>> m = map(u'y', True)
+        >>> m = qmap(u'y', True)
         >>> m
-        <map True = u'y'>
+        <qmap True = u'y'>
         >>> m.test
         u'y'
         >>> m.value
@@ -77,19 +78,21 @@ class map(object):
         self.test = test
         self.value = value
     def __repr__(self):
-        return "<map %s = %s>" % (repr(self.value), repr(self.test))
+        return "<qmap %s = %s>" % (repr(self.value), repr(self.test))
 
-
-def urepr(x):
-    r'''
-        >>> urepr(44)
-        u'44'
-        >>> tuple(urepr('hi\n'))
-        (u"'", u'h', u'i', u'\\', u'n', u"'")
-    '''
-    if isinstance(x, types.StringTypes):
-        return repr(x.encode('utf-8')).decode('utf-8')
-    return unicode(x)
+if sys.version_info[0] < 3:
+    def urepr(x):
+        r'''
+            >>> urepr(44)
+            u'44'
+            >>> tuple(urepr('hi\n'))
+            (u"'", u'h', u'i', u'\\', u'n', u"'")
+        '''
+        if isinstance(x, types.StringTypes):
+            return repr(x.encode('utf-8')).decode('utf-8')
+        return unicode(x)
+else:
+    urepr = repr
 
 def to_int(str):
     r'''
@@ -167,7 +170,7 @@ def msg_for(test, type):
         >>> msg_for(None, int)
         >>> msg_for(regexp(u'', u'the msg'), int)
         u'the msg'
-        >>> msg_for(map(44, True), int)
+        >>> msg_for(qmap(44, True), int)
         u'44'
         >>> msg_for(slice(3, 55), int)
         u'between 3 and 55'
@@ -192,7 +195,7 @@ def msg_for(test, type):
     '''
     if test is None: return None
     if isinstance(test, regexp): return test.msg
-    if isinstance(test, map): return msg_for(test.test, type)
+    if isinstance(test, qmap): return msg_for(test.test, type)
     if isinstance(test, slice):
         if test.start is None:
             if test.stop is not None: ans = u"<= %d" % test.stop
@@ -214,7 +217,7 @@ def match_prompt(test, type, format, default=u''):
         u''
         >>> match_prompt(regexp(u'', u'', u'the prompt'), int, u' [%s] ')
         u' [the prompt] '
-        >>> match_prompt(map(44, True), int, u' [%s] ')
+        >>> match_prompt(qmap(44, True), int, u' [%s] ')
         u' [44] '
         >>> match_prompt(slice(3, 55), int, u' [%s] ')
         u' [3-55] '
@@ -240,7 +243,7 @@ def match_prompt(test, type, format, default=u''):
     def prompt_body(test, type):
         if test is None: return None
         if isinstance(test, regexp): return test.prompt
-        if isinstance(test, map): return prompt_body(test.test, type)
+        if isinstance(test, qmap): return prompt_body(test.test, type)
         if isinstance(test, slice):
             if test.start is None:
                 if test.stop is not None:
@@ -277,9 +280,9 @@ def match(ans, test):
         Traceback (most recent call last):
             ...
         ValueError: hi there
-        >>> match(u'y', map(u'y', True))
+        >>> match(u'y', qmap(u'y', True))
         True
-        >>> match(2, map(slice(3, 5), True))
+        >>> match(2, qmap(slice(3, 5), True))
         Traceback (most recent call last):
             ...
         ValueError: between 3 and 5
@@ -298,7 +301,7 @@ def match(ans, test):
     if isinstance(test, regexp):
         ans = test.match(ans)
         if ans is not None: return ans
-    if isinstance(test, map):
+    if isinstance(test, qmap):
         match(ans, test.test)   # raises ValueError if it doesn't match
         return test.value
     elif isinstance(test, slice):
@@ -319,7 +322,6 @@ def match(ans, test):
 
 def test():
     import doctest
-    import sys
     sys.exit(doctest.testmod()[0])
 
 if __name__ == "__main__":
