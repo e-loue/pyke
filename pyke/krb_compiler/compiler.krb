@@ -410,7 +410,7 @@ bc_premises
             (lines for step, lines
                     in sorted(((step, lines) for step, lines in $plan_lines1
                                               if step is not None),
-                              key=lambda (step, lines): step)))))
+                              key=lambda t: t[0])))))
 
 bc_premises1_0
     use bc_premises1($_, $_, $clause_num, $clause_num, (), $_, $_,

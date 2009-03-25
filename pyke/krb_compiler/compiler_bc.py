@@ -1157,7 +1157,7 @@ def bc_premises(rule, arg_patterns, arg_context):
                        (lines for step, lines
                        in sorted(((step, lines) for step, lines in context.lookup_data('plan_lines1')
                        if step is not None),
-                       key=lambda (step, lines): step)))))):
+                       key=lambda t: t[0])))))):
                   context.end_save_all_undo()
                   rule.rule_base.num_bc_rule_successes += 1
                   yield
