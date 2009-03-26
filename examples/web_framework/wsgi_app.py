@@ -102,7 +102,7 @@ def gen_plan(environ, starting_tables, template_name):
     add_fact("wsgi", "wsgi.multithread")
     add_fact("wsgi", "wsgi.run_once")
 
-    for env_var in environ.keys():
+    for env_var in environ.iterkeys():
         if env_var.startswith('HTTP_'): add_http(env_var)
 
     if Debug > 1:

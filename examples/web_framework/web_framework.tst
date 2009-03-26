@@ -10,34 +10,34 @@ First, fire up the server:
     >>> server = subprocess.Popen((sys.executable, "-i"),
     ...                           stdin=subprocess.PIPE,
     ...                           stdout=subprocess.PIPE,
-    ...                           stderr=subprocess.PIPE,
+    ...                           stderr=subprocess.STDOUT,
     ...                           close_fds=True, env=os.environ)
-    >>> server.stderr.readline()        # doctest: +ELLIPSIS
+    >>> server.stdout.readline()        # doctest: +ELLIPSIS
     'Python ...\n'
-    >>> server.stderr.readline()        # doctest: +ELLIPSIS
+    >>> server.stdout.readline()        # doctest: +ELLIPSIS
     '[...\n'
-    >>> server.stderr.readline()        # doctest: +ELLIPSIS
+    >>> server.stdout.readline()        # doctest: +ELLIPSIS
     'Type ...\n'
-    >>> server.stderr.read(4)
+    >>> server.stdout.read(4)
     '>>> '
     >>> server.stdin.write("print 'mom'\n")
     >>> server.stdout.readline()
     'mom\n'
-    >>> server.stderr.read(4)
+    >>> server.stdout.read(4)
     '>>> '
     >>> server.stdin.write("import sys\n")
-    >>> server.stderr.read(4)
+    >>> server.stdout.read(4)
     '>>> '
     >>> server.stdin.write("sys.path.insert(0, '')\n")
-    >>> server.stderr.read(4)
+    >>> server.stdout.read(4)
     '>>> '
     >>> server.stdin.write("import simple_server\n")
-    >>> server.stderr.read(4)
+    >>> server.stdout.read(4)
     '>>> '
-    >>> server.stdin.write("print 'dad'\n")
+    >>> server.stdin.write("print >>sys.stderr, 'dad'\n")
     >>> server.stdout.readline()
     'dad\n'
-    >>> server.stderr.read(4)
+    >>> server.stdout.read(4)
     '>>> '
     >>> server.stdin.write("simple_server.run()\n")
     >>> time.sleep(0.8)
@@ -73,8 +73,15 @@ Then interact with it:
     </html>
     <BLANKLINE>
 
-    #>>> server.stderr.readline()        # doctest: +ELLIPSIS
-    #'localhost - - [...] "GET /movie/1/movie.html HTTP/1.0" 200 305\n'
+    >>> while True:
+    ...     line = server.stdout.readline()
+    ...     if not line.startswith('writing [examples.'):
+    ...         break
+    >>> line
+    "get_plan(..., ('movie',), movie.html)\n"
+
+    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    'localhost - - [...] "GET /movie/1/movie.html HTTP/1.0" 200 302\n'
 
     >>> print get("movie/3/movie.html")
     <html>
@@ -96,8 +103,8 @@ Then interact with it:
     </html>
     <BLANKLINE>
 
-    #>>> server.stderr.readline()        # doctest: +ELLIPSIS
-    #'localhost - - [...] "GET /movie/3/movie.html HTTP/1.0" 200 335\n'
+    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    'localhost - - [...] "GET /movie/3/movie.html HTTP/1.0" 200 332\n'
 
     >>> print get("movie/3/movie2.html")
     <html>
@@ -126,8 +133,11 @@ Then interact with it:
     </html>
     <BLANKLINE>
 
-    #>>> server.stderr.readline()        # doctest: +ELLIPSIS
-    #'localhost - - [...] "GET /movie/3/movie2.html HTTP/1.0" 200 432\n'
+    >>> server.stdout.readline()
+    "get_plan(..., ('movie',), movie2.html)\n"
+
+    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    'localhost - - [...] "GET /movie/3/movie2.html HTTP/1.0" 200 429\n'
 
     >>> print get("movie/6/movie2.html")
     <html>
@@ -164,8 +174,8 @@ Then interact with it:
     </html>
     <BLANKLINE>
 
-    #>>> server.stderr.readline()        # doctest: +ELLIPSIS
-    #'localhost - - [...] "GET /movie/6/movie2.html HTTP/1.0" 200 488\n'
+    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    'localhost - - [...] "GET /movie/6/movie2.html HTTP/1.0" 200 485\n'
 
 Kill server:
 
