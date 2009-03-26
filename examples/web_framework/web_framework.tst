@@ -7,36 +7,29 @@ First, fire up the server:
     >>> import signal
     >>> import time
     >>> import subprocess
-    >>> server = subprocess.Popen((sys.executable, "-i", "-u"),
+    >>> server = subprocess.Popen((sys.executable, "-u", "-"),
     ...                           stdin=subprocess.PIPE,
     ...                           stdout=subprocess.PIPE,
     ...                           stderr=subprocess.STDOUT,
     ...                           close_fds=True, env=os.environ)
     >>> server.stdin.write(r'''
-    ... print 'mom'
     ... import sys
     ... from examples.web_framework import simple_server
-    ... print >> sys.stderr, 'dad'
     ... simple_server.run()
-    ... ''')                            # doctest: +ELLIPSIS
-    >>> #server.stdin.write("sys.path.insert(0, '')\n")
-    >>> server.stdout.readline()        # doctest: +ELLIPSIS
-    'Python ...\n'
-    >>> server.stdout.readline()        # doctest: +ELLIPSIS
-    '[...\n'
-    >>> server.stdout.readline()        # doctest: +ELLIPSIS
-    'Type ...\n'
-    >>> server.stdout.readline()
-    '>>> >>> mom\n'
-    >>> server.stdout.readline()
-    '>>> >>> >>> dad\n'
-    >>> server.stdout.read(4)
-    '>>> '
-    >>> while True:
+    ... ''')
+    >>> server.stdin.close()
+    >>> def readline():
+    ...     if server.poll() is not None:
+    ...         return "Server terminated prematurely with returncode " + \
+    ...                  repr(server.returncode)
     ...     line = server.stdout.readline()
+    ...     print >> sys.stderr, line,
+    ...     return line
+    >>> while True:
+    ...     line = readline()
     ...     if not line.startswith('writing [examples.'):
     ...         break
-    >>> line                            # doctest: +ELLIPSIS
+    >>> line
     'Server running...\n'
     >>> time.sleep(0.8)
 
@@ -71,10 +64,9 @@ Then interact with it:
     </html>
     <BLANKLINE>
 
-    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    >>> readline()        # doctest: +ELLIPSIS
     "get_plan(..., ('movie',), ...examples/web_framework/movie.html)\n"
-
-    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    >>> readline()        # doctest: +ELLIPSIS
     'localhost - - [...] "GET /movie/1/movie.html HTTP/1.0" 200 302\n'
 
     >>> print get("movie/3/movie.html")
@@ -97,7 +89,7 @@ Then interact with it:
     </html>
     <BLANKLINE>
 
-    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    >>> readline()        # doctest: +ELLIPSIS
     'localhost - - [...] "GET /movie/3/movie.html HTTP/1.0" 200 332\n'
 
     >>> print get("movie/3/movie2.html")
@@ -127,10 +119,9 @@ Then interact with it:
     </html>
     <BLANKLINE>
 
-    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    >>> readline()        # doctest: +ELLIPSIS
     "get_plan(..., ('movie',), ...examples/web_framework/movie2.html)\n"
-
-    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    >>> readline()        # doctest: +ELLIPSIS
     'localhost - - [...] "GET /movie/3/movie2.html HTTP/1.0" 200 429\n'
 
     >>> print get("movie/6/movie2.html")
@@ -168,13 +159,12 @@ Then interact with it:
     </html>
     <BLANKLINE>
 
-    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    >>> readline()        # doctest: +ELLIPSIS
     'localhost - - [...] "GET /movie/6/movie2.html HTTP/1.0" 200 485\n'
 
 Kill server:
 
     >>> time.sleep(0.4)
-    >>> os.kill(server.pid, signal.SIGINT)
-    >>> server.stdin.close()
+    >>> os.kill(server.pid, signal.SIGTERM)
     >>> server.wait()
-    0
+    -15
