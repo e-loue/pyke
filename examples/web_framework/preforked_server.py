@@ -88,6 +88,7 @@ def run(num_processes = 2, port = 8080, logging = False, trace_sql = False,
                        else RequestHandlerNoLogging,
                    num_processes, trace_sql, db_engine)
     httpd.set_app(wsgi_app.wsgi_app)
+    print "Server running..."
     httpd.serve_forever()
 
 if __name__ == "__main__":

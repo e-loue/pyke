@@ -7,39 +7,37 @@ First, fire up the server:
     >>> import signal
     >>> import time
     >>> import subprocess
-    >>> server = subprocess.Popen((sys.executable, "-i"),
+    >>> server = subprocess.Popen((sys.executable, "-i", "-u"),
     ...                           stdin=subprocess.PIPE,
     ...                           stdout=subprocess.PIPE,
     ...                           stderr=subprocess.STDOUT,
     ...                           close_fds=True, env=os.environ)
+    >>> server.stdin.write(r'''
+    ... print 'mom'
+    ... import sys
+    ... from examples.web_framework import simple_server
+    ... print >> sys.stderr, 'dad'
+    ... simple_server.run()
+    ... ''')                            # doctest: +ELLIPSIS
+    >>> #server.stdin.write("sys.path.insert(0, '')\n")
     >>> server.stdout.readline()        # doctest: +ELLIPSIS
     'Python ...\n'
     >>> server.stdout.readline()        # doctest: +ELLIPSIS
     '[...\n'
     >>> server.stdout.readline()        # doctest: +ELLIPSIS
     'Type ...\n'
-    >>> server.stdout.read(4)
-    '>>> '
-    >>> server.stdin.write("print 'mom'\n")
     >>> server.stdout.readline()
-    'mom\n'
-    >>> server.stdout.read(4)
-    '>>> '
-    >>> server.stdin.write("import sys\n")
-    >>> server.stdout.read(4)
-    '>>> '
-    >>> server.stdin.write("sys.path.insert(0, '')\n")
-    >>> server.stdout.read(4)
-    '>>> '
-    >>> server.stdin.write("import simple_server\n")
-    >>> server.stdout.read(4)
-    '>>> '
-    >>> server.stdin.write("print >>sys.stderr, 'dad'\n")
+    '>>> >>> mom\n'
     >>> server.stdout.readline()
-    'dad\n'
+    '>>> >>> >>> dad\n'
     >>> server.stdout.read(4)
     '>>> '
-    >>> server.stdin.write("simple_server.run()\n")
+    >>> while True:
+    ...     line = server.stdout.readline()
+    ...     if not line.startswith('writing [examples.'):
+    ...         break
+    >>> line                            # doctest: +ELLIPSIS
+    'Server running...\n'
     >>> time.sleep(0.8)
 
 Then interact with it:
@@ -73,12 +71,8 @@ Then interact with it:
     </html>
     <BLANKLINE>
 
-    >>> while True:
-    ...     line = server.stdout.readline()
-    ...     if not line.startswith('writing [examples.'):
-    ...         break
-    >>> line
-    "get_plan(..., ('movie',), movie.html)\n"
+    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    "get_plan(..., ('movie',), ...examples/web_framework/movie.html)\n"
 
     >>> server.stdout.readline()        # doctest: +ELLIPSIS
     'localhost - - [...] "GET /movie/1/movie.html HTTP/1.0" 200 302\n'
@@ -133,8 +127,8 @@ Then interact with it:
     </html>
     <BLANKLINE>
 
-    >>> server.stdout.readline()
-    "get_plan(..., ('movie',), movie2.html)\n"
+    >>> server.stdout.readline()        # doctest: +ELLIPSIS
+    "get_plan(..., ('movie',), ...examples/web_framework/movie2.html)\n"
 
     >>> server.stdout.readline()        # doctest: +ELLIPSIS
     'localhost - - [...] "GET /movie/3/movie2.html HTTP/1.0" 200 429\n'
