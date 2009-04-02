@@ -16,13 +16,12 @@ FILES TO CHANGE:
         will always change:
         - line  3: Version: 0.2
         - line 23:     pyke_doc_html-0.2.tar.gz
-        - line 48:     pyke-0.2-py2.5.egg
-        - line 56:     pyke-0.2.tar.gz
-        - line 61: Add any new examples
-        - line 66:     pyke_examples-0.2.tar.gz
+        - line 55:     pyke-0.2-py2.5.egg
+        - line 63:     pyke-0.2.tar.gz
+        - line 68: Add any new examples
+        - line 73:     pyke_examples-0.2.tar.gz
     - setup.py
         - line 11:     version = "0.2",
-        - line 39:         "http://downloads.sourceforge.net/..."
     - pyke/__init__.py
         - line 3: version = '0.2'
     - doc/source/index.txt
@@ -50,6 +49,7 @@ BUILD RELEASE
     $ cd ../..
     $ rm -rf build
     $ python setup.py bdist_egg sdist
+    $ python2.6 setup.py bdist_egg
     $ ./make_doc_tarball dist/pyke_doc_html-0.2.tar.gz
     $ ./make_examples_tarball dist/pyke_examples-0.2.tar.gz
 
@@ -73,8 +73,9 @@ UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
 UPLOAD DIST FILES TO SOURCEFORGE:
 
     In the browser, go to: https://frs.sourceforge.net/webupload and upload
-    the 4 files:
+    the 5 files:
                 pyke-0.4-py2.5.egg 
+                pyke-0.4-py2.6.egg 
                 pyke-0.4.tar.gz
                 pyke_doc_html-0.4.tar.gz
                 pyke_examples-0.4.tar.gz
@@ -92,10 +93,16 @@ UPLOAD DIST FILES TO SOURCEFORGE:
 
         Pick "Platform Independant" for all of the files.
 
-        Pick ".zip" for the .egg file.
+        Pick ".zip" for the .egg files.
         Pick "Source .gz" for the source .gz file.
         Pick ".gz" for the doc .gz file.
         Pick ".gz" for the examples .gz file.
+
+
+CHECK THE FOLLOWING LINK (in setup.py):
+
+    http://sourceforge.net/project/showfiles.php?group_id=207724&package_id=248795
+    It should show the new release and the new release files.
 
 UPDATE PYPI LINK:
 

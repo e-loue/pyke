@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/env python
 
 # Make sure the user has setuptools installed!
 import ez_setup
@@ -8,7 +8,7 @@ from setuptools import setup
 
 setup(
     name = "pyke",
-    version = "1.0",
+    version = "1.0.1",
     packages = ['pyke', 'pyke.krb_compiler', 'pyke.krb_compiler.ply'],
     package_data = {
         'pyke.krb_compiler': ['*.krb'],
@@ -36,7 +36,7 @@ setup(
         backward-chaining rules.
     """,
     download_url =
-        "http://downloads.sourceforge.net/pyke/pyke-1.0-py2.5.egg",
+        "http://sourceforge.net/project/showfiles.php?group_id=207724&package_id=248795"
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
