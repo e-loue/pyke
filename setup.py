@@ -36,7 +36,7 @@ setup(
         backward-chaining rules.
     """,
     download_url =
-        "http://sourceforge.net/project/showfiles.php?group_id=207724&package_id=248795"
+        "http://sourceforge.net/project/showfiles.php?group_id=207724&package_id=248795",
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
