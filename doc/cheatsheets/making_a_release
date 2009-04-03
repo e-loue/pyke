@@ -21,7 +21,10 @@ FILES TO CHANGE:
         - line 68: Add any new examples
         - line 73:     pyke_examples-0.2.tar.gz
     - setup.py
-        - line 11:     version = "0.2",
+        - line 11:   version = "0.2",
+        - line 39:   - http://downloads.sourceforge.net/pyke/pyke-0.2-py2.5.egg
+        - line 40:   - http://downloads.sourceforge.net/pyke/pyke-0.2-py2.6.egg
+        - line 43:   "http://downloads.sourceforge.net/pyke/pyke-1.0.1.tar.gz",
     - pyke/__init__.py
         - line 3: version = '0.2'
     - doc/source/index.txt
@@ -98,11 +101,6 @@ UPLOAD DIST FILES TO SOURCEFORGE:
         Pick ".gz" for the doc .gz file.
         Pick ".gz" for the examples .gz file.
 
-
-CHECK THE FOLLOWING LINK (in setup.py):
-
-    http://sourceforge.net/project/showfiles.php?group_id=207724&package_id=248795
-    It should show the new release and the new release files.
 
 UPDATE PYPI LINK:
 

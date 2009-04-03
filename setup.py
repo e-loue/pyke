@@ -34,9 +34,13 @@ setup(
         python code) are compiled into python. Can also automatically assemble
         python programs out of python functions which are attached to
         backward-chaining rules.
+
+        The egg files installed by easy_install are:
+          - http://downloads.sourceforge.net/pyke/pyke-1.0.1-py2.5.egg
+          - http://downloads.sourceforge.net/pyke/pyke-1.0.1-py2.6.egg
     """,
     download_url =
-        "http://sourceforge.net/project/showfiles.php?group_id=207724&package_id=248795",
+        "http://downloads.sourceforge.net/pyke/pyke-1.0.1.tar.gz",
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
