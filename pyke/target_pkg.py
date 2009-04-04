@@ -65,6 +65,7 @@ class target_pkg(object):
         ''' This should be called once by engine.__init__ prior to calling
             add_source_package.
         '''
+        if debug: print >> sys.stderr, "target_pkg.reset"
         self.dirty = False
         self.source_packages = {}  # {source_package_name: source_package_dir}
         self.compiled_targets = set([])  # set of target_filename
@@ -101,6 +102,8 @@ class target_pkg(object):
                               in self.sources.iterkeys()
                                  if src_pkg_name == source_package_name and \
                                     src_filepath not in sources]:
+                if debug:
+                    print >> sys.stderr, "del:", source_package_name, filepath
                 del self.sources[source_package_name, filepath]
     def add_source(self, source_package_name, source_filepath, source_mtime):
         if debug:

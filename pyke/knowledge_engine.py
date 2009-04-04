@@ -110,9 +110,8 @@ class engine(object):
                        target_package_name
             if target_package_name not in target_pkgs:
                 # This import must succeed!
-                tp = getattr(target_pkg.import_(target_package_name + 
-                                                  '.compiled_pyke_files'),
-                             'targets')
+                tp = _get_target_pkg(target_package_name + 
+                                       '.compiled_pyke_files')
                 tp.reset()
                 target_pkgs[target_package_name] = tp
             return
@@ -141,7 +140,7 @@ class engine(object):
                 print >> sys.stderr, "_init_path target_name:", target_name
             try:
                 # See if compiled_pyke_files already exists.
-                tp = getattr(target_pkg.import_(target_name), 'targets')
+                tp = _get_target_pkg(target_name)
             except ImportError:
                 if debug: print >> sys.stderr, "_init_path: no target module"
                 # Create a new target_pkg object.
@@ -300,6 +299,11 @@ class engine(object):
         self.get_rb(rb_name).trace(rule_name)
     def untrace(self, rb_name, rule_name):
         self.get_rb(rb_name).untrace(rule_name)
+
+def _get_target_pkg(target_name):
+    if target_name in sys.modules:
+        return getattr(reload(sys.modules[target_name]), 'targets')
+    return getattr(target_pkg.import_(target_name), 'targets')
 
 def test():
     import doctest
