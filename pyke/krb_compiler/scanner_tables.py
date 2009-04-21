@@ -1,5 +1,5 @@
-# pyke.krb_compiler.scanner_tables.py. This file automatically created by PLY (version 3.0). Don't edit!
-_tabversion   = '3.0'
+# pyke.krb_compiler.scanner_tables.py. This file automatically created by PLY (version 3.2). Don't edit!
+_tabversion   = '3.2'
 _lextokens    = {'AS_TOK': 1, 'LP_TOK': 1, 'FOREACH_TOK': 1, 'TAKING_TOK': 1, 'PYTHON_TOK': 1, 'NUMBER_TOK': 1, 'DEINDENT_TOK': 1, 'STEP_TOK': 1, 'EXTENDING_TOK': 1, 'ASSERT_TOK': 1, 'ANONYMOUS_VAR_TOK': 1, 'RP_TOK': 1, 'NOTANY_TOK': 1, 'WITHOUT_TOK': 1, 'INDENT_TOK': 1, 'BC_EXTRAS_TOK': 1, 'CODE_TOK': 1, 'REQUIRE_TOK': 1, 'IN_TOK': 1, 'TRUE_TOK': 1, 'PLAN_EXTRAS_TOK': 1, 'NOT_NL_TOK': 1, 'NONE_TOK': 1, 'WHEN_TOK': 1, 'WITH_TOK': 1, 'FALSE_TOK': 1, 'PATTERN_VAR_TOK': 1, 'CHECK_TOK': 1, 'IDENTIFIER_TOK': 1, 'USE_TOK': 1, 'FC_EXTRAS_TOK': 1, 'STRING_TOK': 1, 'FIRST_TOK': 1, 'NL_TOK': 1, 'FORALL_TOK': 1}
 _lexreflags   = 0
 _lexliterals  = '*:,!.='

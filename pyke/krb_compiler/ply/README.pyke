@@ -1,13 +1,13 @@
 A copy of the ply library is provided here so that the pyke code is using a
 known version of the ply library.
 
-The ply library is covered under a different copyrights and a different license
-than Pyke.  The license is included in this directory (as the file called:
-COPYING).
+The ply library is covered under different copyrights and a different license
+than Pyke.  The license is included in this directory as the file called
+README, which is taken from the ply distribution.
 
 This directory only includes the files needed by Pyke to function.  The
 complete ply library may be found at http://www.dabeaz.com/ply/.
 
 Pyke has not made any modification to these ply files.
 
--bruce frederiksen, March 6, 2009
+-bruce frederiksen, April 21, 2009
