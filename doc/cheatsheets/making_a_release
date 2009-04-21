@@ -6,29 +6,30 @@ To get the svn revision of the previous release:
 
 Do "svn log" to see what's changed:
 
-    $ svn log -r 48:HEAD https://pyke.svn.sourceforge.net/svnroot/pyke/trunk
+    $ svn log -r 48:HEAD \
+        https://pyke.svn.sourceforge.net/svnroot/pyke/branches/release_1.0
 
-Write: RELEASE_NOTES-0.2
+Write: RELEASE_NOTES-1.0.2
 
 FILES TO CHANGE:
     - README
         Read through to see if anything has changed.  The following lines
         will always change:
-        - line  3: Version: 0.2
-        - line 23:     pyke_doc_html-0.2.tar.gz
-        - line 55:     pyke-0.2-py2.5.egg
-        - line 63:     pyke-0.2.tar.gz
+        - line  3: Version: 1.0.2
+        - line 23:     pyke_doc_html-1.0.2.tar.gz
+        - line 55:     pyke-1.0.2-py2.5.egg
+        - line 63:     pyke-1.0.2.tar.gz
         - line 68: Add any new examples
-        - line 73:     pyke_examples-0.2.tar.gz
+        - line 73:     pyke_examples-1.0.2.tar.gz
     - setup.py
-        - line 11:   version = "0.2",
-        - line 39:   - http://downloads.sourceforge.net/pyke/pyke-0.2-py2.5.egg
-        - line 40:   - http://downloads.sourceforge.net/pyke/pyke-0.2-py2.6.egg
-        - line 43:   "http://downloads.sourceforge.net/pyke/pyke-1.0.1.tar.gz",
+        - line 11:  version = "1.0.2",
+        - line 40:  - http://downloads.sourceforge.net/pyke/pyke-1.0.2-py2.5.egg
+        - line 41:  - http://downloads.sourceforge.net/pyke/pyke-1.0.2-py2.6.egg
+        - line 44:  "http://downloads.sourceforge.net/pyke/pyke-1.0.2.tar.gz",
     - pyke/__init__.py
-        - line 3: version = '0.2'
+        - line 3: version = '1.0.2'
     - doc/source/index.txt
-        - line 43: Release 0.2
+        - line 43: Release 1.0
 
 COMMIT SVN UPDATES
 
@@ -53,13 +54,13 @@ BUILD RELEASE
     $ rm -rf build
     $ python setup.py bdist_egg sdist
     $ python2.6 setup.py bdist_egg
-    $ ./make_doc_tarball dist/pyke_doc_html-0.2.tar.gz
-    $ ./make_examples_tarball dist/pyke_examples-0.2.tar.gz
+    $ ./make_doc_tarball dist/pyke_doc_html-1.0.2.tar.gz
+    $ ./make_examples_tarball dist/pyke_examples-1.0.2.tar.gz
 
 TAG RELEASE
 
     $ svn copy https://pyke.svn.sourceforge.net/svnroot/pyke/trunk \
-               https://pyke.svn.sourceforge.net/svnroot/pyke/tags/0.2
+               https://pyke.svn.sourceforge.net/svnroot/pyke/tags/1.0.2
 
 ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
 
@@ -77,17 +78,17 @@ UPLOAD DIST FILES TO SOURCEFORGE:
 
     In the browser, go to: https://frs.sourceforge.net/webupload and upload
     the 5 files:
-                pyke-0.4-py2.5.egg 
-                pyke-0.4-py2.6.egg 
-                pyke-0.4.tar.gz
-                pyke_doc_html-0.4.tar.gz
-                pyke_examples-0.4.tar.gz
+                pyke-1.0.2-py2.5.egg 
+                pyke-1.0.2-py2.6.egg 
+                pyke-1.0.2.tar.gz
+                pyke_doc_html-1.0.2.tar.gz
+                pyke_examples-1.0.2.tar.gz
 
     Go to: Project Admin -> Feature Settings
                          -> Manage (on File Release System line)
-    Click on "Add Release", Enter: 0.2
+    Click on "Add Release", Enter: 1.0.2
     Click "Preserve my pre-formatted text." on the Release Notes (upload the
-        RELEASE_NOTES-0.4 file).
+        RELEASE_NOTES-1.0.2 file).
     Follow the rest of the instructions there...
         After you've selected the files to include, you have to go through
         settings for each file ONE AT A TIME.  (Each file has its own Update
