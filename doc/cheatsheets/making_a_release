@@ -31,13 +31,6 @@ FILES TO CHANGE:
     - doc/source/index.txt
         - line 43: Release 1.0
 
-COMMIT SVN UPDATES
-
-REBUILD DOCUMENTS
-
-    $ cd doc/source
-    $ bin/gen_html
-
 REBUILD compiler_bc.py
 
     $ cd ../../pyke/krb_compiler
@@ -47,6 +40,13 @@ REBUILD compiler_bc.py
     $ mv compiled_krb/compiler_bc.py .
 
 COMMIT SVN UPDATES
+
+REBUILD DOCUMENTS
+
+    $ cd doc/source
+    $ bin/gen_html
+
+COMMIT SVN UPDATES (if any)
 
 BUILD RELEASE
 
