@@ -31,6 +31,23 @@ do
     fi
 done
 
+if ! $PYTHON setup.py --quiet bdist_egg
+then
+    echo "setup.py" >> $ERRORFILES
+    NUM_ERRORS=$(($NUM_ERRORS + 1))
+else
+    cd ..
+    if ! PYTHONPATH=`echo Test/dist/CanNotProve*.egg` $PYTHON doctest_file.py \
+           Test/CanNotProve/CanNotProve.tst2
+    then
+        echo "CanNotProve/CanNotProve.tst2" >> $ERRORFILES
+        NUM_ERRORS=$(($NUM_ERRORS + 1))
+    else
+        rm -rf Test/CanNotProve.egg-info Test/build Test/dist
+    fi
+    cd Test
+fi
+
 if [ $NUM_ERRORS -eq 0 ]
 then
     echo "No Errors!"

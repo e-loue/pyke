@@ -1,0 +1,17 @@
+# CanNotProve.tst2
+
+r"""
+
+    >>> from CanNotProve import test
+    >>> test.__loader__         # doctest: +ELLIPSIS
+    <zipimporter ...>
+    >>> test.dotests()
+
+"""
+
+def test():
+    import sys
+    import doctest
+    sys.exit(doctest.testmod()[0])
+
+if __name__ == "__main__": test()

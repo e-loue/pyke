@@ -147,6 +147,24 @@ def is_pattern(data):
     return False
 
 def is_rest_var(data):
+    r'''
+    >>> is_rest_var('foo')
+    False
+    >>> is_rest_var('$foo')
+    False
+    >>> is_rest_var('*foo')
+    False
+    >>> is_rest_var('$*foo')
+    False
+    >>> is_rest_var('*$foo')
+    True
+    >>> is_rest_var('*$')
+    False
+    >>> is_rest_var('*')
+    False
+    >>> is_rest_var('')
+    False
+    '''
     return isinstance(data, types.StringTypes) and len(data) > 2 and \
            data.startswith('*$') and (data[2].isalpha() or data[2] == '_')
 

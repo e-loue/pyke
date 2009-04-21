@@ -227,7 +227,7 @@ This fails the subsequent check in the ``brothers`` rule::
 
 And so Pyke goes back to step 4 once again.  The next solution binds ``$son``
 to ``bruce``.  This succeeds for ``brother`` and is passed down to
-``father_son`` which returns ``michael`` as ``tim's`` nephew.
+``father_son`` which returns ``michael`` as ``fred's`` nephew.
 
 Further backtracking reveals no other solutions.
 
@@ -259,7 +259,7 @@ Running the Example
 Nothing happens this time when we activate the rule base, because there are no
 forward-chaining rules here.
 
-We want to ask the question: "How are Tim's nephews?".  This translates
+We want to ask the question: "Who are Fred's nephews?".  This translates
 into the Pyke statement: ``bc_example.uncle_nephew(fred, $v1, $v2)``.
 
 .. note::
