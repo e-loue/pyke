@@ -89,6 +89,13 @@ knowledge_engine.engine(\*paths, \*\*kws)
     restarting your program.  But note that you'll need to rerun the
     ``add_universal_fact`` calls that you made outside of your `.kfb files`_.
 
+    .. note::
+       It is OK for your source package directory to be part of a zipped
+       `Python egg file`_.  But, in this case, Pyke can't rebuild and recompile
+       the source files.  It will just import the compiled file that is there
+       without complaining if the source file has a later modification time
+       than the compiled file.
+
     All of the Python source files and pickle files generated from each source
     package are placed, by default, in a ``compiled_krb`` package directly
     subordinate to that source package.  You may specify a different

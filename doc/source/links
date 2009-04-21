@@ -109,6 +109,7 @@
 .. _Pyke project download page: http://sourceforge.net/project/showfiles.php?group_id=207724
 .. _pypi: http://pypi.python.org/pypi
 .. _Python: http://www.python.org
+.. _Python egg file: http://peak.telecommunity.com/DevCenter/PythonEggs
 .. _python_premise: pyke_syntax/krb_syntax/python_premise.html
 .. _python_statements: pyke_syntax/krb_syntax/python_premise.html#python-statements
 .. _question base: knowledge_bases/question_bases.html

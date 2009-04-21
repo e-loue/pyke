@@ -106,6 +106,14 @@ source file that it finds is compiled, if out of date, and then imported
 object to compile and reload the generated Python modules without
 restarting your program.  But note that you'll need to rerun the
 <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> calls that you made outside of your <a class="reference" href="pyke_syntax/kfb_syntax.html">.kfb files</a>.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is OK for your source package directory to be part of a zipped
+<a class="reference" href="http://peak.telecommunity.com/DevCenter/PythonEggs">Python egg file</a>.  But, in this case, Pyke can't rebuild and recompile
+the source files.  It will just import the compiled file that is there
+without complaining if the source file has a later modification time
+than the compiled file.</p>
+</div>
 <p>All of the Python source files and pickle files generated from each source
 package are placed, by default, in a <tt class="docutils literal"><span class="pre">compiled_krb</span></tt> package directly
 subordinate to that source package.  You may specify a different
@@ -338,9 +346,9 @@ Python functions between subgoal proofs.</p>
 Traceback (most recent call last):
   File &quot;&lt;doctest using_pyke.txt[37]&gt;&quot;, line 2, in &lt;module&gt;
     my_engine.prove_1('error_test', 'goal', (), 0)
-  File &quot;...knowledge_engine.py&quot;, line 289, in prove_1
+  File &quot;...knowledge_engine.py&quot;, line 288, in prove_1
     return iter(it).next()
-  File &quot;...knowledge_engine.py&quot;, line 273, in gen
+  File &quot;...knowledge_engine.py&quot;, line 272, in gen
     for plan in it:
   File &quot;...rule_base.py&quot;, line 46, in next
     return self.iterator.next()
@@ -489,7 +497,7 @@ into named repositories called <em>knowledge bases</em>.</p>
 
   <div id="last-modified">
     Page last modified
-    Tue, Mar 17 2009.
+    Sat, Apr 04 2009.
 
   </div>
 

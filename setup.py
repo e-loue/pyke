@@ -21,6 +21,7 @@ setup(
         'regen_docs': ["rest2web>=0.5"],
         'examples': ["HTMLTemplate>=1.5"],
     },
+    zip_safe = True,
 
     # Metadata for upload to PyPI
     author = "Bruce Frederiksen",

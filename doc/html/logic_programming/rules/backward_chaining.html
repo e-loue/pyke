@@ -241,7 +241,7 @@ This fails the subsequent check in the <tt class="docutils literal"><span class=
 </pre>
 <p>And so Pyke goes back to step 4 once again.  The next solution binds <tt class="docutils literal"><span class="pre">$son</span></tt>
 to <tt class="docutils literal"><span class="pre">bruce</span></tt>.  This succeeds for <tt class="docutils literal"><span class="pre">brother</span></tt> and is passed down to
-<tt class="docutils literal"><span class="pre">father_son</span></tt> which returns <tt class="docutils literal"><span class="pre">michael</span></tt> as <tt class="docutils literal"><span class="pre">tim's</span></tt> nephew.</p>
+<tt class="docutils literal"><span class="pre">father_son</span></tt> which returns <tt class="docutils literal"><span class="pre">michael</span></tt> as <tt class="docutils literal"><span class="pre">fred's</span></tt> nephew.</p>
 <p>Further backtracking reveals no other solutions.</p>
 <div class="section">
 <h3><a id="backtracking-summary" name="backtracking-summary">Backtracking Summary</a></h3>
@@ -273,7 +273,7 @@ alternate solution is where backward-chaining systems get their power!</li>
 </blockquote>
 <p>Nothing happens this time when we activate the rule base, because there are no
 forward-chaining rules here.</p>
-<p>We want to ask the question: &quot;How are Tim's nephews?&quot;.  This translates
+<p>We want to ask the question: &quot;Who are Fred's nephews?&quot;.  This translates
 into the Pyke statement: <tt class="docutils literal"><span class="pre">bc_example.uncle_nephew(fred,</span> <span class="pre">$v1,</span> <span class="pre">$v2)</span></tt>.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
@@ -328,7 +328,7 @@ works.</p>
 
   <div id="last-modified">
     Page last modified
-    Tue, Jan 13 2009.
+    Tue, Apr 21 2009.
 
   </div>
 
