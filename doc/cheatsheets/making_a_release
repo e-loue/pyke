@@ -59,8 +59,9 @@ BUILD RELEASE
 
 TAG RELEASE
 
-    $ svn copy https://pyke.svn.sourceforge.net/svnroot/pyke/trunk \
-               https://pyke.svn.sourceforge.net/svnroot/pyke/tags/1.0.2
+    $ svn copy \
+          https://pyke.svn.sourceforge.net/svnroot/pyke/branches/release_1.0 \
+          https://pyke.svn.sourceforge.net/svnroot/pyke/tags/1.0.2
 
 ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
 
