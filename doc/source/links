@@ -4,16 +4,20 @@
 .. _activating: activate_
 .. _activation: activate_
 .. _active: knowledge_bases/rule_bases.html#rule-base-activation
-.. _anonymous variable: logic_programming/pattern_matching/pattern_variables.html#anonymous-pattern-variables
+.. _anonymous variable: `anonymous variable lp`_
+.. _anonymous variable lp: logic_programming/pattern_matching/pattern_variables.html#anonymous-pattern-variables
+.. _anonymous variable syntax: pyke_syntax/krb_syntax/pattern.html#anonymous-variable
 .. _ask_tty: knowledge_bases/question_bases.html#presenting-questions-to-your-end-users
 .. _assert: using_pyke.html#setting-up-each-case
 .. _asserted: assert_
 .. _asserts: assert_
 .. _backtracked: backtracking_
 .. _backtracking: logic_programming/rules/index.html#backtracking
-.. _backward chaining: logic_programming/rules/backward_chaining.html
+.. _backward chaining: `backward-chaining rule lp`_
 .. _backward-chaining: `backward chaining`_
-.. _backward-chaining rule: logic_programming/rules/backward_chaining.html
+.. _backward-chaining rule: `backward-chaining rule lp`_
+.. _backward-chaining rule lp: logic_programming/rules/backward_chaining.html
+.. _backward-chaining rule syntax: pyke_syntax/krb_syntax/bc_rule.html
 .. _backward-chaining rules: `backward-chaining rule`_
 .. _bc_premise: pyke_syntax/krb_syntax/bc_rule.html#when-clause
 .. _bc_rule: `backward-chaining rule`_
@@ -25,7 +29,7 @@
 .. _compound_premise: pyke_syntax/krb_syntax/compound_premise.html
 .. _cooked: `cooking functions`_
 .. _cooking functions: about_pyke/cooking_functions.html
-.. _copy_reg: http://docs.python.org/lib/module-copyreg.html
+.. _copy_reg: http://docs.python.org/library/copy_reg.html
 .. _cut operator: http://en.wikipedia.org/wiki/Cut_%28logic_programming%29
 .. _Docutils: http://sourceforge.net/projects/docutils
 .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
@@ -39,17 +43,22 @@
 .. _fact: knowledge_bases/fact_bases.html#facts
 .. _facts: fact_
 .. _family_relations: examples.html#family-relations
+.. _FAQ: http://pyke.wiki.sourceforge.net/FAQ
 .. _fc_premise: pyke_syntax/krb_syntax/fc_rule.html#foreach-clause
 .. _fc_rule: pyke_syntax/krb_syntax/fc_rule.html
 .. _forall: pyke_syntax/krb_syntax/compound_premise.html#forall-premise
 .. _forall premise: forall_
-.. _forward-chaining: logic_programming/rules/forward_chaining.html
-.. _forward-chaining rule: forward-chaining_
+.. _forward-chaining: `forward-chaining rule lp`_
+.. _forward-chaining rule: `forward-chaining rule lp`_
+.. _forward-chaining rule lp: logic_programming/rules/forward_chaining.html
+.. _forward-chaining rule syntax: pyke_syntax/krb_syntax/fc_rule.html
 .. _forward-chaining rules: `forward-chaining rule`_
 .. _fully bound: logic_programming/pattern_matching/matching_patterns.html#binding-to-a-tuple-pattern
-.. _functools: http://docs.python.org/lib/module-functools.html
+.. _functools: http://docs.python.org/library/functools.html
 .. _functools.partial: functools_
-.. _goal: logic_programming/rules/backward_chaining.html
+.. _goal: `goal lp`_
+.. _goal lp: logic_programming/rules/backward_chaining.html
+.. _goal syntax: pyke_syntax/krb_syntax/bc_rule.html#use-clause
 .. _goals: goal_
 .. _home page: index.html
 .. _how to call Pyke: using_pyke.html
@@ -80,20 +89,26 @@
 .. _notany premise: notany_
 .. _package: http://www.python.org/doc/essays/packages.html
 .. _pathological question: logic_programming/pattern_matching/matching_patterns.html#pathological-question
-.. _pattern: logic_programming/pattern_matching/index.html
+.. _pattern: `pattern lp`_
+.. _pattern lp: logic_programming/pattern_matching/index.html
+.. _pattern syntax: pyke_syntax/krb_syntax/pattern.html
 .. _pattern matches: logic_programming/pattern_matching/index.html
 .. _pattern matching: `pattern matches`_
-.. _pattern variable: logic_programming/pattern_matching/pattern_variables.html
+.. _pattern variable: `pattern variable lp`_
+.. _pattern variable lp: logic_programming/pattern_matching/pattern_variables.html
+.. _pattern variable syntax: pyke_syntax/krb_syntax/pattern.html#pattern-variable
 .. _pattern variables: `pattern variable`_
 .. _patterns: pattern_
 .. _pickled: using_pyke.html#running-and-pickling-plans
-.. _pickle: http://docs.python.org/lib/module-pickle.html
+.. _pickle: http://docs.python.org/library/pickle.html
 .. _pickles: pickle_
 .. _plan: logic_programming/plans.html
 .. _plan_spec: pyke_syntax/krb_syntax/bc_rule.html#plan-spec
 .. _plans: plan_
 .. _PLY 2.5: http://www.dabeaz.com/ply/
-.. _premise: logic_programming/rules/index.html#premises-and-conclusions
+.. _premise: `premise lp`_
+.. _premise lp: logic_programming/rules/index.html#premises-and-conclusions
+.. _premise syntax: pyke_syntax/krb_syntax/bc_rule.html#when-clause
 .. _premises: premise_
 .. _print_stats: using_pyke.html#other-functions
 .. _programming in the large: http://portal.acm.org/citation.cfm?id=808431
@@ -116,7 +131,7 @@
 .. _question bases: `question base`_
 .. _question: knowledge_bases/question_bases.html
 .. _questions: question_
-.. _regular expression syntax: http://docs.python.org/lib/re-syntax.html
+.. _regular expression syntax: http://docs.python.org/library/re.html#regular-expression-syntax
 .. _reset: using_pyke.html#setting-up-each-case
 .. _Rest2web: http://sourceforge.net/projects/rest2web
 .. _rule base category: knowledge_bases/rule_bases.html#rule-base-categories
@@ -126,21 +141,22 @@
 .. _rule: logic_programming/rules/index.html
 .. _rule's: rule_
 .. _rules: rule_
-.. _siege: http://www.joedog.org/JoeDog/Siege
+.. _siege: http://www.joedog.org/index/siege-home
 .. _special: knowledge_bases/special.html
 .. _sqlgen: examples.html#sqlgen
 .. _statement: logic_programming/statements.html
 .. _statements: statement_
-.. _string.Template: http://docs.python.org/lib/node40.html
-.. _subprocess.CalledProcessError: http://docs.python.org/lib/node530.html
-.. _subprocess.Popen: http://docs.python.org/lib/node528.html
+.. _string.Template: http://docs.python.org/library/string.html#template-strings
+.. _subprocess.CalledProcessError: http://docs.python.org/library/subprocess.html#exceptions
+.. _subprocess.Popen: http://docs.python.org/library/subprocess.html#subprocess.Popen
 .. _taking clause: pyke_syntax/krb_syntax/bc_rule.html#taking-clause
-.. _traceback: http://docs.python.org/lib/module-traceback.html
+.. _traceback: http://docs.python.org/library/traceback.html
 .. _Tuple patterns: logic_programming/pattern_matching/tuple_patterns.html
 .. _TurboGears 2: http://turbogears.org/2.0/
 .. _variables: `pattern variable`_
 .. _web_framework: examples.html#web-framework
 .. _when clause: pyke_syntax/krb_syntax/bc_rule.html#when-clause
+.. _wiki: http://pyke.wiki.sourceforge.net/
 .. _with clause: pyke_syntax/krb_syntax/bc_rule.html#with-clause
 .. _WSGI: http://www.python.org/dev/peps/pep-0333/
 .. _wxpython: http://www.wxpython.org/

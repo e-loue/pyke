@@ -53,8 +53,7 @@ customize them for a specific situation or use-case.
 Pyke can also be used for difficult decision making applications where each
 part of the problem has multiple possible solutions and the selection of a
 solution to one part of the problem affects whether another part of the problem
-can be solved or not.  Examples of these kind of applications are listed on
-the `home page`_.
+can be solved or not.
 
 
 Cooking Your Python Code

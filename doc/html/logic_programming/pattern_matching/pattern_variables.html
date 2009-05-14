@@ -63,6 +63,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -106,8 +107,8 @@ does the <em>binding</em> again to a new value.</p>
 see that it is alternately bound and unbound many times as Pyke tries to find
 a suitable answer to your question.  Specifically, when Pyke comes back with
 the final thumbs down, <tt class="docutils literal"><span class="pre">$son</span></tt> is unbound.</p>
-<div class="section">
-<h2><a id="anonymous-pattern-variables" name="anonymous-pattern-variables">Anonymous Pattern Variables</a></h2>
+<div class="section" id="anonymous-pattern-variables">
+<h2>Anonymous Pattern Variables</h2>
 <p>Suppose we want to know who Norma's sons are?  In this case we don't care
 about the father.  We use <em>anonymous variables</em> as &quot;don't care&quot; placeholders.</p>
 <p>An anonymous variable is any pattern variable who's name starts with an
@@ -122,8 +123,8 @@ telling Pyke that we don't care about the <tt class="docutils literal"><span cla
 <p>Anonymous variables are never bound to values.  (So you could say that they
 are always unbound).</p>
 </div>
-<div class="section">
-<h2><a id="pattern-variable-identity" name="pattern-variable-identity">Pattern Variable Identity</a></h2>
+<div class="section" id="pattern-variable-identity">
+<h2>Pattern Variable Identity</h2>
 <p>Now this is very important, so pay attention!  The same pattern variable
 <em>name</em> means the same <em>pattern variable</em>.  Thus, if you say <tt class="docutils literal"><span class="pre">$son</span></tt> twice,
 it's the <em>same</em> pattern variable.  And, a pattern variable can only be bound
@@ -131,7 +132,7 @@ to one value (at a time), so you mean the <em>same</em> data value must appear i
 both places.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">This does <em>not</em> apply to <a class="reference" href="#anonymous-pattern-variables">anonymous pattern variables</a>.  Since they are
+<p class="last">This does <em>not</em> apply to <a class="reference internal" href="#anonymous-pattern-variables">anonymous pattern variables</a>.  Since they are
 never bound to a value, each use of the same anonymous variable can match
 different data values.</p>
 </div>
@@ -142,7 +143,7 @@ family.son_of($father, $father, $_mother)
 </pre>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p>The Pyke <a class="reference" href="../../examples.html#family-relations">family_relations</a> example never uses the same name for both
+<p>The Pyke <a class="reference external" href="../../examples.html#family-relations">family_relations</a> example never uses the same name for both
 father and son because that would cause confusion about which of them
 was the father to both of their sons and daughters.</p>
 <p>In these cases, it modifies the name of the son to make it unique.</p>

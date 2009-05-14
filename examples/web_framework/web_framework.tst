@@ -19,9 +19,17 @@ First, fire up the server:
     ... ''')
     >>> server.stdin.close()
     >>> def readline():
+    ...     global server_error_msg
     ...     if server.poll() is not None:
-    ...         return "Server terminated prematurely with returncode " + \
-    ...                  repr(server.returncode)
+    ...         msg = server.stdout.read()
+    ...         if msg:
+    ...             server_error_msg = '\n'.join(('server: ' + line)
+    ...                                          for line in msg.split('\n'))
+    ...         sys.stdout.write(server_error_msg)
+    ...         sys.stdout.write(
+    ...           "Server terminated prematurely with returncode %r\n" % \
+    ...             (server.returncode,))
+    ...         return
     ...     line = server.stdout.readline()
     ...     print >> sys.stderr, line,
     ...     return line

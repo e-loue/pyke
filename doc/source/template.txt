@@ -43,6 +43,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -96,9 +97,9 @@
        import datetime
        import re
        print datetime.date(*(int(x)
-                           for x in re.search(r'([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})',
-                                              filedate)
-                                      .groups())
+                             for x in re.search(r'([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})',
+                                                filedate)
+                                        .groups())
                           ).strftime("%a, %b %d %Y") + '.'
     #>
   </div>

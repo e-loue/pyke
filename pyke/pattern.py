@@ -54,7 +54,7 @@ class pattern_tuple(pattern):
         self.elements = tuple(elements)
         self.rest_var = rest_var
     def __hash__(self):
-        hash(self.elements) ^ hash(self.rest_var)
+        return hash(self.elements) ^ hash(self.rest_var)
     def __eq__(self, b):
         return isinstance(b, pattern_tuple) and \
                self.elements == b.elements and self.rest_var == b.rest_var

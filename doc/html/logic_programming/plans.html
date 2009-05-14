@@ -55,6 +55,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -72,20 +73,20 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="plans-and-automatic-program-generation">
 <h1 class="title">Plans and Automatic Program Generation</h1>
-<p>Once you understand how <a class="reference" href="rules/backward_chaining.html">backward-chaining</a> works, it is relatively easy to
+<p>Once you understand how <a class="reference external" href="rules/backward_chaining.html">backward-chaining</a> works, it is relatively easy to
 do automatic program generation.</p>
-<div class="section">
-<h2><a id="adding-plans-to-backward-chaining-rules" name="adding-plans-to-backward-chaining-rules">Adding Plans to Backward-Chaining Rules</a></h2>
+<div class="section" id="adding-plans-to-backward-chaining-rules">
+<h2>Adding Plans to Backward-Chaining Rules</h2>
 <p>The way this is done is by attaching Python functions to
-<a class="reference" href="rules/backward_chaining.html">backward-chaining</a> <a class="reference" href="rules/index.html">rules</a>.  These functions are written in the <em>with</em>
-clause at the end of each <a class="reference" href="rules/index.html">rule</a> in the <a class="reference" href="../pyke_syntax/krb_syntax/index.html">.krb file</a>.  They don't affect how
-the <a class="reference" href="rules/index.html">rules</a> run to prove a goal, but are
-gathered up to form a call graph that is returned along with the <a class="reference" href="pattern_matching/pattern_variables.html">pattern
-variable</a> bindings that <a class="reference" href="../using_pyke.html#proving-goals">prove</a> the top-level goal.</p>
+<a class="reference external" href="rules/backward_chaining.html">backward-chaining</a> <a class="reference external" href="rules/index.html">rules</a>.  These functions are written in the <em>with</em>
+clause at the end of each <a class="reference external" href="rules/index.html">rule</a> in the <a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb file</a>.  They don't affect how
+the <a class="reference external" href="rules/index.html">rules</a> run to prove a goal, but are
+gathered up to form a call graph that is returned along with the <a class="reference external" href="pattern_matching/pattern_variables.html">pattern
+variable</a> bindings that <a class="reference external" href="../using_pyke.html#proving-goals">prove</a> the top-level goal.</p>
 </div>
-<div class="section">
-<h2><a id="example" name="example">Example</a></h2>
-<p>Consider a small <a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a> to construct programs to transfer money between
+<div class="section" id="example">
+<h2>Example</h2>
+<p>Consider a small <a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a> to construct programs to transfer money between
 bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two forms:</p>
 <ol class="arabic simple">
 <li>(name, account_type)<ul>
@@ -151,10 +152,10 @@ bank accounts.  Each <em>from_acct</em> and <em>to_acct</em> takes one of two fo
 41      with
 42          print &quot;get&quot;, amount, &quot;from bank&quot;, $bank, &quot;acct&quot;, $who, $acct_type
 </pre>
-<div class="section">
-<h3><a id="how-the-plan-functions-are-generated-for-this-example" name="how-the-plan-functions-are-generated-for-this-example">How the Plan Functions are Generated for This Example</a></h3>
-<p>Each of these <a class="reference" href="rules/index.html">rules</a> will have a plan function generated for it.  These plan
-functions are generated with the same name as the <a class="reference" href="rules/index.html">rule</a> name.  Thus, the
+<div class="section" id="how-the-plan-functions-are-generated-for-this-example">
+<h3>How the Plan Functions are Generated for This Example</h3>
+<p>Each of these <a class="reference external" href="rules/index.html">rules</a> will have a plan function generated for it.  These plan
+functions are generated with the same name as the <a class="reference external" href="rules/index.html">rule</a> name.  Thus, the
 name of the generated Python plan function for the first rule would be
 &quot;transfer1&quot;.</p>
 <p>The plan function generated for the first rule consists of two lines taken
@@ -166,21 +167,21 @@ plan function will be defined to take an &quot;amount&quot; parameter because of
 subordinate plan functions in lines 5 and 7.</p>
 <p>The plan function generated for the &quot;withdraw&quot; rule on line 13 will have
 the single line taken from line 16 in the <em>with</em> clause.  The &quot;$who&quot; and
-&quot;$acct_type&quot; <a class="reference" href="pattern_matching/pattern_variables.html">pattern variables</a> will be expanded to constant values taken
-from the values bound to these <a class="reference" href="pattern_matching/pattern_variables.html">pattern variables</a> after the top-level
+&quot;$acct_type&quot; <a class="reference external" href="pattern_matching/pattern_variables.html">pattern variables</a> will be expanded to constant values taken
+from the values bound to these <a class="reference external" href="pattern_matching/pattern_variables.html">pattern variables</a> after the top-level
 (transfer) goal has been proven.</p>
 <p>Finally, the plan function generated for the &quot;transfer_ach1&quot; rule on line
 21 will have three lines: two from the <em>when</em> clause (lines 25 and 27)
 followed by one from the <em>with</em> clause (line 29).  These lines will be
 generated at the same indent level in the plan function even though they
-are at different indent levels in the <a class="reference" href="../pyke_syntax/krb_syntax/index.html">.krb file</a>.</p>
+are at different indent levels in the <a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb file</a>.</p>
 <p>For more detailed information about the options available for plans in the
-<a class="reference" href="../pyke_syntax/krb_syntax/index.html">.krb file</a>, see <a class="reference" href="rules/backward_chaining.html">Bc_rule Syntax</a>.</p>
+<a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb file</a>, see <a class="reference external" href="rules/backward_chaining.html">Bc_rule Syntax</a>.</p>
 </div>
 </div>
-<div class="section">
-<h2><a id="running-the-example" name="running-the-example">Running the Example</a></h2>
-<p>The plan is created as a byproduct of <a class="reference" href="../using_pyke.html#proving-goals">proving</a> the goal:</p>
+<div class="section" id="running-the-example">
+<h2>Running the Example</h2>
+<p>The plan is created as a byproduct of <a class="reference external" href="../using_pyke.html#proving-goals">proving</a> the goal:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
@@ -218,7 +219,7 @@ deposit 50 to bruce savings
 </pre>
 </blockquote>
 <p>Notice the strings: <tt class="docutils literal"><span class="pre">bruce</span></tt>, <tt class="docutils literal"><span class="pre">checking</span></tt> and <tt class="docutils literal"><span class="pre">savings</span></tt> in the output.
-These were specified as <a class="reference" href="pattern_matching/pattern_variables.html">pattern variables</a> in the code and are <a class="reference" href="../about_pyke/cooking_functions.html">cooked</a>
+These were specified as <a class="reference external" href="pattern_matching/pattern_variables.html">pattern variables</a> in the code and are <a class="reference external" href="../about_pyke/cooking_functions.html">cooked</a>
 into the plan along with the function call graph.</p>
 <p>Let's create a second program:</p>
 <blockquote>
@@ -265,20 +266,20 @@ deposit 150 to bruce savings
 </div>
 <p>Note that the same <em>transfer2</em> function is calling two different functions
 (<em>transfer_ach1</em> and <em>transfer_ach2</em>) in plan2 and plan3.  This shows how
-different functions may be chosen based on the <a class="reference" href="rules/index.html">rule</a> inferencing.  Also
+different functions may be chosen based on the <a class="reference external" href="rules/index.html">rule</a> inferencing.  Also
 note that after the generation of plan3, plan2 is still valid; both may
 still be called successfully, resulting in different calls from the initial
 <em>transfer2</em> function.</p>
 </div>
-<div class="section">
-<h2><a id="conclusion" name="conclusion">Conclusion</a></h2>
+<div class="section" id="conclusion">
+<h2>Conclusion</h2>
 <p>So you can see that it quite easy to use Pyke to automatically combine
 Python functions into programs!</p>
 <p>It also allows data within each Python function to be specified using a
-<a class="reference" href="pattern_matching/pattern_variables.html">pattern variable</a> so that Pyke can customize these values to match the
+<a class="reference external" href="pattern_matching/pattern_variables.html">pattern variable</a> so that Pyke can customize these values to match the
 specific situation.</p>
 <p>If you would like to know more about how Pyke <em>cooks</em> (or customizes) your
-Python functions, see <a class="reference" href="../about_pyke/cooking_functions.html">Cooking Functions</a>.</p>
+Python functions, see <a class="reference external" href="../about_pyke/cooking_functions.html">Cooking Functions</a>.</p>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>

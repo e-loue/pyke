@@ -63,6 +63,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -80,8 +81,8 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="pattern-syntax">
 <h1 class="title">Pattern Syntax</h1>
-<div class="section">
-<h2><a id="pattern" name="pattern">Pattern</a></h2>
+<div class="section" id="pattern">
+<h2>Pattern</h2>
 <pre class="literal-block">
 pattern ::= 'None' | 'True' | 'False'
           | NUMBER | IDENTIFIER | STRING | variable
@@ -92,24 +93,24 @@ value.  All variables in patterns must be preceded by a <tt class="docutils lite
 <p>Pyke does not currently support complex NUMBERS (for no good reason -- email
 me if you need them).</p>
 </div>
-<div class="section">
-<h2><a id="pattern-variable" name="pattern-variable">Pattern Variable</a></h2>
-<p><a class="reference" href="pattern.html#pattern-variable">Pattern variables</a> are simply called <em>variable</em> in the syntax:</p>
+<div class="section" id="pattern-variable">
+<h2>Pattern Variable</h2>
+<p><a class="reference external" href="../../logic_programming/pattern_matching/pattern_variables.html">Pattern variables</a> are simply called <em>variable</em> in the syntax:</p>
 <pre class="literal-block">
 variable ::= '$'IDENTIFIER
 </pre>
 <p>The variable must not have a space between the <tt class="docutils literal"><span class="pre">$</span></tt> and the <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.</p>
 </div>
-<div class="section">
-<h2><a id="anonymous-variable" name="anonymous-variable">Anonymous Variable</a></h2>
+<div class="section" id="anonymous-variable">
+<h2>Anonymous Variable</h2>
 <p>If the pattern variable IDENTIFIER begins with an underscore (_), the variable
-is an <a class="reference" href="../../logic_programming/pattern_matching/pattern_variables.html#anonymous-pattern-variables">anonymous variable</a>.  It acts like a &quot;don't care&quot;.  Technically, this
+is an <a class="reference external" href="../../logic_programming/pattern_matching/pattern_variables.html#anonymous-pattern-variables">anonymous variable</a>.  It acts like a &quot;don't care&quot;.  Technically, this
 means that multiple uses of the same IDENTIFIER may stand for different
 values.  The name of the IDENTIFIER after the underscore is ignored and may be
 used to document the use of the anonymous variable.</p>
 </div>
-<div class="section">
-<h2><a id="rest-variable" name="rest-variable">Rest Variable</a></h2>
+<div class="section" id="rest-variable">
+<h2>Rest Variable</h2>
 <p>The <tt class="docutils literal"><span class="pre">*variable</span></tt> at the end of a tuple pattern will match the rest of the
 tuple.  Thus, <tt class="docutils literal"><span class="pre">variable</span></tt> is <em>always</em> bound to a (possibly empty) tuple.</p>
 <p>The syntax is taken from rest parameter syntax in Python function definitions.

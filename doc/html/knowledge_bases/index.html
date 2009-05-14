@@ -53,6 +53,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -87,10 +88,10 @@ request.path_segment(1, 'site.html')
 request.path_segment(-2, my)
 request.path_segment(-1, 'site.html')
 </pre>
-<p>Note that three different knowledge bases (all <a class="reference" href="fact_bases.html">fact bases</a>) are shown here
+<p>Note that three different knowledge bases (all <a class="reference external" href="fact_bases.html">fact bases</a>) are shown here
 named <tt class="docutils literal"><span class="pre">header</span></tt>, <tt class="docutils literal"><span class="pre">cookie</span></tt>, and <tt class="docutils literal"><span class="pre">request</span></tt>; each with multiple facts.</p>
 <p>The second part of the two-part name is the name of the <em>knowledge entity</em>.
-You can think of knowledge entities as <a class="reference" href="../logic_programming/statements.html">statement</a> <em>types</em> or <em>topics</em>.  So:</p>
+You can think of knowledge entities as <a class="reference external" href="../logic_programming/statements.html">statement</a> <em>types</em> or <em>topics</em>.  So:</p>
 <blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -107,30 +108,30 @@ You can think of knowledge entities as <a class="reference" href="../logic_progr
 </tbody>
 </table>
 </blockquote>
-<div class="section">
-<h2><a id="what-do-knowledge-bases-do" name="what-do-knowledge-bases-do">What do Knowledge Bases Do?</a></h2>
+<div class="section" id="what-do-knowledge-bases-do">
+<h2>What do Knowledge Bases Do?</h2>
 <p>Ultimately Pyke is interested in proving statements, or answering the question
 &quot;Is statement X true&quot;?  There are several different types of knowledge bases.
 Each type of knowledge base represents a different way of doing this:</p>
 <ul class="simple">
 <li>Those that contain simple lists of statements of fact (as you see in the
-example above) are called <a class="reference" href="fact_bases.html">fact bases</a>.<ul>
+example above) are called <a class="reference external" href="fact_bases.html">fact bases</a>.<ul>
 <li>These determine whether a statement is true by simply checking to see if
 that statement is in their list of known facts.</li>
 </ul>
 </li>
-<li>Those that contain <em>if-then</em> <a class="reference" href="../logic_programming/rules/index.html">rules</a> are called <a class="reference" href="rule_bases.html">rule bases</a>.<ul>
+<li>Those that contain <em>if-then</em> <a class="reference external" href="../logic_programming/rules/index.html">rules</a> are called <a class="reference external" href="rule_bases.html">rule bases</a>.<ul>
 <li>These determine whether a statement is true by running their if-then rules
 to try to construct a proof for that statement.</li>
-<li>Rule bases may include both <a class="reference" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> and <a class="reference" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> rules.</li>
+<li>Rule bases may include both <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> and <a class="reference external" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> rules.</li>
 </ul>
 </li>
 <li>It is also possible to create other kinds of knowledge bases that determine
 the truth of statements in other ways.  Pyke provides two of these:<ul>
-<li>The <a class="reference" href="question_bases.html">question base</a> which just poses the statement to an end user as a
+<li>The <a class="reference external" href="question_bases.html">question base</a> which just poses the statement to an end user as a
 question.</li>
-<li>The <a class="reference" href="special.html">special</a> knowledge base which has several special one-off knowledge
-entities to do different things like run a <a class="reference" href="special.html#running-commands">command</a> on the underlying
+<li>The <a class="reference external" href="special.html">special</a> knowledge base which has several special one-off knowledge
+entities to do different things like run a <a class="reference external" href="special.html#running-commands">command</a> on the underlying
 system and examine its output and/or exit status.<ul>
 <li>There is only has one instance of this knowledge base -- called
 <tt class="docutils literal"><span class="pre">special</span></tt>.</li>

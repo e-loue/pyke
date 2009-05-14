@@ -55,6 +55,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -76,9 +77,9 @@
 Pyke allows you to have as many fact bases as you like to help you organize
 your facts.  The fact bases are created automatically, as needed, as new facts
 are asserted.</p>
-<div class="section">
-<h2><a id="facts" name="facts">Facts</a></h2>
-<p>Think of a fact as a simple <a class="reference" href="../logic_programming/statements.html">statement</a>.  It has a name and a set of
+<div class="section" id="facts">
+<h2>Facts</h2>
+<p>Think of a fact as a simple <a class="reference external" href="../logic_programming/statements.html">statement</a>.  It has a name and a set of
 arguments.  The arguments may be:</p>
 <ul class="simple">
 <li>strings<ul>
@@ -98,26 +99,26 @@ arguments must be the same!</p>
 <p>Currently facts are thought to be immutable, meaning that they may not be
 changed or retracted.  That's why dictionaries, lists and user-defined
 objects are not recommended as arguments.</p>
-<div class="section">
-<h3><a id="case-specific-facts" name="case-specific-facts">Case Specific Facts</a></h3>
+<div class="section" id="case-specific-facts">
+<h3>Case Specific Facts</h3>
 <p>Most facts are <em>case specific</em> facts.  This means that they will be deleted
-when an <a class="reference" href="../using_pyke.html#initializing-pyke">engine</a> <a class="reference" href="../using_pyke.html#setting-up-each-case">reset</a> is done to prepare for another run of the inference
+when an <a class="reference external" href="../using_pyke.html#initializing-pyke">engine</a> <a class="reference external" href="../using_pyke.html#setting-up-each-case">reset</a> is done to prepare for another run of the inference
 engine.  Case specific facts are asserted through either:</p>
 <pre class="literal-block">
 some_engine.assert_(kb_name, fact_name, arguments)
 some_engine.add_case_specific_fact(kb_name, fact_name, arguments)
 </pre>
-<p>They may also be asserted by <a class="reference" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> rules.</p>
+<p>They may also be asserted by <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> rules.</p>
 </div>
-<div class="section">
-<h3><a id="universal-facts" name="universal-facts">Universal Facts</a></h3>
-<p>Universal facts are never deleted (specifically, when a <a class="reference" href="../using_pyke.html#setting-up-each-case">reset</a> is done).  You
-can specify universal facts in a <a class="reference" href="../pyke_syntax/kfb_syntax.html">.kfb file</a>, or add universal facts by
+<div class="section" id="universal-facts">
+<h3>Universal Facts</h3>
+<p>Universal facts are never deleted (specifically, when a <a class="reference external" href="../using_pyke.html#setting-up-each-case">reset</a> is done).  You
+can specify universal facts in a <a class="reference external" href="../pyke_syntax/kfb_syntax.html">.kfb file</a>, or add universal facts by
 calling:</p>
 <pre class="literal-block">
 some_engine.add_universal_fact(kb_name, fact_name, arguments)
 </pre>
-<p>Typically, all universal facts are added once at <a class="reference" href="../using_pyke.html#initializing-pyke">program startup</a>.</p>
+<p>Typically, all universal facts are added once at <a class="reference external" href="../using_pyke.html#initializing-pyke">program startup</a>.</p>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>

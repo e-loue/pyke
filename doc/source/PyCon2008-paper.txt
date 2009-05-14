@@ -69,8 +69,8 @@ explore the capabilities of this approach across different domains.
 
 .. contents::
 
-The Thinking that Lead to Pyke
-==============================
+The Thinking that Led to Pyke
+=============================
 
 The Need for Code Reuse
 ~~~~~~~~~~~~~~~~~~~~~~~

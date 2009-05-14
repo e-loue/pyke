@@ -1,0 +1,25 @@
+Installing rest2web (May 14, 2009).
+
+There is a 0.5.1 version on http://www.voidspace.org.uk/python/rest2web/ but
+not on https://sourceforge.net/projects/rest2web.
+
+The svn respository is https://svn.rest2web.python-hosting.com/trunk/.
+
+It doesn't work with easy_install either :-(.
+
+It seems that 0.5.1 has bug fixes for Python 2.5, so I'm assuming that it
+doesn't work on Python 2.6 (but haven't tried it).
+
+Installation steps:
+
+1. sudo easy_install-2.5 docutils
+2. Download the 0.5.1.zip file.
+3. cd /storage/downloads
+4. unzip rest2web-0.5.1.zip
+5. cd rest2web-0.5.1
+5. sudo mv rest2web /usr/lib/python2.5/site-packages
+6. sudo chown -R root:root /usr/lib/python2.5/site-packages/rest2web
+7. sed '1s,python,python2.5,' r2w.py > r2w
+8. chmod +x r2w
+9. sudo chown root:root r2w
+10. sudo mv r2w /usr/bin

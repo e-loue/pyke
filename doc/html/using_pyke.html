@@ -47,6 +47,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -65,8 +66,8 @@
                 <div class="document" id="using-pyke">
 <h1 class="title">Using Pyke</h1>
 <p>This describes how to call Pyke from within your Python program.</p>
-<div class="section">
-<h2><a id="initializing-pyke" name="initializing-pyke">Initializing Pyke</a></h2>
+<div class="section" id="initializing-pyke">
+<h2>Initializing Pyke</h2>
 <p>There are two steps to initializing a Pyke knowledge engine:</p>
 <dl class="docutils">
 <dt>knowledge_engine.engine(*paths, **kws)</dt>
@@ -80,7 +81,7 @@ the functions that you need are provided directly by this object:</p>
 &gt;&gt;&gt; my_engine = knowledge_engine.engine('doc.examples')
 </pre>
 <p>Pyke requires that all Pyke source files be placed (either directly or
-indirectly) under a Python <a class="reference" href="http://www.python.org/doc/essays/packages.html">package</a> directory.  These packages must be
+indirectly) under a Python <a class="reference external" href="http://www.python.org/doc/essays/packages.html">package</a> directory.  These packages must be
 on Python's search path for modules, and the directory for each dotted
 name must include an <tt class="docutils literal"><span class="pre">__init__.py</span></tt> file.</p>
 <p>Each <tt class="docutils literal"><span class="pre">paths</span></tt> argument represents a different Python package directory to
@@ -98,18 +99,18 @@ example above could also be written:</p>
 &gt;&gt;&gt; my_engine = knowledge_engine.engine(some_module)
 </pre>
 <p>Pyke recursively walks each source package directory looking for Pyke
-source files (<a class="reference" href="pyke_syntax/kfb_syntax.html">.kfb files</a>, <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a>, and <a class="reference" href="pyke_syntax/kqb_syntax.html">.kqb files</a>).  Each
+source files (<a class="reference external" href="pyke_syntax/kfb_syntax.html">.kfb files</a>, <a class="reference external" href="pyke_syntax/krb_syntax/index.html">.krb files</a>, and <a class="reference external" href="pyke_syntax/kqb_syntax.html">.kqb files</a>).  Each
 source file that it finds is compiled, if out of date, and then imported
 (depending on the keyword arguments, see below).  This causes all of the
-<a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a> to be loaded and made ready to <a class="reference" href="using_pyke.html#setting-up-each-case">activate</a>.</p>
+<a class="reference external" href="knowledge_bases/rule_bases.html">rule bases</a> to be loaded and made ready to <a class="reference external" href="using_pyke.html#setting-up-each-case">activate</a>.</p>
 <p>If you change some of your Pyke source files, you can create a new engine
 object to compile and reload the generated Python modules without
 restarting your program.  But note that you'll need to rerun the
-<tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> calls that you made outside of your <a class="reference" href="pyke_syntax/kfb_syntax.html">.kfb files</a>.</p>
+<tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> calls that you made outside of your <a class="reference external" href="pyke_syntax/kfb_syntax.html">.kfb files</a>.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">It is OK for your source package directory to be part of a zipped
-<a class="reference" href="http://peak.telecommunity.com/DevCenter/PythonEggs">Python egg file</a>.  But, in this case, Pyke can't rebuild and recompile
+<a class="reference external" href="http://peak.telecommunity.com/DevCenter/PythonEggs">Python egg file</a>.  But, in this case, Pyke can't rebuild and recompile
 the source files.  It will just import the compiled file that is there
 without complaining if the source file has a later modification time
 than the compiled file.</p>
@@ -142,9 +143,9 @@ if it does not already exist.</p>
 to <tt class="docutils literal"><span class="pre">True</span></tt>.</p>
 </dd>
 <dt><em>some_engine</em>.add_universal_fact(kb_name, fact_name, arguments)</dt>
-<dd><p class="first">The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference" href="knowledge_bases/fact_bases.html#facts">fact</a>.  These
-<a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> are never deleted and apply to all <em>cases</em>.</p>
-<p>Alternatively, you can place universal facts in a <a class="reference" href="pyke_syntax/kfb_syntax.html">.kfb file</a> so that
+<dd><p class="first">The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference external" href="knowledge_bases/fact_bases.html#facts">fact</a>.  These
+<a class="reference external" href="knowledge_bases/fact_bases.html#facts">facts</a> are never deleted and apply to all <em>cases</em>.</p>
+<p>Alternatively, you can place universal facts in a <a class="reference external" href="pyke_syntax/kfb_syntax.html">.kfb file</a> so that
 they are loaded automatically.</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas'))
@@ -161,23 +162,23 @@ son_of('bruce', 'thomas')
 son_of('david', 'bruce')
 </pre>
 <p class="last">These facts are accessed as <tt class="docutils literal"><span class="pre">kb_name.fact_name(arguments)</span></tt> within the
-<a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a>.</p>
+<a class="reference external" href="pyke_syntax/krb_syntax/index.html">.krb files</a>.</p>
 </dd>
 </dl>
 </div>
-<div class="section">
-<h2><a id="setting-up-each-case" name="setting-up-each-case">Setting up Each Case</a></h2>
+<div class="section" id="setting-up-each-case">
+<h2>Setting up Each Case</h2>
 <p>Pyke is designed to be run multiple times for multiple <em>cases</em>.  In
-general each case has its own set of starting <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a> and may use different
-<a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>, depending upon the situation.</p>
+general each case has its own set of starting <a class="reference external" href="knowledge_bases/fact_bases.html#facts">facts</a> and may use different
+<a class="reference external" href="knowledge_bases/rule_bases.html">rule bases</a>, depending upon the situation.</p>
 <p>Three functions initialize each case:</p>
 <dl class="docutils">
 <dt><em>some_engine</em>.reset()</dt>
-<dd>The <tt class="docutils literal"><span class="pre">reset</span></tt> function is called once to delete all of the <a class="reference" href="knowledge_bases/fact_bases.html#case-specific-facts">case specific
-facts</a> from the last run.  It also deactivates all <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>.</dd>
+<dd>The <tt class="docutils literal"><span class="pre">reset</span></tt> function is called once to delete all of the <a class="reference external" href="knowledge_bases/fact_bases.html#case-specific-facts">case specific
+facts</a> from the last run.  It also deactivates all <a class="reference external" href="knowledge_bases/rule_bases.html">rule bases</a>.</dd>
 <dt><em>some_engine</em>.assert_(kb_name, fact_name, arguments)</dt>
 <dd><p class="first">Call <tt class="docutils literal"><span class="pre">assert_</span></tt> (or the equivalent, <tt class="docutils literal"><span class="pre">add_case_specific_fact</span></tt>,
-see <a class="reference" href="#other-functions">Other Functions</a>, below) for each starting <a class="reference" href="knowledge_bases/fact_bases.html#facts">fact</a> for this case.
+see <a class="reference internal" href="#other-functions">Other Functions</a>, below) for each starting <a class="reference external" href="knowledge_bases/fact_bases.html#facts">fact</a> for this case.
 Like universal facts, you may have multiple facts with the same name so
 long as they have different arguments.</p>
 <pre class="doctest-block">
@@ -195,7 +196,7 @@ son_of('fred', 'thomas')
 son_of('bruce', 'thomas')
 son_of('david', 'bruce')
 </pre>
-<p>There is no difference within the <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb files</a> of how universal facts
+<p>There is no difference within the <a class="reference external" href="pyke_syntax/krb_syntax/index.html">.krb files</a> of how universal facts
 verses case specific facts are used.  The only difference between the two
 types of facts is that the case specific facts are deleted when a <tt class="docutils literal"><span class="pre">reset</span></tt>
 is done.</p>
@@ -208,7 +209,7 @@ son_of('david', 'bruce')
 </pre>
 </dd>
 <dt><em>some_engine</em>.activate(*rb_names)</dt>
-<dd><p class="first">Then call <tt class="docutils literal"><span class="pre">activate</span></tt> to activate the appropriate <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>.  This
+<dd><p class="first">Then call <tt class="docutils literal"><span class="pre">activate</span></tt> to activate the appropriate <a class="reference external" href="knowledge_bases/rule_bases.html">rule bases</a>.  This
 may be called more than once, if desired, or it can simply take multiple
 arguments.</p>
 <pre class="last doctest-block">
@@ -218,20 +219,20 @@ arguments.</p>
 </dl>
 <p>Your Pyke engine is now ready to prove goals for this case!</p>
 </div>
-<div class="section">
-<h2><a id="proving-goals" name="proving-goals">Proving Goals</a></h2>
+<div class="section" id="proving-goals">
+<h2>Proving Goals</h2>
 <p>Two functions are provided that cover the easy cases.  More general
-functions are provided in <a class="reference" href="#other-functions">Other Functions</a>, below.</p>
+functions are provided in <a class="reference internal" href="#other-functions">Other Functions</a>, below.</p>
 <dl class="docutils">
 <dt><em>some_engine</em>.prove_1(kb_name, entity_name, fixed_args, num_returns)</dt>
-<dd><p class="first"><tt class="docutils literal"><span class="pre">Kb_name</span></tt> may name either a <a class="reference" href="knowledge_bases/fact_bases.html">fact base</a>, <a class="reference" href="knowledge_bases/question_bases.html">question base</a> or
-<a class="reference" href="knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>.</p>
+<dd><p class="first"><tt class="docutils literal"><span class="pre">Kb_name</span></tt> may name either a <a class="reference external" href="knowledge_bases/fact_bases.html">fact base</a>, <a class="reference external" href="knowledge_bases/question_bases.html">question base</a> or
+<a class="reference external" href="knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>.</p>
 <p>The <tt class="docutils literal"><span class="pre">entity_name</span></tt> is the fact name for fact bases, question name for
-question bases or the name of the <a class="reference" href="logic_programming/rules/backward_chaining.html">backward chaining</a> goal for
-<a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>.</p>
+question bases or the name of the <a class="reference external" href="logic_programming/rules/backward_chaining.html">backward chaining</a> goal for
+<a class="reference external" href="knowledge_bases/rule_bases.html">rule bases</a>.</p>
 <p>The <tt class="docutils literal"><span class="pre">fixed_args</span></tt> are a tuple of Python values.  These form the first
 set of arguments to the proof.  <tt class="docutils literal"><span class="pre">Num_returns</span></tt> specifies the number of
-additional <a class="reference" href="logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> to be appended to these arguments for the
+additional <a class="reference external" href="logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> to be appended to these arguments for the
 proof.  The bindings of these pattern variables will be returned as a
 tuple in the answer for the proof.  For example:</p>
 <blockquote>
@@ -242,9 +243,9 @@ tuple in the answer for the proof.  For example:</p>
 <p>And will return the bindings produced by the proof as (<tt class="docutils literal"><span class="pre">$ans_0</span></tt>,
 <tt class="docutils literal"><span class="pre">$ans_1</span></tt>).</p>
 <p class="last">Returns the first proof found as a 2-tuple: a tuple of the bindings for
-the <tt class="docutils literal"><span class="pre">num_returns</span></tt> pattern variables, and a <a class="reference" href="logic_programming/plans.html">plan</a>.  The plan is <tt class="docutils literal"><span class="pre">None</span></tt>
+the <tt class="docutils literal"><span class="pre">num_returns</span></tt> pattern variables, and a <a class="reference external" href="logic_programming/plans.html">plan</a>.  The plan is <tt class="docutils literal"><span class="pre">None</span></tt>
 if no plan was generated; otherwise, it is a Python function as
-described <a class="reference" href="#running-and-pickling-plans">below</a>.</p>
+described <a class="reference external" href="#running-and-pickling-plans">below</a>.</p>
 </dd>
 </dl>
 <blockquote>
@@ -263,7 +264,7 @@ CanNotProve: Can not prove bc_example.father_son(thomas, bogus, $ans_0)
 <dl class="docutils">
 <dt><em>some_engine</em>.prove_n(kb_name, entity_name, fixed_args, num_returns)</dt>
 <dd><p class="first">This returns a context manager for a generator yielding 2-tuples, a tuple
-whose length == <tt class="docutils literal"><span class="pre">num_returns</span></tt> and a <a class="reference" href="logic_programming/plans.html">plan</a>, for each possible proof.
+whose length == <tt class="docutils literal"><span class="pre">num_returns</span></tt> and a <a class="reference external" href="logic_programming/plans.html">plan</a>, for each possible proof.
 Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>, the plan is None if no plan was generated.  Unlike
 <tt class="docutils literal"><span class="pre">prove_1</span></tt> it does not raise an exception if no proof is found.</p>
 <pre class="last doctest-block">
@@ -276,15 +277,15 @@ Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>, the pla
 </pre>
 </dd>
 </dl>
-<div class="section">
-<h3><a id="running-and-pickling-plans" name="running-and-pickling-plans">Running and Pickling Plans</a></h3>
-<p>Once you've obtained a <a class="reference" href="logic_programming/plans.html">plan</a> from <tt class="docutils literal"><span class="pre">prove_1</span></tt> or <tt class="docutils literal"><span class="pre">prove_n</span></tt>, you just call
+<div class="section" id="running-and-pickling-plans">
+<h3>Running and Pickling Plans</h3>
+<p>Once you've obtained a <a class="reference external" href="logic_programming/plans.html">plan</a> from <tt class="docutils literal"><span class="pre">prove_1</span></tt> or <tt class="docutils literal"><span class="pre">prove_n</span></tt>, you just call
 it like a normal Python function.  The arguments required are simply those
-specified, if any, in the <a class="reference" href="pyke_syntax/krb_syntax/bc_rule.html#taking-clause">taking clause</a> of the <a class="reference" href="pyke_syntax/krb_syntax/bc_rule.html">rule</a> proving the top-level
+specified, if any, in the <a class="reference external" href="pyke_syntax/krb_syntax/bc_rule.html#taking-clause">taking clause</a> of the <a class="reference external" href="pyke_syntax/krb_syntax/bc_rule.html">rule</a> proving the top-level
 goal.</p>
 <p>You may call the plan function any number of times.  You may even pickle
 the plan for later use.  But the plans are constructed out of
-<a class="reference" href="http://docs.python.org/lib/module-functools.html">functools.partial</a> functions, so you need to register this with <a class="reference" href="http://docs.python.org/lib/module-copyreg.html">copy_reg</a>
+<a class="reference external" href="http://docs.python.org/library/functools.html">functools.partial</a> functions, so you need to register this with <a class="reference external" href="http://docs.python.org/library/copy_reg.html">copy_reg</a>
 before pickling the plan:</p>
 <blockquote>
 <pre class="doctest-block">
@@ -298,8 +299,8 @@ before pickling the plan:</p>
 (Unpickling the plan only imports one small Pyke module to be able to run
 the plan).</p>
 </div>
-<div class="section">
-<h3><a id="tracing-rules" name="tracing-rules">Tracing Rules</a></h3>
+<div class="section" id="tracing-rules">
+<h3>Tracing Rules</h3>
 <p>Individual rules may be traced to aid in debugging.  The <tt class="docutils literal"><span class="pre">trace</span></tt> function
 takes two arguments: the rule base name, and the name of the rule to trace:</p>
 <blockquote>
@@ -321,14 +322,14 @@ in effect until you call <tt class="docutils literal"><span class="pre">untrace<
 </pre>
 </blockquote>
 </div>
-<div class="section">
-<h3><a id="krb-traceback" name="krb-traceback">Krb_traceback</a></h3>
+<div class="section" id="krb-traceback">
+<h3>Krb_traceback</h3>
 <p>A handy traceback module is provided to convert Python functions, lines and
-line numbers to the <a class="reference" href="pyke_syntax/krb_syntax/index.html">.krb file</a> rule names, lines and line numbers in a
+line numbers to the <a class="reference external" href="pyke_syntax/krb_syntax/index.html">.krb file</a> rule names, lines and line numbers in a
 Python traceback.  This makes it much easier to read the tracebacks that occur
 during proofs.</p>
 <p>The <tt class="docutils literal"><span class="pre">krb_traceback</span></tt> module has exactly the same functions as the standard
-Python <a class="reference" href="http://docs.python.org/lib/module-traceback.html">traceback</a> module, but they convert the generated Python function
+Python <a class="reference external" href="http://docs.python.org/library/traceback.html">traceback</a> module, but they convert the generated Python function
 information into .krb file information.  They also delete the intervening
 Python functions between subgoal proofs.</p>
 <blockquote>
@@ -371,36 +372,36 @@ KeyError: '$bar not bound'
 </blockquote>
 </div>
 </div>
-<div class="section">
-<h2><a id="other-functions" name="other-functions">Other Functions</a></h2>
+<div class="section" id="other-functions">
+<h2>Other Functions</h2>
 <p>There are a few more functions that may be useful in special situations.</p>
-<p>The first two of these provide more general access to the <a class="reference" href="knowledge_bases/fact_bases.html#facts">fact</a> lookup and
+<p>The first two of these provide more general access to the <a class="reference external" href="knowledge_bases/fact_bases.html#facts">fact</a> lookup and
 goal proof mechanisms.  The catch is that you must first convert <strong>all</strong>
-arguments into <a class="reference" href="#creating-your-own-patterns">patterns</a> and create a <em>context</em> for these patterns.  This is
-discussed <a class="reference" href="#creating-your-own-patterns">below</a>.</p>
+arguments into <a class="reference external" href="#creating-your-own-patterns">patterns</a> and create a <em>context</em> for these patterns.  This is
+discussed <a class="reference internal" href="#creating-your-own-patterns">below</a>.</p>
 <dl class="docutils">
 <dt><em>some_engine</em>.lookup(kb_name, entity_name, pattern_context, patterns)</dt>
-<dd>This returns a context manager for a generator that binds <a class="reference" href="#creating-your-own-patterns">patterns</a> to
-successive <a class="reference" href="knowledge_bases/fact_bases.html#facts">facts</a>.  Yields <tt class="docutils literal"><span class="pre">None</span></tt> for each successful match.</dd>
+<dd>This returns a context manager for a generator that binds <a class="reference external" href="#creating-your-own-patterns">patterns</a> to
+successive <a class="reference external" href="knowledge_bases/fact_bases.html#facts">facts</a>.  Yields <tt class="docutils literal"><span class="pre">None</span></tt> for each successful match.</dd>
 <dt><em>some_engine</em>.prove(kb_name, entity_name, pattern_context, patterns)</dt>
-<dd>Returns a context manager for a generator that binds <a class="reference" href="#creating-your-own-patterns">patterns</a> to
+<dd>Returns a context manager for a generator that binds <a class="reference external" href="#creating-your-own-patterns">patterns</a> to
 successive proofs.  Yields a <em>prototype_plan</em> or <tt class="docutils literal"><span class="pre">None</span></tt> for each
 successful match.  To turn the prototype_plan into a Python function,
-use <em>prototype_plan</em>.create_plan().  This returns the <a class="reference" href="logic_programming/plans.html">plan</a> function.</dd>
+use <em>prototype_plan</em>.create_plan().  This returns the <a class="reference external" href="logic_programming/plans.html">plan</a> function.</dd>
 </dl>
 <p>The remaining functions are:</p>
 <dl class="docutils">
 <dt><em>some_engine</em>.add_case_specific_fact(kb_name, fact_name, args)</dt>
 <dd>This is an alternate to the <tt class="docutils literal"><span class="pre">assert_</span></tt> function.</dd>
 <dt><em>some_engine</em>.get_kb(kb_name)</dt>
-<dd>Finds and returns the <a class="reference" href="knowledge_bases/index.html">knowledge base</a> by the name <tt class="docutils literal"><span class="pre">kb_name</span></tt>.  Raises
-<tt class="docutils literal"><span class="pre">KeyError</span></tt> if not found.  Note that for <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a>, this returns the
-active <a class="reference" href="knowledge_bases/rule_bases.html">rule base</a> where <tt class="docutils literal"><span class="pre">kb_name</span></tt> is the <a class="reference" href="knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name.
-Thus, not all <a class="reference" href="knowledge_bases/rule_bases.html">rule bases</a> are accessible through this call.</dd>
+<dd>Finds and returns the <a class="reference external" href="knowledge_bases/index.html">knowledge base</a> by the name <tt class="docutils literal"><span class="pre">kb_name</span></tt>.  Raises
+<tt class="docutils literal"><span class="pre">KeyError</span></tt> if not found.  Note that for <a class="reference external" href="knowledge_bases/rule_bases.html">rule bases</a>, this returns the
+active <a class="reference external" href="knowledge_bases/rule_bases.html">rule base</a> where <tt class="docutils literal"><span class="pre">kb_name</span></tt> is the <a class="reference external" href="knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name.
+Thus, not all <a class="reference external" href="knowledge_bases/rule_bases.html">rule bases</a> are accessible through this call.</dd>
 <dt><em>some_engine</em>.get_rb(rb_name)</dt>
-<dd>Finds and returns the <a class="reference" href="knowledge_bases/rule_bases.html">rule base</a> by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
-<tt class="docutils literal"><span class="pre">KeyError</span></tt> if not found.  This works for any <a class="reference" href="knowledge_bases/rule_bases.html">rule base</a>, whether it
-is <a class="reference" href="knowledge_bases/rule_bases.html#rule-base-activation">active</a> or not.</dd>
+<dd>Finds and returns the <a class="reference external" href="knowledge_bases/rule_bases.html">rule base</a> by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
+<tt class="docutils literal"><span class="pre">KeyError</span></tt> if not found.  This works for any <a class="reference external" href="knowledge_bases/rule_bases.html">rule base</a>, whether it
+is <a class="reference external" href="knowledge_bases/rule_bases.html#rule-base-activation">active</a> or not.</dd>
 <dt><em>some_engine</em>.print_stats([f = sys.stdout])</dt>
 <dd>Prints a brief set of statistics for each knowledge base to file <tt class="docutils literal"><span class="pre">f</span></tt>.
 These are reset by the <tt class="docutils literal"><span class="pre">reset</span></tt> function.  This will show how many facts
@@ -410,9 +411,9 @@ tried, and how many backward-chaining rules matched, succeeded and failed.
 Note that one backward-chaining rule may succeed many times through
 backtracking.</dd>
 </dl>
-<div class="section">
-<h3><a id="creating-your-own-patterns" name="creating-your-own-patterns">Creating Your Own Patterns</a></h3>
-<p>You'll need two more Pyke modules to create your own <a class="reference" href="logic_programming/pattern_matching/index.html">patterns</a> and contexts:</p>
+<div class="section" id="creating-your-own-patterns">
+<h3>Creating Your Own Patterns</h3>
+<p>You'll need two more Pyke modules to create your own <a class="reference external" href="logic_programming/pattern_matching/index.html">patterns</a> and contexts:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import pattern, contexts
@@ -466,7 +467,7 @@ proof is yielded. This is done by either:</p>
 <div class="right-item"><a href="about_pyke/index.html">About Pyke</a><p>What pyke does for you, its features, steps to using pyke and
 installation.</p>
 </div>
-<div class="right-item"><a href="logic_programming/index.html">Logic Programming Tutorial</a><p>An tutorial on logic programming in Pyke, including <em>statements</em>,
+<div class="right-item"><a href="logic_programming/index.html">Logic Programming Tutorial</a><p>A tutorial on logic programming in Pyke, including <em>statements</em>,
 <em>pattern matching</em> and <em>rules</em>.</p>
 </div>
 <div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered

@@ -47,6 +47,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -79,8 +80,8 @@
 <td>© 2008, Bruce Frederiksen</td></tr>
 </tbody>
 </table>
-<div class="section">
-<h1><a class="toc-backref" href="#id2" id="abstract" name="abstract">Abstract</a></h1>
+<div class="section" id="abstract">
+<h1><a class="toc-backref" href="#id2">Abstract</a></h1>
 <p>This paper explores a new approach to code reuse using a backward-chaining
 rule-based system, similar to prolog, to generate a function call graph <em>before</em>
 the functions are called.  This is compared with current solutions which build
@@ -91,53 +92,53 @@ Knowledge Engine).</p>
 exceeds expectations; leading to something more akin to automatic
 programming rather than adaptable libraries.  A call for help is given to
 explore the capabilities of this approach across different domains.</p>
-<div class="contents topic">
-<p class="topic-title first"><a id="contents" name="contents">Contents</a></p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference" href="#abstract" id="id2" name="id2">Abstract</a></li>
-<li><a class="reference" href="#the-thinking-that-lead-to-pyke" id="id3" name="id3">The Thinking that Lead to Pyke</a><ul>
-<li><a class="reference" href="#the-need-for-code-reuse" id="id4" name="id4">The Need for Code Reuse</a></li>
-<li><a class="reference" href="#what-is-code-reuse" id="id5" name="id5">What is Code Reuse?</a><ul>
-<li><a class="reference" href="#example-1" id="id6" name="id6">Example 1</a></li>
-<li><a class="reference" href="#current-solutions" id="id7" name="id7">Current Solutions</a></li>
+<li><a class="reference internal" href="#abstract" id="id2">Abstract</a></li>
+<li><a class="reference internal" href="#the-thinking-that-led-to-pyke" id="id3">The Thinking that Led to Pyke</a><ul>
+<li><a class="reference internal" href="#the-need-for-code-reuse" id="id4">The Need for Code Reuse</a></li>
+<li><a class="reference internal" href="#what-is-code-reuse" id="id5">What is Code Reuse?</a><ul>
+<li><a class="reference internal" href="#example-1" id="id6">Example 1</a></li>
+<li><a class="reference internal" href="#current-solutions" id="id7">Current Solutions</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#current-solution-limitations" id="id8" name="id8">Current Solution Limitations</a><ul>
-<li><a class="reference" href="#example-2" id="id9" name="id9">Example 2</a></li>
-<li><a class="reference" href="#what-s-needed" id="id10" name="id10">What's Needed</a></li>
+<li><a class="reference internal" href="#current-solution-limitations" id="id8">Current Solution Limitations</a><ul>
+<li><a class="reference internal" href="#example-2" id="id9">Example 2</a></li>
+<li><a class="reference internal" href="#what-s-needed" id="id10">What's Needed</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#applying-backward-chaining-to-code-reuse" id="id11" name="id11">Applying Backward-Chaining to Code Reuse</a></li>
+<li><a class="reference internal" href="#applying-backward-chaining-to-code-reuse" id="id11">Applying Backward-Chaining to Code Reuse</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#pyke" id="id12" name="id12">Pyke</a><ul>
-<li><a class="reference" href="#pyke-krb-syntax" id="id13" name="id13">Pyke KRB Syntax</a></li>
-<li><a class="reference" href="#attaching-python-functions-to-backward-chaining-rules" id="id14" name="id14">Attaching Python Functions to Backward-Chaining Rules</a><ul>
-<li><a class="reference" href="#calling-subordinate-plans" id="id15" name="id15">Calling Subordinate Plans</a></li>
-<li><a class="reference" href="#some-final-points-about-plans" id="id16" name="id16">Some Final Points about Plans</a></li>
+<li><a class="reference internal" href="#pyke" id="id12">Pyke</a><ul>
+<li><a class="reference internal" href="#pyke-krb-syntax" id="id13">Pyke KRB Syntax</a></li>
+<li><a class="reference internal" href="#attaching-python-functions-to-backward-chaining-rules" id="id14">Attaching Python Functions to Backward-Chaining Rules</a><ul>
+<li><a class="reference internal" href="#calling-subordinate-plans" id="id15">Calling Subordinate Plans</a></li>
+<li><a class="reference internal" href="#some-final-points-about-plans" id="id16">Some Final Points about Plans</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#other-capabilities" id="id17" name="id17">Other Capabilities</a></li>
+<li><a class="reference internal" href="#other-capabilities" id="id17">Other Capabilities</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#initial-results" id="id18" name="id18">Initial Results</a><ul>
-<li><a class="reference" href="#code-reuse-through-automatic-programming" id="id19" name="id19">Code Reuse through Automatic Programming</a></li>
+<li><a class="reference internal" href="#initial-results" id="id18">Initial Results</a><ul>
+<li><a class="reference internal" href="#code-reuse-through-automatic-programming" id="id19">Code Reuse through Automatic Programming</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#going-forward" id="id20" name="id20">Going Forward</a></li>
+<li><a class="reference internal" href="#going-forward" id="id20">Going Forward</a></li>
 </ul>
 </div>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id3" id="the-thinking-that-lead-to-pyke" name="the-thinking-that-lead-to-pyke">The Thinking that Lead to Pyke</a></h1>
-<div class="section">
-<h2><a class="toc-backref" href="#id4" id="the-need-for-code-reuse" name="the-need-for-code-reuse">The Need for Code Reuse</a></h2>
+<div class="section" id="the-thinking-that-led-to-pyke">
+<h1><a class="toc-backref" href="#id3">The Thinking that Led to Pyke</a></h1>
+<div class="section" id="the-need-for-code-reuse">
+<h2><a class="toc-backref" href="#id4">The Need for Code Reuse</a></h2>
 <p>At one of my contracting jobs, they had many clients running essentially the
 same program, but each client needed minor code modifications.  Their objective
 was to maximize code reuse.</p>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id5" id="what-is-code-reuse" name="what-is-code-reuse">What is Code Reuse?</a></h2>
+<div class="section" id="what-is-code-reuse">
+<h2><a class="toc-backref" href="#id5">What is Code Reuse?</a></h2>
 <p>The first question is what does &quot;code reuse&quot; mean?  And the answer that seems
 most logical is <em>function</em> reuse.  Where code modifications are required, a
 new function can be created incorporating those modifications.</p>
@@ -149,8 +150,8 @@ client.  So it's not simply the case that there will be one standard default
 version of each function, and then several one-off customized versions that
 each only apply to a single client.</p>
 <p>The result of this function combination exercise is a function call graph.</p>
-<div class="section">
-<h3><a class="toc-backref" href="#id6" id="example-1" name="example-1">Example 1</a></h3>
+<div class="section" id="example-1">
+<h3><a class="toc-backref" href="#id6">Example 1</a></h3>
 <p>Let us imagine that we start out with two functions for client1:</p>
 <blockquote>
 <img alt="images/PyCon2008/client1.png" src="images/PyCon2008/client1.png" style="width: 200.4px; height: 251.4px;" />
@@ -171,8 +172,8 @@ but can reuse function A<sub>1</sub>:</p>
 </blockquote>
 <p>This is where we need help.</p>
 </div>
-<div class="section">
-<h3><a class="toc-backref" href="#id7" id="current-solutions" name="current-solutions">Current Solutions</a></h3>
+<div class="section" id="current-solutions">
+<h3><a class="toc-backref" href="#id7">Current Solutions</a></h3>
 <p>The current solutions are all run-time solutions that trap the call from
 function A<sub>1</sub> to some function B and figure out which function B to use
 when the call is made.  For example:</p>
@@ -183,12 +184,12 @@ when the call is made.  For example:</p>
 </ul>
 </div>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id8" id="current-solution-limitations" name="current-solution-limitations">Current Solution Limitations</a></h2>
+<div class="section" id="current-solution-limitations">
+<h2><a class="toc-backref" href="#id8">Current Solution Limitations</a></h2>
 <p>These solutions are all limited for the same reason.  Let's look at another
 example to see why.</p>
-<div class="section">
-<h3><a class="toc-backref" href="#id9" id="example-2" name="example-2">Example 2</a></h3>
+<div class="section" id="example-2">
+<h3><a class="toc-backref" href="#id9">Example 2</a></h3>
 <p>Real world programs have many more than two functions, but we can start to see
 the limitations of the current solutions by looking at a three function
 example.</p>
@@ -234,8 +235,8 @@ and try the other B function:</p>
 <img alt="images/PyCon2008/client3h.png" src="images/PyCon2008/client3h.png" style="width: 363.6px; height: 368.4px;" />
 </blockquote>
 </div>
-<div class="section">
-<h3><a class="toc-backref" href="#id10" id="what-s-needed" name="what-s-needed">What's Needed</a></h3>
+<div class="section" id="what-s-needed">
+<h3><a class="toc-backref" href="#id10">What's Needed</a></h3>
 <p>By looking at this example, we discover two things about how to solve
 this problem:</p>
 <ol class="arabic">
@@ -251,8 +252,8 @@ rule-based systems like prolog.  They call it <em>backtracking</em>.</p>
 </ol>
 </div>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id11" id="applying-backward-chaining-to-code-reuse" name="applying-backward-chaining-to-code-reuse">Applying Backward-Chaining to Code Reuse</a></h2>
+<div class="section" id="applying-backward-chaining-to-code-reuse">
+<h2><a class="toc-backref" href="#id11">Applying Backward-Chaining to Code Reuse</a></h2>
 <p>The next question is how do we use a backward-chaining system to produce
 function call graphs?</p>
 <p>Let's examine, conceptually, what a set of backward-chaining rules would look
@@ -309,10 +310,10 @@ backward-chaining rules:</p>
 </blockquote>
 </div>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id12" id="pyke" name="pyke">Pyke</a></h1>
-<div class="section">
-<h2><a class="toc-backref" href="#id13" id="pyke-krb-syntax" name="pyke-krb-syntax">Pyke KRB Syntax</a></h2>
+<div class="section" id="pyke">
+<h1><a class="toc-backref" href="#id12">Pyke</a></h1>
+<div class="section" id="pyke-krb-syntax">
+<h2><a class="toc-backref" href="#id13">Pyke KRB Syntax</a></h2>
 <p>How does all of this look in Pyke?</p>
 <p>Pyke has its own language for rules, which it compiles into python source
 modules and then imports.  This gives a performance boost by circumventing
@@ -350,8 +351,8 @@ function should be used for this client.  If this is the incorrect version,
 it fails.  If there is no indication for this function, it succeeds to
 allow guessing.</p>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id14" id="attaching-python-functions-to-backward-chaining-rules" name="attaching-python-functions-to-backward-chaining-rules">Attaching Python Functions to Backward-Chaining Rules</a></h2>
+<div class="section" id="attaching-python-functions-to-backward-chaining-rules">
+<h2><a class="toc-backref" href="#id14">Attaching Python Functions to Backward-Chaining Rules</a></h2>
 <p>Here are the last two rules with the python code added.  The rules have the
 python function attached to them so that the function can be returned from
 the goal as an additional parameter.  Because this parameter does not affect
@@ -375,8 +376,8 @@ use_D2
 </pre>
 <p>Pyke calls the function call graphs <em>plans</em>.  This terms applies to both the
 final top-level call graph, as well as intermediate call graphs.</p>
-<div class="section">
-<h3><a class="toc-backref" href="#id15" id="calling-subordinate-plans" name="calling-subordinate-plans">Calling Subordinate Plans</a></h3>
+<div class="section" id="calling-subordinate-plans">
+<h3><a class="toc-backref" href="#id15">Calling Subordinate Plans</a></h3>
 <p>Now we do the same thing to add python code to the <tt class="docutils literal"><span class="pre">use_B2</span></tt> rule:</p>
 <pre class="literal-block">
 use_B2
@@ -430,8 +431,8 @@ and set constant values within the plan functions to further customize the
 code.  This is the reason that the code for the attached python functions is
 placed directly in the .krb file rather than in a separate python module.</p>
 </div>
-<div class="section">
-<h3><a class="toc-backref" href="#id16" id="some-final-points-about-plans" name="some-final-points-about-plans">Some Final Points about Plans</a></h3>
+<div class="section" id="some-final-points-about-plans">
+<h3><a class="toc-backref" href="#id16">Some Final Points about Plans</a></h3>
 <ul>
 <li><p class="first">Function parameters are specified at the end of the <tt class="docutils literal"><span class="pre">use</span></tt> clause with an
 optional <tt class="docutils literal"><span class="pre">taking</span></tt> clause:</p>
@@ -456,8 +457,8 @@ use_B2
 </ul>
 </div>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id17" id="other-capabilities" name="other-capabilities">Other Capabilities</a></h2>
+<div class="section" id="other-capabilities">
+<h2><a class="toc-backref" href="#id17">Other Capabilities</a></h2>
 <ul>
 <li><p class="first">Pyke also supports forward-chaining rules:</p>
 <pre class="literal-block">
@@ -510,8 +511,8 @@ another rule base.<ul>
 </ul>
 </div>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id18" id="initial-results" name="initial-results">Initial Results</a></h1>
+<div class="section" id="initial-results">
+<h1><a class="toc-backref" href="#id18">Initial Results</a></h1>
 <p>After writing Pyke's younger brother, it occurred to me that backward-chaining
 could be used to automatically figure out how to join database tables together
 and generate SQL statements.</p>
@@ -554,8 +555,8 @@ multi-row data) and was preparing to show some demonstrations; our new
 president, coming from a java background and apparently never having heard of
 python, decided to cancel the project.</p>
 <p>End of contract!</p>
-<div class="section">
-<h2><a class="toc-backref" href="#id19" id="code-reuse-through-automatic-programming" name="code-reuse-through-automatic-programming">Code Reuse through Automatic Programming</a></h2>
+<div class="section" id="code-reuse-through-automatic-programming">
+<h2><a class="toc-backref" href="#id19">Code Reuse through Automatic Programming</a></h2>
 <p>The fundamental lesson learned was that this technique ends up being far more
 capable than what I had first imagined.</p>
 <p>More than producing adaptable libraries capable of using B<sub>1</sub> or
@@ -571,8 +572,8 @@ parsed; but is rather a simple observer of already known facts:</p>
 realm of static <em>libraries</em>, to the realm of dynamic <em>automatic programming</em>.</p>
 </div>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id20" id="going-forward" name="going-forward">Going Forward</a></h1>
+<div class="section" id="going-forward">
+<h1><a class="toc-backref" href="#id20">Going Forward</a></h1>
 <p>Thinking that others might find this useful, I've re-implemented the underlying
 knowledge engine from scratch, with numerous improvements gained from the
 experience of the first attempt, and made it open source.</p>
@@ -609,7 +610,7 @@ domains.  Pyke is in alpha status now and is ready to start to lean on.</p>
 <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">
   <img alt="Creative Commons License" style="border-width:0"
        src="http://i.creativecommons.org/l/by/3.0/88x31.png" />
-</a><p>This paper is licensed under a <a class="reference" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported
+</a><p>This paper is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported
 License</a>.</p>
 </div>
 </div>
@@ -626,7 +627,7 @@ License</a>.</p>
 <div class="right-item"><a href="about_pyke/index.html">About Pyke</a><p>What pyke does for you, its features, steps to using pyke and
 installation.</p>
 </div>
-<div class="right-item"><a href="logic_programming/index.html">Logic Programming Tutorial</a><p>An tutorial on logic programming in Pyke, including <em>statements</em>,
+<div class="right-item"><a href="logic_programming/index.html">Logic Programming Tutorial</a><p>A tutorial on logic programming in Pyke, including <em>statements</em>,
 <em>pattern matching</em> and <em>rules</em>.</p>
 </div>
 <div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered

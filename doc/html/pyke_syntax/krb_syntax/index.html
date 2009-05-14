@@ -61,6 +61,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -78,9 +79,9 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="krb-syntax">
 <h1 class="title">KRB Syntax</h1>
-<p>This section describes the syntax for defining <a class="reference" href="../../logic_programming/rules/index.html">rules</a> in KRB files.</p>
-<div class="section">
-<h2><a id="keywords" name="keywords">Keywords</a></h2>
+<p>This section describes the syntax for defining <a class="reference external" href="../../logic_programming/rules/index.html">rules</a> in KRB files.</p>
+<div class="section" id="keywords">
+<h2>Keywords</h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="31%" />
@@ -119,8 +120,8 @@
 </tbody>
 </table>
 </div>
-<div class="section">
-<h2><a id="syntax-of-the-entire-krb-file" name="syntax-of-the-entire-krb-file">Syntax of the Entire KRB File</a></h2>
+<div class="section" id="syntax-of-the-entire-krb-file">
+<h2>Syntax of the Entire KRB File</h2>
 <pre class="literal-block">
 file ::= [NL]
 
@@ -139,38 +140,38 @@ file ::= [NL]
              {&lt;python_statement&gt; NL}
            DEINDENT]]
 </pre>
-<p>The KRB file has three optional parts.  It must contain at least one <a class="reference" href="../../logic_programming/rules/index.html">rule</a>
-(either <a class="reference" href="../../logic_programming/rules/forward_chaining.html">forward-chaining</a> or <a class="reference" href="../../logic_programming/rules/backward_chaining.html">backward-chaining</a>).</p>
-<p>The filename (minus the .krb extension) is the name of the <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a>.
+<p>The KRB file has three optional parts.  It must contain at least one <a class="reference external" href="../../logic_programming/rules/index.html">rule</a>
+(either <a class="reference external" href="../../logic_programming/rules/forward_chaining.html">forward-chaining</a> or <a class="reference external" href="../../logic_programming/rules/backward_chaining.html">backward-chaining</a>).</p>
+<p>The filename (minus the .krb extension) is the name of the <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule base</a>.
 This must be a legal Python identifier.</p>
-<div class="section">
-<h3><a id="extending-clause" name="extending-clause">Extending clause</a></h3>
+<div class="section" id="extending-clause">
+<h3>Extending clause</h3>
 <p>The optional <tt class="docutils literal"><span class="pre">extending</span></tt> clause, if used, is the first line of the file.
-This defines the parent <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> that this <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-inheritance">inherits</a> from.
-It may also specify a list of <a class="reference" href="../../logic_programming/rules/backward_chaining.html">backward-chaining</a> goal names to be excluded
+This defines the parent <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule base</a> that this <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule base</a> <a class="reference external" href="../../knowledge_bases/rule_bases.html#rule-base-inheritance">inherits</a> from.
+It may also specify a list of <a class="reference external" href="../../logic_programming/rules/backward_chaining.html">backward-chaining</a> goal names to be excluded
 from this inheritance.</p>
 </div>
-<div class="section">
-<h3><a id="forward-chaining-section" name="forward-chaining-section">Forward-Chaining Section</a></h3>
-<p>If the krb file contains any <a class="reference" href="../../logic_programming/rules/forward_chaining.html">forward-chaining</a> rules, a Python source file
-will be created named &lt;rb_name&gt;_fc.py, where &lt;rb_name&gt; is the <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a>
+<div class="section" id="forward-chaining-section">
+<h3>Forward-Chaining Section</h3>
+<p>If the krb file contains any <a class="reference external" href="../../logic_programming/rules/forward_chaining.html">forward-chaining</a> rules, a Python source file
+will be created named &lt;rb_name&gt;_fc.py, where &lt;rb_name&gt; is the <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule base</a>
 name.</p>
-<p>The syntax of a forward-chaining rule (<a class="reference" href="fc_rule.html">fc_rule</a>) is defined <a class="reference" href="fc_rule.html">here</a>.</p>
+<p>The syntax of a forward-chaining rule (<a class="reference external" href="fc_rule.html">fc_rule</a>) is defined <a class="reference external" href="fc_rule.html">here</a>.</p>
 <p>The <tt class="docutils literal"><span class="pre">fc_extras</span></tt> may only be used if there are forward-chaining rules.
 This allows you to add other Python code (for example, <tt class="docutils literal"><span class="pre">import</span></tt> statements)
 to the generated Python source file.</p>
 </div>
-<div class="section">
-<h3><a id="backward-chaining-section" name="backward-chaining-section">Backward-Chaining Section</a></h3>
-<p>If the krb file contains any <a class="reference" href="../../logic_programming/rules/backward_chaining.html">backward-chaining</a> rules, a Python source file
-will be created named &lt;rb_name&gt;_bc.py, where &lt;rb_name&gt; is the <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a>
+<div class="section" id="backward-chaining-section">
+<h3>Backward-Chaining Section</h3>
+<p>If the krb file contains any <a class="reference external" href="../../logic_programming/rules/backward_chaining.html">backward-chaining</a> rules, a Python source file
+will be created named &lt;rb_name&gt;_bc.py, where &lt;rb_name&gt; is the <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule base</a>
 name.</p>
-<p>The syntax of a backward-chaining rule (<a class="reference" href="bc_rule.html">bc_rule</a>) is defined <a class="reference" href="bc_rule.html">here</a>.</p>
+<p>The syntax of a backward-chaining rule (<a class="reference external" href="bc_rule.html">bc_rule</a>) is defined <a class="reference external" href="bc_rule.html">here</a>.</p>
 <p>The <tt class="docutils literal"><span class="pre">bc_extras</span></tt> can only be used if there are backward-chaining rules.
 This allows you to add other Python code (for example, <tt class="docutils literal"><span class="pre">import</span></tt> statements)
 to the generated Python source file.</p>
-<p>In addition, if any of the backward-chaining rules have <a class="reference" href="../../logic_programming/plans.html">plan</a> code (a
-<a class="reference" href="bc_rule.html#with-clause">with clause</a> or any subgoals in the <a class="reference" href="bc_rule.html#when-clause">when clause</a> with a <a class="reference" href="bc_rule.html#plan-spec">plan_spec</a>),
+<p>In addition, if any of the backward-chaining rules have <a class="reference external" href="../../logic_programming/plans.html">plan</a> code (a
+<a class="reference external" href="bc_rule.html#with-clause">with clause</a> or any subgoals in the <a class="reference external" href="bc_rule.html#when-clause">when clause</a> with a <a class="reference external" href="bc_rule.html#plan-spec">plan_spec</a>),
 a Python source file will be created named &lt;rb_name&gt;_plans.py,
 where &lt;rb_name&gt; is the <cite>rule base</cite> name.</p>
 <p>You use the <tt class="docutils literal"><span class="pre">plan_extras</span></tt> to include arbitrary Python code in this plans

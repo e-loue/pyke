@@ -63,6 +63,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -80,13 +81,13 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="fc-rule-syntax">
 <h1 class="title">Fc_rule Syntax</h1>
-<div class="section">
-<h2><a id="fc-rule" name="fc-rule">Fc_rule</a></h2>
-<p><a class="reference" href="../../logic_programming/rules/forward_chaining.html">Forward-chaining</a> rules have three parts:</p>
+<div class="section" id="fc-rule">
+<h2>Fc_rule</h2>
+<p><a class="reference external" href="../../logic_programming/rules/forward_chaining.html">Forward-chaining</a> rules have three parts:</p>
 <ol class="arabic simple">
 <li>A unique name.</li>
-<li>An optional <a class="reference" href="#foreach-clause">foreach clause</a>.</li>
-<li>An <a class="reference" href="#assert-clause">assert clause</a>.</li>
+<li>An optional <a class="reference internal" href="#foreach-clause">foreach clause</a>.</li>
+<li>An <a class="reference internal" href="#assert-clause">assert clause</a>.</li>
 </ol>
 <pre class="literal-block">
 fc_rule ::= IDENTIFIER NL INDENT
@@ -94,11 +95,11 @@ fc_rule ::= IDENTIFIER NL INDENT
                fc_assert
             DEINDENT
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt> uniquely names this <a class="reference" href="../../logic_programming/rules/index.html">rule</a> and is used as the corresponding
+<p>The <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt> uniquely names this <a class="reference external" href="../../logic_programming/rules/index.html">rule</a> and is used as the corresponding
 Python function name in the generated &lt;rb_name&gt;_fc.py file.</p>
 </div>
-<div class="section">
-<h2><a id="foreach-clause" name="foreach-clause">Foreach clause</a></h2>
+<div class="section" id="foreach-clause">
+<h2>Foreach clause</h2>
 <pre class="literal-block">
 fc_foreach ::= 'foreach' NL INDENT
                    {fc_premise NL}
@@ -110,14 +111,14 @@ fc_premise ::= fact_pattern
 
 fact_pattern ::= IDENTIFIER '.' IDENTIFIER '(' [{pattern,}] ')'
 </pre>
-<p>Here are links to the definitions for <a class="reference" href="pattern.html">pattern</a>, <a class="reference" href="compound_premise.html">compound_premise</a> and
-<a class="reference" href="python_premise.html">python_premise</a>.</p>
-<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause is omitted, the <a class="reference" href="../../logic_programming/rules/index.html">rule</a> is always fired once.</p>
+<p>Here are links to the definitions for <a class="reference external" href="pattern.html">pattern</a>, <a class="reference external" href="compound_premise.html">compound_premise</a> and
+<a class="reference external" href="python_premise.html">python_premise</a>.</p>
+<p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause is omitted, the <a class="reference external" href="../../logic_programming/rules/index.html">rule</a> is always fired once.</p>
 <p>If the <tt class="docutils literal"><span class="pre">foreach</span></tt> clause is present, the rule is fired for each combination
 of true premises.</p>
 </div>
-<div class="section">
-<h2><a id="assert-clause" name="assert-clause">Assert clause</a></h2>
+<div class="section" id="assert-clause">
+<h2>Assert clause</h2>
 <pre class="literal-block">
 fc_assert ::= 'assert' NL INDENT
                   {assertion NL}
@@ -126,10 +127,10 @@ fc_assert ::= 'assert' NL INDENT
 assertion ::= fact_pattern
             | python_statements
 </pre>
-<p>Here is the link to the definitions of <a class="reference" href="python_premise.html#python-statements">python_statements</a>.</p>
-<p>The <tt class="docutils literal"><span class="pre">assert</span></tt> clause lists new <a class="reference" href="../../knowledge_bases/fact_bases.html#facts">facts</a> to assert, and/or Python
-statements to execute each time the <a class="reference" href="../../logic_programming/rules/index.html">rule</a> is fired.  Each of these may
-include <a class="reference" href="pattern.html#pattern-variable">pattern variables</a> which should also appear in the <tt class="docutils literal"><span class="pre">foreach</span></tt>
+<p>Here is the link to the definitions of <a class="reference external" href="python_premise.html#python-statements">python_statements</a>.</p>
+<p>The <tt class="docutils literal"><span class="pre">assert</span></tt> clause lists new <a class="reference external" href="../../knowledge_bases/fact_bases.html#facts">facts</a> to assert, and/or Python
+statements to execute each time the <a class="reference external" href="../../logic_programming/rules/index.html">rule</a> is fired.  Each of these may
+include <a class="reference external" href="pattern.html#pattern-variable">pattern variables</a> which should also appear in the <tt class="docutils literal"><span class="pre">foreach</span></tt>
 clause where they are bound to a value.  These values will then be substituted
 into the facts and Python statements.</p>
 <!-- ADD_LINKS MARKER -->

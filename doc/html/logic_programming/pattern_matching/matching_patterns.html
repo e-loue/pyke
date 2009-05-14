@@ -63,6 +63,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -86,7 +87,7 @@ matched to data.  Not too bad so far...</p>
 generalize a statement is when you want to ask a question.  That's been
 covered above.</p>
 <p>The other situation where you need to generalize a statement is when you write
-<a class="reference" href="../rules/index.html">rules</a>, which are explained later.</p>
+<a class="reference external" href="../rules/index.html">rules</a>, which are explained later.</p>
 <p>But rules also need to be able to match one pattern to another <em>pattern</em>,
 and not just match patterns to <em>data</em> as we have discussed so far.</p>
 <p>So before we can move on to rules, we need to examine how one pattern is
@@ -94,13 +95,13 @@ matched to another pattern.</p>
 <p>The short answer is that it all comes down to pattern variables and that
 pattern variables may not only be bound to <em>data</em>, but may also be bound to
 other <em>patterns</em>.</p>
-<div class="section">
-<h2><a id="binding-to-a-literal-pattern" name="binding-to-a-literal-pattern">Binding to a Literal Pattern</a></h2>
+<div class="section" id="binding-to-a-literal-pattern">
+<h2>Binding to a Literal Pattern</h2>
 <p>Binding a pattern variable to a literal pattern is just like binding it to the
 data within that literal pattern.  Nothing fancy here!</p>
 </div>
-<div class="section">
-<h2><a id="binding-to-another-pattern-variable" name="binding-to-another-pattern-variable">Binding to Another Pattern Variable</a></h2>
+<div class="section" id="binding-to-another-pattern-variable">
+<h2>Binding to Another Pattern Variable</h2>
 <p>When pattern variable A is bound to pattern variable B, they essentially
 become the <em>same pattern variable</em>.  Basically, pattern variable A <em>becomes</em>
 pattern variable B (or, you might say, <em>defers</em> to pattern variable B).</p>
@@ -120,8 +121,8 @@ you will get the same value.</li>
 <p>So for all intents and purposes pattern variable A and pattern variable B
 become the same pattern variable.</p>
 </div>
-<div class="section">
-<h2><a id="binding-to-a-tuple-pattern" name="binding-to-a-tuple-pattern">Binding to a Tuple Pattern</a></h2>
+<div class="section" id="binding-to-a-tuple-pattern">
+<h2>Binding to a Tuple Pattern</h2>
 <p>Because pattern variables may be bound to tuple patterns, the term <em>fully
 bound</em> is introduced.  Asking whether the pattern variable is <em>fully bound</em>
 means that not only is it bound to a value (the tuple pattern), but that all
@@ -132,8 +133,8 @@ converted into standard Python data without any pattern variables in it.  This
 is important when Pyke wants to talk to Python because Python has no concept
 of storing <em>variables</em> within its data structures.</p>
 </div>
-<div class="section">
-<h2><a id="pathological-question" name="pathological-question">Pathological Question</a></h2>
+<div class="section" id="pathological-question">
+<h2>Pathological Question</h2>
 <p>What is the bound value of pattern variable <tt class="docutils literal"><span class="pre">$y</span></tt> after matching the
 following two tuple patterns:</p>
 <blockquote>
@@ -144,7 +145,7 @@ following two tuple patterns:</p>
 <dd><tt class="docutils literal"><span class="pre">($x,</span> <span class="pre">$x,</span> <span class="pre">$y)</span></tt></dd>
 </dl>
 </blockquote>
-<p>The answer is <a class="reference" href="pathological_answer.html">here</a> (but no peeking!).</p>
+<p>The answer is <a class="reference external" href="pathological_answer.html">here</a> (but no peeking!).</p>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>

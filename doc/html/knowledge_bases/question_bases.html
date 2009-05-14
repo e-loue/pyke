@@ -55,6 +55,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -76,20 +77,20 @@
 various types (e.g., yes/no, multiple_choice).  The questions may be
 parametrized, with the parameter values substituted into the question text
 when the question is asked.  In this case, different parameter values are
-treated as different question <a class="reference" href="../logic_programming/statements.html">statements</a>.</p>
+treated as different question <a class="reference external" href="../logic_programming/statements.html">statements</a>.</p>
 <p>The answers to all questions are automatically remembered so that if multiple
 rules ask the same question, the end user only sees it once.  These answers
-are erased when an <a class="reference" href="../using_pyke.html#setting-up-each-case">engine.reset</a> is done.</p>
+are erased when an <a class="reference external" href="../using_pyke.html#setting-up-each-case">engine.reset</a> is done.</p>
 <p>Finally, questions may have <em>reviews</em> attached to them to automatically
 display different canned messages (with parameter substitution) depending on
 the end user's answer.</p>
-<div class="section">
-<h2><a id="kqb-files" name="kqb-files">KQB files</a></h2>
-<p>Each question base is defined by a <a class="reference" href="../pyke_syntax/kqb_syntax.html">.kqb file</a>.  The name of each question
+<div class="section" id="kqb-files">
+<h2>KQB files</h2>
+<p>Each question base is defined by a <a class="reference external" href="../pyke_syntax/kqb_syntax.html">.kqb file</a>.  The name of each question
 base is the filename of the .kqb file (with the <tt class="docutils literal"><span class="pre">.kqb</span></tt> suffix removed).
 This must be a legal Python identifier.</p>
 <p>These .kqb files are compiled and loaded automatically when you create your
-<a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object.</p>
+<a class="reference external" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object.</p>
 <p>The .kqb file contains all of the information about the question needed to
 ask the question, validate the answer, and output the appropriate <em>review</em>
 text.</p>
@@ -97,8 +98,8 @@ text.</p>
 parameters, except this one, must be bound to values before testing the
 question.</p>
 </div>
-<div class="section">
-<h2><a id="example" name="example">Example</a></h2>
+<div class="section" id="example">
+<h2>Example</h2>
 <p>In writing a program to diagnose car problems, you might have a
 <tt class="docutils literal"><span class="pre">user_question</span></tt> question base with questions like:</p>
 <pre class="literal-block">
@@ -118,22 +119,22 @@ noise_from($location, $ans)
     ---
     $ans = yn
 </pre>
-<p>These would look like the following <a class="reference" href="../logic_programming/statements.html">statements</a> within <a class="reference" href="../logic_programming/rules/index.html">rules</a>:</p>
+<p>These would look like the following <a class="reference external" href="../logic_programming/statements.html">statements</a> within <a class="reference external" href="../logic_programming/rules/index.html">rules</a>:</p>
 <pre class="literal-block">
 user_question.engine_starts(True)
 user_question.mileage($mileage)
 user_question.noise_from('under the hood', False)
 </pre>
 </div>
-<div class="section">
-<h2><a id="presenting-questions-to-your-end-users" name="presenting-questions-to-your-end-users">Presenting Questions to Your End Users</a></h2>
+<div class="section" id="presenting-questions-to-your-end-users">
+<h2>Presenting Questions to Your End Users</h2>
 <p>Pyke provides two modules to actually present a question to your end user:</p>
 <ul>
 <li><p class="first">ask_tty</p>
 <p>This presents the question on stdout and reads stdin for the answer.</p>
 </li>
 <li><p class="first">ask_wx</p>
-<p>This presents the question in a dialog box for use with <a class="reference" href="http://www.wxpython.org/">wxpython</a>.</p>
+<p>This presents the question in a dialog box for use with <a class="reference external" href="http://www.wxpython.org/">wxpython</a>.</p>
 </li>
 </ul>
 <p>You may write your own module to present questions to end users.  Look at the
@@ -141,9 +142,9 @@ modules provided by Pyke for guidance.</p>
 <p>To ask a question, Pyke looks for an <tt class="docutils literal"><span class="pre">ask_module</span></tt> attribute on:</p>
 <ol class="arabic simple">
 <li>the question_base object, then</li>
-<li>the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object</li>
+<li>the <a class="reference external" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object</li>
 </ol>
-<p>If the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object does not have an <tt class="docutils literal"><span class="pre">ask_module</span></tt>
+<p>If the <a class="reference external" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> object does not have an <tt class="docutils literal"><span class="pre">ask_module</span></tt>
 attribute, ask_tty is imported (by default) and stored there.</p>
 <p>Here's an example of setting this attribute:</p>
 <pre class="literal-block">

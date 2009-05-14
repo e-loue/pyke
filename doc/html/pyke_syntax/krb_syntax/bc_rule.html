@@ -63,6 +63,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -80,14 +81,14 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="bc-rule-syntax">
 <h1 class="title">Bc_rule Syntax</h1>
-<div class="section">
-<h2><a id="bc-rule" name="bc-rule">Bc_rule</a></h2>
-<p><a class="reference" href="../../logic_programming/rules/backward_chaining.html">Backward-chaining</a> <a class="reference" href="../../logic_programming/rules/index.html">rules</a> have four parts:</p>
+<div class="section" id="bc-rule">
+<h2>Bc_rule</h2>
+<p><a class="reference external" href="../../logic_programming/rules/backward_chaining.html">Backward-chaining</a> <a class="reference external" href="../../logic_programming/rules/index.html">rules</a> have four parts:</p>
 <ol class="arabic simple">
 <li>A unique name.</li>
-<li>A <a class="reference" href="#use-clause">use clause</a>.</li>
-<li>An optional <a class="reference" href="bc_rule.html#when-clause">when clause</a>.</li>
-<li>An optional <a class="reference" href="bc_rule.html#with-clause">with clause</a>.</li>
+<li>A <a class="reference internal" href="#use-clause">use clause</a>.</li>
+<li>An optional <a class="reference external" href="bc_rule.html#when-clause">when clause</a>.</li>
+<li>An optional <a class="reference external" href="bc_rule.html#with-clause">with clause</a>.</li>
 </ol>
 <pre class="literal-block">
 bc_rule ::= IDENTIFIER NL INDENT
@@ -96,14 +97,14 @@ bc_rule ::= IDENTIFIER NL INDENT
                 [with]
             DEINDENT
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt> is the unique name for this <a class="reference" href="../../logic_programming/rules/index.html">rule</a> and is used as the
+<p>The <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt> is the unique name for this <a class="reference external" href="../../logic_programming/rules/index.html">rule</a> and is used as the
 corresponding Python function name in the generated &lt;rb_name&gt;_bc.py file
-and also for the Python function name of the <a class="reference" href="../../logic_programming/plans.html">plan</a> function (if any)
+and also for the Python function name of the <a class="reference external" href="../../logic_programming/plans.html">plan</a> function (if any)
 associated with the rule.  This name will show up in stack traces
 associated with exceptions raised during inferencing or plan execution.</p>
 </div>
-<div class="section">
-<h2><a id="use-clause" name="use-clause">Use Clause</a></h2>
+<div class="section" id="use-clause">
+<h2>Use Clause</h2>
 <p>The <tt class="docutils literal"><span class="pre">use</span></tt> clause is the <strong>then</strong> part of the rule.  It identifies the
 <em>goal</em> that this rule is prepared to prove.</p>
 <pre class="literal-block">
@@ -112,27 +113,27 @@ use ::= 'use' IDENTIFIER '(' {pattern,} ')' ['taking' '(' &lt;python_arg_spec&gt
          INDENT 'taking' '(' &lt;python_arg_spec&gt; ')' NL
          DEINDENT
 </pre>
-<p>Notice that it uses a single <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.  The <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> name is implied
-as the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name (the name of the root rule base, see
-<a class="reference" href="index.html#extending-clause">extending clause</a>) for the rule base containing this rule.</p>
-<div class="section">
-<h3><a id="taking-clause" name="taking-clause">Taking Clause</a></h3>
-<p>The <tt class="docutils literal"><span class="pre">use</span></tt> clause also defines parameters to the <a class="reference" href="../../logic_programming/plans.html">plan</a> function (if one is
-used for this <a class="reference" href="../../logic_programming/rules/index.html">rule</a>) with the optional <tt class="docutils literal"><span class="pre">taking</span></tt> sub-clause.</p>
+<p>Notice that it uses a single <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.  The <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule base</a> name is implied
+as the <a class="reference external" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name (the name of the root rule base, see
+<a class="reference external" href="index.html#extending-clause">extending clause</a>) for the rule base containing this rule.</p>
+<div class="section" id="taking-clause">
+<h3>Taking Clause</h3>
+<p>The <tt class="docutils literal"><span class="pre">use</span></tt> clause also defines parameters to the <a class="reference external" href="../../logic_programming/plans.html">plan</a> function (if one is
+used for this <a class="reference external" href="../../logic_programming/rules/index.html">rule</a>) with the optional <tt class="docutils literal"><span class="pre">taking</span></tt> sub-clause.</p>
 <p>The <em>python_arg_spec</em> is not parsed by Pyke, but simply copied to the
 output plan function.  Do <strong>not</strong> use <tt class="docutils literal"><span class="pre">$</span></tt> with these parameter names (or
 their default values).</p>
 </div>
 </div>
-<div class="section">
-<h2><a id="when-clause" name="when-clause">When Clause</a></h2>
-<p>The <tt class="docutils literal"><span class="pre">when</span></tt> clause is the <strong>if</strong> part of the <a class="reference" href="../../logic_programming/rules/index.html">rule</a>.  It defines the
+<div class="section" id="when-clause">
+<h2>When Clause</h2>
+<p>The <tt class="docutils literal"><span class="pre">when</span></tt> clause is the <strong>if</strong> part of the <a class="reference external" href="../../logic_programming/rules/index.html">rule</a>.  It defines the
 premises that must be true for this rule to succeed.</p>
 <p>If the <tt class="docutils literal"><span class="pre">when</span></tt> clause is omitted, the only
 requirement for the rule to succeed is that the <tt class="docutils literal"><span class="pre">use</span></tt> clause
-<a class="reference" href="../../logic_programming/pattern_matching/index.html">pattern matches</a> the goal.</p>
+<a class="reference external" href="../../logic_programming/pattern_matching/index.html">pattern matches</a> the goal.</p>
 <p>If the <tt class="docutils literal"><span class="pre">when</span></tt> clause is specified, the rule succeeds for each combination
-of true premises (see <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>).</p>
+of true premises (see <a class="reference external" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>).</p>
 <pre class="literal-block">
 when ::= 'when' NL INDENT
              {bc_premise NL}
@@ -145,22 +146,22 @@ bc_premise ::= ['!'] [ name '.' ] name '(' {pattern,} ')' [ plan_spec ]
 name ::= IDENTIFIER
        | '$'IDENTIFIER
 </pre>
-<p>Here are the links to the definitions for <a class="reference" href="pattern.html">pattern</a>, <a class="reference" href="compound_premise.html">compound_premise</a> and
-<a class="reference" href="python_premise.html">python_premise</a>.</p>
+<p>Here are the links to the definitions for <a class="reference external" href="pattern.html">pattern</a>, <a class="reference external" href="compound_premise.html">compound_premise</a> and
+<a class="reference external" href="python_premise.html">python_premise</a>.</p>
 <p>If the <em>bc_premise</em> includes the <tt class="docutils literal"><span class="pre">!</span></tt>, an AssertionError will be raised if the
 premise fails on the first try.  This can help in debugging.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">This does not apply when the premise fails on <a class="reference" href="../../logic_programming/rules/index.html#backtracking">backtracking</a> (in which case
+<p class="last">This does not apply when the premise fails on <a class="reference external" href="../../logic_programming/rules/index.html#backtracking">backtracking</a> (in which case
 it has already succeeded at least once).</p>
 </div>
 <p>If a single <em>name</em> is used in the <em>bc_premise</em>,
-the <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> for the current <a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> (the root rule base
-name, see <a class="reference" href="index.html#extending-clause">extending clause</a>) is assumed.</p>
+the <a class="reference external" href="../../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> for the current <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule base</a> (the root rule base
+name, see <a class="reference external" href="index.html#extending-clause">extending clause</a>) is assumed.</p>
 <p>If two <em>names</em> are used in the <em>bc_premise</em>, the first may name a rule
-base category or some other <a class="reference" href="../../knowledge_bases/index.html">knowledge base</a>.</p>
-<p>If a rule base category name is used (or assumed), the currently <a class="reference" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a>
-<a class="reference" href="../../knowledge_bases/rule_bases.html">rule base</a> for that category is used to prove the premise.</p>
+base category or some other <a class="reference external" href="../../knowledge_bases/index.html">knowledge base</a>.</p>
+<p>If a rule base category name is used (or assumed), the currently <a class="reference external" href="../../knowledge_bases/rule_bases.html#rule-base-activation">active</a>
+<a class="reference external" href="../../knowledge_bases/rule_bases.html">rule base</a> for that category is used to prove the premise.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p>If the rule base category name is omitted, and therefore assumed
@@ -171,14 +172,14 @@ the derived rule base is used to prove the premise.</p>
 <p class="last">In this way, different rules may be used to prove the same premise,
 depending upon which rule base has been activated.</p>
 </div>
-<div class="section">
-<h3><a id="plan-spec" name="plan-spec">Plan_spec</a></h3>
-<p>A <em>plan_spec</em> is required for each premise that returns a subordinate <a class="reference" href="../../logic_programming/plans.html">plan</a>.
-This shows what should be done with that subordinate <a class="reference" href="../../logic_programming/plans.html">plan</a> function.</p>
+<div class="section" id="plan-spec">
+<h3>Plan_spec</h3>
+<p>A <em>plan_spec</em> is required for each premise that returns a subordinate <a class="reference external" href="../../logic_programming/plans.html">plan</a>.
+This shows what should be done with that subordinate <a class="reference external" href="../../logic_programming/plans.html">plan</a> function.</p>
 <p>Thus, a rule's plan function is composed first of the collected
 python_statements taken from its plan_specs (as described below), followed by
-the python_statements within its <a class="reference" href="bc_rule.html#with-clause">with clause</a> (if any).  The inclusion of
-any plan_spec containing a python_statement will cause a <a class="reference" href="../../logic_programming/plans.html">plan</a> function to be
+the python_statements within its <a class="reference external" href="bc_rule.html#with-clause">with clause</a> (if any).  The inclusion of
+any plan_spec containing a python_statement will cause a <a class="reference external" href="../../logic_programming/plans.html">plan</a> function to be
 generated for this rule, even if the rule lacks a <tt class="docutils literal"><span class="pre">with</span></tt> clause.</p>
 <pre class="literal-block">
 plan_spec ::= [ 'step' NUMBER ] NL INDENT
@@ -188,9 +189,9 @@ plan_spec ::= [ 'step' NUMBER ] NL INDENT
 </pre>
 <p>Within each python_statement, the subordinate plan function is indicated by
 <tt class="docutils literal"><span class="pre">$$</span></tt>.  The result of this function may be assigned to a Python variable,
-but not a <a class="reference" href="pattern.html#pattern-variable">pattern variable</a> (<tt class="docutils literal"><span class="pre">$variable</span></tt>).
+but not a <a class="reference external" href="pattern.html#pattern-variable">pattern variable</a> (<tt class="docutils literal"><span class="pre">$variable</span></tt>).
 Parameters from the rule's <tt class="docutils literal"><span class="pre">taking</span></tt> clause may be passed on to the
-subordinate <a class="reference" href="../../logic_programming/plans.html">plan</a> functions.</p>
+subordinate <a class="reference external" href="../../logic_programming/plans.html">plan</a> functions.</p>
 <p>When multiple premises have python_statements in their <em>plan_specs</em>, the
 python_statements in plan_specs <em>without</em> a <tt class="docutils literal"><span class="pre">step</span></tt> clause are executed first
 in the order that they appear in the <tt class="docutils literal"><span class="pre">when</span></tt> clause.</p>
@@ -204,16 +205,16 @@ please.  The parameters required are defined in the <tt class="docutils literal"
 rule used to prove the premise.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">Within a <a class="reference" href="compound_premise.html#forall-premise">forall</a> or <a class="reference" href="compound_premise.html#notany-premise">notany</a> premise, the only <tt class="docutils literal"><span class="pre">plan_spec</span></tt> that may be
+<p class="last">Within a <a class="reference external" href="compound_premise.html#forall-premise">forall</a> or <a class="reference external" href="compound_premise.html#notany-premise">notany</a> premise, the only <tt class="docutils literal"><span class="pre">plan_spec</span></tt> that may be
 used is the <tt class="docutils literal"><span class="pre">as</span></tt> clause.</p>
 </div>
 </div>
 </div>
-<div class="section">
-<h2><a id="with-clause" name="with-clause">With Clause</a></h2>
-<p>The <tt class="docutils literal"><span class="pre">with</span></tt> clause contains Python statements to include in the <a class="reference" href="../../logic_programming/plans.html">plan</a>
-produced by this <a class="reference" href="../../logic_programming/rules/index.html">rule</a>.  These Python statements may include
-<a class="reference" href="pattern.html#pattern-variable">pattern variables</a> whose values will be <a class="reference" href="../../about_pyke/cooking_functions.html">cooked</a> into these statements
+<div class="section" id="with-clause">
+<h2>With Clause</h2>
+<p>The <tt class="docutils literal"><span class="pre">with</span></tt> clause contains Python statements to include in the <a class="reference external" href="../../logic_programming/plans.html">plan</a>
+produced by this <a class="reference external" href="../../logic_programming/rules/index.html">rule</a>.  These Python statements may include
+<a class="reference external" href="pattern.html#pattern-variable">pattern variables</a> whose values will be <a class="reference external" href="../../about_pyke/cooking_functions.html">cooked</a> into these statements
 when the plan is created.</p>
 <pre class="literal-block">
 with ::= 'with' NL INDENT
@@ -222,17 +223,17 @@ with ::= 'with' NL INDENT
 </pre>
 <p>The <em>python_statements</em> are included in the rule's plan function after
 all of the calls to the subordinate plan functions made from the
-<em>plan_specs</em> in the <a class="reference" href="bc_rule.html#when-clause">when clause</a>.</p>
+<em>plan_specs</em> in the <a class="reference external" href="bc_rule.html#when-clause">when clause</a>.</p>
 <p>If the <tt class="docutils literal"><span class="pre">with</span></tt> clause is omitted, but the <tt class="docutils literal"><span class="pre">when</span></tt> clause has <em>plan_specs</em>
 (excluding the <em>as</em> clause), a plan function is still generated for this
 rule so that the subordinate plan functions are still called.</p>
 <p>The <em>python_statements</em> are not parsed.  They are simply scanned for <tt class="docutils literal"><span class="pre">$</span></tt>
 pattern variables that don't occur within string literals or comments.
-The values bound to these variables are <a class="reference" href="../../about_pyke/cooking_functions.html">cooked</a> into the code to produce the
+The values bound to these variables are <a class="reference external" href="../../about_pyke/cooking_functions.html">cooked</a> into the code to produce the
 plan.</p>
 <p>Thus, all pattern variables used within <em>python_statements</em> (both in the
 <tt class="docutils literal"><span class="pre">plan_specs</span></tt> and the <tt class="docutils literal"><span class="pre">when</span></tt> clause) must be bound to a value.  This
-value is a constant value that never changes for this <a class="reference" href="../../logic_programming/plans.html">plan</a>.</p>
+value is a constant value that never changes for this <a class="reference external" href="../../logic_programming/plans.html">plan</a>.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">This occurs after the entire top-level goal is proven so that it is

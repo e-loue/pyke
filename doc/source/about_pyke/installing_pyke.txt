@@ -94,9 +94,9 @@ Installing the Executables
 ----------------------------
 
 Pyke is registered on pypi_, so once you have `Python`_ 2.5 or 2.6 with
-easy_install_ you can just type::
+easy_install_ you can just type (as root)::
 
-    $ sudo easy_install-2.5 pyke
+    # easy_install pyke
 
 Installing the Sources
 ------------------------
@@ -131,10 +131,14 @@ documentation itself as ``pyke_doc_html-<release>.zip`` file from the
 Subversion Directories
 ==========================
 
-To check out the entire project (including the examples_ and this documentation)
-into a directory called *foobar*::
+To check out the development version of the entire project (including the
+examples_ and this documentation) into a directory called *foobar*::
 
     $ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/trunk foobar
+
+Or to checkout the latest release 1.0 branch::
+
+    $ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/branches/release_1.0 foobar
 
 Anybody can check out the code, but only project members may do
 ``commits``.  Send me an email if you'd like to lend a hand!

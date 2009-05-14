@@ -54,6 +54,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -71,17 +72,17 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="kfb-syntax">
 <h1 class="title">KFB Syntax</h1>
-<p>This uses the same lexical structure as <a class="reference" href="index.html#lexical-structure">KRB files</a>, except that the only
+<p>This uses the same lexical structure as <a class="reference external" href="index.html#lexical-structure">KRB files</a>, except that the only
 keywords are:</p>
 <ul class="simple">
 <li>None</li>
 <li>True</li>
 <li>False</li>
 </ul>
-<p>The name of the <a class="reference" href="../knowledge_bases/fact_bases.html">fact base</a> is simply the filename with the <tt class="docutils literal"><span class="pre">.kfb</span></tt> suffix
+<p>The name of the <a class="reference external" href="../knowledge_bases/fact_bases.html">fact base</a> is simply the filename with the <tt class="docutils literal"><span class="pre">.kfb</span></tt> suffix
 stripped.  This must be a valid Python identifier.</p>
-<div class="section">
-<h2><a id="syntax-for-kfb-file" name="syntax-for-kfb-file">Syntax for KFB File</a></h2>
+<div class="section" id="syntax-for-kfb-file">
+<h2>Syntax for KFB File</h2>
 <pre class="literal-block">
 file ::= [NL] {fact NL}
 
@@ -92,9 +93,9 @@ data ::= 'None' | 'True' | 'False'
        | '(' [{data,}] ')'
 </pre>
 </div>
-<div class="section">
-<h2><a id="example" name="example">Example</a></h2>
-<p>This is taken from the <a class="reference" href="../examples.html#family-relations">family_relations</a> example:</p>
+<div class="section" id="example">
+<h2>Example</h2>
+<p>This is taken from the <a class="reference external" href="../examples.html#family-relations">family_relations</a> example:</p>
 <pre class="literal-block">
 # family.kfb
 

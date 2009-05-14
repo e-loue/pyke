@@ -51,11 +51,26 @@ Unlike Prolog, Pyke integrates with Python allowing you to invoke Pyke from
 Python and intermingle Python statements and expressions within your expert
 system rules.
 
-Pyke was developed to significantly raise the bar on code reuse.  To do this,
-it had to provide a way to take Python code and be able to radically customize
-it for a specific purpose or use case.
+Pyke was developed to significantly raise the bar on code reuse.  Here's how
+it works:
 
-Doing this essentially makes Pyke a very high-level "compiler".  And taking
+#. You write a set of Python functions, and a set of Pyke rules__ to direct the
+   configuration and combination of these functions.
+#. These functions refer to Pyke `pattern variables`_ within the function body.
+#. Pyke may instantiate each of your functions multiple times, providing a
+   different set of constant values for each of the pattern variables used
+   within the function body.  Each of these instances appears as a different
+   function.
+#. Pyke then automatically assembles these customized functions into a
+   complete program (function call graph) to meet a specific need or use case.
+   Pyke calls this function call graph a plan_.
+
+.. __: `backward-chaining rule lp`_
+
+In this way, Pyke provides a way to radically customize and adapt your Python
+code for a specific purpose or use case.
+
+Doing this essentially makes Pyke a very high-level compiler.  And taking
 this approach also produces dramatic increases in performance.
 
 And Pyke is very successful at this, providing order of magnitude improvements
@@ -79,4 +94,10 @@ Pyke on Google Groups
 =====================
 
 Please join Pyke_ on Google Groups for questions and discussion!
+
+FAQ
+===
+
+There is also an FAQ_ list on the sourceforge wiki_, to make it easy to
+contribute.
 

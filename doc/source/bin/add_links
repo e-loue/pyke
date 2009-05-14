@@ -33,6 +33,11 @@ do
         then
             #echo "$file"
             mtime=`stat -c '%y' "$file"`
+            if [ `tail -1 "$file"` ]
+            then
+                # Make sure that file ends in a blank line!
+                echo >> "$file"
+            fi
             echo ".. ADD_LINKS MARKER" >> "$file"
             cat $TMP_FILE >> "$file"
             touch -d "$mtime" "$file"

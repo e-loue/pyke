@@ -23,7 +23,7 @@
 restindex
     crumb: Logic Programming
     page-description:
-        An tutorial on logic programming in Pyke, including *statements*,
+        A tutorial on logic programming in Pyke, including *statements*,
         *pattern matching* and *rules*.
     /description
     section-pages: , statements, pattern_matching/index, rules/index, plans

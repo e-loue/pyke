@@ -55,6 +55,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -72,24 +73,24 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="installing-pyke">
 <h1 class="title">Installing Pyke</h1>
-<div class="section">
-<h2><a id="index-to-this-page" name="index-to-this-page">Index to This Page</a></h2>
+<div class="section" id="index-to-this-page">
+<h2>Index to This Page</h2>
 <ul class="simple">
-<li><a class="reference" href="#licensing">Licensing</a></li>
-<li><a class="reference" href="#system-requirements">System Requirements</a></li>
-<li><a class="reference" href="#installation">Installation</a><ul>
-<li><a class="reference" href="#installing-the-executables">Installing the Executables</a></li>
-<li><a class="reference" href="#installing-the-sources">Installing the Sources</a></li>
-<li><a class="reference" href="#installing-the-examples">Installing the Examples</a></li>
-<li><a class="reference" href="#installing-the-html-documentation">Installing the HTML Documentation</a></li>
+<li><a class="reference internal" href="#licensing">Licensing</a></li>
+<li><a class="reference internal" href="#system-requirements">System Requirements</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#installing-the-executables">Installing the Executables</a></li>
+<li><a class="reference internal" href="#installing-the-sources">Installing the Sources</a></li>
+<li><a class="reference internal" href="#installing-the-examples">Installing the Examples</a></li>
+<li><a class="reference internal" href="#installing-the-html-documentation">Installing the HTML Documentation</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#subversion-directories">Subversion Directories</a></li>
-<li><a class="reference" href="#documentation">Documentation</a></li>
+<li><a class="reference internal" href="#subversion-directories">Subversion Directories</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a></li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="licensing" name="licensing">Licensing</a></h2>
+<div class="section" id="licensing">
+<h2>Licensing</h2>
 <p>This software is licensed under the MIT license:</p>
 <pre class="literal-block">
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -111,51 +112,55 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 </pre>
 </div>
-<div class="section">
-<h2><a id="system-requirements" name="system-requirements">System Requirements</a></h2>
+<div class="section" id="system-requirements">
+<h2>System Requirements</h2>
 <p>Pyke is 100% Python, so it should run on any platform supported by Python.
-So all you'll need is <a class="reference" href="http://www.python.org">Python</a> 2.5 or 2.6.</p>
+So all you'll need is <a class="reference external" href="http://www.python.org">Python</a> 2.5 or 2.6.</p>
 </div>
-<div class="section">
-<h2><a id="installation" name="installation">Installation</a></h2>
-<div class="section">
-<h3><a id="installing-the-executables" name="installing-the-executables">Installing the Executables</a></h3>
-<p>Pyke is registered on <a class="reference" href="http://pypi.python.org/pypi">pypi</a>, so once you have <a class="reference" href="http://www.python.org">Python</a> 2.5 or 2.6 with
-<a class="reference" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a> you can just type:</p>
+<div class="section" id="installation">
+<h2>Installation</h2>
+<div class="section" id="installing-the-executables">
+<h3>Installing the Executables</h3>
+<p>Pyke is registered on <a class="reference external" href="http://pypi.python.org/pypi">pypi</a>, so once you have <a class="reference external" href="http://www.python.org">Python</a> 2.5 or 2.6 with
+<a class="reference external" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a> you can just type (as root):</p>
 <pre class="literal-block">
-$ sudo easy_install-2.5 pyke
+# easy_install pyke
 </pre>
 </div>
-<div class="section">
-<h3><a id="installing-the-sources" name="installing-the-sources">Installing the Sources</a></h3>
-<p>The source code for the latest release can be found on the <a class="reference" href="http://sourceforge.net/project/showfiles.php?group_id=207724">Pyke project
+<div class="section" id="installing-the-sources">
+<h3>Installing the Sources</h3>
+<p>The source code for the latest release can be found on the <a class="reference external" href="http://sourceforge.net/project/showfiles.php?group_id=207724">Pyke project
 download page</a> as <tt class="docutils literal"><span class="pre">pyke-&lt;release&gt;.tar.gz</span></tt>.</p>
-<p>If you want the latest developer version, read <a class="reference" href="#subversion-directories">Subversion Directories</a>,
+<p>If you want the latest developer version, read <a class="reference internal" href="#subversion-directories">Subversion Directories</a>,
 below.</p>
 </div>
-<div class="section">
-<h3><a id="installing-the-examples" name="installing-the-examples">Installing the Examples</a></h3>
+<div class="section" id="installing-the-examples">
+<h3>Installing the Examples</h3>
 <p>There are several examples that are contained in the source directory.
 There is a README file for each one that explains how to run it.</p>
 <p>These are in the source directory in the <tt class="docutils literal"><span class="pre">examples</span></tt> subdirectory.
 To download just the examples (for example, if you used easy_install to
 install Pyke), download the <tt class="docutils literal"><span class="pre">pyke_examples-&lt;release&gt;.tar.gz</span></tt> file.</p>
-<p>See also <a class="reference" href="../examples.html">Examples</a>.</p>
+<p>See also <a class="reference external" href="../examples.html">Examples</a>.</p>
 </div>
-<div class="section">
-<h3><a id="installing-the-html-documentation" name="installing-the-html-documentation">Installing the HTML Documentation</a></h3>
+<div class="section" id="installing-the-html-documentation">
+<h3>Installing the HTML Documentation</h3>
 <p>If you'd like to view this html documentation from you hard drive,
 it is in the source directory (doc/html), or you can download just the
 documentation itself as <tt class="docutils literal"><span class="pre">pyke_doc_html-&lt;release&gt;.zip</span></tt> file from the
-<a class="reference" href="http://sourceforge.net/project/showfiles.php?group_id=207724">Pyke project download page</a>.</p>
+<a class="reference external" href="http://sourceforge.net/project/showfiles.php?group_id=207724">Pyke project download page</a>.</p>
 </div>
 </div>
-<div class="section">
-<h2><a id="subversion-directories" name="subversion-directories">Subversion Directories</a></h2>
-<p>To check out the entire project (including the <a class="reference" href="../examples.html">examples</a> and this documentation)
-into a directory called <em>foobar</em>:</p>
+<div class="section" id="subversion-directories">
+<h2>Subversion Directories</h2>
+<p>To check out the development version of the entire project (including the
+<a class="reference external" href="../examples.html">examples</a> and this documentation) into a directory called <em>foobar</em>:</p>
 <pre class="literal-block">
 $ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/trunk foobar
+</pre>
+<p>Or to checkout the latest release 1.0 branch:</p>
+<pre class="literal-block">
+$ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/branches/release_1.0 foobar
 </pre>
 <p>Anybody can check out the code, but only project members may do
 <tt class="docutils literal"><span class="pre">commits</span></tt>.  Send me an email if you'd like to lend a hand!</p>
@@ -164,13 +169,13 @@ out individually by simply adding the directory name onto the end of the url in
 the example above and changing the directory that you want it to go into.</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">doc</span></tt><ul>
-<li>See <a class="reference" href="#documentation">Documentation</a>, below.</li>
+<li>See <a class="reference internal" href="#documentation">Documentation</a>, below.</li>
 </ul>
 </li>
 <li><tt class="docutils literal"><span class="pre">examples</span></tt><ul>
 <li>There are several examples.  Start with <em>family_relations</em>.  Look at the
 <tt class="docutils literal"><span class="pre">README</span></tt> file for each example to see how to run it.  See also,
-<a class="reference" href="../examples.html">Examples</a>.</li>
+<a class="reference external" href="../examples.html">Examples</a>.</li>
 </ul>
 </li>
 <li><tt class="docutils literal"><span class="pre">pyke</span></tt><ul>
@@ -182,14 +187,14 @@ which is expected to be a subpackage of <tt class="docutils literal"><span class
 </li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="documentation" name="documentation">Documentation</a></h2>
+<div class="section" id="documentation">
+<h2>Documentation</h2>
 <p>The <tt class="docutils literal"><span class="pre">doc/html</span></tt> directory in subversion contains all of these documents.
 You can browse these on your hard drive if you'd like.</p>
 <p>If you want to regenerate these documents, you'll also need:</p>
 <ul class="simple">
-<li><a class="reference" href="http://sourceforge.net/projects/rest2web">Rest2web</a>, which requires:</li>
-<li><a class="reference" href="http://sourceforge.net/projects/docutils">Docutils</a></li>
+<li><a class="reference external" href="http://sourceforge.net/projects/rest2web">Rest2web</a>, which requires:</li>
+<li><a class="reference external" href="http://sourceforge.net/projects/docutils">Docutils</a></li>
 </ul>
 <p>The sources for the documentation are in <tt class="docutils literal"><span class="pre">doc/source</span></tt>.</p>
 <p>To regenerate the documentation, in the <tt class="docutils literal"><span class="pre">doc/source</span></tt> directory run:</p>

@@ -52,6 +52,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -69,42 +70,42 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="pyke-syntax">
 <h1 class="title">Pyke Syntax</h1>
-<div class="section">
-<h2><a id="source-files" name="source-files">Source Files</a></h2>
+<div class="section" id="source-files">
+<h2>Source Files</h2>
 <p>Pyke has three different kinds of source files for the three main types of
-<a class="reference" href="../knowledge_bases/index.html">knowledge bases</a>:</p>
+<a class="reference external" href="../knowledge_bases/index.html">knowledge bases</a>:</p>
 <ol class="arabic simple">
-<li><em>Knowledge Fact Base</em> (KFB) files for <a class="reference" href="../knowledge_bases/fact_bases.html">fact bases</a>.</li>
-<li><em>Knowledge Rule Base</em> (KRB) files for <a class="reference" href="../knowledge_bases/rule_bases.html">rule bases</a>.</li>
-<li><em>Knowledge Question Base</em> (KQB) files for <a class="reference" href="../knowledge_bases/question_bases.html">question bases</a>.</li>
+<li><em>Knowledge Fact Base</em> (KFB) files for <a class="reference external" href="../knowledge_bases/fact_bases.html">fact bases</a>.</li>
+<li><em>Knowledge Rule Base</em> (KRB) files for <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</li>
+<li><em>Knowledge Question Base</em> (KQB) files for <a class="reference external" href="../knowledge_bases/question_bases.html">question bases</a>.</li>
 </ol>
 <p>Each type of source file ends in a different file suffix: <tt class="docutils literal"><span class="pre">.kfb</span></tt>,
 <tt class="docutils literal"><span class="pre">.krb</span></tt> or <tt class="docutils literal"><span class="pre">.kqb</span></tt>.</p>
 <p>Place all of these source files into a directory structure.  Then include this
-directory as an argument to the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> constructor.
+directory as an argument to the <a class="reference external" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> constructor.
 This will recursively search your directory for these three types of source
 files, compile them, and load them into the engine.  How you organize these
 files into subdirectories is up to you -- the directory structure does not
 matter to Pyke.</p>
-<p>The <tt class="docutils literal"><span class="pre">.kfb</span></tt> and <tt class="docutils literal"><span class="pre">.kqb</span></tt> files are compiled into Python <a class="reference" href="http://docs.python.org/lib/module-pickle.html">pickles</a> with
+<p>The <tt class="docutils literal"><span class="pre">.kfb</span></tt> and <tt class="docutils literal"><span class="pre">.kqb</span></tt> files are compiled into Python <a class="reference external" href="http://docs.python.org/library/pickle.html">pickles</a> with
 <tt class="docutils literal"><span class="pre">.fbc</span></tt> and <tt class="docutils literal"><span class="pre">.qbc</span></tt> suffixes.</p>
 <p>The <tt class="docutils literal"><span class="pre">.krb</span></tt> files are compiled into up to three <tt class="docutils literal"><span class="pre">.py</span></tt> source files.
 The names of these <tt class="docutils literal"><span class="pre">.py</span></tt> files are the same as the <tt class="docutils literal"><span class="pre">.krb</span></tt> file, but with
 different endings:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">_fc</span></tt> (if there are any <a class="reference" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> rules)</li>
-<li><tt class="docutils literal"><span class="pre">_bc</span></tt> (if there are any <a class="reference" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> rules) and</li>
-<li><tt class="docutils literal"><span class="pre">_plans</span></tt> (if any of the backward-chaining rules have a <a class="reference" href="../logic_programming/plans.html">plan</a>)</li>
+<li><tt class="docutils literal"><span class="pre">_fc</span></tt> (if there are any <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> rules)</li>
+<li><tt class="docutils literal"><span class="pre">_bc</span></tt> (if there are any <a class="reference external" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> rules) and</li>
+<li><tt class="docutils literal"><span class="pre">_plans</span></tt> (if any of the backward-chaining rules have a <a class="reference external" href="../logic_programming/plans.html">plan</a>)</li>
 </ul>
 <p>These <tt class="docutils literal"><span class="pre">.py</span></tt> files are then automatically imported to define the rule base.
 This causes Python to compile them into <tt class="docutils literal"><span class="pre">.pyc</span></tt> or <tt class="docutils literal"><span class="pre">.pyo</span></tt> files.</p>
-<p>Subsequent runs of the <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> constructor only recompile
+<p>Subsequent runs of the <a class="reference external" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> constructor only recompile
 the Pyke source files that have changed since the last time they were compiled.</p>
 <p>The name of each knowledge base is the filename of the Pyke source file with
 the suffix removed.  This must be a legal Python identifier.</p>
 </div>
-<div class="section">
-<h2><a id="syntax-legend" name="syntax-legend">Syntax Legend</a></h2>
+<div class="section" id="syntax-legend">
+<h2>Syntax Legend</h2>
 <p>To describe this syntax, the following punctuation is used:</p>
 <dl class="docutils">
 <dt>'<em>any_chars</em>'</dt>
@@ -132,14 +133,14 @@ than the delimiter characters containing the <tt class="docutils literal"><span 
 <dd>Only used in KQB files.  This signifies any text (any characters) through
 the end of the line and all text on subsequent lines that are indented at
 least as much as the first <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> character on the first
-line.  All <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> is treated as a <a class="reference" href="http://docs.python.org/lib/node40.html">string.Template</a> and
+line.  All <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> is treated as a <a class="reference external" href="http://docs.python.org/library/string.html#template-strings">string.Template</a> and
 may include <tt class="docutils literal"><span class="pre">$IDENTIFIER</span></tt> or <tt class="docutils literal"><span class="pre">${IDENTIFIER}</span></tt> parameters.  All other
 <tt class="docutils literal"><span class="pre">$</span></tt> characters must be doubled (<tt class="docutils literal"><span class="pre">$$</span></tt>).</dd>
 <dt>REGEXP_TEXT</dt>
 <dd>Only used in KQB files.  This signifies any text (any characters) excluding
 an unescaped backslash (<tt class="docutils literal"><span class="pre">\</span></tt>) at the end.  These are given to the Python's
 <tt class="docutils literal"><span class="pre">re</span></tt> module as regular expressions and must follow Python's
-<a class="reference" href="http://docs.python.org/lib/re-syntax.html">regular expression syntax</a>.</dd>
+<a class="reference external" href="http://docs.python.org/library/re.html#regular-expression-syntax">regular expression syntax</a>.</dd>
 <dt>NL</dt>
 <dd>One or more newlines.</dd>
 <dt>INDENT</dt>
@@ -149,8 +150,8 @@ previous text.</dd>
 <dd>The following text must be indented one less level than the previous text.</dd>
 </dl>
 </div>
-<div class="section">
-<h2><a id="lexical-structure" name="lexical-structure">Lexical Structure</a></h2>
+<div class="section" id="lexical-structure">
+<h2>Lexical Structure</h2>
 <p>The lexical structure is much like Python.  Like Python, indenting is
 significant.  It uses the same commenting, line continuation and literal
 formats for strings and numbers (but doesn't use complex numbers).  It also

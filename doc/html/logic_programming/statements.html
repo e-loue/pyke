@@ -55,6 +55,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -76,7 +77,7 @@
 the bread and butter of Pyke.  Statements are the data values that Pyke acts
 upon.</p>
 <p>You might also think of a statement as a spoken sentence.  For example, the
-Pyke <a class="reference" href="../examples.html#family-relations">family_relations</a> example deals with sentences like:</p>
+Pyke <a class="reference external" href="../examples.html#family-relations">family_relations</a> example deals with sentences like:</p>
 <pre class="literal-block">
 &quot;Bruce is the son of Thomas (his father) and Norma (his mother).&quot;
 </pre>
@@ -146,10 +147,10 @@ son_of(Bruce, Norma, Thomas)
 </pre>
 <p>mean different things!  The first statement says that Thomas is the father of
 Bruce, but the second statement says that Norma is the father!</p>
-<div class="section">
-<h2><a id="syntactic-structure-of-statements" name="syntactic-structure-of-statements">Syntactic Structure of Statements</a></h2>
+<div class="section" id="syntactic-structure-of-statements">
+<h2>Syntactic Structure of Statements</h2>
 <p>So we see that statements in Pyke are very structured.</p>
-<p>Pyke categorizes statements into <a class="reference" href="../knowledge_bases/index.html">knowledge bases</a>.  You create knowledge
+<p>Pyke categorizes statements into <a class="reference external" href="../knowledge_bases/index.html">knowledge bases</a>.  You create knowledge
 bases to help you organize your statements.  A <em>knowledge base</em> in Pyke
 roughly corresponds to a <em>module</em> in Python.</p>
 <div class="note">
@@ -169,28 +170,28 @@ there is a push for these arguments to be immutable.</li>
 <pre class="literal-block">
 statement ::= IDENTIFIER '.' IDENTIFIER '(' {argument,} ')'
 </pre>
-<div class="section">
-<h3><a id="knowledge-base" name="knowledge-base">Knowledge Base</a></h3>
+<div class="section" id="knowledge-base">
+<h3>Knowledge Base</h3>
 <p>The first IDENTIFIER is the name of the knowledge base.  In our
 family_relations example, this is <tt class="docutils literal"><span class="pre">family</span></tt>.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">You'll see that within <a class="reference" href="rules/backward_chaining.html">backward-chaining rules</a>, the name of the
+<p class="last">You'll see that within <a class="reference external" href="rules/backward_chaining.html">backward-chaining rules</a>, the name of the
 knowledge base may be omitted.  It defaults to the currently selected
-<a class="reference" href="../knowledge_bases/rule_bases.html">rule base</a> for this <a class="reference" href="../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>.  You'll learn more about this
+<a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a> for this <a class="reference external" href="../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>.  You'll learn more about this
 later.</p>
 </div>
 </div>
-<div class="section">
-<h3><a id="knowledge-entity" name="knowledge-entity">Knowledge Entity</a></h3>
+<div class="section" id="knowledge-entity">
+<h3>Knowledge Entity</h3>
 <p>The second IDENTIFIER is the name of the <em>knowledge entity</em>.  This is the
 relationship between the arguments.  You could also think of this as the
 statement <em>type</em> or <em>topic</em>.  For example, <tt class="docutils literal"><span class="pre">son_of</span></tt> is a <em>type</em> of statement
 with three arguments: (son, father, mother).  Or the (son, father, mother)
 arguments are about the <em>topic</em> <tt class="docutils literal"><span class="pre">son_of</span></tt>.</p>
 </div>
-<div class="section">
-<h3><a id="arguments" name="arguments">Arguments</a></h3>
+<div class="section" id="arguments">
+<h3>Arguments</h3>
 <p>The arguments can be any simple Python data value (numbers, strings, None,
 True or False) or tuples of these values (including nested tuples).
 Currently, statements are supposed to be immutable, so all of the arguments
@@ -198,7 +199,7 @@ are immutable.  The arguments relate to the topic, above, to make a complete
 statement.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last"><a class="reference" href="http://en.wikipedia.org/wiki/Prolog">Prolog</a> allows arguments to be other statements (functors).  But Pyke needs
+<p class="last"><a class="reference external" href="http://en.wikipedia.org/wiki/Prolog">Prolog</a> allows arguments to be other statements (functors).  But Pyke needs
 to integrate into Python and Python has no concept of a &quot;statement&quot;.  So we
 just use tuples in Pyke because Python is very happy with tuples!</p>
 </div>

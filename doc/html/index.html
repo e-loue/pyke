@@ -45,6 +45,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -63,16 +64,29 @@
                 <div class="document" id="welcome-to-pyke">
 <h1 class="title">Welcome to Pyke</h1>
 <h2 class="subtitle" id="release-1-0">Release 1.0</h2>
-<p>Pyke introduces a form of <a class="reference" href="http://en.wikipedia.org/wiki/Logic_programming">Logic Programming</a> (inspired by <a class="reference" href="http://en.wikipedia.org/wiki/Prolog">Prolog</a>) to the
+<p>Pyke introduces a form of <a class="reference external" href="http://en.wikipedia.org/wiki/Logic_programming">Logic Programming</a> (inspired by <a class="reference external" href="http://en.wikipedia.org/wiki/Prolog">Prolog</a>) to the
 Python community by providing a knowledge-based inference engine (expert
 system) written in 100% Python.</p>
 <p>Unlike Prolog, Pyke integrates with Python allowing you to invoke Pyke from
 Python and intermingle Python statements and expressions within your expert
 system rules.</p>
-<p>Pyke was developed to significantly raise the bar on code reuse.  To do this,
-it had to provide a way to take Python code and be able to radically customize
-it for a specific purpose or use case.</p>
-<p>Doing this essentially makes Pyke a very high-level &quot;compiler&quot;.  And taking
+<p>Pyke was developed to significantly raise the bar on code reuse.  Here's how
+it works:</p>
+<ol class="arabic simple">
+<li>You write a set of Python functions, and a set of Pyke <a class="reference external" href="logic_programming/rules/backward_chaining.html">rules</a> to direct the
+configuration and combination of these functions.</li>
+<li>These functions refer to Pyke <a class="reference external" href="logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> within the function body.</li>
+<li>Pyke may instantiate each of your functions multiple times, providing a
+different set of constant values for each of the pattern variables used
+within the function body.  Each of these instances appears as a different
+function.</li>
+<li>Pyke then automatically assembles these customized functions into a
+complete program (function call graph) to meet a specific need or use case.
+Pyke calls this function call graph a <a class="reference external" href="logic_programming/plans.html">plan</a>.</li>
+</ol>
+<p>In this way, Pyke provides a way to radically customize and adapt your Python
+code for a specific purpose or use case.</p>
+<p>Doing this essentially makes Pyke a very high-level compiler.  And taking
 this approach also produces dramatic increases in performance.</p>
 <p>And Pyke is very successful at this, providing order of magnitude improvements
 in:</p>
@@ -84,13 +98,18 @@ in:</p>
 <p>Pyke does not replace Python, nor is meant to compete with Python.  Python is
 an excellent general purpose programming language, that allows you to &quot;program
 in the small&quot;.</p>
-<p>Pyke builds upon Python by also giving you tools to directly <a class="reference" href="http://portal.acm.org/citation.cfm?id=808431">program in the
+<p>Pyke builds upon Python by also giving you tools to directly <a class="reference external" href="http://portal.acm.org/citation.cfm?id=808431">program in the
 large</a>.</p>
 <p>Oh, and Pyke uses Logic Programming to do all of this.  So if you're interested
 in Logic Programming or Expert Systems, well Pyke has that too...</p>
-<div class="section">
-<h2><a id="pyke-on-google-groups" name="pyke-on-google-groups">Pyke on Google Groups</a></h2>
-<p>Please join <a class="reference" href="http://groups.google.com/group/pyke">Pyke</a> on Google Groups for questions and discussion!</p>
+<div class="section" id="pyke-on-google-groups">
+<h2>Pyke on Google Groups</h2>
+<p>Please join <a class="reference external" href="http://groups.google.com/group/pyke">Pyke</a> on Google Groups for questions and discussion!</p>
+</div>
+<div class="section" id="faq">
+<h2>FAQ</h2>
+<p>There is also an <a class="reference external" href="http://pyke.wiki.sourceforge.net/FAQ">FAQ</a> list on the sourceforge <a class="reference external" href="http://pyke.wiki.sourceforge.net/">wiki</a>, to make it easy to
+contribute.</p>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>
@@ -107,7 +126,7 @@ in Logic Programming or Expert Systems, well Pyke has that too...</p>
 <div class="right-item"><a href="about_pyke/index.html">About Pyke</a><p>What pyke does for you, its features, steps to using pyke and
 installation.</p>
 </div>
-<div class="right-item"><a href="logic_programming/index.html">Logic Programming Tutorial</a><p>An tutorial on logic programming in Pyke, including <em>statements</em>,
+<div class="right-item"><a href="logic_programming/index.html">Logic Programming Tutorial</a><p>A tutorial on logic programming in Pyke, including <em>statements</em>,
 <em>pattern matching</em> and <em>rules</em>.</p>
 </div>
 <div class="right-item"><a href="knowledge_bases/index.html">Knowledge Bases</a><p>Knowledge is made up of both <em>facts</em> and <em>rules</em>.  These are gathered

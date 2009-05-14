@@ -55,6 +55,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -77,30 +78,30 @@
 <p>The <tt class="docutils literal"><span class="pre">special</span></tt> knowledge base is a collection of miscellaneous helper
 <em>knowledge entities</em> that determine whether a statement is true or not in
 various interesting ways.</p>
-<p>Thus, each entity in this <a class="reference" href="index.html">knowledge base</a> is a Python function that does
+<p>Thus, each entity in this <a class="reference external" href="index.html">knowledge base</a> is a Python function that does
 something &quot;special&quot; when run.</p>
 <p>The <tt class="docutils literal"><span class="pre">special</span></tt> functions are:</p>
 <blockquote>
 <ul class="simple">
-<li><a class="reference" href="#claim-goal">claim_goal</a></li>
-<li><a class="reference" href="#check-command">check_command</a></li>
-<li><a class="reference" href="special.html#running-commands">command</a></li>
-<li><a class="reference" href="#general-command">general_command</a></li>
+<li><a class="reference internal" href="#claim-goal">claim_goal</a></li>
+<li><a class="reference internal" href="#check-command">check_command</a></li>
+<li><a class="reference external" href="special.html#running-commands">command</a></li>
+<li><a class="reference internal" href="#general-command">general_command</a></li>
 </ul>
 </blockquote>
-<div class="section">
-<h2><a id="claim-goal" name="claim-goal">Claim_goal</a></h2>
+<div class="section" id="claim-goal">
+<h2>Claim_goal</h2>
 <p>The <tt class="docutils literal"><span class="pre">claim_goal</span></tt> function has no arguments:</p>
 <pre class="literal-block">
 special.claim_goal()
 </pre>
-<p>This acts like the <a class="reference" href="http://en.wikipedia.org/wiki/Prolog">Prolog</a> <a class="reference" href="http://en.wikipedia.org/wiki/Cut_%28logic_programming%29">cut operator</a>.</p>
-<p>In general there are multiple <a class="reference" href="../logic_programming/rules/index.html">rules</a> that might be used to try to <a class="reference" href="../using_pyke.html#proving-goals">prove</a> any
-<a class="reference" href="../pyke_syntax/krb_syntax/bc_rule.html#use-clause">goal</a>.  They are each tried in the order that they appear in the <a class="reference" href="../pyke_syntax/krb_syntax/index.html">.krb file</a>.
+<p>This acts like the <a class="reference external" href="http://en.wikipedia.org/wiki/Prolog">Prolog</a> <a class="reference external" href="http://en.wikipedia.org/wiki/Cut_%28logic_programming%29">cut operator</a>.</p>
+<p>In general there are multiple <a class="reference external" href="../logic_programming/rules/index.html">rules</a> that might be used to try to <a class="reference external" href="../using_pyke.html#proving-goals">prove</a> any
+<a class="reference external" href="../pyke_syntax/krb_syntax/bc_rule.html#use-clause">goal</a>.  They are each tried in the order that they appear in the <a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb file</a>.
 If one rule fails, the next rule is tried.  The goal itself doesn't fail
 until all of the rules for it have failed.</p>
-<div class="section">
-<h3><a id="example" name="example">Example</a></h3>
+<div class="section" id="example">
+<h3>Example</h3>
 <p>Suppose I want to translate a number, N, into the phrase &quot;N dogs&quot;.  I could
 use the following rules:</p>
 <pre class="literal-block">
@@ -129,14 +130,14 @@ n_dogs
 <p>The <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> prevents the second rule from being used when
 <tt class="docutils literal"><span class="pre">n</span></tt> is 1.</p>
 </div>
-<div class="section">
-<h3><a id="explanation" name="explanation">Explanation</a></h3>
-<p>When a <a class="reference" href="../logic_programming/rules/index.html">rule</a> executes <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> in its <tt class="docutils literal"><span class="pre">when</span></tt>
-clause, none of the rest of the rules will be tried for that <a class="reference" href="../pyke_syntax/krb_syntax/bc_rule.html#use-clause">goal</a>.
-Thus, when <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is <a class="reference" href="../logic_programming/rules/index.html#backtracking">backtracked</a> over, the goal fails
+<div class="section" id="explanation">
+<h3>Explanation</h3>
+<p>When a <a class="reference external" href="../logic_programming/rules/index.html">rule</a> executes <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> in its <tt class="docutils literal"><span class="pre">when</span></tt>
+clause, none of the rest of the rules will be tried for that <a class="reference external" href="../pyke_syntax/krb_syntax/bc_rule.html#use-clause">goal</a>.
+Thus, when <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is <a class="reference external" href="../logic_programming/rules/index.html#backtracking">backtracked</a> over, the goal fails
 immediately without trying any more rules for it.</p>
 <p>This ends up acting like an &quot;else&quot;.  You place it in the <tt class="docutils literal"><span class="pre">when</span></tt> clause
-after the <a class="reference" href="../logic_programming/rules/index.html#premises-and-conclusions">premises</a> that show that this rule <strong>must</strong> be the correct one
+after the <a class="reference external" href="../logic_programming/rules/index.html#premises-and-conclusions">premises</a> that show that this rule <strong>must</strong> be the correct one
 to use.  Then the subsequent rules will only be tried if these premises
 fail, such that <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is never executed.</p>
 <p>This means that you don't need to add extra premises in each subsequent rule
@@ -158,12 +159,12 @@ rule.  But in general, it can be difficult to check for prior conditions,
 especially when many rules are involved that each has its own condition.</p>
 </div>
 </div>
-<div class="section">
-<h2><a id="running-commands" name="running-commands">Running Commands</a></h2>
+<div class="section" id="running-commands">
+<h2>Running Commands</h2>
 <p>The remaining three functions deal with running programs (commands) on the
 host computer that is running your Pyke program.  Their difference is in what
 kind of output they provide from the command.</p>
-<p>These functions all use the <a class="reference" href="http://docs.python.org/lib/node528.html">subprocess.Popen</a> function from the standard
+<p>These functions all use the <a class="reference external" href="http://docs.python.org/library/subprocess.html#subprocess.Popen">subprocess.Popen</a> function from the standard
 Python library.</p>
 <p>Thus, each of these functions accept these three parameters that are passed
 on to subprocess.Popen:</p>
@@ -190,9 +191,9 @@ include embedded newlines (e.g., <tt class="docutils literal"><span class="pre">
 </li>
 </ul>
 </blockquote>
-<p>All of these functions fail on <a class="reference" href="../logic_programming/rules/index.html#backtracking">backtracking</a>.</p>
-<div class="section">
-<h3><a id="check-command" name="check-command">Check_command</a></h3>
+<p>All of these functions fail on <a class="reference external" href="../logic_programming/rules/index.html#backtracking">backtracking</a>.</p>
+<div class="section" id="check-command">
+<h3>Check_command</h3>
 <pre class="literal-block">
 special.check_command($command [, $cwd [, $stdin]])
 </pre>
@@ -211,15 +212,15 @@ CanNotProve: Can not prove special.check_command((false))
 </pre>
 </blockquote>
 </div>
-<div class="section">
-<h3><a id="command" name="command">Command</a></h3>
+<div class="section" id="command">
+<h3>Command</h3>
 <pre class="literal-block">
 special.command($stdout, $command [, $cwd [, $stdin]])
 </pre>
 <p>This just looks at the stdout of the command.  Any output from the command
 to stderr is unavailable.</p>
 <p>The <tt class="docutils literal"><span class="pre">$stdout</span></tt> is a tuple of lines with the trailing newlines removed.</p>
-<p>This raises <a class="reference" href="http://docs.python.org/lib/node530.html">subprocess.CalledProcessError</a> if the command returns a non-zero
+<p>This raises <a class="reference external" href="http://docs.python.org/library/subprocess.html#exceptions">subprocess.CalledProcessError</a> if the command returns a non-zero
 exit status.</p>
 <blockquote>
 <pre class="doctest-block">
@@ -266,8 +267,8 @@ CalledProcessError: Command 'false' returned non-zero exit status 1
 </pre>
 </blockquote>
 </div>
-<div class="section">
-<h3><a id="general-command" name="general-command">General_command</a></h3>
+<div class="section" id="general-command">
+<h3>General_command</h3>
 <pre class="literal-block">
 special.general_command($output, $command [, $cwd [, $stdin]])
 </pre>

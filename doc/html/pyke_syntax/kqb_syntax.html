@@ -54,6 +54,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -71,15 +72,15 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="kqb-syntax">
 <h1 class="title">KQB Syntax</h1>
-<p>This uses a different lexical structure than <a class="reference" href="index.html#lexical-structure">KRB files</a>.  Textual parameter
-substitution is done with the standard Python <a class="reference" href="http://docs.python.org/lib/node40.html">string.Template</a> class, which
-specifies parameters with a <tt class="docutils literal"><span class="pre">$</span></tt>, much like <a class="reference" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a>.  In the
+<p>This uses a different lexical structure than <a class="reference external" href="index.html#lexical-structure">KRB files</a>.  Textual parameter
+substitution is done with the standard Python <a class="reference external" href="http://docs.python.org/library/string.html#template-strings">string.Template</a> class, which
+specifies parameters with a <tt class="docutils literal"><span class="pre">$</span></tt>, much like <a class="reference external" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a>.  In the
 following descriptions, substitution parameters are acted upon in
 <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>, but not in <tt class="docutils literal"><span class="pre">TEXT</span></tt>.</p>
-<p>The name of the <a class="reference" href="../knowledge_bases/question_bases.html">question base</a> is simple the filename with the <tt class="docutils literal"><span class="pre">.kqb</span></tt>
+<p>The name of the <a class="reference external" href="../knowledge_bases/question_bases.html">question base</a> is simple the filename with the <tt class="docutils literal"><span class="pre">.kqb</span></tt>
 suffix stripped.  This must be a valid Python identifier.</p>
-<div class="section">
-<h2><a id="parametrized-text" name="parametrized-text">PARAMETRIZED_TEXT</a></h2>
+<div class="section" id="parametrized-text">
+<h2>PARAMETRIZED_TEXT</h2>
 <p><tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> may span multiple lines.  Each subsequent line must
 be indented at least as much as the first character of <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>
 on the first line.  Line breaks and indentation are preserved.  So syntax
@@ -113,8 +114,8 @@ parametrized text.
       with a second line that's not indented enough!
 </pre>
 </div>
-<div class="section">
-<h2><a id="syntax-for-kqb-file" name="syntax-for-kqb-file">Syntax for KQB File</a></h2>
+<div class="section" id="syntax-for-kqb-file">
+<h2>Syntax for KQB File</h2>
 <pre class="literal-block">
 file ::= [NL] {question}
 
@@ -139,7 +140,7 @@ ate($meal, $ans)
     ---
     $ans = yn
 </pre>
-<p>This question could be referenced in the <a class="reference" href="krb_syntax/bc_rule.html#when-clause">premise</a> of a <a class="reference" href="../logic_programming/rules/index.html">rule</a> as:</p>
+<p>This question could be referenced in the <a class="reference external" href="krb_syntax/bc_rule.html#when-clause">premise</a> of a <a class="reference external" href="../logic_programming/rules/index.html">rule</a> as:</p>
 <pre class="literal-block">
 user_questions.ate(lunch, $ans)
 </pre>
@@ -163,27 +164,27 @@ question_type ::= yn_type
                 | select_n_type
 </pre>
 <p>The <tt class="docutils literal"><span class="pre">integer_type</span></tt>, <tt class="docutils literal"><span class="pre">number_type</span></tt>, <tt class="docutils literal"><span class="pre">float_type</span></tt> and <tt class="docutils literal"><span class="pre">string_type</span></tt> may
-include a <a class="reference" href="#match">match</a> to force the user to enter a sensible answer.</p>
-<p>All of these may also include a <a class="reference" href="#review">review</a>, which is just <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>
-that will be displayed when the user's answer matches a certain <a class="reference" href="#match">match</a> value.</p>
+include a <a class="reference internal" href="#match">match</a> to force the user to enter a sensible answer.</p>
+<p>All of these may also include a <a class="reference internal" href="#review">review</a>, which is just <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>
+that will be displayed when the user's answer matches a certain <a class="reference internal" href="#match">match</a> value.</p>
 <p>Question_type links:</p>
 <ul class="simple">
-<li><a class="reference" href="#yn-type">yn_type</a></li>
-<li><a class="reference" href="#integer-type">integer_type</a></li>
-<li><a class="reference" href="#number-type">number_type</a></li>
-<li><a class="reference" href="#float-type">float_type</a></li>
-<li><a class="reference" href="#string-type">string_type</a></li>
-<li><a class="reference" href="#select-1-type">select_1_type</a></li>
-<li><a class="reference" href="#select-n-type">select_n_type</a></li>
+<li><a class="reference internal" href="#yn-type">yn_type</a></li>
+<li><a class="reference internal" href="#integer-type">integer_type</a></li>
+<li><a class="reference internal" href="#number-type">number_type</a></li>
+<li><a class="reference internal" href="#float-type">float_type</a></li>
+<li><a class="reference internal" href="#string-type">string_type</a></li>
+<li><a class="reference internal" href="#select-1-type">select_1_type</a></li>
+<li><a class="reference internal" href="#select-n-type">select_n_type</a></li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="yn-type" name="yn-type">YN_type</a></h2>
+<div class="section" id="yn-type">
+<h2>YN_type</h2>
 <pre class="literal-block">
 yn_type ::= 'yn' NL [review]
 </pre>
 <p>The user answers &quot;yes&quot; or &quot;no&quot;.  The answer returned is True or False.  If the
-<a class="reference" href="../knowledge_bases/question_bases.html#presenting-questions-to-your-end-users">ask_tty</a> module is used, the user may type &quot;yes&quot;, &quot;y&quot;, &quot;true&quot; or &quot;t&quot; for
+<a class="reference external" href="../knowledge_bases/question_bases.html#presenting-questions-to-your-end-users">ask_tty</a> module is used, the user may type &quot;yes&quot;, &quot;y&quot;, &quot;true&quot; or &quot;t&quot; for
 True and &quot;no&quot;, &quot;n&quot;, &quot;false&quot;, or &quot;f&quot; for False.  These are case insensitive.</p>
 <p>Example:</p>
 <pre class="literal-block">
@@ -192,14 +193,14 @@ ate($meal, $ans)
     ---
     $ans = yn
 </pre>
-<p>See <a class="reference" href="#review">review</a>, below.</p>
+<p>See <a class="reference internal" href="#review">review</a>, below.</p>
 </div>
-<div class="section">
-<h2><a id="integer-type" name="integer-type">Integer_type</a></h2>
+<div class="section" id="integer-type">
+<h2>Integer_type</h2>
 <pre class="literal-block">
 integer_type ::= 'integer' ['(' match ')'] NL [review]
 </pre>
-<p>The user enters an integer.  If the <a class="reference" href="#match">match</a> is specified, the integer must
+<p>The user enters an integer.  If the <a class="reference internal" href="#match">match</a> is specified, the integer must
 match it or the user is asked to try again.</p>
 <p>Example:</p>
 <pre class="literal-block">
@@ -208,17 +209,17 @@ hours_since_last_meal($ans)
     ---
     $ans = integer(0-48)
 </pre>
-<p>See <a class="reference" href="#review">review</a>, below.</p>
+<p>See <a class="reference internal" href="#review">review</a>, below.</p>
 </div>
-<div class="section">
-<h2><a id="number-type" name="number-type">Number_type</a></h2>
+<div class="section" id="number-type">
+<h2>Number_type</h2>
 <pre class="literal-block">
 number_type ::= 'number' ['(' match ')'] NL [review]
 </pre>
 <p>The user enters either an integer or a floating point number.  If the user
 enters an integer, a Python <tt class="docutils literal"><span class="pre">int</span></tt> is returned.  Otherwise a Python <tt class="docutils literal"><span class="pre">float</span></tt>
 is returned.</p>
-<p>If the <a class="reference" href="#match">match</a> is specified, the number must match it or the user is asked
+<p>If the <a class="reference internal" href="#match">match</a> is specified, the number must match it or the user is asked
 to try again.</p>
 <p>Example:</p>
 <pre class="literal-block">
@@ -227,16 +228,16 @@ miles_to($dest, $ans)
     ---
     $ans = number(0.1-3000)
 </pre>
-<p>See <a class="reference" href="#review">review</a>, below.</p>
+<p>See <a class="reference internal" href="#review">review</a>, below.</p>
 </div>
-<div class="section">
-<h2><a id="float-type" name="float-type">Float_type</a></h2>
+<div class="section" id="float-type">
+<h2>Float_type</h2>
 <pre class="literal-block">
 float_type ::= 'float' ['(' match ')'] NL [review]
 </pre>
 <p>The user enters an integer or a floating point number.  But the answer
 returned is always a Python <tt class="docutils literal"><span class="pre">float</span></tt>.</p>
-<p>If the <a class="reference" href="#match">match</a> is specified, the number must match it or the user is asked
+<p>If the <a class="reference internal" href="#match">match</a> is specified, the number must match it or the user is asked
 to try again.</p>
 <p>Example:</p>
 <pre class="literal-block">
@@ -245,14 +246,14 @@ price($object, $price)
     ---
     $price = float
 </pre>
-<p>See <a class="reference" href="#review">review</a>, below.</p>
+<p>See <a class="reference internal" href="#review">review</a>, below.</p>
 </div>
-<div class="section">
-<h2><a id="string-type" name="string-type">String_type</a></h2>
+<div class="section" id="string-type">
+<h2>String_type</h2>
 <pre class="literal-block">
 string_type ::= 'string' ['(' match ')'] NL [review]
 </pre>
-<p>The user enters a string (text).  If the <a class="reference" href="#match">match</a> is specified, the string must
+<p>The user enters a string (text).  If the <a class="reference internal" href="#match">match</a> is specified, the string must
 match it or the user is asked to try again.</p>
 <p>Example:</p>
 <pre class="literal-block">
@@ -262,10 +263,10 @@ users_name($name)
     ---
     $name = string(2-40)
 </pre>
-<p>See <a class="reference" href="#review">review</a>, below.</p>
+<p>See <a class="reference internal" href="#review">review</a>, below.</p>
 </div>
-<div class="section">
-<h2><a id="match" name="match">Match</a></h2>
+<div class="section" id="match">
+<h2>Match</h2>
 <p>There are several kinds of simple_matches that may be or-ed together with
 <tt class="docutils literal"><span class="pre">|</span></tt>:</p>
 <pre class="literal-block">
@@ -280,12 +281,12 @@ simple_match ::= '(' match ')'
                | value '=' simple_match
                | value
 </pre>
-<div class="section">
-<h3><a id="regexp-match" name="regexp-match">Regexp Match</a></h3>
+<div class="section" id="regexp-match">
+<h3>Regexp Match</h3>
 <pre class="literal-block">
 simple_match ::= [ STRING ] [ '[' TEXT ']' ] '/' REGEXP_TEXT '/'
 </pre>
-<p>A regexp match can only be used with <a class="reference" href="#string-type">string_type</a> questions.  It matches if
+<p>A regexp match can only be used with <a class="reference internal" href="#string-type">string_type</a> questions.  It matches if
 the regexp matches.</p>
 <p>If the regexp contains a single group, that group is returned as the
 question's answer rather than the entire string.</p>
@@ -304,8 +305,8 @@ state_code($state)
     $state = string('uppercase'[uppercase]/[A-Z][A-Z]/)
 </pre>
 </div>
-<div class="section">
-<h3><a id="range-match" name="range-match">Range Match</a></h3>
+<div class="section" id="range-match">
+<h3>Range Match</h3>
 <pre class="literal-block">
 simple_match ::= [NUMBER] '-' NUMBER
                | NUMBER '-'
@@ -321,12 +322,12 @@ age($years)
     $years = integer(1-130)
 </pre>
 </div>
-<div class="section">
-<h3><a id="value-match" name="value-match">Value '=' Match</a></h3>
+<div class="section" id="value-match">
+<h3>Value '=' Match</h3>
 <pre class="literal-block">
 simple_match ::= value '=' simple_match
 </pre>
-<p>The '=' means &quot;substituted for&quot;.  The <a class="reference" href="#match">match</a> fails if the match after the '='
+<p>The '=' means &quot;substituted for&quot;.  The <a class="reference internal" href="#match">match</a> fails if the match after the '='
 fails.  Otherwise it returns the value before the '=' rather than what the
 user entered.  Note that you can or (<tt class="docutils literal"><span class="pre">|</span></tt>) several of these together to
 translate several different matched values.</p>
@@ -342,8 +343,8 @@ age_category($period_of_life)
                               elder=65-130)
 </pre>
 </div>
-<div class="section">
-<h3><a id="id1" name="id1">Value Match</a></h3>
+<div class="section" id="id1">
+<h3>Value Match</h3>
 <pre class="literal-block">
 simple_match ::= value
 
@@ -353,15 +354,15 @@ value ::= STRING | IDENTIFIER | NUMBER | 'None' | 'True' | 'False'
 STRING.  These are mostly used in reviews.</p>
 </div>
 </div>
-<div class="section">
-<h2><a id="review" name="review">Review</a></h2>
+<div class="section" id="review">
+<h2>Review</h2>
 <pre class="literal-block">
 review ::= {match '!' PARAMETRIZED_TEXT NL}
 </pre>
 <p>All of the <tt class="docutils literal"><span class="pre">reviews</span></tt> must be at the same indent level.</p>
 <p>The review is applied after the answer has been validated (validation possibly
 changes the value).</p>
-<p>Each <a class="reference" href="#match">match</a> is checked and all of the matching review's <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>
+<p>Each <a class="reference internal" href="#match">match</a> is checked and all of the matching review's <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>
 messages are displayed to the user.</p>
 <p>Examples:</p>
 <pre class="literal-block">
@@ -409,12 +410,12 @@ Correct!  This is true because the
 ((True,), None)
 </pre>
 </div>
-<div class="section">
-<h2><a id="select-1-type" name="select-1-type">Select_1_type</a></h2>
+<div class="section" id="select-1-type">
+<h2>Select_1_type</h2>
 <pre class="literal-block">
 select_1_type ::= 'select_1' NL alternatives
 </pre>
-<p>This is a multiple choice question.  The <a class="reference" href="#alternatives">alternatives</a> are displayed to the
+<p>This is a multiple choice question.  The <a class="reference internal" href="#alternatives">alternatives</a> are displayed to the
 user, and he picks one (and only one).</p>
 <p>Example:</p>
 <pre class="literal-block">
@@ -438,12 +439,12 @@ another_question($arg1, $arg2, $ans)
                 - and indented...
 </pre>
 </div>
-<div class="section">
-<h2><a id="select-n-type" name="select-n-type">Select_n_type</a></h2>
+<div class="section" id="select-n-type">
+<h2>Select_n_type</h2>
 <pre class="literal-block">
 select_n_type ::= 'select_n' NL alternatives
 </pre>
-<p>This is a multiple choice question.  The <a class="reference" href="#alternatives">alternatives</a> are displayed to the
+<p>This is a multiple choice question.  The <a class="reference internal" href="#alternatives">alternatives</a> are displayed to the
 user, and he picks as many as he likes.</p>
 <p>Example:</p>
 <pre class="literal-block">
@@ -462,8 +463,8 @@ problems($list)
         senile: What's email?
 </pre>
 </div>
-<div class="section">
-<h2><a id="alternatives" name="alternatives">Alternatives</a></h2>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
 <pre class="literal-block">
 alternatives ::= {value ':' PARAMETRIZED_TEXT NL [alt_review]}
 </pre>

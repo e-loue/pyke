@@ -55,6 +55,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -74,8 +75,8 @@
 <h1 class="title">Cooking Python Functions</h1>
 <p>&quot;Cooking&quot; a Python function means customizing it.  And you customize it by
 cooking certain parameter values into it as constant values.</p>
-<div class="section">
-<h2><a id="cooking-a-single-parameter-value" name="cooking-a-single-parameter-value">Cooking a single parameter value</a></h2>
+<div class="section" id="cooking-a-single-parameter-value">
+<h2>Cooking a single parameter value</h2>
 <p>First you define the function that you want to cook with an extra parameter
 at the start:</p>
 <blockquote>
@@ -94,7 +95,7 @@ foo called with cooked: a, standard: b
 </blockquote>
 <p>But your real intention is that it appear to be a function taking one
 parameter, with the first parameter cooked in.</p>
-<p>This is done with the <tt class="docutils literal"><span class="pre">partial</span></tt> class of the <a class="reference" href="http://docs.python.org/lib/module-functools.html">functools</a> module in the
+<p>This is done with the <tt class="docutils literal"><span class="pre">partial</span></tt> class of the <a class="reference external" href="http://docs.python.org/library/functools.html">functools</a> module in the
 standard Python library.</p>
 <blockquote>
 <pre class="doctest-block">
@@ -143,8 +144,8 @@ foo called with cooked: cooked_value2, standard: value6
 <p>And you can keep going with this to make as many functions as you care to
 from your single starting function.</p>
 </div>
-<div class="section">
-<h2><a id="cooking-a-function-call-graph" name="cooking-a-function-call-graph">Cooking a Function Call Graph</a></h2>
+<div class="section" id="cooking-a-function-call-graph">
+<h2>Cooking a Function Call Graph</h2>
 <p>This same technique can be used to cook a function call graph, by making the
 subordinate function a cooked parameter:</p>
 <blockquote>
@@ -189,8 +190,8 @@ bar called with: (3, 2, 5)
 </pre>
 </blockquote>
 </div>
-<div class="section">
-<h2><a id="cooking-several-parameters" name="cooking-several-parameters">Cooking Several Parameters</a></h2>
+<div class="section" id="cooking-several-parameters">
+<h2>Cooking Several Parameters</h2>
 <p>In general, you may want to cook several values for each function.  Some of
 these values may specify which subordinate functions to call, others may just
 fix certain constant values for the function.</p>
@@ -204,18 +205,18 @@ lookup on <tt class="docutils literal"><span class="pre">context</span></tt> tha
 context['parameter_name']
 </pre>
 </div>
-<div class="section">
-<h2><a id="the-need-for-pyke" name="the-need-for-pyke">The Need for Pyke</a></h2>
+<div class="section" id="the-need-for-pyke">
+<h2>The Need for Pyke</h2>
 <p>Now that you understand how Pyke cooks Python functions, you should be able
 to understand how this technique can achieve the &quot;order of magnitude&quot;
 improvements to Adaptability/Customization, Performance and Code Reuse
-discussed on the <a class="reference" href="index.html">About Pyke</a> page.</p>
+discussed on the <a class="reference external" href="index.html">About Pyke</a> page.</p>
 <p>You should also now see the need for a tool like Pyke to assemble all of
 these functions to fit specific situations and use cases.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">Pyke calls a customized function call graph a <em>plan</em>.  <a class="reference" href="../logic_programming/plans.html">Plans</a> are explained
-later, after you've been introduced to <a class="reference" href="../logic_programming/index.html">Logic Programming in Pyke</a>.</p>
+<p class="last">Pyke calls a customized function call graph a <em>plan</em>.  <a class="reference external" href="../logic_programming/plans.html">Plans</a> are explained
+later, after you've been introduced to <a class="reference external" href="../logic_programming/index.html">Logic Programming in Pyke</a>.</p>
 </div>
 <p>And, finally, you should start to get a sense for how &quot;programming in the
 large&quot; with Pyke dovetails with &quot;programming in the small&quot; with Python.</p>

@@ -55,6 +55,7 @@
                 <div id="project-page">
                   <a href="http://sourceforge.net/projects/pyke/">Pyke Project Page</a>
                 </div>
+                <a href="http://sourceforge.net/community/cca09/nominate/?project_name=Python Knowledge Engine (PyKE)&project_url=http://sourceforge.net/projects/pyke/"><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"/></a>
                 Please Make a Donation:<br />
                 <a href="http://sourceforge.net/donate/index.php?group_id=207724">
                   <img src="http://images.sourceforge.net/images/project-support.jpg"
@@ -73,41 +74,41 @@
                 <div class="document" id="steps-to-using-pyke">
 <h1 class="title">Steps to Using Pyke</h1>
 <ol class="arabic simple">
-<li>You provide the following to Pyke's <a class="reference" href="../using_pyke.html#initializing-pyke">knowledge engine</a>:<ul>
-<li>A set of universally true <a class="reference" href="../logic_programming/statements.html">statements</a>.<ul>
+<li>You provide the following to Pyke's <a class="reference external" href="../using_pyke.html#initializing-pyke">knowledge engine</a>:<ul>
+<li>A set of universally true <a class="reference external" href="../logic_programming/statements.html">statements</a>.<ul>
 <li>These statements are true for all time.</li>
 </ul>
 </li>
-<li>The text for all <a class="reference" href="../knowledge_bases/question_bases.html">questions</a> that you might want Pyke to ask your end user.</li>
-<li>Multiple sets of <a class="reference" href="../logic_programming/rules/index.html">rules</a>.<ul>
-<li>Your rules may include both <a class="reference" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> and
-<a class="reference" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> rules.</li>
+<li>The text for all <a class="reference external" href="../knowledge_bases/question_bases.html">questions</a> that you might want Pyke to ask your end user.</li>
+<li>Multiple sets of <a class="reference external" href="../logic_programming/rules/index.html">rules</a>.<ul>
+<li>Your rules may include both <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining</a> and
+<a class="reference external" href="../logic_programming/rules/backward_chaining.html">backward-chaining</a> rules.</li>
 </ul>
 </li>
 </ul>
 </li>
 <li>Repeat for each specific use case:<ol class="arabic">
-<li>You provide a set of <a class="reference" href="../logic_programming/statements.html">statements</a> describing this specific use case to
+<li>You provide a set of <a class="reference external" href="../logic_programming/statements.html">statements</a> describing this specific use case to
 Pyke.</li>
 <li>You select which set of rules apply to this use case.</li>
 <li>Pyke automatically runs all of the selected forward-chaining rules that
 apply to the statements that you've given to it to deduce new statements.<ul>
 <li>Your forward-chaining rules may interactively ask your end user
-<a class="reference" href="../knowledge_bases/question_bases.html">questions</a>, or get information by executing <a class="reference" href="../knowledge_bases/special.html#running-commands">commands</a> (programs)
+<a class="reference external" href="../knowledge_bases/question_bases.html">questions</a>, or get information by executing <a class="reference external" href="../knowledge_bases/special.html#running-commands">commands</a> (programs)
 on the computer that it's running on to help in its decision
 making.</li>
 </ul>
 </li>
-<li>You ask Pyke a question by having it <a class="reference" href="../using_pyke.html#proving-goals">prove</a> a <a class="reference" href="../logic_programming/rules/backward_chaining.html">goal</a> (which is just
-another statement).  This goal may include <a class="reference" href="../logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> that
+<li>You ask Pyke a question by having it <a class="reference external" href="../using_pyke.html#proving-goals">prove</a> a <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a> (which is just
+another statement).  This goal may include <a class="reference external" href="../logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> that
 allow you to ask &quot;for what values is this statement true?&quot;.<ul>
 <li>Pyke runs the selected backward-chaining rules against the statements
 that it has in order to figure out the answer to your question.</li>
-<li>Your backward-chaining rules may also ask your end user <a class="reference" href="../knowledge_bases/question_bases.html">questions</a> and
-run <a class="reference" href="../knowledge_bases/special.html#running-commands">commands</a>.</li>
+<li>Your backward-chaining rules may also ask your end user <a class="reference external" href="../knowledge_bases/question_bases.html">questions</a> and
+run <a class="reference external" href="../knowledge_bases/special.html#running-commands">commands</a>.</li>
 <li>You may have written Python code at the end of some of your
 backward-chaining rules.  For each such rule, Pyke has compiled this
-Python code into a Python function called a <a class="reference" href="../logic_programming/plans.html">plan</a> which it has attached
+Python code into a Python function called a <a class="reference external" href="../logic_programming/plans.html">plan</a> which it has attached
 to the rule.</li>
 <li>Once Pyke finds an answer to your question, it gathers all of the plan
 functions of the rules that it used to find your answer into a
@@ -118,13 +119,13 @@ together and configure a set of Python functions to solve specific
 problems.</li>
 <li>Pyke returns the top Python function of this function call graph as a
 standard Python function along with the answer to your question.  You
-may call this function as may times as you like.  You may also <a class="reference" href="http://docs.python.org/lib/module-pickle.html">pickle</a>
+may call this function as may times as you like.  You may also <a class="reference external" href="http://docs.python.org/library/pickle.html">pickle</a>
 the function so that you can send it to another program or save it to
 disk.  You only need one small Pyke module to load and run these
 pickles.</li>
 </ul>
 </li>
-<li>You <a class="reference" href="../using_pyke.html#setting-up-each-case">reset</a> Pyke to clear out all of these case specific statements and
+<li>You <a class="reference external" href="../using_pyke.html#setting-up-each-case">reset</a> Pyke to clear out all of these case specific statements and
 prepare it for the next use case.</li>
 </ol>
 </li>

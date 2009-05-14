@@ -1,6 +1,6 @@
-.. _backward-chaining rule: krb_syntax/bc_rule.html
-.. _forward-chaining rule: krb_syntax/fc_rule.html
+.. _backward-chaining rule: `backward-chaining rule syntax`_
+.. _forward-chaining rule: `forward-chaining rule syntax`_
 .. _KRB files: index.html#lexical-structure
-.. _pattern: krb_syntax/pattern.html
-.. _pattern variable: krb_syntax/pattern.html#pattern-variable
-.. _premise: krb_syntax/bc_rule.html#when-clause
+.. _pattern: `pattern syntax`_
+.. _pattern variable: `pattern variable syntax`_
+.. _premise: `premise syntax`_
