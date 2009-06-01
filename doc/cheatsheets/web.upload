@@ -9,5 +9,5 @@ mv htdocs htdocs.old; mv html htdocs
 rm -rf htdocs.old
 cd
 rm pyke.html.tar
-shutdown
+shutdown now
 rm /tmp/pyke.html.tar
