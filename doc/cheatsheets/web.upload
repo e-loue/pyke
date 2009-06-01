@@ -10,3 +10,4 @@ rm -rf htdocs.old
 cd
 rm pyke.html.tar
 shutdown
+rm /tmp/pyke.html.tar
