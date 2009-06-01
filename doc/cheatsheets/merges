@@ -1,0 +1,8 @@
+From trunk, merge in changes from release_1.0 branch:
+
+    $ svn merge https://pyke.svn.sourceforge.net/svnroot/pyke/branches/release_1.0
+
+From pre_2to3 merge in changes from trunk:
+
+    $ svn merge https://pyke.svn.sourceforge.net/svnroot/pyke/trunk
+
