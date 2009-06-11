@@ -205,7 +205,7 @@ class target_pkg(object):
         if debug: print >> sys.stderr, "target_pkg.load:", load_flags
         for (source_package_name, source_filename), value \
          in self.sources.iteritems():
-            if source_package_name in self.source_packages:
+            if self.loader or source_package_name in self.source_packages:
                 for target_filename in value[1:]:
                     if debug: print >> sys.stderr, "load:", target_filename
                     self.do_by_ext('load', target_filename, engine, load_flags)
@@ -259,21 +259,15 @@ class target_pkg(object):
             pickle
         except NameError:
             import cPickle as pickle
+        full_path = os.path.join(self.directory, filename)
         if self.loader:
             import contextlib
             import StringIO
-            top_pkg_path = \
-                os.path.dirname(sys.modules[self.package_name.split('.')[0]]
-                                   .__file__)
-            egg_path = os.path.dirname(top_pkg_path)
-            assert filename.startswith(egg_path)
             ctx_lib = \
                 contextlib.closing(
-                    StringIO.StringIO(
-                        self.loader.get_data(filename[len(egg_path) + 1:])))
-                        # ...   + 1 to drop the '/' too.
+                    StringIO.StringIO(self.loader.get_data(full_path)))
         else:
-            ctx_lib = open(os.path.join(self.directory, filename), 'rb')
+            ctx_lib = open(full_path, 'rb')
         with ctx_lib as f:
             version = pickle.load(f)
             if version != pyke.version:

@@ -80,7 +80,8 @@ class question(knowledge_base.knowledge_entity_list):
         self.knowledge_base = question_base
         self.user_question.set_question_base(question_base)
     def lookup(self, bindings, pat_context, patterns):
-        input_params = tuple((self.params[i], patterns[i].as_data(pat_context))
+        input_params = tuple((self.params[i],
+                                unicode(patterns[i].as_data(pat_context)))
                              for i in self.input_param_positions)
         format_params = dict(input_params)
         ans = self.cache.get(input_params, self.not_found)

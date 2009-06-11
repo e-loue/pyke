@@ -2,9 +2,13 @@
 
 from pyke import knowledge_engine
 
-Engine = knowledge_engine.engine('Test.CanNotProve')
+Rule_package = 'Test.CanNotProve'
+Engine = None
 
 def test(kb, ke, arg):
+    global Engine
+    if Engine is None:
+        Engine = knowledge_engine.engine(Rule_package)
     Engine.reset()
     Engine.activate('rules')
     try:
