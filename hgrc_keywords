@@ -1,0 +1,20 @@
+[extensions]
+hgext.keyword =
+
+[keyword]
+**.kqb =
+**.krb =
+**.kfb =
+**.py =
+**.sql =
+**.sqlite3 =
+**.txt =
+**copyright_license =
+**load_sqlite3 =
+**load_tables =
+
+[keywordmaps]
+Id = {file|basename} {node|short} {date|shortdate} {author|user}
+Date = {date|shortdate}
+Revision = {node|short}
+
