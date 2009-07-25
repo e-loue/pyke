@@ -1,0 +1,10 @@
+syntax: glob
+
+.pyhist
+*.pyc
+*.pyo
+.*.swp
+*.egg-info
+build
+dist
+compiled_krb
