@@ -35,7 +35,7 @@ NUM_ERRORS=0
 
 #find . -name compiled_krb -exec rm -rf "{}" +
 
-for f in `find . -name .svn -prune -o -name '*.tst' -print`
+for f in `find . -name '*.tst' -print`
 do
     #echo Testing "$f"
     if ! $PYTHON ../doctest_file.py "$f" True

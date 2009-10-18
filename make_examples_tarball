@@ -7,5 +7,5 @@ usage() {
 
 [ $# -eq 1 ] || usage
 
-tar --exclude='*/.svn*' --exclude='*/.pyhist' --exclude='*/compiled_krb*' \
+tar --exclude='*/.*.swp' --exclude='*/.pyhist' --exclude='*/compiled_krb*' \
     --exclude='*.py[co]' -czf "$1" examples
