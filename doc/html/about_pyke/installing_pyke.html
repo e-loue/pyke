@@ -84,7 +84,10 @@
 <li><a class="reference internal" href="#installing-the-html-documentation">Installing the HTML Documentation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#subversion-directories">Subversion Directories</a></li>
+<li><a class="reference internal" href="#mercurial-repositories">Mercurial Repositories</a><ul>
+<li><a class="reference internal" href="#repository-directory-structure">Repository Directory Structure</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#documentation">Documentation</a></li>
 </ul>
 </div>
@@ -130,7 +133,7 @@ So all you'll need is <a class="reference external" href="http://www.python.org"
 <h3>Installing the Sources</h3>
 <p>The source code for the latest release can be found on the <a class="reference external" href="http://sourceforge.net/project/showfiles.php?group_id=207724">Pyke project
 download page</a> as <tt class="docutils literal"><span class="pre">pyke-&lt;release&gt;.tar.gz</span></tt>.</p>
-<p>If you want the latest developer version, read <a class="reference internal" href="#subversion-directories">Subversion Directories</a>,
+<p>If you want the latest developer version, read <a class="reference internal" href="#mercurial-repositories">Mercurial Repositories</a>,
 below.</p>
 </div>
 <div class="section" id="installing-the-examples">
@@ -150,22 +153,37 @@ documentation itself as <tt class="docutils literal"><span class="pre">pyke_doc_
 <a class="reference external" href="http://sourceforge.net/project/showfiles.php?group_id=207724">Pyke project download page</a>.</p>
 </div>
 </div>
-<div class="section" id="subversion-directories">
-<h2>Subversion Directories</h2>
-<p>To check out the development version of the entire project (including the
+<div class="section" id="mercurial-repositories">
+<h2>Mercurial Repositories</h2>
+<p>With <a class="reference external" href="http://mercurial.selenic.com/wiki/">mercurial</a>, you clone the entire repository locally on your computer.
+Then you can make changes and commit those changes to your local repository.
+If you think those changes might be interesting to everybody, make your local
+repository (or a clone of it) publically available (either on your own server,
+or on one of the <a class="reference external" href="http://mercurial.selenic.com/wiki/MercurialHosting">mercurial hosting sites</a>) and send me an email.  I will
+examine your changes and pull them into the master repository on sourceforge.</p>
+<p>To clone the development version of the entire project (including the
 <a class="reference external" href="../examples.html">examples</a> and this documentation) into a directory called <em>foobar</em>:</p>
 <pre class="literal-block">
-$ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/trunk foobar
+$ hg clone http://pyke.hg.sourceforge.net:8000/hgroot/pyke/pyke foobar
 </pre>
-<p>Or to checkout the latest release 1.0 branch:</p>
+<p>Or to clone the latest release 1 branch:</p>
 <pre class="literal-block">
-$ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/branches/release_1.0 foobar
+$ hg clone http://pyke.hg.sourceforge.net:8000/hgroot/pyke/release_1 foobar
 </pre>
-<p>Anybody can check out the code, but only project members may do
-<tt class="docutils literal"><span class="pre">commits</span></tt>.  Send me an email if you'd like to lend a hand!</p>
-<p>You'll see the following directories.  You can also use <tt class="docutils literal"><span class="pre">svn</span></tt> to check these
-out individually by simply adding the directory name onto the end of the url in
-the example above and changing the directory that you want it to go into.</p>
+<p>Use the <em>release_1</em> repository for any work that improves the quality of the
+code (bug fixes, code formatting, comments, documentation) that won't break
+existing programs and can go into the next point release.</p>
+<p>Use the <em>pyke</em> repository for new features that will go into the next major
+release.  I merge all the changes done in the release_1 repository into the
+pyke repository.</p>
+<p>Finally, use the <em>pre_2to3</em> repository for any work that is specific to the
+Python3 version of PyKE.  Just don't run 2to3 in directly in your working
+directory because it will change all of the .py files and we don't want those
+changes committed!  I merge all the changes done in the pyke repository
+into the pre_2to3 repository.</p>
+<div class="section" id="repository-directory-structure">
+<h3>Repository Directory Structure</h3>
+<p>You'll see the following directories.</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">doc</span></tt><ul>
 <li>See <a class="reference internal" href="#documentation">Documentation</a>, below.</li>
@@ -186,9 +204,10 @@ which is expected to be a subpackage of <tt class="docutils literal"><span class
 </li>
 </ul>
 </div>
+</div>
 <div class="section" id="documentation">
 <h2>Documentation</h2>
-<p>The <tt class="docutils literal"><span class="pre">doc/html</span></tt> directory in subversion contains all of these documents.
+<p>The <tt class="docutils literal"><span class="pre">doc/html</span></tt> directory in <a class="reference external" href="http://mercurial.selenic.com/wiki/">mercurial</a> contains all of these documents.
 You can browse these on your hard drive if you'd like.</p>
 <p>If you want to regenerate these documents, you'll also need:</p>
 <ul class="simple">
@@ -209,8 +228,8 @@ $ bin/gen_html
 </li>
 <li>Then strips all of the hyperlink references from the *.txt files.</li>
 </ol>
-<p>I've gone ahead and placed the generated html files in subversion so that
-you can checkout the documentation without having to run <tt class="docutils literal"><span class="pre">bin/gen_html</span></tt>.</p>
+<p>I've gone ahead and placed the generated html files in mercurial so that
+you can browse the documentation without having to run <tt class="docutils literal"><span class="pre">bin/gen_html</span></tt>.</p>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>
@@ -250,7 +269,7 @@ of links).</p>
 
   <div id="last-modified">
     Page last modified
-    Thu, May 14 2009.
+    Mon, Oct 19 2009.
 
   </div>
 

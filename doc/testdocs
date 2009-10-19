@@ -31,6 +31,9 @@ then
     shift 2
 fi
 
+# Generate __init__.pyc so source/knowledge_bases/special.txt doesn't fail...
+$PYTHON -c 'import __init__'
+
 > $ERRORFILES
 NUM_ERRORS=0
 

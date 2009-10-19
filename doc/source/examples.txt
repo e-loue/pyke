@@ -37,9 +37,9 @@ uservalues
 /uservalues
 
 
-=============================
+========
 Examples
-=============================
+========
 
 Several examples are included to help you become familiar with Pyke.  These
 are all in an ``examples`` directory, which forms the top-level Python package
