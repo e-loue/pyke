@@ -3,7 +3,7 @@ Installing rest2web (May 14, 2009).
 There is a 0.5.1 version on http://www.voidspace.org.uk/python/rest2web/ but
 not on https://sourceforge.net/projects/rest2web.
 
-The svn respository is https://svn.rest2web.python-hosting.com/trunk/.
+Their subversion respository is https://svn.rest2web.python-hosting.com/trunk/.
 
 It doesn't work with easy_install either :-(.
 

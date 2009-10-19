@@ -7,7 +7,7 @@ STATUS_FILE=/tmp/make_sitemap.$$
 set -e
 set -o pipefail
 
-svn status | sed 's/ \{6\}/	/' | sort > $STATUS_FILE
+hg status | sort > $STATUS_FILE
 
 trap "rm $STATUS_FILE" 0
 
@@ -20,9 +20,9 @@ do
     if [ "$f" != ./template.txt ]
     then
 	f_clean=`expr "$f" : '\./\(.*\)'`
-        code=`sed -n '\,^\(.\)	'"$f_clean"'$,s,,\1,p' "$STATUS_FILE" | tr -d '\n'`
+        code=`sed -n '\,^\(.\) '"$f_clean"'$,s,,\1,p' "$STATUS_FILE" | tr -d '\n'`
 	#echo "$f_clean: >$code<" >&2
-        if [ "$code" != D ]
+        if [ "$code" != R ]
         then
             html=`expr "$f_clean" : '\(.*\)\.txt'`.html
             url="http://pyke.sourceforge.net/$html"
@@ -37,7 +37,7 @@ do
                     echo "$f: missing date" >&2
                     exit 1
                 fi
-                #echo "$f_clean: using svn date: $date" >&2
+                #echo "$f_clean: using hg date: $date" >&2
             fi
             cat <<-!
 		 <url>

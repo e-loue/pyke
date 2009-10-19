@@ -53,7 +53,7 @@ for importing::
 Thus the directory containing the ``examples`` directory must be on your
 Python path.
 
-If you did an svn checkout, the entire source directory should already be on
+If you did an hg_ clone, the entire source directory should already be on
 your Python path in order to import pyke, so you're all set!
 
 If you used easy_install for Pyke, you'll need to download the pyke_examples

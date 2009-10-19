@@ -1,4 +1,5 @@
-http://sf.net/docs/G01#backup
+https://sourceforge.net/apps/trac/sourceforge/wiki/Mercurial#Backups
 
 from emachine:
-    rsync -av pyke.svn.sourceforge.net::svn/pyke/* /home/bruce/Backups/pyke/svn
+    #rsync -av --delete pyke.svn.sourceforge.net::svn/pyke/* /backups/sourceforge/pyke
+    rsync -av --delete pyke.hg.sourceforge.net::hgroot/pyke/* /backups/sourceforge/pyke-hg

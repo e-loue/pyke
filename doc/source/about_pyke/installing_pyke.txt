@@ -52,7 +52,10 @@ Index to This Page
   * `Installing the Examples`_
   * `Installing the HTML Documentation`_
 
-* `Subversion Directories`_
+* `Mercurial Repositories`_
+
+  * `Repository Directory Structure`_
+
 * Documentation_
 
 
@@ -104,7 +107,7 @@ Installing the Sources
 The source code for the latest release can be found on the `Pyke project
 download page`_ as ``pyke-<release>.tar.gz``.
 
-If you want the latest developer version, read `Subversion Directories`_,
+If you want the latest developer version, read `Mercurial Repositories`_,
 below.
 
 Installing the Examples
@@ -128,24 +131,43 @@ documentation itself as ``pyke_doc_html-<release>.zip`` file from the
 `Pyke project download page`_.
 
 
-Subversion Directories
-==========================
+Mercurial Repositories
+======================
 
-To check out the development version of the entire project (including the
+With mercurial_, you clone the entire repository locally on your computer.
+Then you can make changes and commit those changes to your local repository.
+If you think those changes might be interesting to everybody, make your local
+repository (or a clone of it) publically available (either on your own server,
+or on one of the `mercurial hosting sites`_) and send me an email.  I will
+examine your changes and pull them into the master repository on sourceforge.
+
+To clone the development version of the entire project (including the
 examples_ and this documentation) into a directory called *foobar*::
 
-    $ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/trunk foobar
+    $ hg clone http://pyke.hg.sourceforge.net:8000/hgroot/pyke/pyke foobar
 
-Or to checkout the latest release 1.0 branch::
+Or to clone the latest release 1 branch::
 
-    $ svn checkout https://pyke.svn.sourceforge.net/svnroot/pyke/branches/release_1.0 foobar
+    $ hg clone http://pyke.hg.sourceforge.net:8000/hgroot/pyke/release_1 foobar
 
-Anybody can check out the code, but only project members may do
-``commits``.  Send me an email if you'd like to lend a hand!
+Use the *release_1* repository for any work that improves the quality of the
+code (bug fixes, code formatting, comments, documentation) that won't break
+existing programs and can go into the next point release.
 
-You'll see the following directories.  You can also use ``svn`` to check these
-out individually by simply adding the directory name onto the end of the url in
-the example above and changing the directory that you want it to go into.
+Use the *pyke* repository for new features that will go into the next major
+release.  I merge all the changes done in the release_1 repository into the
+pyke repository.
+
+Finally, use the *pre_2to3* repository for any work that is specific to the
+Python3 version of PyKE.  Just don't run 2to3 in directly in your working
+directory because it will change all of the .py files and we don't want those
+changes committed!  I merge all the changes done in the pyke repository
+into the pre_2to3 repository.
+
+Repository Directory Structure
+------------------------------
+
+You'll see the following directories.
 
 * ``doc``
 
@@ -168,7 +190,7 @@ the example above and changing the directory that you want it to go into.
 Documentation
 =================
 
-The ``doc/html`` directory in subversion contains all of these documents.
+The ``doc/html`` directory in mercurial_ contains all of these documents.
 You can browse these on your hard drive if you'd like.
 
 If you want to regenerate these documents, you'll also need:
@@ -191,7 +213,7 @@ This:
 
 #. Then strips all of the hyperlink references from the \*.txt files.
 
-I've gone ahead and placed the generated html files in subversion so that
-you can checkout the documentation without having to run ``bin/gen_html``.
+I've gone ahead and placed the generated html files in mercurial so that
+you can browse the documentation without having to run ``bin/gen_html``.
 
 

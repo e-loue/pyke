@@ -112,8 +112,8 @@ knowledge_engine.engine(\*paths, \*\*kws)
     The last component of the destination package will be created automatically
     if it does not already exist.
 
-    If you use the default ``.compiled_krb``, you probably want to add
-    ``compiled_krb`` to your subversion ``global-ignores`` option.
+    You probably want to add ``compiled_krb`` (or whatever you've chosen to
+    call it) to your source code repository's list of files to ignore.
 
     There are four optional keyword arguments that you may also pass to the
     ``engine`` constructor:
