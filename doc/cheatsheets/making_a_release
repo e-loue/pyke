@@ -32,8 +32,8 @@ FILES TO CHANGE:
 
 REBUILD compiler_bc.py
 
-    $ cd ../../pyke/krb_compiler
-    $ python
+    $ cd pyke/krb_compiler
+    $ PYTHONPATH=../.. python
     >>> from pyke import krb_compiler
     >>> krb_compiler.compile_krb('compiler', 'compiled_krb', 'compiled_krb', 'compiler.krb')
     $ mv compiled_krb/compiler_bc.py .
@@ -49,7 +49,7 @@ COMMIT HG UPDATES (if any)
 
 CHECK FOR OTHER CHANGES
 
-    $ hg fetch release_1-hg
+    $ hg fetch hg
     $ retest as necessary
 
 BUILD RELEASE

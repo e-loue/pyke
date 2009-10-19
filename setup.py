@@ -8,7 +8,7 @@ from setuptools import setup
 
 setup(
     name = "pyke",
-    version = "1.0.2",
+    version = "1.0.3",
     packages = ['pyke', 'pyke.krb_compiler', 'pyke.krb_compiler.ply'],
     package_data = {
         'pyke.krb_compiler': ['*.krb'],
@@ -37,11 +37,11 @@ setup(
         backward-chaining rules.
 
         The egg files installed by easy_install are:
-          - http://downloads.sourceforge.net/pyke/pyke-1.0.2-py2.5.egg
-          - http://downloads.sourceforge.net/pyke/pyke-1.0.2-py2.6.egg
+          - http://downloads.sourceforge.net/pyke/pyke-1.0.3-py2.5.egg
+          - http://downloads.sourceforge.net/pyke/pyke-1.0.3-py2.6.egg
     """,
     download_url =
-        "http://downloads.sourceforge.net/pyke/pyke-1.0.2.tar.gz",
+        "http://downloads.sourceforge.net/pyke/pyke-1.0.3.tar.gz",
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
