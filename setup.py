@@ -14,7 +14,7 @@ setup(
         'pyke.krb_compiler': ['*.krb'],
         'pyke.krb_compiler.ply': ['README', 'README.pyke'],
     },
-    data_files = [('pyke', ['copyright_license', 'README'])],
+    data_files = [('pyke', ['copyright_license', 'hgrc_keywords', 'README'])],
 
     install_requires = [],
     extras_require = {

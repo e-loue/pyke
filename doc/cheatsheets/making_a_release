@@ -55,16 +55,15 @@ CHECK FOR OTHER CHANGES
 BUILD RELEASE
 
     $ cd ../..
-    $ rm -rf build
-    $ python setup.py bdist_egg sdist
+    $ rm -rf build dist
+    $ python2.5 setup.py bdist_egg sdist
     $ python2.6 setup.py bdist_egg
     $ ./make_doc_tarball dist/pyke_doc_html-1.0.2.tar.gz
     $ ./make_examples_tarball dist/pyke_examples-1.0.2.tar.gz
 
 TAG RELEASE
 
-    $ hg tag 1.0.2
- ?? $ hg commit
+    $ hg tag 1.0.2 (commit is automatic)
 
 PUSH TO SOURCEFORGE
 
@@ -85,32 +84,18 @@ UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
 
 UPLOAD DIST FILES TO SOURCEFORGE:
 
-    In the browser, go to: https://frs.sourceforge.net/webupload and upload
-    the 5 files:
-                pyke-1.0.2-py2.5.egg 
-                pyke-1.0.2-py2.6.egg 
-                pyke-1.0.2.tar.gz
-                pyke_doc_html-1.0.2.tar.gz
-                pyke_examples-1.0.2.tar.gz
+    $ cp RELEASE_NOTES-1.0.2 dist
+    $ cd dist
+    $ rsync -e ssh * mtnyogi,pyke@frs.sourceforge.net:/home/frs/project/p/py/pyke/pyke/1.0.2
 
-    Go to: Project Admin -> Feature Settings
-                         -> Manage (on File Release System line)
-    Click on "Add Release", Enter: 1.0.2
-    Click "Preserve my pre-formatted text." on the Release Notes (upload the
-        RELEASE_NOTES-1.0.2 file).
-    Follow the rest of the instructions there...
-        After you've selected the files to include, you have to go through
-        settings for each file ONE AT A TIME.  (Each file has its own Update
-        button which erases any information you've entered for subsequent
-        files).
+    In the browser go to: Project Admin -> File Manager
 
-        Pick "Platform Independant" for all of the files.
-
-        Pick ".zip" for the .egg files.
-        Pick "Source .gz" for the source .gz file.
-        Pick ".gz" for the doc .gz file.
-        Pick ".gz" for the examples .gz file.
-
+    left click on RELEASE_NOTES-1.0.2
+    check the "Release Note" checkbox
+    click Save
+    left click on pyke-1.0.2.tar.gz
+    set the "Release Notes for this file" (leave the "Label" blank)
+    click Save
 
 UPDATE PYPI LINK:
 
@@ -146,6 +131,10 @@ COPY TO PRE_2TO3 BRANCH:
     $ cd ../pre_working
     $ hg pull -u hg (no merge should be required here!)
     $ hg fetch pyke
+    $ cd doc/source
+    $ bin/gen_html
+    $ cd ../..
+    $ hg commit (if gen_html made any changes)
     $ (clone, run 2to3 and test)
     $ hg push
     $ hg push hg

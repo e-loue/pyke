@@ -38,7 +38,7 @@ You can download this at:
 There is another branch of Pyke that is ready for Python3.x.  If you want
 Python3.x support, read this:
 
-    http://pyke.hg.sourceforge.net/hgweb/pyke/pre_2to3/file/e6e990a053fd/README-3.0
+    http://pyke.hg.sourceforge.net/hgweb/pyke/pre_2to3/file/8788b112f5f6/README-3.x
 
 Otherwise (if you want Pyke on Python2.5 or later 2.x release)...
 
