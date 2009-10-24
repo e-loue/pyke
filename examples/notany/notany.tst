@@ -1,6 +1,6 @@
 # notany.tst
 
-    >>> import test
+    >>> from examples.notany import test
 
     >>> test.fc_test()
     egon has no uncle

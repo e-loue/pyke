@@ -1,6 +1,6 @@
 # towers_of_hanoi.tst
 
-    >>> import test
+    >>> from examples.towers_of_hanoi import test
 
     >>> test.test(1)
     got 1: ((0, 2),)

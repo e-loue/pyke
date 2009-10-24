@@ -51,10 +51,9 @@ def plan_head(rb_name):
         "version = %s" % repr(pyke.version)
     )
 
-def goal(rb_name, rule_name,
-         (goal, goal_name, pattern_args, taking, start_lineno, end_lineno),
-         pred_plan_lines, python_lines):
+def goal(rb_name, rule_name, goal_info, pred_plan_lines, python_lines):
     # returns plan_lines, goal_fn_head, goal_fn_tail, goal_decl_lines
+    goal, goal_name, pattern_args, taking, start_lineno, end_lineno = goal_info
     assert goal == 'goal'
     goal_fn_head = (
         "",

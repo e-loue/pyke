@@ -1,6 +1,6 @@
 # knapsack.tst
 
-    >>> import test
+    >>> from examples.knapsack import test
 
     >>> test.run((('bread', 4, 9200),
     ...           ('pasta', 2, 4500),

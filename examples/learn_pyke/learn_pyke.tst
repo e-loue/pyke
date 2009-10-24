@@ -1,6 +1,6 @@
-# forall.tst
+# learn_pyke.tst
 
-    >>> import run
+    >>> from examples.learn_pyke import run
     >>> from StringIO import StringIO
     >>> import sys
 

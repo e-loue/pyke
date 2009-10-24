@@ -32,8 +32,6 @@ def test(filepath, chdir=False):
     if chdir:
         dir, base = os.path.split(filepath)
         os.chdir(dir)
-        if '' not in sys.path and os.getcwd() not in sys.path:
-            sys.path.insert(0, '')
     else:
         dir, base = '', filepath
     sys.exit(doctest.testfile(base, False,

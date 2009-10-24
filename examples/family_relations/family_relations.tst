@@ -1,6 +1,6 @@
 # family_relations.tst
 
-    >>> import test
+    >>> from examples.family_relations import test
 
     >>> test.fc_test()      # doctest: +ELLIPSIS
     doing proof

@@ -1,6 +1,6 @@
-# forall.tst
+# findall.tst
 
-    >>> import test
+    >>> from examples.findall import test
 
     >>> test.fc_test()
     egon has ('harald', 'claudia') as cousins

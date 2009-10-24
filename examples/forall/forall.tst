@@ -1,6 +1,6 @@
 # forall.tst
 
-    >>> import test
+    >>> from examples.forall import test
 
     >>> test.fc_test()
     arthur2 has no step brothers or sisters

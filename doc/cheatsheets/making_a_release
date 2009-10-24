@@ -55,8 +55,8 @@ CHECK FOR OTHER CHANGES
 BUILD RELEASE
 
     $ cd ../..
-    $ rm -rf build dist
-    $ python2.5 setup.py bdist_egg sdist
+    $ rm -rf build dist pyke.egg-info
+    $ python2.5 setup.py sdist bdist_egg
     $ python2.6 setup.py bdist_egg
     $ ./make_doc_tarball dist/pyke_doc_html-1.0.2.tar.gz
     $ ./make_examples_tarball dist/pyke_examples-1.0.2.tar.gz
