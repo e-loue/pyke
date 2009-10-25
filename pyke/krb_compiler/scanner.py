@@ -568,9 +568,8 @@ def tokenize_file(filename = 'TEST/scan_test'):
         >>> from pyke.krb_compiler import scanner
         >>> init(scanner, 0, True)
         >>> import os, os.path
-        >>> tokenize_file('TEST/scan_test'
-        ...               if os.path.split(os.getcwd())[1] == 'krb_compiler'
-        ...               else 'krb_compiler/TEST/scan_test')
+        >>> tokenize_file(os.path.join(os.path.dirname(__file__),
+        ...                            'TEST/scan_test'))
         LexToken(NL_TOK,'\n# line 2 of comment\n\n# comment after blank line\n',1,19)
         LexToken(IDENTIFIER_TOK,'name1',5,68)
         LexToken(:,':',5,73)

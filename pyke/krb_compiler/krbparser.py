@@ -541,10 +541,8 @@ def run(this_module, filename='TEST/krbparse_test.krb'):
 
         >>> import os, os.path
         >>> from pyke.krb_compiler import krbparser
-        >>> run(krbparser,
-        ...     'TEST/krbparse_test.krb'
-        ...     if os.path.split(os.getcwd())[1] == 'krb_compiler'
-        ...     else 'krb_compiler/TEST/krbparse_test.krb')
+        >>> run(krbparser, os.path.join(os.path.dirname(__file__),
+        ...                             'TEST/krbparse_test.krb'))
         ('file',
          None,
          ((('fc_rule',

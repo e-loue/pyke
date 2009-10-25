@@ -21,7 +21,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import MySQLdb as db
 from pyke import test
 from examples.sqlgen import load_mysql_schema
 
@@ -30,6 +29,7 @@ def init():
 
 def init_fn(engine):
     global Db_connection, Db_cursor
+    import MySQLdb as db
     Db_connection = db.connect(user="movie_user", passwd="user_pw",
                                db="movie_db")
     Db_cursor = Db_connection.cursor()

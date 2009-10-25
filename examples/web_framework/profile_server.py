@@ -1,7 +1,6 @@
 # profile_server.py
 
 import cProfile
-import pstats
 import simple_server
 
 def run(port=8080, logging=False, trace_sql=False, db_engine='sqlite3'):
@@ -11,6 +10,7 @@ def run(port=8080, logging=False, trace_sql=False, db_engine='sqlite3'):
         globals(), locals(), 'profile.out')
 
 def stats():
+    import pstats
     p = pstats.Stats('profile.out')
     p.sort_stats('time')
     p.print_stats(20)

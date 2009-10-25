@@ -14,9 +14,10 @@ First, fire up the server:
     ...                           close_fds=True, env=os.environ)
     >>> server.stdin.write(r'''
     ... import sys
+    ... sys.path.insert(0, %r)
     ... from examples.web_framework import simple_server
     ... simple_server.run()
-    ... ''')
+    ... ''' % sys.path[0])
     >>> server.stdin.close()
     >>> def readline():
     ...     global server_error_msg

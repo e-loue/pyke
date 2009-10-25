@@ -132,7 +132,8 @@ class tracked_object(object):
         ...         super(foo, self).__init__()
         ...         print "foo.__init__:", arg
         ...         self.x = arg    # should be ignored
-        metaclass: name foo , bases (<class '__main__.tracked_object'>,) ,
+        ... # doctest: +NORMALIZE_WHITESPACE
+        metaclass: name foo , bases (<class 'experimental.metaclass.tracked_object'>,) ,
         dict keys ('__init__', '__module__')
     
     
@@ -143,7 +144,8 @@ class tracked_object(object):
         ...         super(bar, self).__init__(arg1)
         ...         print "bar.__init__:", arg1, arg2
         ...         self.y = arg2    # should be ignored
-        metaclass: name bar , bases (<class '__main__.foo'>,) ,
+        ... # doctest: +NORMALIZE_WHITESPACE
+        metaclass: name bar , bases (<class 'experimental.metaclass.foo'>,) ,
         dict keys ('__init__', '__module__')
     
     
@@ -161,27 +163,61 @@ class tracked_object(object):
         And now we create some instances (shouldn't see any attribute change
         notifications here!):
     
-        >>> f = foo(44)
+        >>> f = foo(44)             # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+        tracked_object.__setattr__ called on object
+          <experimental.metaclass.foo object at 0x...>
+          with property _ignore_setattr and value True
+        tracked_object.__setattr__ called on object
+          <experimental.metaclass.foo object at 0x...>
+          with property knowledgebase and value None
         foo.__init__: 44
-        add instance <__main__.foo object at 0x...> to foo base
-        >>> b = bar(55, 66)
+        tracked_object.__setattr__ called on object
+          <experimental.metaclass.foo object at 0x...>
+          with property x and value 44
+        add instance <experimental.metaclass.foo object at 0x...> to foo base
+        >>> b = bar(55, 66)         # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+        tracked_object.__setattr__ called on object
+          <experimental.metaclass.bar object at 0x...>
+          with property _ignore_setattr and value True
+        tracked_object.__setattr__ called on object
+          <experimental.metaclass.bar object at 0x...>
+          with property knowledgebase and value None
         foo.__init__: 55
+        tracked_object.__setattr__ called on object
+          <experimental.metaclass.bar object at 0x...>
+          with property x and value 55
         bar.__init__: 55 66
-        add instance <__main__.bar object at 0x...> to bar base
+        tracked_object.__setattr__ called on object
+          <experimental.metaclass.bar object at 0x...>
+          with property y and value 66
+        add instance <experimental.metaclass.bar object at 0x...> to bar base
     
     
         And modify some attributes:
     
-        >>> f.x = 'y'
-        notify foo base of attribute change:
-        (<__main__.foo object at 0x...>, x, y)
-        >>> b.y = 'z'
-        notify bar base of attribute change:
-        (<__main__.bar object at 0x...>, y, z)
+        >>> f.x = 'y'          # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+        tracked_object.__setattr__ called on object
+          <experimental.metaclass.foo object at 0x...>
+          with property x and value y
+        tracked_object.__setattr__: notify foo base of attribute change:
+          (<experimental.metaclass.foo object at 0x...>, x, y)
+        >>> b.y = 'z'          # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+        tracked_object.__setattr__ called on object
+          <experimental.metaclass.bar object at 0x...>
+          with property y and value z
+        tracked_object.__setattr__: notify bar base of attribute change:
+          (<experimental.metaclass.bar object at 0x...>, y, z)
         >>> b.y = 'z' # should be ignored
-        >>> b.z = "wasn't set"
-        notify bar base of attribute change:
-        (<__main__.bar object at 0x...>, z, wasn't set)
+        ...    # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+        tracked_object.__setattr__ called on object
+          <experimental.metaclass.bar object at 0x...>
+          with property y and value z
+        >>> b.z = "wasn't set" # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+        tracked_object.__setattr__ called on object
+          <experimental.metaclass.bar object at 0x...>
+          with property z and value wasn't set
+        tracked_object.__setattr__: notify bar base of attribute change:
+          (<experimental.metaclass.bar object at 0x...>, z, wasn't set)
     
     '''
     __metaclass__ = metaclass_option1

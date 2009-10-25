@@ -143,9 +143,8 @@ def parse(this_module, filename, check_tables = False, debug = 0):
     '''
         >>> from pyke.krb_compiler import kfbparser
         >>> kfbparser.parse(kfbparser,
-        ...                 'TEST/kfbparse_test.kfb'
-        ...                 if os.path.split(os.getcwd())[1] == 'krb_compiler'
-        ...                 else 'krb_compiler/TEST/kfbparse_test.kfb',
+        ...                 os.path.join(os.path.dirname(__file__),
+        ...                              'TEST/kfbparse_test.kfb'),
         ...                 True)
         <fact_base kfbparse_test>
     '''

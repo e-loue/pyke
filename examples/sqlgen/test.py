@@ -24,7 +24,6 @@
 
 from __future__ import with_statement
 import contextlib
-import MySQLdb as db
 from pyke import test
 import load_mysql_schema
 
@@ -42,6 +41,8 @@ class cursor(object):
         return tuple(self.fetchone(i) for i in range(1, 5))
 
 def init():
+    global db
+    import MySQLdb as db
     test.init()
     with contextlib.closing(db.connect(user="movie_user", passwd="user_pw",
                                        db="movie_db")) \

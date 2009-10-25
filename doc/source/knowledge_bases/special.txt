@@ -218,13 +218,12 @@ exit status.
     >>> run_command('command', ('echo', 'hi', 'mom'))
     ('hi mom',)
     >>> run_command('command', ('ls',))   # doctest: +NORMALIZE_WHITESPACE
-    ('ast_syntax', 'cheatsheets', 'examples', 'html', '__init__.py',
-     '__init__.pyc', 'PyKE.mm', 'r2w.ini', 'source', 'syntax', 'testdocs',
-     'todo')
-    >>> run_command('command', ('ls', '-l', 'r2w.ini')) # doctest: +ELLIPSIS
-    ('-rw-r--r-- 1 ... r2w.ini',)
+    ('fact_bases.txt', 'index.txt', 'links', 'question_bases.txt',
+     'rule_bases.txt', 'special.txt')
+    >>> run_command('command', ('ls', '-l', 'links')) # doctest: +ELLIPSIS
+    ('-rw-r--r-- 1 ... links',)
     >>> run_command('command', ('tail', '-n', '5', 'template.txt', '-'),
-    ...             'source',   # cwd
+    ...             '..',   # cwd (doc/source)
     ...             'stdin: line 1\nstdin: line 2\nstdin: line 3\n')
     ...     # doctest: +NORMALIZE_WHITESPACE
     ('==> template.txt <==',
@@ -259,10 +258,10 @@ and stderr are single strings (with embedded newlines).
     (0, 'hi mom\n', '')
     >>> run_command('general_command', ('cat', 'foobar'))
     (1, '', 'cat: foobar: No such file or directory\n')
-    >>> run_command('general_command', ('tail', '-n', '5', 'r2w.ini', 'foobar'))
+    >>> run_command('general_command', ('tail', '-n', '5', '../../r2w.ini', 'foobar'))
     ...     # doctest: +NORMALIZE_WHITESPACE
     (1,
-     "==> r2w.ini <==\ntarget_directory = 'html'\nmacros =
+     "==> ../../r2w.ini <==\ntarget_directory = 'html'\nmacros =
          ''\n\n[uservalues]\nversion = '0.2'\n",
      "tail: cannot open `foobar' for reading: No such file or directory\n")
 

@@ -131,7 +131,7 @@
         KeyError: '$a_var not bound'
         >>> ans = B_context.lookup(b_var, True)
         >>> ans                                 # doctest: +ELLIPSIS
-        ($a_var, <__main__.simple_context object at ...>)
+        ($a_var, <pyke.contexts.simple_context object at ...>)
         >>> ans[1] is A_context
         True
     
@@ -141,7 +141,7 @@
     differentiate it from plain python strings).
 
         >>> type(ans[0])
-        <class '__main__.variable'>
+        <class 'pyke.contexts.variable'>
 
     The anonymous variables have names starting with '_'.  Binding
     requests on anonymous variables are silently ignored.
@@ -349,10 +349,3 @@ class anonymous(variable):
     def is_data(self, my_context):
         return False
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()
