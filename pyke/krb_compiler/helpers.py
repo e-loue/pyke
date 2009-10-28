@@ -30,7 +30,8 @@ def fc_head(rb_name):
         "from __future__ import with_statement",
         "from pyke import contexts, pattern, fc_rule, knowledge_base",
         "",
-        "version = %s" % repr(pyke.version)
+        "pyke_version = %r" % pyke.version,
+        "compiler_version = %r" % pyke.compiler_version,
     )
 
 def bc_head(rb_name):
@@ -41,14 +42,16 @@ def bc_head(rb_name):
         "import itertools",
         "from pyke import contexts, pattern, bc_rule",
         "",
-        "version = %s" % repr(pyke.version)
+        "pyke_version = %r" % pyke.version,
+        "compiler_version = %r" % pyke.compiler_version,
     )
 
 def plan_head(rb_name):
     return (
         "# %s_plans.py" % rb_name,
         "",
-        "version = %s" % repr(pyke.version)
+        "pyke_version = %r" % pyke.version,
+        "compiler_version = %r" % pyke.compiler_version,
     )
 
 def goal(rb_name, rule_name, goal_info, pred_plan_lines, python_lines):

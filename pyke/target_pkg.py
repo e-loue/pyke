@@ -38,29 +38,72 @@ debug = False
 Name_test = re.compile(r'[a-zA-Z_][a-zA-Z0-9_]*$')
 
 class target_pkg(object):
-    '''
-        This maintains a list of:
-            source_package, source_filepath, compile_time, target_filenames.
+    r'''This manages all of the target files in a compiled_krb directory.
+
+    There is one instance per compiled_krb directory.  It keeps track of
+    everything in that directory and manages recompiling the sources when
+    the compiled targets are missing or out of date.
+
+    This instance is stored permanently in the "targets" variable of the
+    compiled_pyke_files.py module in the compiled_krb directory.
+
+    This maintains the following information for each compiled target file:
+        source_package, source_filepath, compile_time, target_filename.
     '''
     def __init__(self, module_name, filename, pyke_version = pyke.version,
-                       loader = None, sources = None):
-        self.package_name = module_name.rsplit('.', 1)[0]
+                       loader = None, sources = None, compiler_version = 0):
+        r'''
+
+        The parameters are:
+
+            module_name:  the complete dotted name of the compiled_pyke_files
+                          module for this object.
+            filename:     the absolute path to the compiled_pyke_files.py/c
+                          file.
+            pyke_version: the version of pyke used to compile the target files.
+            loader:       the __loader__ attribute of the compiled_pyke_files
+                          module (only set if the compiled_krb directory has
+                          been zipped).
+            sources:      {(source_module, source_filepath):
+                            [compile_time, target_file...]}
+            compiler_version:
+                          the version of the pyke compiler used to compile all
+                          of the targets in this compiled_krb directory.
+
+        This class is instantiated in two different circumstances:
+
+        1.  From compiled_krb/compiled_pyke_files.py with a list of all of the
+            compiled files in that compiled_krb directory.
+
+            In this case, all of the parameters are passed to __init__.
+
+        2.  From knowledge_engine.engine.__init__ (actually _init_path).
+
+            In this case, only the first two parameters are passed to __init__.
+
+        Either way, after importing compiled_pyke_files or creating a new
+        instance directly, reset is called by
+        knowledge_engine.engine._init_path.
+        '''
+        self.package_name = os.path.splitext(module_name)[0]
         self.filename = filename
         self.directory = os.path.dirname(self.filename)
         if debug:
             print >> sys.stderr, "target_pkg:", self.package_name, self.filename
         self.loader = loader
 
-        if pyke_version == pyke.version:
+        if compiler_version == pyke.compiler_version:
             # {(source_package_name, source_filepath):
             #  [compile_time, target_filename, ...]}
             self.sources = sources if sources is not None else {}
         elif self.loader is None:
             self.sources = {}
         else:
+            # loading incorrect version from zip file
             raise AssertionError("%s: wrong version of pyke, "
                                  "running %s, compiled for %s" % 
                                  (pyke.version, pyke_version))
+
     def reset(self):
         ''' This should be called once by engine.__init__ prior to calling
             add_source_package.
@@ -68,8 +111,9 @@ class target_pkg(object):
         if debug: print >> sys.stderr, "target_pkg.reset"
         self.dirty = False
         self.source_packages = {}  # {source_package_name: source_package_dir}
-        self.compiled_targets = set([])  # set of target_filename
+        self.compiled_targets = set()  # set of target_filename
         self.rb_names = set()
+
     def add_source_package(self, source_package_name):
         if debug:
             print >> sys.stderr, "target_pkg.add_source_package:", \
@@ -86,8 +130,7 @@ class target_pkg(object):
             for dirpath, dirnames, filenames \
              in os.walk(source_package_dir, onerror=_raise_exc):
                 for filename in filenames:
-                    if len(filename) > 4 \
-                       and filename[-4:] in ('.krb', '.kfb', '.kqb'):
+                    if filename.endswith(('.krb', '.kfb', '.kqb')):
                         source_abspath = os.path.join(dirpath, filename)
                         assert dirpath.startswith(source_package_dir)
                         source_relpath = \
@@ -105,11 +148,12 @@ class target_pkg(object):
                 if debug:
                     print >> sys.stderr, "del:", source_package_name, filepath
                 del self.sources[source_package_name, filepath]
+
     def add_source(self, source_package_name, source_filepath, source_mtime):
         if debug:
             print >> sys.stderr, "target_pkg.add_source:", \
                                  source_package_name, source_filepath
-        rb_name = os.path.basename(source_filepath)[:-4]
+        rb_name = os.path.splitext(os.path.basename(source_filepath))[0]
         if debug: print >> sys.stderr, "rb_name:", rb_name
         if not Name_test.match(rb_name):
             raise ValueError("%s: %s illegal as python identifier" %
@@ -124,9 +168,11 @@ class target_pkg(object):
                 print >> sys.stderr, source_filepath, "needs to be compiled"
             self.sources[key] = []
             self.dirty = True
+
     def do_by_ext(self, prefix, filename, *args):
         ext = os.path.splitext(filename)[1][1:]
         return getattr(self, "%s_%s" % (prefix, ext))(filename, *args)
+
     def compile(self, engine):
         if debug: print >> sys.stderr, "%s.compile:" % self.package_name
         global krb_compiler
@@ -150,11 +196,13 @@ class target_pkg(object):
                     value.append(time.time())
                     value.extend(target_files)
                     self.compiled_targets.update(target_files)
+
     def compile_krb(self, source_filename):
         if debug: print >> sys.stderr, "compile_krb:", source_filename
         rb_name = os.path.basename(source_filename)[:-4]
         return krb_compiler.compile_krb(rb_name, self.package_name,
                                         self.directory, source_filename)
+
     def compile_kfb(self, source_filename):
         if debug: print >> sys.stderr, "compile_kfb:", source_filename
         try:
@@ -165,6 +213,7 @@ class target_pkg(object):
         except:
             if os.path.lexists(fbc_path): os.remove(fbc_path)
             raise
+
     def compile_kqb(self, source_filename):
         if debug: print >> sys.stderr, "compile_kqb:", source_filename
         try:
@@ -175,6 +224,7 @@ class target_pkg(object):
         except:
             if os.path.lexists(qbc_path): os.remove(qbc_path)
             raise
+
     def write(self):
         if debug: print >> sys.stderr, "target_pkg.write"
         if self.dirty:
@@ -184,20 +234,21 @@ class target_pkg(object):
             with open(self.filename, 'w') as f:
                 f.write("# compiled_pyke_files.py\n\n")
                 f.write("from pyke import target_pkg\n\n")
-                f.write("version = %r\n\n" % pyke.version)
+                f.write("pyke_version = %r\n\n" % pyke.version)
+                f.write("compiler_version = %r\n\n" % pyke.compiler_version)
                 f.write("try:\n");
                 f.write("    loader = __loader__\n")
                 f.write("except NameError:\n");
                 f.write("    loader = None\n\n");
-                f.write("targets = "
-                        "target_pkg.target_pkg(__name__, __file__, "
-                        "version, loader, {\n")
+                f.write("targets = target_pkg.target_pkg(__name__, __file__, "
+                        "pyke_version, loader, {\n")
                 for item in self.sources.iteritems():
                     if debug: print >> sys.stderr, "write got:", item
                     if item[0][0] in self.source_packages:
                         if debug: print >> sys.stderr, "writing:", item
                         f.write("    %r: %r,\n" % item)
-                f.write("})\n")
+                f.write("  },\n  compiler_version)\n")
+
     def load(self, engine, load_fc = True, load_bc = True,
                            load_fb = True, load_qb = True):
         load_flags = {'load_fc': load_fc, 'load_bc': load_bc,
@@ -209,6 +260,7 @@ class target_pkg(object):
                 for target_filename in value[1:]:
                     if debug: print >> sys.stderr, "load:", target_filename
                     self.do_by_ext('load', target_filename, engine, load_flags)
+
     def load_py(self, target_filename, engine, flags):
         if debug: print >> sys.stderr, "load_py:", target_filename
         target_module = target_filename[:-3]  # strip '.py' extension.
@@ -226,14 +278,17 @@ class target_pkg(object):
             raise AssertionError("target_pkg.load_py: "
                                  "unknown target file type: %s" %
                                    target_filename)
+
     def load_fbc(self, target_filename, engine, flags):
         if debug: print >> sys.stderr, "load_fbc:", target_filename
         if flags['load_fb']:
             self.load_pickle(target_filename, engine)
+
     def load_qbc(self, target_filename, engine, flags):
         if debug: print >> sys.stderr, "load_qbc:", target_filename
         if flags['load_qb']:
             self.load_pickle(target_filename, engine)
+
     def load_module(self, module_path, filename, engine, do_import = True):
         if debug: print >> sys.stderr, "load_module:", module_path, filename
         module = None
@@ -247,11 +302,13 @@ class target_pkg(object):
             if debug: print >> sys.stderr, "load_module: importing"
             module = import_(module_path)
         if module is not None and \
-           (not hasattr(module, 'version') or module.version != pyke.version):
-            raise AssertionError("%s: incorrect pyke version: "
+           getattr(module, 'compiler_version', 0) != pyke.compiler_version:
+            raise AssertionError("%s: incorrect pyke version: running "
                                  "%s, expected %s" %
-                                   (filename, module.version, pyke.version))
+                                   (filename, pyke.version,
+                                    module.pyke_version))
         if do_import: module.populate(engine)
+
     def load_pickle(self, filename, engine):
         global pickle
         if debug: print >> sys.stderr, "load_pickle:", filename
@@ -269,12 +326,17 @@ class target_pkg(object):
         else:
             ctx_lib = open(full_path, 'rb')
         with ctx_lib as f:
-            version = pickle.load(f)
-            if version != pyke.version:
-                raise AssertionError("%s: incorrect pyke version: "
+            versions = pickle.load(f)
+            if isinstance(versions, tuple):
+                pyke_version, compiler_version = versions
+            else:
+                pyke_version, compiler_version = versions, 0
+            if compiler_version != pyke.compiler_version:
+                raise AssertionError("%s: incorrect pyke version: running "
                                      "%s, expected %s" %
-                                       (filename, version, pyke.version))
+                                       (filename, pyke.version, pyke_version))
             pickle.load(f).register(engine)
+
     def pickle_it(self, obj, path):
         global pickle
         try:
@@ -286,7 +348,7 @@ class target_pkg(object):
         sys.stderr.write("writing [%s]/%s\n" %
                            (self.package_name, os.path.basename(path)))
         with open(path, 'wb') as f:
-            pickle.dump(pyke.version, f)
+            pickle.dump((pyke.version, pyke.compiler_version), f)
             pickle.dump(obj, f)
 
 def _raise_exc(exc): raise exc
@@ -300,10 +362,3 @@ def import_(modulename):
         mod = getattr(mod, comp)
     return mod
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()
