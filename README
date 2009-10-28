@@ -115,15 +115,21 @@ TO INSTALL FROM THE SOURCES:
 
 RUNNING DOCTESTS:
 
-To run doctests on all *.py files in the pyke directory, cd to the pyke
-directory and:
+Pyke uses the doctest-tools package to run its doctests.  You can run the
+"testall" program from doctest-tools in any subdirectory, or in the top-level
+directory.  You can install doctest-tools with:
 
-    $ ./testpyke
+    $ sudo easy-install doctest-tools
 
-To run doctests on the whole source directory, cd to the top-level directory
-and:
+The top-level directory also has it's own "testall" script that removes all
+compiled_krb directories, then runs the standard testall scripts twice.  The
+first time forces pyke to recompile everything, and the second time runs the
+same tests again having pyke re-use the compiled results from the previous
+run.  This "testall" program should not be on your path, so run it as:
 
     $ ./testall
+
+to distinguish it from the "testall" program installed with doctest-tools.
 
 
 COMPILING kfbparser_tables.py, krbparser_tables.py and scanner_tables.py:
@@ -134,17 +140,17 @@ COMPILING kfbparser_tables.py, krbparser_tables.py and scanner_tables.py:
     >>> krbparser.init(krbparser, True)
     >>> kfbparser.init(kfbparser, True)
 
-    or just run testpyke:
+    or just run the "testall" program from the doctest-tools package:
 
-    $ cd pyke
-    $ ./testpyke
+    $ cd pyke/krb_compiler
+    $ testall
 
 
 COMPILING THE COMPILER.KRB FILE:
 
 In pyke/krb_compiler:
 
-    $ python
+    $ PYTHONPATH=../.. python
     >>> from pyke import krb_compiler
     >>> krb_compiler.compile_krb('compiler', 'compiled_krb', 'compiled_krb', 'compiler.krb')
     $ mv compiled_krb/compiler_bc.py .
@@ -182,8 +188,9 @@ To regenerate the html:
 This regenerates everything from doc/source into doc/html.  It takes about
 9 seconds to run.
 
-If you want to run doctest on all of the *.txt files in doc/source:
+If you want to run doctest on all of the *.txt files in doc/source, use the
+"testall" program from the doctest-tools package:
 
     $ cd doc
-    $ ./testdocs
+    $ testall
 
