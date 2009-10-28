@@ -1,85 +1,53 @@
 #!/bin/bash
 
-# testall [-p python_command]
+# testall [-3]
 #
-# Runs pyke/testpyke, and then all of the following twice:
-#     doc/testdocs, examples/testexamples, Test/testTest
+# Deletes all compiled_krb directories, then runs testall twice.
 # 
 # exit status > 0 if errors found.
 
-ERRORFILES="/tmp/testall.$$"
+TMP1=/tmp/testall1.$$
+TMP2=/tmp/testall2.$$
 
-ARGS=("$@" "$ERRORFILES")
+CMD="${0##*/} $@"
 
-> $ERRORFILES
-NUM_ERRORS=0
+#echo $CMD
+
+echo Removing all compiled_krb directories.
+echo
 
 find . -name krb_compiler -prune -o -name compiled_krb -exec rm -rf "{}" +
 
-cd pyke
-echo pyke/testpyke
-if ./testpyke "${ARGS[@]}"
-then
-    :
-else
-    NUM_ERRORS=$(($NUM_ERRORS + $?))
-fi
+echo Running all tests with no compiled_krb files:
+echo
 
-cd ../doc
-echo doc/testdocs with no doc/compiled_krb
-if ./testdocs "${ARGS[@]}"
-then
-    :
-else
-    NUM_ERRORS=$(($NUM_ERRORS + $?))
-fi
-echo doc/testdocs with doc/compiled_krb
-if ./testdocs "${ARGS[@]}"
-then
-    :
-else
-    NUM_ERRORS=$(($NUM_ERRORS + $?))
-fi
+$CMD -s $TMP1
+status1=$?
 
-cd ../examples
-echo examples/testexamples with no compiled_krb
-if ./testexamples "${ARGS[@]}"
-then
-    :
-else
-    NUM_ERRORS=$(($NUM_ERRORS + $?))
-fi
-echo examples/testexamples with compiled_krb
-if ./testexamples "${ARGS[@]}"
-then
-    :
-else
-    NUM_ERRORS=$(($NUM_ERRORS + $?))
-fi
+echo
+echo Running all tests with compiled_krb files:
+echo
 
-cd ../Test
-echo Test/testTest with no compiled_krb
-if ./testTest "${ARGS[@]}"
-then
-    :
-else
-    NUM_ERRORS=$(($NUM_ERRORS + $?))
-fi
-echo Test/testTest with compiled_krb
-if ./testTest "${ARGS[@]}"
-then
-    :
-else
-    NUM_ERRORS=$(($NUM_ERRORS + $?))
-fi
+$CMD -s $TMP2 tst txt
+status2=$?
 
-if [ $NUM_ERRORS -eq 0 ]
+results1=(`sed -n '1s/^Files: \([0-9]*\), Tests: \([0-9]*\), Errors: \(.*\)$/\1 \2 \3/p' $TMP1`)
+results2=(`sed -n '1s/^Files: \([0-9]*\), Tests: \([0-9]*\), Errors: \(.*\)$/\1 \2 \3/p' $TMP2`)
+
+echo
+echo "Compiling compiled_krb:" Files: ${results1[0]}, \
+     Tests: ${results1[1]}, \
+     Errors: ${results1[2]}
+echo "Reusing   compiled_krb:" Files: ${results2[0]}, \
+     Tests: ${results2[1]}, \
+     Errors: ${results2[2]}
+echo
+
+tail -q -n +2 $TMP1 $TMP2 | sort -u
+
+rm -f $TMP1 $TMP2
+
+if [ $status1 -gt 0 -o $status2 -gt 0 ]
 then
-    echo "No Errors!"
-    rm -f $ERRORFILES
-else
-    echo "********** ERRORS ************* $NUM_ERRORS files had errors:"
-    cat $ERRORFILES
-    rm -f $ERRORFILES
-    exit $NUM_ERRORS
+    exit 1
 fi
