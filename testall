@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# testall [-3]
+# testall [-x.y] [-3]
 #
 # Deletes all compiled_krb directories, then runs testall twice.
 # 
@@ -9,7 +9,49 @@
 TMP1=/tmp/testall1.$$
 TMP2=/tmp/testall2.$$
 
-CMD="${0##*/} $@"
+usage() {
+    echo "usage: testall [-x.y] [-3] [suffix...]" >&2
+    echo "       x.y is the Python version to use" >&2
+    exit 2
+}
+
+options=(`getopt -uqan testall -o 3 -l 2.5,2.6,2.7,2.8,3.0,3.1,3.2,3.3 -- "$@"`)
+[ $? -eq 0 ] || usage
+
+#echo options "${options[@]}"
+#echo num options ${#options[*]}
+
+opt=
+args1=
+args2=
+first=1
+suffix=
+
+i=0
+while [ $i -lt ${#options[*]} ]
+do
+    case ${options[$i]} in
+    -3)  opt="-3";;
+    --)  ;;
+    --*) suffix=${options[$i]#-};;
+    py)  args1="$args1 py";;
+    *)   args1="$args1 ${options[$i]}"
+         args2="$args2 ${options[$i]}"
+         ;;
+    esac
+    i=$(($i + 1))
+done
+
+if [ ! "$args1" ]
+then
+    args2="tst txt"
+fi
+
+#echo args "$args"
+#echo suffix "$suffix"
+#exit
+
+CMD="testall$suffix $opt"
 
 #echo $CMD
 
@@ -21,33 +63,43 @@ find . -name krb_compiler -prune -o -name compiled_krb -exec rm -rf "{}" +
 echo Running all tests with no compiled_krb files:
 echo
 
-$CMD -s $TMP1
+$CMD -s $TMP1 $args1
 status1=$?
 
-echo
-echo Running all tests with compiled_krb files:
-echo
+if [ "$args2" ]
+then
+    echo
+    echo Running all tests with compiled_krb files:
+    echo
 
-$CMD -s $TMP2 tst txt
-status2=$?
+    $CMD -s $TMP2 $args2
+    status2=$?
+else
+    status2=0
+fi
 
+echo
 results1=(`sed -n '1s/^Files: \([0-9]*\), Tests: \([0-9]*\), Errors: \(.*\)$/\1 \2 \3/p' $TMP1`)
-results2=(`sed -n '1s/^Files: \([0-9]*\), Tests: \([0-9]*\), Errors: \(.*\)$/\1 \2 \3/p' $TMP2`)
-
-echo
 echo "Compiling compiled_krb:" Files: ${results1[0]}, \
      Tests: ${results1[1]}, \
      Errors: ${results1[2]}
-echo "Reusing   compiled_krb:" Files: ${results2[0]}, \
-     Tests: ${results2[1]}, \
-     Errors: ${results2[2]}
-echo
 
-tail -q -n +2 $TMP1 $TMP2 | sort -u
+if [ "$args2" ]
+then
+    results2=(`sed -n '1s/^Files: \([0-9]*\), Tests: \([0-9]*\), Errors: \(.*\)$/\1 \2 \3/p' $TMP2`)
+    echo "Reusing   compiled_krb:" Files: ${results2[0]}, \
+         Tests: ${results2[1]}, \
+         Errors: ${results2[2]}
+    echo
+    tail -q -n +2 $TMP1 $TMP2 | sort -u
+else
+    echo
+    tail -q -n +2 $TMP1
+fi
 
 rm -f $TMP1 $TMP2
 
-if [ $status1 -gt 0 -o $status2 -gt 0 ]
+if [ $status1 -ne 0 -o $status2 -ne 0 ]
 then
     exit 1
 fi
