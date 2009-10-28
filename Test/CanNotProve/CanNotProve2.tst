@@ -9,9 +9,11 @@ First, create the egg (in Test/dist) using Test/setup.py:
     >>> import os
     >>> os.chdir('..')  # up to Test directory
 
-    >>> import sys
-    >>> sys.argv = ['Test/setup.py', '--quiet', 'bdist_egg']
-    >>> from Test import setup  # This runs setup.py
+    >>> import contextlib
+    >>> import zipfile
+    >>> with contextlib.closing(zipfile.PyZipFile('CanNotProve.egg', 'w')) as z:
+    ...     z.writepy('CanNotProve')
+    ...     z.write('CanNotProve/compiled_krb/facts.fbc')
 
 Now, move up another level (so that 'CanNotProve' is not a subdirectory)
 
@@ -19,8 +21,8 @@ Now, move up another level (so that 'CanNotProve' is not a subdirectory)
 
 Add the egg to the python path:
 
-    >>> import glob
-    >>> sys.path.insert(0, glob.glob('Test/dist/CanNotProve*.egg')[0])
+    >>> import sys
+    >>> sys.path.insert(0, 'Test/CanNotProve.egg')
 
 Now try the test!
 
@@ -30,16 +32,7 @@ Now try the test!
     >>> test.Rule_package = 'CanNotProve'
     >>> test.dotests()
 
-And finally, delete the files created by Test/setup.py
+And finally, delete the egg file:
 
-    >>> def rm_r(dir):
-    ...     for root, dirs, files in os.walk(dir, topdown=False):
-    ...        for name in files:
-    ...            os.remove(os.path.join(root, name))
-    ...        for name in dirs:
-    ...            os.rmdir(os.path.join(root, name))
-    ...     os.rmdir(dir)
-    >>> rm_r('Test/build')
-    >>> rm_r('Test/dist')
-    >>> rm_r('Test/CanNotProve.egg-info')
+    >>> os.remove('Test/CanNotProve.egg')
 
