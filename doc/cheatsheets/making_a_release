@@ -8,7 +8,7 @@ Do "hg log" to see what's changed:
 
     $ hg log -v -r .:48
 
-Write: RELEASE_NOTES-1.0.2
+Append to: RELEASE_NOTES-1.0.txt
 
 FILES TO CHANGE:
     - README
@@ -44,6 +44,7 @@ REBUILD DOCUMENTS
 
     $ cd doc/source
     $ bin/gen_html
+    $ cd ../..
 
 COMMIT HG UPDATES (if any)
 
@@ -57,7 +58,20 @@ COPY TO PYKE BRANCH:
     $ cd ../pyke_working
     $ hg pull -u hg (no merge should be required here!)
     $ hg fetch release_1
-    $ (test)
+    $ ./testpyke
+    $ hg push
+    $ hg push hg
+
+COPY TO PRE_2TO3_R1 BRANCH:
+
+    $ cd ../pre_r1_working
+    $ hg pull -u hg (no merge should be required here!)
+    $ hg fetch ../r1_working
+    $ cd doc/source
+    $ bin/gen_html
+    $ cd ../..
+    $ hg commit (if gen_html made any changes)
+    $ ./run_pre_test        (this also builds a source distribution)
     $ hg push
     $ hg push hg
 
@@ -65,7 +79,7 @@ COPY TO PRE_2TO3 BRANCH:
 
     $ cd ../pre_working
     $ hg pull -u hg (no merge should be required here!)
-    $ hg fetch pyke
+    $ hg fetch ../pre_r1_working
     $ cd doc/source
     $ bin/gen_html
     $ cd ../..
@@ -76,10 +90,10 @@ COPY TO PRE_2TO3 BRANCH:
 
 BUILD RELEASE
 
-    $ cd ../..
+    $ cd ../r1_working
     $ rm -rf build dist pyke.egg-info
     $ python setup.py sdist --formats zip
-    $ cp ../pre_test/dist/pyke*.zip dist
+    $ cp ../pre_r1_working_test/dist/pyke*.zip dist
 
 TAG RELEASE
 
@@ -104,13 +118,13 @@ UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
 
 UPLOAD DIST FILES TO SOURCEFORGE:
 
-    $ cp RELEASE_NOTES-1.0.2 dist
+    $ cp RELEASE_NOTES-1.0.txt dist
     $ cd dist
     $ rsync -e ssh * mtnyogi,pyke@frs.sourceforge.net:/home/frs/project/p/py/pyke/pyke/1.0.2
 
     In the browser go to: Project Admin -> File Manager
 
-    left click on RELEASE_NOTES-1.0.2
+    left click on RELEASE_NOTES-1.0.txt
     check the "Release Note" checkbox
     click Save
     left click on pyke-1.0.2.tar.gz

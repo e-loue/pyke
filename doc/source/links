@@ -32,6 +32,7 @@
 .. _cooking functions: about_pyke/cooking_functions.html
 .. _copy_reg: http://docs.python.org/library/copy_reg.html
 .. _cut operator: http://en.wikipedia.org/wiki/Cut_%28logic_programming%29
+.. _doctest: http://docs.python.org/library/doctest.html
 .. _doctest-tools: http://code.google.com/p/doctest-tools
 .. _Docutils: http://sourceforge.net/projects/docutils
 .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
@@ -62,12 +63,14 @@
 .. _goal lp: logic_programming/rules/backward_chaining.html
 .. _goal syntax: pyke_syntax/krb_syntax/bc_rule.html#use-clause
 .. _goals: goal_
-.. _hg: mercurial_
+.. _hg: Mercurial_
+.. _hgrc: http://www.selenic.com/mercurial/hgrc.5.html
 .. _home page: index.html
 .. _how to call Pyke: using_pyke.html
 .. _HTMLTemplate: http://py-templates.sourceforge.net/htmltemplate/index.html
 .. _inherit: knowledge_bases/rule_bases.html#rule-base-inheritance
 .. _inherits: inherit_
+.. _Keyword Extension: http://mercurial.selenic.com/wiki/KeywordExtension
 .. _.kfb file: pyke_syntax/kfb_syntax.html
 .. _.kfb files: `.kfb file`_
 .. _knapsack problem: http://en.wikipedia.org/wiki/Knapsack_problem
@@ -87,8 +90,9 @@
 .. _logic programming in pyke: logic_programming/index.html
 .. _matched: `pattern matches`_
 .. _matching two patterns together: logic_programming/pattern_matching/matching_patterns.html
-.. _mercurial: http://mercurial.selenic.com/wiki/
-.. _mercurial hosting sites: http://mercurial.selenic.com/wiki/MercurialHosting
+.. _Mercurial: http://mercurial.selenic.com/wiki/
+.. _Mercurial hook: http://www.selenic.com/mercurial/hgrc.5.html#hooks
+.. _Mercurial Hosting Sites: http://mercurial.selenic.com/wiki/MercurialHosting
 .. _MySQL: http://www.mysql.com/
 .. _notany: pyke_syntax/krb_syntax/compound_premise.html#notany-premise
 .. _notany premise: notany_
@@ -136,6 +140,7 @@
 .. _question bases: `question base`_
 .. _question: knowledge_bases/question_bases.html
 .. _questions: question_
+.. _Rebuilding the HTML Documentation: about_pyke/modifying_pyke.html#rebuilding-the-html-documentation
 .. _regular expression syntax: http://docs.python.org/library/re.html#regular-expression-syntax
 .. _reset: using_pyke.html#setting-up-each-case
 .. _rest2web: http://sourceforge.net/projects/rest2web
@@ -146,6 +151,7 @@
 .. _rule: logic_programming/rules/index.html
 .. _rule's: rule_
 .. _rules: rule_
+.. _Running Unit Tests: about_pyke/modifying_pyke.html#running-unit-tests
 .. _siege: http://www.joedog.org/index/siege-home
 .. _special: knowledge_bases/special.html
 .. _sqlgen: examples.html#sqlgen

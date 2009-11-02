@@ -27,7 +27,7 @@ restindex
         installation.
     /description
     format: rest
-    section-pages: , cooking_functions, what_is_pyke, steps_to_using_pyke, installing_pyke
+    section-pages: , cooking_functions, what_is_pyke, steps_to_using_pyke, installing_pyke, modifying_pyke
     encoding: utf8
     output-encoding: utf8
     include: yes

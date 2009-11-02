@@ -10,24 +10,23 @@ rules.
 COPYRIGHT AND LICENSE:
 
 This is published under the MIT License.  The copyright and license are in
-the file "copyright_license".
+the file "LICENSE" in the source directory.
 
 DOCUMENTATION:
 
-The documentation is at:
+The complete documentation is at:
 
     http://pyke.sourceforge.net
 
-You can download a copy of this documentation to your hard drive:
-
-    pyke_doc_html-1.0.3.zip
+A copy of the html documentation is also included in the "doc/html" directory
+within the source distribution.
 
 See the end of this file for how to regenerate the html files.
 
 
-INSTALLATION:
+REQUIREMENTS:
 
-Pyke requires python 2.5 (or later).  Check with:
+Pyke requires python 2.5 or later.  Check with:
 
     $ python --version
 
@@ -36,26 +35,30 @@ You can download python at:
     http://www.python.org
 
 
+TO INSTALL:
+
+    1. Download and unzip the source distribution for the version of Python
+       that you want to use.
+
+       If you want to use Python 2.5 or 2.6, you need to use the pyke-1.0.3.zip
+       sources.
+
+       If you want to use Python 3.x, you need to use the pyke3.1-1.0.3.zip
+       sources.
+
+    2. Open a command line window in the directory above.
+    3. Run "python setup.py build"
+    4. As administrator, run: "python setup.py install"
+
+
 SOURCE DISTRIBUTION:
 
-There is a separate set of Pyke sources for Python3.1.
-
-The pyke source distribution is the file:
-
-    pyke-1.0.3.zip
-
-This contains the pyke source code, documentation (both source and html), and
-examples.
+The source distribution contains the pyke source code, documentation (both
+source and html), unit tests, and examples.
 
 EXAMPLES:
 
-Pyke examples may be downloaded separately from sourceforge if you've used
-easy_install to install pyke (or installed the .egg file):
-
-    pyke_examples-1.0.3.tar.gz
-
-You need to unpack this into a directory that is on your PYTHON PATH.
-
+Each example is in a separate subdirectory under the "examples" directory.
 Each example has a README file that explains how to run it.
 
 The family_relations example is a good place to start.  It shows several
@@ -90,28 +93,22 @@ The findall, forall, knapsack, notany and towers_of_hanoi examples are each
 very small.
 
 
-TO INSTALL FROM THE SOURCES:
-
-    $ python setup.py install
-
 
 RUNNING DOCTESTS:
 
 Pyke uses the doctest-tools package to run its doctests.  You can run the
 "testall" program from doctest-tools in any subdirectory, or in the top-level
-directory.  You can install doctest-tools with:
+directory.  You can install doctest-tools as administrator with:
 
-    $ sudo easy-install doctest-tools
+    # easy-install doctest-tools
 
-The top-level directory also has it's own "testall" script that removes all
-compiled_krb directories, then runs the standard testall scripts twice.  The
-first time forces pyke to recompile everything, and the second time runs the
-same tests again having pyke re-use the compiled results from the previous
-run.  This "testall" program should not be on your path, so run it as:
+The top-level directory also has it's own "testpyke" script that removes all
+compiled_krb directories, then runs the testall script (from doctest-tools)
+twice.  The first time forces pyke to recompile everything, and the second
+time runs the same tests again having pyke re-use the compiled results from
+the previous run.  If the "testpyke" program is not on your path, run it as:
 
-    $ ./testall
-
-to distinguish it from the "testall" program installed with doctest-tools.
+    $ ./testpyke
 
 
 WORKING WITH THE SOURCE CODE REPOSITORY:

@@ -1,0 +1,258 @@
+.. $Id$
+.. 
+.. Copyright © 2009 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Modifying Pyke
+    page-description:
+        Which source code repository to use.  And the other tools that you'll
+        need run the units tests, and rebuild the html documentation.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+uservalues
+    filedate: $Id$
+/uservalues
+
+===================================
+Modifying Pyke
+===================================
+
+Index to This Page
+=======================
+
+* `Mercurial Repositories`_
+
+  * `Mercurial Keyword Extension`_
+  * `Which Repository Do I Use?`_
+
+* `Other Required Packages`_
+
+* `Running Unit Tests`_
+
+* `Rebuilding the HTML Documentation`_
+
+
+Mercurial Repositories
+======================
+
+With Mercurial_, you clone the entire repository locally on your computer.
+Then you can make changes and commit those changes to your local repository.
+If you think those changes might be interesting to everybody, make your local
+repository (or a clone of it) publically available (either on your own server,
+or on one of the `Mercurial Hosting Sites`_) and send me an email.  I will
+pull your changes, examine them, and push them to the master repository on
+sourceforge.
+
+Mercurial Keyword Extension
+---------------------------
+
+The Pyke sources use the Mercurial `Keyword Extension`_ as a holdover from
+when the repository used Subversion rather than Mercurial.
+
+The ``hgrc_keywords`` file has been provided to enable and configure this
+extension for Pyke use.  You can append this file to either your personal
+.hgrc configuration file (which would then apply to all of your Mercurial
+projects) or the project .hg/hgrc file (see `hgrc`_ in the Mercurial wiki).
+
+If you use a ``post-clone`` `Mercurial hook`_, or append ``hgrc_keywords``
+manually after cloning, the keywords won't be expanded properly when the
+project is first cloned.  But they will be expanded properly if the clone is
+done with the -U option and then an ``hg update`` done in the newly cloned
+repository (after the changes to .hg/hgrc have been made).
+
+The keyword expansions are only used by the tools that generate the html
+documentation (see `Rebuilding the HTML Documentation`_, below).
+
+Which Repository Do I Use?
+--------------------------
+
+Normally, you will clone one of the following four repositories locally to
+make a master copy of what's on sourceforge.  Then you would clone your master
+copy (which is very fast) to make separate clones for each development task
+that you are working on for Pyke.
+
+So it is best to keep all of these clones together in a common directory.
+
+There are four repositories on sourceforge that you can start with:
+
+release_1
+  Use this for bug fixes, code and documentation cleanup, and anything else
+  that would go into a point release for release 1.  I merge the changes made
+  here into all of the other repositories.  So this code goes into both the
+  Python2.x and Python3.x versions of Pyke.
+
+pyke
+  Use this for major new features.  I merge the changes made in release_1 into
+  the pyke repository (but not the other way around).  And I merge the changes
+  made in the pyke repository into the pre_2to3 repository.  So the code here
+  also goes into both the Python2.x and Python3.x versions of Pyke.
+
+pre_2to3_r1
+  Use this for bug fixes, code and documentation cleanup, and anything else
+  that would go into a point release for release 1, but only apply to the
+  Python3.x version of Pyke.  I merge the changes made in release_1 into the
+  pre_2to3_r1 repository (but not the other way around).  And I merge the
+  changes made in the pre_2to3_r1 repository into the pre_2to3 repository.
+  So changes here only go into the Python3.x version of Pyke.
+
+  Note that this code is maintained in a state just prior to running Python's
+  2to3_ tool on it.  So you can't just run the code here directly.
+
+  The ``run_2to3`` script runs 2to3 on the current copy of the sources.  Do
+  **not** run this in a repository clone that you still want to use to do
+  commits!  Instead, commit all of your changes, then clone the repository and
+  do ``run_2to3`` in the clone.  If anything doesn't work, go back to the first
+  repository to fix it, delete the clone, and repeat the whole process.  This
+  was done to minimize merge conflicts caused by the 2to3 changes.
+
+  The ``run_pre_test`` script will:
+
+  * clone the current repository
+  * then in the clone do:
+  
+    * ``run_2to3``
+    * ``testpyke`` -3.1
+    * python setup.py -q sdist --formats zip
+    * insert '3.1' after 'pyke' in the name of the source distribution zip
+      file.
+  
+  Note that ``run_pre_test`` assumes that you either have the keywording
+  options set in your personal .hgrc file, or have clone hooks in place to
+  copy these into the .hg/hgrc file of all clones within your pyke workarea.
+
+pre_2to3
+  Normally I merge changes from the pyke repository and the pre_2to3_r1
+  repository into pre_2to3 so that nothing needs to be done in this repository.
+  Most major new features would be developed in the ``pyke`` repository and
+  merged into pre_2to3.  Making changes to pre_2to3 directly would only be
+  done when those changes are for major new features that only apply to the
+  Python3.x version of Pyke.
+
+To clone the development version of the project into a directory called
+*foobar*::
+
+    $ hg clone http://pyke.hg.sourceforge.net:8000/hgroot/pyke/pyke foobar
+
+Or to clone the latest release 1 branch::
+
+    $ hg clone http://pyke.hg.sourceforge.net:8000/hgroot/pyke/release_1 foobar
+
+Use the *release_1* repository for any work that improves the quality of the
+code (bug fixes, code formatting, comments, documentation) that won't break
+existing programs and can go into the next point release.
+
+Use the *pyke* repository for new features that will go into the next major
+release.  I merge all the changes done in the release_1 repository into the
+pyke repository (but not the other way around).
+
+Finally, use the *pre_2to3* repository for any work that is specific to the
+Python3 version of PyKE.  Just don't run 2to3 directly in your working
+directory because it will change all of the .py files and we don't want those
+changes committed!  I merge all the changes done in the pyke repository
+into the pre_2to3 repository.
+
+
+Other Required Packages
+=======================
+
+No other packages are required to develop, run and distribute an application
+using Pyke.  But there are package requirements to do the following additional
+things:
+
++--------------------------------+------------------+------------------+
+| If you want to                 | you also need    | minimum version  |
++================================+==================+==================+
+| run the web_framework example  | HTMLTemplate_    | 1.5              |
++--------------------------------+------------------+------------------+
+| run the unit tests             | `doctest-tools`_ | 1.0a1            |
++--------------------------------+------------------+------------------+
+| rebuild the html documentation | rest2web_        | 0.5              |
++                                +------------------+------------------+
+|                                | docutils_        | 0.5              |
++--------------------------------+------------------+------------------+
+
+If the docutils package is not part of your standard Python installation,
+there is probably a package for it in the package index for your Linux
+distribution.
+
+All of the other packages can be installed as administrator using
+easy_install_.  For example::
+
+    # easy_install HTMLTemplate
+
+
+Running Unit Tests
+==================
+
+The `doctest-tools`_ package is required to run the unit tests (see
+`Other Required Packages`_ for more details).
+
+The ``testall`` and ``testdoc`` scripts from ``doctest-tools`` can be run
+anywhere.
+
+In addition, the top-level directory contains a ``testpyke`` script that will
+delete all of the compiled_krb directories, then run ``testall`` twice.  The
+first run must recompile all of the knowledge base sources (.krb, .kfb and
+.kqb files) into the compiled_krb directories in order to run the tests.  The
+second run reuses the files compiled in the first run.  This makes sure that
+all of the tests run properly whether they have to compile the knowledge base
+sources or not.
+
+
+Rebuilding the HTML Documentation
+=================================
+
+The ``doc/html`` directory contains all of the documents that you are reading
+now.  These are ready to browse directly from your hard drive if you'd like.
+
+The documentation is generated using the rest2web_ package, which uses
+doctutils_ (see `Other Required Packages`_ for more details):
+
+The sources for the documentation are in ``doc/source``.  Each .txt file there
+is converted into an .html file in the doc/html directory by running::
+
+    $ bin/gen_html
+
+This:
+
+#. Temporarily appends hyperlink references onto all of the \*.txt files.
+#. Runs ``r2w`` to regenerate the files in ``doc/html``
+
+   - except for those in ``doc/html/stylesheets`` and ``doc/html/images``.
+
+#. Then strips all of the hyperlink references from the \*.txt files.
+
+.. note::
+   This process uses the date information expanded by the Mercurial `Keyword
+   Extension`_.  See `Mercurial Keyword Extension`_, above.
+
+I've gone ahead and placed the generated html files in the source repository
+so that you can browse the documentation locally without having to run
+``bin/gen_html``.  So you only need these procedures if you change the
+documentation (i.e., change the .txt files in doc/source).
+
+

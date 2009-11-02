@@ -49,18 +49,9 @@ Index to This Page
   * `Other required packages`_
 
 * Installation_
-
-  * `Installing the Sources`_
-
-    * `Examples`_
-
-  * `Installing the HTML Documentation`_
-
-* `Mercurial Repositories`_
-
-  * `Repository Directory Structure`_
-
-* Documentation_
+* `Examples`_
+* `Viewing the HTML Documentation`_
+* `Repository Directory Structure`_
 
 
 Licensing
@@ -116,116 +107,69 @@ If the docutils package is not part of your standard Python installation,
 there is probably a package for it in the package index for your Linux
 distribution.
 
-All of the other packages can be installed using easy_install_.  For example:
+All of the other packages can be installed as the administrator using
+easy_install_.  For example:
 
-    $ sudo easy_install HTMLTemplate
+    # easy_install HTMLTemplate
 
 
 Installation
-==================
-
-Installing the Sources
-------------------------
+============
 
 The source code for the latest release can be found on the `Pyke project
 download page`_ as ``pyke-<release>.zip`` (for Python2) and
 ``pyke3.1-<release>.zip`` (for Python3).  After unzipping these, go into the
-directory and:
+directory and run::
 
     $ python setup.py build
-    $ sudo python setup.py install
+
+And then as administrator, run::
+
+    # python setup.py install
 
 The sources include a complete copy of the project directory, including the
 documentation, unit tests, and examples.
 
 If you want to clone the source code repository to contribute to the project
-development, or to use the latest developer version, read
-`Mercurial Repositories`_, below.
+development, or to use the latest developer version, read `Modifying Pyke`_.
 
 Examples
-~~~~~~~~
+========
 
-There are several examples that are contained in the source directory.
-There is a README file for each one that explains how to run it.
+There are several examples that are contained in the source directory.  Each
+example is in it's own subdirectory under the ``examples`` subdirectory, and
+each has it's own README file that explains how to run it.
 
-These are in the source directory in the ``examples`` subdirectory.
+The web_framework example requires the HTMLTemplate_ package, version 1.5 or
+later.  This can be installed as administrator with easy_install::
+
+    # easy_install HTMLTemplate
 
 See also Examples_.
 
-Installing the HTML Documentation
-----------------------------------------
+Viewing the HTML Documentation
+==============================
 
-If you'd like to view this html documentation directly from you hard drive,
-you can download ``pyke_doc_html-<release>.zip`` from the
-`Pyke project download page`_.
+This HTML documentation may be viewed directly from you hard drive.  The HTML
+files are in the ``doc/html`` directory.  Start with ``doc/html/index.html``.
 
-
-Mercurial Repositories
-======================
-
-With mercurial_, you clone the entire repository locally on your computer.
-Then you can make changes and commit those changes to your local repository.
-If you think those changes might be interesting to everybody, make your local
-repository (or a clone of it) publically available (either on your own server,
-or on one of the `mercurial hosting sites`_) and send me an email.  I will
-pull your changes, examine them, and push them to the master repository on
-sourceforge.
-
-There are three repositories on sourceforge:
-
-release_1
-  Use this for bug fixes, code and documentation cleanup, and anything else
-  that could go into a point release.
-
-pyke
-  Use this for major new features.  I merge the changes made in release_1 into
-  the pyke repository (but not the other way around).
-
-pre_2to3
-  Normally I merge changes from the pyke repository into pre_2to3 so that
-  nothing needs to be done in this repository.  Changes would only occur here
-  if they only pertain to the Python3 version of Pyke.  In order to minimize
-  merge conflicts, the sources are maintained in this repository prior to
-  running the 2to3_ tool on them.  You can run the run_pre_test shell script
-  to:
-  
-  * clone the local repository to a ../pre_test repository
-  * run the run_2to3 script in ../pre_test
-  * run testall -3.1 (unit tests) in ../pre_test.  (This requires the
-    doctest-tools_ package, "easy_install doctest-tools").
-  * run python setup.py sdist --formats zip
-
-To clone the development version of the project into a directory called
-*foobar*::
-
-    $ hg clone http://pyke.hg.sourceforge.net:8000/hgroot/pyke/pyke foobar
-
-Or to clone the latest release 1 branch::
-
-    $ hg clone http://pyke.hg.sourceforge.net:8000/hgroot/pyke/release_1 foobar
-
-Use the *release_1* repository for any work that improves the quality of the
-code (bug fixes, code formatting, comments, documentation) that won't break
-existing programs and can go into the next point release.
-
-Use the *pyke* repository for new features that will go into the next major
-release.  I merge all the changes done in the release_1 repository into the
-pyke repository (but not the other way around).
-
-Finally, use the *pre_2to3* repository for any work that is specific to the
-Python3 version of PyKE.  Just don't run 2to3 directly in your working
-directory because it will change all of the .py files and we don't want those
-changes committed!  I merge all the changes done in the pyke repository
-into the pre_2to3 repository.
 
 Repository Directory Structure
-------------------------------
+==============================
 
 You'll see the following directories.
 
 * ``doc``
 
-  - See `Documentation`_, below.
+  - the ``html`` directory has all of the HTML documentation ready to browse
+    off your hard drive.  Start with doc/html/index.html.
+  - the ``source`` directory has all of the sources that were used to
+    generated the HTML documentation.  See `Rebuilding the HTML Documentation`_.
+  - the ``examples`` directory just has a copy of the examples used by the
+    .txt files in the ``source`` directory so that the doctests will work on
+    the ``source`` directory.
+  - ``cheatsheets`` are a collection of text files with notes on various tools
+    used by Pyke, and processes used to maintain Pyke.
 
 * ``examples``
 
@@ -233,42 +177,22 @@ You'll see the following directories.
     ``README`` file for each example to see how to run it.  See also,
     Examples_.
 
+* ``experimental``
+
+  - This is a catch-all directory for various ideas that have been tried, but
+    that have not been incorporated into Pyke.  You can safely skip over this
+    directory...
+
 * ``pyke``
-  
+
   - This is the top-level Python package directory for the Python sources.
-    This needs to be in a directory on your ``PYTHONPATH``.
+    This needs to be installed into a directory on your ``PYTHONPATH``.
     The sources for the compilers are in the ``krb_compiler`` subdirectory,
     which is expected to be a subpackage of ``pyke``.
 
+* ``Test``
 
-Documentation
-=================
-
-The ``doc/html`` directory in mercurial_ contains all of these documents.
-You can browse these on your hard drive if you'd like.
-
-If you want to regenerate these documents, you'll also need:
-
-* rest2web_, which requires:
-* docutils_
-
-The sources for the documentation are in ``doc/source``.
-
-To regenerate the documentation, in the ``doc/source`` directory run::
-
-    $ bin/gen_html
-
-This:
-
-#. Temporarily appends hyperlink references onto all of the \*.txt files.
-#. Runs ``r2w`` to regenerate the files in ``doc/html``
-
-   - except for those in ``doc/html/stylesheets`` and ``doc/html/images``.
-
-#. Then strips all of the hyperlink references from the \*.txt files.
-
-I've gone ahead and placed the generated html files in mercurial so that
-you can browse the documentation locally without having to run
-``bin/gen_html``.
-
+  - This is where the unit test scripts are stored.  These use Python's
+    doctest_ package.  Each test file has a .tst suffix.
+  - See `Running Unit Tests`_.
 

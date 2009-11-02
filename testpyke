@@ -1,21 +1,21 @@
 #!/bin/bash
 
-# testall [-x.y] [-3]
+# testpyke [-x.y] [-3]
 #
 # Deletes all compiled_krb directories, then runs testall twice.
 # 
 # exit status > 0 if errors found.
 
-TMP1=/tmp/testall1.$$
-TMP2=/tmp/testall2.$$
+TMP1=/tmp/testpyke1.$$
+TMP2=/tmp/testpyke2.$$
 
 usage() {
-    echo "usage: testall [-x.y] [-3] [suffix...]" >&2
+    echo "usage: testpyke [-x.y] [-3] [suffix...]" >&2
     echo "       x.y is the Python version to use" >&2
     exit 2
 }
 
-options=(`getopt -uqan testall -o 3 -l 2.5,2.6,2.7,2.8,3.0,3.1,3.2,3.3 -- "$@"`)
+options=(`getopt -uqan testpyke -o 3 -l 2.5,2.6,2.7,2.8,3.0,3.1,3.2,3.3 -- "$@"`)
 [ $? -eq 0 ] || usage
 
 #echo options "${options[@]}"
