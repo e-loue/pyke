@@ -20,47 +20,29 @@ The documentation is at:
 
 You can download a copy of this documentation to your hard drive:
 
-    pyke_doc_html-1.0.3.tar.gz
+    pyke_doc_html-1.0.3.zip
 
 See the end of this file for how to regenerate the html files.
 
 
 INSTALLATION:
 
-Pyke requires python 2.5 (or later 2.x release).  Check with:
+Pyke requires python 2.5 (or later).  Check with:
 
     $ python --version
 
-You can download this at:
+You can download python at:
 
     http://www.python.org
-
-There is another branch of Pyke that is ready for Python3.x.  If you want
-Python3.x support, read this:
-
-    http://pyke.hg.sourceforge.net/hgweb/pyke/pre_2to3/file/8788b112f5f6/README-3.x
-
-Otherwise (if you want Pyke on Python2.5 or later 2.x release)...
-
-To install pyke with easy_install, at the shell prompt just type:
-
-    $ easy_install pyke
-
-If you don't have easy_install, you can install it by looking at:
-
-    http://pypi.python.org/pypi/setuptools/
-
-Then you've got two choices for pyke:
-
-    pyke-1.0.3-py2.5.egg or pyke-1.0.3-py2.6.egg (used by easy_install)
- or the source distribution (see next section)
 
 
 SOURCE DISTRIBUTION:
 
+There is a separate set of Pyke sources for Python3.1.
+
 The pyke source distribution is the file:
 
-    pyke-1.0.3.tar.gz
+    pyke-1.0.3.zip
 
 This contains the pyke source code, documentation (both source and html), and
 examples.
@@ -90,15 +72,15 @@ results as a dictionary.
 
 The web_framework example uses the sqlgen example.  This demonstrates the use
 of multiple rule bases.  The web_framework is a WSGI application that uses the
-HTMLTemplate package (install this with "easy_install HTMLTemplate", be sure to
-get version 1.5 or later).  It gets the column names from the HTMLTemplate and
-feeds those to the sqlgen example to generate a plan to retrieve the data.  It
-then builds a plan to populate the template and return the finished HTML
-document.  It also caches the plans so that they don't have to be re-generated
-for each request.  This makes it run a full 10 times faster than the same
-example done in TurboGears 2!  The example includes a wsgiref simple_server
-setup to run it as an http server so that you can access it through your
-browser.
+HTMLTemplate package (install this with "sudo easy_install HTMLTemplate", be
+sure to get version 1.5 or later).  It gets the column names from the
+HTMLTemplate and feeds those to the sqlgen example to generate a plan to
+retrieve the data.  It then builds a plan to populate the template and return
+the finished HTML document.  It also caches the plans so that they don't have
+to be re-generated for each request.  This makes it run a full 10 times faster
+than the same example done in TurboGears 2!  The example includes a wsgiref
+simple_server setup to run it as an http server so that you can access it
+through your browser.
 
 The learn_pyke example is an incomplete attempt at a computer based training
 program.  It only deals with the topic of pattern matching.  It is left here
@@ -132,6 +114,12 @@ run.  This "testall" program should not be on your path, so run it as:
 to distinguish it from the "testall" program installed with doctest-tools.
 
 
+WORKING WITH THE SOURCE CODE REPOSITORY:
+
+If you want to run Python3.1, read this:
+
+    http://pyke.hg.sourceforge.net/hgweb/pyke/pre_2to3/file/8788b112f5f6/README-3.x
+
 COMPILING kfbparser_tables.py, krbparser_tables.py and scanner_tables.py:
 
     $ python
@@ -161,7 +149,7 @@ To compile the documentation into html, you'll need docutils and rest2web.
 If you're running linux, your distro may have packages for these already.
 Or you can:
 
-    $ easy_install rest2web
+    $ sudo easy_install rest2web
 
 I used version 0.4.1 of docutils and 0.5.0 of rest2web.  I don't know if
 earlier versions work OK or not.

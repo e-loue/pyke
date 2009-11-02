@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
 # Make sure the user has setuptools installed!
-import ez_setup
-ez_setup.use_setuptools()
+#import ez_setup
+#ez_setup.use_setuptools()
 
-from setuptools import setup
+#from setuptools import setup
+
+from distutils.core import setup
 
 setup(
     name = "pyke",
@@ -16,12 +18,14 @@ setup(
     },
     data_files = [('pyke', ['copyright_license', 'hgrc_keywords', 'README'])],
 
-    install_requires = [],
-    extras_require = {
-        'regen_docs': ["rest2web>=0.5"],
-        'examples': ["HTMLTemplate>=1.5"],
-    },
-    zip_safe = True,
+    # old setuptools stuff:
+    #install_requires = [],
+    #extras_require = {
+    #    'regen_docs': ["rest2web>=0.5"],
+    #    'examples': ["HTMLTemplate>=1.5"],
+    #    'tests': ["doctest-tools>=1.0a1"],
+    #},
+    #zip_safe = True,
 
     # Metadata for upload to PyPI
     author = "Bruce Frederiksen",
@@ -35,13 +39,9 @@ setup(
         python code) are compiled into python. Can also automatically assemble
         python programs out of python functions which are attached to
         backward-chaining rules.
-
-        The egg files installed by easy_install are:
-          - http://downloads.sourceforge.net/pyke/pyke-1.0.3-py2.5.egg
-          - http://downloads.sourceforge.net/pyke/pyke-1.0.3-py2.6.egg
     """,
     download_url =
-        "http://downloads.sourceforge.net/pyke/pyke-1.0.3.tar.gz",
+        "http://downloads.sourceforge.net/pyke/pyke-1.0.3.zip",
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",

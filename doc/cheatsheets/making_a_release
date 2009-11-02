@@ -24,7 +24,7 @@ FILES TO CHANGE:
         - line 11:  version = "1.0.2",
         - line 40:  - http://downloads.sourceforge.net/pyke/pyke-1.0.2-py2.5.egg
         - line 41:  - http://downloads.sourceforge.net/pyke/pyke-1.0.2-py2.6.egg
-        - line 44:  "http://downloads.sourceforge.net/pyke/pyke-1.0.2.tar.gz",
+        - line 44:  "http://downloads.sourceforge.net/pyke/pyke-1.0.2.zip",
     - pyke/__init__.py
         - line 3: version = '1.0.2'
     - doc/source/index.txt
@@ -52,14 +52,34 @@ CHECK FOR OTHER CHANGES
     $ hg fetch hg
     $ retest as necessary
 
+COPY TO PYKE BRANCH:
+
+    $ cd ../pyke_working
+    $ hg pull -u hg (no merge should be required here!)
+    $ hg fetch release_1
+    $ (test)
+    $ hg push
+    $ hg push hg
+
+COPY TO PRE_2TO3 BRANCH:
+
+    $ cd ../pre_working
+    $ hg pull -u hg (no merge should be required here!)
+    $ hg fetch pyke
+    $ cd doc/source
+    $ bin/gen_html
+    $ cd ../..
+    $ hg commit (if gen_html made any changes)
+    $ ./run_pre_test        (this also builds a source distribution)
+    $ hg push
+    $ hg push hg
+
 BUILD RELEASE
 
     $ cd ../..
     $ rm -rf build dist pyke.egg-info
-    $ python2.5 setup.py sdist bdist_egg
-    $ python2.6 setup.py bdist_egg
-    $ ./make_doc_tarball dist/pyke_doc_html-1.0.2.tar.gz
-    $ ./make_examples_tarball dist/pyke_examples-1.0.2.tar.gz
+    $ python setup.py sdist --formats zip
+    $ cp ../pre_test/dist/pyke*.zip dist
 
 TAG RELEASE
 
@@ -117,24 +137,3 @@ TO TEST:
     $ unset PYTHONPATH
     $ source bin/activate
 
-COPY TO PYKE BRANCH:
-
-    $ cd ../pyke_working
-    $ hg pull -u hg (no merge should be required here!)
-    $ hg fetch release_1
-    $ (test)
-    $ hg push
-    $ hg push hg
-
-COPY TO PRE_2TO3 BRANCH:
-
-    $ cd ../pre_working
-    $ hg pull -u hg (no merge should be required here!)
-    $ hg fetch pyke
-    $ cd doc/source
-    $ bin/gen_html
-    $ cd ../..
-    $ hg commit (if gen_html made any changes)
-    $ (clone, run 2to3 and test)
-    $ hg push
-    $ hg push hg

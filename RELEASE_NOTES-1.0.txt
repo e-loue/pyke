@@ -1,0 +1,148 @@
+1.0.3 RELEASE NOTES Oct 19, 2009
+================================
+
+This release has two bug fixes in it.  The big thing is that the source code
+repository has been moved from Subversion to Mercurial.  This is the first
+release under Mercurial.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 1.0.2 RELEASE:
+
+    - The source code repository has been moved from subversion to mercurial
+      to make it easier for people to contribute to the project.  If you have
+      the source code checked out under subversion, and want to stay abreast
+      of developments or contribute your changes back to the project, you will
+      need to switch to Mercurial.
+
+
+FEATURE ENHANCEMENTS:
+
+    - Moved the source code repository from Subversion to Mercurial!
+    - Did some enhancements to examples/web_framework/web_framework.tst to
+      better report server errors.
+    - Added examples/web_framework/director.html as another example html
+      template.
+    - Upgraded to 3.3 version of PLY.
+
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug #2881934: py2exe doesn't work with Pyke
+    - Applied patch #2787699: hash function returns void
+
+
+1.0.2 RELEASE NOTES Apr 21, 2009
+================================
+
+This fixes a few more bugs in Pyke and has several very minor enhancements.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 1.0.1 RELEASE:
+
+    <none>
+
+
+FEATURE ENHANCEMENTS:
+
+    - Added zip_safe to setup.py so that the Pyke egg isn't unzipped when it
+      is installed.
+    - Added mention in the using_pyke.txt document that Pyke supports source
+      package directories in zipped egg files.
+    - Upgraded to 3.2 version of PLY.
+    - Upgraded to 0.6c9 version ez_setup.py.
+
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug 2729315: IndexError: list index out of range.
+    - Fixed an error in the logic_programming/rules/backward_chaining.txt
+      documentation file (reported by Carlo, aka Mr.SpOOn).
+
+
+1.0.1 RELEASE NOTES Apr 2, 2009
+================================
+
+This fixes a few bugs in Pyke and cleans up the error reporting in the
+web_framework test script.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 1.0 RELEASE:
+
+    <none>
+
+
+FEATURE ENHANCEMENTS:
+
+    - Changed the test script for the web_framework example to better report
+      errors from the server process.
+    - Misc minor code changes for Python3.0 support.
+
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug 2709888: Strange behavior with two iterable.
+    - Fixed an error in the examples/web_framework/README file.
+    - Fixed testdocs bug which required wxPython to be installed to run the
+      test (even though the test doesn't use wxPython).
+
+
+1.0 RELEASE NOTES Mar 18, 2009
+================================
+
+This fixes two bugs in Pyke and is Pyke's first full release version!
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 0.7 RELEASE:
+
+    <none>
+
+
+FEATURE ENHANCEMENTS:
+
+Added the following features:
+
+    - Changed the .krb parser to iterate, rather than recurse, on the list of
+      rules in the file so that it doesn't hit the recursion limit on large
+      .krb files.
+    - Now including a copy of PLY with the Pyke sources so that I can release
+      the compiled pyke/krb_compiler/*_tables.py files with Pyke and not have
+      PLY try to recompile them (which generally gets a permission violation
+      because normal users can't write the Python's site-packages directory).
+    - Added the option to pass any module within the package to identify the
+      source package to knowledge_engine.engine().
+
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug 2569021: string literals don't work in .kfb files.
+    - Added mention of 'engine' variable within the rules documentation to fix
+      bug 2588191.
+

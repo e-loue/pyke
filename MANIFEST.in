@@ -2,10 +2,7 @@ include *
 graft *
 exclude .hgtags .hgignore
 prune .hg
-#prune build
 prune dist
-prune Test/build
-prune Test/dist
 prune */compiled_krb
 prune */*/compiled_krb
 prune */*/*/compiled_krb

@@ -1,0 +1,469 @@
+0.7 RELEASE NOTES Jan 17, 2009
+==============================
+
+This fixes a reported bug in Pyke and also changes the way that Pyke searches
+for Pyke source files during initialization so that it depends on the standard
+Python Path rather than the program's Current Working Directory.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 0.6 RELEASE:
+
+    - The parameters to knowledge_engine.engine.__init__ have changed.  Pyke
+      no longer searchs the current working directory for your Pyke source
+      files.  Your Pyke source files must now be located (either directly or
+      indirectly) under a Python package directory that is on the standard
+      Python Path.  You must now specify the package name containing your Pyke
+      source files as a parameter to knowledge_engine.engine.__init__.
+
+      If you pass any of the load_fc, load_bc, load_fb, or load_qb parameters
+      to knowledge_engine.engine.__init__, you must now pass these as keyword
+      parameters.
+
+
+FEATURE ENHANCEMENTS:
+
+Added the following features:
+
+    - Pyke's initialization logic no longer depends on the program's current
+      working directory, making it easier to run on Windows.
+    - Pyke can now load its compiled files from a Python .egg file.
+
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug 2496575: "duplicate knowledge base names" bug
+
+
+0.6 RELEASE NOTES Dec 30, 2008
+==============================
+
+This fixes a reported bug in Pyke and also sets up the examples to be easier
+to run by not requiring that they be run from a certain directory.  This makes
+them easier to run from Windows.  The sqlgen and web_framework examples were
+also changed to use the Sqlite3 database rather than MySQL, again, to make the
+examples easier to run.
+
+Pyke's use of the PLY lex and yacc modules has been changed to avoid compiling
+the scanner and parsers each time Pyke is run.  These changes should also help
+when running Pyke on IronPython as PLY has some incompatibilities with
+IronPython.
+
+Finally, Pyke has been upgraded to run on Python 2.6 without any Deprecation
+Warnings.  (And Pyke still runs fine on Python 2.5).  But to run Pyke on
+Python 2.6 you will need the development version of PLY (from subversion)
+until PLY comes out with it's release 2.6.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 0.5 RELEASE:
+
+    - You must upgrade to PLY version 2.5.  This can be done with:
+        - easy_install --upgrade ply
+
+    - If you want to run the web_framework example, you need to upgrade the
+      HTMLTemplate package to the 1.5 release.  You can use easy_install to
+      install the 1.5 release, but may need to unintall the older release
+      manually (I don't remember the prior release of HTMLTemplate being set
+      up for easy_install). 
+
+    - The meaning of the generated_root_dir parameter to
+      knowledge_engine.engine.__init__ has been changed (as well as its name).
+      The default value produces the same result, so you only need to make
+      source changes here if you specified a value for this parameter.
+
+FEATURE ENHANCEMENTS:
+
+Added the following features:
+
+    - The examples no longer depend on the program's current working
+      directory, making them easier to run from Windows.
+    - The sqlgen and web_framework examples no longer require MySQL.  They
+      have been converted to Sqlite3 and the Sqlite3 database is included in
+      the examples directory.  So these examples no longer require setting up
+      the database first.
+    - Pyke runs on Python 2.6 without any Deprecation Warnings.
+        - But you need the development version of PLY until PLY comes out with
+          its release 2.6.
+    - Changed Pyke's use of PLY to save the compiled scanner and parser tables
+      rather than regenerating them each time Pyke is run.  These changes
+      should also avoid incompatibilities between IronPython and PLY.
+
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug 2339448: BC rules with nonexistent dependencies
+    - Fixed bug 2062109: Pyke does not run on IronPython 2.0B3 and Jython 2.5a1
+        - This fix has now been tested and runs OK on Jython.
+        - The test on IronPython exposed a bug in IronPython that has been
+          reported to the IronPython project (as item# 20143 on their bug
+          tracking list).
+
+
+0.5 RELEASE NOTES Nov 9, 2008
+=============================
+
+This is the first beta release of Pyke.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 0.4 RELEASE:
+
+    - The following functions now return a context manager rather than a
+      generator.  Note that the parameters to these functions have _not_
+      changed:
+        - engine.prove_n
+        - engine.prove
+        - engine.lookup
+        - NOTE: engine.prove_1 is not affected by this change.
+
+        - YOU NEED TO CHANGE ALL CALLS TO THESE FUNCTIONS FROM:
+
+            def your_function():
+                for vars, plan in engine.prove_n(...):
+                    <for loop body>
+                <code after for loop>
+          
+          TO:
+
+            from __future__ import with_statement
+
+            def your_function():
+                with engine.prove_n(...) as it:
+                    for vars, plan in it:
+                        <for loop body>
+                <code after for loop>
+
+    - Pyke no longer replicates the source code directory structure under the
+      compiled_krb directory.  So the compiled_krb directory now has no
+      subdirectories.
+        - YOU SHOULD DELETE ALL compiled_krb DIRECTORIES PRIOR TO RUNNING PYKE
+          0.5.
+    - The two parameters, gen_root_location and gen_root_pkg, to
+      knowledge_engine.engine.__init__ have been merged into one parameter.
+      The default values produce the same result, so you only need to make
+      source changes here if you specified values for either of the old
+      parameters.
+        - generated_root_dir = 'compiled_krb'
+
+FEATURE ENHANCEMENTS:
+
+Added the following features:
+
+    - Changed "Page Last Modified" date to be last svn commit date in html
+      documentation.
+    - Added sitemap.xml to doc/html
+
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug 2062109: Pyke does not run on IronPython 2.0B3 and Jython 2.5a1
+        - But this fix can not be tested until new releases of IronPython and
+          Jython are produced.
+
+
+0.4 RELEASE NOTES Aug 30, 2008
+==============================
+
+I expect to move Pyke to beta status soon.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 0.3 RELEASE:
+
+    - Two parameters to knowledge_engine.engine have changed name (but not
+      meaning):
+        - gen_dir      is now gen_root_location
+        - gen_root_dir is now gen_root_pkg
+
+FEATURE ENHANCEMENTS:
+
+Added the following features:
+
+    - Added 'special' commands to be able to run programs from rules and examine
+      their results:
+        - special.check_command -- runs program and checks exit status
+        - special.command -- runs program and returns stdout as tuple of lines
+        - special.general_command -- runs program and returns (exit_status,
+                                     stdout, stderr)
+    - Added .kfb files to make universal facts easier.
+    - Added question bases and .kqb files so that rules can ask an end user
+      questions.
+    - Added a database trace_cursor to examples/web_framework/wsgi_app.py
+      which is enabled by setting the TRACE_SQL env variable to anything other
+      than 'False'.
+    - Added performance testing and profiling harnesses to
+      examples/web_framework.
+    - Added default parameter values to engine.prove_1 and engine.prove_n for
+      fixed_args and num_returns parameters.
+
+Added the following web pages:
+
+    - The web pages have been extensively revised with many new pages to help
+      the person new to logic programming.
+
+Added the following examples:
+
+    - learn_pyke as unfinished Computer Based Training example using the new
+      queston bases.
+    - towers_of_hanoi as a brute force solution to the Towers of Hanoi puzzle.
+      This generates multiple solutions (though only one is optimal).
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug 2041883: installation error "Sorry: IndentationError"
+    - Fixed: the web_framework example does not do database commits.
+    - Fixed: small bug in examples/sqlgen/test.py cursor.execute parameters.
+    - Fixed: examples/web_framework not placing the returned document into a
+      singleton tuple as per WSGI spec.
+
+
+0.3 RELEASE NOTES Jun 8, 2008
+=============================
+
+I expect only minor feature enhancements at this point and am focusing now
+on testing.  Often the sources under subversion are more stable than the
+release.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 0.2 RELEASE:
+
+    - Made use of ':' after rule names in .krb files deprecated.
+    - Also eliminated use of ':' after 'python' in fc_assertions so that ':' is
+      no longer used to introduce indented lines in .krb files.
+    - Changed the url format in the web_framework example from "/1/movie.html"
+      to "/movie/1/movie.html".
+
+FEATURE ENHANCEMENTS:
+
+Added the following features:
+
+    - Added 'forall'/'require', 'notany', 'first', and 'python' premises to both
+      fc and bc rules.
+    - The web_framework example now caches plans.  It should be extremely fast
+      now!
+    - Anonymous pattern variables are now any identifier starting with an
+      underscore.  This allows you to document the variable.
+    - Allow the 'taking' clause to be indented on the next line after the 'use'
+      clause without requiring a \ continuation.
+    - Changed 'python' syntax to allow either a single python statement on the
+      same line as 'python', or multiple python statements indented under
+      'python'.
+    - All .krb files are now automatically recompiled whenever the pyke version
+      changes.
+    - Top-level testall script.
+
+Added the following web pages:
+
+    - KRB Syntax => Compound Premise
+    - Examples
+    - PyCon 2008 Paper
+
+Added the following examples:
+
+    - knapsack example.  This is a small example that came up at the PyCon 2008
+      conference.
+    - findall example.  This is mostly for testing the new forall premise
+      combined with the new 'python' premise.
+    - forall example.  This is mostly for testing the new forall premise.
+    - notany example.  This is mostly for testing the new notany premise.
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    The 'python' assertion in fc rules didn't work.
+
+
+0.2 RELEASE NOTES Mar 05, 2008
+==============================
+
+I expect only minor feature enhancements at this point and am focusing now
+on testing.  Often the sources under subversion are more stable than the
+alpha release.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH 0.1.alpha2 RELEASE:
+
+The top-level pyke package code has been moved into a standard module called
+knowledge_engine.py.  Therefore, you need to:
+
+    1.  Change all "import pyke" lines to "from pyke import knowledge_engine".
+    2.  Change all "pyke.engine(...)" calls to "knowledge_engine.engine(...)".
+
+
+FEATURE ENHANCEMENTS:
+
+Added the following web pages:
+
+    Logic Tricks
+
+Added the following features:
+
+    - engine.print_stats()
+    - engine.trace and engine.untrace functions to trace backward-chaining
+      rules.
+    - added "allow_vars" parameter to "as_data" methods.
+    - added test.py module to pyke package.  This lets you type in goals and
+      run them interactively to help debug your rules.  Also allows you to
+      test the plan functions returned from goals.
+
+Added the following examples:
+
+    - To family_relations:
+
+        fc_example.krb
+        bc_example.krb
+        bc2_example.krb (a few rule optimizations make it 100 times faster
+                         than bc_example.krb)
+        
+        Many enhancements to test.py, including a "general" function to show
+        how to create your own patterns to prove fully general goals with
+        pattern variables anywhere in the arguments.
+
+    - Added sqlgen example.  This automatically generates sql statements,
+      figuring out how to join tables together to get needed data.  This runs
+      against MySQL and introspects the schema automatically.
+
+    - Added web_framework example.  This uses the HTMLTemplate facility as its
+      templating engine.  It automatically builds the program to render the
+      templates, including using the sqlgen rule base to automatically build
+      the sql statements to retrieve the data needed by the template.
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+#1908852 unpickling a plan causes most of pyke to be imported.
+#1908855 a comment on same line as "check" premise causes syntax errors in
+         generated .py files.
+#1908856 tuple patterns treat strings as tuples
+#1908862 *_plans.py files not reloaded
+#1908867 engine.reset wasn't reseting forward-chaining rules.
+#1908870 variable binding loops were possible.
+#1908875 rest_var in pattern tuple not checked properly.
+#1908877 debug messages are being printed when .krb syntax errors are
+         encountered.
+#1908880 prove_n and prove_1 were not converting prototype plans stored in
+         pattern variables into plan functions.
+
+
+0.1.alpha2 RELEASE NOTES Feb 12, 2008
+=====================================
+
+I expect only minor feature enhancements at this point and am focusing now
+on testing.  Often the sources under subversion are more stable than the
+alpha release.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs
+
+
+INCOMPATIBILITIES WITH PRIOR RELEASE:
+
+The pyke inference engine was converted into an object so that multiple
+instances can be used simultaniously running different rule bases.  This
+changed the top-level interfaces into pyke.  The "load" function is now
+the constructor on the pyke.engine class.  There have been some new
+arguments added to it since the alpha1 release.  See the new "Using Pyke"
+web page.
+
+All other top-level pyke.X functions are now <engine_obj>.X methods.
+The function names and arguments remain the same.
+
+The .krb syntax has not changed, but the compiled python modules have.  If
+you are upgrading from the alpha1 release, the compiled python modules are
+now placed into a ./compiled_krb directory which is created automatically.
+(You can change the location and/or name of this directory through the new
+arguments to the pyke.engine constructor).  You'll need to delete the
+generated *_fc.py, *_bc.py, and *_plans.py files and their corresponding
+.pyc and .pyo files.
+
+If you are upgrading from a subversion release and already have generated
+python modules in a "compiled_krb" directory, you will need to either delete
+the generated *_fc.py, *_bc.py, and *_plans.py files or "touch" your *.krb
+files to cause them to be recompiled by the new system.
+
+FEATURE ENHANCEMENTS:
+
+The following Feature Requests have been implemented:
+
+#1865574: Create top-level pyke class
+    See INCOMPATIBILITIES, above.
+
+A krb_traceback module has been added to translate filename, line,
+linenumber and function name information from the generated python modules
+into equivalent information for the source .krb files.
+See the new "Using Pyke" web page.
+
+Substantial changes to the following web pages:
+
+    Using Pyke
+    Overview -> Plans
+    Overview -> Knowledge Bases -> Rule Bases
+    KRB Syntax -> Bc_rule
+
+BUGS FIXED:
+
+The following Bugs have been fixed:
+
+#1864966: PYTHONPATH ignored for compiler invocation 
+#1861999: update clause plan documentation
+#1861997: sys.path must match pyke.load()
+#1861993: extending mismatch between activate and prove
+#1861992: plan enumeration is broken
+#1861988: prove_1 exception error
+#1843445: KeyError in _unbind
+#1843408: facts are not matched in the correct order
+#1843395: "%(rule_name)s" in error text
+#1830762: "'python2.5' is not recognized" on windows
+
+
+0.1.alpha1 RELEASE NOTES Nov 9, 2007
+====================================
+
+0.1.alpha1 is the first alpha release of pyke.
+
+I expect only minor feature enhancements at this point and am focusing now
+on testing.
+
+Please report bugs to http://sourceforge.net/projects/pyke at either:
+
+    forum => help
+ or tracker => bugs

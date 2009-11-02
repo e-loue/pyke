@@ -1,0 +1,20 @@
+#!/bin/bash
+
+usage() {
+    echo "usage: make_doc_zip zipfile" >&2
+    exit 2
+}
+
+set -e
+
+[ $# -eq 1 ] || usage
+
+rm -f "$zipname"
+if expr "$zipname" : /
+then
+    :
+else
+    zipname="../$zipname"
+fi
+cd doc
+zip -r -MM "$zipname" html -x .pyhist -x '.*.swp'

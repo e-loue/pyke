@@ -1,6 +1,6 @@
 .. $Id$
 .. 
-.. Copyright © 2007-2008 Bruce Frederiksen
+.. Copyright © 2007-2009 Bruce Frederiksen
 .. 
 .. Permission is hereby granted, free of charge, to any person obtaining a copy
 .. of this software and associated documentation files (the "Software"), to deal
@@ -45,11 +45,15 @@ Index to This Page
 
 * Licensing_
 * `System Requirements`_
+
+  * `Other required packages`_
+
 * Installation_
 
-  * `Installing the Executables`_
   * `Installing the Sources`_
-  * `Installing the Examples`_
+
+    * `Examples`_
+
   * `Installing the HTML Documentation`_
 
 * `Mercurial Repositories`_
@@ -87,47 +91,72 @@ System Requirements
 ====================
 
 Pyke is 100% Python, so it should run on any platform supported by Python.
-So all you'll need is `Python`_ 2.5 or 2.6.
+So all you'll need is `Python`_ 2.5, 2.6 or 3.1.
+
+Other required packages
+-----------------------
+
+No other packages are required to develop, run and distribute an application
+using Pyke.  But there are package requirements to do the following additional
+things:
+
++--------------------------------+------------------+------------------+
+| If you want to                 | you also need    | minimum version  |
++================================+==================+==================+
+| run the web_framework example  | HTMLTemplate_    | 1.5              |
++--------------------------------+------------------+------------------+
+| run the unit tests             | `doctest-tools`_ | 1.0a1            |
++--------------------------------+------------------+------------------+
+| rebuild the html documentation | rest2web_        | 0.5              |
++                                +------------------+------------------+
+|                                | docutils_        | 0.5              |
++--------------------------------+------------------+------------------+
+
+If the docutils package is not part of your standard Python installation,
+there is probably a package for it in the package index for your Linux
+distribution.
+
+All of the other packages can be installed using easy_install_.  For example:
+
+    $ sudo easy_install HTMLTemplate
 
 
 Installation
 ==================
 
-Installing the Executables
-----------------------------
-
-Pyke is registered on pypi_, so once you have `Python`_ 2.5 or 2.6 with
-easy_install_ you can just type (as root)::
-
-    # easy_install pyke
-
 Installing the Sources
 ------------------------
 
 The source code for the latest release can be found on the `Pyke project
-download page`_ as ``pyke-<release>.tar.gz``.
+download page`_ as ``pyke-<release>.zip`` (for Python2) and
+``pyke3.1-<release>.zip`` (for Python3).  After unzipping these, go into the
+directory and:
 
-If you want the latest developer version, read `Mercurial Repositories`_,
-below.
+    $ python setup.py build
+    $ sudo python setup.py install
 
-Installing the Examples
--------------------------
+The sources include a complete copy of the project directory, including the
+documentation, unit tests, and examples.
+
+If you want to clone the source code repository to contribute to the project
+development, or to use the latest developer version, read
+`Mercurial Repositories`_, below.
+
+Examples
+~~~~~~~~
 
 There are several examples that are contained in the source directory.
 There is a README file for each one that explains how to run it.
 
 These are in the source directory in the ``examples`` subdirectory.
-To download just the examples (for example, if you used easy_install to
-install Pyke), download the ``pyke_examples-<release>.tar.gz`` file.
 
 See also Examples_.
 
 Installing the HTML Documentation
 ----------------------------------------
 
-If you'd like to view this html documentation from you hard drive,
-it is in the source directory (doc/html), or you can download just the
-documentation itself as ``pyke_doc_html-<release>.zip`` file from the
+If you'd like to view this html documentation directly from you hard drive,
+you can download ``pyke_doc_html-<release>.zip`` from the
 `Pyke project download page`_.
 
 
@@ -139,10 +168,35 @@ Then you can make changes and commit those changes to your local repository.
 If you think those changes might be interesting to everybody, make your local
 repository (or a clone of it) publically available (either on your own server,
 or on one of the `mercurial hosting sites`_) and send me an email.  I will
-examine your changes and pull them into the master repository on sourceforge.
+pull your changes, examine them, and push them to the master repository on
+sourceforge.
 
-To clone the development version of the entire project (including the
-examples_ and this documentation) into a directory called *foobar*::
+There are three repositories on sourceforge:
+
+release_1
+  Use this for bug fixes, code and documentation cleanup, and anything else
+  that could go into a point release.
+
+pyke
+  Use this for major new features.  I merge the changes made in release_1 into
+  the pyke repository (but not the other way around).
+
+pre_2to3
+  Normally I merge changes from the pyke repository into pre_2to3 so that
+  nothing needs to be done in this repository.  Changes would only occur here
+  if they only pertain to the Python3 version of Pyke.  In order to minimize
+  merge conflicts, the sources are maintained in this repository prior to
+  running the 2to3_ tool on them.  You can run the run_pre_test shell script
+  to:
+  
+  * clone the local repository to a ../pre_test repository
+  * run the run_2to3 script in ../pre_test
+  * run testall -3.1 (unit tests) in ../pre_test.  (This requires the
+    doctest-tools_ package, "easy_install doctest-tools").
+  * run python setup.py sdist --formats zip
+
+To clone the development version of the project into a directory called
+*foobar*::
 
     $ hg clone http://pyke.hg.sourceforge.net:8000/hgroot/pyke/pyke foobar
 
@@ -156,10 +210,10 @@ existing programs and can go into the next point release.
 
 Use the *pyke* repository for new features that will go into the next major
 release.  I merge all the changes done in the release_1 repository into the
-pyke repository.
+pyke repository (but not the other way around).
 
 Finally, use the *pre_2to3* repository for any work that is specific to the
-Python3 version of PyKE.  Just don't run 2to3 in directly in your working
+Python3 version of PyKE.  Just don't run 2to3 directly in your working
 directory because it will change all of the .py files and we don't want those
 changes committed!  I merge all the changes done in the pyke repository
 into the pre_2to3 repository.
@@ -195,8 +249,8 @@ You can browse these on your hard drive if you'd like.
 
 If you want to regenerate these documents, you'll also need:
 
-* Rest2web_, which requires:
-* Docutils_
+* rest2web_, which requires:
+* docutils_
 
 The sources for the documentation are in ``doc/source``.
 
@@ -214,6 +268,7 @@ This:
 #. Then strips all of the hyperlink references from the \*.txt files.
 
 I've gone ahead and placed the generated html files in mercurial so that
-you can browse the documentation without having to run ``bin/gen_html``.
+you can browse the documentation locally without having to run
+``bin/gen_html``.
 
 

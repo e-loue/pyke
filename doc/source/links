@@ -1,3 +1,4 @@
+.. _2to3: http://docs.python.org/library/2to3.html
 .. _about pyke: about_pyke/index.html
 .. _activated: activate_
 .. _activate: using_pyke.html#setting-up-each-case
@@ -31,6 +32,7 @@
 .. _cooking functions: about_pyke/cooking_functions.html
 .. _copy_reg: http://docs.python.org/library/copy_reg.html
 .. _cut operator: http://en.wikipedia.org/wiki/Cut_%28logic_programming%29
+.. _doctest-tools: http://code.google.com/p/doctest-tools
 .. _Docutils: http://sourceforge.net/projects/docutils
 .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
 .. _engine: `knowledge engine`_
@@ -43,7 +45,7 @@
 .. _fact: knowledge_bases/fact_bases.html#facts
 .. _facts: fact_
 .. _family_relations: examples.html#family-relations
-.. _FAQ: http://pyke.wiki.sourceforge.net/FAQ
+.. _FAQ: http://sourceforge.net/apps/trac/pyke/wiki/FAQ
 .. _fc_premise: pyke_syntax/krb_syntax/fc_rule.html#foreach-clause
 .. _fc_rule: pyke_syntax/krb_syntax/fc_rule.html
 .. _forall: pyke_syntax/krb_syntax/compound_premise.html#forall-premise
@@ -63,7 +65,7 @@
 .. _hg: mercurial_
 .. _home page: index.html
 .. _how to call Pyke: using_pyke.html
-.. _HTMLTemplates: http://py-templates.sourceforge.net/htmltemplate/index.html
+.. _HTMLTemplate: http://py-templates.sourceforge.net/htmltemplate/index.html
 .. _inherit: knowledge_bases/rule_bases.html#rule-base-inheritance
 .. _inherits: inherit_
 .. _.kfb file: pyke_syntax/kfb_syntax.html
@@ -124,7 +126,7 @@
 .. _proving: prove_
 .. _PyCon 2008: http://us.pycon.org/2008/about/
 .. _Pyke: http://groups.google.com/group/pyke
-.. _Pyke project download page: http://sourceforge.net/project/showfiles.php?group_id=207724
+.. _Pyke project download page: http://sourceforge.net/projects/pyke/files/
 .. _pypi: http://pypi.python.org/pypi
 .. _Python: http://www.python.org
 .. _Python egg file: http://peak.telecommunity.com/DevCenter/PythonEggs
@@ -136,7 +138,7 @@
 .. _questions: question_
 .. _regular expression syntax: http://docs.python.org/library/re.html#regular-expression-syntax
 .. _reset: using_pyke.html#setting-up-each-case
-.. _Rest2web: http://sourceforge.net/projects/rest2web
+.. _rest2web: http://sourceforge.net/projects/rest2web
 .. _rule base category: knowledge_bases/rule_bases.html#rule-base-categories
 .. _rule base: knowledge_bases/rule_bases.html
 .. _rule base's: `rule base`_
@@ -159,7 +161,7 @@
 .. _variables: `pattern variable`_
 .. _web_framework: examples.html#web-framework
 .. _when clause: pyke_syntax/krb_syntax/bc_rule.html#when-clause
-.. _wiki: http://pyke.wiki.sourceforge.net/
+.. _wiki: http://sourceforge.net/apps/trac/pyke/wiki
 .. _with clause: pyke_syntax/krb_syntax/bc_rule.html#with-clause
 .. _WSGI: http://www.python.org/dev/peps/pep-0333/
 .. _wxpython: http://www.wxpython.org/
