@@ -2,7 +2,7 @@ Link checks:
 
     In the doc directory:
 
-    $ checklink -sr file:///home/bruce/python/workareas/sf.trunk/doc/html/index.html > checklink.out 2>&1 &
+    $ checklink -sr file:///home/bruce/python/workareas/pyke-hg/r1_working/doc/html/index.html > checklink.out 2>&1 &
     $ tail -f checklink.out
 
     Then check the checklink.out file.

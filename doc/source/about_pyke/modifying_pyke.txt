@@ -49,10 +49,7 @@ Index to This Page
   * `Mercurial Keyword Extension`_
   * `Which Repository Do I Use?`_
 
-* `Other Required Packages`_
-
 * `Running Unit Tests`_
-
 * `Rebuilding the HTML Documentation`_
 
 
@@ -62,7 +59,7 @@ Mercurial Repositories
 With Mercurial_, you clone the entire repository locally on your computer.
 Then you can make changes and commit those changes to your local repository.
 If you think those changes might be interesting to everybody, make your local
-repository (or a clone of it) publically available (either on your own server,
+repository (or a clone of it) publicly available (either on your own server,
 or on one of the `Mercurial Hosting Sites`_) and send me an email.  I will
 pull your changes, examine them, and push them to the master repository on
 sourceforge.
@@ -119,30 +116,33 @@ pre_2to3_r1
   changes made in the pre_2to3_r1 repository into the pre_2to3 repository.
   So changes here only go into the Python3.x version of Pyke.
 
-  Note that this code is maintained in a state just prior to running Python's
-  2to3_ tool on it.  So you can't just run the code here directly.
+  .. warning::
+     This code is maintained in a state just prior to running Python's
+     2to3_ tool on it.  So you can't just run the code here directly.
 
-  The ``run_2to3`` script runs 2to3 on the current copy of the sources.  Do
-  **not** run this in a repository clone that you still want to use to do
-  commits!  Instead, commit all of your changes, then clone the repository and
-  do ``run_2to3`` in the clone.  If anything doesn't work, go back to the first
-  repository to fix it, delete the clone, and repeat the whole process.  This
-  was done to minimize merge conflicts caused by the 2to3 changes.
+     The ``run_2to3`` script runs 2to3 on the current copy of the sources.  Do
+     **not** run this in a repository clone that you still want to use to do
+     commits!  Instead, commit all of your changes, then clone the repository
+     and do ``run_2to3`` in the clone.  If anything doesn't work, go back to
+     the first repository to fix it, delete the clone, and repeat the whole
+     process.  This was done to minimize merge conflicts caused by the 2to3
+     changes.
 
-  The ``run_pre_test`` script will:
+     The ``run_pre_test`` script will:
 
-  * clone the current repository
-  * then in the clone do:
+     * clone the current repository
+     * then in the clone do:
   
-    * ``run_2to3``
-    * ``testpyke`` -3.1
-    * python setup.py -q sdist --formats zip
-    * insert '3.1' after 'pyke' in the name of the source distribution zip
-      file.
+       * ``run_2to3``
+       * ``testpyke`` -3.1
+       * python setup.py -q sdist --formats zip
+       * insert '3.1' after 'pyke' in the name of the source distribution zip
+         file.
   
-  Note that ``run_pre_test`` assumes that you either have the keywording
-  options set in your personal .hgrc file, or have clone hooks in place to
-  copy these into the .hg/hgrc file of all clones within your pyke workarea.
+     ``Run_pre_test`` assumes that you either have the keywording options set
+     in your personal .hgrc file, or have clone hooks in place to copy these
+     into the .hg/hgrc file of all clones within your pyke work area.  See
+     `Mercurial Keyword Extension`_, above.
 
 pre_2to3
   Normally I merge changes from the pyke repository and the pre_2to3_r1
@@ -152,57 +152,18 @@ pre_2to3
   done when those changes are for major new features that only apply to the
   Python3.x version of Pyke.
 
-To clone the development version of the project into a directory called
-*foobar*::
+So, for example, if you wanted to work on the ``release_1`` repository, you
+would::
 
-    $ hg clone http://pyke.hg.sourceforge.net:8000/hgroot/pyke/pyke foobar
+  $ mkdir pyke_repos
+  $ cd pyke_repos
+  $ hg clone -U http://pyke.hg.sourceforge.net:8000/hgroot/pyke/release_1 master
+  $ hg clone master task_1
+  $ cd task_1
 
-Or to clone the latest release 1 branch::
-
-    $ hg clone http://pyke.hg.sourceforge.net:8000/hgroot/pyke/release_1 foobar
-
-Use the *release_1* repository for any work that improves the quality of the
-code (bug fixes, code formatting, comments, documentation) that won't break
-existing programs and can go into the next point release.
-
-Use the *pyke* repository for new features that will go into the next major
-release.  I merge all the changes done in the release_1 repository into the
-pyke repository (but not the other way around).
-
-Finally, use the *pre_2to3* repository for any work that is specific to the
-Python3 version of PyKE.  Just don't run 2to3 directly in your working
-directory because it will change all of the .py files and we don't want those
-changes committed!  I merge all the changes done in the pyke repository
-into the pre_2to3 repository.
-
-
-Other Required Packages
-=======================
-
-No other packages are required to develop, run and distribute an application
-using Pyke.  But there are package requirements to do the following additional
-things:
-
-+--------------------------------+------------------+------------------+
-| If you want to                 | you also need    | minimum version  |
-+================================+==================+==================+
-| run the web_framework example  | HTMLTemplate_    | 1.5              |
-+--------------------------------+------------------+------------------+
-| run the unit tests             | `doctest-tools`_ | 1.0a1            |
-+--------------------------------+------------------+------------------+
-| rebuild the html documentation | rest2web_        | 0.5              |
-+                                +------------------+------------------+
-|                                | docutils_        | 0.5              |
-+--------------------------------+------------------+------------------+
-
-If the docutils package is not part of your standard Python installation,
-there is probably a package for it in the package index for your Linux
-distribution.
-
-All of the other packages can be installed as administrator using
-easy_install_.  For example::
-
-    # easy_install HTMLTemplate
+.. note::
+   This assumes that you've added the `hgrc_keywords`_ file to your ~/.hgrc
+   file.  See `Mercurial Keyword Extension`_, above.
 
 
 Running Unit Tests
@@ -216,11 +177,11 @@ anywhere.
 
 In addition, the top-level directory contains a ``testpyke`` script that will
 delete all of the compiled_krb directories, then run ``testall`` twice.  The
-first run must recompile all of the knowledge base sources (.krb, .kfb and
-.kqb files) into the compiled_krb directories in order to run the tests.  The
-second run reuses the files compiled in the first run.  This makes sure that
-all of the tests run properly whether they have to compile the knowledge base
-sources or not.
+first run must recompile all of the `knowledge base`_ sources (`.krb`_,
+`.kfb`_ and `.kqb`_ files) into the compiled_krb directories in order to run
+the tests.  The second run reuses the files compiled in the first run.  This
+makes sure that all of the tests run properly whether they have to compile the
+knowledge base sources or not.
 
 
 Rebuilding the HTML Documentation
@@ -230,7 +191,7 @@ The ``doc/html`` directory contains all of the documents that you are reading
 now.  These are ready to browse directly from your hard drive if you'd like.
 
 The documentation is generated using the rest2web_ package, which uses
-doctutils_ (see `Other Required Packages`_ for more details):
+docutils_ (see `Other Required Packages`_ for more details).
 
 The sources for the documentation are in ``doc/source``.  Each .txt file there
 is converted into an .html file in the doc/html directory by running::

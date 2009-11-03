@@ -65,7 +65,7 @@
                 <div class="document" id="examples">
 <h1 class="title">Examples</h1>
 <p>Several examples are included to help you become familiar with Pyke.  These
-are all in an <tt class="docutils literal"><span class="pre">examples</span></tt> directory, which forms the top-level Python package
+are all in an <tt class="docutils literal"><span class="pre">examples</span></tt> directory; which forms the top-level Python package
 for importing:</p>
 <pre class="literal-block">
 &gt;&gt;&gt; from examples.towers_of_hanoi import test
@@ -73,13 +73,9 @@ for importing:</p>
 got 1: ((0, 1), (0, 2), (1, 2))
 got 2: ((0, 2), (0, 1), (2, 0), (1, 2), (0, 2))
 </pre>
-<p>Thus the directory containing the <tt class="docutils literal"><span class="pre">examples</span></tt> directory must be on your
-Python path.</p>
-<p>If you did an <a class="reference external" href="http://mercurial.selenic.com/wiki/">hg</a> clone, the entire source directory should already be on
-your Python path in order to import pyke, so you're all set!</p>
-<p>If you used easy_install for Pyke, you'll need to download the pyke_examples
-tar file separately <a class="reference external" href="http://sourceforge.net/project/showfiles.php?group_id=207724">here</a> and then expand the tar file in a directory on your
-Python path.</p>
+<p>Thus the source directory (containing the <tt class="docutils literal"><span class="pre">examples</span></tt> directory) must be on
+your Python path.  This is most easily accomplished by running the examples
+from the source directory.</p>
 <p>Each example is in its own sub-directory and has a README file to get you
 started.  They all have <a class="reference external" href="pyke_syntax/krb_syntax/index.html">.krb files</a> and a Python module to run the example
 that also demonstrates <a class="reference external" href="using_pyke.html">how to call Pyke</a> from your Python program.</p>
@@ -134,7 +130,7 @@ Relational Mapper (ORM).</p>
 <p>The data model used for the requested columns is that tables inherit the
 columns from tables they link to.  So if there is a 1-many relationship
 between tables A and B (1 A row has many B rows), the B table inherits the
-columns from table A through it's link to table A.  The Pyke rules will
+columns from the A table through it's link to table A.  The Pyke rules will
 automatically figure out the table joins for this.</p>
 <p>The program automatically introspects the schema information.  For this
 example, it assumes that <tt class="docutils literal"><span class="pre">id</span></tt> is the primary key for each table, and that
@@ -153,10 +149,10 @@ and is a very real example of generating <a class="reference external" href="log
 <div class="section" id="web-framework">
 <h2>Web_framework</h2>
 <p>This example completes the Python web framework demo by adding rules to
-automatically generate code to render HTML templates from the <a class="reference external" href="http://py-templates.sourceforge.net/htmltemplate/index.html">HTMLTemplates</a>
-package (you can run <tt class="docutils literal"><span class="pre">easy_install</span> <span class="pre">HTMLTemplate</span></tt> to install this package).
-This uses the <a class="reference external" href="examples.html#sqlgen">sqlgen</a> example, above, to generate the SQL statements.</p>
-<p>The HTMLTemplates do not include anything resembling program code in them, so
+automatically generate code to render HTML templates from the <a class="reference external" href="http://py-templates.sourceforge.net/htmltemplate/index.html">HTMLTemplate</a>
+package (you can run <tt class="docutils literal"><span class="pre">easy_install</span> <span class="pre">HTMLTemplate</span></tt> to install the HTMLTemplate
+package).  This uses the <a class="reference external" href="examples.html#sqlgen">sqlgen</a> example, above, to generate the SQL statements.</p>
+<p>An HTMLTemplate does not include anything resembling program code in it, so
 that your graphics designers can completely own the html files without the
 developers having to modify them in any way.</p>
 <p>Note that the code generated here is fully <a class="reference external" href="about_pyke/cooking_functions.html">cooked</a> code, custom built for
@@ -222,7 +218,7 @@ into named repositories called <em>knowledge bases</em>.</p>
 
   <div id="last-modified">
     Page last modified
-    Mon, Oct 19 2009.
+    Mon, Nov 02 2009.
 
   </div>
 

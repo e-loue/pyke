@@ -46,10 +46,10 @@ Index to This Page
 * Licensing_
 * `System Requirements`_
 
-  * `Other required packages`_
+  * `Other Required Packages`_
 
 * Installation_
-* `Examples`_
+* `Run the Examples`_
 * `Viewing the HTML Documentation`_
 * `Repository Directory Structure`_
 
@@ -84,31 +84,34 @@ System Requirements
 Pyke is 100% Python, so it should run on any platform supported by Python.
 So all you'll need is `Python`_ 2.5, 2.6 or 3.1.
 
-Other required packages
+Other Required Packages
 -----------------------
 
 No other packages are required to develop, run and distribute an application
 using Pyke.  But there are package requirements to do the following additional
 things:
 
-+--------------------------------+------------------+------------------+
-| If you want to                 | you also need    | minimum version  |
-+================================+==================+==================+
-| run the web_framework example  | HTMLTemplate_    | 1.5              |
-+--------------------------------+------------------+------------------+
-| run the unit tests             | `doctest-tools`_ | 1.0a1            |
-+--------------------------------+------------------+------------------+
-| rebuild the html documentation | rest2web_        | 0.5              |
-+                                +------------------+------------------+
-|                                | docutils_        | 0.5              |
-+--------------------------------+------------------+------------------+
+.. table::
+   :class: table-offset
+
+   +--------------------------------+------------------+------------------+
+   | If you want to                 | you also need    | minimum version  |
+   +================================+==================+==================+
+   | run the web_framework example  | HTMLTemplate_    | 1.5              |
+   +--------------------------------+------------------+------------------+
+   | run the unit tests             | `doctest-tools`_ | 1.0a1            |
+   +--------------------------------+------------------+------------------+
+   | rebuild the html documentation | rest2web_        | 0.5              |
+   +                                +------------------+------------------+
+   |                                | docutils_        | 0.5              |
+   +--------------------------------+------------------+------------------+
 
 If the docutils package is not part of your standard Python installation,
 there is probably a package for it in the package index for your Linux
 distribution.
 
 All of the other packages can be installed as the administrator using
-easy_install_.  For example:
+easy_install_.  For example::
 
     # easy_install HTMLTemplate
 
@@ -133,8 +136,8 @@ documentation, unit tests, and examples.
 If you want to clone the source code repository to contribute to the project
 development, or to use the latest developer version, read `Modifying Pyke`_.
 
-Examples
-========
+Run the Examples
+================
 
 There are several examples that are contained in the source directory.  Each
 example is in it's own subdirectory under the ``examples`` subdirectory, and
@@ -167,7 +170,8 @@ You'll see the following directories.
     generated the HTML documentation.  See `Rebuilding the HTML Documentation`_.
   - the ``examples`` directory just has a copy of the examples used by the
     .txt files in the ``source`` directory so that the doctests will work on
-    the ``source`` directory.
+    the ``source`` directory.  You should be able to skip this unless you
+    change an example in one of the ``source`` files.
   - ``cheatsheets`` are a collection of text files with notes on various tools
     used by Pyke, and processes used to maintain Pyke.
 

@@ -33,7 +33,7 @@
 .. _copy_reg: http://docs.python.org/library/copy_reg.html
 .. _cut operator: http://en.wikipedia.org/wiki/Cut_%28logic_programming%29
 .. _doctest: http://docs.python.org/library/doctest.html
-.. _doctest-tools: http://code.google.com/p/doctest-tools
+.. _doctest-tools: http://code.google.com/p/doctest-tools/
 .. _Docutils: http://sourceforge.net/projects/docutils
 .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
 .. _engine: `knowledge engine`_
@@ -65,6 +65,7 @@
 .. _goals: goal_
 .. _hg: Mercurial_
 .. _hgrc: http://www.selenic.com/mercurial/hgrc.5.html
+.. _hgrc_keywords: http://pyke.hg.sourceforge.net/hgweb/pyke/release_1/raw-file/tip/hgrc_keywords
 .. _home page: index.html
 .. _how to call Pyke: using_pyke.html
 .. _HTMLTemplate: http://py-templates.sourceforge.net/htmltemplate/index.html
@@ -73,6 +74,7 @@
 .. _Keyword Extension: http://mercurial.selenic.com/wiki/KeywordExtension
 .. _.kfb file: pyke_syntax/kfb_syntax.html
 .. _.kfb files: `.kfb file`_
+.. _.kfb: `.kfb file`_
 .. _knapsack problem: http://en.wikipedia.org/wiki/Knapsack_problem
 .. _knowledge base: knowledge_bases/index.html
 .. _knowledge bases: `knowledge base`_
@@ -80,6 +82,7 @@
 .. _knowledge engine: `knowledge_engine.engine`_
 .. _.kqb file: pyke_syntax/kqb_syntax.html
 .. _.kqb files: `.kqb file`_
+.. _.kqb: `.kqb file`_
 .. _.krb file: pyke_syntax/krb_syntax/index.html
 .. _.krb files: `.krb file`_
 .. _.krb: `.krb file`_
@@ -93,9 +96,11 @@
 .. _Mercurial: http://mercurial.selenic.com/wiki/
 .. _Mercurial hook: http://www.selenic.com/mercurial/hgrc.5.html#hooks
 .. _Mercurial Hosting Sites: http://mercurial.selenic.com/wiki/MercurialHosting
+.. _Modifying Pyke: about_pyke/modifying_pyke.html
 .. _MySQL: http://www.mysql.com/
 .. _notany: pyke_syntax/krb_syntax/compound_premise.html#notany-premise
 .. _notany premise: notany_
+.. _Other Required Packages: about_pyke/installing_pyke.html#other-required-packages
 .. _package: http://www.python.org/doc/essays/packages.html
 .. _pathological question: logic_programming/pattern_matching/matching_patterns.html#pathological-question
 .. _pattern: `pattern lp`_

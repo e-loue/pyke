@@ -239,13 +239,12 @@ exit status.</p>
 &gt;&gt;&gt; run_command('command', ('echo', 'hi', 'mom'))
 ('hi mom',)
 &gt;&gt;&gt; run_command('command', ('ls',))   # doctest: +NORMALIZE_WHITESPACE
-('ast_syntax', 'cheatsheets', 'examples', 'html', '__init__.py',
- '__init__.pyc', 'PyKE.mm', 'r2w.ini', 'source', 'syntax', 'testdocs',
- 'todo')
-&gt;&gt;&gt; run_command('command', ('ls', '-l', 'r2w.ini')) # doctest: +ELLIPSIS
-('-rw-r--r-- 1 ... r2w.ini',)
+('fact_bases.txt', 'index.txt', 'links', 'question_bases.txt',
+ 'rule_bases.txt', 'special.txt')
+&gt;&gt;&gt; run_command('command', ('ls', '-l', 'links')) # doctest: +ELLIPSIS
+('-rw-r--r-- 1 ... links',)
 &gt;&gt;&gt; run_command('command', ('tail', '-n', '5', 'template.txt', '-'),
-...             'source',   # cwd
+...             '..',   # cwd (doc/source)
 ...             'stdin: line 1\nstdin: line 2\nstdin: line 3\n')
 ...     # doctest: +NORMALIZE_WHITESPACE
 ('==&gt; template.txt &lt;==',
@@ -280,10 +279,10 @@ and stderr are single strings (with embedded newlines).</p>
 (0, 'hi mom\n', '')
 &gt;&gt;&gt; run_command('general_command', ('cat', 'foobar'))
 (1, '', 'cat: foobar: No such file or directory\n')
-&gt;&gt;&gt; run_command('general_command', ('tail', '-n', '5', 'r2w.ini', 'foobar'))
+&gt;&gt;&gt; run_command('general_command', ('tail', '-n', '5', '../../r2w.ini', 'foobar'))
 ...     # doctest: +NORMALIZE_WHITESPACE
 (1,
- &quot;==&gt; r2w.ini &lt;==\ntarget_directory = 'html'\nmacros =
+ &quot;==&gt; ../../r2w.ini &lt;==\ntarget_directory = 'html'\nmacros =
      ''\n\n[uservalues]\nversion = '0.2'\n&quot;,
  &quot;tail: cannot open `foobar' for reading: No such file or directory\n&quot;)
 </pre>
@@ -328,7 +327,7 @@ are compiled and loaded into your Python program.</p>
 
   <div id="last-modified">
     Page last modified
-    Tue, Jan 13 2009.
+    Sat, Oct 24 2009.
 
   </div>
 
