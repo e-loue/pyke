@@ -1,4 +1,4 @@
-# CanNotProve1.tst
+# CanNotProve2.tst
 
 We're going to create a zipped egg file with a compiled CanNotProve example in
 it and see if pyke can load its compiled files from the zip file.
