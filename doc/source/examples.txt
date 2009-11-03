@@ -54,7 +54,7 @@ Thus the source directory (containing the ``examples`` directory) must be on
 your Python path.  This is most easily accomplished by running the examples
 from the source directory.
 
-Each example is in its own sub-directory and has a README file to get you
+Each example is in its own sub-directory and has a README.txt file to get you
 started.  They all have `.krb files`_ and a Python module to run the example
 that also demonstrates `how to call Pyke`_ from your Python program.
 

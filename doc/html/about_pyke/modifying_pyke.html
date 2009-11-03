@@ -81,6 +81,8 @@
 <li><a class="reference internal" href="#which-repository-do-i-use">Which Repository Do I Use?</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#compiling-ply-tables-files">Compiling PLY Tables Files</a></li>
+<li><a class="reference internal" href="#compiling-the-compiler-krb-file">Compiling the Compiler.krb File</a></li>
 <li><a class="reference external" href="modifying_pyke.html#running-unit-tests">Running Unit Tests</a></li>
 <li><a class="reference external" href="modifying_pyke.html#rebuilding-the-html-documentation">Rebuilding the HTML Documentation</a></li>
 </ul>
@@ -90,7 +92,7 @@
 <p>With <a class="reference external" href="http://mercurial.selenic.com/wiki/">Mercurial</a>, you clone the entire repository locally on your computer.
 Then you can make changes and commit those changes to your local repository.
 If you think those changes might be interesting to everybody, make your local
-repository (or a clone of it) publically available (either on your own server,
+repository (or a clone of it) publicly available (either on your own server,
 or on one of the <a class="reference external" href="http://mercurial.selenic.com/wiki/MercurialHosting">Mercurial Hosting Sites</a>) and send me an email.  I will
 pull your changes, examine them, and push them to the master repository on
 sourceforge.</p>
@@ -161,7 +163,7 @@ file.</li>
 </ul>
 <p class="last"><tt class="docutils literal"><span class="pre">Run_pre_test</span></tt> assumes that you either have the keywording options set
 in your personal .hgrc file, or have clone hooks in place to copy these
-into the .hg/hgrc file of all clones within your pyke workarea.  See
+into the .hg/hgrc file of all clones within your pyke work area.  See
 <a class="reference internal" href="#mercurial-keyword-extension">Mercurial Keyword Extension</a>, above.</p>
 </div>
 </dd>
@@ -189,9 +191,71 @@ file.  See <a class="reference internal" href="#mercurial-keyword-extension">Mer
 </div>
 </div>
 </div>
+<div class="section" id="compiling-ply-tables-files">
+<h2>Compiling PLY Tables Files</h2>
+<p>Pyke uses <a class="reference external" href="http://www.dabeaz.com/ply/">PLY</a> (Python Lex and Yacc) as it's parser generator.  PLY compiles
+the Pyke grammars into a set of three tables files:</p>
+<ul class="simple">
+<li>kfbparser_tables.py (from kfbparser.py)</li>
+<li>krbparser_tables.py (from krbparser.py)</li>
+<li>scanner_tables.py (from scanner.py)</li>
+</ul>
+<p>A copy of PLY is included in the source directory (pyke/krb_compiler/ply) so
+that there there can be no version mismatch between the version of PLY used to
+compile these tables files and the version of PLY installed on your machine.</p>
+<p>To regenerate these tables files, at the top-level source directory:</p>
+<pre class="literal-block">
+$ python
+&gt;&gt;&gt; from pyke.krb_compiler import kfbparser, krbparser, scanner
+&gt;&gt;&gt; scanner.init(scanner, 0, True)
+&gt;&gt;&gt; krbparser.init(krbparser, True)
+&gt;&gt;&gt; kfbparser.init(kfbparser, True)
+</pre>
+<p>or just run the &quot;testall&quot; program from the doctest-tools package:</p>
+<pre class="literal-block">
+$ cd pyke/krb_compiler
+$ testall
+</pre>
+</div>
+<div class="section" id="compiling-the-compiler-krb-file">
+<h2>Compiling the Compiler.krb File</h2>
+<p>Pyke uses itself to compile your <a class="reference external" href="../knowledge_bases/index.html">knowledge base</a> sources (<a class="reference external" href="../pyke_syntax/kfb_syntax.html">.kfb</a>, <a class="reference external" href="../pyke_syntax/kqb_syntax.html">.kqb</a>
+and <a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb</a> files) into Python source files.</p>
+<p>The knowledge base file that Pyke uses for this is
+pyke/krb_compiler/compiler.krb.  This gets compiled into compiler_bc.py, which
+is stored in the source code repository.</p>
+<!-- this code is hidden and will create the pyke/krb_compiler/compiled_krb
+directory, if needed, for the code section following:
+>>> import os, os.path
+>>> os.chdir('../../..')
+>>> root='pyke/krb_compiler'
+>>> dir=root + '/compiled_krb'
+>>> os.path.isdir(root)
+True
+>>> if not os.path.isdir(dir): os.mkdir(dir) -->
+<p>To recompile the compiler_bc.py file, from the top-level source directory:</p>
+<pre class="literal-block">
+$ mkdir pyke/krb_compiler/compiled_krb
+$ python
+&gt;&gt;&gt; from pyke import krb_compiler
+&gt;&gt;&gt; krb_compiler.compile_krb('compiler', 'pyke.krb_compiler.compiled_krb',
+...                          'pyke/krb_compiler/compiled_krb',
+...                          'pyke/krb_compiler/compiler.krb')
+['compiler_bc.py']
+
+$ mv pyke/krb_compiler/compiled_krb/compiler_bc.py pyke/krb_compiler
+</pre>
+<!-- this code is also hidden and deletes the
+pyke/krb_compiler/compiled_krb/compiler_bc.py file and
+pyke/krb_compiler/compiled_krb directory created above.
+>>> os.path.isdir(root)
+True
+>>> os.remove(dir + '/compiler_bc.py')
+>>> os.rmdir(dir) -->
+</div>
 <div class="section" id="running-unit-tests">
 <h2>Running Unit Tests</h2>
-<p>The <a class="reference external" href="http://code.google.com/p/doctest-tools">doctest-tools</a> package is required to run the unit tests (see
+<p>The <a class="reference external" href="http://code.google.com/p/doctest-tools/">doctest-tools</a> package is required to run the unit tests (see
 <a class="reference external" href="installing_pyke.html#other-required-packages">Other Required Packages</a> for more details).</p>
 <p>The <tt class="docutils literal"><span class="pre">testall</span></tt> and <tt class="docutils literal"><span class="pre">testdoc</span></tt> scripts from <tt class="docutils literal"><span class="pre">doctest-tools</span></tt> can be run
 anywhere.</p>
@@ -214,14 +278,16 @@ is converted into an .html file in the doc/html directory by running:</p>
 <pre class="literal-block">
 $ bin/gen_html
 </pre>
-<p>This:</p>
+<p>This takes about 9 seconds.  It:</p>
 <ol class="arabic simple">
 <li>Temporarily appends hyperlink references onto all of the *.txt files.</li>
 <li>Runs <tt class="docutils literal"><span class="pre">r2w</span></tt> to regenerate the files in <tt class="docutils literal"><span class="pre">doc/html</span></tt><ul>
 <li>except for those in <tt class="docutils literal"><span class="pre">doc/html/stylesheets</span></tt> and <tt class="docutils literal"><span class="pre">doc/html/images</span></tt>.</li>
 </ul>
 </li>
-<li>Then strips all of the hyperlink references from the *.txt files.</li>
+<li>Strips all of the hyperlink references from the *.txt files.</li>
+<li>Creates a new sitemap.xml file with all of the dates that the files were
+last modified.</li>
 </ol>
 <div class="note">
 <p class="first admonition-title">Note</p>
@@ -232,6 +298,12 @@ Extension</a>.  See <a class="reference internal" href="#mercurial-keyword-exten
 so that you can browse the documentation locally without having to run
 <tt class="docutils literal"><span class="pre">bin/gen_html</span></tt>.  So you only need these procedures if you change the
 documentation (i.e., change the .txt files in doc/source).</p>
+<p>To test all of the code examples in the documents, use the <tt class="docutils literal"><span class="pre">testall</span></tt>
+command from the <a class="reference external" href="http://code.google.com/p/doctest-tools/">doctest-tools</a> package:</p>
+<pre class="literal-block">
+$ cd doc
+$ testall
+</pre>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>
@@ -274,7 +346,7 @@ need run the units tests, and rebuild the html documentation.</p>
 
   <div id="last-modified">
     Page last modified
-    Mon, Nov 02 2009.
+    Tue, Nov 03 2009.
 
   </div>
 

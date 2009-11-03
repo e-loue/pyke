@@ -85,7 +85,7 @@ class target_pkg(object):
         instance directly, reset is called by
         knowledge_engine.engine._init_path.
         '''
-        self.package_name = os.path.splitext(module_name)[0]
+        self.package_name = module_name.rsplit('.', 1)[0]
         if filename.endswith('.py'):
             self.filename = filename
         else:

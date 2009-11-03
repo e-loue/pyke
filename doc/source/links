@@ -119,7 +119,7 @@
 .. _plan: logic_programming/plans.html
 .. _plan_spec: pyke_syntax/krb_syntax/bc_rule.html#plan-spec
 .. _plans: plan_
-.. _PLY 2.5: http://www.dabeaz.com/ply/
+.. _PLY: http://www.dabeaz.com/ply/
 .. _premise: `premise lp`_
 .. _premise lp: logic_programming/rules/index.html#premises-and-conclusions
 .. _premise syntax: pyke_syntax/krb_syntax/bc_rule.html#when-clause

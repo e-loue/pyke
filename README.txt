@@ -21,8 +21,6 @@ The complete documentation is at:
 A copy of the html documentation is also included in the "doc/html" directory
 within the source distribution.
 
-See the end of this file for how to regenerate the html files.
-
 
 REQUIREMENTS:
 
@@ -50,6 +48,8 @@ TO INSTALL:
     3. Run "python setup.py build"
     4. As administrator, run: "python setup.py install"
 
+See http://pyke.sourceforge.net/about_pyke/installing_pyke.html for more
+information.
 
 SOURCE DISTRIBUTION:
 
@@ -59,7 +59,7 @@ source and html), unit tests, and examples.
 EXAMPLES:
 
 Each example is in a separate subdirectory under the "examples" directory.
-Each example has a README file that explains how to run it.
+Each example has a README.txt file that explains how to run it.
 
 The family_relations example is a good place to start.  It shows several
 solutions to the same problem.  It also has an example of a few rule
@@ -75,15 +75,15 @@ results as a dictionary.
 
 The web_framework example uses the sqlgen example.  This demonstrates the use
 of multiple rule bases.  The web_framework is a WSGI application that uses the
-HTMLTemplate package (install this with "sudo easy_install HTMLTemplate", be
-sure to get version 1.5 or later).  It gets the column names from the
-HTMLTemplate and feeds those to the sqlgen example to generate a plan to
-retrieve the data.  It then builds a plan to populate the template and return
-the finished HTML document.  It also caches the plans so that they don't have
-to be re-generated for each request.  This makes it run a full 10 times faster
-than the same example done in TurboGears 2!  The example includes a wsgiref
-simple_server setup to run it as an http server so that you can access it
-through your browser.
+HTMLTemplate package (install this as administrator with
+"easy_install HTMLTemplate" -- be sure to get version 1.5 or later).  It gets
+the column names from the HTMLTemplate and feeds those to the sqlgen example
+to generate a plan to retrieve the data.  It then builds a plan to populate
+the template and return the finished HTML document.  It also caches the plans
+so that they don't have to be re-generated for each request.  This makes it
+run a full 10 times faster than the same example done in TurboGears 2!  The
+example includes a wsgiref simple_server setup to run it as an http server
+so that you can access it through your browser.
 
 The learn_pyke example is an incomplete attempt at a computer based training
 program.  It only deals with the topic of pattern matching.  It is left here
@@ -92,6 +92,7 @@ as an example of using question bases.
 The findall, forall, knapsack, notany and towers_of_hanoi examples are each
 very small.
 
+See http://pyke.sourceforge.net/examples.html for more information.
 
 
 RUNNING DOCTESTS:
@@ -111,71 +112,8 @@ the previous run.  If the "testpyke" program is not on your path, run it as:
     $ ./testpyke
 
 
-WORKING WITH THE SOURCE CODE REPOSITORY:
+WORKING ON PYKE:
 
-If you want to run Python3.1, read this:
-
-    http://pyke.hg.sourceforge.net/hgweb/pyke/pre_2to3/file/8788b112f5f6/README-3.x
-
-COMPILING kfbparser_tables.py, krbparser_tables.py and scanner_tables.py:
-
-    $ python
-    >>> from pyke.krb_compiler import kfbparser, krbparser, scanner
-    >>> scanner.init(scanner, 0, True)
-    >>> krbparser.init(krbparser, True)
-    >>> kfbparser.init(kfbparser, True)
-
-    or just run the "testall" program from the doctest-tools package:
-
-    $ cd pyke/krb_compiler
-    $ testall
-
-
-COMPILING THE COMPILER.KRB FILE:
-
-In pyke/krb_compiler:
-
-    $ PYTHONPATH=../.. python
-    >>> from pyke import krb_compiler
-    >>> krb_compiler.compile_krb('compiler', 'compiled_krb', 'compiled_krb', 'compiler.krb')
-    $ mv compiled_krb/compiler_bc.py .
-
-COMPILING THE DOCUMENTATION:
-
-To compile the documentation into html, you'll need docutils and rest2web.
-If you're running linux, your distro may have packages for these already.
-Or you can:
-
-    $ sudo easy_install rest2web
-
-I used version 0.4.1 of docutils and 0.5.0 of rest2web.  I don't know if
-earlier versions work OK or not.
-
-To check your versions:
-
-    $ python
-    >>> import docutils
-    >>> docutils.__version__
-    >>> import rest2web
-    >>> rest2web.__version__
-
-If your linux distro doesn't have packages for these, and you don't want to
-use easy_install, you can get them at:
-
-    http://sourceforge.net/projects/docutils
-    http://sourceforge.net/projects/rest2web
-
-To regenerate the html:
-
-    $ cd doc/source
-    $ bin/gen_html
-
-This regenerates everything from doc/source into doc/html.  It takes about
-9 seconds to run.
-
-If you want to run doctest on all of the *.txt files in doc/source, use the
-"testall" program from the doctest-tools package:
-
-    $ cd doc
-    $ testall
+See http://pyke.sourceforge.net/about_pyke/modifying_pyke.html for information
+about doing development work on Pyke.  Contributions of any kind are welcome!
 

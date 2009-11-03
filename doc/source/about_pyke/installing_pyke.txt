@@ -103,7 +103,7 @@ things:
    +--------------------------------+------------------+------------------+
    | rebuild the html documentation | rest2web_        | 0.5              |
    +                                +------------------+------------------+
-   |                                | docutils_        | 0.5              |
+   |                                | docutils_        | 0.4.1            |
    +--------------------------------+------------------+------------------+
 
 If the docutils package is not part of your standard Python installation,
@@ -141,7 +141,7 @@ Run the Examples
 
 There are several examples that are contained in the source directory.  Each
 example is in it's own subdirectory under the ``examples`` subdirectory, and
-each has it's own README file that explains how to run it.
+each has it's own README.txt file that explains how to run it.
 
 The web_framework example requires the HTMLTemplate_ package, version 1.5 or
 later.  This can be installed as administrator with easy_install::
@@ -178,7 +178,7 @@ You'll see the following directories.
 * ``examples``
 
   - There are several examples.  Start with *family_relations*.  Look at the
-    ``README`` file for each example to see how to run it.  See also,
+    ``README.txt`` file for each example to see how to run it.  See also,
     Examples_.
 
 * ``experimental``

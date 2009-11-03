@@ -49,6 +49,8 @@ Index to This Page
   * `Mercurial Keyword Extension`_
   * `Which Repository Do I Use?`_
 
+* `Compiling PLY Tables Files`_
+* `Compiling the Compiler.krb File`_
 * `Running Unit Tests`_
 * `Rebuilding the HTML Documentation`_
 
@@ -166,6 +168,74 @@ would::
    file.  See `Mercurial Keyword Extension`_, above.
 
 
+Compiling PLY Tables Files
+==========================
+
+Pyke uses PLY_ (Python Lex and Yacc) as it's parser generator.  PLY compiles
+the Pyke grammars into a set of three tables files:
+
+- kfbparser_tables.py (from kfbparser.py)
+- krbparser_tables.py (from krbparser.py)
+- scanner_tables.py (from scanner.py)
+
+A copy of PLY is included in the source directory (pyke/krb_compiler/ply) so
+that there there can be no version mismatch between the version of PLY used to
+compile these tables files and the version of PLY installed on your machine.
+
+To regenerate these tables files, at the top-level source directory::
+
+    $ python
+    >>> from pyke.krb_compiler import kfbparser, krbparser, scanner
+    >>> scanner.init(scanner, 0, True)
+    >>> krbparser.init(krbparser, True)
+    >>> kfbparser.init(kfbparser, True)
+
+or just run the "testall" program from the doctest-tools package::
+
+    $ cd pyke/krb_compiler
+    $ testall
+
+
+Compiling the Compiler.krb File
+===============================
+
+Pyke uses itself to compile your `knowledge base`_ sources (`.kfb`_, `.kqb`_
+and `.krb`_ files) into Python source files.
+
+The knowledge base file that Pyke uses for this is
+pyke/krb_compiler/compiler.krb.  This gets compiled into compiler_bc.py, which
+is stored in the source code repository.
+
+.. this code is hidden and will create the pyke/krb_compiler/compiled_krb
+   directory, if needed, for the code section following:
+   >>> import os, os.path
+   >>> os.chdir('../../..')
+   >>> root='pyke/krb_compiler'
+   >>> dir=root + '/compiled_krb'
+   >>> os.path.isdir(root)
+   True
+   >>> if not os.path.isdir(dir): os.mkdir(dir)
+
+To recompile the compiler_bc.py file, from the top-level source directory::
+
+    $ mkdir pyke/krb_compiler/compiled_krb
+    $ python
+    >>> from pyke import krb_compiler
+    >>> krb_compiler.compile_krb('compiler', 'pyke.krb_compiler.compiled_krb',
+    ...                          'pyke/krb_compiler/compiled_krb',
+    ...                          'pyke/krb_compiler/compiler.krb')
+    ['compiler_bc.py']
+
+    $ mv pyke/krb_compiler/compiled_krb/compiler_bc.py pyke/krb_compiler
+
+.. this code is also hidden and deletes the
+   pyke/krb_compiler/compiled_krb/compiler_bc.py file and
+   pyke/krb_compiler/compiled_krb directory created above.
+   >>> os.path.isdir(root)
+   True
+   >>> os.remove(dir + '/compiler_bc.py')
+   >>> os.rmdir(dir)
+
 Running Unit Tests
 ==================
 
@@ -198,14 +268,16 @@ is converted into an .html file in the doc/html directory by running::
 
     $ bin/gen_html
 
-This:
+This takes about 9 seconds.  It:
 
 #. Temporarily appends hyperlink references onto all of the \*.txt files.
 #. Runs ``r2w`` to regenerate the files in ``doc/html``
 
    - except for those in ``doc/html/stylesheets`` and ``doc/html/images``.
 
-#. Then strips all of the hyperlink references from the \*.txt files.
+#. Strips all of the hyperlink references from the \*.txt files.
+#. Creates a new sitemap.xml file with all of the dates that the files were
+   last modified.
 
 .. note::
    This process uses the date information expanded by the Mercurial `Keyword
@@ -215,5 +287,11 @@ I've gone ahead and placed the generated html files in the source repository
 so that you can browse the documentation locally without having to run
 ``bin/gen_html``.  So you only need these procedures if you change the
 documentation (i.e., change the .txt files in doc/source).
+
+To test all of the code examples in the documents, use the ``testall``
+command from the `doctest-tools`_ package::
+
+    $ cd doc
+    $ testall
 
 
