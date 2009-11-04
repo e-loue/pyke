@@ -40,10 +40,16 @@ UPDATE RELEASE FILES ON SOURCEFORGE:
 
     In the browser go to: Project Admin -> File Manager
 
+    Go into the release directory
+
     left click on RELEASE_NOTES-1.0.txt
     check the "Release Note" checkbox
     click Save
     left click on pyke-1.0.2.tar.gz
+    set the "Release Notes for this file" (leave the "Label" blank)
+    click "Select All" under Platform
+    click Save
+    left click on pyke3-1.0.2.tar.gz
     set the "Release Notes for this file" (leave the "Label" blank)
     click Save
 
@@ -69,6 +75,7 @@ CREATE NEWS ANNOUNCEMENTS
 TO TEST:
 
     $ cd ~/python
+    $ rm -rf pyketest
     $ virtualenv --no-site-packages pyketest
     $ cd pyketest
     $ bash
