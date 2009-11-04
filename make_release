@@ -80,7 +80,7 @@ do_fetch() {
 }
 
 echo "*************************************************************************"
-echo "Rebuilding compiler_bc.py"
+echo "                      Rebuilding compiler_bc.py"
 echo "*************************************************************************"
 
 dir=pyke/krb_compiler/compiler_krb
@@ -99,7 +99,13 @@ krb_compiler.compile_krb('compiler', 'pyke.krb_compiler.compiled_krb',
 mv pyke/krb_compiler/compiled_krb/compiler_bc.py pyke/krb_compiler
 
 echo "*************************************************************************"
-echo "Committing release documentation"
+echo "                            Running testpyke"
+echo "*************************************************************************"
+
+./testpyke
+
+echo "*************************************************************************"
+echo "                    Committing release documentation"
 echo "*************************************************************************"
 
 do_commit -m "Release documentation for $release_number"
@@ -107,7 +113,7 @@ do_commit -m "Release documentation for $release_number"
 check_status                # there shouldn't be any uncommitted files!
 
 echo "*************************************************************************"
-echo "Regenerating HTML documentation"
+echo "                   Regenerating HTML documentation"
 echo "*************************************************************************"
 
 cd doc/source
@@ -117,7 +123,7 @@ cd ../..
 do_commit -Am "Regenerated HTML documentation for $release_number"
 
 echo "*************************************************************************"
-echo "Fetching from sourceforge"
+echo "                      Fetching from sourceforge"
 echo "*************************************************************************"
 
 cd "../$RELEASE_1"
@@ -130,7 +136,7 @@ then
 fi
 
 echo "*************************************************************************"
-echo "Merging into $PYKE"
+echo "                        Merging into $PYKE"
 echo "*************************************************************************"
 
 cd "../$PYKE"
@@ -147,7 +153,7 @@ cd ..
 rm -rf "$PYKE"_temp
 
 echo "*************************************************************************"
-echo "Merging into $PRE_2TO3_R1"
+echo "                      Merging into $PRE_2TO3_R1"
 echo "*************************************************************************"
 
 cd "$PRE_2TO3_R1"
@@ -168,7 +174,7 @@ cd ..
 rm -rf "$PRE_2TO3_R1"_temp
 
 echo "*************************************************************************"
-echo "Merging into $PRE_2TO3"
+echo "                       Merging into $PRE_2TO3"
 echo "*************************************************************************"
 
 cd "$PRE_2TO3"
@@ -189,7 +195,7 @@ cd ..
 rm -rf "$PRE_2TO3"_temp
 
 echo "*************************************************************************"
-echo "Building release files into dist directory"
+echo "             Building release files into dist directory"
 echo "*************************************************************************"
 
 cd "$start_repo"
@@ -200,7 +206,7 @@ rm -rf ../"$PRE_2TO3_R1"_temp_test
 cp RELEASE_NOTES-1.0.txt dist
 
 echo "*************************************************************************"
-echo "Tagging release $release_number"
+echo "                  Tagging release $release_number"
 echo "*************************************************************************"
 
 hg tag "$release_number"
@@ -213,7 +219,7 @@ exit
 
 
 echo "*************************************************************************"
-echo "Pushing sources to sourceforge"
+echo "                   Pushing sources to sourceforge"
 echo "*************************************************************************"
 
 cd ../"$RELEASE_1"
@@ -226,7 +232,7 @@ cd ../"$PRE_2TO3"
 hg push
 
 echo "*************************************************************************"
-echo "Copying release files to sourceforge"
+echo "                Copying release files to sourceforge"
 echo "*************************************************************************"
 
 cd dist
