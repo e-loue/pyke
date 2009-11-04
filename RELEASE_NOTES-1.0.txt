@@ -1,3 +1,58 @@
+1.0.4 RELEASE NOTES Nov 4, 2009
+===============================
+
+This release has one bug fix in it.  The big new things are:
+
+1. The release packaging and installation have been redone.  There is now only
+   one source package.  This includes the HTML documentation and examples.
+   Use the standard "python setup.py install" to install it.
+
+2. There is now a separate Pyke source zip file for Python 3.
+
+Please report bugs to http://sourceforge.net/projects/pyke to:
+
+    Support => Bugs (under Project Tracker)
+
+
+INCOMPATIBILITIES WITH 1.0.3 RELEASE:
+
+    - none.  But Pyke will want to recompile your knowledge base (.krb, .kfb,
+      .kqb) files when you install this release (as usual).  This release
+      introduces a new compiler_version to eliminate doing this when nothing
+      in the compile process has changed in the release.
+
+
+FEATURE ENHANCEMENTS:
+
+    - Changed the release files from tarball to zip format to make it easier
+      for Windows users.
+    - Eliminated the separate tarballs for the HTML documentation and
+      examples.  These are now included in the source zip file.
+    - Eliminated the dependency on easy_install (setuptools) for installation.
+      You can still use easy_install, but I no longer release separate egg
+      files.  Use the source zip file instead.
+    - Added a separate source zip file for the version of Pyke that runs on
+      Python 3.
+    - Changed the unit test harness to use doctest-tools (see
+      http://code.google.com/p/doctest-tools/).  Now the top-level test script
+      is called "testpyke" (was "testall").
+    - Combined RELEASE_NOTES for separate releases into one file.  (Was
+      separate files for each release).
+    - Added a .txt suffix to all README files.
+    - Renamed "copyright_license" to "LICENSE".
+    - Added "About Pyke" -> "Modifying Pyke" page to HTML documentation.
+    - Added a separate compiler_version to avoid unnecessarily recompiling the
+      knowledge bases (.krb, .kfb, .kqb files) when a new Pyke release is
+      installed with no compiler changes in that release.
+
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug #2881969: "copyright_license" missing from 1.0.3 tarball
+
+
 1.0.3 RELEASE NOTES Oct 19, 2009
 ================================
 

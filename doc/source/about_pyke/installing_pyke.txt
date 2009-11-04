@@ -121,7 +121,7 @@ Installation
 
 The source code for the latest release can be found on the `Pyke project
 download page`_ as ``pyke-<release>.zip`` (for Python2) and
-``pyke3.1-<release>.zip`` (for Python3).  After unzipping these, go into the
+``pyke3-<release>.zip`` (for Python3).  After unzipping these, go into the
 directory and run::
 
     $ python setup.py build

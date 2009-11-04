@@ -1,0 +1,234 @@
+#!/bin/bash
+
+# make_release release_number
+
+usage() {
+    echo "usage: make_release release_number" >&2
+    exit 2
+}
+
+[ $# -eq 1 ] || usage
+
+set -e
+
+RELEASE_1=release_1
+PYKE=pyke
+PRE_2TO3_R1=pre_2to3_r1
+PRE_2TO3=pre_2to3
+
+TMPFILE=/tmp/make_release.$$
+
+release_number="$1"
+
+start_repo=`pwd`
+
+# conditional commit -- only if "hg status" reports changes!
+#   all args passed to "hg commit"
+do_commit() {
+    hg status > $TMPFILE
+    if [ -s $TMPFILE ]
+    then
+        #echo hg commit "$@"
+        hg commit "$@"
+    fi
+    rm -f $TMPFILE
+}
+
+# Raise error if "hg status" reports any changes!
+#   no args
+check_status() {
+    hg status > $TMPFILE
+    if [ -s $TMPFILE ]
+    then
+        echo "ERROR: Uncommitted files:" >&2
+        cat $TMPFILE >&2
+        rm -f $TMPFILE
+        return 1
+    fi
+    rm -f $TMPFILE
+}
+
+# Raise error if "hg heads" reports multiple heads!
+#   optional -q arg to nix the error message to stderr
+check_heads() {
+    hg heads --template '{desc|firstline}\n' > $TMPFILE
+    if [ `wc -l $TMPFILE` -gt 1 ]
+    then
+        if [ x"$1" != x-q ]
+        then
+            echo "ERROR: Multiple Heads:" >&2
+            cat $TMPFILE >&2
+        fi
+        rm -f $TMPFILE
+        return 1
+    fi
+    rm -f $TMPFILE
+}
+
+# Run "hg fetch" and return error if no merge/commit done
+#   1 arg, passed to "hg pull -u"
+do_fetch() {
+    hg pull -u "$1"
+    if check_heads -q
+    then
+        hg merge
+        check_heads
+        hg commit -m "Automated merge with $1"
+    else
+        return 1
+    fi
+}
+
+echo "*************************************************************************"
+echo "Rebuilding compiler_bc.py"
+echo "*************************************************************************"
+
+dir=pyke/krb_compiler/compiler_krb
+if [ ! -d "$dir" ]
+then
+    mkdir "$dir"
+fi
+
+python <<!
+from pyke import krb_compiler
+
+krb_compiler.compile_krb('compiler', 'pyke.krb_compiler.compiled_krb',
+                         'pyke/krb_compiler/compiled_krb',
+                         'pyke/krb_compiiler/compiler.krb')
+!
+mv pyke/krb_compiler/compiled_krb/compiler_bc.py pyke/krb_compiler
+
+echo "*************************************************************************"
+echo "Committing release documentation"
+echo "*************************************************************************"
+
+do_commit -m "Release documentation for $release_number"
+
+check_status                # there shouldn't be any uncommitted files!
+
+echo "*************************************************************************"
+echo "Regenerating HTML documentation"
+echo "*************************************************************************"
+
+cd doc/source
+bin/gen_html
+cd ../..
+
+do_commit -Am "Regenerated HTML documentation for $release_number"
+
+echo "*************************************************************************"
+echo "Fetching from sourceforge"
+echo "*************************************************************************"
+
+cd "../$RELEASE_1"
+hg pull
+cd "$start_repo"
+
+if do_fetch ../"$RELEASE_1"
+then
+    ./testpyke
+fi
+
+echo "*************************************************************************"
+echo "Merging into $PYKE"
+echo "*************************************************************************"
+
+cd "../$PYKE"
+hg pull
+cd ..
+rm -rf "$PYKE"_temp
+hg clone -U "$PYKE" "$PYKE"_temp
+cd "$PYKE"_temp
+hg update
+hg fetch "$start_repo"
+./testpyke
+hg push                         # back to $PYKE
+cd ..
+rm -rf "$PYKE"_temp
+
+echo "*************************************************************************"
+echo "Merging into $PRE_2TO3_R1"
+echo "*************************************************************************"
+
+cd "$PRE_2TO3_R1"
+hg pull
+cd ..
+rm -rf "$PRE_2TO3_R1"_temp
+hg clone -U "$PRE_2TO3_R1" "$PRE_2TO3_R1"_temp
+cd "$PRE_2TO3_R1"_temp
+hg update
+hg fetch "$start_repo"
+cd doc/source
+bin/gen_html
+cd ../..
+do_commit -Am "Regenerated 3.1 HTML documenation for $release_number"
+./run_pre_test
+hg push                         # back to $PRE_2TO3_R1
+cd ..
+rm -rf "$PRE_2TO3_R1"_temp
+
+echo "*************************************************************************"
+echo "Merging into $PRE_2TO3"
+echo "*************************************************************************"
+
+cd "$PRE_2TO3"
+hg pull
+cd ..
+rm -rf "$PRE_2TO3"_temp
+hg clone -U "$PRE_2TO3" "$PRE_2TO3"_temp
+cd "$PRE_2TO3"_temp
+hg update
+
+# do this first to avoid dealing with the $PRE_2TO3_R1 merge conflicts twice!
+hg fetch ../"$PRE_2TO3_R1"
+
+hg fetch ../"$PYKE"
+
+hg push                         # back to $PRE_2TO3
+cd ..
+rm -rf "$PRE_2TO3"_temp
+
+echo "*************************************************************************"
+echo "Building release files into dist directory"
+echo "*************************************************************************"
+
+cd "$start_repo"
+rm -rf build dist pyke.egg-info
+python setup.py sdist --formats zip
+cp ../"$PRE_2TO3_R1"_temp_test/dist/pyke*.zip dist
+rm -rf ../"$PRE_2TO3_R1"_temp_test
+cp RELEASE_NOTES-1.0.txt dist
+
+echo "*************************************************************************"
+echo "Tagging release $release_number"
+echo "*************************************************************************"
+
+hg tag "$release_number"
+
+hg push                         # back to $RELEASE_1
+
+
+echo "done -- quiting early for testing"
+exit
+
+
+echo "*************************************************************************"
+echo "Pushing sources to sourceforge"
+echo "*************************************************************************"
+
+cd ../"$RELEASE_1"
+hg push
+cd ../"$PYKE"
+hg push
+cd ../"$PRE_2TO3_R1"
+hg push
+cd ../"$PRE_2TO3"
+hg push
+
+echo "*************************************************************************"
+echo "Copying release files to sourceforge"
+echo "*************************************************************************"
+
+cd dist
+rsync -e ssh * mtnyogi,pyke@frs.sourceforge.net:/home/frs/project/p/py/pyke/pyke/"$release_number"
+

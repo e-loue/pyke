@@ -8,7 +8,7 @@ Do "hg log" to see what's changed:
 
     $ hg log -v -r .:48
 
-Append to: RELEASE_NOTES-1.0.txt
+Prepend to: RELEASE_NOTES-1.0.txt
 
 FILES TO CHANGE:
     - README.txt
@@ -27,16 +27,17 @@ FILES TO CHANGE:
         - line 44:  "http://downloads.sourceforge.net/pyke/pyke-1.0.2.zip",
     - pyke/__init__.py
         - line 3: version = '1.0.2'
+        - line 5: compiler_version = 1  (does this need to be incremented?)
     - doc/source/index.txt
         - line 43: Release 1.0
 
 REBUILD compiler_bc.py
 
-    $ cd pyke/krb_compiler
-    $ PYTHONPATH=../.. python
+    $ mkdir pyke/krb_compiler/compiled_krb (if not present)
+    $ python
     >>> from pyke import krb_compiler
-    >>> krb_compiler.compile_krb('compiler', 'compiled_krb', 'compiled_krb', 'compiler.krb')
-    $ mv compiled_krb/compiler_bc.py .
+    >>> krb_compiler.compile_krb('compiler', 'pyke.krb_compiler.compiled_krb', 'pyke/krb_compiler/compiled_krb', 'pyke/krb_compiiler/compiler.krb')
+    $ mv pyke/krb_compiler/compiled_krb/compiler_bc.py pyke/krb_compiler
 
 COMMIT HG UPDATES
 
@@ -50,22 +51,22 @@ COMMIT HG UPDATES (if any)
 
 CHECK FOR OTHER CHANGES
 
-    $ hg fetch hg
+    $ hg fetch sf
     $ retest as necessary
 
 COPY TO PYKE BRANCH:
 
     $ cd ../pyke_working
-    $ hg pull -u hg (no merge should be required here!)
+    $ hg pull -u sf (no merge should be required here!)
     $ hg fetch release_1
     $ ./testpyke
     $ hg push
-    $ hg push hg
+    $ hg push sf
 
 COPY TO PRE_2TO3_R1 BRANCH:
 
     $ cd ../pre_r1_working
-    $ hg pull -u hg (no merge should be required here!)
+    $ hg pull -u sf (no merge should be required here!)
     $ hg fetch ../r1_working
     $ cd doc/source
     $ bin/gen_html
@@ -73,20 +74,16 @@ COPY TO PRE_2TO3_R1 BRANCH:
     $ hg commit (if gen_html made any changes)
     $ ./run_pre_test        (this also builds a source distribution)
     $ hg push
-    $ hg push hg
+    $ hg push sf
 
 COPY TO PRE_2TO3 BRANCH:
 
     $ cd ../pre_working
-    $ hg pull -u hg (no merge should be required here!)
+    $ hg pull -u sf (no merge should be required here!)
     $ hg fetch ../pre_r1_working
-    $ cd doc/source
-    $ bin/gen_html
-    $ cd ../..
-    $ hg commit (if gen_html made any changes)
     $ ./run_pre_test        (this also builds a source distribution)
     $ hg push
-    $ hg push hg
+    $ hg push sf
 
 BUILD RELEASE
 
@@ -102,7 +99,7 @@ TAG RELEASE
 PUSH TO SOURCEFORGE
 
     $ hg push
-    $ hg push hg
+    $ hg push sf
 
 ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
 

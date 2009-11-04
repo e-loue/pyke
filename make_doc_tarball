@@ -1,0 +1,10 @@
+#!/bin/bash
+
+usage() {
+    echo "usage: make_doc_tarball tarfile" >&2
+    exit 2
+}
+
+[ $# -eq 1 ] || usage
+
+tar --exclude='*/.*.swp' --exclude='*/.pyhist' -C doc -czf "$1" html
