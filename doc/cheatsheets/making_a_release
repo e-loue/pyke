@@ -8,22 +8,18 @@ Do "hg log" to see what's changed:
 
     $ hg log -v -r .:48
 
-Prepend to: RELEASE_NOTES-1.0.txt
+Prepend notes to: RELEASE_NOTES-1.0.txt
 
 FILES TO CHANGE:
     - README.txt
         Read through to see if anything has changed.  The following lines
         will always change:
         - line  3: Version: 1.0.2
-        - line 23:     pyke_doc_html-1.0.2.tar.gz
-        - line 55:     pyke-1.0.2-py2.5.egg
-        - line 63:     pyke-1.0.2.tar.gz
-        - line 68: Add any new examples
-        - line 73:     pyke_examples-1.0.2.tar.gz
+        - line 41:   ...  pyke-1.0.3.zip
+        - line 44:   ...  pyke3-1.0.3.zip
+        - line 59: Add any new examples
     - setup.py
-        - line 11:  version = "1.0.2",
-        - line 40:  - http://downloads.sourceforge.net/pyke/pyke-1.0.2-py2.5.egg
-        - line 41:  - http://downloads.sourceforge.net/pyke/pyke-1.0.2-py2.6.egg
+        - line 13:  version = "1.0.2",
         - line 44:  "http://downloads.sourceforge.net/pyke/pyke-1.0.2.zip",
     - pyke/__init__.py
         - line 3: version = '1.0.2'
@@ -31,93 +27,11 @@ FILES TO CHANGE:
     - doc/source/index.txt
         - line 43: Release 1.0
 
-REBUILD compiler_bc.py
+RUN MAKE_RELEASE
 
-    $ mkdir pyke/krb_compiler/compiled_krb (if not present)
-    $ python
-    >>> from pyke import krb_compiler
-    >>> krb_compiler.compile_krb('compiler', 'pyke.krb_compiler.compiled_krb', 'pyke/krb_compiler/compiled_krb', 'pyke/krb_compiiler/compiler.krb')
-    $ mv pyke/krb_compiler/compiled_krb/compiler_bc.py pyke/krb_compiler
+    $ ./make_release 1.0.3
 
-COMMIT HG UPDATES
-
-REBUILD DOCUMENTS
-
-    $ cd doc/source
-    $ bin/gen_html
-    $ cd ../..
-
-COMMIT HG UPDATES (if any)
-
-CHECK FOR OTHER CHANGES
-
-    $ hg fetch sf
-    $ retest as necessary
-
-COPY TO PYKE BRANCH:
-
-    $ cd ../pyke_working
-    $ hg pull -u sf (no merge should be required here!)
-    $ hg fetch release_1
-    $ ./testpyke
-    $ hg push
-    $ hg push sf
-
-COPY TO PRE_2TO3_R1 BRANCH:
-
-    $ cd ../pre_r1_working
-    $ hg pull -u sf (no merge should be required here!)
-    $ hg fetch ../r1_working
-    $ cd doc/source
-    $ bin/gen_html
-    $ cd ../..
-    $ hg commit (if gen_html made any changes)
-    $ ./run_pre_test        (this also builds a source distribution)
-    $ hg push
-    $ hg push sf
-
-COPY TO PRE_2TO3 BRANCH:
-
-    $ cd ../pre_working
-    $ hg pull -u sf (no merge should be required here!)
-    $ hg fetch ../pre_r1_working
-    $ ./run_pre_test        (this also builds a source distribution)
-    $ hg push
-    $ hg push sf
-
-BUILD RELEASE
-
-    $ cd ../r1_working
-    $ rm -rf build dist pyke.egg-info
-    $ python setup.py sdist --formats zip
-    $ cp ../pre_r1_working_test/dist/pyke*.zip dist
-
-TAG RELEASE
-
-    $ hg tag 1.0.2 (commit is automatic)
-
-PUSH TO SOURCEFORGE
-
-    $ hg push
-    $ hg push sf
-
-ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
-
-    Project Admin -> Feature Settings -> Manage (on Tracker line)
-
-    Do: Bugs, Support Requests, and Patches
-
-    Add release through "Add/Update Groups"
-
-UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
-
-    see web.upload cheatsheet
-
-UPLOAD DIST FILES TO SOURCEFORGE:
-
-    $ cp RELEASE_NOTES-1.0.txt dist
-    $ cd dist
-    $ rsync -e ssh * mtnyogi,pyke@frs.sourceforge.net:/home/frs/project/p/py/pyke/pyke/1.0.2
+UPDATE RELEASE FILES ON SOURCEFORGE:
 
     In the browser go to: Project Admin -> File Manager
 
@@ -127,6 +41,18 @@ UPLOAD DIST FILES TO SOURCEFORGE:
     left click on pyke-1.0.2.tar.gz
     set the "Release Notes for this file" (leave the "Label" blank)
     click Save
+
+UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
+
+    see web.upload cheatsheet
+
+ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
+
+    Project Admin -> Feature Settings -> Manage (on Tracker line)
+
+    Do: Bugs, Support Requests, and Patches
+
+    Add release through "Add/Update Groups"
 
 UPDATE PYPI LINK:
 
