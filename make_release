@@ -71,11 +71,11 @@ do_fetch() {
     hg pull -u "$1"
     if check_heads -q
     then
+        return 1
+    else
         hg merge
         check_heads
         hg commit -m "Automated merge with $1"
-    else
-        return 1
     fi
 }
 
