@@ -1,0 +1,2 @@
+ssh -t mtnyogi,pyke@shell.sourceforge.net create
+cd /home/scm_hg/p/py/pyke

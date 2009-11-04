@@ -1,6 +1,6 @@
 include *
 graft *
-exclude .hgtags .hgignore
+#exclude .hgtags .hgignore
 prune .hg
 prune dist
 prune */compiled_krb

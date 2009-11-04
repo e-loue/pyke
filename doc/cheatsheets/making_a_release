@@ -29,7 +29,8 @@ FILES TO CHANGE:
 
 RUN MAKE_RELEASE
 
-    $ ./make_release 1.0.3
+    $ ./make_release 1.0.3 > /tmp/make_release.out 2>&1 &
+    $ tail -f /tmp/make_release.out
 
 UPDATE RELEASE FILES ON SOURCEFORGE:
 

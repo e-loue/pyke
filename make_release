@@ -52,7 +52,7 @@ check_status() {
 #   optional -q arg to nix the error message to stderr
 check_heads() {
     hg heads --template '{desc|firstline}\n' > $TMPFILE
-    if [ `wc -l $TMPFILE` -gt 1 ]
+    if [ `wc -l $TMPFILE | cut -f1 '-d '` -gt 1 ]
     then
         if [ x"$1" != x-q ]
         then
@@ -79,11 +79,13 @@ do_fetch() {
     fi
 }
 
+echo
 echo "*************************************************************************"
 echo "                      Rebuilding compiler_bc.py"
 echo "*************************************************************************"
+echo
 
-dir=pyke/krb_compiler/compiler_krb
+dir=pyke/krb_compiler/compiled_krb
 if [ ! -d "$dir" ]
 then
     mkdir "$dir"
@@ -94,27 +96,33 @@ from pyke import krb_compiler
 
 krb_compiler.compile_krb('compiler', 'pyke.krb_compiler.compiled_krb',
                          'pyke/krb_compiler/compiled_krb',
-                         'pyke/krb_compiiler/compiler.krb')
+                         'pyke/krb_compiler/compiler.krb')
 !
 mv pyke/krb_compiler/compiled_krb/compiler_bc.py pyke/krb_compiler
 
+echo
 echo "*************************************************************************"
 echo "                            Running testpyke"
 echo "*************************************************************************"
+echo
 
 ./testpyke
 
+echo
 echo "*************************************************************************"
 echo "                    Committing release documentation"
 echo "*************************************************************************"
+echo
 
 do_commit -m "Release documentation for $release_number"
 
 check_status                # there shouldn't be any uncommitted files!
 
+echo
 echo "*************************************************************************"
 echo "                   Regenerating HTML documentation"
 echo "*************************************************************************"
+echo
 
 cd doc/source
 bin/gen_html
@@ -122,9 +130,11 @@ cd ../..
 
 do_commit -Am "Regenerated HTML documentation for $release_number"
 
+echo
 echo "*************************************************************************"
 echo "                      Fetching from sourceforge"
 echo "*************************************************************************"
+echo
 
 cd "../$RELEASE_1"
 hg pull
@@ -135,9 +145,11 @@ then
     ./testpyke
 fi
 
+echo
 echo "*************************************************************************"
 echo "                        Merging into $PYKE"
 echo "*************************************************************************"
+echo
 
 cd "../$PYKE"
 hg pull
@@ -152,9 +164,11 @@ hg push                         # back to $PYKE
 cd ..
 rm -rf "$PYKE"_temp
 
+echo
 echo "*************************************************************************"
 echo "                      Merging into $PRE_2TO3_R1"
 echo "*************************************************************************"
+echo
 
 cd "$PRE_2TO3_R1"
 hg pull
@@ -173,9 +187,11 @@ hg push                         # back to $PRE_2TO3_R1
 cd ..
 rm -rf "$PRE_2TO3_R1"_temp
 
+echo
 echo "*************************************************************************"
 echo "                       Merging into $PRE_2TO3"
 echo "*************************************************************************"
+echo
 
 cd "$PRE_2TO3"
 hg pull
@@ -194,20 +210,24 @@ hg push                         # back to $PRE_2TO3
 cd ..
 rm -rf "$PRE_2TO3"_temp
 
+echo
 echo "*************************************************************************"
 echo "             Building release files into dist directory"
 echo "*************************************************************************"
+echo
 
 cd "$start_repo"
 rm -rf build dist pyke.egg-info
-python setup.py sdist --formats zip
+python setup.py -q sdist --formats zip
 cp ../"$PRE_2TO3_R1"_temp_test/dist/pyke*.zip dist
 rm -rf ../"$PRE_2TO3_R1"_temp_test
 cp RELEASE_NOTES-1.0.txt dist
 
+echo
 echo "*************************************************************************"
 echo "                  Tagging release $release_number"
 echo "*************************************************************************"
+echo
 
 hg tag "$release_number"
 
@@ -218,9 +238,11 @@ echo "done -- quiting early for testing"
 exit
 
 
+echo
 echo "*************************************************************************"
 echo "                   Pushing sources to sourceforge"
 echo "*************************************************************************"
+echo
 
 cd ../"$RELEASE_1"
 hg push
@@ -231,9 +253,11 @@ hg push
 cd ../"$PRE_2TO3"
 hg push
 
+echo
 echo "*************************************************************************"
 echo "                Copying release files to sourceforge"
 echo "*************************************************************************"
+echo
 
 cd dist
 rsync -e ssh * mtnyogi,pyke@frs.sourceforge.net:/home/frs/project/p/py/pyke/pyke/"$release_number"
