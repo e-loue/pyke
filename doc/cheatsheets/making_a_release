@@ -32,6 +32,10 @@ RUN MAKE_RELEASE
     $ ./make_release 1.0.3 > /tmp/make_release.out 2>&1 &
     $ tail -f /tmp/make_release.out
 
+CHECK OUT WEB SITE
+
+    with the browser, go to http://pyke.sourceforge.net
+
 UPDATE RELEASE FILES ON SOURCEFORGE:
 
     In the browser go to: Project Admin -> File Manager
@@ -42,10 +46,6 @@ UPDATE RELEASE FILES ON SOURCEFORGE:
     left click on pyke-1.0.2.tar.gz
     set the "Release Notes for this file" (leave the "Label" blank)
     click Save
-
-UPLOAD NEW DOCUMENTATION TO SOURCEFORGE
-
-    see web.upload cheatsheet
 
 ADD NEW RELEASE TO SOURCEFORGE TRACKERS:
 

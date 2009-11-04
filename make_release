@@ -159,7 +159,7 @@ hg clone -U "$PYKE" "$PYKE"_temp
 cd "$PYKE"_temp
 hg update
 hg fetch "$start_repo"
-./testpyke
+#./testpyke                     # I don't want errors here stopping the release!
 hg push                         # back to $PYKE
 cd ..
 rm -rf "$PYKE"_temp
@@ -206,6 +206,8 @@ hg fetch ../"$PRE_2TO3_R1"
 
 hg fetch ../"$PYKE"
 
+#./run_pre_test                 # I don't want errors here stopping the release!
+
 hg push                         # back to $PRE_2TO3
 cd ..
 rm -rf "$PRE_2TO3"_temp
@@ -234,9 +236,11 @@ hg tag "$release_number"
 hg push                         # back to $RELEASE_1
 
 
-echo "done -- quiting early for testing"
-exit
-
+############################################################################
+#                                                                          #
+#   This is where the script starts pushing the release to sourceforge.    #
+#                                                                          #
+############################################################################
 
 echo
 echo "*************************************************************************"
@@ -259,6 +263,15 @@ echo "                Copying release files to sourceforge"
 echo "*************************************************************************"
 echo
 
-cd dist
-rsync -e ssh * mtnyogi,pyke@frs.sourceforge.net:/home/frs/project/p/py/pyke/pyke/"$release_number"
+cd "$start_repo"
+rsync -avP --delete -e ssh dist/ mtnyogi,pyke@frs.sourceforge.net:/home/frs/project/p/py/pyke/pyke/"$release_number"
+
+
+echo
+echo "*************************************************************************"
+echo "                Copying HTML documentation to sourceforge"
+echo "*************************************************************************"
+echo
+
+rsync -avP --delete -e ssh doc/html/ mtnyogi,pyke@web.sourceforge.net:htdocs/
 

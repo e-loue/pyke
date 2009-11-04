@@ -1,11 +1,5 @@
 #!/usr/bin/env python
 
-# Make sure the user has setuptools installed!
-#import ez_setup
-#ez_setup.use_setuptools()
-
-#from setuptools import setup
-
 from distutils.core import setup
 
 setup(

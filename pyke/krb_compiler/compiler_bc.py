@@ -4,7 +4,7 @@ from __future__ import with_statement
 import itertools
 from pyke import contexts, pattern, bc_rule
 
-pyke_version = '1.0.3'
+pyke_version = '1.0.4'
 compiler_version = 1
 
 def file(rule, arg_patterns, arg_context):
