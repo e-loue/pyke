@@ -211,10 +211,10 @@ $ python
 &gt;&gt;&gt; krbparser.init(krbparser, True)
 &gt;&gt;&gt; kfbparser.init(kfbparser, True)
 </pre>
-<p>or just run the &quot;testall&quot; program from the doctest-tools package:</p>
+<p>or just run the &quot;testall.py&quot; program from the doctest-tools package:</p>
 <pre class="literal-block">
 $ cd pyke/krb_compiler
-$ testall
+$ testall.py
 </pre>
 </div>
 <div class="section" id="compiling-the-compiler-krb-file">
@@ -257,10 +257,10 @@ True
 <h2>Running Unit Tests</h2>
 <p>The <a class="reference external" href="http://code.google.com/p/doctest-tools/">doctest-tools</a> package is required to run the unit tests (see
 <a class="reference external" href="installing_pyke.html#other-required-packages">Other Required Packages</a> for more details).</p>
-<p>The <tt class="docutils literal"><span class="pre">testall</span></tt> and <tt class="docutils literal"><span class="pre">testdoc</span></tt> scripts from <tt class="docutils literal"><span class="pre">doctest-tools</span></tt> can be run
+<p>The <tt class="docutils literal"><span class="pre">testall.py</span></tt> and <tt class="docutils literal"><span class="pre">testdoc.py</span></tt> scripts from <tt class="docutils literal"><span class="pre">doctest-tools</span></tt> can be run
 anywhere.</p>
 <p>In addition, the top-level directory contains a <tt class="docutils literal"><span class="pre">testpyke</span></tt> script that will
-delete all of the compiled_krb directories, then run <tt class="docutils literal"><span class="pre">testall</span></tt> twice.  The
+delete all of the compiled_krb directories, then run <tt class="docutils literal"><span class="pre">testall.py</span></tt> twice.  The
 first run must recompile all of the <a class="reference external" href="../knowledge_bases/index.html">knowledge base</a> sources (<a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb</a>,
 <a class="reference external" href="../pyke_syntax/kfb_syntax.html">.kfb</a> and <a class="reference external" href="../pyke_syntax/kqb_syntax.html">.kqb</a> files) into the compiled_krb directories in order to run
 the tests.  The second run reuses the files compiled in the first run.  This
@@ -298,11 +298,11 @@ Extension</a>.  See <a class="reference internal" href="#mercurial-keyword-exten
 so that you can browse the documentation locally without having to run
 <tt class="docutils literal"><span class="pre">bin/gen_html</span></tt>.  So you only need these procedures if you change the
 documentation (i.e., change the .txt files in doc/source).</p>
-<p>To test all of the code examples in the documents, use the <tt class="docutils literal"><span class="pre">testall</span></tt>
+<p>To test all of the code examples in the documents, use the <tt class="docutils literal"><span class="pre">testall.py</span></tt>
 command from the <a class="reference external" href="http://code.google.com/p/doctest-tools/">doctest-tools</a> package:</p>
 <pre class="literal-block">
 $ cd doc
-$ testall
+$ testall.py
 </pre>
 <!-- ADD_LINKS MARKER -->
 </div>

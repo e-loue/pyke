@@ -190,10 +190,10 @@ To regenerate these tables files, at the top-level source directory::
     >>> krbparser.init(krbparser, True)
     >>> kfbparser.init(kfbparser, True)
 
-or just run the "testall" program from the doctest-tools package::
+or just run the "testall.py" program from the doctest-tools package::
 
     $ cd pyke/krb_compiler
-    $ testall
+    $ testall.py
 
 
 Compiling the Compiler.krb File
@@ -242,11 +242,11 @@ Running Unit Tests
 The `doctest-tools`_ package is required to run the unit tests (see
 `Other Required Packages`_ for more details).
 
-The ``testall`` and ``testdoc`` scripts from ``doctest-tools`` can be run
+The ``testall.py`` and ``testdoc.py`` scripts from ``doctest-tools`` can be run
 anywhere.
 
 In addition, the top-level directory contains a ``testpyke`` script that will
-delete all of the compiled_krb directories, then run ``testall`` twice.  The
+delete all of the compiled_krb directories, then run ``testall.py`` twice.  The
 first run must recompile all of the `knowledge base`_ sources (`.krb`_,
 `.kfb`_ and `.kqb`_ files) into the compiled_krb directories in order to run
 the tests.  The second run reuses the files compiled in the first run.  This
@@ -288,10 +288,10 @@ so that you can browse the documentation locally without having to run
 ``bin/gen_html``.  So you only need these procedures if you change the
 documentation (i.e., change the .txt files in doc/source).
 
-To test all of the code examples in the documents, use the ``testall``
+To test all of the code examples in the documents, use the ``testall.py``
 command from the `doctest-tools`_ package::
 
     $ cd doc
-    $ testall
+    $ testall.py
 
 

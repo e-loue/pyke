@@ -98,13 +98,13 @@ See http://pyke.sourceforge.net/examples.html for more information.
 RUNNING DOCTESTS:
 
 Pyke uses the doctest-tools package to run its doctests.  You can run the
-"testall" program from doctest-tools in any subdirectory, or in the top-level
-directory.  You can install doctest-tools as administrator with:
+"testall.py" program from doctest-tools in any subdirectory, or in the
+top-level directory.  You can install doctest-tools as administrator with:
 
     # easy-install doctest-tools
 
 The top-level directory also has it's own "testpyke" script that removes all
-compiled_krb directories, then runs the testall script (from doctest-tools)
+compiled_krb directories, then runs the testall.py script (from doctest-tools)
 twice.  The first time forces pyke to recompile everything, and the second
 time runs the same tests again having pyke re-use the compiled results from
 the previous run.  If the "testpyke" program is not on your path, run it as:

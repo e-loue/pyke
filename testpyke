@@ -2,7 +2,7 @@
 
 # testpyke [-x.y] [-3]
 #
-# Deletes all compiled_krb directories, then runs testall twice.
+# Deletes all compiled_krb directories, then runs testall.py twice.
 # 
 # exit status > 0 if errors found.
 
@@ -33,7 +33,7 @@ do
     case ${options[$i]} in
     -3)  opt="-3";;
     --)  ;;
-    --*) suffix=${options[$i]#-};;
+    --*) suffix=_${options[$i]//[-.]};;
     py)  args1="$args1 py";;
     *)   args1="$args1 ${options[$i]}"
          args2="$args2 ${options[$i]}"
@@ -47,13 +47,12 @@ then
     args2="tst txt"
 fi
 
+CMD="testall${suffix}.py $opt"
+
 #echo args "$args"
 #echo suffix "$suffix"
-#exit
-
-CMD="testall$suffix $opt"
-
 #echo $CMD
+#exit
 
 echo Removing all compiled_krb directories.
 echo

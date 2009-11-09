@@ -17,7 +17,7 @@ setup(
     #extras_require = {
     #    'regen_docs': ["rest2web>=0.5"],
     #    'examples': ["HTMLTemplate>=1.5"],
-    #    'tests': ["doctest-tools>=1.0a1"],
+    #    'tests': ["doctest-tools>=1.0a2"],
     #},
     #zip_safe = True,
 
