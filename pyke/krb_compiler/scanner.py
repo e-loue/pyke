@@ -624,19 +624,22 @@ def syntaxerror_params(pos = None, lineno = None):
         argument to SyntaxError exceptions.
     '''
     if pos is None: pos = lexer.lexpos
-    start = pos
+    if pos > len(lexer.lexdata): pos = len(lexer.lexdata)
+    end = pos
     if lineno is None: lineno = lexer.lineno
-    while start > 0 and (start >= len(lexer.lexdata) or
-                         lexer.lexdata[start] in '\r\n'):
-        start -= 1
-    end = start
-    if debug: print "pos", pos, "lineno", lineno, "start", start
-    start = max(lexer.lexdata.rfind('\r', 0, start),
-                lexer.lexdata.rfind('\n', 0, start)) + 1
+    while end > 0 and (end >= len(lexer.lexdata) or
+                       lexer.lexdata[end] in '\r\n'):
+        end -= 1
+    start = end
+    if debug: print "pos", pos, "lineno", lineno, "end", end
+    start = max(lexer.lexdata.rfind('\r', 0, end),
+                lexer.lexdata.rfind('\n', 0, end)) + 1
     column = pos - start + 1
     end1 = lexer.lexdata.find('\r', end)
     end2 = lexer.lexdata.find('\n', end)
-    if end1 < 0: end = end2
+    if end1 < 0:
+        if end2 < 0: end = len(lexer.lexdata)
+        else: end = end2
     elif end2 < 0: end = end1
     else: end = min(end1, end2)
     if debug: print "start", start, "column", column, "end", end

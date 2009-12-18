@@ -102,8 +102,11 @@ def p_tuple(p):
     p[0] = tuple(p[2])
 
 def p_error(t):
-    raise SyntaxError("invalid syntax",
-                      scanner.syntaxerror_params(t.lexpos, t.lineno))
+    if t is None:
+        raise SyntaxError("invalid syntax", scanner.syntaxerror_params())
+    else:
+        raise SyntaxError("invalid syntax",
+                          scanner.syntaxerror_params(t.lexpos, t.lineno))
 
 parser = None
 
