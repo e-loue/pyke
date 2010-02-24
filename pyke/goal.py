@@ -17,9 +17,9 @@ EXAMPLE USAGE:
 
 import itertools
 from pyke import contexts
-from pyke import krb_compiler
 
 def compile(goal_str):
+    from pyke import krb_compiler
     return prover(*krb_compiler.compile_goal(goal_str))
 
 class prover(object):

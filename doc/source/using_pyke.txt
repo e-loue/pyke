@@ -333,9 +333,9 @@ Python functions between subgoal proofs.
     Traceback (most recent call last):
       File "<doctest using_pyke.txt[37]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
-      File "...knowledge_engine.py", line 288, in prove_1
+      File "...knowledge_engine.py", line 291, in prove_1
         return iter(it).next()
-      File "...knowledge_engine.py", line 272, in gen
+      File "...knowledge_engine.py", line 275, in gen
         for plan in it:
       File "...rule_base.py", line 46, in next
         return self.iterator.next()

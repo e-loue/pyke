@@ -38,12 +38,12 @@ goal_mode = False
 
 def p_top(p):
     ''' top : file
-            | goal
+            | python_goal
     '''
     p[0] = p[1]
 
 def p_goal(p):
-    ''' goal : CHECK_TOK IDENTIFIER_TOK '.' IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK
+    ''' python_goal : CHECK_TOK IDENTIFIER_TOK '.' IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK
     '''
     p[0] = (p[2], p[4], p[6], python_vars, pattern_vars)
 
@@ -594,7 +594,7 @@ def init(this_module, check_tables = False, debug = 0):
 # Use the first line for normal use, the second for testing changes in the
 # grammer (the first line does not report grammer errors!).
 def parse(this_module, filename, check_tables = False, debug = 0):
-#def parse(this_module, filename, check_tables = False, debug = 1):
+#def parse(this_module, filename, check_tables = True, debug = 1):
     global goal_mode
     init(this_module, check_tables, debug)
     with open(filename) as f:

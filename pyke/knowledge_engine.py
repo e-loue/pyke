@@ -42,7 +42,7 @@ if sys.version_info[0] < 3:
 
 import pyke
 from pyke import (condensedPrint, contexts, pattern,
-                  fact_base, rule_base, special, target_pkg)
+                  fact_base, goal, rule_base, special, target_pkg)
 
 debug = False
 
@@ -249,6 +249,9 @@ class engine(object):
     def lookup(self, kb_name, entity_name, pat_context, patterns):
         return self.get_kb(kb_name).lookup(pat_context, pat_context,
                                            entity_name, patterns)
+
+    def prove_goal(self, goal_str, **args):
+        return goal.compile(goal_str).prove(self, **args)
 
     def prove(self, kb_name, entity_name, pat_context, patterns):
         return self.get_kb(kb_name).prove(pat_context, pat_context,
