@@ -158,6 +158,9 @@ def compile_krb(rb_name, generated_root_pkg, generated_root_dir, filename):
         if os.path.lexists(plan_path): os.remove(plan_path)
         raise
 
+def compile_goal(goal_str):
+    return krbparser.parse_goal(krbparser, goal_str)
+
 def compile_kfb(filename):
     global kfbparser
     try:

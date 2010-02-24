@@ -186,7 +186,7 @@ class kqb_parser(object):
         self.indent += indent
         self.column = end
         if token == 'str' or token == 'prompt':
-            value = scanner.unquote(chars)
+            value = scanner.unescape(chars)
         elif token == 'const':
             value = eval(chars)
         elif token == 'number':
@@ -273,7 +273,7 @@ class kqb_parser(object):
                 for i in range(self.lineno - last_lineno - 1): ans.append('')
             ans.append(' ' * (self.indent - indent) + self.line[self.column:])
         if not ans: self.SyntaxError("expected block string", False)
-        return u'\n'.join(scanner.unquote(str) for str in ans)
+        return u'\n'.join(scanner.unescape(str) for str in ans)
     def parse_simple_match(self):
         token, value = self.get_token()
         if token == 'str' or token == 'id' or token == 'number' or \

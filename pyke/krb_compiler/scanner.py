@@ -32,6 +32,7 @@ from pyke.krb_compiler.ply import lex
 debug=0
 
 kfb_mode = False
+goal_mode = False
 
 states = (
     ('indent', 'exclusive'),
@@ -92,6 +93,7 @@ base_krb_tokens = base_kfb_tokens + (
     'INDENT_TOK',
     'NOT_NL_TOK',
     'PATTERN_VAR_TOK',
+    'PYTHON_VAR_TOK',
 )
 
 kfb_tokens = tuple(x.upper() + '_TOK' for x in kfb_keywords) + base_kfb_tokens
@@ -315,28 +317,28 @@ def t_code_NL_TOK(t):
 # strings:
 def t_tsqstring(t):
     r"[uU]?[rR]?'''([^\\]|\\.)*?'''"
-    #t.value = unquote(t.value[3:-3])
+    #t.value = unescape(t.value[3:-3])
     t.type = 'STRING_TOK'
     t.lexer.lineno += t.value.count('\n')
     return t
 
 def t_tdqstring(t):
     r'[uU]?[rR]?"""([^\\]|\\.)*?"""'
-    #t.value = unquote(t.value[3:-3])
+    #t.value = unescape(t.value[3:-3])
     t.type = 'STRING_TOK'
     t.lexer.lineno += t.value.count('\n')
     return t
 
 def t_sqstring(t):
     r"[uU]?[rR]?'([^'\\\n\r]|\\.|\\(\r)?\n)*?'"
-    #t.value = unquote(t.value[1:-1])
+    #t.value = unescape(t.value[1:-1])
     t.lexer.lineno += t.value.count('\n')
     t.type = 'STRING_TOK'
     return t
 
 def t_dqstring(t):
     r'[uU]?[rR]?"([^"\\\n\r]|\\.|\\(\r)?\n)*?"'
-    #t.value = unquote(t.value[1:-1])
+    #t.value = unescape(t.value[1:-1])
     t.type = 'STRING_TOK'
     t.lexer.lineno += t.value.count('\n')
     return t
@@ -345,13 +347,25 @@ def t_dqstring(t):
 def t_ANONYMOUS_VAR_TOK(t):
     r'\$_([a-zA-Z_][a-zA-Z0-9_]*)?'
     if kfb_mode: t_ANY_error(t)
-    t.value = "'" + t.value[1:] + "'"
+    if goal_mode:
+        t.value = t.value[1:]
+    else:
+        t.value = "'" + t.value[1:] + "'"
     return t
 
 def t_PATTERN_VAR_TOK(t):
     r'\$[a-zA-Z][a-zA-Z0-9_]*'
     if kfb_mode: t_ANY_error(t)
-    t.value = "'" + t.value[1:] + "'"
+    if goal_mode:
+        t.value = t.value[1:]
+    else:
+        t.value = "'" + t.value[1:] + "'"
+    return t
+
+def t_PYTHON_VAR_TOK(t):
+    r'%[a-zA-Z][a-zA-Z0-9_]*'
+    if not goal_mode: t_ANY_error(t)
+    t.value = t.value[1:]
     return t
 
 def t_IDENTIFIER_TOK(t):
@@ -481,7 +495,7 @@ escapes = {
     '\"': '\"',
 }
 
-def unquote(s):
+def unescape(s):
     start = 0
     ans = []
     i = s.find('\\', start)

@@ -30,8 +30,22 @@ import warnings
 import os, os.path
 from pyke.krb_compiler.ply import yacc
 from pyke.krb_compiler import scanner
+from pyke import pattern, contexts
 
 tokens = scanner.tokens
+
+goal_mode = False
+
+def p_top(p):
+    ''' top : file
+            | goal
+    '''
+    p[0] = p[1]
+
+def p_goal(p):
+    ''' goal : CHECK_TOK IDENTIFIER_TOK '.' IDENTIFIER_TOK LP_TOK patterns_opt RP_TOK
+    '''
+    p[0] = (p[2], p[4], p[6], python_vars, pattern_vars)
 
 def p_file(p):
     ''' file : nl_opt parent_opt fc_rules bc_rules_opt
@@ -361,18 +375,32 @@ def p_python_extras_code(p):
 def p_pattern_var(p):
     ''' variable : PATTERN_VAR_TOK
     '''
-    p[0] = "contexts.variable(%s)" % p[1]
+    global pattern_vars
+    if goal_mode:
+        pattern_vars.append(p[1])
+        p[0] = contexts.variable(p[1])
+    else:
+        p[0] = "contexts.variable(%s)" % p[1]
+
+def p_python_var(p):
+    ''' variable : PYTHON_VAR_TOK
+    '''
+    global python_vars
+    python_vars.append(p[1])
+    p[0] = contexts.variable(p[1])
 
 def p_anonymous_var(p):
     ''' variable : ANONYMOUS_VAR_TOK
     '''
-    p[0] = "contexts.anonymous(%s)" % p[1]
+    if goal_mode:
+        p[0] = contexts.anonymous(p[1])
+    else:
+        p[0] = "contexts.anonymous(%s)" % p[1]
 
 def p_first(p):
     ''' bc_premise : python_premise
         bc_rules_opt : bc_rules_section
         data : NUMBER_TOK
-        data : STRING_TOK
         fc_premise : python_premise
         pattern : pattern_proper
         pattern_proper : variable
@@ -384,6 +412,17 @@ def p_last(p):
     ''' rest_opt : ',' '*' variable
     '''
     p[0] = p[len(p)-1]
+
+def p_data_string(p):
+    ''' data : STRING_TOK
+    '''
+    if goal_mode:
+        if p[1].startswith("'''") or p[1].startswith('"""'):
+            p[0] = scanner.unescape(p[1][3:-3])
+        else:
+            p[0] = scanner.unescape(p[1][1:-1])
+    else:
+        p[0] = p[1]
 
 def p_taking(p):
     ''' taking : start_python_code TAKING_TOK python_rule_code NL_TOK
@@ -398,7 +437,10 @@ def p_taking2(p):
 def p_quoted_last(p):
     ''' data : IDENTIFIER_TOK
     '''
-    p[0] = "'" + p[len(p)-1] + "'"
+    if goal_mode:
+        p[0] = p[len(p)-1]
+    else:
+        p[0] = "'" + p[len(p)-1] + "'"
 
 def p_false(p):
     ''' data : FALSE_TOK
@@ -455,35 +497,61 @@ def p_append_list(p):
 
 def p_pattern(p):
     ''' pattern : data '''
-    p[0] = "pattern.pattern_literal(%s)" % str(p[1])
+    if goal_mode:
+        p[0] = pattern.pattern_literal(p[1])
+    else:
+        p[0] = "pattern.pattern_literal(%s)" % str(p[1])
 
 def p_pattern_tuple1(p):
     ''' pattern_proper : LP_TOK '*' variable RP_TOK '''
-    p[0] = "pattern.pattern_tuple((), %s)" % p[3]
+    if goal_mode:
+        p[0] = pattern.pattern_tuple((), p[3])
+    else:
+        p[0] = "pattern.pattern_tuple((), %s)" % p[3]
 
 def p_pattern_tuple2(p):
     ''' pattern_proper : LP_TOK data_list ',' '*' variable RP_TOK '''
-    p[0] = "pattern.pattern_tuple((%s), %s)" % \
-               (' '.join("pattern.pattern_literal(%s)," % str(x) for x in p[2]),
-                p[5])
+    if goal_mode:
+        p[0] = pattern.pattern_tuple(
+                 tuple(pattern.pattern_literal(x) for x in p[2]),
+                 p[5])
+    else:
+        p[0] = "pattern.pattern_tuple((%s), %s)" % \
+                   (' '.join("pattern.pattern_literal(%s)," % str(x)
+                             for x in p[2]),
+                    p[5])
 
 def p_pattern_tuple3(p):
     ''' pattern_proper : LP_TOK data_list ',' patterns_proper rest_opt RP_TOK '''
-    p[0] = "pattern.pattern_tuple((%s), %s)" % \
-               (' '.join(itertools.chain(("pattern.pattern_literal(%s)," % str(x)
-                                           for x in p[2]),
-                                         (str(x) + ',' for x in p[4]))),
-                p[5])
+    if goal_mode:
+        p[0] = pattern.pattern_tuple(
+                 tuple(itertools.chain(
+                         (pattern.pattern_literal(x) for x in p[2]),
+                         p[4])),
+                 p[5])
+    else:
+        p[0] = "pattern.pattern_tuple((%s), %s)" % \
+                   (' '.join(itertools.chain(
+                               ("pattern.pattern_literal(%s)," % str(x)
+                                 for x in p[2]),
+                               (str(x) + ',' for x in p[4]))),
+                    p[5])
 
 def p_pattern_tuple4(p):
     ''' pattern_proper : LP_TOK patterns_proper rest_opt RP_TOK '''
-    p[0] = "pattern.pattern_tuple((%s), %s)" % \
-               (' '.join(str(x) + ',' for x in p[2]),
-                p[3])
+    if goal_mode:
+        p[0] = pattern.pattern_tuple(p[2], p[3])
+    else:
+        p[0] = "pattern.pattern_tuple((%s), %s)" % \
+                   (' '.join(str(x) + ',' for x in p[2]),
+                    p[3])
 
 def p_tuple(p):
     ''' data : LP_TOK data_list comma_opt RP_TOK '''
-    p[0] = '(' + ' '.join(str(x) + ',' for x in p[2]) + ')'
+    if goal_mode:
+        p[0] = tuple(p[2])
+    else:
+        p[0] = '(' + ' '.join(str(x) + ',' for x in p[2]) + ')'
 
 def p_error(t):
     if t is None:
@@ -527,14 +595,33 @@ def init(this_module, check_tables = False, debug = 0):
 # grammer (the first line does not report grammer errors!).
 def parse(this_module, filename, check_tables = False, debug = 0):
 #def parse(this_module, filename, check_tables = False, debug = 1):
+    global goal_mode
     init(this_module, check_tables, debug)
     with open(filename) as f:
         scanner.init(scanner, debug, check_tables)
         scanner.lexer.lineno = 1
         scanner.lexer.filename = filename
+        scanner.kfb_mode = False
+        scanner.goal_mode = False
+        goal_mode = False
         #parser.restart()
         return parser.parse(f.read(), lexer=scanner.lexer, tracking=True,
                             debug=debug)
+
+def parse_goal(this_module, s, check_tables = False, debug = 0):
+    global goal_mode, python_vars, pattern_vars
+    init(this_module, check_tables, debug)
+    scanner.init(scanner, debug, check_tables)
+    scanner.lexer.lineno = 1
+    scanner.lexer.filename = s
+    scanner.kfb_mode = False
+    scanner.goal_mode = True
+    goal_mode = True
+    python_vars = []
+    pattern_vars = []
+    #parser.restart()
+    return parser.parse('check ' + s, lexer=scanner.lexer, tracking=True,
+                        debug=debug)
 
 def run(this_module, filename='TEST/krbparse_test.krb'):
     r""" Used for testing.

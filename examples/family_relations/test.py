@@ -43,10 +43,12 @@ import contextlib
 import sys
 import time
 
-from pyke import knowledge_engine, krb_traceback
+from pyke import knowledge_engine, krb_traceback, goal
 
 # Compile and load .krb files in same directory that I'm in (recursively).
 engine = knowledge_engine.engine('examples.family_relations')
+
+fc_goal = goal.compile('family.how_related(%person1, $person2, $relationship)')
 
 def fc_test(person1 = 'bruce'):
     '''
@@ -60,9 +62,13 @@ def fc_test(person1 = 'bruce'):
     fc_time = fc_end_time - start_time
 
     print "doing proof"
-    with engine.prove_n('family', 'how_related', (person1,), 2) as gen:
-        for (person2, relationship), plan in gen:
-            print "%s, %s are %s" % (person1, person2, relationship)
+    with fc_goal.prove(engine, person1=person1) as gen:
+        for vars, plan in gen:
+            print "%s, %s are %s" % \
+                    (person1, vars['person2'], vars['relationship'])
+    #with engine.prove_n('family', 'how_related', (person1,), 2) as gen:
+    #    for (person2, relationship), plan in gen:
+    #        print "%s, %s are %s" % (person1, person2, relationship)
     prove_time = time.time() - fc_end_time
     print
     print "done"
