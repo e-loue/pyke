@@ -19,9 +19,10 @@ def bc_test():
     engine.reset()
     try:
         engine.activate('bc_findall')
-        with engine.prove_n('bc_findall', 'cousins_of', (), 2) as gen:
-            for (child, cousins), plan in gen:
-                print "%s has %s as cousins" % (child, cousins)
+        with engine.prove_goal('bc_findall.cousins_of($child, $cousins)') \
+          as gen:
+            for vars, plan in gen:
+                print "%s has %s as cousins" % (vars['child'], vars['cousins'])
     except:
         krb_traceback.print_exc()
         sys.exit(1)

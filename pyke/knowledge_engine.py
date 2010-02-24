@@ -83,6 +83,7 @@ class engine(object):
                 target_package.load(self, **kws)
         for kb in self.knowledge_bases.itervalues(): kb.init2()
         for rb in self.rule_bases.itervalues(): rb.init2()
+
     def _init_path(self, path, target_pkgs):
         if debug: print >> sys.stderr, "engine._init_path:", path
         # Does target_pkg.add_source_package.
@@ -193,24 +194,29 @@ class engine(object):
             tp.reset()
             target_pkgs[target_package_name] = tp
         tp.add_source_package(source_package_name)
+
     def get_ask_module(self):
         if not hasattr(self, 'ask_module'):
             from pyke import ask_tty
             self.ask_module = ask_tty
         return self.ask_module
+
     def reset(self):
         for rb in self.rule_bases.itervalues(): rb.reset()
         for kb in self.knowledge_bases.itervalues(): kb.reset()
+
     def get_kb(self, kb_name, _new_class = None):
         ans = self.knowledge_bases.get(kb_name)
         if ans is None:
             if _new_class: ans = _new_class(self, kb_name)
             else: raise KeyError("knowledge_base %s not found" % kb_name)
         return ans
+
     def get_rb(self, rb_name):
         ans = self.rule_bases.get(rb_name)
         if ans is None: raise KeyError("rule_base %s not found" % rb_name)
         return ans
+
     def get_create(self, rb_name, parent = None, exclude_list = ()):
         ans = self.rule_bases.get(rb_name)
         if ans is None:
@@ -218,6 +224,7 @@ class engine(object):
         elif ans.parent != parent or ans.exclude_set != frozenset(exclude_list):
             raise AssertionError("duplicate rule_base: %s" % rb_name)
         return ans
+
     def get_ke(self, kb_name, entity_name):
         return self.get_kb(kb_name).get_entity_list(entity_name)
 
@@ -228,6 +235,7 @@ class engine(object):
         args = tuple(args)
         return self.get_kb(kb_name, fact_base.fact_base) \
                    .add_universal_fact(fact_name, args)
+
     def add_case_specific_fact(self, kb_name, fact_name, args):
         if isinstance(args, types.StringTypes):
             raise TypeError("engine.add_case_specific_fact: "
@@ -235,6 +243,7 @@ class engine(object):
         args = tuple(args)
         return self.get_kb(kb_name, fact_base.fact_base) \
                    .add_case_specific_fact(fact_name, args)
+
     def assert_(self, kb_name, entity_name, args):
         if isinstance(args, types.StringTypes):
             raise TypeError("engine.assert_: "
@@ -253,9 +262,18 @@ class engine(object):
     def prove_goal(self, goal_str, **args):
         return goal.compile(goal_str).prove(self, **args)
 
+    def prove_1_goal(self, goal_str, **args):
+        try:
+            # All we need is the first one!
+            with self.prove_goal(goal_str, **args) as it:
+                return iter(it).next()
+        except StopIteration:
+            raise CanNotProve("Can not prove " + goal_str)
+
     def prove(self, kb_name, entity_name, pat_context, patterns):
         return self.get_kb(kb_name).prove(pat_context, pat_context,
                                           entity_name, patterns)
+
     def prove_n(self, kb_name, entity_name, fixed_args = (), num_returns = 0):
         ''' Returns a context manager for a generator of:
                 a tuple of len == num_returns, and a plan (or None).
@@ -281,6 +299,7 @@ class engine(object):
             finally:
                 context.done()
         return contextlib.closing(gen())
+
     def prove_1(self, kb_name, entity_name, fixed_args = (), num_returns = 0):
         ''' Returns a tuple of len == num_returns, and a plan (or None).
         '''
@@ -294,12 +313,15 @@ class engine(object):
                                (kb_name, entity_name,
                                  condensedPrint.cprint(
                                    fixed_args + self._Variables[:num_returns])))
+
     def print_stats(self, f = sys.stdout):
         for kb \
          in sorted(self.knowledge_bases.itervalues(), key=lambda kb: kb.name):
             kb.print_stats(f)
+
     def trace(self, rb_name, rule_name):
         self.get_rb(rb_name).trace(rule_name)
+
     def untrace(self, rb_name, rule_name):
         self.get_rb(rb_name).untrace(rule_name)
 

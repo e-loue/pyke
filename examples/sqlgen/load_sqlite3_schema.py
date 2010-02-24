@@ -45,6 +45,8 @@
 from __future__ import with_statement
 import contextlib
 
+from pyke import goal
+
 debug = False
 
 def load_schema(engine, dbi_module, connection):
@@ -81,21 +83,36 @@ def _create_column(engine, table_name, col_name, type, null, key, default,
         _add_fact(engine, "many_to_1",
                   (table_name, to_table, (col_name,), ('id',)))
 
+many_to_1 = goal.compile(
+  'schema.many_to_1($from_table, $to_table, $from_columns, $to_columns)')
+
+links_to = goal.compile(
+  'schema.links_to(%depth, $from_table, $to_table, $joins)')
+
+many_to_1_to = goal.compile(
+  'schema.many_to_1(%to_table, $end_table, $to_columns, $end_columns)')
+
 def _links_to(engine, depth):
     ans = False
     if depth == 1:
-        with engine.prove_n("schema", "many_to_1", (), 4) as gen1:
-            for (from_table, to_table, from_columns, to_columns), bogus_plan \
-             in gen1:
+        with many_to_1.prove(engine) as gen1:
+            for vars, bogus_plan in gen1:
+                from_table, to_table, from_columns, to_columns = \
+                  vars['from_table'], vars['to_table'], vars['from_columns'], \
+                  vars['to_columns']
                 _add_fact(engine, "links_to",
                           (1, from_table, to_table,
                            ((to_table, from_table, from_columns, to_columns),)))
                 ans = True
         return ans
-    with engine.prove_n("schema", "links_to", (depth - 1,), 3) as gen2:
-        for (from_table, to_table, joins), bogus_plan1 in gen2:
-            with engine.prove_n("schema", "many_to_1", (to_table,), 3) as gen3:
-                for (end_table, to_columns, end_columns), bogus_plan2 in gen3:
+    with links_to.prove(engine, depth=depth - 1) as gen2:
+        for vars, bogus_plan1 in gen2:
+            from_table, to_table, joins = \
+              vars['from_table'], vars['to_table'], vars['joins']
+            with many_to_1_to.prove(engine, to_table=to_table) as gen3:
+                for vars, bogus_plan2 in gen3:
+                    end_table, to_columns, end_columns = \
+                      vars['end_table'], vars['to_columns'], vars['end_columns']
                     if end_table != from_table and \
                        not any(end_table == join_clause[0]
                                for join_clause in joins):

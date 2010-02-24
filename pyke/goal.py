@@ -34,7 +34,7 @@ class prover(object):
     def prove(self, engine, **args):
         assert len(args) == len(self.python_vars), \
                "incorrect number of arguments to goal: expected %d, got %d" % \
-                 (len(self.python_args), len(args))
+                 (len(self.python_vars), len(args))
         context = contexts.simple_context()
         for var in self.python_vars:
             context.bind(var, context, args[var])

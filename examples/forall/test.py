@@ -19,9 +19,9 @@ def bc_test():
     engine.reset()
     try:
         engine.activate('bc_forall')
-        with engine.prove_n('bc_forall', 'no_step_siblings', (), 1) as gen:
-            for (child,), plan in gen:
-                print child
+        with engine.prove_goal('bc_forall.no_step_siblings($child)') as gen:
+            for vars, plan in gen:
+                print vars['child']
     except:
         krb_traceback.print_exc()
         sys.exit(1)

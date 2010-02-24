@@ -119,9 +119,9 @@ def gen_plan(environ, starting_tables, template_name):
 
     try:
         no_vars, plan = \
-            Engine.prove_1("web", "process",
-                           (starting_tables, template_name),
-                           0)
+            Engine.prove_1_goal('web.process(%starting_tables, %template_name)',
+                                starting_tables=starting_tables,
+                                template_name=template_name)
     except:
         traceback = krb_traceback.format_exc(100)
         return None, traceback

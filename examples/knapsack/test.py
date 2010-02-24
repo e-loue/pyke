@@ -11,9 +11,13 @@ def run(pantry, capacity):
     engine.activate('knapsack')
     max = 0
     ans = None
-    with engine.prove_n('knapsack', 'legal_knapsack', (pantry, capacity), 1) \
+    with engine.prove_goal(
+           'knapsack.legal_knapsack(%pantry, %capacity, $knapsack)',
+           pantry=pantry,
+           capacity=capacity) \
       as gen:
-        for (knapsack,), no_plan in gen:
+        for vars, no_plan in gen:
+            knapsack = vars['knapsack']
             calories = sum(map(lambda x: x[2], knapsack))
             if calories > max:
                 max = calories
