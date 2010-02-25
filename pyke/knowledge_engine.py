@@ -263,12 +263,7 @@ class engine(object):
         return goal.compile(goal_str).prove(self, **args)
 
     def prove_1_goal(self, goal_str, **args):
-        try:
-            # All we need is the first one!
-            with self.prove_goal(goal_str, **args) as it:
-                return iter(it).next()
-        except StopIteration:
-            raise CanNotProve("Can not prove " + goal_str)
+        return goal.compile(goal_str).prove_1(self, **args)
 
     def prove(self, kb_name, entity_name, pat_context, patterns):
         return self.get_kb(kb_name).prove(pat_context, pat_context,

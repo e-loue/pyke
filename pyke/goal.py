@@ -20,11 +20,12 @@ from pyke import contexts
 
 def compile(goal_str):
     from pyke import krb_compiler
-    return prover(*krb_compiler.compile_goal(goal_str))
+    return prover(goal_str, *krb_compiler.compile_goal(goal_str))
 
 class prover(object):
-    def __init__(self, rb_name, goal_name, patterns, python_vars, pattern_vars):
+    def __init__(self, goal_str, rb_name, goal_name, patterns, python_vars, pattern_vars):
         #print "prover", rb_name, goal_name, patterns, python_vars, pattern_vars
+        self.goal_str = goal_str
         self.rb_name = rb_name
         self.goal_name = goal_name
         self.patterns = patterns
@@ -40,6 +41,15 @@ class prover(object):
             context.bind(var, context, args[var])
         return producer(engine, self.rb_name, self.goal_name, self.patterns,
                         context, self.pattern_vars)
+
+    def prove_1(self, engine, **args):
+        try:
+            # All we need is the first one!
+            with self.prove(engine, **args) as it:
+                return iter(it).next()
+        except StopIteration:
+            raise CanNotProve("Can not prove " + self.goal_str)
+
 
 class producer(object):
     def __init__(self, engine, rb_name, goal_name, patterns, context,
