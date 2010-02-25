@@ -48,7 +48,7 @@ from pyke import knowledge_engine, krb_traceback, goal
 # Compile and load .krb files in same directory that I'm in (recursively).
 engine = knowledge_engine.engine('examples.family_relations')
 
-fc_goal = goal.compile('family.how_related(%person1, $person2, $relationship)')
+fc_goal = goal.compile('family.how_related($person1, $person2, $relationship)')
 
 def fc_test(person1 = 'bruce'):
     '''
@@ -84,7 +84,7 @@ def bc_test(person1 = 'bruce'):
     print "doing proof"
     try:
         with engine.prove_goal(
-               'bc_example.how_related(%person1, $person2, $relationship)',
+               'bc_example.how_related($person1, $person2, $relationship)',
                person1=person1) \
           as gen:
             for vars, plan in gen:
@@ -113,7 +113,7 @@ def bc2_test(person1 = 'bruce'):
     print "doing proof"
     try:
         with engine.prove_goal(
-               'bc2_example.how_related(%person1, $person2, $relationship)',
+               'bc2_example.how_related($person1, $person2, $relationship)',
                person1=person1) \
           as gen:
             for vars, plan in gen:
@@ -145,7 +145,7 @@ def test(person1 = 'bruce'):
     try:
         # In this case, the relationship is returned when you run the plan.
         with engine.prove_goal(
-               'example.how_related(%person1, $person2)',
+               'example.how_related($person1, $person2)',
                person1=person1) \
           as gen:
             for vars, plan in gen:

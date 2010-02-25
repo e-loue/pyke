@@ -717,10 +717,10 @@ bc_extras
     from pyke import goal
 
     links_to = \
-      goal.compile('schema.links_to(%depth, %table, $to_table, $joins)')
+      goal.compile('schema.links_to($depth, $table, $to_table, $joins)')
 
     column_lookup = \
-      goal.compile('schema.column(%to_table, %column, $_, $_, $_, $_, $_)')
+      goal.compile('schema.column($to_table, $column, $_, $_, $_, $_, $_)')
 
     def find_at_depth1(engine, depth, column, table):
         got_depth = False

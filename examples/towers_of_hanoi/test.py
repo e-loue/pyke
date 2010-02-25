@@ -12,7 +12,7 @@ def test(num_disks):
     try:
         engine.activate('towers_of_hanoi')
   
-        with engine.prove_goal('towers_of_hanoi.solve(%num_disks, $moves)',
+        with engine.prove_goal('towers_of_hanoi.solve($num_disks, $moves)',
                                num_disks=num_disks) \
           as gen:
             for i, (vars, no_plan) in enumerate(gen):

@@ -12,7 +12,7 @@ def run(pantry, capacity):
     max = 0
     ans = None
     with engine.prove_goal(
-           'knapsack.legal_knapsack(%pantry, %capacity, $knapsack)',
+           'knapsack.legal_knapsack($pantry, $capacity, $knapsack)',
            pantry=pantry,
            capacity=capacity) \
       as gen:

@@ -119,7 +119,7 @@ def gen_plan(environ, starting_tables, template_name):
 
     try:
         no_vars, plan = \
-            Engine.prove_1_goal('web.process(%starting_tables, %template_name)',
+            Engine.prove_1_goal('web.process($starting_tables, $template_name)',
                                 starting_tables=starting_tables,
                                 template_name=template_name)
     except:

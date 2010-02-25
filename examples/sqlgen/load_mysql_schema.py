@@ -85,10 +85,10 @@ many_to_1 = goal.compile(
   'schema.many_to_1($from_table, $to_table, $from_columns, $to_columns)')
 
 links_to = goal.compile(
-  'schema.links_to(%depth, $from_table, $to_table, $joins)')
+  'schema.links_to($depth, $from_table, $to_table, $joins)')
 
 many_to_1_to = goal.compile(
-  'schema.many_to_1(%to_table, $end_table, $to_columns, $end_columns)')
+  'schema.many_to_1($to_table, $end_table, $to_columns, $end_columns)')
 
 def _links_to(engine, depth):
     ans = False

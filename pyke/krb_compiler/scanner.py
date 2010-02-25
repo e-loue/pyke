@@ -93,7 +93,6 @@ base_krb_tokens = base_kfb_tokens + (
     'INDENT_TOK',
     'NOT_NL_TOK',
     'PATTERN_VAR_TOK',
-    'PYTHON_VAR_TOK',
 )
 
 kfb_tokens = tuple(x.upper() + '_TOK' for x in kfb_keywords) + base_kfb_tokens
@@ -360,12 +359,6 @@ def t_PATTERN_VAR_TOK(t):
         t.value = t.value[1:]
     else:
         t.value = "'" + t.value[1:] + "'"
-    return t
-
-def t_PYTHON_VAR_TOK(t):
-    r'%[a-zA-Z][a-zA-Z0-9_]*'
-    if not goal_mode: t_ANY_error(t)
-    t.value = t.value[1:]
     return t
 
 def t_IDENTIFIER_TOK(t):

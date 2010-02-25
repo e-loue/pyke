@@ -7,12 +7,12 @@ EXAMPLE USAGE:
     from pyke import goal
 
     bruce_related_to = \
-      goal.compile('bc_example.how_related(bruce, %who, @ans)')
+      goal.compile('bc_example.how_related(bruce, $who, $ans)')
 
     def main():
         with bruce_related_to(my_engine, who='thomas') as gen:
-            for vars_dict, plan in gen:
-                print vars_dict['ans']
+            for vars, plan in gen:
+                print vars['ans']
 '''
 
 import itertools
@@ -23,22 +23,18 @@ def compile(goal_str):
     return prover(goal_str, *krb_compiler.compile_goal(goal_str))
 
 class prover(object):
-    def __init__(self, goal_str, rb_name, goal_name, patterns, python_vars, pattern_vars):
-        #print "prover", rb_name, goal_name, patterns, python_vars, pattern_vars
+    def __init__(self, goal_str, rb_name, goal_name, patterns, pattern_vars):
+        #print "prover", rb_name, goal_name, patterns, pattern_vars
         self.goal_str = goal_str
         self.rb_name = rb_name
         self.goal_name = goal_name
         self.patterns = patterns
-        self.python_vars = python_vars
         self.pattern_vars = pattern_vars
 
     def prove(self, engine, **args):
-        assert len(args) == len(self.python_vars), \
-               "incorrect number of arguments to goal: expected %d, got %d" % \
-                 (len(self.python_vars), len(args))
         context = contexts.simple_context()
-        for var in self.python_vars:
-            context.bind(var, context, args[var])
+        for var, value in args.iteritems():
+            context.bind(var, context, value)
         return producer(engine, self.rb_name, self.goal_name, self.patterns,
                         context, self.pattern_vars)
 

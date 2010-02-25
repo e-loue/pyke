@@ -8,6 +8,7 @@
 
 TMP1=/tmp/testpyke1.$$
 TMP2=/tmp/testpyke2.$$
+TMP3=/tmp/testpyke3.$$
 
 usage() {
     echo "usage: testpyke [-x.y] [-3] [suffix...]" >&2
@@ -89,14 +90,21 @@ then
     echo "Reusing   compiled_krb:" Files: ${results2[0]}, \
          Tests: ${results2[1]}, \
          Errors: ${results2[2]}
-    echo
-    tail -q -n +2 $TMP1 $TMP2 | sort -u
-else
+    tail -q -n +3 $TMP1 $TMP2 | sort -u > $TMP3
+    if [ -s $TMP3 ]
+    then
+        num_error_files=`wc -l $TMP3 | cut -f1 '-d '`
+        echo
+        echo "********** ERRORS ************* $num_error_files files had errors:"
+        cat $TMP3
+    fi
+elif [ -s $TMP1 ]
+then
     echo
     tail -q -n +2 $TMP1
 fi
 
-rm -f $TMP1 $TMP2
+rm -f $TMP1 $TMP2 $TMP3
 
 if [ $status1 -ne 0 -o $status2 -ne 0 ]
 then
