@@ -74,7 +74,7 @@ class engine(object):
             paths[0][1].populate(self)
         else:
             target_pkgs = {}  # {target_package_name: target_pkg}
-            for path in paths: self._init_path(path, target_pkgs)
+            for path in paths: self._create_target_pkg(path, target_pkgs)
             for target_package in target_pkgs.itervalues():
                 if debug:
                     print >>sys.stderr, "target_package:", target_package
@@ -84,15 +84,16 @@ class engine(object):
         for kb in self.knowledge_bases.itervalues(): kb.init2()
         for rb in self.rule_bases.itervalues(): rb.init2()
 
-    def _init_path(self, path, target_pkgs):
-        if debug: print >> sys.stderr, "engine._init_path:", path
+    def _create_target_pkg(self, path, target_pkgs):
+        if debug: print >> sys.stderr, "engine._create_target_pkg:", path
         # Does target_pkg.add_source_package.
         source_package_name = None
-        target_package_name = '.compiled_krb'
+        source_package_dir = None
+        target_package_name = '.compiled_krb'   # default
         if isinstance(path, (tuple, list)):
             path, target_package_name = path
         if isinstance(path, types.StringTypes):
-            source_package_name = path
+            source_package_name, source_package_dir = _parse_path(path)
         elif isinstance(path, types.ModuleType):
             if path.__file__.endswith(('__init__.py', '__init__.pyc',
                                        '__init__.pyo')):
@@ -104,10 +105,25 @@ class engine(object):
                              "string or module expected, got " +
                                str(type(path)))
         if debug:
-            print >> sys.stderr, "_init_path source_package_name:", \
+            print >> sys.stderr, "_create_target_pkg source_package_name:", \
                                  source_package_name
-            print >> sys.stderr, "_init_path target_package_name:", \
+            print >> sys.stderr, "_create_target_pkg target_package_name:", \
                                  target_package_name
+        if target_package_name[0] == '.':
+            num_dots = \
+                len(target_package_name) - len(target_package_name.lstrip('.'))
+            if debug:
+                print >> sys.stderr, "_create_target_pkg num_dots:", num_dots
+            if num_dots == 1:
+                base_package = source_package_name
+            else:
+                base_package = \
+                    '.'.join(source_package_name.split('.')[:-(num_dots - 1)])
+            if base_package:
+                target_package_name = \
+                    base_package + '.' + target_package_name[num_dots:]
+            else:
+                target_package_name = target_package_name[num_dots:]
         if source_package_name is None:
             assert target_package_name[0] != '.', \
                    "engine: relative target, %s, illegal " \
@@ -117,37 +133,27 @@ class engine(object):
                 # This import must succeed!
                 tp = _get_target_pkg(target_package_name + 
                                        '.compiled_pyke_files')
-                tp.reset()
+                tp.reset(check=False)
                 target_pkgs[target_package_name] = tp
             return
         if debug:
-            print >> sys.stderr, "_init_path source_package_name:", \
+            print >> sys.stderr, "_create_target_pkg source_package_name:", \
                                  source_package_name
-        if target_package_name[0] == '.':
-            num_dots = \
-                len(target_package_name) - len(target_package_name.lstrip('.'))
-            if debug: print >> sys.stderr, "_init_path num_dots:", num_dots
-            if num_dots == 1:
-                base_package = source_package_name
-            else:
-                base_package = \
-                    '.'.join(source_package_name.split('.')[:-(num_dots - 1)])
-            target_package_name = \
-                base_package + '.' + target_package_name[num_dots:]
-        if debug:
-            print >> sys.stderr, "_init_path target_package_name:", \
+            print >> sys.stderr, "_create_target_pkg target_package_name:", \
                                  target_package_name
         if target_package_name in target_pkgs:
             tp = target_pkgs[target_package_name]
         else:
             target_name = target_package_name + '.compiled_pyke_files'
             if debug:
-                print >> sys.stderr, "_init_path target_name:", target_name
+                print >> sys.stderr, "_create_target_pkg target_name:", \
+                                     target_name
             try:
                 # See if compiled_pyke_files already exists.
                 tp = _get_target_pkg(target_name)
             except ImportError:
-                if debug: print >> sys.stderr, "_init_path: no target module"
+                if debug:
+                    print >> sys.stderr, "_create_target_pkg: no target module"
                 # Create a new target_pkg object.
                 try:
                     # See if the target_package exists.
@@ -156,7 +162,8 @@ class engine(object):
                                                   .__file__)
                 except ImportError:
                     if debug:
-                        print >> sys.stderr, "_init_path: no target package"
+                        print >> sys.stderr, "_create_target_pkg: " \
+                                               "no target package"
                     # Create the target_package.
                     last_dot = target_package_name.rfind('.')
                     if last_dot < 0:
@@ -168,27 +175,31 @@ class engine(object):
                             target_pkg.import_(target_package_name[:last_dot]) \
                                       .__file__)
                     if debug:
-                        print >> sys.stderr, "_init_path package_parent_dir:", \
+                        print >> sys.stderr, "_create_target_pkg " \
+                                               "package_parent_dir:", \
                                              package_parent_dir
                     target_package_dir = \
                         os.path.join(package_parent_dir,
                                      target_package_name[last_dot + 1:])
                     if debug:
-                        print >> sys.stderr, "_init_path target_package_dir:", \
+                        print >> sys.stderr, "_create_target_pkg " \
+                                               "target_package_dir:", \
                                              target_package_dir
                     if not os.path.lexists(target_package_dir):
                         if debug:
-                            print >> sys.stderr, "_init_path: mkdir", \
+                            print >> sys.stderr, "_create_target_pkg: mkdir", \
                                                  target_package_dir
                         os.mkdir(target_package_dir)
                     init_filepath = \
                         os.path.join(target_package_dir, '__init__.py')
                     if debug:
-                        print >> sys.stderr, "_init_path init_filepath:", \
+                        print >> sys.stderr, "_create_target_pkg " \
+                                               "init_filepath:", \
                                              init_filepath
                     if not os.path.lexists(init_filepath):
                         if debug:
-                            print >> sys.stderr, "_init_path: creating", \
+                            print >> sys.stderr, "_create_target_pkg: " \
+                                                   "creating", \
                                                  init_filepath
                         open(init_filepath, 'w').close()
                 tp = target_pkg.target_pkg(
@@ -197,7 +208,7 @@ class engine(object):
                                     'compiled_pyke_files.py'))
             tp.reset()
             target_pkgs[target_package_name] = tp
-        tp.add_source_package(source_package_name)
+        tp.add_source_package(source_package_name, source_package_dir)
 
     def get_ask_module(self):
         if not hasattr(self, 'ask_module'):
@@ -328,6 +339,48 @@ def _get_target_pkg(target_name):
     if target_name in sys.modules:
         return getattr(reload(sys.modules[target_name]), 'targets')
     return getattr(target_pkg.import_(target_name), 'targets')
+
+def _parse_path(path):
+    r'''Returns source_package_name, source_package_dir.
+    '''
+    if path.endswith(('.py', '.pyc', '.pyo')):
+        # path is a file path:
+        if os.path.exists(path):
+            # not a .zip file!
+            path = os.path.abspath(path)
+            if not os.path.isdir(path):
+                path = os.path.dirname(path)
+            package_path = ''
+            while is_package(path):
+                path, package = os.path.split(path)
+                if package_path:
+                    package_path = package + '.' + package_path
+                else:
+                    package_path = package
+            if package_path:
+                return package_path, None
+            return '', path
+        # must be in a .zip file:
+        test_path = os.path.dirname(path)
+        package_path = ''
+        while test_path and not os.path.exists(test_path):
+            test_path, package = os.path.split(test_path)
+            if package_path:
+                package_path = package + '.' + package_path
+            else:
+                package_path = package
+        if not test_path:
+            raise IOError("%s: file does not exist" % path)
+        if package_path:
+            return package_path, None
+        return None, None
+    return path, None
+
+def _is_package(path):
+    if not os.path.isdir(path): return False
+    return os.path.exists(os.path.join(path, '__init__.py')) or \
+           os.path.exists(os.path.join(path, '__init__.pyc')) or \
+           os.path.exists(os.path.join(path, '__init__.pyo'))
 
 def test():
     import doctest

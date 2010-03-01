@@ -77,13 +77,13 @@ class target_pkg(object):
 
             In this case, all of the parameters are passed to __init__.
 
-        2.  From knowledge_engine.engine.__init__ (actually _init_path).
+        2.  From knowledge_engine.engine.__init__ (actually _create_target_pkg).
 
             In this case, only the first two parameters are passed to __init__.
 
         Either way, after importing compiled_pyke_files or creating a new
         instance directly, reset is called by
-        knowledge_engine.engine._init_path.
+        knowledge_engine.engine._create_target_pkg.
         '''
         self.package_name = module_name.rsplit('.', 1)[0]
         if filename.endswith('.py'):
@@ -107,25 +107,28 @@ class target_pkg(object):
                                  "running %s, compiled for %s" % 
                                  (module_name, pyke.version, pyke_version))
 
-    def reset(self):
+    def reset(self, check = True):
         ''' This should be called once by engine.__init__ prior to calling
             add_source_package.
         '''
         if debug: print >> sys.stderr, "target_pkg.reset"
         self.dirty = False
+        self.check = check
         self.source_packages = {}  # {source_package_name: source_package_dir}
         self.compiled_targets = set()  # set of target_filename
         self.rb_names = set()
 
-    def add_source_package(self, source_package_name):
+    def add_source_package(self, source_package_name,
+                                 source_package_dir = None):
         if debug:
             print >> sys.stderr, "target_pkg.add_source_package:", \
-                                 source_package_name
+                                 source_package_name, source_package_dir
         if not self.loader:
             assert source_package_name not in self.source_packages, \
                    "duplicate source package: %s" % source_package_name
-            source_package_dir = \
-                os.path.dirname(import_(source_package_name).__file__)
+            if source_package_dir is None:
+                source_package_dir = \
+                    os.path.dirname(import_(source_package_name).__file__)
             if debug:
                 print >> sys.stderr, "source_package_dir:", source_package_dir
             self.source_packages[source_package_name] = source_package_dir
@@ -179,7 +182,7 @@ class target_pkg(object):
     def compile(self, engine):
         if debug: print >> sys.stderr, "%s.compile:" % self.package_name
         global krb_compiler
-        if not self.loader:
+        if self.check and not self.loader:
             initialized = False
             for (source_package_name, source_filename), value \
              in self.sources.iteritems():
@@ -259,7 +262,8 @@ class target_pkg(object):
         if debug: print >> sys.stderr, "target_pkg.load:", load_flags
         for (source_package_name, source_filename), value \
          in self.sources.iteritems():
-            if self.loader or source_package_name in self.source_packages:
+            if not self.check or self.loader or \
+               source_package_name in self.source_packages:
                 for target_filename in value[1:]:
                     if debug: print >> sys.stderr, "load:", target_filename
                     self.do_by_ext('load', target_filename, engine, load_flags)
