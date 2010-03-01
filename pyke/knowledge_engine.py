@@ -99,6 +99,10 @@ class engine(object):
                 source_package_name = path.__name__
             else:
                 source_package_name = path.__name__.rsplit('.', 1)[0]
+        else:
+            raise ValueError("illegal path argument: "
+                             "string or module expected, got " +
+                               str(type(path)))
         if debug:
             print >> sys.stderr, "_init_path source_package_name:", \
                                  source_package_name
