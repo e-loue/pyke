@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 
 """
-    The target_pkg object keeps track of all of the compiled files within one
+    Each target_pkg object keeps track of all of the compiled files within one
     compiled_krb package.
 """
 
@@ -50,7 +50,8 @@ class target_pkg(object):
     This maintains the following information for each compiled target file:
         source_package, source_filepath, compile_time, target_filename.
     '''
-    def __init__(self, module_name, filename, pyke_version = pyke.version,
+    def __init__(self, module_name, filename = None,
+                       pyke_version = pyke.version,
                        loader = None, sources = None, compiler_version = 0):
         r'''
 
@@ -79,13 +80,66 @@ class target_pkg(object):
 
         2.  From knowledge_engine.engine.__init__ (actually _create_target_pkg).
 
-            In this case, only the first two parameters are passed to __init__.
+            In this case, only the first parameter is passed to __init__.
 
         Either way, after importing compiled_pyke_files or creating a new
         instance directly, reset is called by
         knowledge_engine.engine._create_target_pkg.
         '''
+
+        # compiled_krb package name
         self.package_name = module_name.rsplit('.', 1)[0]
+
+        if filename is None:
+            # compiled_pyke_files.py does not exist.
+
+            # Creating a new target_pkg object from scratch.
+            try:
+                # See if the self.package_name exists.
+                target_package_dir = \
+                    os.path.dirname(import_(self.package_name).__file__)
+            except ImportError:
+                if debug:
+                    print >> sys.stderr, "target_pkg: no target package"
+                # Create the target_package.
+                last_dot = self.package_name.rfind('.')
+                if last_dot < 0:
+                    package_parent_dir = '.'
+                else:
+                    package_parent_dir = \
+                      os.path.dirname(
+                        # This import better work!
+                        import_(self.package_name[:last_dot]).__file__)
+                if debug:
+                    print >> sys.stderr, "target_pkg package_parent_dir:", \
+                                         package_parent_dir
+                target_package_dir = \
+                    os.path.join(package_parent_dir,
+                                 self.package_name[last_dot + 1:])
+                if debug:
+                    print >> sys.stderr, "target_pkg target_package_dir:", \
+                                         target_package_dir
+                if not os.path.lexists(target_package_dir):
+                    if debug:
+                        print >> sys.stderr, "target_pkg: mkdir", \
+                                             target_package_dir
+                    os.mkdir(target_package_dir)
+
+                # Does __init__.py file exist?
+                init_filepath = \
+                    os.path.join(target_package_dir, '__init__.py')
+                if debug:
+                    print >> sys.stderr, "target_pkg init_filepath:", \
+                                         init_filepath
+                if not os.path.lexists(init_filepath):
+                    # Create empty __init__.py file.
+                    if debug:
+                        print >> sys.stderr, "target_pkg: creating", \
+                                             init_filepath
+                    open(init_filepath, 'w').close()
+            filename = os.path.join(target_package_dir,
+                                    'compiled_pyke_files.py')
+
         if filename.endswith('.py'):
             self.filename = filename
         else:
@@ -100,20 +154,22 @@ class target_pkg(object):
             #  [compile_time, target_filename, ...]}
             self.sources = sources if sources is not None else {}
         elif self.loader is None:
+            # Force recompile of everything
             self.sources = {}
         else:
-            # loading incorrect version from zip file
+            # Loading incorrect pyke.compiler_version from zip file.
+            # Can't recompile to zip file...
             raise AssertionError("%s: wrong version of pyke, "
                                  "running %s, compiled for %s" % 
                                  (module_name, pyke.version, pyke_version))
 
-    def reset(self, check = True):
+    def reset(self, check_sources = True):
         ''' This should be called once by engine.__init__ prior to calling
             add_source_package.
         '''
         if debug: print >> sys.stderr, "target_pkg.reset"
         self.dirty = False
-        self.check = check
+        self.check_sources = check_sources
         self.source_packages = {}  # {source_package_name: source_package_dir}
         self.compiled_targets = set()  # set of target_filename
         self.rb_names = set()
@@ -182,7 +238,7 @@ class target_pkg(object):
     def compile(self, engine):
         if debug: print >> sys.stderr, "%s.compile:" % self.package_name
         global krb_compiler
-        if self.check and not self.loader:
+        if self.check_sources and not self.loader:
             initialized = False
             for (source_package_name, source_filename), value \
              in self.sources.iteritems():
@@ -262,7 +318,7 @@ class target_pkg(object):
         if debug: print >> sys.stderr, "target_pkg.load:", load_flags
         for (source_package_name, source_filename), value \
          in self.sources.iteritems():
-            if not self.check or self.loader or \
+            if not self.check_sources or self.loader or \
                source_package_name in self.source_packages:
                 for target_filename in value[1:]:
                     if debug: print >> sys.stderr, "load:", target_filename

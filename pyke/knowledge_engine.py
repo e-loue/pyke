@@ -87,6 +87,9 @@ class engine(object):
     def _create_target_pkg(self, path, target_pkgs):
         if debug: print >> sys.stderr, "engine._create_target_pkg:", path
         # Does target_pkg.add_source_package.
+
+        # First, figure out source_package_name, source_package_dir
+        #               and target_package_name:
         source_package_name = None
         source_package_dir = None
         target_package_name = '.compiled_krb'   # default
@@ -109,6 +112,8 @@ class engine(object):
                                  source_package_name
             print >> sys.stderr, "_create_target_pkg target_package_name:", \
                                  target_package_name
+
+        # Convert relative target_package_name (if specified) to absolute form:
         if target_package_name[0] == '.':
             num_dots = \
                 len(target_package_name) - len(target_package_name.lstrip('.'))
@@ -124,6 +129,13 @@ class engine(object):
                     base_package + '.' + target_package_name[num_dots:]
             else:
                 target_package_name = target_package_name[num_dots:]
+            if debug:
+                print >> sys.stderr, "_create_target_pkg " \
+                                       "absolute target_package_name:", \
+                                     target_package_name
+
+        # Handle the case where there are no source files (for a distributed
+        # app that wants to hide its knowledge bases):
         if source_package_name is None:
             assert target_package_name[0] != '.', \
                    "engine: relative target, %s, illegal " \
@@ -133,14 +145,10 @@ class engine(object):
                 # This import must succeed!
                 tp = _get_target_pkg(target_package_name + 
                                        '.compiled_pyke_files')
-                tp.reset(check=False)
+                tp.reset(check_sources=False)
                 target_pkgs[target_package_name] = tp
             return
-        if debug:
-            print >> sys.stderr, "_create_target_pkg source_package_name:", \
-                                 source_package_name
-            print >> sys.stderr, "_create_target_pkg target_package_name:", \
-                                 target_package_name
+
         if target_package_name in target_pkgs:
             tp = target_pkgs[target_package_name]
         else:
@@ -154,58 +162,7 @@ class engine(object):
             except ImportError:
                 if debug:
                     print >> sys.stderr, "_create_target_pkg: no target module"
-                # Create a new target_pkg object.
-                try:
-                    # See if the target_package exists.
-                    target_package_dir = \
-                        os.path.dirname(target_pkg.import_(target_package_name)
-                                                  .__file__)
-                except ImportError:
-                    if debug:
-                        print >> sys.stderr, "_create_target_pkg: " \
-                                               "no target package"
-                    # Create the target_package.
-                    last_dot = target_package_name.rfind('.')
-                    if last_dot < 0:
-                        package_parent_dir = '.'
-                    else:
-                        package_parent_dir = \
-                          os.path.dirname(
-                            # This import better work!
-                            target_pkg.import_(target_package_name[:last_dot]) \
-                                      .__file__)
-                    if debug:
-                        print >> sys.stderr, "_create_target_pkg " \
-                                               "package_parent_dir:", \
-                                             package_parent_dir
-                    target_package_dir = \
-                        os.path.join(package_parent_dir,
-                                     target_package_name[last_dot + 1:])
-                    if debug:
-                        print >> sys.stderr, "_create_target_pkg " \
-                                               "target_package_dir:", \
-                                             target_package_dir
-                    if not os.path.lexists(target_package_dir):
-                        if debug:
-                            print >> sys.stderr, "_create_target_pkg: mkdir", \
-                                                 target_package_dir
-                        os.mkdir(target_package_dir)
-                    init_filepath = \
-                        os.path.join(target_package_dir, '__init__.py')
-                    if debug:
-                        print >> sys.stderr, "_create_target_pkg " \
-                                               "init_filepath:", \
-                                             init_filepath
-                    if not os.path.lexists(init_filepath):
-                        if debug:
-                            print >> sys.stderr, "_create_target_pkg: " \
-                                                   "creating", \
-                                                 init_filepath
-                        open(init_filepath, 'w').close()
-                tp = target_pkg.target_pkg(
-                       target_name,
-                       os.path.join(target_package_dir,
-                                    'compiled_pyke_files.py'))
+                tp = target_pkg.target_pkg(target_name)
             tp.reset()
             target_pkgs[target_package_name] = tp
         tp.add_source_package(source_package_name, source_package_dir)
