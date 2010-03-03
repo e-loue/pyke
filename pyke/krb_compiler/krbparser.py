@@ -598,7 +598,7 @@ def parse(this_module, filename, check_tables = False, debug = 0):
         scanner.goal_mode = False
         goal_mode = False
         #parser.restart()
-        return parser.parse(f.read(), lexer=scanner.lexer, tracking=True,
+        return parser.parse(f.read() + '\n', lexer=scanner.lexer, tracking=True,
                             debug=debug)
 
 def parse_goal(this_module, s, check_tables = False, debug = 0):
