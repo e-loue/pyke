@@ -64,9 +64,10 @@ class target_pkg(object):
             pyke_version: the version of pyke used to compile the target files.
             loader:       the __loader__ attribute of the compiled_pyke_files
                           module (only set if the compiled_krb directory has
-                          been zipped).
-            sources:      {(source_module, source_filepath):
-                            [compile_time, target_file...]}
+                          been zipped, otherwise None).
+            sources:      {(source_package_name, path_from_package,
+                            source_filepath):
+                           [compile_time, target_file...]}
             compiler_version:
                           the version of the pyke compiler used to compile all
                           of the targets in this compiled_krb directory.
@@ -170,51 +171,63 @@ class target_pkg(object):
         if debug: print >> sys.stderr, "target_pkg.reset"
         self.dirty = False
         self.check_sources = check_sources
-        self.source_packages = {}  # {source_package_name: source_package_dir}
+
+        # {(source_package_name, path_from_package): source_package_dir}
+        self.source_packages = {}
+
         self.compiled_targets = set()  # set of target_filename
         self.rb_names = set()
 
-    def add_source_package(self, source_package_name,
-                                 source_package_dir = None):
+    def add_source_package(self, source_package_name, path_from_package,
+                                 source_package_dir):
         if debug:
             print >> sys.stderr, "target_pkg.add_source_package:", \
                                  source_package_name, source_package_dir
         if not self.loader:
-            assert source_package_name not in self.source_packages, \
-                   "duplicate source package: %s" % source_package_name
-            if source_package_dir is None:
-                source_package_dir = \
-                    os.path.dirname(import_(source_package_name).__file__)
+            assert (source_package_name, path_from_package) not in \
+                     self.source_packages, \
+                   "duplicate source package: %s" % path_from_package
             if debug:
                 print >> sys.stderr, "source_package_dir:", source_package_dir
-            self.source_packages[source_package_name] = source_package_dir
+                print >> sys.stderr, "path_from_package:", path_from_package
+            source_dir = os.path.normpath(os.path.join(source_package_dir,
+                                                       path_from_package))
+            self.source_packages[source_package_name, path_from_package] = \
+                source_dir
             sources = set([])
             for dirpath, dirnames, filenames \
-             in os.walk(source_package_dir, onerror=_raise_exc):
+             in os.walk(source_dir, onerror=_raise_exc):
                 for filename in filenames:
                     if filename.endswith(('.krb', '.kfb', '.kqb')):
                         source_abspath = os.path.join(dirpath, filename)
-                        assert dirpath.startswith(source_package_dir)
+                        assert dirpath.startswith(source_dir)
                         source_relpath = \
-                            os.path.join(dirpath[len(source_package_dir)+1:],
+                            os.path.join(dirpath[len(source_dir)+1:],
                                          filename)
-                        self.add_source(source_package_name, source_relpath,
+                        self.add_source(source_package_name, path_from_package,
+                                        source_relpath,
                                         os.path.getmtime(source_abspath))
                         sources.add(source_relpath)
-            # delete any old source files that are no longer present
-            for filepath in [src_filepath
-                             for src_pkg_name, src_filepath
-                              in self.sources.iterkeys()
-                                 if src_pkg_name == source_package_name and \
-                                    src_filepath not in sources]:
+
+            # Delete old source file info for files that are no longer present
+            for deleted_filepath \
+             in [src_filepath
+                 for src_pkg_name, src_path_from_pkg, src_filepath
+                  in self.sources.iterkeys()
+                     if src_pkg_name == source_package_name and
+                        src_path_from_pkg == path_from_package and
+                        src_filepath not in sources]:
                 if debug:
                     print >> sys.stderr, "del:", source_package_name, filepath
-                del self.sources[source_package_name, filepath]
+                del self.sources[source_package_name, path_from_package,
+                                 deleted_filepath]
 
-    def add_source(self, source_package_name, source_filepath, source_mtime):
+    def add_source(self, source_package_name, path_from_package,
+                         source_filepath, source_mtime):
         if debug:
             print >> sys.stderr, "target_pkg.add_source:", \
-                                 source_package_name, source_filepath
+                                 source_package_name, path_from_package, \
+                                 source_filepath
         rb_name = os.path.splitext(os.path.basename(source_filepath))[0]
         if debug: print >> sys.stderr, "rb_name:", rb_name
         if not Name_test.match(rb_name):
@@ -223,7 +236,7 @@ class target_pkg(object):
         if rb_name in self.rb_names:
             raise ValueError("%s: duplicate knowledge base name" % rb_name)
         self.rb_names.add(rb_name)
-        key = source_package_name, source_filepath
+        key = source_package_name, path_from_package, source_filepath
         if debug: print >> sys.stderr, "key:", key
         if self.sources.get(key, (0,))[0] < source_mtime:
             if debug:
@@ -240,9 +253,12 @@ class target_pkg(object):
         global krb_compiler
         if self.check_sources and not self.loader:
             initialized = False
-            for (source_package_name, source_filename), value \
+            for (source_package_name, path_from_package, source_filename), \
+                value \
              in self.sources.iteritems():
-                if not value and source_package_name in self.source_packages:
+                if not value and \
+                   (source_package_name, path_from_package) in \
+                     self.source_packages:
                     if not initialized:
                         try:
                             krb_compiler
@@ -252,7 +268,8 @@ class target_pkg(object):
                     target_files = \
                         self.do_by_ext('compile',
                             os.path.join(
-                                self.source_packages[source_package_name],
+                                self.source_packages[source_package_name,
+                                                     path_from_package],
                                 source_filename))
                     if debug: print >> sys.stderr, "target_files:", target_files
                     value.append(time.time())
@@ -304,11 +321,11 @@ class target_pkg(object):
                 f.write("    loader = None\n\n");
                 f.write("targets = target_pkg.target_pkg(__name__, __file__, "
                         "pyke_version, loader, {\n")
-                for item in self.sources.iteritems():
-                    if debug: print >> sys.stderr, "write got:", item
-                    if item[0][0] in self.source_packages:
-                        if debug: print >> sys.stderr, "writing:", item
-                        f.write("    %r: %r,\n" % item)
+                for key, value in self.sources.iteritems():
+                    if debug: print >> sys.stderr, "write got:", key, value
+                    if (key[0], key[1]) in self.source_packages:
+                        if debug: print >> sys.stderr, "writing:", key, value
+                        f.write("    %r: %r,\n" % (key, value))
                 f.write("  },\n  compiler_version)\n")
 
     def load(self, engine, load_fc = True, load_bc = True,
@@ -316,10 +333,10 @@ class target_pkg(object):
         load_flags = {'load_fc': load_fc, 'load_bc': load_bc,
                       'load_fb': load_fb, 'load_qb': load_qb}
         if debug: print >> sys.stderr, "target_pkg.load:", load_flags
-        for (source_package_name, source_filename), value \
+        for (source_package_name, path_from_package, source_filename), value \
          in self.sources.iteritems():
             if not self.check_sources or self.loader or \
-               source_package_name in self.source_packages:
+               (source_package_name, path_from_package) in self.source_packages:
                 for target_filename in value[1:]:
                     if debug: print >> sys.stderr, "load:", target_filename
                     self.do_by_ext('load', target_filename, engine, load_flags)

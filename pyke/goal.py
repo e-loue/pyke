@@ -15,6 +15,8 @@ EXAMPLE USAGE:
                 print vars['ans']
 '''
 
+from __future__ import with_statement
+
 import itertools
 from pyke import contexts
 

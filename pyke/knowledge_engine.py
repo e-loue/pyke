@@ -46,16 +46,33 @@ from pyke import (condensedPrint, contexts, pattern,
 
 debug = False
 
+Sys_path = tuple(os.getcwd() if p == ''
+                             else os.path.normpath(os.path.abspath(p))
+                 for p in sys.path)
+
 class CanNotProve(StandardError):
     pass
 
 class engine(object):
     _Variables = tuple(contexts.variable('ans_%d' % i) for i in range(100))
 
-    def __init__(self, *paths, **kws):
-        '''
-            kws can be: load_fc, load_bc, load_fb and load_qb.
-            They all default to True.
+    def __init__(self, reference_path = None, *search_paths, **kws):
+        r'''All search_paths are relative to reference_path.
+
+        Each search_path may be:
+
+            None        -- to use the compiled knowledge bases in
+                           '.compiled_krb' without scanning for source files.
+            path        -- a path relative to reference_path to search for
+                           source files, placing the compiled knowledge bases
+                           in '.compiled_krb'.
+            (None|path, target_package)
+                        -- use target_package rather than '.compiled_krb'.
+                           This is a package name in Python dotted name
+                           notation relative to reference_path.
+
+        kws can be: load_fc, load_bc, load_fb and load_qb.  They are all
+        boolean valued and default to True.
         '''
         for keyword in kws.iterkeys():
             if keyword not in ('load_fc', 'load_bc', 'load_fb', 'load_qb'):
@@ -66,15 +83,20 @@ class engine(object):
         self.rule_bases = {}
         special.create_for(self)
 
-        if len(paths) == 1 and isinstance(paths[0], tuple) and \
-           paths[0][0] == '*direct*' and \
-           isinstance(paths[0][1], types.ModuleType):
+        if len(search_paths) == 1 and isinstance(search_paths[0], tuple) and \
+           search_paths[0][0] == '*direct*' and \
+           isinstance(search_paths[0][1], types.ModuleType):
             # secret hook for the compiler to initialize itself (so the
             # compiled python module can be in an egg).
-            paths[0][1].populate(self)
-        else:
+            search_paths[0][1].populate(self)
+        elif reference_path:
+            reference_info = _pythonify_path(reference_path)
             target_pkgs = {}  # {target_package_name: target_pkg}
-            for path in paths: self._create_target_pkg(path, target_pkgs)
+            if not search_paths:
+                self._create_target_pkg(reference_info, '.', target_pkgs)
+            else:
+                for path in search_paths:
+                    self._create_target_pkg(reference_info, path, target_pkgs)
             for target_package in target_pkgs.itervalues():
                 if debug:
                     print >>sys.stderr, "target_package:", target_package
@@ -84,34 +106,43 @@ class engine(object):
         for kb in self.knowledge_bases.itervalues(): kb.init2()
         for rb in self.rule_bases.itervalues(): rb.init2()
 
-    def _create_target_pkg(self, path, target_pkgs):
-        if debug: print >> sys.stderr, "engine._create_target_pkg:", path
+    def _create_target_pkg(self, reference_info, path, target_pkgs):
         # Does target_pkg.add_source_package.
+
+        if debug: print >> sys.stderr, "engine._create_target_pkg:", path
+
+        path_to_package, source_package_name, remainder_path, zip_file_flag = \
+          reference_info
 
         # First, figure out source_package_name, source_package_dir
         #               and target_package_name:
-        source_package_name = None
-        source_package_dir = None
         target_package_name = '.compiled_krb'   # default
         if isinstance(path, (tuple, list)):
             path, target_package_name = path
-        if isinstance(path, types.StringTypes):
-            source_package_name, source_package_dir = _parse_path(path)
-        elif isinstance(path, types.ModuleType):
-            if path.__file__.endswith(('__init__.py', '__init__.pyc',
-                                       '__init__.pyo')):
-                source_package_name = path.__name__
-            else:
-                source_package_name = path.__name__.rsplit('.', 1)[0]
-        else:
-            raise ValueError("illegal path argument: "
-                             "string or module expected, got " +
+        if not isinstance(path, (types.StringTypes, types.NoneType)):
+            raise ValueError("illegal path argument: string expected, got " + \
                                str(type(path)))
+
         if debug:
             print >> sys.stderr, "_create_target_pkg source_package_name:", \
                                  source_package_name
             print >> sys.stderr, "_create_target_pkg target_package_name:", \
                                  target_package_name
+
+        # Handle the case where there are no source files (for a distributed
+        # app that wants to hide its knowledge bases):
+        if path is None:
+            assert target_package_name[0] != '.', \
+                   "engine: relative target, %s, illegal " \
+                   "with no source package" % \
+                       target_package_name
+            if target_package_name not in target_pkgs:
+                # This import must succeed!
+                tp = _get_target_pkg(target_package_name + 
+                                       '.compiled_pyke_files')
+                tp.reset(check_sources=False)
+                target_pkgs[target_package_name] = tp
+            return
 
         # Convert relative target_package_name (if specified) to absolute form:
         if target_package_name[0] == '.':
@@ -134,21 +165,6 @@ class engine(object):
                                        "absolute target_package_name:", \
                                      target_package_name
 
-        # Handle the case where there are no source files (for a distributed
-        # app that wants to hide its knowledge bases):
-        if source_package_name is None:
-            assert target_package_name[0] != '.', \
-                   "engine: relative target, %s, illegal " \
-                   "with no source package" % \
-                       target_package_name
-            if target_package_name not in target_pkgs:
-                # This import must succeed!
-                tp = _get_target_pkg(target_package_name + 
-                                       '.compiled_pyke_files')
-                tp.reset(check_sources=False)
-                target_pkgs[target_package_name] = tp
-            return
-
         if target_package_name in target_pkgs:
             tp = target_pkgs[target_package_name]
         else:
@@ -165,7 +181,17 @@ class engine(object):
                 tp = target_pkg.target_pkg(target_name)
             tp.reset()
             target_pkgs[target_package_name] = tp
-        tp.add_source_package(source_package_name, source_package_dir)
+
+        path_from_package = os.path.join(remainder_path, path)
+        source_package_dir = \
+          os.path.join(path_to_package,
+                       os.path.join(*source_package_name.split('.')),
+                       path_from_package)
+        if not os.path.isdir(source_package_dir):
+            source_package_dir = os.path.dirname(source_package_dir)
+            path_from_package = os.path.dirname(path_from_package)
+        tp.add_source_package(source_package_name, path_from_package,
+                              source_package_dir)
 
     def get_ask_module(self):
         if not hasattr(self, 'ask_module'):
@@ -297,51 +323,57 @@ def _get_target_pkg(target_name):
         return getattr(reload(sys.modules[target_name]), 'targets')
     return getattr(target_pkg.import_(target_name), 'targets')
 
-def _parse_path(path):
-    r'''Returns source_package_name, source_package_dir.
-    '''
-    if path.endswith(('.py', '.pyc', '.pyo')):
-        # path is a file path:
-        if os.path.exists(path):
-            # not a .zip file!
-            path = os.path.abspath(path)
-            if not os.path.isdir(path):
-                path = os.path.dirname(path)
-            package_path = ''
-            while is_package(path):
-                path, package = os.path.split(path)
-                if package_path:
-                    package_path = package + '.' + package_path
-                else:
-                    package_path = package
-            if package_path:
-                return package_path, None
-            return '', path
-        # must be in a .zip file:
-        test_path = os.path.dirname(path)
-        package_path = ''
-        while test_path and not os.path.exists(test_path):
-            test_path, package = os.path.split(test_path)
-            if package_path:
-                package_path = package + '.' + package_path
-            else:
-                package_path = package
-        if not test_path:
-            raise IOError("%s: file does not exist" % path)
-        if package_path:
-            return package_path, None
-        return None, None
-    return path, None
+def _pythonify_path(path):
+    r'''Returns path_to_package, package_name, remainder_path, zip_file_flag.
 
-def _is_package(path):
+    If zip_file_flag is set, remainder_path is ''.
+    '''
+    path = os.path.normpath(os.path.abspath(path))
+    if path.endswith(('.py', '.pyc', '.pyo')):
+        path = os.path.dirname(path)
+    package_name = ''
+    remainder_path = ''
+    remainder_package_name = ''
+    ans = '', '', path, False
+    while path:
+        if in_sys_path(path):
+            if len(remainder_path) < len(ans[2]) or \
+               len(remainder_path) == len(ans[2]) and \
+                 len(package_name) > len(ans[1]):
+                if os.path.isdir(path):
+                    ans = path, package_name, remainder_path, False
+                else:
+                    ans = path, remainder_package_name, '', True
+        parent_path, dir = os.path.split(path)
+        if parent_path == '' or parent_path == '/' and dir == '':
+            break
+        if _is_package_dir(path):
+            if package_name:
+                package_name = dir + '.' + package_name
+            else:
+                package_name = dir
+        else:
+            package_path = os.path.join(*package_name.split('.'))
+            package_name = ''
+            if remainder_path:
+                remainder_path = os.path.join(dir, package_path, remainder_path)
+            else:
+                remainder_path = os.path.join(dir, package_path)
+        if remainder_package_name:
+            remainder_package_name = dir + '.' + remainder_package_name
+        else:
+            remainder_package_name = dir
+        path = parent_path
+    return ans
+
+def _is_package_dir(path):
     if not os.path.isdir(path): return False
     return os.path.exists(os.path.join(path, '__init__.py')) or \
            os.path.exists(os.path.join(path, '__init__.pyc')) or \
            os.path.exists(os.path.join(path, '__init__.pyo'))
 
-def test():
-    import doctest
-    sys.exit(doctest.testmod()[0])
+def in_sys_path(path):
+    r'''Assumes path is a normalized abspath.
+    '''
+    return path in Sys_path
 
-if __name__ == "__main__":
-    test()

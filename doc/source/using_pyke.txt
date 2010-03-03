@@ -57,7 +57,8 @@ knowledge_engine.engine(\*paths, \*\*kws)
     the functions that you need are provided directly by this object:
 
     >>> from pyke import knowledge_engine
-    >>> my_engine = knowledge_engine.engine('doc.examples')
+    >>> import doc.examples
+    >>> my_engine = knowledge_engine.engine(doc.examples.__first__)
 
     Pyke requires that all Pyke source files be placed (either directly or
     indirectly) under a Python package_ directory.  These packages must be

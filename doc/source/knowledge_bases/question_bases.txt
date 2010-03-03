@@ -131,7 +131,8 @@ Here's an example of setting this attribute::
     >>> from pyke import knowledge_engine
     >>> from pyke import ask_wx
 
-    >>> engine = knowledge_engine.engine('doc.examples')
+    >>> import doc.examples
+    >>> engine = knowledge_engine.engine(doc.examples.__file__)
     >>> engine.ask_module = ask_wx
 
 

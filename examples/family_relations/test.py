@@ -46,7 +46,7 @@ import time
 from pyke import knowledge_engine, krb_traceback, goal
 
 # Compile and load .krb files in same directory that I'm in (recursively).
-engine = knowledge_engine.engine('examples.family_relations')
+engine = knowledge_engine.engine(__file__)
 
 fc_goal = goal.compile('family.how_related($person1, $person2, $relationship)')
 

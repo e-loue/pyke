@@ -7,7 +7,7 @@ from pyke import knowledge_engine
 from pyke import krb_traceback 
 
 def run(pantry, capacity):
-    engine = knowledge_engine.engine('examples.knapsack')
+    engine = knowledge_engine.engine(__file__)
     engine.activate('knapsack')
     max = 0
     ans = None

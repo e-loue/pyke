@@ -52,8 +52,7 @@ class trace_cursor(object):
 
 def init(db_connection, trace_sql=False):
     global Engine, Db_connection, Db_cursor
-    Engine = knowledge_engine.engine('examples.sqlgen',
-                                     'examples.web_framework')
+    Engine = knowledge_engine.engine(__file__, '../sqlgen', '.')
     Db_connection = db_connection
     Db_cursor = db_connection.cursor()
     if trace_sql: Db_cursor = trace_cursor(Db_cursor)

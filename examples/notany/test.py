@@ -5,7 +5,7 @@ import sys
 from pyke import knowledge_engine
 from pyke import krb_traceback
 
-engine = knowledge_engine.engine('examples.notany')
+engine = knowledge_engine.engine(__file__)
 
 def fc_test():
     engine.reset()

@@ -3,7 +3,7 @@
 import sys
 from pyke import knowledge_engine, krb_traceback
 
-engine = knowledge_engine.engine('examples.learn_pyke')
+engine = knowledge_engine.engine(__file__)
 
 def run():
     engine.reset()

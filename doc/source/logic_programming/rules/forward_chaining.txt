@@ -391,7 +391,8 @@ Running the Example
 These rules could be run as follows:
 
     >>> from pyke import knowledge_engine
-    >>> engine = knowledge_engine.engine('doc.examples')
+    >>> import doc.examples
+    >>> engine = knowledge_engine.engine(doc.examples.__file__)
     >>> engine.assert_('family', 'son_of', ('michael', 'bruce'))
     >>> engine.assert_('family', 'son_of', ('bruce', 'thomas'))
     >>> engine.assert_('family', 'son_of', ('thomas', 'frederik'))

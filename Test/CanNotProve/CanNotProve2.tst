@@ -29,7 +29,6 @@ Now try the test!
     >>> from CanNotProve import test
     >>> test.__loader__         # doctest: +ELLIPSIS
     <zipimporter ...>
-    >>> test.Rule_package = 'CanNotProve'
     >>> test.dotests()
 
 And finally, delete the egg file:

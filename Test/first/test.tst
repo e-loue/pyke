@@ -3,7 +3,7 @@
     >>> from Test import test
     >>> import Test.first
     >>> from Test.first import family
-    >>> test.init(Test.first)
+    >>> test.init(family.__file__)
     >>> family.init(test.Engine)
 
     son_of('art', 'art2', 'nana')
