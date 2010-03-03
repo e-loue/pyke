@@ -6,9 +6,9 @@ import types
 from pyke import knowledge_engine
 from pyke import krb_traceback
 
-def init(reference_path, *paths):
+def init(*paths):
     global Engine
-    Engine = knowledge_engine.engine(reference_path, *paths)
+    Engine = knowledge_engine.engine(*paths)
 
 def add_fact(fb, name, *args):
     Engine.add_universal_fact(fb, name, args)

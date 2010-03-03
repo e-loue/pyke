@@ -103,7 +103,7 @@ def to_relative(from_path, to_path):
     return os.path.join(prefix, to_path[len(from_path) + 1:])
 
 def compile_krb(rb_name, generated_root_pkg, generated_root_dir, filename):
-    engine = knowledge_engine.engine(None, ('*direct*', compiler_bc))
+    engine = knowledge_engine.engine(('*direct*', compiler_bc))
     try:
         fc_name = rb_name + '_fc.py'
         bc_name = rb_name + '_bc.py'

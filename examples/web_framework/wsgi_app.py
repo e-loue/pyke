@@ -24,6 +24,7 @@
 import sys
 import os, os.path
 from pyke import knowledge_engine, krb_traceback
+from examples import sqlgen
 
 # Possibly interesting values:
 #     CONTENT_LENGTH:
@@ -52,7 +53,7 @@ class trace_cursor(object):
 
 def init(db_connection, trace_sql=False):
     global Engine, Db_connection, Db_cursor
-    Engine = knowledge_engine.engine(__file__, '../sqlgen', '.')
+    Engine = knowledge_engine.engine(sqlgen, __file__)
     Db_connection = db_connection
     Db_cursor = db_connection.cursor()
     if trace_sql: Db_cursor = trace_cursor(Db_cursor)

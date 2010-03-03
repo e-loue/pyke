@@ -160,7 +160,7 @@ The plan is created as a byproduct of proving_ the goal:
 
     >>> from pyke import knowledge_engine
     >>> import doc.examples
-    >>> engine = knowledge_engine.engine(doc.examples.__file__)
+    >>> engine = knowledge_engine.engine(doc.examples)
     >>> engine.activate('plan_example')
     >>> no_vars, plan1 = engine.prove_1('plan_example', 'transfer',
     ...                                 (('bruce', 'checking'),

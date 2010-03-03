@@ -411,7 +411,7 @@ Asking ``stupid_question`` and answering "y" to it::
     >>> from pyke import knowledge_engine
 
     >>> import doc.examples
-    >>> engine = knowledge_engine.engine(doc.examples.__file__)
+    >>> engine = knowledge_engine.engine(doc.examples)
 
     >>> from StringIO import StringIO
     >>> import sys

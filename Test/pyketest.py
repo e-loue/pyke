@@ -6,10 +6,10 @@ import unittest
 from pyke import knowledge_engine
 from pyke import krb_traceback
 
-def mk_engine(reference_path, *paths):
+def mk_engine(*paths):
     if isinstance(self.paths, types.StringTypes):
         self.paths = (self.paths,)
-    return knowledge_engine.engine(reference_path, *paths)
+    return knowledge_engine.engine(*paths)
 
 class pyketest(unittest.TestCase):
     # Need to set: engine

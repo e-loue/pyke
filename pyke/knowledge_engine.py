@@ -56,20 +56,21 @@ class CanNotProve(StandardError):
 class engine(object):
     _Variables = tuple(contexts.variable('ans_%d' % i) for i in range(100))
 
-    def __init__(self, reference_path = None, *search_paths, **kws):
+    def __init__(self, *search_paths, **kws):
         r'''All search_paths are relative to reference_path.
 
         Each search_path may be:
 
-            None        -- to use the compiled knowledge bases in
-                           '.compiled_krb' without scanning for source files.
             path        -- a path relative to reference_path to search for
                            source files, placing the compiled knowledge bases
                            in '.compiled_krb'.
-            (None|path, target_package)
+            module      -- the module's __file__ is taken as the path.
+            (None|path|module, target_package)
                         -- use target_package rather than '.compiled_krb'.
                            This is a package name in Python dotted name
-                           notation relative to reference_path.
+                           notation relative to path.  Use None to use the
+                           compiled knowledge bases in the target_package
+                           without scanning for source files.
 
         kws can be: load_fc, load_bc, load_fb and load_qb.  They are all
         boolean valued and default to True.
@@ -89,14 +90,10 @@ class engine(object):
             # secret hook for the compiler to initialize itself (so the
             # compiled python module can be in an egg).
             search_paths[0][1].populate(self)
-        elif reference_path:
-            reference_info = _pythonify_path(reference_path)
+        else:
             target_pkgs = {}  # {target_package_name: target_pkg}
-            if not search_paths:
-                self._create_target_pkg(reference_info, '.', target_pkgs)
-            else:
-                for path in search_paths:
-                    self._create_target_pkg(reference_info, path, target_pkgs)
+            for path in search_paths:
+                self._create_target_pkg(path, target_pkgs)
             for target_package in target_pkgs.itervalues():
                 if debug:
                     print >>sys.stderr, "target_package:", target_package
@@ -106,19 +103,18 @@ class engine(object):
         for kb in self.knowledge_bases.itervalues(): kb.init2()
         for rb in self.rule_bases.itervalues(): rb.init2()
 
-    def _create_target_pkg(self, reference_info, path, target_pkgs):
+    def _create_target_pkg(self, path, target_pkgs):
         # Does target_pkg.add_source_package.
 
         if debug: print >> sys.stderr, "engine._create_target_pkg:", path
-
-        path_to_package, source_package_name, remainder_path, zip_file_flag = \
-          reference_info
 
         # First, figure out source_package_name, source_package_dir
         #               and target_package_name:
         target_package_name = '.compiled_krb'   # default
         if isinstance(path, (tuple, list)):
             path, target_package_name = path
+        if isinstance(path, types.ModuleType):
+            path = path.__file__
         if not isinstance(path, (types.StringTypes, types.NoneType)):
             raise ValueError("illegal path argument: string expected, got " + \
                                str(type(path)))
@@ -143,6 +139,9 @@ class engine(object):
                 tp.reset(check_sources=False)
                 target_pkgs[target_package_name] = tp
             return
+
+        path_to_package, source_package_name, remainder_path, zip_file_flag = \
+          _pythonify_path(path)
 
         # Convert relative target_package_name (if specified) to absolute form:
         if target_package_name[0] == '.':
@@ -182,15 +181,14 @@ class engine(object):
             tp.reset()
             target_pkgs[target_package_name] = tp
 
-        path_from_package = os.path.join(remainder_path, path)
         source_package_dir = \
           os.path.join(path_to_package,
                        os.path.join(*source_package_name.split('.')),
-                       path_from_package)
+                       remainder_path)
         if not os.path.isdir(source_package_dir):
             source_package_dir = os.path.dirname(source_package_dir)
-            path_from_package = os.path.dirname(path_from_package)
-        tp.add_source_package(source_package_name, path_from_package,
+            remainder_path = os.path.dirname(remainder_path)
+        tp.add_source_package(source_package_name, remainder_path,
                               source_package_dir)
 
     def get_ask_module(self):
