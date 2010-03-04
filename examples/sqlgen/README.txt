@@ -92,7 +92,7 @@ run_sqlite3.py
     database cursor.  The debug cursor class does not require a database
     connection and returns dummy data from any SELECT call.
 
-    Import either run or run_sqlite3, for example:
+    Import either run (for mysql) or run_sqlite3, for example:
 
     >>> import run_sqlite3
 

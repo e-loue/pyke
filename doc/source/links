@@ -116,6 +116,7 @@
 .. _pickled: using_pyke.html#running-and-pickling-plans
 .. _pickle: http://docs.python.org/library/pickle.html
 .. _pickles: pickle_
+.. _pip: http://pypi.python.org/pypi/pip
 .. _plan: logic_programming/plans.html
 .. _plan_spec: pyke_syntax/krb_syntax/bc_rule.html#plan-spec
 .. _plans: plan_

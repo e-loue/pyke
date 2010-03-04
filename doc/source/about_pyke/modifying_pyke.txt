@@ -266,6 +266,7 @@ docutils_ (see `Other Required Packages`_ for more details).
 The sources for the documentation are in ``doc/source``.  Each .txt file there
 is converted into an .html file in the doc/html directory by running::
 
+    $ cd doc/source
     $ bin/gen_html
 
 This takes about 9 seconds.  It:

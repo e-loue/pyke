@@ -58,7 +58,7 @@ knowledge_engine.engine(\*paths, \*\*kws)
 
     >>> from pyke import knowledge_engine
     >>> import doc.examples
-    >>> my_engine = knowledge_engine.engine(doc.examples.__first__)
+    >>> my_engine = knowledge_engine.engine(doc.examples)
 
     Pyke requires that all Pyke source files be placed (either directly or
     indirectly) under a Python package_ directory.  These packages must be
@@ -66,16 +66,10 @@ knowledge_engine.engine(\*paths, \*\*kws)
     name must include an ``__init__.py`` file.
 
     Each ``paths`` argument represents a different Python package directory to
-    search for Pyke source files.  These source packages may be passed either
-    as package names (as a string in Python's standard dotted notation), as
-    the packages themselves, or as any module within the package (in this
-    case, the module name is stripped from the dotted path to get the package).
-    Thus, the example above could also be written:
-
-    >>> from doc import examples
-    >>> my_engine = knowledge_engine.engine(examples)
-
-    or
+    search for Pyke source files.  Each source package may be passed either
+    as the path to the package, the package itself, or as any module within
+    the package (in this case, the module name is stripped from the dotted
+    path to get the package).  Thus, the example above could also be written:
 
     >>> from doc.examples import some_module
     >>> my_engine = knowledge_engine.engine(some_module)
@@ -94,9 +88,9 @@ knowledge_engine.engine(\*paths, \*\*kws)
     .. note::
        It is OK for your source package directory to be part of a zipped
        `Python egg file`_.  But, in this case, Pyke can't rebuild and recompile
-       the source files.  It will just import the compiled file that is there
-       without complaining if the source file has a later modification time
-       than the compiled file.
+       the source files.  It will just import the compiled files that are there
+       without complaining if a source file has a later modification time
+       than its compiled file.
 
     All of the Python source files and pickle files generated from each source
     package are placed, by default, in a ``compiled_krb`` package directly
@@ -107,7 +101,7 @@ knowledge_engine.engine(\*paths, \*\*kws)
     relative path (with leading dots), relative to the source package.  Thus,
     specifying the default destination explicitly would look like:
 
-    >>> my_engine = knowledge_engine.engine(('doc.examples', '.compiled_krb'))
+    >>> my_engine = knowledge_engine.engine((doc.examples, '.compiled_krb'))
 
     You may specify the same destination package for multiple source packages.
 
@@ -333,18 +327,18 @@ Python functions between subgoal proofs.
     >>> from pyke import knowledge_engine
     >>> from pyke import krb_traceback
     >>>
-    >>> my_engine = knowledge_engine.engine('doc.examples')
+    >>> my_engine = knowledge_engine.engine(doc.examples)
     >>> my_engine.activate('error_test')
     >>> try:                                            # doctest: +ELLIPSIS
     ...     my_engine.prove_1('error_test', 'goal', (), 0)
     ... except:
     ...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
     Traceback (most recent call last):
-      File "<doctest using_pyke.txt[37]>", line 2, in <module>
+      File "<doctest using_pyke.txt[36]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
-      File "...knowledge_engine.py", line 277, in prove_1
+      File "...knowledge_engine.py", line 309, in prove_1
         return iter(it).next()
-      File "...knowledge_engine.py", line 260, in gen
+      File "...knowledge_engine.py", line 292, in gen
         for plan in it:
       File "...rule_base.py", line 46, in next
         return self.iterator.next()

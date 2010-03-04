@@ -1,23 +1,21 @@
 This example automatically generates programs to render HTMLTemplates
 (http://py-templates.sourceforge.net/htmltemplate/index.html).  You can use
-easy_install to install the HTMLTemplate package.
+pip or easy_install to install the HTMLTemplate package.
 
 It uses the sqlgen example on the back-end to generate and run SQL statements.
 You'll need to first set up the sqlgen example database before using this
-example.  Check there for the movie_db schema.  You'll also need the directory
-containing the "examples" directory to be on your PYTHONPATH (e.g., if you
-downloaded the pyke_examples separately).
+example.  Check there for the movie_db schema.
 
 This is also an example of using multiple rule bases (its own rule base, and
 the sqlgen/database.krb rule base).
 
-This example also caches the plans returned from pyke so it should be extremely
-fast.  In fact, in siege tests compared to this same example running in
+This example also caches the plans returned from pyke so it is extremely fast.
+In fact, in siege tests compared to this same example running in
 TurboGears 2.0, this web framework is a full 10 times faster than TurboGears!
 
-To run this example:
+To run this example, you need to be in the examples directory, then:
 
-    >>> from examples.web_framework import simple_server
+    >>> from web_framework import simple_server
     >>> simple_server.run()
 
 Then point your browser at:

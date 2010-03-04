@@ -99,7 +99,7 @@ things:
    +================================+==================+==================+
    | run the web_framework example  | HTMLTemplate_    | 1.5              |
    +--------------------------------+------------------+------------------+
-   | run the unit tests             | `doctest-tools`_ | 1.0a2            |
+   | run the unit tests             | `doctest-tools`_ | 1.0a3            |
    +--------------------------------+------------------+------------------+
    | rebuild the html documentation | rest2web_        | 0.5              |
    +                                +------------------+------------------+
@@ -111,9 +111,9 @@ there is probably a package for it in the package index for your Linux
 distribution.
 
 All of the other packages can be installed as the administrator using
-easy_install_.  For example::
+pip_ or easy_install_.  For example::
 
-    # easy_install HTMLTemplate
+    # pip install HTMLTemplate
 
 
 Installation
@@ -144,9 +144,9 @@ example is in it's own subdirectory under the ``examples`` subdirectory, and
 each has it's own README.txt file that explains how to run it.
 
 The web_framework example requires the HTMLTemplate_ package, version 1.5 or
-later.  This can be installed as administrator with easy_install::
+later.  This can be installed as administrator with pip or easy_install::
 
-    # easy_install HTMLTemplate
+    # pip install HTMLTemplate
 
 See also Examples_.
 
