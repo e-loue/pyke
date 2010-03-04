@@ -41,18 +41,22 @@ uservalues
 Examples
 ========
 
-Several examples are included to help you become familiar with Pyke.  These
-are all in an ``examples`` directory; which forms the top-level Python package
-for importing::
+.. this code is hidden and will change to the root directory and add '' to
+   sys.path for the code section following:
+   >>> import sys
+   >>> sys.path.insert(0, '')
+   >>> import os
+   >>> os.chdir("../..")  # get out of documents directory back to root dir
 
-    >>> from examples.towers_of_hanoi import test
-    >>> test.test(2)
+Several examples are included to help you become familiar with Pyke.  These
+are all in an ``examples`` directory::
+
+    >>> import os
+    >>> os.chdir("examples/towers_of_hanoi")
+    >>> import run
+    >>> run.test(2)
     got 1: ((0, 1), (0, 2), (1, 2))
     got 2: ((0, 2), (0, 1), (2, 0), (1, 2), (0, 2))
-
-Thus the source directory (containing the ``examples`` directory) must be on
-your Python path.  This is most easily accomplished by running the examples
-from the source directory.
 
 Each example is in its own sub-directory and has a README.txt file to get you
 started.  They all have `.krb files`_ and a Python module to run the example
@@ -84,7 +88,7 @@ them:
 - A mix of forward-chaining and backward-chaining with some use of plans_ added
   too.
 
-The test.py program also demonstrates how to use krb_traceback_ and the
+The run.py program also demonstrates how to use krb_traceback_ and the
 print_stats_ function.
 
 
@@ -146,8 +150,9 @@ Web_framework
 
 This example completes the Python web framework demo by adding rules to
 automatically generate code to render HTML templates from the HTMLTemplate_
-package (you can run ``easy_install HTMLTemplate`` to install the HTMLTemplate
-package).  This uses the sqlgen_ example, above, to generate the SQL statements.
+package (you can run ``pip install HTMLTemplate`` or ``easy_install
+HTMLTemplate`` to install the HTMLTemplate package).  This example uses the
+sqlgen_ example, above, to generate the SQL statements.
 
 An HTMLTemplate does not include anything resembling program code in it, so
 that your graphics designers can completely own the html files without the

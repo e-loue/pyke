@@ -75,15 +75,15 @@ results as a dictionary.
 
 The web_framework example uses the sqlgen example.  This demonstrates the use
 of multiple rule bases.  The web_framework is a WSGI application that uses the
-HTMLTemplate package (install this as administrator with
-"easy_install HTMLTemplate" -- be sure to get version 1.5 or later).  It gets
-the column names from the HTMLTemplate and feeds those to the sqlgen example
-to generate a plan to retrieve the data.  It then builds a plan to populate
-the template and return the finished HTML document.  It also caches the plans
-so that they don't have to be re-generated for each request.  This makes it
-run a full 10 times faster than the same example done in TurboGears 2!  The
-example includes a wsgiref simple_server setup to run it as an http server
-so that you can access it through your browser.
+HTMLTemplate package (install this as administrator with "pip install
+HTMLTemplate" or "easy_install HTMLTemplate" -- be sure to get version 1.5 or
+later).  It gets the column names from the HTMLTemplate and feeds those to the
+sqlgen example to generate a plan to retrieve the data.  It then builds a plan
+to populate the template and return the finished HTML document.  It also
+caches the plans so that they don't have to be re-generated for each request.
+This makes it run a full 10 times faster than the same example done in
+TurboGears 2!  The example includes a wsgiref simple_server setup to run it
+as an http server so that you can access it through your browser.
 
 The learn_pyke example is an incomplete attempt at a computer based training
 program.  It only deals with the topic of pattern matching.  It is left here
@@ -101,7 +101,7 @@ Pyke uses the doctest-tools package to run its doctests.  You can run the
 "testall.py" program from doctest-tools in any subdirectory, or in the
 top-level directory.  You can install doctest-tools as administrator with:
 
-    # easy-install doctest-tools
+    # pip install doctest-tools
 
 The top-level directory also has it's own "testpyke" script that removes all
 compiled_krb directories, then runs the testall.py script (from doctest-tools)
