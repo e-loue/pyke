@@ -24,7 +24,7 @@
 import sys
 import os, os.path
 from pyke import knowledge_engine, krb_traceback
-from examples import sqlgen
+import sqlgen
 
 # Possibly interesting values:
 #     CONTENT_LENGTH:

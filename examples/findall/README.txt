@@ -7,10 +7,10 @@ files showing examples of use of the 'forall' clause in both cases.
 Rather than finding individual siblings and cousins, these rules find all
 siblings and all cousins and assert them in a single fact (as a tuple).
 
-    >>> from examples.findall import test
+    >>> import run
 
     # uses fc_findall.krb
-    >>> test.fc_test()
+    >>> run.fc_test()
     egon has ('harald', 'claudia') as cousins
     ralf has ('harald', 'claudia') as cousins
     hilde has () as cousins
@@ -19,7 +19,7 @@ siblings and all cousins and assert them in a single fact (as a tuple).
     claudia has ('egon', 'ralf') as cousins
 
     # uses bc_findall.krb
-    >>> test.bc_test()
+    >>> run.bc_test()
     egon has ('harald', 'claudia') as cousins
     ralf has ('harald', 'claudia') as cousins
     hilde has () as cousins

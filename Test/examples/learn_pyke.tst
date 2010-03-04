@@ -1,6 +1,13 @@
 # learn_pyke.tst
 
-    >>> from examples.learn_pyke import run
+    >>> import sys
+    >>> import pyke
+    >>> import os
+    >>> new_path = os.path.join(os.path.dirname(os.path.dirname(pyke.__file__)),
+    ...                         'examples/learn_pyke')
+    >>> sys.path.append(new_path)
+
+    >>> import run
     >>> from StringIO import StringIO
     >>> import sys
 

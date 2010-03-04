@@ -49,13 +49,13 @@ class server(wsgiref.simple_server.WSGIServer):
     def init_wsgi(self):
         if self.db_engine.lower() == 'sqlite3':
             import sqlite3 as db
-            import examples.sqlgen.load_sqlite3_schema as load_schema
+            import sqlgen.load_sqlite3_schema as load_schema
             db_connection = \
                 db.connect(os.path.join(os.path.dirname(load_schema.__file__),
                                         'sqlite3.db'))
         elif self.db_engine.lower() == 'mysql':
             import MySQLdb as db
-            import examples.sqlgen.load_mysql_schema as load_schema
+            import sqlgen.load_mysql_schema as load_schema
             db_connection = db.connect(user="movie_user", passwd="user_pw",
                                        db="movie_db")
         else:

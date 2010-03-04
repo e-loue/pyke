@@ -1,8 +1,15 @@
 # notany.tst
 
-    >>> from examples.notany import test
+    >>> import sys
+    >>> import pyke
+    >>> import os
+    >>> new_path = os.path.join(os.path.dirname(os.path.dirname(pyke.__file__)),
+    ...                         'examples/notany')
+    >>> sys.path.append(new_path)
 
-    >>> test.fc_test()
+    >>> import run
+
+    >>> run.fc_test()
     egon has no uncle
     ralf has no uncle
     anton has no uncle
@@ -14,7 +21,7 @@
     karin has no aunt
     sabine has no aunt
 
-    >>> test.bc_test()
+    >>> run.bc_test()
     anton has no aunt
     elisabeth has no aunt
     karin has no aunt

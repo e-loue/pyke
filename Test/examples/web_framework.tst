@@ -1,5 +1,12 @@
 # web_framework.tst
 
+    >>> import sys
+    >>> import pyke
+    >>> import os
+    >>> new_path = os.path.join(os.path.dirname(os.path.dirname(pyke.__file__)),
+    ...                         'examples')
+    >>> sys.path.append(new_path)
+
 First, fire up the server:
 
     >>> import sys
@@ -14,10 +21,10 @@ First, fire up the server:
     ...                           close_fds=True, env=os.environ)
     >>> server.stdin.write(r'''
     ... import sys
-    ... sys.path.insert(0, %r)
-    ... from examples.web_framework import simple_server
+    ... sys.path.append(%r)
+    ... from web_framework import simple_server
     ... simple_server.run()
-    ... ''' % sys.path[0])
+    ... ''' % new_path)
     >>> server.stdin.close()
     >>> def readline():
     ...     global server_error_msg
@@ -36,7 +43,7 @@ First, fire up the server:
     ...     return line
     >>> while True:
     ...     line = readline()
-    ...     if not line.startswith('writing [examples.'):
+    ...     if not line.startswith('writing ['):
     ...         break
     >>> line
     'Server running...\n'

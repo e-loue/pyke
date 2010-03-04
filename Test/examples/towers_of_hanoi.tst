@@ -1,15 +1,22 @@
 # towers_of_hanoi.tst
 
-    >>> from examples.towers_of_hanoi import test
+    >>> import sys
+    >>> import pyke
+    >>> import os
+    >>> new_path = os.path.join(os.path.dirname(os.path.dirname(pyke.__file__)),
+    ...                         'examples/towers_of_hanoi')
+    >>> sys.path.append(new_path)
 
-    >>> test.test(1)
+    >>> import run
+
+    >>> run.test(1)
     got 1: ((0, 2),)
 
-    >>> test.test(2)
+    >>> run.test(2)
     got 1: ((0, 1), (0, 2), (1, 2))
     got 2: ((0, 2), (0, 1), (2, 0), (1, 2), (0, 2))
 
-    >>> test.test(3)
+    >>> run.test(3)
     got 1: ((0, 1), (0, 2), (1, 0), (2, 1), (0, 1), (0, 2), (1, 0), (1, 2), (0, 2))
     got 2: ((0, 1), (0, 2), (1, 0), (2, 1), (0, 1), (0, 2), (1, 2), (1, 0), (2, 1), (0, 2), (1, 2))
     got 3: ((0, 1), (0, 2), (1, 2), (0, 1), (2, 0), (2, 1), (0, 2), (1, 0), (2, 0), (1, 2), (0, 1), (0, 2), (1, 2))

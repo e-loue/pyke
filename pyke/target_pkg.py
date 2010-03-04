@@ -91,26 +91,33 @@ class target_pkg(object):
         # compiled_krb package name
         self.package_name = module_name.rsplit('.', 1)[0]
 
-        if filename is None:
+        if sources is None:
             # compiled_pyke_files.py does not exist.
 
             # Creating a new target_pkg object from scratch.
             try:
-                # See if the self.package_name exists.
+                # See if the self.package_name (e.g., compiled_krb) exists.
                 target_package_dir = \
                     os.path.dirname(import_(self.package_name).__file__)
             except ImportError:
                 if debug:
-                    print >> sys.stderr, "target_pkg: no target package"
+                    print >> sys.stderr, "target_pkg: no target package", \
+                                         self.package_name
                 # Create the target_package.
                 last_dot = self.package_name.rfind('.')
                 if last_dot < 0:
-                    package_parent_dir = '.'
+                    assert filename is not None
+                    package_parent_dir = \
+                      os.path.dirname(os.path.dirname(filename))
                 else:
                     package_parent_dir = \
                       os.path.dirname(
                         # This import better work!
                         import_(self.package_name[:last_dot]).__file__)
+                    if filename is not None:
+                        assert os.path.normpath(package_parent_dir) == \
+                                 os.path.normpath(
+                                   os.path.dirname(os.path.dirname(filename)))
                 if debug:
                     print >> sys.stderr, "target_pkg package_parent_dir:", \
                                          package_parent_dir

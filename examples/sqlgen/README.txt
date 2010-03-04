@@ -86,21 +86,21 @@ database.krb
     dictionaries with the indicated column_names as keys and values from the
     database.
 
-test.py
-test_sqlite3.py
+run.py
+run_sqlite3.py
     These have a debug "cursor" class that can be used instead of a real
     database cursor.  The debug cursor class does not require a database
     connection and returns dummy data from any SELECT call.
 
-    Import either test or test_sqlite3 from examples.sqlgen, for example:
+    Import either run or run_sqlite3, for example:
 
-    >>> from examples.sqlgen import test_sqlite3
+    >>> import run_sqlite3
 
     Test functions:
 
-    >>> test_sqlite3.init()
+    >>> run_sqlite3.init()
             Creates a pyke engine and calls load_schema.
-    >>> test_sqlite3.run()
+    >>> run_sqlite3.run()
             Loops on "goal: " prompt.  Type a goal, or trace/untrace rule_name.
             Empty string terminates the loop.  Examples:
 

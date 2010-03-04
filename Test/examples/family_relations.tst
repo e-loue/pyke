@@ -1,8 +1,15 @@
 # family_relations.tst
 
-    >>> from examples.family_relations import test
+    >>> import sys
+    >>> import pyke
+    >>> import os
+    >>> new_path = os.path.join(os.path.dirname(os.path.dirname(pyke.__file__)),
+    ...                         'examples/family_relations')
+    >>> sys.path.append(new_path)
 
-    >>> test.fc_test()      # doctest: +ELLIPSIS
+    >>> import run
+
+    >>> run.fc_test()      # doctest: +ELLIPSIS
     doing proof
     bruce, thomas are ('son', 'father')
     bruce, norma are ('son', 'mother')
@@ -50,7 +57,7 @@
                 0 successes, 0 failures
     fc time ..., ... asserts/sec
 
-    >>> test.bc_test()      # doctest: +ELLIPSIS
+    >>> run.bc_test()      # doctest: +ELLIPSIS
     doing proof
     bruce, thomas are ('son', 'father')
     bruce, norma are ('son', 'mother')
@@ -98,7 +105,7 @@
     family: 9 fact names, 94 universal facts, 0 case_specific facts
     bc time ..., ... goals/sec
 
-    >>> test.bc2_test()      # doctest: +ELLIPSIS
+    >>> run.bc2_test()      # doctest: +ELLIPSIS
     doing proof
     bruce, thomas are ('son', 'father')
     bruce, norma are ('son', 'mother')
@@ -146,7 +153,7 @@
     family: 9 fact names, 94 universal facts, 0 case_specific facts
     bc time ..., ... goals/sec
 
-    >>> test.test()      # doctest: +ELLIPSIS
+    >>> run.test()      # doctest: +ELLIPSIS
     doing proof
     bruce, thomas are son, father
     bruce, norma are son, mother
@@ -196,7 +203,7 @@
     bc time ..., ... goals/sec
     total time ...
 
-    >>> test.general('bruce')      # doctest: +ELLIPSIS
+    >>> run.general('bruce')      # doctest: +ELLIPSIS
     doing proof
     bruce, thomas are ('son', 'father')
     bruce, norma are ('son', 'mother')

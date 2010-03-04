@@ -143,6 +143,8 @@ class engine(object):
         path_to_package, source_package_name, remainder_path, zip_file_flag = \
           _pythonify_path(path)
 
+        target_filename = None
+
         # Convert relative target_package_name (if specified) to absolute form:
         if target_package_name[0] == '.':
             num_dots = \
@@ -159,6 +161,12 @@ class engine(object):
                     base_package + '.' + target_package_name[num_dots:]
             else:
                 target_package_name = target_package_name[num_dots:]
+
+            target_filename = \
+              os.path.join(path_to_package,
+                           os.path.join(*target_package_name.split('.')),
+                           'compiled_pyke_files.py')
+
             if debug:
                 print >> sys.stderr, "_create_target_pkg " \
                                        "absolute target_package_name:", \
@@ -177,7 +185,7 @@ class engine(object):
             except ImportError:
                 if debug:
                     print >> sys.stderr, "_create_target_pkg: no target module"
-                tp = target_pkg.target_pkg(target_name)
+                tp = target_pkg.target_pkg(target_name, target_filename)
             tp.reset()
             target_pkgs[target_package_name] = tp
 

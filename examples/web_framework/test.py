@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 
 from pyke import test
-from examples.sqlgen import load_mysql_schema
+from sqlgen import load_mysql_schema
 
 def init():
     test.init(('.', '../sqlgen'))

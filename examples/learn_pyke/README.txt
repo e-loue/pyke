@@ -9,6 +9,6 @@ incomplete it is left here as an example of question bases...
 To run this:
 
     $ python
-    >>> from examples.learn_pyke import run
+    >>> import run
     >>> run.run()
 
