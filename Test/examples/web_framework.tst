@@ -3,8 +3,8 @@
     >>> import sys
     >>> import pyke
     >>> import os
-    >>> new_path = os.path.join(os.path.dirname(os.path.dirname(pyke.__file__)),
-    ...                         'examples')
+    >>> source_dir = os.path.dirname(os.path.dirname(pyke.__file__))
+    >>> new_path = os.path.join(source_dir, 'examples')
     >>> sys.path.append(new_path)
 
 First, fire up the server:
@@ -22,9 +22,10 @@ First, fire up the server:
     >>> server.stdin.write(r'''
     ... import sys
     ... sys.path.append(%r)
+    ... sys.path.append(%r)
     ... from web_framework import simple_server
     ... simple_server.run()
-    ... ''' % new_path)
+    ... ''' % (new_path, source_dir))
     >>> server.stdin.close()
     >>> def readline():
     ...     global server_error_msg
