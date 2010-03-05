@@ -41,12 +41,17 @@ class prover(object):
                         context, self.pattern_vars)
 
     def prove_1(self, engine, **args):
+        global knowledge_engine
         try:
             # All we need is the first one!
             with self.prove(engine, **args) as it:
                 return iter(it).next()
         except StopIteration:
-            raise CanNotProve("Can not prove " + self.goal_str)
+            try:
+                knowledge_engine
+            except NameError:
+                from pyke import knowledge_engine
+            raise knowledge_engine.CanNotProve("Can not prove " + self.goal_str)
 
 
 class producer(object):

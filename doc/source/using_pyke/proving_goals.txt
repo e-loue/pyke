@@ -1,0 +1,114 @@
+.. $Id$
+.. 
+.. Copyright © 2010 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Proving Goals
+    page-description:
+        Using Pyke's API to prove goals from your Python program.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+uservalues
+    filedate: $Id$
+/uservalues
+
+===================================
+Proving Goals
+===================================
+
+Though Pyke has the capability to return multiple answers to a single goal,
+often you just want one answer.
+
+*some_engine*.prove_1_goal(goal, **args)
+    ``goal`` is a Pyke goal (as a string).  This may include `pattern
+    variables`_ (which start with a '$').
+
+
+        *some_engine*.prove_1(*some_rule_base_category*, *some_goal*, (1, 2, 3), 2)
+
+    Proves the goal:
+
+        *some_rule_base_category.some_goal* (1, 2, 3, $ans_0, $ans_1)
+
+    And will return the bindings produced by the proof as (``$ans_0``,
+    ``$ans_1``).
+
+    Returns the first proof found as a 2-tuple: a tuple of the bindings for
+    the ``num_returns`` pattern variables, and a plan_.  The plan is ``None``
+    if no plan was generated; otherwise, it is a Python function as
+    described below__.
+
+.. __: #running-and-pickling-plans
+
+    >>> my_engine.prove_1('bc_example', 'father_son', ('thomas', 'david'), 1)
+    ((('grand',),), None)
+
+    Raises ``pyke.knowledge_engine.CanNotProve`` if no proof is found.
+
+    >>> my_engine.prove_1('bc_example', 'father_son', ('thomas', 'bogus'), 1)
+    Traceback (most recent call last):
+        ...
+    CanNotProve: Can not prove bc_example.father_son(thomas, bogus, $ans_0)
+
+*some_engine*.prove_n(kb_name, entity_name, fixed_args, num_returns)
+    This returns a context manager for a generator yielding 2-tuples, a tuple
+    whose length == ``num_returns`` and a plan_, for each possible proof.
+    Like ``prove_1``, the plan is None if no plan was generated.  Unlike
+    ``prove_1`` it does not raise an exception if no proof is found. 
+
+    >>> from __future__ import with_statement
+    >>> with my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2) as gen:
+    ...     for ans in gen:
+    ...         print ans
+    (('bruce', ()), None)
+    (('david', ('grand',)), None)
+
+
+Running and Pickling Plans
+----------------------------
+
+Once you've obtained a plan_ from ``prove_1`` or ``prove_n``, you just call
+it like a normal Python function.  The arguments required are simply those
+specified, if any, in the `taking clause`_ of the rule__ proving the top-level
+goal.
+
+You may call the plan function any number of times.  You may even pickle
+the plan for later use.  But the plans are constructed out of
+`functools.partial`_ functions, so you need to register this with copy_reg_
+before pickling the plan:
+
+    >>> import copy_reg
+    >>> import functools
+    >>> copy_reg.pickle(functools.partial,
+    ...                 lambda p: (functools.partial, (p.func,) + p.args))
+
+No special code is required to unpickle a plan.  Just unpickle and call it.
+(Unpickling the plan only imports one small Pyke module to be able to run
+the plan).
+
+.. __: ../pyke_syntax/krb_syntax/bc_rule.html
+

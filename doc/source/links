@@ -148,6 +148,7 @@
 .. _questions: question_
 .. _Rebuilding the HTML Documentation: about_pyke/modifying_pyke.html#rebuilding-the-html-documentation
 .. _regular expression syntax: http://docs.python.org/library/re.html#regular-expression-syntax
+.. _relative import: http://www.python.org/dev/peps/pep-0328/
 .. _reset: using_pyke.html#setting-up-each-case
 .. _rest2web: http://sourceforge.net/projects/rest2web
 .. _rule base category: knowledge_bases/rule_bases.html#rule-base-categories

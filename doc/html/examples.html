@@ -37,7 +37,7 @@
 <div class="normal-nav"><a href="logic_programming/index.html">Logic Programming</a></div>
 <div class="normal-nav"><a href="knowledge_bases/index.html">Knowledge Bases</a></div>
 <div class="normal-nav"><a href="pyke_syntax/index.html">Pyke Syntax</a></div>
-<div class="normal-nav"><a href="using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="using_pyke/index.html">Using Pyke</a></div>
 <div class="normal-nav"><a href="examples.html">Examples</a></div>
 <div class="normal-nav"><a href="PyCon2008-paper.html">PyCon 2008 Paper</a></div>
 </div>
@@ -64,18 +64,23 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="examples">
 <h1 class="title">Examples</h1>
+<!-- this code is hidden and will change to the root directory and add '' to
+sys.path for the code section following:
+>>> import sys
+>>> sys.path.insert(0, '')
+>>> import os
+>>> os.chdir("../..")  # get out of documents directory back to root dir
+>>> os.chdir("examples/towers_of_hanoi") -->
 <p>Several examples are included to help you become familiar with Pyke.  These
-are all in an <tt class="docutils literal"><span class="pre">examples</span></tt> directory; which forms the top-level Python package
-for importing:</p>
+are all in an <tt class="docutils literal"><span class="pre">examples</span></tt> directory:</p>
 <pre class="literal-block">
-&gt;&gt;&gt; from examples.towers_of_hanoi import test
-&gt;&gt;&gt; test.test(2)
+$ cd examples/towers_of_hanoi
+$ python
+&gt;&gt;&gt; import run
+&gt;&gt;&gt; run.test(2)
 got 1: ((0, 1), (0, 2), (1, 2))
 got 2: ((0, 2), (0, 1), (2, 0), (1, 2), (0, 2))
 </pre>
-<p>Thus the source directory (containing the <tt class="docutils literal"><span class="pre">examples</span></tt> directory) must be on
-your Python path.  This is most easily accomplished by running the examples
-from the source directory.</p>
 <p>Each example is in its own sub-directory and has a README.txt file to get you
 started.  They all have <a class="reference external" href="pyke_syntax/krb_syntax/index.html">.krb files</a> and a Python module to run the example
 that also demonstrates <a class="reference external" href="using_pyke.html">how to call Pyke</a> from your Python program.</p>
@@ -102,7 +107,7 @@ run 100 times faster!</li>
 <li>A mix of forward-chaining and backward-chaining with some use of <a class="reference external" href="logic_programming/plans.html">plans</a> added
 too.</li>
 </ul>
-<p>The test.py program also demonstrates how to use <a class="reference external" href="using_pyke.html#krb-traceback">krb_traceback</a> and the
+<p>The run.py program also demonstrates how to use <a class="reference external" href="using_pyke.html#krb-traceback">krb_traceback</a> and the
 <a class="reference external" href="using_pyke.html#other-functions">print_stats</a> function.</p>
 </div>
 <div class="section" id="knapsack">
@@ -150,8 +155,9 @@ and is a very real example of generating <a class="reference external" href="log
 <h2>Web_framework</h2>
 <p>This example completes the Python web framework demo by adding rules to
 automatically generate code to render HTML templates from the <a class="reference external" href="http://py-templates.sourceforge.net/htmltemplate/index.html">HTMLTemplate</a>
-package (you can run <tt class="docutils literal"><span class="pre">easy_install</span> <span class="pre">HTMLTemplate</span></tt> to install the HTMLTemplate
-package).  This uses the <a class="reference external" href="examples.html#sqlgen">sqlgen</a> example, above, to generate the SQL statements.</p>
+package (you can run <tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">HTMLTemplate</span></tt> or <tt class="docutils literal"><span class="pre">easy_install</span>
+<span class="pre">HTMLTemplate</span></tt> to install the HTMLTemplate package).  This example uses the
+<a class="reference external" href="examples.html#sqlgen">sqlgen</a> example, above, to generate the SQL statements.</p>
 <p>An HTMLTemplate does not include anything resembling program code in it, so
 that your graphics designers can completely own the html files without the
 developers having to modify them in any way.</p>
@@ -195,7 +201,7 @@ into named repositories called <em>knowledge bases</em>.</p>
 </div>
 <div class="right-item"><a href="pyke_syntax/index.html">Pyke Syntax</a><p>The syntax of Pyke's three different kinds of source files.</p>
 </div>
-<div class="right-item"><a href="using_pyke.html">Using Pyke</a><p>How your Python program uses Pyke.  I.e., Pyke's API to Python.</p>
+<div class="right-item"><a href="using_pyke/index.html">Using Pyke</a><p>How your Python program calls Pyke.</p>
 </div>
 <div class="right-item"><a href="examples.html">Examples</a><p>An overview of the examples provided with Pyke.</p>
 </div>
@@ -218,7 +224,7 @@ into named repositories called <em>knowledge bases</em>.</p>
 
   <div id="last-modified">
     Page last modified
-    Tue, Nov 03 2009.
+    Wed, Mar 03 2010.
 
   </div>
 

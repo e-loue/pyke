@@ -1,0 +1,96 @@
+.. $Id$
+.. 
+.. Copyright © 2010 Bruce Frederiksen
+.. 
+.. Permission is hereby granted, free of charge, to any person obtaining a copy
+.. of this software and associated documentation files (the "Software"), to deal
+.. in the Software without restriction, including without limitation the rights
+.. to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+.. copies of the Software, and to permit persons to whom the Software is
+.. furnished to do so, subject to the following conditions:
+.. 
+.. The above copyright notice and this permission notice shall be included in
+.. all copies or substantial portions of the Software.
+.. 
+.. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.. IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.. FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.. AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.. LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+.. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+.. THE SOFTWARE.
+
+restindex
+    crumb: Asserting Facts
+    page-description:
+        How to dynamically assert new *facts* from your Python program.
+    /description
+    format: rest
+    encoding: utf8
+    output-encoding: utf8
+    include: yes
+    initialheaderlevel: 2
+/restindex
+
+uservalues
+    filedate: $Id$
+/uservalues
+
+===================================
+Asserting New Facts
+===================================
+
+*some_engine*.add_universal_fact(kb_name, fact_name, arguments)
+    The ``add_universal_fact`` function is called once per fact_.  These
+    facts_ are never deleted and apply to all *cases*.
+    
+    Alternatively, you can place universal facts in a `.kfb file`_ so that
+    they are loaded automatically.
+
+    >>> my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas'))
+
+    Multiple facts with the same name are allowed.
+
+    >>> my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce'))
+
+    But duplicate facts (with the same arguments) are silently ignored.
+
+    >>> my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce'))
+    >>> my_engine.get_kb('family').dump_universal_facts()
+    son_of('bruce', 'thomas')
+    son_of('david', 'bruce')
+
+    These facts are accessed as ``kb_name.fact_name(arguments)`` within the
+    `.krb files`_.
+
+
+*some_engine*.assert_(kb_name, fact_name, arguments)
+    Call ``assert_`` for each starting fact_ for this case.  Like universal
+    facts, you may have multiple facts with the same name so long as they
+    have different arguments.
+
+    >>> my_engine.assert_('family', 'son_of', ('michael', 'bruce'))
+    >>> my_engine.assert_('family', 'son_of', ('fred', 'thomas'))
+    >>> my_engine.assert_('family', 'son_of', ('fred', 'thomas'))
+
+    Duplicates with universal facts are also ignored.
+
+    >>> my_engine.assert_('family', 'son_of', ('bruce', 'thomas'))
+    >>> my_engine.get_kb('family').dump_specific_facts()
+    son_of('michael', 'bruce')
+    son_of('fred', 'thomas')
+    >>> my_engine.get_kb('family').dump_universal_facts()
+    son_of('bruce', 'thomas')
+    son_of('david', 'bruce')
+
+    There is no difference within the `.krb files`_ of how universal facts
+    verses case specific facts are used.  The only difference between the two
+    types of facts is that the case specific facts are deleted when a ``reset``
+    is done.
+
+    >>> my_engine.reset()
+    >>> my_engine.get_kb('family').dump_specific_facts()
+    >>> my_engine.get_kb('family').dump_universal_facts()
+    son_of('bruce', 'thomas')
+    son_of('david', 'bruce')
+

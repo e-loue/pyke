@@ -120,10 +120,10 @@ class engine(object):
                                str(type(path)))
 
         if debug:
-            print >> sys.stderr, "_create_target_pkg source_package_name:", \
-                                 source_package_name
+            print >> sys.stderr, "_create_target_pkg path:", \
+                                 repr(path)
             print >> sys.stderr, "_create_target_pkg target_package_name:", \
-                                 target_package_name
+                                 repr(target_package_name)
 
         # Handle the case where there are no source files (for a distributed
         # app that wants to hide its knowledge bases):
@@ -140,8 +140,20 @@ class engine(object):
                 target_pkgs[target_package_name] = tp
             return
 
+        path = os.path.normpath(os.path.abspath(path))
+
         path_to_package, source_package_name, remainder_path, zip_file_flag = \
           _pythonify_path(path)
+
+        if debug:
+            print >> sys.stderr, "_create_target_pkg path to " \
+                                   "_pythonify_path:", \
+                                 repr(path)
+            print >> sys.stderr, "    path_to_package:", repr(path_to_package)
+            print >> sys.stderr, "    source_package_name:", \
+                                 repr(source_package_name)
+            print >> sys.stderr, "    remainder_path:", repr(remainder_path)
+            print >> sys.stderr, "    zip_file_flag:", zip_file_flag
 
         target_filename = None
 
@@ -191,8 +203,7 @@ class engine(object):
 
         source_package_dir = \
           os.path.join(path_to_package,
-                       os.path.join(*source_package_name.split('.')),
-                       remainder_path)
+                       os.path.join(*source_package_name.split('.')))
         if not os.path.isdir(source_package_dir):
             source_package_dir = os.path.dirname(source_package_dir)
             remainder_path = os.path.dirname(remainder_path)
@@ -264,9 +275,48 @@ class engine(object):
                                            entity_name, patterns)
 
     def prove_goal(self, goal_str, **args):
+        r'''Proves goal_str with logic variables set to args.
+
+        This returns a context manager that you use in a with statement:
+
+            with some_engine.prove_goal(
+                   'family.how_related($person1, $person2, $how_related)',
+                   person1='bruce') as it:
+                for vars, plan in it:
+                    print "bruce is related to", vars['person2'], "as", \
+                          vars['how_related']
+
+        vars is a dictionary of all of the logic variables in the goal
+        (without the '$') and their values.  The plan is a callable python
+        function.
+
+        See also, engine.prove_1_goal.
+        '''
         return goal.compile(goal_str).prove(self, **args)
 
     def prove_1_goal(self, goal_str, **args):
+        r'''Proves goal_str with logic variables set to args.
+
+        Returns the vars and plan for the first solution found.  Raises
+        knowledge_engine.CanNotProve if no solutions are found.
+
+            >>> source_dir = os.path.dirname(os.path.dirname(__file__))
+            >>> family_relations_dir = \
+            ...   os.path.join(source_dir, 'examples/family_relations')
+            >>> sys.path.insert(0, family_relations_dir)
+            >>> from pyke import knowledge_engine
+            >>> my_engine = knowledge_engine.engine(family_relations_dir)
+
+            >>> my_engine.activate('bc_example')
+
+            >>> vars, plan = \
+            ...   my_engine.prove_1_goal(
+            ...     'bc_example.how_related($person1, $person2, $how_related)',
+            ...     person1='bruce',
+            ...     person2='m_thomas')
+            >>> print "bruce is related to m_thomas as", vars['how_related']
+            bruce is related to m_thomas as ('father', 'son')
+        '''
         return goal.compile(goal_str).prove_1(self, **args)
 
     def prove(self, kb_name, entity_name, pat_context, patterns):

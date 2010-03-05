@@ -45,7 +45,7 @@
 <div class="normal-nav"><a href="special.html">Special</a></div>
 </div>
 <div class="normal-nav"><a href="../pyke_syntax/index.html">Pyke Syntax</a></div>
-<div class="normal-nav"><a href="../using_pyke.html">Using Pyke</a></div>
+<div class="normal-nav"><a href="../using_pyke/index.html">Using Pyke</a></div>
 <div class="normal-nav"><a href="../examples.html">Examples</a></div>
 <div class="normal-nav"><a href="../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
 </div>
@@ -150,7 +150,8 @@ attribute, ask_tty is imported (by default) and stored there.</p>
 &gt;&gt;&gt; from pyke import knowledge_engine
 &gt;&gt;&gt; from pyke import ask_wx
 
-&gt;&gt;&gt; engine = knowledge_engine.engine('doc.examples')
+&gt;&gt;&gt; import doc.examples
+&gt;&gt;&gt; engine = knowledge_engine.engine(doc.examples)
 &gt;&gt;&gt; engine.ask_module = ask_wx
 </pre>
 <!-- ADD_LINKS MARKER -->
@@ -192,7 +193,7 @@ are compiled and loaded into your Python program.</p>
 
   <div id="last-modified">
     Page last modified
-    Tue, Jan 13 2009.
+    Wed, Mar 03 2010.
 
   </div>
 

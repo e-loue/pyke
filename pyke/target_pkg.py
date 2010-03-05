@@ -188,15 +188,17 @@ class target_pkg(object):
     def add_source_package(self, source_package_name, path_from_package,
                                  source_package_dir):
         if debug:
-            print >> sys.stderr, "target_pkg.add_source_package:", \
-                                 source_package_name, source_package_dir
+            print >> sys.stderr, "target_pkg.add_source_package " \
+                                   "source_package_name:", \
+                                 repr(source_package_name)
+            print >> sys.stderr, "    path_from_package:", \
+                                 repr(path_from_package)
+            print >> sys.stderr, "    source_package_dir:", \
+                                 repr(source_package_dir)
         if not self.loader:
             assert (source_package_name, path_from_package) not in \
                      self.source_packages, \
                    "duplicate source package: %s" % path_from_package
-            if debug:
-                print >> sys.stderr, "source_package_dir:", source_package_dir
-                print >> sys.stderr, "path_from_package:", path_from_package
             source_dir = os.path.normpath(os.path.join(source_package_dir,
                                                        path_from_package))
             self.source_packages[source_package_name, path_from_package] = \

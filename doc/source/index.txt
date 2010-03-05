@@ -25,7 +25,7 @@ restindex
     format: rest
     encoding: utf8
     output-encoding: utf8
-    section-pages: , about_pyke/index, logic_programming/index, knowledge_bases/index, pyke_syntax/index, using_pyke, examples, PyCon2008-paper
+    section-pages: , about_pyke/index, logic_programming/index, knowledge_bases/index, pyke_syntax/index, using_pyke/index, examples, PyCon2008-paper
     template: template.txt
     template-encoding: utf8
     include: No
@@ -40,7 +40,7 @@ uservalues
 Welcome to Pyke
 =============================
 -----------------------------
-Release 1.0
+Release 1.1
 -----------------------------
 
 Pyke introduces a form of `Logic Programming`_ (inspired by Prolog_) to the
