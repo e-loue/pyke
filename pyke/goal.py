@@ -18,10 +18,9 @@ EXAMPLE USAGE:
 from __future__ import with_statement
 
 import itertools
-from pyke import contexts
+from pyke import contexts, knowledge_engine, krb_compiler
 
 def compile(goal_str):
-    from pyke import krb_compiler
     return prover(goal_str, *krb_compiler.compile_goal(goal_str))
 
 class prover(object):
@@ -47,10 +46,6 @@ class prover(object):
             with self.prove(engine, **args) as it:
                 return iter(it).next()
         except StopIteration:
-            try:
-                knowledge_engine
-            except NameError:
-                from pyke import knowledge_engine
             raise knowledge_engine.CanNotProve("Can not prove " + self.goal_str)
 
 

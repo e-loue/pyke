@@ -23,7 +23,9 @@
 
 class gen_tuple(object):
     def __init__(self, tup): self.tup = tup
+
     def __enter__(self): return self.tup
+
     def __exit__(self, type, value, tb): pass
 
 Gen_empty = gen_tuple(())
@@ -45,6 +47,7 @@ class knowledge_base(object):
         self.initialized = False        # used by self.init2
         if register: self.register(engine)
         else: self.engine = engine
+
     def register(self, engine):
         r'''
             Called at most once either from __init__ or after loading from a
@@ -59,6 +62,7 @@ class knowledge_base(object):
                                  "rule_base '%s'" %
                                      (self.__class__.__name__, name, name))
         engine.knowledge_bases[name] = self
+
     def __getstate__(self):
         r'''
             User must call 'register' on the new instance after loading it
@@ -68,12 +72,16 @@ class knowledge_base(object):
         ans = vars(self).copy()
         del ans['engine']
         return ans
+
     def init2(self):
         ''' overridden by subclasses. '''
         pass
+
     def reset(self):
         for entity in self.entity_lists.itervalues(): entity.reset()
+
     def __repr__(self): return "<%s %s>" % (self.__class__.__name__, self.name)
+
     def get_entity_list(self, entity_name):
         ans = self.entity_lists.get(entity_name)
         if ans is None:
@@ -84,14 +92,17 @@ class knowledge_base(object):
                 raise KeyError("%s not found in knowledge_base %s" %
                                (entity_name, self.name))
         return ans
+
     def lookup(self, bindings, pat_context, entity_name, patterns):
         entity = self.entity_lists.get(entity_name)
         if entity is None: return Gen_empty
         return entity.lookup(bindings, pat_context, patterns)
+
     def prove(self, bindings, pat_context, entity_name, patterns):
         entity = self.entity_lists.get(entity_name)
         if entity is None: return Gen_empty
         return entity.prove(bindings, pat_context, patterns)
+
     def add_fc_rule_ref(self, entity_name, fc_rule, foreach_index):
         self.get_entity_list(entity_name) \
             .add_fc_rule_ref(fc_rule, foreach_index)
@@ -108,18 +119,15 @@ class knowledge_entity_list(object):
     '''
     def __init__(self, name):
         self.name = name
+
     def __repr__(self): return "<%s %s>" % (self.__class__.__name__, self.name)
+
     def reset(self):
         pass
+
     def prove(self, bindings, pat_context, patterns):
         return self.lookup(bindings, pat_context, patterns)
+
     def add_fc_rule_ref(self, fc_rule, foreach_index):
         pass
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

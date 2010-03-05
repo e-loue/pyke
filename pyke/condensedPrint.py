@@ -168,11 +168,3 @@ def printDict(dict, maxdepth,
            [item(key, dict[key], maxdepth, separator) for key in keys] + \
            [endChar]
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()
-

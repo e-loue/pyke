@@ -35,8 +35,10 @@ from string import Template
 class user_question(object):
     match = None
     review = None
+
     def __init__(self, format):
         self.format = Template(format)
+
     def __repr__(self):
         head = "<%s" % self.__class__.__name__
         if self.match: head += self.repr_match()
@@ -44,16 +46,22 @@ class user_question(object):
         if self.review:
             head += " %s" % ' ! '.join(repr(m) for m, text in self.review)
         return head + ">"
+
     def repr_match(self):
         return "(%s)" % repr(self.match)
+
     def parse(self, parser):
         self.parse_args(parser)
         self.review = parser.parse_review()
+
     def parse_args(self, parser): pass
+
     def set_question_base(self, question_base):
         self.question_base = question_base
+
     def get_ask_module(self):
         return self.question_base.get_ask_module()
+
     def ask(self, format_params):
         ask_fn = getattr(self.get_ask_module(),
                          'ask_' + self.__class__.__name__)
@@ -68,9 +76,9 @@ class user_question(object):
                           review=review)
         return ask_fn(self.format.substitute(format_params),
                       review=review)
+
     def prepare_arg2(self, format_params):
         return self.match
-
 
 class yn(user_question):
     pass
@@ -85,7 +93,9 @@ class match_args(user_question):
             parser.push_token()
 
 class integer(match_args): pass
+
 class float(match_args): pass
+
 class number(match_args): pass
 
 class string(match_args): pass
@@ -93,18 +103,13 @@ class string(match_args): pass
 class select_1(user_question):
     def repr_match(self):
         return "(%s)" % ' '.join(repr(t) + ':' for t, text in self.match)
+
     def parse(self, parser):
         self.match, self.review = parser.parse_alternatives()
+
     def prepare_arg2(self, format_params):
         return tuple((tag, label.substitute(format_params))
                      for tag, label in self.match)
 
 class select_n(select_1): pass
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

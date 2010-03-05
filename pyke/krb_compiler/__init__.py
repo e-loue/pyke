@@ -220,10 +220,3 @@ def write_file2(lines, f, indents, lineno_map, lineno, starting_lineno = None):
             lineno += 1
     return lineno, starting_lineno
 
-
-def test():
-    import doctest
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

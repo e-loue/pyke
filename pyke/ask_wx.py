@@ -51,12 +51,14 @@ from pyke import qa_helpers
 
 def review_ans(dlg, ans, review=None):
     if review:
+
         def matches2(ans, test):
             try:
                 qa_helpers.match(ans, test)
                 return True
             except ValueError:
                 return False
+
         def matches(ans, test):
             if isinstance(ans, (tuple, list)):
                 return any(itertools.imap(lambda elem: matches2(elem, test),
@@ -171,9 +173,3 @@ def ask_select_n(question, alternatives, review=None):
     dlg.Destroy()
     return ans
 
-def test():
-    import doctest
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

@@ -39,6 +39,7 @@ class question_base(knowledge_base.knowledge_base):
             and the instance is not registered with any engine.
         '''
         super(question_base, self).__init__(None, name, register=False)
+
     def add_question(self, question):
         name = question.name
         if name in self.entity_lists:
@@ -46,6 +47,7 @@ class question_base(knowledge_base.knowledge_base):
                                     (self.name, name))
         self.entity_lists[name] = question
         question.set_knowledge_base(self)
+
     def get_ask_module(self):
         if hasattr(self, 'ask_module'): return self.ask_module
         return self.engine.get_ask_module()
@@ -58,6 +60,7 @@ class question(knowledge_base.knowledge_entity_list):
         'ask' method passing the format parameters.
     '''
     not_found = unique.unique('question.not_found')
+
     def __init__(self, name, params, answer_param, user_question):
         super(question, self).__init__(name)
         self.params = tuple(params)
@@ -72,13 +75,16 @@ class question(knowledge_base.knowledge_entity_list):
                          range(len(self.params))))
         self.user_question = user_question
         self.cache = {}
+
     def __repr__(self):
         return "<question %s(%s): $%s = %s>" % \
                (self.name, ', '.join('$' + p for p in self.params),
                 self.answer_param, repr(self.user_question))
+
     def set_knowledge_base(self, question_base):
         self.knowledge_base = question_base
         self.user_question.set_question_base(question_base)
+
     def lookup(self, bindings, pat_context, patterns):
         input_params = tuple((self.params[i],
                                 unicode(patterns[i].as_data(pat_context)))
@@ -88,6 +94,7 @@ class question(knowledge_base.knowledge_entity_list):
         if ans is self.not_found:
             ans = self.cache[input_params] = \
                 self.user_question.ask(format_params)
+
         def gen():
             mark = bindings.mark(True)
             end_done = False
@@ -100,15 +107,9 @@ class question(knowledge_base.knowledge_entity_list):
             finally:
                 if not end_done: bindings.end_save_all_undo()
                 bindings.undo_to_mark(mark)
+
         return contextlib.closing(gen())
+
     def reset(self):
         self.cache.clear()
 
-
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

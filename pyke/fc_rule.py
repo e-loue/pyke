@@ -60,8 +60,10 @@ class rule(object):
         self.name = name
         self.rule_base = rule_base
         self.patterns = patterns
+
     def __repr__(self):
         return "<%s %s>" % (self.__class__.__name__, self.name)
+
     def pattern(self, pattern_index):
         return self.patterns[pattern_index]
 
@@ -73,16 +75,20 @@ class fc_rule(rule):
         self.foreach_facts = foreach_facts # (kb_name, fact_name, arg_pats,
                                            #  multi_match?)...
         self.ran = False
+
     def register_rule(self):
         for i, (kb_name, fact_name, arg_patterns, multi_match) \
          in enumerate(self.foreach_facts):
             self.rule_base.engine.get_kb(kb_name) \
                 .add_fc_rule_ref(fact_name, self, i)
+
     def reset(self):
         self.ran = False
+
     def run(self):
         self.ran = True
         self.rule_fn(self)
+
     def new_fact(self, fact_args, n):
         if self.ran:
             arg_patterns = self.foreach_facts[n][2]
@@ -98,13 +104,7 @@ class fc_rule(rule):
                     else:
                         self.rule_fn(self, context, n)
                 context.done()
+
     def foreach_patterns(self, foreach_index):
         return self.foreach_facts[foreach_index][2]
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

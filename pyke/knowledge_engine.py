@@ -34,6 +34,7 @@ if sys.version_info[0] < 3:
         old_chain = itertools.chain
         def __new__(cls, *args):
             return cls.old_chain(*args)
+
         @staticmethod
         def from_iterable(i):
             for iterable in i:
@@ -41,8 +42,7 @@ if sys.version_info[0] < 3:
     itertools.chain = chain
 
 import pyke
-from pyke import (condensedPrint, contexts, pattern,
-                  fact_base, goal, rule_base, special, target_pkg)
+from pyke import contexts
 
 debug = False
 
@@ -75,6 +75,13 @@ class engine(object):
         kws can be: load_fc, load_bc, load_fb and load_qb.  They are all
         boolean valued and default to True.
         '''
+
+        # import this stuff here to avoid import cycles...
+        global condensedPrint, pattern, fact_base, goal, rule_base, special, \
+               target_pkg
+        from pyke import (condensedPrint, pattern, fact_base, goal, rule_base,
+                          special, target_pkg)
+
         for keyword in kws.iterkeys():
             if keyword not in ('load_fc', 'load_bc', 'load_fb', 'load_qb'):
                 raise TypeError("engine.__init__() got an unexpected keyword "
@@ -217,6 +224,8 @@ class engine(object):
         return self.ask_module
 
     def reset(self):
+        r'''Erases all case-specific facts and deactivates all rule bases.
+        '''
         for rb in self.rule_bases.itervalues(): rb.reset()
         for kb in self.knowledge_bases.itervalues(): kb.reset()
 
@@ -244,6 +253,8 @@ class engine(object):
         return self.get_kb(kb_name).get_entity_list(entity_name)
 
     def add_universal_fact(self, kb_name, fact_name, args):
+        r'''Universal facts are not deleted by engine.reset.
+        '''
         if isinstance(args, types.StringTypes):
             raise TypeError("engine.add_universal_fact: "
                             "illegal args type, %s" % type(args))
@@ -252,6 +263,8 @@ class engine(object):
                    .add_universal_fact(fact_name, args)
 
     def add_case_specific_fact(self, kb_name, fact_name, args):
+        r'''Case specific facts are deleted by engine.reset.
+        '''
         if isinstance(args, types.StringTypes):
             raise TypeError("engine.add_case_specific_fact: "
                             "illegal args type, %s" % type(args))
@@ -268,6 +281,11 @@ class engine(object):
                    .assert_(entity_name, args)
 
     def activate(self, *rb_names):
+        r'''Activate rule bases.
+
+        This runs all forward-chaining rules in the activated rule bases, so
+        add your facts before doing this!
+        '''
         for rb_name in rb_names: self.get_rb(rb_name).activate()
 
     def lookup(self, kb_name, entity_name, pat_context, patterns):
@@ -279,26 +297,8 @@ class engine(object):
 
         This returns a context manager that you use in a with statement:
 
-            with some_engine.prove_goal(
-                   'family.how_related($person1, $person2, $how_related)',
-                   person1='bruce') as it:
-                for vars, plan in it:
-                    print "bruce is related to", vars['person2'], "as", \
-                          vars['how_related']
-
-        vars is a dictionary of all of the logic variables in the goal
-        (without the '$') and their values.  The plan is a callable python
-        function.
-
-        See also, engine.prove_1_goal.
-        '''
-        return goal.compile(goal_str).prove(self, **args)
-
-    def prove_1_goal(self, goal_str, **args):
-        r'''Proves goal_str with logic variables set to args.
-
-        Returns the vars and plan for the first solution found.  Raises
-        knowledge_engine.CanNotProve if no solutions are found.
+            Ugly setup to use the family_relations example.  You can ignore
+            this... :-(
 
             >>> source_dir = os.path.dirname(os.path.dirname(__file__))
             >>> family_relations_dir = \
@@ -309,6 +309,43 @@ class engine(object):
 
             >>> my_engine.activate('bc_example')
 
+            OK, here's the example!
+
+            >>> with some_engine.prove_goal(
+            ...        'family.how_related($person1, $person2, $how_related)',
+            ...        person1='bruce') as it:
+            ...     for vars, plan in it:
+            ...         print "bruce is related to", vars['person2'], "as", \
+            ...               vars['how_related']
+
+        vars is a dictionary of all of the logic variables in the goal
+        (without the '$') and their values.  The plan is a callable python
+        function.
+
+        If you only want the first answer, see engine.prove_1_goal.
+        '''
+        return goal.compile(goal_str).prove(self, **args)
+
+    def prove_1_goal(self, goal_str, **args):
+        r'''Proves goal_str with logic variables set to args.
+
+        Returns the vars and plan for the first solution found.  Raises
+        knowledge_engine.CanNotProve if no solutions are found.
+
+            Ugly setup to use the family_relations example.  You can ignore
+            this... :-(
+
+            >>> source_dir = os.path.dirname(os.path.dirname(__file__))
+            >>> family_relations_dir = \
+            ...   os.path.join(source_dir, 'examples/family_relations')
+            >>> sys.path.insert(0, family_relations_dir)
+            >>> from pyke import knowledge_engine
+            >>> my_engine = knowledge_engine.engine(family_relations_dir)
+
+            >>> my_engine.activate('bc_example')
+
+            OK, here's the example!
+
             >>> vars, plan = \
             ...   my_engine.prove_1_goal(
             ...     'bc_example.how_related($person1, $person2, $how_related)',
@@ -316,16 +353,22 @@ class engine(object):
             ...     person2='m_thomas')
             >>> print "bruce is related to m_thomas as", vars['how_related']
             bruce is related to m_thomas as ('father', 'son')
+
+        If you want more than one answer, see engine.prove_goal.
         '''
         return goal.compile(goal_str).prove_1(self, **args)
 
     def prove(self, kb_name, entity_name, pat_context, patterns):
+        r'''Deprecated.  Use engine.prove_goal.
+        '''
         return self.get_kb(kb_name).prove(pat_context, pat_context,
                                           entity_name, patterns)
 
     def prove_n(self, kb_name, entity_name, fixed_args = (), num_returns = 0):
-        ''' Returns a context manager for a generator of:
-                a tuple of len == num_returns, and a plan (or None).
+        '''Returns a context manager for a generator of:
+               a tuple of len == num_returns, and a plan (or None).
+
+        Deprecated.  Use engine.prove_goal.
         '''
         if isinstance(fixed_args, types.StringTypes):
             raise TypeError("engine.prove_n: fixed_args must not be a string, "
@@ -350,7 +393,9 @@ class engine(object):
         return contextlib.closing(gen())
 
     def prove_1(self, kb_name, entity_name, fixed_args = (), num_returns = 0):
-        ''' Returns a tuple of len == num_returns, and a plan (or None).
+        r'''Returns a tuple of len == num_returns, and a plan (or None).
+
+        Deprecated.  Use engine.prove_1_goal.
         '''
         try:
             # All we need is the first one!

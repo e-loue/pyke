@@ -685,10 +685,3 @@ def init(this_module, debug_param, check_tables = False, kfb = False):
                             lextab='pyke.krb_compiler.scanner_tables',
                             outputdir=os.path.dirname(this_module.__file__))
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

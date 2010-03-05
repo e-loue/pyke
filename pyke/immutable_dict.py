@@ -69,24 +69,23 @@ class immutable_dict(dict):
     '''
     def __delitem__(self, key):
         raise TypeError("del (%s) not allowed on plan context" % key)
+
     def __setitem__(self, key, value):
         raise TypeError("not allowed to change pattern variables (%s) in plan" %
                             key)
+
     def clear(self):
         raise TypeError("clear not allowed on plan context")
+
     def pop(self, key, default = None):
         raise TypeError("pop (%s) not allowed on plan context" % key)
+
     def popitem(self):
         raise TypeError("popitem not allowed on plan context")
+
     def setdefault(self, key, default = None):
         raise TypeError("setdefault (%s) not allowed on plan context" % key)
+
     def update(self, dict2 = None, **kwargs):
         raise TypeError("update not allowed on plan context")
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

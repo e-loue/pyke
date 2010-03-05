@@ -722,10 +722,3 @@ def run(this_module, filename='TEST/krbparse_test.krb'):
     import pprint
     pprint.pprint(parse(this_module, filename, True))
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

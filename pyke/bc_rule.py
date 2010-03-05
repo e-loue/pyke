@@ -38,15 +38,19 @@ class bc_rule(fc_rule.rule):
         self.goal_arg_pats = goal_arg_patterns
         self.plan_vars = plan_vars
         rule_base.add_bc_rule(self)
+
     def goal_arg_patterns(self):
         return self.goal_arg_pats
+
     def make_plan(self, context, final):
         return functools.partial(self.plan_fn,
                    immutable_dict.immutable_dict(
                        (var_name, context.lookup_data(var_name, final=final))
                        for var_name in self.plan_vars))
+
     def trace(self):
         self.bc_fn = self.surrogate
+
     def surrogate(self, rule, arg_patterns, arg_context):
         print "%s.%s%s" % (rule.rule_base.root_name, rule.name,
                            tuple(arg.as_data(arg_context, True)
@@ -58,13 +62,7 @@ class bc_rule(fc_rule.rule):
                          for arg in arg_patterns))
             yield prototype_plan
         print "%s.%s failed" % (rule.rule_base.root_name, rule.name)
+
     def untrace(self):
         self.bc_fn = self.orig_bc_fn
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

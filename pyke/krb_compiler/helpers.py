@@ -242,10 +242,3 @@ def merge_patterns(patterns, pattern_list):
 def syntax_error(msg, lineno, pos):
     raise SyntaxError(msg, scanner.syntaxerror_params(pos, lineno))
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

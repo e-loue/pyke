@@ -133,9 +133,3 @@ def convert_tb(extracted_tb):
         if info: batch.append(info)
     return ans + batch
 
-def test():
-    import doctest
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

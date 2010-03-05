@@ -258,11 +258,3 @@ def run(rule_bases_to_activate,
         except:
             krb_traceback.print_exc(100)
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()
-

@@ -43,6 +43,7 @@ class regexp(object):
         self.pattern = regexp
         self.msg = msg
         self.prompt = prompt
+
     def __repr__(self):
         if self.msg:
             if self.prompt:
@@ -52,11 +53,14 @@ class regexp(object):
         if self.prompt:
             return '<regexp [%s]/%s/>' % (self.prompt, self.pattern)
         return '<regexp /%s/>' % self.pattern
+
     def __getstate__(self):
         return self.pattern, self.msg, self.prompt
+
     def __setstate__(self, args):
         self.pattern, self.msg, self.prompt = args
         self.re = re.compile(self.pattern, re.UNICODE | re.VERBOSE)
+
     def match(self, str):
         m = self.re.match(str)
         if m and m.end() == len(str):
@@ -77,6 +81,7 @@ class qmap(object):
     def __init__(self, test, value):
         self.test = test
         self.value = value
+
     def __repr__(self):
         return "<qmap %s = %s>" % (repr(self.value), repr(self.test))
 
@@ -158,11 +163,13 @@ def to_tuple(str, conv_fn=None, test=None, separator=','):
             ...
         ValueError: illegal number: '43.3.3'
     '''
+
     def conv_element(elem):
         elem = elem.strip()
         if conv_fn: elem = conv_fn(elem)
         if test: elem = match(elem, test)
         return elem
+
     return tuple(conv_element(elem) for elem in str.split(separator))
 
 def msg_for(test, type):
@@ -240,6 +247,7 @@ def match_prompt(test, type, format, default=u''):
         >>> match_prompt(True, str, u' [%s] ')
         u' [True] '
     '''
+
     def prompt_body(test, type):
         if test is None: return None
         if isinstance(test, regexp): return test.prompt
@@ -266,6 +274,7 @@ def match_prompt(test, type, format, default=u''):
             return u' or '.join(filter(None, (prompt_body(test_i, type)
                                               for test_i in test)))
         return urepr(test)
+
     body = prompt_body(test, type)
     if body: return format % body
     return default
@@ -319,10 +328,3 @@ def match(ans, test):
     elif test == ans: return ans
     raise ValueError(msg_for(test, type(ans)))
 
-
-def test():
-    import doctest
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()

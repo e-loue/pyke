@@ -172,9 +172,11 @@ class simple_context(object):
         self.bindings = {}
         self.undo_list = []
         self.save_all_undo_count = 0
+
     def dump(self):
         for var_name in sorted(self.bindings.iterkeys()):
             print "%s: %s" % (var_name, repr(self.lookup_data(var_name, True)))
+
     def bind(self, var_name, var_context, val, val_context = None):
         """ val_context must be None iff val is not a pattern.
             Returns True if a new binding was created.
@@ -205,6 +207,7 @@ class simple_context(object):
         ans = var_context.bind(var_name, var_context, val, val_context)
         if ans: self.undo_list.append((var_name, var_context))
         return ans
+
     def is_bound(self, var):
         val, where = var, self
         while where is not None and isinstance(val, variable):
@@ -213,6 +216,7 @@ class simple_context(object):
             val, where = ans
         # where is None or not isinstance(val, variable)
         return where is None or val.is_data(where)
+
     def lookup_data(self, var_name, allow_vars = False, final = None):
         """ Converts the answer into data only (without any patterns in it).
             If there are unbound variables anywhere in the data, a KeyError is
@@ -231,6 +235,7 @@ class simple_context(object):
         if isinstance(val, bc_context): val = val.create_plan(final)
         if final is not None: final[var_name, self] = val
         return val
+
     def lookup(self, var, allow_variable_in_ans = False):
         """ Returns value, val_context.
             Returns (var, self) if not bound and allow_variable_in_ans, else
@@ -247,18 +252,22 @@ class simple_context(object):
         # where is not None and isinstance(val, variable)
         if allow_variable_in_ans: return val, where
         raise KeyError("%s not bound" % str(val))
+
     def mark(self, save_all_undo = False):
         if save_all_undo: self.save_all_undo_count += 1
         return len(self.undo_list)
+
     def end_save_all_undo(self):
         assert self.save_all_undo_count > 0
         self.save_all_undo_count -= 1
+
     def undo_to_mark(self, mark, *var_names_to_undo):
         for var_name, var_context in self.undo_list[mark:]:
             var_context._unbind(var_name)
         del self.undo_list[mark:]
         for var_name in var_names_to_undo:
             self._unbind(var_name)
+
     def done(self):
         """ Unbinds all variables bound through 'self's 'bind' method.
             The assumption here is that 'self' is being abandoned, so we don't
@@ -266,6 +275,7 @@ class simple_context(object):
         """
         for var_name, var_context in self.undo_list:
             var_context._unbind(var_name)
+
     def _unbind(self, var_name):
         del self.bindings[var_name]
 
@@ -273,9 +283,12 @@ class bc_context(simple_context):
     def __init__(self, rule):
         super(bc_context, self).__init__()
         self.rule = rule
+
     def name(self): return self.rule.name
+
     def __repr__(self):
         return "<bc_context for %s at 0x%x>" % (self.name(), id(self))
+
     def create_plan(self, final = None):
         if final is None: final = {}
         return self.rule.make_plan(self, final)
@@ -285,17 +298,22 @@ class variable(pattern.pattern):
         probably not needed anymore...
     """
     Variables = {}
+
     def __new__(cls, name):
         var = cls.Variables.get(name)
         if var is None:
             var = super(variable, cls).__new__(cls)
             cls.Variables[name] = var
         return var
+
     def __init__(self, name):
         self.name = name
+
     def __repr__(self): return '$' + self.name
+
     def lookup(self, my_context, allow_variable_in_ans = False):
         return my_context.lookup(self, allow_variable_in_ans)
+
     def match_data(self, bindings, my_context, data):
         if self.name in debug:
             sys.stderr.write("%s.match_data(%s, %s, %s)\n" %
@@ -309,6 +327,7 @@ class variable(pattern.pattern):
                 (self, var, var_context))
         if var_context is None: return var == data
         return var.match_data(bindings, var_context, data)
+
     def simple_match_pattern(self, bindings, my_context, pattern_b, b_context):
         var, var_context = my_context.lookup(self, True)
         if isinstance(var, variable):
@@ -318,6 +337,7 @@ class variable(pattern.pattern):
             return pattern_b.match_data(bindings, b_context, var)
         return var.simple_match_pattern(bindings, var_context,
                                         pattern_b, b_context)
+
     def match_pattern(self, bindings, my_context, pattern_b, b_context):
         var, var_context = my_context.lookup(self, True)
         if isinstance(var, variable):
@@ -326,8 +346,10 @@ class variable(pattern.pattern):
         if var_context is None:
             return pattern_b.match_data(bindings, b_context, var)
         return var.match_pattern(bindings, var_context, pattern_b, b_context)
+
     def as_data(self, my_context, allow_vars = False, final = None):
         return my_context.lookup_data(self.name, allow_vars, final)
+
     def is_data(self, my_context):
         return my_context.is_bound(self)
 
@@ -336,16 +358,21 @@ class anonymous(variable):
         assert name[0] == '_', \
                "anonymous variables must start with '_', not %s" % name
         super(anonymous, self).__init__(name)
+
     def lookup(self, my_context, allow_variable_in_ans = False):
         if allow_variable_in_ans: return self, my_context
         raise KeyError("$%s not bound" % self.name)
+
     def match_data(self, bindings, my_context, data):
         return True
+
     def match_pattern(self, bindings, my_context, pattern_b, b_context):
         return True
+
     def as_data(self, my_context, allow_vars = False, final = None):
         if allow_vars: return "$%s" % self.name
         raise KeyError("$%s not bound" % self.name)
+
     def is_data(self, my_context):
         return False
 

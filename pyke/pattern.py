@@ -26,26 +26,34 @@ import itertools
 
 class pattern(object):
     def __ne__(self, b): return not (self == b)
+
     def simple_match_pattern(self, bindings, my_context, pattern_b, b_context):
         return self.match_pattern(bindings, my_context, pattern_b, b_context)
+
     def lookup(self, context, allow_variable_in_ans = False):
         return self
 
 class pattern_literal(pattern):
     def __init__(self, literal):
         self.literal = literal
+
     def __hash__(self): return hash(self.literal)
+
     def __eq__(self, b):
         if isinstance(b, pattern_literal): return self.literal == b.literal
         return self.literal == b
+
     def match_data(self, bindings, my_context, data):
         return self.literal == data
+
     def match_pattern(self, bindings, my_context, pattern_b, b_context):
         if isinstance(pattern_b, pattern_literal):
             return self.literal == pattern_b.literal
         return pattern_b.match_data(bindings, b_context, self.literal)
+
     def as_data(self, my_context, allow_vars = False, final = None):
         return self.literal
+
     def is_data(self, my_context):
         return True
 
@@ -53,11 +61,14 @@ class pattern_tuple(pattern):
     def __init__(self, elements, rest_var = None):
         self.elements = tuple(elements)
         self.rest_var = rest_var
+
     def __hash__(self):
         return hash(self.elements) ^ hash(self.rest_var)
+
     def __eq__(self, b):
         return isinstance(b, pattern_tuple) and \
                self.elements == b.elements and self.rest_var == b.rest_var
+
     def match_data(self, bindings, my_context, data):
         if isinstance(data, types.StringTypes): return False
         try:
@@ -73,8 +84,10 @@ class pattern_tuple(pattern):
             return self.rest_var.match_data(bindings, my_context,
                                             tuple(data[len(self.elements):]))
         return True
+
     def simple_match_pattern(self, bindings, my_context, pattern_b, b_context):
         return self, my_context
+
     def match_pattern(self, bindings, my_context, pattern_b, b_context):
         simple_ans = pattern_b.simple_match_pattern(bindings, b_context,
                                                     self, my_context)
@@ -114,6 +127,7 @@ class pattern_tuple(pattern):
                                                         tail_val, tail_context):
                     return False
         return True
+
     def as_data(self, my_context, allow_vars = False, final = None):
         ans = tuple(x.as_data(my_context, allow_vars, final)
                     for x in self.elements)
@@ -122,6 +136,7 @@ class pattern_tuple(pattern):
         rest = my_context.lookup_data(self.rest_var.name, allow_vars, final)
         if isinstance(rest, tuple): return ans + rest
         return ans + ('*' + rest,)
+
     def _tail(self, n, my_context):
         """ Return a copy of myself with the first n elements removed.
         """
@@ -133,15 +148,9 @@ class pattern_tuple(pattern):
            all(isinstance(x, pattern_literal) for x in rest_elements):
             return tuple(x.literal for x in rest_elements), None
         return pattern_tuple(self.elements[n:], self.rest_var), my_context
+
     def is_data(self, my_context):
         arg_test = all(arg_pat.is_data(my_context) for arg_pat in self.elements)
         if not arg_test or self.rest_var is None: return arg_test
         return self.rest_var.is_data(my_context)
 
-def test():
-    import doctest
-    import sys
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()
