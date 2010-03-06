@@ -44,7 +44,7 @@ Examples
 .. this code is hidden and will change to the root directory and add '' to
    sys.path for the code section following:
    >>> import sys
-   >>> sys.path.insert(0, '')
+   >>> if '' not in sys.path: sys.path.insert(0, '')
    >>> import os
    >>> os.chdir("../..")  # get out of documents directory back to root dir
    >>> os.chdir("examples/towers_of_hanoi")

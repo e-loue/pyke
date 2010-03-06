@@ -65,7 +65,7 @@ you need are provided directly by this object:
 .. this code is hidden and will set __file__ to the doc/examples directory.
    >>> import os
    >>> __file__ = \
-   ...   os.path.join(os.path.dirname(os.path.dirname(os.getcwd("../.."))),
+   ...   os.path.join(os.path.dirname(os.path.dirname(os.getcwd())),
    ...                'examples')
 
 knowledge_engine.engine(\*paths, \*\*kws)

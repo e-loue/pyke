@@ -245,12 +245,20 @@ Thus we see:
 #. The ability to go back to *any* point in the computation to try an
    alternate solution is where backward-chaining systems get their power!
 
+.. This code is hidden.  It will add '' to sys.path, change to the doc.examples
+   directory and store the directory path in __file__ for the code section
+   following:
+   >>> import sys
+   >>> if '' not in sys.path: sys.path.insert(0, '')
+   >>> import os
+   >>> os.chdir("../../../examples")
+   >>> __file__ = os.getcwd()
+
 Running the Example
 ========================
 
     >>> from pyke import knowledge_engine
-    >>> import doc.examples
-    >>> engine = knowledge_engine.engine(doc.examples)
+    >>> engine = knowledge_engine.engine(__file__)
     >>> engine.assert_('family', 'son_of', ('tim', 'thomas'))
     >>> engine.assert_('family', 'son_of', ('fred', 'thomas'))
     >>> engine.assert_('family', 'son_of', ('bruce', 'thomas'))

@@ -1,9 +1,9 @@
-# test.py
+# run.py
 
 from pyke import knowledge_engine
 
-def test():
+def run():
     engine = knowledge_engine.engine(__file__)
     engine.activate('backup')
-    (ans,), plan = engine.prove_1('backup', 'top', (), 1)
-    print ans
+    vars, plan = engine.prove_1_goal('backup.top($ans)')
+    print vars['ans']

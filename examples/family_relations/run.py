@@ -178,21 +178,19 @@ def general(person1 = None, person2 = None, relationship = None):
     fc_time = fc_end_time - start_time
 
     print "doing proof"
-    top_context = contexts.simple_context()
-    if person1: arg1 = pattern.pattern_literal(person1)
-    else: arg1 = contexts.variable('person1')
-    if person2: arg2 = pattern.pattern_literal(person2)
-    else: arg2 = contexts.variable('person2')
-    if relationship: arg3 = make_pattern(relationship)
-    else: arg3 = contexts.variable('relationship')
+    args = {}
+    if person1: args['person1'] = person1
+    if person2: args['person2'] = person2
+    if relationship: args['relationship'] = relationship
     try:
-        with engine.prove('bc2_example', 'how_related', top_context,
-                          (arg1, arg2, arg3)) \
-          as gen:
-            for prototype_plan in gen:
-                print "%s, %s are %s" % (arg1.as_data(top_context),
-                                         arg2.as_data(top_context),
-                                         arg3.as_data(top_context))
+        with engine.prove_goal(
+               'bc2_example.how_related($person1, $person2, $relationship)',
+               **args
+        ) as gen:
+            for vars, plan in gen:
+                print "%s, %s are %s" % (vars['person1'],
+                                         vars['person2'],
+                                         vars['relationship'])
     except StandardError:
         # This converts stack frames of generated python functions back to the
         # .krb file.

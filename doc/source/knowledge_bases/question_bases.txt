@@ -126,13 +126,21 @@ To ask a question, Pyke looks for an ``ask_module`` attribute on:
 If the `knowledge_engine.engine`_ object does not have an ``ask_module``
 attribute, ask_tty is imported (by default) and stored there.
 
+.. This code is hidden.  It will add '' to sys.path, change to the doc.examples
+   directory and store the directory path in __file__ for the code section
+   following:
+   >>> import sys
+   >>> if '' not in sys.path: sys.path.insert(0, '')
+   >>> import os
+   >>> os.chdir("../../examples")
+   >>> __file__ = os.getcwd()
+
 Here's an example of setting this attribute::
 
     >>> from pyke import knowledge_engine
     >>> from pyke import ask_wx
 
-    >>> import doc.examples
-    >>> engine = knowledge_engine.engine(doc.examples)
+    >>> engine = knowledge_engine.engine(__file__)
     >>> engine.ask_module = ask_wx
 
 

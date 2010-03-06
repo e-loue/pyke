@@ -46,9 +46,19 @@ This describes how to call Pyke from your Python program.
 Getting Started
 ===============
 
+.. this code is hidden and will set __file__ to the doc/examples directory.
+   >>> import os
+   >>> __file__ = \
+   ...   os.path.join(os.path.dirname(os.path.dirname(os.getcwd())),
+   ...                'examples')
+
 The simplest use of Pyke involves three steps:
 
 #.  Create an engine_ object.
+
+    >>> from pyke import knowledge_engine
+    >>>
+    >>> my_engine = knowledge_engine.engine(__file__)
 
     The Pyke source files are compiled, if out of date, and loaded as
     `knowledge bases`_.
@@ -328,18 +338,18 @@ Python functions between subgoal proofs.
     >>> from pyke import knowledge_engine
     >>> from pyke import krb_traceback
     >>>
-    >>> my_engine = knowledge_engine.engine(doc.examples)
+    >>> my_engine = knowledge_engine.engine(__file__)
     >>> my_engine.activate('error_test')
     >>> try:                                            # doctest: +ELLIPSIS
     ...     my_engine.prove_1('error_test', 'goal', (), 0)
     ... except:
     ...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
     Traceback (most recent call last):
-      File "<doctest using_pyke.txt[36]>", line 2, in <module>
+      File "<doctest index.txt[34]>", line 2, in <module>
         my_engine.prove_1('error_test', 'goal', (), 0)
-      File "...knowledge_engine.py", line 309, in prove_1
+      File "...knowledge_engine.py", line 404, in prove_1
         return iter(it).next()
-      File "...knowledge_engine.py", line 292, in gen
+      File "...knowledge_engine.py", line 385, in gen
         for plan in it:
       File "...rule_base.py", line 46, in next
         return self.iterator.next()

@@ -388,11 +388,19 @@ three times, asserting::
 Running the Example
 ===========================
 
+.. This code is hidden.  It will add '' to sys.path, change to the doc.examples
+   directory and store the directory path in __file__ for the code section
+   following:
+   >>> import sys
+   >>> if '' not in sys.path: sys.path.insert(0, '')
+   >>> import os
+   >>> os.chdir("../../../examples")
+   >>> __file__ = os.getcwd()
+
 These rules could be run as follows:
 
     >>> from pyke import knowledge_engine
-    >>> import doc.examples
-    >>> engine = knowledge_engine.engine(doc.examples)
+    >>> engine = knowledge_engine.engine(__file__)
     >>> engine.assert_('family', 'son_of', ('michael', 'bruce'))
     >>> engine.assert_('family', 'son_of', ('bruce', 'thomas'))
     >>> engine.assert_('family', 'son_of', ('thomas', 'frederik'))

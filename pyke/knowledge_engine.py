@@ -311,7 +311,7 @@ class engine(object):
 
             OK, here's the example!
 
-            >>> with some_engine.prove_goal(
+            >>> with my_engine.prove_goal(
             ...        'family.how_related($person1, $person2, $how_related)',
             ...        person1='bruce') as it:
             ...     for vars, plan in it:

@@ -406,12 +406,20 @@ Examples::
             10-20 ! bingo!
             21-   ! I guess they're not as strong as you think ...
 
+.. This code is hidden.  It will add '' to sys.path, change to the doc.examples
+   directory and store the directory path in __file__ for the code section
+   following:
+   >>> import sys
+   >>> if '' not in sys.path: sys.path.insert(0, '')
+   >>> import os
+   >>> os.chdir("../../examples")
+   >>> __file__ = os.getcwd()
+
 Asking ``stupid_question`` and answering "y" to it::
 
     >>> from pyke import knowledge_engine
 
-    >>> import doc.examples
-    >>> engine = knowledge_engine.engine(doc.examples)
+    >>> engine = knowledge_engine.engine(__file__)
 
     >>> from StringIO import StringIO
     >>> import sys
@@ -425,13 +433,13 @@ Asking ``stupid_question`` and answering "y" to it::
 
 displays::
 
-    >>> engine.prove_1('user_questions', 'stupid_question', (), 1)
+    >>> engine.prove_1_goal('user_questions.stupid_question($ans)')
     ______________________________________________________________________________
     Can you answer a question
     that is several lines long? (y/n) y
     Correct!  This is true because the
               sky is blue!
-    ((True,), None)
+    ({'ans': True}, None)
 
 
 Select_1_type
