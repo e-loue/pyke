@@ -67,7 +67,7 @@
 <!-- this code is hidden and will change to the root directory and add '' to
 sys.path for the code section following:
 >>> import sys
->>> sys.path.insert(0, '')
+>>> if '' not in sys.path: sys.path.insert(0, '')
 >>> import os
 >>> os.chdir("../..")  # get out of documents directory back to root dir
 >>> os.chdir("examples/towers_of_hanoi") -->
@@ -224,7 +224,7 @@ into named repositories called <em>knowledge bases</em>.</p>
 
   <div id="last-modified">
     Page last modified
-    Wed, Mar 03 2010.
+    Fri, Mar 05 2010.
 
   </div>
 

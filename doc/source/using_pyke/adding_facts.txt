@@ -40,6 +40,14 @@ uservalues
 Asserting New Facts
 ===================================
 
+.. this code is hidden and will set __file__ to the doc/examples directory.
+   >>> import os
+   >>> __file__ = \
+   ...   os.path.join(os.path.dirname(os.path.dirname(os.getcwd())),
+   ...                'examples')
+   >>> from pyke import knowledge_engine
+   >>> my_engine = knowledge_engine.engine(__file__)
+
 *some_engine*.add_universal_fact(kb_name, fact_name, arguments)
     The ``add_universal_fact`` function is called once per fact_.  These
     facts_ are never deleted and apply to all *cases*.

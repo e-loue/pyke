@@ -180,17 +180,25 @@ are at different indent levels in the <a class="reference external" href="../pyk
 </div>
 <div class="section" id="running-the-example">
 <h2>Running the Example</h2>
+<!-- This code is hidden.  It will add '' to sys.path, change to the doc.examples
+directory and store the directory path in __file__ for the code section
+following:
+>>> import sys
+>>> if '' not in sys.path: sys.path.insert(0, '')
+>>> import os
+>>> os.chdir("../../examples")
+>>> __file__ = os.getcwd() -->
 <p>The plan is created as a byproduct of <a class="reference external" href="../using_pyke.html#proving-goals">proving</a> the goal:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
-&gt;&gt;&gt; import doc.examples
-&gt;&gt;&gt; engine = knowledge_engine.engine(doc.examples)
+</pre>
+<pre class="doctest-block">
+&gt;&gt;&gt; engine = knowledge_engine.engine(__file__)
 &gt;&gt;&gt; engine.activate('plan_example')
-&gt;&gt;&gt; no_vars, plan1 = engine.prove_1('plan_example', 'transfer',
-...                                 (('bruce', 'checking'),
-...                                  ('bruce', 'savings')),
-...                                 0)
+&gt;&gt;&gt; no_vars, plan1 = \
+...   engine.prove_1_goal(
+...     'plan_example.transfer((bruce, checking), (bruce, savings))')
 </pre>
 </blockquote>
 <p><tt class="docutils literal"><span class="pre">plan1</span></tt> is now a program to transfer X amount
@@ -224,10 +232,10 @@ into the plan along with the function call graph.</p>
 <p>Let's create a second program:</p>
 <blockquote>
 <pre class="doctest-block">
-&gt;&gt;&gt; no_vars, plan2 = engine.prove_1('plan_example', 'transfer',
-...                                 (('bruce', 'checking'),
-...                                  ('my_other_bank', 'bruce', 'savings')),
-...                                 0)
+&gt;&gt;&gt; no_vars, plan2 = \
+...   engine.prove_1_goal(
+...     'plan_example.transfer((bruce, checking), '
+...                           '(my_other_bank, bruce, savings))')
 </pre>
 </blockquote>
 <p><tt class="docutils literal"><span class="pre">plan2</span></tt> is now a program to transfer X amount
@@ -249,10 +257,10 @@ send 200 to bank my_other_bank acct bruce savings
 <p>And the final use case:</p>
 <blockquote>
 <pre class="doctest-block">
-&gt;&gt;&gt; no_vars, plan3 = engine.prove_1('plan_example', 'transfer',
-...                                 (('my_other_bank', 'bruce', 'checking'),
-...                                  ('bruce', 'savings')),
-...                                 0)
+&gt;&gt;&gt; no_vars, plan3 = \
+...   engine.prove_1_goal(
+...     'plan_example.transfer((my_other_bank, bruce, checking), '
+...                           '(bruce, savings))')
 &gt;&gt;&gt; plan3(150)
 get 150 from bank my_other_bank acct bruce checking
 withdraw 150 from central_accts ach_recv_acct
@@ -318,7 +326,7 @@ Python functions, see <a class="reference external" href="../about_pyke/cooking_
 
   <div id="last-modified">
     Page last modified
-    Wed, Mar 03 2010.
+    Fri, Mar 05 2010.
 
   </div>
 

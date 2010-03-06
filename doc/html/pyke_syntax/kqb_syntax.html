@@ -382,12 +382,19 @@ wood($ans)
         10-20 ! bingo!
         21-   ! I guess they're not as strong as you think ...
 </pre>
+<!-- This code is hidden.  It will add '' to sys.path, change to the doc.examples
+directory and store the directory path in __file__ for the code section
+following:
+>>> import sys
+>>> if '' not in sys.path: sys.path.insert(0, '')
+>>> import os
+>>> os.chdir("../../examples")
+>>> __file__ = os.getcwd() -->
 <p>Asking <tt class="docutils literal"><span class="pre">stupid_question</span></tt> and answering &quot;y&quot; to it:</p>
 <pre class="literal-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
 
-&gt;&gt;&gt; import doc.examples
-&gt;&gt;&gt; engine = knowledge_engine.engine(doc.examples)
+&gt;&gt;&gt; engine = knowledge_engine.engine(__file__)
 
 &gt;&gt;&gt; from StringIO import StringIO
 &gt;&gt;&gt; import sys
@@ -401,13 +408,13 @@ wood($ans)
 </pre>
 <p>displays:</p>
 <pre class="literal-block">
-&gt;&gt;&gt; engine.prove_1('user_questions', 'stupid_question', (), 1)
+&gt;&gt;&gt; engine.prove_1_goal('user_questions.stupid_question($ans)')
 ______________________________________________________________________________
 Can you answer a question
 that is several lines long? (y/n) y
 Correct!  This is true because the
           sky is blue!
-((True,), None)
+({'ans': True}, None)
 </pre>
 </div>
 <div class="section" id="select-1-type">
@@ -520,7 +527,7 @@ spell out your end user questions.</p>
 
   <div id="last-modified">
     Page last modified
-    Wed, Mar 03 2010.
+    Fri, Mar 05 2010.
 
   </div>
 

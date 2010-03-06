@@ -46,13 +46,15 @@ multiple `knowledge bases`_ related to accomplishing some task.
 You may create multiple Pyke engines, each with it's own knowledge bases to
 accomplish different disconnected tasks.
 
-When you create a Pyke engine object, Pyke scans for Pyke `.kfb`_,
-`.krb`_ and `.kqb`_ source files and compiles these into .fbc pickle files,
-Python .py source files and .qbc pickle files respectively.  Each time a Pyke
-engine object is created it checks the file modification times of the Pyke
-source files to see whether they need to be recompiled.  If you change a Pyke
-source file, you may create a new Pyke engine to compile the changes and run
-with the new knowledge bases without having to restart your application.
+When you create a Pyke engine object, Pyke scans for Pyke `.kfb`_, `.krb`_
+and `.kqb`_ source files and compiles these into .fbc pickle files,
+Python .py source files and .qbc pickle files, respectively.
+
+Each time a Pyke engine object is created it checks the file modification
+times of the Pyke source files to see whether they need to be recompiled.
+If you change a Pyke source file, you may create a new Pyke engine to compile
+the changes and run with the new knowledge bases without having to restart
+your application.
 
 Pyke also lets you zip these compiled files into Python eggs and can load the
 files from the egg.  By including the compiled files in your application's
@@ -70,13 +72,11 @@ you need are provided directly by this object:
 
 knowledge_engine.engine(\*paths, \*\*kws)
 
-    >>> from pyke import knowledge_engine
-    >>> my_engine = knowledge_engine.engine(__file__)
-
     Pyke recursively searches for Pyke source files (`.kfb files`_,
-    `.krb files`_, and `.kqb files`_) starting at a source directory and
-    places all of the compiled files in a *target package*.  This causes
-    all of the `rule bases`_ to be loaded and made ready to activate_.
+    `.krb files`_, and `.kqb files`_) starting at each source directory
+    indicated in *paths* and places all of the compiled files in the
+    associated *target packages*.  This causes all of the `knowledge bases`_
+    to be loaded and made ready to activate_.
 
     Pyke source files may be spread out over multiple directories and may be
     compiled into one or more target packages.  Multiple target packages
@@ -84,8 +84,8 @@ knowledge_engine.engine(\*paths, \*\*kws)
     `knowledge bases`_, perhaps adding some of its own knowledge that it
     compiles into its own target package.
 
-    Each ``path`` argument specifies both a Pyke source directory and a target
-    package.  The source directories do not have to be Python package
+    Each ``path`` argument specifies a Pyke source directory and an optional
+    target package.  The source directories do not have to be Python package
     directories, but the target packages do.
 
     The target package defaults to ``.compiled_krb``.  The leading dot (.)
@@ -100,35 +100,32 @@ knowledge_engine.engine(\*paths, \*\*kws)
     passing a Python module.  If a module is passed, its __file__ attribute
     is used.  If the path points to a file, rather than a directory, the final
     filename is discarded.  In the simple case, when the Pyke source files are
-    in the same directory as the module creating the ``engine`` object,
-    ``__file__`` can be used as the argument.
+    in the same directory as the module creating the ``engine`` object, you
+    can just pass ``__file__`` as the sole argument.
 
-    Thus, the example above could also be written:
+    >>> from pyke import knowledge_engine
+    >>> my_engine = knowledge_engine.engine(__file__)
+
+    Passing a package instead, this example could also be written:
 
     >>> import doc.examples
     >>> my_engine = knowledge_engine.engine(doc.examples)
 
-    or
+    or, you can pass a module within the desired package:
 
     >>> from doc.examples import some_module
     >>> my_engine = knowledge_engine.engine(some_module)
 
-    In the both cases, the final .py or .pyc file is stripped from the value
-    of the module's __file__ attribute to get the directory that the package
-    is in.  This directory will then be searched for Pyke source files.
+    In the all three cases, the final .py or .pyc file is stripped from the
+    value of the module's __file__ attribute to get the directory that the
+    package is in.  This directory will then be recursively searched for Pyke
+    source files.
 
     If you change some of your Pyke source files, you can create a new engine
     object to compile and reload the generated Python modules without
     restarting your program.  But note that you'll need to rerun the
     ``add_universal_fact`` calls that you made (a reason to use `.kfb files`_
     instead).
-
-    .. note::
-       It is OK for your Pyke source directory to be part of a zipped
-       `Python egg file`_, so long as the compiled versions are also in the
-       egg.  In this case, Pyke can't rebuild and recompile the source files.
-       It will just import the compiled files without complaining if a source
-       file has a later modification time than its compiled file.
 
     All of the compiled Python .py source files and .fbc/.qbc pickle files
     generated from each source directory are placed, by default, in a
@@ -155,13 +152,15 @@ knowledge_engine.engine(\*paths, \*\*kws)
     and Pyke will simply load these files.  Also, the target package must be
     specified in absolute form (with no leading dots).
 
-    There are four optional keyword arguments that you may also pass to the
-    ``engine`` constructor.  These are all booleans that default to ``True``:
+    Finally, there are four optional keyword arguments that you may also pass
+    to the ``engine`` constructor.  These are all booleans that default to
+    ``True``:
 
+    - ``load_fb`` -- load fact bases
     - ``load_fc`` -- load forward-chaining rules
-    - ``load_bc`` -- load backward-chaining rules
-    - ``load_fb`` -- load fact bases and
+    - ``load_bc`` -- load backward-chaining rules and
     - ``load_qb`` -- load question bases
 
-    These parameters must be passed as keyword parameters.
+    These parameters must be passed as keyword parameters and let you
+    selectively load the various kinds of compiled files.
 

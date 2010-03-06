@@ -40,66 +40,111 @@ uservalues
 Proving Goals
 ===================================
 
-Though Pyke has the capability to return multiple answers to a single goal,
-often you just want one answer.
+.. this code is hidden and will set __file__ to the doc/examples directory.
+   >>> import os
+   >>> __file__ = \
+   ...   os.path.join(os.path.dirname(os.path.dirname(os.getcwd())),
+   ...                'examples')
+   >>> from pyke import knowledge_engine
+   >>> my_engine = knowledge_engine.engine(__file__)
+   >>> my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas'))
+   >>> my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce'))
+   >>> my_engine.activate('bc_example')
 
-*some_engine*.prove_1_goal(goal, **args)
+Though Pyke has the capability to return multiple answers to a single goal,
+often you just want the first answer:
+
+*some_engine*.prove_1_goal(goal, \*\*args)
     ``goal`` is a Pyke goal (as a string).  This may include `pattern
     variables`_ (which start with a '$').
 
+    >>> my_engine.prove_1_goal('bc_example.father_son(thomas, david, $depth)')
+    ({'depth': ('grand',)}, None)
 
-        *some_engine*.prove_1(*some_rule_base_category*, *some_goal*, (1, 2, 3), 2)
-
-    Proves the goal:
-
-        *some_rule_base_category.some_goal* (1, 2, 3, $ans_0, $ans_1)
-
-    And will return the bindings produced by the proof as (``$ans_0``,
-    ``$ans_1``).
-
-    Returns the first proof found as a 2-tuple: a tuple of the bindings for
-    the ``num_returns`` pattern variables, and a plan_.  The plan is ``None``
-    if no plan was generated; otherwise, it is a Python function as
-    described below__.
+    Returns the first proof found as a 2-tuple: a dict of bindings for the
+    pattern variables, and a plan_.  The plan is ``None`` if no plan was
+    generated; otherwise, it is a Python function as described below__.
 
 .. __: #running-and-pickling-plans
 
-    >>> my_engine.prove_1('bc_example', 'father_son', ('thomas', 'david'), 1)
-    ((('grand',),), None)
+    Args must be specified as keyword arguments and are set as the value of
+    the corresponding pattern variable.
 
-    Raises ``pyke.knowledge_engine.CanNotProve`` if no proof is found.
+    >>> vars, plan = \
+    ...   my_engine.prove_1_goal('bc_example.father_son($father, $son, $depth)',
+    ...                          father='thomas',
+    ...                          son='david')
+    >>> sorted(vars.items(), key=lambda item: item[0])
+    [('depth', ('grand',)), ('father', 'thomas'), ('son', 'david')]
 
-    >>> my_engine.prove_1('bc_example', 'father_son', ('thomas', 'bogus'), 1)
+    Prove_1_goal raises ``pyke.knowledge_engine.CanNotProve`` if no proof is
+    found:
+
+    >>> my_engine.prove_1_goal('bc_example.father_son(thomas, bogus, $depth)')
     Traceback (most recent call last):
         ...
-    CanNotProve: Can not prove bc_example.father_son(thomas, bogus, $ans_0)
+    CanNotProve: Can not prove bc_example.father_son(thomas, bogus, $depth)
 
-*some_engine*.prove_n(kb_name, entity_name, fixed_args, num_returns)
-    This returns a context manager for a generator yielding 2-tuples, a tuple
-    whose length == ``num_returns`` and a plan_, for each possible proof.
-    Like ``prove_1``, the plan is None if no plan was generated.  Unlike
-    ``prove_1`` it does not raise an exception if no proof is found. 
+*some_engine*.prove_goal(goal, \*\*args)
+    This returns a context manager for a generator yielding 2-tuples, as
+    above.  Unlike ``prove_1_goal`` it does not raise an exception if no
+    proof is found:
 
     >>> from __future__ import with_statement
-    >>> with my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2) as gen:
-    ...     for ans in gen:
-    ...         print ans
-    (('bruce', ()), None)
-    (('david', ('grand',)), None)
 
+    >>> with my_engine.prove_goal(
+    ...        'bc_example.father_son(thomas, $son, $depth)') as gen:
+    ...     for vars, plan in gen:
+    ...         print vars['son'], vars['depth']
+    bruce ()
+    david ('grand',)
+
+    Like ``prove_1_goal``, above, `pattern variables`_ in the goal_ may be
+    specified with keyword arguments:
+
+    >>> with my_engine.prove_goal(
+    ...        'bc_example.father_son($father, $son, $depth)',
+    ...        father='thomas') as gen:
+    ...     for vars, plan in gen:
+    ...         print vars['son'], vars['depth']
+    bruce ()
+    david ('grand',)
+
+Compiling Goals at Program Startup
+----------------------------------
+
+Similar to Python's regular expression library, ``re``, you may compile your
+goal statements once at program startup:
+
+    >>> from pyke import goal
+
+    >>> my_goal = goal.compile('bc_example.father_son($father, $son, $depth)')
+
+Then use ``my_goal.prove_1`` and ``my_goal.prove`` as many times as you'd
+like:
+
+    >>> vars, plan = my_goal.prove_1(my_engine, father='thomas', son='david')
+    >>> sorted(vars.items(), key=lambda item: item[0])
+    [('depth', ('grand',)), ('father', 'thomas'), ('son', 'david')]
+
+    >>> with my_goal.prove(my_engine, father='thomas') as gen:
+    ...     for vars, plan in gen:
+    ...         print vars['son'], vars['depth']
+    bruce ()
+    david ('grand',)
 
 Running and Pickling Plans
 ----------------------------
 
-Once you've obtained a plan_ from ``prove_1`` or ``prove_n``, you just call
-it like a normal Python function.  The arguments required are simply those
+Once you've obtained a plan_ from ``prove_1_goal`` or ``prove_goal``, you just
+call it like a normal Python function.  The arguments required are simply those
 specified, if any, in the `taking clause`_ of the rule__ proving the top-level
 goal.
 
 You may call the plan function any number of times.  You may even pickle
 the plan for later use.  But the plans are constructed out of
-`functools.partial`_ functions, so you need to register this with copy_reg_
-before pickling the plan:
+`functools.partial`_ functions that need to be registered with copy_reg if
+you are running Python 2.x:
 
     >>> import copy_reg
     >>> import functools

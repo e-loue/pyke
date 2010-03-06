@@ -351,11 +351,11 @@ Python functions between subgoal proofs.
         return iter(it).next()
       File "...knowledge_engine.py", line 385, in gen
         for plan in it:
-      File "...rule_base.py", line 46, in next
+      File "...rule_base.py", line 50, in next
         return self.iterator.next()
-      File "...knowledge_engine.py", line 40, in from_iterable
+      File "...knowledge_engine.py", line 41, in from_iterable
         for x in iterable: yield x
-      File "...knowledge_engine.py", line 40, in from_iterable
+      File "...knowledge_engine.py", line 41, in from_iterable
         for x in iterable: yield x
       File "...error_test.krb", line 26, in rule1
         goal2()
@@ -365,7 +365,7 @@ Python functions between subgoal proofs.
         goal4()
       File "...error_test.krb", line 41, in rule4
         check $bar > 0
-      File "...contexts.py", line 227, in lookup_data
+      File "...contexts.py", line 231, in lookup_data
         raise KeyError("$%s not bound" % var_name)
     KeyError: '$bar not bound'
 

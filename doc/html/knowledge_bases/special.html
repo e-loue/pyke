@@ -202,9 +202,9 @@ output from the command to stdout or stderr is unavailable.</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
 &gt;&gt;&gt; engine = knowledge_engine.engine()
-&gt;&gt;&gt; engine.prove_1('special', 'check_command', (('true',),), 0)
-((), None)
-&gt;&gt;&gt; engine.prove_1('special', 'check_command', (('false',),), 0)
+&gt;&gt;&gt; engine.prove_1_goal('special.check_command((true))')
+({}, None)
+&gt;&gt;&gt; engine.prove_1_goal('special.check_command((false))')
 Traceback (most recent call last):
     ...
 CanNotProve: Can not prove special.check_command((false))
@@ -226,16 +226,14 @@ exit status.</p>
 &gt;&gt;&gt; from __future__ import with_statement
 &gt;&gt;&gt; from pyke import pattern, contexts
 &gt;&gt;&gt; def run_command(entity, command, cwd=None, stdin=None):
-...     my_context = contexts.simple_context()
-...     output = contexts.variable('output')
-...     with engine.prove('special', entity, my_context,
-...                       (output,
-...                        pattern.pattern_literal(command),
-...                        pattern.pattern_literal(cwd),
-...                        pattern.pattern_literal(stdin))) \
+...     with engine.prove_goal(
+...            'special.%s($output, $command, $cwd, $stdin)' % entity,
+...            command=command,
+...            cwd=cwd,
+...            stdin=stdin) \
 ...       as gen:
-...         for no_plan in gen:
-...             print output.as_data(my_context)
+...         for vars, no_plan in gen:
+...             print vars['output']
 &gt;&gt;&gt; run_command('command', ('echo', 'hi', 'mom'))
 ('hi mom',)
 &gt;&gt;&gt; run_command('command', ('ls',))   # doctest: +NORMALIZE_WHITESPACE
@@ -327,7 +325,7 @@ are compiled and loaded into your Python program.</p>
 
   <div id="last-modified">
     Page last modified
-    Sat, Oct 24 2009.
+    Fri, Mar 05 2010.
 
   </div>
 

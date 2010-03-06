@@ -32,7 +32,7 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/examples.html</loc>
-  <lastmod>2010-03-04</lastmod>
+  <lastmod>2010-03-05</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -52,7 +52,7 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/knowledge_bases/question_bases.html</loc>
-  <lastmod>2010-03-03</lastmod>
+  <lastmod>2010-03-05</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -62,7 +62,7 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/knowledge_bases/special.html</loc>
-  <lastmod>2009-10-24</lastmod>
+  <lastmod>2010-03-05</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -102,17 +102,17 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/logic_programming/plans.html</loc>
-  <lastmod>2010-03-03</lastmod>
+  <lastmod>2010-03-05</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/logic_programming/rules/backward_chaining.html</loc>
-  <lastmod>2010-03-03</lastmod>
+  <lastmod>2010-03-05</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/logic_programming/rules/forward_chaining.html</loc>
-  <lastmod>2010-03-03</lastmod>
+  <lastmod>2010-03-05</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -142,7 +142,7 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/pyke_syntax/kqb_syntax.html</loc>
-  <lastmod>2010-03-03</lastmod>
+  <lastmod>2010-03-05</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -177,22 +177,22 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/using_pyke/adding_facts.html</loc>
-  <lastmod>2010-03-04</lastmod>
+  <lastmod>2010-03-06</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/using_pyke/creating_engine.html</loc>
-  <lastmod>2010-03-04</lastmod>
+  <lastmod>2010-03-06</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/using_pyke/index.html</loc>
-  <lastmod>2010-03-04</lastmod>
+  <lastmod>2010-03-06</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/using_pyke/proving_goals.html</loc>
-  <lastmod>2010-03-04</lastmod>
+  <lastmod>2010-03-06</lastmod>
   <changefreq>monthly</changefreq>
  </url>
 </urlset>
