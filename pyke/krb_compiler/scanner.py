@@ -649,6 +649,9 @@ def syntaxerror_params(pos = None, lineno = None):
         else: end = end2
     elif end2 < 0: end = end1
     else: end = min(end1, end2)
+    if goal_mode and start == 0 and lexer.lexdata.startswith('check ', start):
+        start += 6
+        column -= 6
     if debug: print "start", start, "column", column, "end", end
     return (lexer.filename, lineno, column, lexer.lexdata[start:end])
 

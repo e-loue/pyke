@@ -107,12 +107,12 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/logic_programming/rules/backward_chaining.html</loc>
-  <lastmod>2010-03-05</lastmod>
+  <lastmod>2010-03-08</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/logic_programming/rules/forward_chaining.html</loc>
-  <lastmod>2010-03-05</lastmod>
+  <lastmod>2010-03-08</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
@@ -177,22 +177,27 @@
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/using_pyke/adding_facts.html</loc>
-  <lastmod>2010-03-06</lastmod>
+  <lastmod>2010-03-05</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/using_pyke/creating_engine.html</loc>
-  <lastmod>2010-03-06</lastmod>
+  <lastmod>2010-03-05</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/using_pyke/index.html</loc>
-  <lastmod>2010-03-06</lastmod>
+  <lastmod>2010-03-08</lastmod>
+  <changefreq>monthly</changefreq>
+ </url>
+ <url>
+  <loc>http://pyke.sourceforge.net/using_pyke/other_functions.html</loc>
+  <lastmod>2010-03-08</lastmod>
   <changefreq>monthly</changefreq>
  </url>
  <url>
   <loc>http://pyke.sourceforge.net/using_pyke/proving_goals.html</loc>
-  <lastmod>2010-03-06</lastmod>
+  <lastmod>2010-03-08</lastmod>
   <changefreq>monthly</changefreq>
  </url>
 </urlset>

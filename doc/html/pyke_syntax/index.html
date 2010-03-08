@@ -81,7 +81,7 @@
 <p>Each type of source file ends in a different file suffix: <tt class="docutils literal"><span class="pre">.kfb</span></tt>,
 <tt class="docutils literal"><span class="pre">.krb</span></tt> or <tt class="docutils literal"><span class="pre">.kqb</span></tt>.</p>
 <p>Place all of these source files into a directory structure.  Then include this
-directory as an argument to the <a class="reference external" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> constructor.
+directory as an argument to the <a class="reference external" href="../using_pyke/creating_engine.html">knowledge_engine.engine</a> constructor.
 This will recursively search your directory for these three types of source
 files, compile them, and load them into the engine.  How you organize these
 files into subdirectories is up to you -- the directory structure does not
@@ -98,7 +98,7 @@ different endings:</p>
 </ul>
 <p>These <tt class="docutils literal"><span class="pre">.py</span></tt> files are then automatically imported to define the rule base.
 This causes Python to compile them into <tt class="docutils literal"><span class="pre">.pyc</span></tt> or <tt class="docutils literal"><span class="pre">.pyo</span></tt> files.</p>
-<p>Subsequent runs of the <a class="reference external" href="../using_pyke.html#initializing-pyke">knowledge_engine.engine</a> constructor only recompile
+<p>Subsequent runs of the <a class="reference external" href="../using_pyke/creating_engine.html">knowledge_engine.engine</a> constructor only recompile
 the Pyke source files that have changed since the last time they were compiled.</p>
 <p>The name of each knowledge base is the filename of the Pyke source file with
 the suffix removed.  This must be a legal Python identifier.</p>

@@ -74,13 +74,13 @@
 additional facts (through <a class="reference external" href="rules/forward_chaining.html">forward-chaining</a> rules), and/or to prove <em>goals</em>
 and optionally assemble Python functions
 into customized call graphs, called <a class="reference external" href="plans.html">plans</a> (through <a class="reference external" href="rules/backward_chaining.html">backward-chaining</a> rules).</p>
-<p>Pyke may then be <a class="reference external" href="../using_pyke.html#setting-up-each-case">reset</a>, deleting the last set of facts, so that the cycle
-may be repeated.  For each cycle a different rule base may be <a class="reference external" href="../using_pyke.html#setting-up-each-case">activated</a>.</p>
+<p>Pyke may then be <a class="reference external" href="../using_pyke/index.html#setting-up-different-cases">reset</a>, deleting the last set of facts, so that the cycle
+may be repeated.  For each cycle a different rule base may be <a class="reference external" href="../using_pyke/index.html#getting-started">activated</a>.</p>
 <p>The <a class="reference external" href="plans.html">plan</a> capability allows the postponement of code execution until the
 top-level goal has been completely proven.  This shields the code from
 blind alleys and the <a class="reference external" href="rules/index.html#backtracking">backtracking</a> that occurs within the rules.</p>
 <p>Once a <a class="reference external" href="plans.html">plan</a> has been created, it may be executed multiple times with different
-arguments.  It may also be <a class="reference external" href="../using_pyke.html#running-and-pickling-plans">pickled</a>, and later run again only requiring one
+arguments.  It may also be <a class="reference external" href="../using_pyke/other_functions.html#running-and-pickling-plans">pickled</a>, and later run again only requiring one
 small Pyke module.</p>
 <p>Pyke also provides an end user <a class="reference external" href="../knowledge_bases/question_bases.html">question</a> capability, as well as the capability
 to run <a class="reference external" href="../knowledge_bases/special.html#running-commands">commands</a> on the local system to guide the inferencing.</p>

@@ -25,7 +25,7 @@ restindex
     page-description:
         How your Python program calls Pyke.
     /description
-    section-pages: , creating_engine, adding_facts, proving_goals
+    section-pages: , creating_engine, adding_facts, proving_goals, other_functions
     format: rest
     encoding: utf8
     output-encoding: utf8
@@ -54,344 +54,121 @@ Getting Started
 
 The simplest use of Pyke involves three steps:
 
-#.  Create an engine_ object.
+#.  `Create an engine`_ object.
 
     >>> from pyke import knowledge_engine
-    >>>
+
     >>> my_engine = knowledge_engine.engine(__file__)
 
-    The Pyke source files are compiled, if out of date, and loaded as
+    The step compiles the Pyke source files, if out of date, and loads the
     `knowledge bases`_.
 
-    There are three kinds of Pyke source files::
+    There are three kinds of Pyke source files:
 
-        #.  `.kfb files`_ define `fact bases`_.
-        #.  `.krb files`_ define `rule bases`_.
-        #.  `.kqb files`_ define `question bases`_.
-
-    Pyke compiles each of these into a form ready for it to use.  For .kfb and
-    .kqb files, it writes a pickle file with the internal objects that it
-    needs.  For .krb files, it compiles the rules_ into Python code and writes
-    .py files.
-
-    This compiling process is done automatically for all source files that
-    have been modified after their compiled files were generated.
+    #.  `.kfb files`_ define `fact bases`_, which are compiled into .fbc pickle
+        files.
+    #.  `.krb files`_ define `rule bases`_, which are compiled into 1 to 3 .py
+        Python source files.
+    #.  `.kqb files`_ define `question bases`_, which are compiled into .qbc
+        pickle files.
 
 #.  Activate `rule bases`_.
 
-    You may chose which rule base to use.  Even if there is only one rule
-    base, you must still activate it.
+    >>> my_engine.activate('bc_father_son')
+
+    You may chose one or more rule bases to activate.
+    
+    .. note::
+
+       Even if you only have one rule base, you must still activate it.
 
     This is when the `forward-chaining rules`_ are run.
 
-#.  Prove goal_.
+#.  Prove_ goal_.
+
+    >>> my_engine.prove_1_goal('bc_father_son.father_son(bruce, $son)')
+    ({'son': 'david'}, None)
 
     The goal might be met by simply matching an already known fact_, or
     through the use of `backward-chaining rules`_.
 
-Then if you want to prove another goal, you can just repeat step 3.  In this
-case, the `forward-chaining rules`_ are only run once and all goals operate
-against the same set of known facts.
+Then if you want to prove another goal, you can just repeat the last step.
+In this case, the `forward-chaining rules`_ are only run once and all goals
+operate against the same set of known facts.
+
+    >>> my_engine.prove_1_goal('bc_father_son.father_son(thomas, $son)')
+    ({'son': 'bruce'}, None)
 
 Dynamically Asserting Facts
 ===========================
 
-To dynamically assert_ facts_, a new step is added:
+To dynamically assert_ facts_ within your Python program, a new step is added:
 
 #.  Create an engine_ object.
-#.  Assert facts_.
+
+    >>> from pyke import knowledge_engine
+
+    >>> my_engine = knowledge_engine.engine(__file__)
+
+#.  Assert_ facts_.
+
+    >>> my_engine.assert_('family', 'son_of', ('david', 'spike'))
 
     These facts must be asserted prior to activating the rule bases so that
     they are available to the `forward-chaining rules`_.
 
 #.  Activate `rule bases`_.
+
+    >>> my_engine.activate('bc_father_son')
+
 #.  Prove goal_.
 
-If you want to prove multiple goals against the same set of facts, then you
-can just repeat the last step.
+    >>> my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+    ({'son': 'spike'}, None)
 
-Proving the Same Goal for Different Cases
+Using Different Facts for Different Cases
 =========================================
 
-But if you want to prove multiple goals against different sets of facts, you
-need to reset_ the Pyke engine:
+But if you want to prove goals against different sets of facts or using
+different rule bases, you need to reset_ the Pyke engine:
 
 #.  Create an ``engine`` object.
-#.  Assert facts_ for first case.
+
+    >>> from pyke import knowledge_engine
+
+    >>> my_engine = knowledge_engine.engine(__file__)
+
+#.  Assert_ facts_ for first case.
+
+    >>> my_engine.assert_('family', 'son_of', ('david', 'spike'))
+
 #.  Activate `rule bases`_.
+
+    >>> my_engine.activate('bc_father_son')
+
 #.  Prove goal_ for first case.
+
+    >>> my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+    ({'son': 'spike'}, None)
+
 #.  Reset the Pyke engine.
 
     This erases all of the case specific facts that you asserted in step 2, as
     well as all of the facts asserted by the `forward-chaining rules`_.
 
-    It also deactivates all of the `rule bases`_.
+    It also deactivates all of the `rule bases`_, so you'll need to call
+    activate again after asserting your facts.
 
 #.  Assert facts_ for second case.
+
+    >>> my_engine.assert_('family', 'son_of', ('david', 'felix'))
+
 #.  Activate `rule bases`_.
+
+    >>> my_engine.activate('bc_father_son')
+
 #.  Prove goal_ for second case.
 
-You would also need to use the above sequence if you want to use different
-rule bases for different goals.
-
-Asserting Universal Facts
-=========================
-
-If you have some facts that you don't want deleted by the `engine.reset`_, you
-can assert them as *universal* facts:
-
-*some_engine*.add_universal_fact(kb_name, fact_name, arguments)
-    The ``add_universal_fact`` function is called once per fact_.  These
-    facts_ are never deleted and apply to all *cases*.
-    
-    Alternatively, you can place universal facts in a `.kfb file`_ so that
-    they are loaded automatically.
-
-    >>> my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas'))
-
-    Multiple facts with the same name are allowed.
-
-    >>> my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce'))
-
-    But duplicate facts (with the same arguments) are silently ignored.
-
-    >>> my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce'))
-    >>> my_engine.get_kb('family').dump_universal_facts()
-    son_of('bruce', 'thomas')
-    son_of('david', 'bruce')
-
-    These facts are accessed as ``kb_name.fact_name(arguments)`` within the
-    `.krb files`_.
-
-
-Setting up Different Cases
-===========================
-
-Pyke is designed to be run multiple times for multiple *cases*.  In
-general each case has its own set of starting facts_ and may use different
-`rule bases`_, depending upon the situation.
-
-Three functions initialize each case:
-
-*some_engine*.reset()
-    The ``reset`` function is called once to delete all of the `case specific
-    facts`_ from the last run.  It also deactivates all `rule bases`_.
-*some_engine*.assert_(kb_name, fact_name, arguments)
-    Call ``assert_`` (or the equivalent, ``add_case_specific_fact``,
-    see `Other Functions`_, below) for each starting fact_ for this case.
-    Like universal facts, you may have multiple facts with the same name so
-    long as they have different arguments.
-
-    >>> my_engine.assert_('family', 'son_of', ('michael', 'bruce'))
-    >>> my_engine.assert_('family', 'son_of', ('fred', 'thomas'))
-    >>> my_engine.assert_('family', 'son_of', ('fred', 'thomas'))
-
-    Facts duplicating a universal fact are also ignored.
-
-    >>> my_engine.get_kb('family').dump_universal_facts()
-    son_of('bruce', 'thomas')
-    son_of('david', 'bruce')
-    >>> my_engine.assert_('family', 'son_of', ('bruce', 'thomas'))
-    >>> my_engine.get_kb('family').dump_specific_facts()
-    son_of('michael', 'bruce')
-    son_of('fred', 'thomas')
-
-    There is no difference within the `.krb files`_ of how universal facts
-    verses case specific facts are used.  The only difference between the two
-    types of facts is that the case specific facts are deleted when a ``reset``
-    is done.
-
-    >>> my_engine.reset()
-    >>> my_engine.get_kb('family').dump_specific_facts()
-    >>> my_engine.get_kb('family').dump_universal_facts()
-    son_of('bruce', 'thomas')
-    son_of('david', 'bruce')
-
-*some_engine*.activate(\*rb_names)
-    Then call ``activate`` to activate the appropriate `rule bases`_.  This
-    may be called more than once, if desired, or it can simply take multiple
-    arguments.
-
-    >>> my_engine.activate('bc_example')
-
-Your Pyke engine is now ready to prove goals for this case!
-
-
-Proving Goals
-=============
-
-Two functions are provided to prove goals:
-
-*some_engine*.prove_1(kb_name, entity_name, fixed_args, num_returns)
-    ``Kb_name`` may name either a `fact base`_, `question base`_ or
-    `rule base category`_.
-    
-    The ``entity_name`` is the fact name for fact bases, question name for
-    question bases or the name of the `backward chaining`_ goal for
-    `rule bases`_.
-
-    The ``fixed_args`` are a tuple of Python values.  These form the first
-    set of arguments to the proof.  ``Num_returns`` specifies the number of
-    additional `pattern variables`_ to be appended to these arguments for the
-    proof.  The bindings of these pattern variables will be returned as a
-    tuple in the answer for the proof.  For example:
-
-        *some_engine*.prove_1(*some_rule_base_category*, *some_goal*, (1, 2, 3), 2)
-
-    Proves the goal:
-
-        *some_rule_base_category.some_goal* (1, 2, 3, $ans_0, $ans_1)
-
-    And will return the bindings produced by the proof as (``$ans_0``,
-    ``$ans_1``).
-
-    Returns the first proof found as a 2-tuple: a tuple of the bindings for
-    the ``num_returns`` pattern variables, and a plan_.  The plan is ``None``
-    if no plan was generated; otherwise, it is a Python function as
-    described below__.
-
-.. __: #running-and-pickling-plans
-
-    >>> my_engine.prove_1('bc_example', 'father_son', ('thomas', 'david'), 1)
-    ((('grand',),), None)
-
-    Raises ``pyke.knowledge_engine.CanNotProve`` if no proof is found.
-
-    >>> my_engine.prove_1('bc_example', 'father_son', ('thomas', 'bogus'), 1)
-    Traceback (most recent call last):
-        ...
-    CanNotProve: Can not prove bc_example.father_son(thomas, bogus, $ans_0)
-
-*some_engine*.prove_n(kb_name, entity_name, fixed_args, num_returns)
-    This returns a context manager for a generator yielding 2-tuples, a tuple
-    whose length == ``num_returns`` and a plan_, for each possible proof.
-    Like ``prove_1``, the plan is None if no plan was generated.  Unlike
-    ``prove_1`` it does not raise an exception if no proof is found. 
-
-    >>> from __future__ import with_statement
-    >>> with my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2) as gen:
-    ...     for ans in gen:
-    ...         print ans
-    (('bruce', ()), None)
-    (('david', ('grand',)), None)
-
-
-Running and Pickling Plans
-----------------------------
-
-Once you've obtained a plan_ from ``prove_1`` or ``prove_n``, you just call
-it like a normal Python function.  The arguments required are simply those
-specified, if any, in the `taking clause`_ of the rule__ proving the top-level
-goal.
-
-You may call the plan function any number of times.  You may even pickle
-the plan for later use.  But the plans are constructed out of
-`functools.partial`_ functions, so you need to register this with copy_reg_
-before pickling the plan:
-
-    >>> import copy_reg
-    >>> import functools
-    >>> copy_reg.pickle(functools.partial,
-    ...                 lambda p: (functools.partial, (p.func,) + p.args))
-
-No special code is required to unpickle a plan.  Just unpickle and call it.
-(Unpickling the plan only imports one small Pyke module to be able to run
-the plan).
-
-.. __: pyke_syntax/krb_syntax/bc_rule.html
-
-
-Tracing Rules
--------------
-
-Individual rules may be traced to aid in debugging.  The ``trace`` function
-takes two arguments: the rule base name, and the name of the rule to trace:
-
-    >>> my_engine.trace('bc_example', 'grand_father_son')
-    >>> my_engine.prove_1('bc_example', 'father_son', ('thomas', 'david'), 1)
-    bc_example.grand_father_son('thomas', 'david', '$ans_0')
-    bc_example.grand_father_son succeeded with ('thomas', 'david', ('grand',))
-    ((('grand',),), None)
-
-This can be done either before or after rule base activation and will remain
-in effect until you call ``untrace``:
-
-    >>> my_engine.untrace('bc_example', 'grand_father_son')
-    >>> my_engine.prove_1('bc_example', 'father_son', ('thomas', 'david'), 1)
-    ((('grand',),), None)
-
-
-Krb_traceback
----------------
-
-A handy traceback module is provided to convert Python functions, lines and
-line numbers to the `.krb file`_ rule names, lines and line numbers in a
-Python traceback.  This makes it much easier to read the tracebacks that occur
-during proofs.
-
-The ``krb_traceback`` module has exactly the same functions as the standard
-Python traceback_ module, but they convert the generated Python function
-information into .krb file information.  They also delete the intervening
-Python functions between subgoal proofs.
-
-    >>> import sys
-    >>> from pyke import knowledge_engine
-    >>> from pyke import krb_traceback
-    >>>
-    >>> my_engine = knowledge_engine.engine(__file__)
-    >>> my_engine.activate('error_test')
-    >>> try:                                            # doctest: +ELLIPSIS
-    ...     my_engine.prove_1('error_test', 'goal', (), 0)
-    ... except:
-    ...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
-    Traceback (most recent call last):
-      File "<doctest index.txt[34]>", line 2, in <module>
-        my_engine.prove_1('error_test', 'goal', (), 0)
-      File "...knowledge_engine.py", line 404, in prove_1
-        return iter(it).next()
-      File "...knowledge_engine.py", line 385, in gen
-        for plan in it:
-      File "...rule_base.py", line 50, in next
-        return self.iterator.next()
-      File "...knowledge_engine.py", line 41, in from_iterable
-        for x in iterable: yield x
-      File "...knowledge_engine.py", line 41, in from_iterable
-        for x in iterable: yield x
-      File "...error_test.krb", line 26, in rule1
-        goal2()
-      File "...error_test.krb", line 31, in rule2
-        goal3()
-      File "...error_test.krb", line 36, in rule3
-        goal4()
-      File "...error_test.krb", line 41, in rule4
-        check $bar > 0
-      File "...contexts.py", line 231, in lookup_data
-        raise KeyError("$%s not bound" % var_name)
-    KeyError: '$bar not bound'
-
-
-Other Functions
-===============
-
-There are a few more functions that may be useful in special situations.
-
-*some_engine*.add_case_specific_fact(kb_name, fact_name, args)
-    This is an alternate to the ``assert_`` function.
-*some_engine*.get_kb(kb_name)
-    Finds and returns the `knowledge base`_ by the name ``kb_name``.  Raises
-    ``KeyError`` if not found.  Note that for `rule bases`_, this returns the
-    active `rule base`_ where ``kb_name`` is the `rule base category`_ name.
-    Thus, not all `rule bases`_ are accessible through this call.
-*some_engine*.get_rb(rb_name)
-    Finds and returns the `rule base`_ by the name ``rb_name``.  Raises
-    ``KeyError`` if not found.  This works for any `rule base`_, whether it
-    is active_ or not.
-*some_engine*.print_stats([f = sys.stdout])
-    Prints a brief set of statistics for each knowledge base to file ``f``.
-    These are reset by the ``reset`` function.  This will show how many facts
-    were asserted, and counts of how many forward-chaining rules were fired
-    and rerun, as well as counts of how many backward-chaining goals were
-    tried, and how many backward-chaining rules matched, succeeded and failed.
-    Note that one backward-chaining rule may succeed many times through
-    backtracking.
+    >>> my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+    ({'son': 'felix'}, None)
 

@@ -79,7 +79,7 @@
                 <div class="document" id="backward-chaining">
 <h1 class="title">Backward Chaining</h1>
 <p>Backward chaining <a class="reference external" href="index.html">rules</a> are processed when your program asks Pyke a <a class="reference external" href="../../knowledge_bases/question_bases.html">question</a>
-(i.e., asks Pyke to <a class="reference external" href="../../using_pyke.html#proving-goals">prove</a> a specific <em>goal</em>).  Pyke will only use <a class="reference external" href="../../using_pyke.html#setting-up-each-case">activated</a>
+(i.e., asks Pyke to <a class="reference external" href="../../using_pyke/proving_goals.html">prove</a> a specific <em>goal</em>).  Pyke will only use <a class="reference external" href="../../using_pyke/index.html#getting-started">activated</a>
 <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule bases</a> to do the proof.</p>
 <div class="section" id="overview-of-backward-chaining">
 <h2>Overview of &quot;Backward-Chaining&quot;</h2>
@@ -123,7 +123,7 @@ one statement in the <em>use</em> clause.</p>
  1  direct_father_son
  2      use father_son($father, $son, ())
  3      when
- 4          family.son_of($son, $father)
+ 4          family2.son_of($son, $father)
 
  5  grand_father_son
  6      use father_son($grand_father, $grand_son, (grand))
@@ -169,27 +169,23 @@ with the addition of the <em>brothers</em>, <em>uncle_nephew</em> and <em>cousin
 <img alt="../../images/bc_rules.png" src="../../images/bc_rules.png" style="width: 509.0px; height: 583.0px;" />
 <p class="caption">Example Rules</p>
 </div>
-<p>These <a class="reference external" href="index.html">rules</a> are not used until you ask Pyke to <a class="reference external" href="../../using_pyke.html#proving-goals">prove</a> a goal.</p>
-<p>The easiest way to do this is with <em>some_engine.prove_1</em> or
-<em>some_engine.prove_n</em>.  <a class="reference external" href="../../using_pyke.html#proving-goals">Prove_1</a> only returns the first proof found and
-then stops (or raises <tt class="docutils literal"><span class="pre">pyke.knowledge_engine.CanNotProve</span></tt>).  <a class="reference external" href="../../using_pyke.html#proving-goals">Prove_n</a>
+<p>These <a class="reference external" href="index.html">rules</a> are not used until you ask Pyke to <a class="reference external" href="../../using_pyke/proving_goals.html">prove</a> a goal.</p>
+<p>The easiest way to do this is with <em>some_engine.prove_1_goal</em> or
+<em>some_engine.prove_goal</em>.  <a class="reference external" href="../../using_pyke/proving_goals.html">Prove_1_goal</a> only returns the first proof found
+and then stops (or raises <tt class="docutils literal"><span class="pre">pyke.knowledge_engine.CanNotProve</span></tt>).  <a class="reference external" href="../../using_pyke/proving_goals.html">Prove_goal</a>
 returns a context manager for a generator that generates all possible proofs
-(which, in some cases, might be infinite).  In both cases, you pass a tuple
-of data arguments and the number of variable arguments as the last two
-parameters.  The total number of arguments for the goal is the sum of the
-length of the data arguments that you pass plus the number of variable
-arguments that you specify.</p>
-<p>Both functions return the variable bindings for the number of variable
-arguments you specified as a tuple, along with the <a class="reference external" href="../plans.html">plan</a>.</p>
+(which, in some cases, might be infinite).</p>
+<p>Both functions return the <a class="reference external" href="../pattern_matching/pattern_variables.html">pattern variable</a> variable bindings, along with
+the <a class="reference external" href="../plans.html">plan</a>.</p>
 </div>
 <div class="section" id="backtracking-with-backward-chaining-rules">
 <h2>Backtracking with Backward-Chaining Rules</h2>
-<p>For this example, these are the starting set of <tt class="docutils literal"><span class="pre">family</span></tt> facts:</p>
+<p>For this example, these are the starting set of <tt class="docutils literal"><span class="pre">family2</span></tt> facts:</p>
 <pre class="literal-block">
 1  son_of(tim, thomas)
 2  son_of(fred, thomas)
 3  son_of(bruce, thomas)
-4  son_of(michael, bruce)
+4  son_of(david, bruce)
 </pre>
 <p>And we want to know who fred's nephews are.  So we'd ask <tt class="docutils literal"><span class="pre">uncle_nephew(fred,</span>
 <span class="pre">$nephew,</span> <span class="pre">$prefix)</span></tt>.</p>
@@ -198,26 +194,28 @@ failure is encountered (with the line number from the example preceding each
 line):</p>
 <pre class="literal-block">
 (1)   22  use uncle_nephew(fred, $nephew, $prefix)
-          25  brothers(fred, $father)
-(2)           25  use brothers(fred, $brother2)
+          24  brothers(fred, $father)
+(2)           16  use brothers(fred, $brother2)
                   18  father_son($father, fred, ())
 (3)                   2  use father_son($father, fred, ())
-                          4  family.son_of(fred, $father)
+                          4  family2.son_of(fred, $father)
+                               matches fact 2: son_of(fred, thomas)
                   19  father_son(thomas, $brother2, ())
 (4)                   2  use father_son(thomas, $son, ())
-                          4  family.son_of($son, thomas)
+                          4  family2.son_of($son, thomas)
+                               matches fact 1: son_of(tim, thomas)
                   20  check fred != tim
-          24  father_son(tim, $nephew, $prefix1)
+          25  father_son(tim, $nephew, $prefix1)
 (5.1)         2  use father_son(tim, $son, ())
-                  4  family.son_of($son, tim)                                =&gt; FAILS
+                  4  family2.son_of($son, tim)                               =&gt; FAILS
 (5.2)         6  use father_son(tim, $grand_son, (grand))
                   8  father_son(tim, $grand_son, ())
                       2  use father_son(tim, $son, ())
-                          4  family.son_of($son, tim)                        =&gt; FAILS
+                          4  family2.son_of($son, tim)                       =&gt; FAILS
 (5.3)         11 use father_son(tim, $gg_son, (great, $prefix1, *$rest_prefixes))
                   13 father_son(tim, $gg_son, ())
                       2  use father_son(tim, $son, ())
-                          4  family.son_of($son, tim)                        =&gt; FAILS
+                          4  family2.son_of($son, tim)                       =&gt; FAILS
 </pre>
 <p>Each rule invocation is numbered (in parenthesis) as a step number.  Step 5
 has tried 3 different rules and they have all failed (5.1, 5.2 and 5.3).</p>
@@ -241,7 +239,7 @@ This fails the subsequent check in the <tt class="docutils literal"><span class=
 </pre>
 <p>And so Pyke goes back to step 4 once again.  The next solution binds <tt class="docutils literal"><span class="pre">$son</span></tt>
 to <tt class="docutils literal"><span class="pre">bruce</span></tt>.  This succeeds for <tt class="docutils literal"><span class="pre">brother</span></tt> and is passed down to
-<tt class="docutils literal"><span class="pre">father_son</span></tt> which returns <tt class="docutils literal"><span class="pre">michael</span></tt> as <tt class="docutils literal"><span class="pre">fred's</span></tt> nephew.</p>
+<tt class="docutils literal"><span class="pre">father_son</span></tt> which returns <tt class="docutils literal"><span class="pre">david</span></tt> as <tt class="docutils literal"><span class="pre">fred's</span></tt> nephew.</p>
 <p>Further backtracking reveals no other solutions.</p>
 <div class="section" id="backtracking-summary">
 <h3>Backtracking Summary</h3>
@@ -272,32 +270,28 @@ following:
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
 &gt;&gt;&gt; engine = knowledge_engine.engine(__file__)
-&gt;&gt;&gt; engine.assert_('family', 'son_of', ('tim', 'thomas'))
-&gt;&gt;&gt; engine.assert_('family', 'son_of', ('fred', 'thomas'))
-&gt;&gt;&gt; engine.assert_('family', 'son_of', ('bruce', 'thomas'))
-&gt;&gt;&gt; engine.assert_('family', 'son_of', ('michael', 'bruce'))
-&gt;&gt;&gt; engine.activate('bc_example')
+&gt;&gt;&gt; engine.activate('bc_related')
 </pre>
 </blockquote>
 <p>Nothing happens this time when we activate the rule base, because there are no
 forward-chaining rules here.</p>
 <p>We want to ask the question: &quot;Who are Fred's nephews?&quot;.  This translates
-into the Pyke statement: <tt class="docutils literal"><span class="pre">bc_example.uncle_nephew(fred,</span> <span class="pre">$v1,</span> <span class="pre">$v2)</span></tt>.</p>
+into the Pyke statement: <tt class="docutils literal"><span class="pre">bc_related.uncle_nephew(fred,</span> <span class="pre">$v1,</span> <span class="pre">$v2)</span></tt>.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">Note that we're using the name of the rule base, <tt class="docutils literal"><span class="pre">bc_example</span></tt> rather than
-the fact base, <tt class="docutils literal"><span class="pre">family</span></tt> here; because we expect this answer to come from
-the <tt class="docutils literal"><span class="pre">bc_example</span></tt> rule base.</p>
+<p class="last">Note that we're using the name of the rule base, <tt class="docutils literal"><span class="pre">bc_related</span></tt> rather than
+the fact base, <tt class="docutils literal"><span class="pre">family2</span></tt> here; because we expect this answer to come from
+the <tt class="docutils literal"><span class="pre">bc_related</span></tt> rule base.</p>
 </div>
-<p>This is 'bc_example', 'uncle_nephew', with ('fred',) followed by 2 pattern
+<p>This is 'bc_related', 'uncle_nephew', with ('fred',) followed by 2 pattern
 variables as arguments:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; from __future__ import with_statement
-&gt;&gt;&gt; with engine.prove_n('bc_example', 'uncle_nephew', ('fred',), 2) as gen:
+&gt;&gt;&gt; with engine.prove_goal('bc_related.uncle_nephew(fred, $nephew, $distance)') as gen:
 ...     for vars, no_plan in gen:
-...         print vars
-('michael', ())
+...         print vars['nephew'], vars['distance']
+david ()
 </pre>
 </blockquote>
 <!-- ADD_LINKS MARKER -->

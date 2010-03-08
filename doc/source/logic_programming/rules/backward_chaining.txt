@@ -93,7 +93,7 @@ Consider this example::
      1  direct_father_son
      2      use father_son($father, $son, ())
      3      when
-     4          family.son_of($son, $father)
+     4          family2.son_of($son, $father)
         
      5  grand_father_son
      6      use father_son($grand_father, $grand_son, (grand))
@@ -145,28 +145,24 @@ We can draw something similar to a function call graph with these rules:
 
 These rules_ are not used until you ask Pyke to prove_ a goal.
 
-The easiest way to do this is with *some_engine.prove_1* or
-*some_engine.prove_n*.  Prove_1_ only returns the first proof found and
-then stops (or raises ``pyke.knowledge_engine.CanNotProve``).  Prove_n_
+The easiest way to do this is with *some_engine.prove_1_goal* or
+*some_engine.prove_goal*.  Prove_1_goal_ only returns the first proof found
+and then stops (or raises ``pyke.knowledge_engine.CanNotProve``).  Prove_goal_
 returns a context manager for a generator that generates all possible proofs
-(which, in some cases, might be infinite).  In both cases, you pass a tuple
-of data arguments and the number of variable arguments as the last two
-parameters.  The total number of arguments for the goal is the sum of the
-length of the data arguments that you pass plus the number of variable
-arguments that you specify.
+(which, in some cases, might be infinite).
 
-Both functions return the variable bindings for the number of variable
-arguments you specified as a tuple, along with the plan_.
+Both functions return the `pattern variable`_ variable bindings, along with
+the plan_.
 
 Backtracking with Backward-Chaining Rules
 =========================================
 
-For this example, these are the starting set of ``family`` facts::
+For this example, these are the starting set of ``family2`` facts::
 
      1  son_of(tim, thomas)
      2  son_of(fred, thomas)
      3  son_of(bruce, thomas)
-     4  son_of(michael, bruce)
+     4  son_of(david, bruce)
 
 And we want to know who fred's nephews are.  So we'd ask ``uncle_nephew(fred,
 $nephew, $prefix)``.
@@ -176,26 +172,28 @@ failure is encountered (with the line number from the example preceding each
 line)::
 
     (1)   22  use uncle_nephew(fred, $nephew, $prefix)
-              25  brothers(fred, $father)
-    (2)           25  use brothers(fred, $brother2)
+              24  brothers(fred, $father)
+    (2)           16  use brothers(fred, $brother2)
                       18  father_son($father, fred, ())
     (3)                   2  use father_son($father, fred, ())
-                              4  family.son_of(fred, $father)
+                              4  family2.son_of(fred, $father)
+                                   matches fact 2: son_of(fred, thomas)
                       19  father_son(thomas, $brother2, ())
     (4)                   2  use father_son(thomas, $son, ())
-                              4  family.son_of($son, thomas)
+                              4  family2.son_of($son, thomas)
+                                   matches fact 1: son_of(tim, thomas)
                       20  check fred != tim
-              24  father_son(tim, $nephew, $prefix1)
+              25  father_son(tim, $nephew, $prefix1)
     (5.1)         2  use father_son(tim, $son, ())
-                      4  family.son_of($son, tim)                                => FAILS
+                      4  family2.son_of($son, tim)                               => FAILS
     (5.2)         6  use father_son(tim, $grand_son, (grand))
                       8  father_son(tim, $grand_son, ())
                           2  use father_son(tim, $son, ())
-                              4  family.son_of($son, tim)                        => FAILS
+                              4  family2.son_of($son, tim)                       => FAILS
     (5.3)         11 use father_son(tim, $gg_son, (great, $prefix1, *$rest_prefixes))
                       13 father_son(tim, $gg_son, ())
                           2  use father_son(tim, $son, ())
-                              4  family.son_of($son, tim)                        => FAILS
+                              4  family2.son_of($son, tim)                       => FAILS
 
 Each rule invocation is numbered (in parenthesis) as a step number.  Step 5
 has tried 3 different rules and they have all failed (5.1, 5.2 and 5.3).
@@ -227,7 +225,7 @@ This fails the subsequent check in the ``brothers`` rule::
 
 And so Pyke goes back to step 4 once again.  The next solution binds ``$son``
 to ``bruce``.  This succeeds for ``brother`` and is passed down to
-``father_son`` which returns ``michael`` as ``fred's`` nephew.
+``father_son`` which returns ``david`` as ``fred's`` nephew.
 
 Further backtracking reveals no other solutions.
 
@@ -259,31 +257,27 @@ Running the Example
 
     >>> from pyke import knowledge_engine
     >>> engine = knowledge_engine.engine(__file__)
-    >>> engine.assert_('family', 'son_of', ('tim', 'thomas'))
-    >>> engine.assert_('family', 'son_of', ('fred', 'thomas'))
-    >>> engine.assert_('family', 'son_of', ('bruce', 'thomas'))
-    >>> engine.assert_('family', 'son_of', ('michael', 'bruce'))
-    >>> engine.activate('bc_example')
+    >>> engine.activate('bc_related')
 
 Nothing happens this time when we activate the rule base, because there are no
 forward-chaining rules here.
 
 We want to ask the question: "Who are Fred's nephews?".  This translates
-into the Pyke statement: ``bc_example.uncle_nephew(fred, $v1, $v2)``.
+into the Pyke statement: ``bc_related.uncle_nephew(fred, $v1, $v2)``.
 
 .. note::
-   Note that we're using the name of the rule base, ``bc_example`` rather than
-   the fact base, ``family`` here; because we expect this answer to come from
-   the ``bc_example`` rule base.
+   Note that we're using the name of the rule base, ``bc_related`` rather than
+   the fact base, ``family2`` here; because we expect this answer to come from
+   the ``bc_related`` rule base.
 
-This is 'bc_example', 'uncle_nephew', with ('fred',) followed by 2 pattern
+This is 'bc_related', 'uncle_nephew', with ('fred',) followed by 2 pattern
 variables as arguments:
 
     >>> from __future__ import with_statement
-    >>> with engine.prove_n('bc_example', 'uncle_nephew', ('fred',), 2) as gen:
+    >>> with engine.prove_goal('bc_related.uncle_nephew(fred, $nephew, $distance)') as gen:
     ...     for vars, no_plan in gen:
-    ...         print vars
-    ('michael', ())
+    ...         print vars['nephew'], vars['distance']
+    david ()
 
 
 .. _example: forward_chaining.html#example

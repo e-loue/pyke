@@ -152,13 +152,13 @@ or explicitly linked to each other.  So Pyke must automatically figure out
 how to combine these rules to accomplish some larger task.  This is called
 <em>inferencing</em> and there are two different approaches that Pyke uses:</p>
 <ul class="simple">
-<li>All <a class="reference external" href="forward_chaining.html">forward-chaining</a> rules are processed when a <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule base</a> is <a class="reference external" href="../../using_pyke.html#setting-up-each-case">activated</a>.<ul>
-<li>Forward-chaining rules may <a class="reference external" href="../../using_pyke.html#setting-up-each-case">assert</a> new facts, and <a class="reference external" href="../../using_pyke.html#setting-up-each-case">activate</a> more specific
+<li>All <a class="reference external" href="forward_chaining.html">forward-chaining</a> rules are processed when a <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule base</a> is <a class="reference external" href="../../using_pyke/index.html#getting-started">activated</a>.<ul>
+<li>Forward-chaining rules may <a class="reference external" href="../../using_pyke/adding_facts.html">assert</a> new facts, and <a class="reference external" href="../../using_pyke/index.html#getting-started">activate</a> more specific
 <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule bases</a>.</li>
 </ul>
 </li>
 <li><a class="reference external" href="backward_chaining.html">Backward-chaining</a> rules are processed when your program asks Pyke to
-<a class="reference external" href="../../using_pyke.html#proving-goals">prove</a> a specific <em>goal</em> (i.e., asks Pyke a <a class="reference external" href="../../knowledge_bases/question_bases.html">question</a>).<ul>
+<a class="reference external" href="../../using_pyke/proving_goals.html">prove</a> a specific <em>goal</em> (i.e., asks Pyke a <a class="reference external" href="../../knowledge_bases/question_bases.html">question</a>).<ul>
 <li>These rules are designed to answer a question rather than assert new
 facts or activate more specific rule bases.</li>
 <li>They also have the ability to assemble Python functions into a customized

@@ -101,7 +101,7 @@ objects are not recommended as arguments.</p>
 <div class="section" id="case-specific-facts">
 <h3>Case Specific Facts</h3>
 <p>Most facts are <em>case specific</em> facts.  This means that they will be deleted
-when an <a class="reference external" href="../using_pyke.html#initializing-pyke">engine</a> <a class="reference external" href="../using_pyke.html#setting-up-each-case">reset</a> is done to prepare for another run of the inference
+when an <a class="reference external" href="../using_pyke/creating_engine.html">engine</a> <a class="reference external" href="../using_pyke/index.html#setting-up-different-cases">reset</a> is done to prepare for another run of the inference
 engine.  Case specific facts are asserted through either:</p>
 <pre class="literal-block">
 some_engine.assert_(kb_name, fact_name, arguments)
@@ -111,13 +111,13 @@ some_engine.add_case_specific_fact(kb_name, fact_name, arguments)
 </div>
 <div class="section" id="universal-facts">
 <h3>Universal Facts</h3>
-<p>Universal facts are never deleted (specifically, when a <a class="reference external" href="../using_pyke.html#setting-up-each-case">reset</a> is done).  You
+<p>Universal facts are never deleted (specifically, when a <a class="reference external" href="../using_pyke/index.html#setting-up-different-cases">reset</a> is done).  You
 can specify universal facts in a <a class="reference external" href="../pyke_syntax/kfb_syntax.html">.kfb file</a>, or add universal facts by
 calling:</p>
 <pre class="literal-block">
 some_engine.add_universal_fact(kb_name, fact_name, arguments)
 </pre>
-<p>Typically, all universal facts are added once at <a class="reference external" href="../using_pyke.html#initializing-pyke">program startup</a>.</p>
+<p>Typically, all universal facts are added once at <a class="reference external" href="../using_pyke/creating_engine.html">program startup</a>.</p>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>

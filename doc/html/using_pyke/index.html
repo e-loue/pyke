@@ -42,6 +42,7 @@
 <div class="normal-nav"><a href="creating_engine.html">Creating an Engine</a></div>
 <div class="normal-nav"><a href="adding_facts.html">Asserting Facts</a></div>
 <div class="normal-nav"><a href="proving_goals.html">Proving Goals</a></div>
+<div class="normal-nav"><a href="other_functions.html">Other functions</a></div>
 </div>
 <div class="normal-nav"><a href="../examples.html">Examples</a></div>
 <div class="normal-nav"><a href="../PyCon2008-paper.html">PyCon 2008 Paper</a></div>
@@ -79,345 +80,139 @@
 ...                'examples') -->
 <p>The simplest use of Pyke involves three steps:</p>
 <ol class="arabic">
-<li><p class="first">Create an <a class="reference external" href="../using_pyke.html#initializing-pyke">engine</a> object.</p>
+<li><p class="first"><a class="reference external" href="creating_engine.html">Create an engine</a> object.</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
-&gt;&gt;&gt;
+</pre>
+<pre class="doctest-block">
 &gt;&gt;&gt; my_engine = knowledge_engine.engine(__file__)
 </pre>
-<p>The Pyke source files are compiled, if out of date, and loaded as
+<p>The step compiles the Pyke source files, if out of date, and loads the
 <a class="reference external" href="../knowledge_bases/index.html">knowledge bases</a>.</p>
 <p>There are three kinds of Pyke source files:</p>
-<pre class="literal-block">
-#.  `.kfb files`_ define `fact bases`_.
-#.  `.krb files`_ define `rule bases`_.
-#.  `.kqb files`_ define `question bases`_.
-</pre>
-<p>Pyke compiles each of these into a form ready for it to use.  For .kfb and
-.kqb files, it writes a pickle file with the internal objects that it
-needs.  For .krb files, it compiles the <a class="reference external" href="../logic_programming/rules/index.html">rules</a> into Python code and writes
-.py files.</p>
-<p>This compiling process is done automatically for all source files that
-have been modified after their compiled files were generated.</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="../pyke_syntax/kfb_syntax.html">.kfb files</a> define <a class="reference external" href="../knowledge_bases/fact_bases.html">fact bases</a>, which are compiled into .fbc pickle
+files.</li>
+<li><a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb files</a> define <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>, which are compiled into 1 to 3 .py
+Python source files.</li>
+<li><a class="reference external" href="../pyke_syntax/kqb_syntax.html">.kqb files</a> define <a class="reference external" href="../knowledge_bases/question_bases.html">question bases</a>, which are compiled into .qbc
+pickle files.</li>
+</ol>
 </li>
 <li><p class="first">Activate <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</p>
-<p>You may chose which rule base to use.  Even if there is only one rule
-base, you must still activate it.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.activate('bc_father_son')
+</pre>
+<p>You may chose one or more rule bases to activate.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Even if you only have one rule base, you must still activate it.</p>
+</div>
 <p>This is when the <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining rules</a> are run.</p>
 </li>
-<li><p class="first">Prove <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a>.</p>
+<li><p class="first"><a class="reference external" href="proving_goals.html">Prove</a> <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a>.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(bruce, $son)')
+({'son': 'david'}, None)
+</pre>
 <p>The goal might be met by simply matching an already known <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">fact</a>, or
 through the use of <a class="reference external" href="../logic_programming/rules/backward_chaining.html">backward-chaining rules</a>.</p>
 </li>
 </ol>
-<p>Then if you want to prove another goal, you can just repeat step 3.  In this
-case, the <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining rules</a> are only run once and all goals operate
-against the same set of known facts.</p>
+<p>Then if you want to prove another goal, you can just repeat the last step.
+In this case, the <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining rules</a> are only run once and all goals
+operate against the same set of known facts.</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(thomas, $son)')
+({'son': 'bruce'}, None)
+</pre>
+</blockquote>
 </div>
 <div class="section" id="dynamically-asserting-facts">
 <h2>Dynamically Asserting Facts</h2>
-<p>To dynamically <a class="reference external" href="../using_pyke.html#setting-up-each-case">assert</a> <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a>, a new step is added:</p>
+<p>To dynamically <a class="reference external" href="adding_facts.html">assert</a> <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a> within your Python program, a new step is added:</p>
 <ol class="arabic">
-<li><p class="first">Create an <a class="reference external" href="../using_pyke.html#initializing-pyke">engine</a> object.</p>
+<li><p class="first">Create an <a class="reference external" href="creating_engine.html">engine</a> object.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; from pyke import knowledge_engine
+</pre>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine = knowledge_engine.engine(__file__)
+</pre>
 </li>
-<li><p class="first">Assert <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a>.</p>
+<li><p class="first"><a class="reference external" href="adding_facts.html">Assert</a> <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a>.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.assert_('family', 'son_of', ('david', 'spike'))
+</pre>
 <p>These facts must be asserted prior to activating the rule bases so that
 they are available to the <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining rules</a>.</p>
 </li>
 <li><p class="first">Activate <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.activate('bc_father_son')
+</pre>
 </li>
 <li><p class="first">Prove <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a>.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+({'son': 'spike'}, None)
+</pre>
 </li>
 </ol>
-<p>If you want to prove multiple goals against the same set of facts, then you
-can just repeat the last step.</p>
 </div>
-<div class="section" id="proving-the-same-goal-for-different-cases">
-<h2>Proving the Same Goal for Different Cases</h2>
-<p>But if you want to prove multiple goals against different sets of facts, you
-need to <a class="reference external" href="../using_pyke.html#setting-up-each-case">reset</a> the Pyke engine:</p>
+<div class="section" id="using-different-facts-for-different-cases">
+<h2>Using Different Facts for Different Cases</h2>
+<p>But if you want to prove goals against different sets of facts or using
+different rule bases, you need to <a class="reference external" href="index.html#setting-up-different-cases">reset</a> the Pyke engine:</p>
 <ol class="arabic">
 <li><p class="first">Create an <tt class="docutils literal"><span class="pre">engine</span></tt> object.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; from pyke import knowledge_engine
+</pre>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine = knowledge_engine.engine(__file__)
+</pre>
 </li>
-<li><p class="first">Assert <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a> for first case.</p>
+<li><p class="first"><a class="reference external" href="adding_facts.html">Assert</a> <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a> for first case.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.assert_('family', 'son_of', ('david', 'spike'))
+</pre>
 </li>
 <li><p class="first">Activate <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.activate('bc_father_son')
+</pre>
 </li>
 <li><p class="first">Prove <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a> for first case.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+({'son': 'spike'}, None)
+</pre>
 </li>
 <li><p class="first">Reset the Pyke engine.</p>
 <p>This erases all of the case specific facts that you asserted in step 2, as
 well as all of the facts asserted by the <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining rules</a>.</p>
-<p>It also deactivates all of the <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</p>
+<p>It also deactivates all of the <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>, so you'll need to call
+activate again after asserting your facts.</p>
 </li>
 <li><p class="first">Assert <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a> for second case.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.assert_('family', 'son_of', ('david', 'felix'))
+</pre>
 </li>
 <li><p class="first">Activate <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.activate('bc_father_son')
+</pre>
 </li>
 <li><p class="first">Prove <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a> for second case.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+({'son': 'felix'}, None)
+</pre>
 </li>
 </ol>
-<p>You would also need to use the above sequence if you want to use different
-rule bases for different goals.</p>
-</div>
-<div class="section" id="asserting-universal-facts">
-<h2>Asserting Universal Facts</h2>
-<p>If you have some facts that you don't want deleted by the <a class="reference external" href="../using_pyke.html#setting-up-each-case">engine.reset</a>, you
-can assert them as <em>universal</em> facts:</p>
-<dl class="docutils">
-<dt><em>some_engine</em>.add_universal_fact(kb_name, fact_name, arguments)</dt>
-<dd><p class="first">The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">fact</a>.  These
-<a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a> are never deleted and apply to all <em>cases</em>.</p>
-<p>Alternatively, you can place universal facts in a <a class="reference external" href="../pyke_syntax/kfb_syntax.html">.kfb file</a> so that
-they are loaded automatically.</p>
-<pre class="doctest-block">
-&gt;&gt;&gt; my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas'))
-</pre>
-<p>Multiple facts with the same name are allowed.</p>
-<pre class="doctest-block">
-&gt;&gt;&gt; my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce'))
-</pre>
-<p>But duplicate facts (with the same arguments) are silently ignored.</p>
-<pre class="doctest-block">
-&gt;&gt;&gt; my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce'))
-&gt;&gt;&gt; my_engine.get_kb('family').dump_universal_facts()
-son_of('bruce', 'thomas')
-son_of('david', 'bruce')
-</pre>
-<p class="last">These facts are accessed as <tt class="docutils literal"><span class="pre">kb_name.fact_name(arguments)</span></tt> within the
-<a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb files</a>.</p>
-</dd>
-</dl>
-</div>
-<div class="section" id="setting-up-different-cases">
-<h2>Setting up Different Cases</h2>
-<p>Pyke is designed to be run multiple times for multiple <em>cases</em>.  In
-general each case has its own set of starting <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a> and may use different
-<a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>, depending upon the situation.</p>
-<p>Three functions initialize each case:</p>
-<dl class="docutils">
-<dt><em>some_engine</em>.reset()</dt>
-<dd>The <tt class="docutils literal"><span class="pre">reset</span></tt> function is called once to delete all of the <a class="reference external" href="../knowledge_bases/fact_bases.html#case-specific-facts">case specific
-facts</a> from the last run.  It also deactivates all <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</dd>
-<dt><em>some_engine</em>.assert_(kb_name, fact_name, arguments)</dt>
-<dd><p class="first">Call <tt class="docutils literal"><span class="pre">assert_</span></tt> (or the equivalent, <tt class="docutils literal"><span class="pre">add_case_specific_fact</span></tt>,
-see <a class="reference internal" href="#other-functions">Other Functions</a>, below) for each starting <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">fact</a> for this case.
-Like universal facts, you may have multiple facts with the same name so
-long as they have different arguments.</p>
-<pre class="doctest-block">
-&gt;&gt;&gt; my_engine.assert_('family', 'son_of', ('michael', 'bruce'))
-&gt;&gt;&gt; my_engine.assert_('family', 'son_of', ('fred', 'thomas'))
-&gt;&gt;&gt; my_engine.assert_('family', 'son_of', ('fred', 'thomas'))
-</pre>
-<p>Facts duplicating a universal fact are also ignored.</p>
-<pre class="doctest-block">
-&gt;&gt;&gt; my_engine.get_kb('family').dump_universal_facts()
-son_of('bruce', 'thomas')
-son_of('david', 'bruce')
-&gt;&gt;&gt; my_engine.assert_('family', 'son_of', ('bruce', 'thomas'))
-&gt;&gt;&gt; my_engine.get_kb('family').dump_specific_facts()
-son_of('michael', 'bruce')
-son_of('fred', 'thomas')
-</pre>
-<p>There is no difference within the <a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb files</a> of how universal facts
-verses case specific facts are used.  The only difference between the two
-types of facts is that the case specific facts are deleted when a <tt class="docutils literal"><span class="pre">reset</span></tt>
-is done.</p>
-<pre class="last doctest-block">
-&gt;&gt;&gt; my_engine.reset()
-&gt;&gt;&gt; my_engine.get_kb('family').dump_specific_facts()
-&gt;&gt;&gt; my_engine.get_kb('family').dump_universal_facts()
-son_of('bruce', 'thomas')
-son_of('david', 'bruce')
-</pre>
-</dd>
-<dt><em>some_engine</em>.activate(*rb_names)</dt>
-<dd><p class="first">Then call <tt class="docutils literal"><span class="pre">activate</span></tt> to activate the appropriate <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.  This
-may be called more than once, if desired, or it can simply take multiple
-arguments.</p>
-<pre class="last doctest-block">
-&gt;&gt;&gt; my_engine.activate('bc_example')
-</pre>
-</dd>
-</dl>
-<p>Your Pyke engine is now ready to prove goals for this case!</p>
-</div>
-<div class="section" id="proving-goals">
-<h2>Proving Goals</h2>
-<p>Two functions are provided to prove goals:</p>
-<dl class="docutils">
-<dt><em>some_engine</em>.prove_1(kb_name, entity_name, fixed_args, num_returns)</dt>
-<dd><p class="first"><tt class="docutils literal"><span class="pre">Kb_name</span></tt> may name either a <a class="reference external" href="../knowledge_bases/fact_bases.html">fact base</a>, <a class="reference external" href="../knowledge_bases/question_bases.html">question base</a> or
-<a class="reference external" href="../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a>.</p>
-<p>The <tt class="docutils literal"><span class="pre">entity_name</span></tt> is the fact name for fact bases, question name for
-question bases or the name of the <a class="reference external" href="../logic_programming/rules/backward_chaining.html">backward chaining</a> goal for
-<a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</p>
-<p>The <tt class="docutils literal"><span class="pre">fixed_args</span></tt> are a tuple of Python values.  These form the first
-set of arguments to the proof.  <tt class="docutils literal"><span class="pre">Num_returns</span></tt> specifies the number of
-additional <a class="reference external" href="../logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> to be appended to these arguments for the
-proof.  The bindings of these pattern variables will be returned as a
-tuple in the answer for the proof.  For example:</p>
-<blockquote>
-<em>some_engine</em>.prove_1(<em>some_rule_base_category</em>, <em>some_goal</em>, (1, 2, 3), 2)</blockquote>
-<p>Proves the goal:</p>
-<blockquote>
-<em>some_rule_base_category.some_goal</em> (1, 2, 3, $ans_0, $ans_1)</blockquote>
-<p>And will return the bindings produced by the proof as (<tt class="docutils literal"><span class="pre">$ans_0</span></tt>,
-<tt class="docutils literal"><span class="pre">$ans_1</span></tt>).</p>
-<p class="last">Returns the first proof found as a 2-tuple: a tuple of the bindings for
-the <tt class="docutils literal"><span class="pre">num_returns</span></tt> pattern variables, and a <a class="reference external" href="../logic_programming/plans.html">plan</a>.  The plan is <tt class="docutils literal"><span class="pre">None</span></tt>
-if no plan was generated; otherwise, it is a Python function as
-described <a class="reference external" href="#running-and-pickling-plans">below</a>.</p>
-</dd>
-</dl>
-<blockquote>
-<pre class="doctest-block">
-&gt;&gt;&gt; my_engine.prove_1('bc_example', 'father_son', ('thomas', 'david'), 1)
-((('grand',),), None)
-</pre>
-<p>Raises <tt class="docutils literal"><span class="pre">pyke.knowledge_engine.CanNotProve</span></tt> if no proof is found.</p>
-<pre class="doctest-block">
-&gt;&gt;&gt; my_engine.prove_1('bc_example', 'father_son', ('thomas', 'bogus'), 1)
-Traceback (most recent call last):
-    ...
-CanNotProve: Can not prove bc_example.father_son(thomas, bogus, $ans_0)
-</pre>
-</blockquote>
-<dl class="docutils">
-<dt><em>some_engine</em>.prove_n(kb_name, entity_name, fixed_args, num_returns)</dt>
-<dd><p class="first">This returns a context manager for a generator yielding 2-tuples, a tuple
-whose length == <tt class="docutils literal"><span class="pre">num_returns</span></tt> and a <a class="reference external" href="../logic_programming/plans.html">plan</a>, for each possible proof.
-Like <tt class="docutils literal"><span class="pre">prove_1</span></tt>, the plan is None if no plan was generated.  Unlike
-<tt class="docutils literal"><span class="pre">prove_1</span></tt> it does not raise an exception if no proof is found.</p>
-<pre class="last doctest-block">
-&gt;&gt;&gt; from __future__ import with_statement
-&gt;&gt;&gt; with my_engine.prove_n('bc_example', 'father_son', ('thomas',), 2) as gen:
-...     for ans in gen:
-...         print ans
-(('bruce', ()), None)
-(('david', ('grand',)), None)
-</pre>
-</dd>
-</dl>
-<div class="section" id="running-and-pickling-plans">
-<h3>Running and Pickling Plans</h3>
-<p>Once you've obtained a <a class="reference external" href="../logic_programming/plans.html">plan</a> from <tt class="docutils literal"><span class="pre">prove_1</span></tt> or <tt class="docutils literal"><span class="pre">prove_n</span></tt>, you just call
-it like a normal Python function.  The arguments required are simply those
-specified, if any, in the <a class="reference external" href="../pyke_syntax/krb_syntax/bc_rule.html#taking-clause">taking clause</a> of the <a class="reference external" href="pyke_syntax/krb_syntax/bc_rule.html">rule</a> proving the top-level
-goal.</p>
-<p>You may call the plan function any number of times.  You may even pickle
-the plan for later use.  But the plans are constructed out of
-<a class="reference external" href="http://docs.python.org/library/functools.html">functools.partial</a> functions, so you need to register this with <a class="reference external" href="http://docs.python.org/library/copy_reg.html">copy_reg</a>
-before pickling the plan:</p>
-<blockquote>
-<pre class="doctest-block">
-&gt;&gt;&gt; import copy_reg
-&gt;&gt;&gt; import functools
-&gt;&gt;&gt; copy_reg.pickle(functools.partial,
-...                 lambda p: (functools.partial, (p.func,) + p.args))
-</pre>
-</blockquote>
-<p>No special code is required to unpickle a plan.  Just unpickle and call it.
-(Unpickling the plan only imports one small Pyke module to be able to run
-the plan).</p>
-</div>
-<div class="section" id="tracing-rules">
-<h3>Tracing Rules</h3>
-<p>Individual rules may be traced to aid in debugging.  The <tt class="docutils literal"><span class="pre">trace</span></tt> function
-takes two arguments: the rule base name, and the name of the rule to trace:</p>
-<blockquote>
-<pre class="doctest-block">
-&gt;&gt;&gt; my_engine.trace('bc_example', 'grand_father_son')
-&gt;&gt;&gt; my_engine.prove_1('bc_example', 'father_son', ('thomas', 'david'), 1)
-bc_example.grand_father_son('thomas', 'david', '$ans_0')
-bc_example.grand_father_son succeeded with ('thomas', 'david', ('grand',))
-((('grand',),), None)
-</pre>
-</blockquote>
-<p>This can be done either before or after rule base activation and will remain
-in effect until you call <tt class="docutils literal"><span class="pre">untrace</span></tt>:</p>
-<blockquote>
-<pre class="doctest-block">
-&gt;&gt;&gt; my_engine.untrace('bc_example', 'grand_father_son')
-&gt;&gt;&gt; my_engine.prove_1('bc_example', 'father_son', ('thomas', 'david'), 1)
-((('grand',),), None)
-</pre>
-</blockquote>
-</div>
-<div class="section" id="krb-traceback">
-<h3>Krb_traceback</h3>
-<p>A handy traceback module is provided to convert Python functions, lines and
-line numbers to the <a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb file</a> rule names, lines and line numbers in a
-Python traceback.  This makes it much easier to read the tracebacks that occur
-during proofs.</p>
-<p>The <tt class="docutils literal"><span class="pre">krb_traceback</span></tt> module has exactly the same functions as the standard
-Python <a class="reference external" href="http://docs.python.org/library/traceback.html">traceback</a> module, but they convert the generated Python function
-information into .krb file information.  They also delete the intervening
-Python functions between subgoal proofs.</p>
-<blockquote>
-<pre class="doctest-block">
-&gt;&gt;&gt; import sys
-&gt;&gt;&gt; from pyke import knowledge_engine
-&gt;&gt;&gt; from pyke import krb_traceback
-&gt;&gt;&gt;
-&gt;&gt;&gt; my_engine = knowledge_engine.engine(__file__)
-&gt;&gt;&gt; my_engine.activate('error_test')
-&gt;&gt;&gt; try:                                            # doctest: +ELLIPSIS
-...     my_engine.prove_1('error_test', 'goal', (), 0)
-... except:
-...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
-Traceback (most recent call last):
-  File &quot;&lt;doctest index.txt[34]&gt;&quot;, line 2, in &lt;module&gt;
-    my_engine.prove_1('error_test', 'goal', (), 0)
-  File &quot;...knowledge_engine.py&quot;, line 404, in prove_1
-    return iter(it).next()
-  File &quot;...knowledge_engine.py&quot;, line 385, in gen
-    for plan in it:
-  File &quot;...rule_base.py&quot;, line 50, in next
-    return self.iterator.next()
-  File &quot;...knowledge_engine.py&quot;, line 41, in from_iterable
-    for x in iterable: yield x
-  File &quot;...knowledge_engine.py&quot;, line 41, in from_iterable
-    for x in iterable: yield x
-  File &quot;...error_test.krb&quot;, line 26, in rule1
-    goal2()
-  File &quot;...error_test.krb&quot;, line 31, in rule2
-    goal3()
-  File &quot;...error_test.krb&quot;, line 36, in rule3
-    goal4()
-  File &quot;...error_test.krb&quot;, line 41, in rule4
-    check $bar &gt; 0
-  File &quot;...contexts.py&quot;, line 231, in lookup_data
-    raise KeyError(&quot;$%s not bound&quot; % var_name)
-KeyError: '$bar not bound'
-</pre>
-</blockquote>
-</div>
-</div>
-<div class="section" id="other-functions">
-<h2>Other Functions</h2>
-<p>There are a few more functions that may be useful in special situations.</p>
-<dl class="docutils">
-<dt><em>some_engine</em>.add_case_specific_fact(kb_name, fact_name, args)</dt>
-<dd>This is an alternate to the <tt class="docutils literal"><span class="pre">assert_</span></tt> function.</dd>
-<dt><em>some_engine</em>.get_kb(kb_name)</dt>
-<dd>Finds and returns the <a class="reference external" href="../knowledge_bases/index.html">knowledge base</a> by the name <tt class="docutils literal"><span class="pre">kb_name</span></tt>.  Raises
-<tt class="docutils literal"><span class="pre">KeyError</span></tt> if not found.  Note that for <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>, this returns the
-active <a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a> where <tt class="docutils literal"><span class="pre">kb_name</span></tt> is the <a class="reference external" href="../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name.
-Thus, not all <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a> are accessible through this call.</dd>
-<dt><em>some_engine</em>.get_rb(rb_name)</dt>
-<dd>Finds and returns the <a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a> by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
-<tt class="docutils literal"><span class="pre">KeyError</span></tt> if not found.  This works for any <a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a>, whether it
-is <a class="reference external" href="../knowledge_bases/rule_bases.html#rule-base-activation">active</a> or not.</dd>
-<dt><em>some_engine</em>.print_stats([f = sys.stdout])</dt>
-<dd>Prints a brief set of statistics for each knowledge base to file <tt class="docutils literal"><span class="pre">f</span></tt>.
-These are reset by the <tt class="docutils literal"><span class="pre">reset</span></tt> function.  This will show how many facts
-were asserted, and counts of how many forward-chaining rules were fired
-and rerun, as well as counts of how many backward-chaining goals were
-tried, and how many backward-chaining rules matched, succeeded and failed.
-Note that one backward-chaining rule may succeed many times through
-backtracking.</dd>
-</dl>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>
@@ -436,6 +231,9 @@ backtracking.</dd>
 <div class="right-item"><a href="adding_facts.html">Asserting New Facts</a><p>How to dynamically assert new <em>facts</em> from your Python program.</p>
 </div>
 <div class="right-item"><a href="proving_goals.html">Proving Goals</a><p>Using Pyke's API to prove goals from your Python program.</p>
+</div>
+<div class="right-item"><a href="other_functions.html">Other Functions</a><p>Other miscellaneous functions available that you might be interested
+in.</p>
 </div>
 
             </div>

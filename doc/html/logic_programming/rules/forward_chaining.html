@@ -79,8 +79,8 @@
                 <div class="document" id="forward-chaining">
 <h1 class="title">Forward Chaining</h1>
 <p>Forward chaining <a class="reference external" href="index.html">rules</a> are processed automatically as each <a class="reference external" href="../../knowledge_bases/rule_bases.html">rule base</a> is
-<a class="reference external" href="../../using_pyke.html#setting-up-each-case">activated</a>.</p>
-<p>When a rule base is <a class="reference external" href="../../using_pyke.html#setting-up-each-case">activated</a>, all of its forward-chaining <a class="reference external" href="index.html">rules</a> are run
+<a class="reference external" href="../../using_pyke/index.html#getting-started">activated</a>.</p>
+<p>When a rule base is <a class="reference external" href="../../using_pyke/index.html#getting-started">activated</a>, all of its forward-chaining <a class="reference external" href="index.html">rules</a> are run
 in the order that they appear in the <a class="reference external" href="../../pyke_syntax/krb_syntax/index.html">.krb file</a> for that rule base.</p>
 <div class="section" id="overview-of-forward-chaining">
 <h2>Overview of Forward-Chaining</h2>
@@ -132,9 +132,9 @@ forward-chaining rule.</p>
 <p>This example will figure out the paternal ancestry of individuals given a list
 of starting statements about who the sons of each father are.  (Daughters and
 mothers are omitted to keep the example brief).  These facts are stored in a
-<a class="reference external" href="../../knowledge_bases/fact_bases.html">fact base</a> called <tt class="docutils literal"><span class="pre">family</span></tt> as <tt class="docutils literal"><span class="pre">son_of(son,</span> <span class="pre">father)</span></tt>:</p>
+<a class="reference external" href="../../knowledge_bases/fact_bases.html">fact base</a> called <tt class="docutils literal"><span class="pre">family1</span></tt> as <tt class="docutils literal"><span class="pre">son_of(son,</span> <span class="pre">father)</span></tt>:</p>
 <pre class="literal-block">
-1  son_of(michael, bruce)
+1  son_of(david, bruce)
 2  son_of(bruce, thomas)
 3  son_of(thomas, frederik)
 4  son_of(frederik, hiram)
@@ -149,7 +149,7 @@ father_son($father, $son, $prefix)
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">$son:</th><td class="field-body">is the name of the son (e.g., michael)</td>
+<tr class="field"><th class="field-name">$son:</th><td class="field-body">is the name of the son (e.g., david)</td>
 </tr>
 <tr class="field"><th class="field-name">$father:</th><td class="field-body">is the name of the father (e.g., bruce)</td>
 </tr>
@@ -188,9 +188,9 @@ forward-chaining rule.  Understanding this will help you to understand
 <pre class="literal-block">
 1  direct_father_son
 2      foreach
-3          family.son_of($son, $father)
+3          family1.son_of($son, $father)
 4      assert
-5          family.father_son($father, $son, ())
+5          family1.father_son($father, $son, ())
 </pre>
 <div class="section" id="the-use-of-pattern-variables">
 <h3>The Use of Pattern Variables</h3>
@@ -205,11 +205,11 @@ line 5) is run four times; because each time line 5 is run, the values for
 statement on line 5.</p>
 <p>When the rule fires matching line 3 to:</p>
 <pre class="literal-block">
-1  son_of(michael, bruce)
+1  son_of(david, bruce)
 </pre>
 <p>It runs line 5 to assert:</p>
 <pre class="literal-block">
-5  father_son(bruce, michael, ())
+5  father_son(bruce, david, ())
 </pre>
 <p>And when the rule fires a second time matching line 3 to:</p>
 <pre class="literal-block">
@@ -223,7 +223,7 @@ statement on line 5.</p>
 two more <tt class="docutils literal"><span class="pre">father_son</span></tt> relationships.  So this rule adds a total of four
 new facts:</p>
 <pre class="literal-block">
-5  father_son(bruce, michael, ())
+5  father_son(bruce, david, ())
 6  father_son(thomas, bruce, ())
 7  father_son(frederik, thomas, ())
 8  father_son(hiram, frederik, ())
@@ -237,16 +237,16 @@ this:</p>
 <pre class="literal-block">
  6  grand_father_son
  7      foreach
- 8          family.father_son($father, $grand_son, ())
- 9          family.father_son($grand_father, $father, ())
+ 8          family1.father_son($father, $grand_son, ())
+ 9          family1.father_son($grand_father, $father, ())
 10      assert
-11          family.father_son($grand_father, $grand_son, (grand))
+11          family1.father_son($grand_father, $grand_son, (grand))
 </pre>
 <div class="section" id="the-use-of-backtracking">
 <h3>The Use of Backtracking</h3>
 <p>The <tt class="docutils literal"><span class="pre">grand_father_son</span></tt> <a class="reference external" href="index.html">rule</a> is run for all combinations of <tt class="docutils literal"><span class="pre">father_son</span></tt>
 <a class="reference external" href="../../knowledge_bases/fact_bases.html#facts">facts</a> that satisfy the two <tt class="docutils literal"><span class="pre">foreach</span></tt> <a class="reference external" href="../statements.html">statements</a> (on lines 8 and 9) and
-<a class="reference external" href="../../using_pyke.html#setting-up-each-case">asserts</a> a <tt class="docutils literal"><span class="pre">(grand)</span></tt> <tt class="docutils literal"><span class="pre">father_son</span></tt> statement (on line 11) for each
+<a class="reference external" href="../../using_pyke/adding_facts.html">asserts</a> a <tt class="docutils literal"><span class="pre">(grand)</span></tt> <tt class="docutils literal"><span class="pre">father_son</span></tt> statement (on line 11) for each
 combination.</p>
 <p>This rule is a good example for <a class="reference external" href="index.html#backtracking">backtracking</a> and will help later in your
 understanding of backtracking with <a class="reference external" href="backward_chaining.html">backward-chaining</a>.  So let's follow the
@@ -254,12 +254,12 @@ backtracking in the execution of this rule.</p>
 <p>The <tt class="docutils literal"><span class="pre">foreach</span></tt> clause has two statements (on lines 8 and 9) in it that are
 both looking for <tt class="docutils literal"><span class="pre">father_son</span></tt> facts with a prefix of <tt class="docutils literal"><span class="pre">()</span></tt>:</p>
 <pre class="literal-block">
-8  family.father_son($father, $grand_son, ())
-9  family.father_son($grand_father, $father, ())
+8  family1.father_son($father, $grand_son, ())
+9  family1.father_son($grand_father, $father, ())
 </pre>
-<p>These will be matched to the following <tt class="docutils literal"><span class="pre">family</span></tt> facts (facts 5 through 8):</p>
+<p>These will be matched to the following <tt class="docutils literal"><span class="pre">family1</span></tt> facts (facts 5 through 8):</p>
 <pre class="literal-block">
-5  father_son(bruce, michael, ())
+5  father_son(bruce, david, ())
 6  father_son(thomas, bruce, ())
 7  father_son(frederik, thomas, ())
 8  father_son(hiram, frederik, ())
@@ -268,19 +268,19 @@ both looking for <tt class="docutils literal"><span class="pre">father_son</span
 first premise (on line 8).  This matches fact 5, so the first premise
 succeeds, binding <tt class="docutils literal"><span class="pre">$father</span></tt> to <tt class="docutils literal"><span class="pre">bruce</span></tt>:</p>
 <pre class="literal-block">
-8  family.father_son($father, $grand_son, ())    =&gt; fact 5, SUCCESS
-9  family.father_son($grand_father, $father, ())
+8  family1.father_son($father, $grand_son, ())    =&gt; fact 5, SUCCESS
+9  family1.father_son($grand_father, $father, ())
 </pre>
 <p><em>Success</em> means go <em>down</em>, so Pyke goes to the next premise on line 9.  This
 succeeds with fact 6 (because <tt class="docutils literal"><span class="pre">$father</span></tt> is bound to <tt class="docutils literal"><span class="pre">bruce</span></tt>):</p>
 <pre class="literal-block">
-8  family.father_son($father, $grand_son, ())    =&gt; fact 5
-9  family.father_son($grand_father, $father, ()) =&gt; fact 6, SUCCESS
+8  family1.father_son($father, $grand_son, ())    =&gt; fact 5
+9  family1.father_son($grand_father, $father, ()) =&gt; fact 6, SUCCESS
 </pre>
 <p><em>Success</em> means go <em>down</em>, but Pyke is at the end of the list of premises,
 so the <em>rule</em> succeeds and Pyke fires the rule to assert:</p>
 <pre class="literal-block">
-9  father_son(thomas, michael, (grand))
+9  father_son(thomas, david, (grand))
 </pre>
 <p>Since this is a forward-chaining rule, Pyke wants to get <em>all</em> of the answers
 from it that it can, so it continues as if it had a failure (i.e., as if it's
@@ -294,21 +294,21 @@ not happy with this answer).</p>
 <tt class="docutils literal"><span class="pre">father_son</span></tt> after fact 6 with <tt class="docutils literal"><span class="pre">bruce</span></tt> as the first argument.  This
 fails:</p>
 <pre class="literal-block">
-8  family.father_son($father, $grand_son, ())    =&gt; fact 5
-9  family.father_son($grand_father, $father, ()) =&gt; FAILS
+8  family1.father_son($father, $grand_son, ())    =&gt; fact 5
+9  family1.father_son($grand_father, $father, ()) =&gt; FAILS
 </pre>
 <p><em>Fail</em> means go <em>up</em>, so Pyke goes up to the first premise and looks for
 another <tt class="docutils literal"><span class="pre">father_son</span></tt> after fact 5, which succeeds for fact 6, binding
 <tt class="docutils literal"><span class="pre">$father</span></tt> to <tt class="docutils literal"><span class="pre">thomas</span></tt>:</p>
 <pre class="literal-block">
-8  family.father_son($father, $grand_son, ())    =&gt; fact 6, SUCCESS
-9  family.father_son($grand_father, $father, ())
+8  family1.father_son($father, $grand_son, ())    =&gt; fact 6, SUCCESS
+9  family1.father_son($grand_father, $father, ())
 </pre>
 <p><em>Success</em> means go <em>down</em>, so Pyke goes down to the second premise which
 succeeds for fact 7:</p>
 <pre class="literal-block">
-8  family.father_son($father, $grand_son, ())    =&gt; fact 6
-9  family.father_son($grand_father, $father, ()) =&gt; fact 7, SUCCESS
+8  family1.father_son($father, $grand_son, ())    =&gt; fact 6
+9  family1.father_son($grand_father, $father, ()) =&gt; fact 7, SUCCESS
 </pre>
 <p><em>Success</em> means go <em>down</em>, but Pyke is at the end of the list of premises,
 so the <em>rule</em> succeeds and Pyke fires the rule to assert:</p>
@@ -318,28 +318,28 @@ so the <em>rule</em> succeeds and Pyke fires the rule to assert:</p>
 <p>Then Pyke <em>fails</em> back <em>up</em> to the second premise, and continues looking for
 another match after fact 7.  This fails:</p>
 <pre class="literal-block">
-8  family.father_son($father, $grand_son, ())    =&gt; fact 6
-9  family.father_son($grand_father, $father, ()) =&gt; FAILS
+8  family1.father_son($father, $grand_son, ())    =&gt; fact 6
+9  family1.father_son($grand_father, $father, ()) =&gt; FAILS
 </pre>
 <p><em>Fail</em> means go <em>up</em>, so Pyke goes back to the first premise and continues
 looking for another match after fact 6.  (Since fact 7 is just like the last
 case, we'll skip matching fact 7 and go straight to the last fact, fact 8).
 The match to fact 8 succeeds, binding <tt class="docutils literal"><span class="pre">$father</span></tt> to <tt class="docutils literal"><span class="pre">hiram</span></tt>:</p>
 <pre class="literal-block">
-8  family.father_son($father, $grand_son, ())    =&gt; fact 8, SUCCESS
-9  family.father_son($grand_father, $father, ())
+8  family1.father_son($father, $grand_son, ())    =&gt; fact 8, SUCCESS
+9  family1.father_son($grand_father, $father, ())
 </pre>
 <p><em>Success</em> means go <em>down</em>, so Pyke goes to the second premise and looks for a
 <tt class="docutils literal"><span class="pre">father_son</span></tt> for <tt class="docutils literal"><span class="pre">hiram</span></tt>.  This fails:</p>
 <pre class="literal-block">
-8  family.father_son($father, $grand_son, ())    =&gt; fact 8
-9  family.father_son($grand_father, $father, ()) =&gt; FAILS
+8  family1.father_son($father, $grand_son, ())    =&gt; fact 8
+9  family1.father_son($grand_father, $father, ()) =&gt; FAILS
 </pre>
 <p><em>Fail</em> means go <em>up</em>, so Pyke goes back up to the first premise and looks for
 another match after fact 8.  There are no more facts, so this fails:</p>
 <pre class="literal-block">
-8  family.father_son($father, $grand_son, ())    =&gt; FAILS
-9  family.father_son($grand_father, $father, ())
+8  family1.father_son($father, $grand_son, ())    =&gt; FAILS
+9  family1.father_son($grand_father, $father, ())
 </pre>
 <p><em>Fail</em> means go <em>up</em>, but Pyke is at the top of the list of premises,
 so the <em>rule</em> fails and Pyke is done processing it.</p>
@@ -353,7 +353,7 @@ When that happens, the whole rule fails and the show's over for this rule!</p>
 <p>So running the <tt class="docutils literal"><span class="pre">grand_father_son</span></tt> rule results in addition of these three
 facts:</p>
 <pre class="literal-block">
-9  father_son(thomas, michael, (grand))
+9  father_son(thomas, david, (grand))
 10 father_son(frederik, bruce, (grand))
 11 father_son(hiram, thomas, (grand))    (this is the one we skipped)
 </pre>
@@ -366,10 +366,10 @@ a final rule for this:</p>
 <pre class="literal-block">
 12  great_grand_father_son
 13      foreach
-14          family.father_son($father, $gg_son, ())
-15          family.father_son($gg_father, $father, ($prefix1, *$rest_prefixes))
+14          family1.father_son($father, $gg_son, ())
+15          family1.father_son($gg_father, $father, ($prefix1, *$rest_prefixes))
 16      assert
-17          family.father_son($gg_father, $gg_son,
+17          family1.father_son($gg_father, $gg_son,
                                 (great, $prefix1, *$rest_prefixes))
 </pre>
 <div class="note">
@@ -379,33 +379,33 @@ a final rule for this:</p>
 This is done so that it does <em>not</em> match <tt class="docutils literal"><span class="pre">()</span></tt>.  (But it will still match
 <tt class="docutils literal"><span class="pre">(grand)</span></tt> by binding <tt class="docutils literal"><span class="pre">$rest_prefixes</span></tt> to <tt class="docutils literal"><span class="pre">()</span></tt>).</p>
 </div>
-<p>This is the only rule that can be recursive.  As this rule <a class="reference external" href="../../using_pyke.html#setting-up-each-case">asserts</a> new <a class="reference external" href="../../knowledge_bases/fact_bases.html#facts">facts</a>,
+<p>This is the only rule that can be recursive.  As this rule <a class="reference external" href="../../using_pyke/adding_facts.html">asserts</a> new <a class="reference external" href="../../knowledge_bases/fact_bases.html#facts">facts</a>,
 those facts may be used by the same rule (by matching the statement on line
 15) to produce even more great, great, ... <tt class="docutils literal"><span class="pre">father_son</span></tt> relationships.</p>
 <div class="section" id="recursive-rules">
 <h3>Recursive Rules</h3>
 <p>Running this rule normally will assert the following two facts:</p>
 <pre class="literal-block">
-12 father_son(frederik, michael, (great, grand))
+12 father_son(frederik, david, (great, grand))
 13 father_son(hiram, bruce, (great, grand))
 </pre>
 <p>But, since these facts may also be used by the same rule (on line 15), Pyke
 checks each one by trying to run the rule again just for that new fact.</p>
-<p>Trying this for the first new fact: <tt class="docutils literal"><span class="pre">father_son(frederik,</span> <span class="pre">michael,</span>
-<span class="pre">(great,</span> <span class="pre">grand))</span></tt> fails to find anything because <tt class="docutils literal"><span class="pre">michael</span></tt> is not a father.</p>
+<p>Trying this for the first new fact: <tt class="docutils literal"><span class="pre">father_son(frederik,</span> <span class="pre">david,</span>
+<span class="pre">(great,</span> <span class="pre">grand))</span></tt> fails to find anything because <tt class="docutils literal"><span class="pre">david</span></tt> is not a father.</p>
 <p>Trying this for the second new fact: <tt class="docutils literal"><span class="pre">father_son(hiram,</span> <span class="pre">bruce,</span> <span class="pre">(great,</span>
 <span class="pre">grand))</span></tt> results in one more new fact:</p>
 <pre class="literal-block">
-14 father_son(hiram, michael, (great, great, grand))
+14 father_son(hiram, david, (great, great, grand))
 </pre>
 <p>Now this last new fact is tried again with this rule, which fails again
-because <tt class="docutils literal"><span class="pre">michael</span></tt> is not a father.</p>
+because <tt class="docutils literal"><span class="pre">david</span></tt> is not a father.</p>
 <p>So at this point Pyke is finished with this rule.  The rule ended up firing
 three times, asserting:</p>
 <pre class="literal-block">
-12 father_son(frederik, michael, (great, grand))
+12 father_son(frederik, david, (great, grand))
 13 father_son(hiram, bruce, (great, grand))
-14 father_son(hiram, michael, (great, great, grand))
+14 father_son(hiram, david, (great, great, grand))
 </pre>
 </div>
 </div>
@@ -424,26 +424,18 @@ following:
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
 &gt;&gt;&gt; engine = knowledge_engine.engine(__file__)
-&gt;&gt;&gt; engine.assert_('family', 'son_of', ('michael', 'bruce'))
-&gt;&gt;&gt; engine.assert_('family', 'son_of', ('bruce', 'thomas'))
-&gt;&gt;&gt; engine.assert_('family', 'son_of', ('thomas', 'frederik'))
-&gt;&gt;&gt; engine.assert_('family', 'son_of', ('frederik', 'hiram'))
-&gt;&gt;&gt; engine.activate('fc_example')     # This is where the rules are run!
-&gt;&gt;&gt; engine.get_kb('family').dump_specific_facts()
-father_son('bruce', 'michael', ())
+&gt;&gt;&gt; engine.activate('fc_related')     # This is where the rules are run!
+&gt;&gt;&gt; engine.get_kb('family1').dump_specific_facts()
+father_son('bruce', 'david', ())
 father_son('thomas', 'bruce', ())
 father_son('frederik', 'thomas', ())
 father_son('hiram', 'frederik', ())
-father_son('thomas', 'michael', ('grand',))
+father_son('thomas', 'david', ('grand',))
 father_son('frederik', 'bruce', ('grand',))
 father_son('hiram', 'thomas', ('grand',))
-father_son('frederik', 'michael', ('great', 'grand'))
+father_son('frederik', 'david', ('great', 'grand'))
 father_son('hiram', 'bruce', ('great', 'grand'))
-father_son('hiram', 'michael', ('great', 'great', 'grand'))
-son_of('michael', 'bruce')
-son_of('bruce', 'thomas')
-son_of('thomas', 'frederik')
-son_of('frederik', 'hiram')
+father_son('hiram', 'david', ('great', 'great', 'grand'))
 </pre>
 </blockquote>
 <!-- ADD_LINKS MARKER -->

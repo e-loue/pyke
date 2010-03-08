@@ -20,25 +20,42 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-
 direct_father_son
-    foreach
-        family.son_of($son, $father)
-    assert
-        family.father_son($father, $son, ())
+    use father_son($father, $son, ())
+    when
+        family2.son_of($son, $father)
 
 grand_father_son
-    foreach
-        family.father_son($father, $grand_son, ())
-        family.father_son($grand_father, $father, ())
-    assert
-        family.father_son($grand_father, $grand_son, (grand))
+    use father_son($grand_father, $grand_son, (grand))
+    when
+        father_son($father, $grand_son, ())
+        father_son($grand_father, $father, ())
 
 great_grand_father_son
-    foreach
-        family.father_son($parent, $gg_child, ())
-        family.father_son($gg_parent, $parent, ($prefix1, *$rest_prefixes))
-    assert
-        family.father_son($gg_parent, $gg_child,
-                            (great, $prefix1, *$rest_prefixes))
+    use father_son($gg_father, $gg_son, (great, $prefix1, *$rest_prefixes))
+    when
+        father_son($father, $gg_son, ())
+        father_son($gg_father, $father, ($prefix1, *$rest_prefixes))
+
+brothers
+    use brothers($brother1, $brother2)
+    when
+        father_son($father, $brother1, ())
+        father_son($father, $brother2, ())
+        check $brother1 != $brother2
+
+uncle_nephew
+    use uncle_nephew($uncle, $nephew, $prefix)
+    when
+        brothers($uncle, $father)
+        father_son($father, $nephew, $prefix1)
+        $prefix = ('great',) * len($prefix1)
+
+cousins
+    use cousins($cousin1, $cousin2, $distance, $removed)
+    when
+        uncle_nephew($uncle, $cousin1, $prefix1)
+        father_son($uncle, $cousin2, $prefix2)
+        $distance = min(len($prefixes1), len($prefixes2)) + 1
+        $removed = abs(len($prefixes1) - len($prefixes2))
 

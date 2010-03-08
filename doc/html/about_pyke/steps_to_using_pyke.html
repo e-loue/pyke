@@ -74,7 +74,7 @@
                 <div class="document" id="steps-to-using-pyke">
 <h1 class="title">Steps to Using Pyke</h1>
 <ol class="arabic simple">
-<li>You provide the following to Pyke's <a class="reference external" href="../using_pyke.html#initializing-pyke">knowledge engine</a>:<ul>
+<li>You provide the following to Pyke's <a class="reference external" href="../using_pyke/creating_engine.html">knowledge engine</a>:<ul>
 <li>A set of universally true <a class="reference external" href="../logic_programming/statements.html">statements</a>.<ul>
 <li>These statements are true for all time.</li>
 </ul>
@@ -99,7 +99,7 @@ on the computer that it's running on to help in its decision
 making.</li>
 </ul>
 </li>
-<li>You ask Pyke a question by having it <a class="reference external" href="../using_pyke.html#proving-goals">prove</a> a <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a> (which is just
+<li>You ask Pyke a question by having it <a class="reference external" href="../using_pyke/proving_goals.html">prove</a> a <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a> (which is just
 another statement).  This goal may include <a class="reference external" href="../logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> that
 allow you to ask &quot;for what values is this statement true?&quot;.<ul>
 <li>Pyke runs the selected backward-chaining rules against the statements
@@ -125,7 +125,7 @@ disk.  You only need one small Pyke module to load and run these
 pickles.</li>
 </ul>
 </li>
-<li>You <a class="reference external" href="../using_pyke.html#setting-up-each-case">reset</a> Pyke to clear out all of these case specific statements and
+<li>You <a class="reference external" href="../using_pyke/index.html#setting-up-different-cases">reset</a> Pyke to clear out all of these case specific statements and
 prepare it for the next use case.</li>
 </ol>
 </li>

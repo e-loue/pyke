@@ -103,9 +103,9 @@ Example
 This example will figure out the paternal ancestry of individuals given a list
 of starting statements about who the sons of each father are.  (Daughters and
 mothers are omitted to keep the example brief).  These facts are stored in a
-`fact base`_ called ``family`` as ``son_of(son, father)``::
+`fact base`_ called ``family1`` as ``son_of(son, father)``::
 
-    1  son_of(michael, bruce)
+    1  son_of(david, bruce)
     2  son_of(bruce, thomas)
     3  son_of(thomas, frederik)
     4  son_of(frederik, hiram)
@@ -117,7 +117,7 @@ We want to derive ``father_son`` relationships of the following form::
 where
 
     :$son:
-        is the name of the son (e.g., michael)
+        is the name of the son (e.g., david)
     :$father:
         is the name of the father (e.g., bruce)
     :$prefix:
@@ -153,9 +153,9 @@ First we need to establish the direct father_son relationships (those whose
 
      1  direct_father_son
      2      foreach
-     3          family.son_of($son, $father)
+     3          family1.son_of($son, $father)
      4      assert
-     5          family.father_son($father, $son, ())
+     5          family1.father_son($father, $son, ())
 
 The Use of Pattern Variables
 ----------------------------
@@ -173,11 +173,11 @@ statement on line 5.
 
 When the rule fires matching line 3 to::
 
-    1  son_of(michael, bruce)
+    1  son_of(david, bruce)
 
 It runs line 5 to assert::
 
-    5  father_son(bruce, michael, ())
+    5  father_son(bruce, david, ())
 
 And when the rule fires a second time matching line 3 to::
 
@@ -191,7 +191,7 @@ The rule fires twice more for the remaining ``son_of`` facts, asserting
 two more ``father_son`` relationships.  So this rule adds a total of four
 new facts::
 
-    5  father_son(bruce, michael, ())
+    5  father_son(bruce, david, ())
     6  father_son(thomas, bruce, ())
     7  father_son(frederik, thomas, ())
     8  father_son(hiram, frederik, ())
@@ -204,10 +204,10 @@ this::
 
      6  grand_father_son
      7      foreach
-     8          family.father_son($father, $grand_son, ())
-     9          family.father_son($grand_father, $father, ())
+     8          family1.father_son($father, $grand_son, ())
+     9          family1.father_son($grand_father, $father, ())
     10      assert
-    11          family.father_son($grand_father, $grand_son, (grand))
+    11          family1.father_son($grand_father, $grand_son, (grand))
 
 The Use of Backtracking
 -----------------------
@@ -224,12 +224,12 @@ backtracking in the execution of this rule.
 The ``foreach`` clause has two statements (on lines 8 and 9) in it that are
 both looking for ``father_son`` facts with a prefix of ``()``::
 
-    8  family.father_son($father, $grand_son, ())
-    9  family.father_son($grand_father, $father, ())
+    8  family1.father_son($father, $grand_son, ())
+    9  family1.father_son($grand_father, $father, ())
 
-These will be matched to the following ``family`` facts (facts 5 through 8)::
+These will be matched to the following ``family1`` facts (facts 5 through 8)::
 
-    5  father_son(bruce, michael, ())
+    5  father_son(bruce, david, ())
     6  father_son(thomas, bruce, ())
     7  father_son(frederik, thomas, ())
     8  father_son(hiram, frederik, ())
@@ -238,19 +238,19 @@ Pyke starts at the top of the list of premises and looks for a match for the
 first premise (on line 8).  This matches fact 5, so the first premise
 succeeds, binding ``$father`` to ``bruce``::
 
-    8  family.father_son($father, $grand_son, ())    => fact 5, SUCCESS
-    9  family.father_son($grand_father, $father, ())
+    8  family1.father_son($father, $grand_son, ())    => fact 5, SUCCESS
+    9  family1.father_son($grand_father, $father, ())
 
 *Success* means go *down*, so Pyke goes to the next premise on line 9.  This
 succeeds with fact 6 (because ``$father`` is bound to ``bruce``)::
 
-    8  family.father_son($father, $grand_son, ())    => fact 5
-    9  family.father_son($grand_father, $father, ()) => fact 6, SUCCESS
+    8  family1.father_son($father, $grand_son, ())    => fact 5
+    9  family1.father_son($grand_father, $father, ()) => fact 6, SUCCESS
 
 *Success* means go *down*, but Pyke is at the end of the list of premises,
 so the *rule* succeeds and Pyke fires the rule to assert::
 
-    9  father_son(thomas, michael, (grand))
+    9  father_son(thomas, david, (grand))
 
 Since this is a forward-chaining rule, Pyke wants to get *all* of the answers
 from it that it can, so it continues as if it had a failure (i.e., as if it's
@@ -265,21 +265,21 @@ So Pyke *fails* back *up* to the second premise and looks for another
 ``father_son`` after fact 6 with ``bruce`` as the first argument.  This
 fails::
 
-    8  family.father_son($father, $grand_son, ())    => fact 5
-    9  family.father_son($grand_father, $father, ()) => FAILS
+    8  family1.father_son($father, $grand_son, ())    => fact 5
+    9  family1.father_son($grand_father, $father, ()) => FAILS
 
 *Fail* means go *up*, so Pyke goes up to the first premise and looks for
 another ``father_son`` after fact 5, which succeeds for fact 6, binding
 ``$father`` to ``thomas``::
 
-    8  family.father_son($father, $grand_son, ())    => fact 6, SUCCESS
-    9  family.father_son($grand_father, $father, ())
+    8  family1.father_son($father, $grand_son, ())    => fact 6, SUCCESS
+    9  family1.father_son($grand_father, $father, ())
 
 *Success* means go *down*, so Pyke goes down to the second premise which
 succeeds for fact 7::
 
-    8  family.father_son($father, $grand_son, ())    => fact 6
-    9  family.father_son($grand_father, $father, ()) => fact 7, SUCCESS
+    8  family1.father_son($father, $grand_son, ())    => fact 6
+    9  family1.father_son($grand_father, $father, ()) => fact 7, SUCCESS
 
 *Success* means go *down*, but Pyke is at the end of the list of premises,
 so the *rule* succeeds and Pyke fires the rule to assert::
@@ -289,28 +289,28 @@ so the *rule* succeeds and Pyke fires the rule to assert::
 Then Pyke *fails* back *up* to the second premise, and continues looking for
 another match after fact 7.  This fails::
 
-    8  family.father_son($father, $grand_son, ())    => fact 6
-    9  family.father_son($grand_father, $father, ()) => FAILS
+    8  family1.father_son($father, $grand_son, ())    => fact 6
+    9  family1.father_son($grand_father, $father, ()) => FAILS
 
 *Fail* means go *up*, so Pyke goes back to the first premise and continues
 looking for another match after fact 6.  (Since fact 7 is just like the last
 case, we'll skip matching fact 7 and go straight to the last fact, fact 8).
 The match to fact 8 succeeds, binding ``$father`` to ``hiram``::
 
-    8  family.father_son($father, $grand_son, ())    => fact 8, SUCCESS
-    9  family.father_son($grand_father, $father, ())
+    8  family1.father_son($father, $grand_son, ())    => fact 8, SUCCESS
+    9  family1.father_son($grand_father, $father, ())
 
 *Success* means go *down*, so Pyke goes to the second premise and looks for a
 ``father_son`` for ``hiram``.  This fails::
 
-    8  family.father_son($father, $grand_son, ())    => fact 8
-    9  family.father_son($grand_father, $father, ()) => FAILS
+    8  family1.father_son($father, $grand_son, ())    => fact 8
+    9  family1.father_son($grand_father, $father, ()) => FAILS
 
 *Fail* means go *up*, so Pyke goes back up to the first premise and looks for
 another match after fact 8.  There are no more facts, so this fails::
 
-    8  family.father_son($father, $grand_son, ())    => FAILS
-    9  family.father_son($grand_father, $father, ())
+    8  family1.father_son($father, $grand_son, ())    => FAILS
+    9  family1.father_son($grand_father, $father, ())
 
 *Fail* means go *up*, but Pyke is at the top of the list of premises,
 so the *rule* fails and Pyke is done processing it.
@@ -326,7 +326,7 @@ so the *rule* fails and Pyke is done processing it.
 So running the ``grand_father_son`` rule results in addition of these three
 facts::
 
-    9  father_son(thomas, michael, (grand))
+    9  father_son(thomas, david, (grand))
     10 father_son(frederik, bruce, (grand))
     11 father_son(hiram, thomas, (grand))    (this is the one we skipped)
 
@@ -338,10 +338,10 @@ a final rule for this::
 
     12  great_grand_father_son
     13      foreach
-    14          family.father_son($father, $gg_son, ())
-    15          family.father_son($gg_father, $father, ($prefix1, *$rest_prefixes))
+    14          family1.father_son($father, $gg_son, ())
+    15          family1.father_son($gg_father, $father, ($prefix1, *$rest_prefixes))
     16      assert
-    17          family.father_son($gg_father, $gg_son,
+    17          family1.father_son($gg_father, $gg_son,
                                     (great, $prefix1, *$rest_prefixes))
 
 .. note::
@@ -360,29 +360,29 @@ Recursive Rules
 
 Running this rule normally will assert the following two facts::
 
-    12 father_son(frederik, michael, (great, grand))
+    12 father_son(frederik, david, (great, grand))
     13 father_son(hiram, bruce, (great, grand))
 
 But, since these facts may also be used by the same rule (on line 15), Pyke
 checks each one by trying to run the rule again just for that new fact.
 
-Trying this for the first new fact: ``father_son(frederik, michael,
-(great, grand))`` fails to find anything because ``michael`` is not a father.
+Trying this for the first new fact: ``father_son(frederik, david,
+(great, grand))`` fails to find anything because ``david`` is not a father.
 
 Trying this for the second new fact: ``father_son(hiram, bruce, (great,
 grand))`` results in one more new fact::
 
-    14 father_son(hiram, michael, (great, great, grand))
+    14 father_son(hiram, david, (great, great, grand))
 
 Now this last new fact is tried again with this rule, which fails again
-because ``michael`` is not a father.
+because ``david`` is not a father.
 
 So at this point Pyke is finished with this rule.  The rule ended up firing
 three times, asserting::
 
-    12 father_son(frederik, michael, (great, grand))
+    12 father_son(frederik, david, (great, grand))
     13 father_son(hiram, bruce, (great, grand))
-    14 father_son(hiram, michael, (great, great, grand))
+    14 father_son(hiram, david, (great, great, grand))
 
 
 Running the Example
@@ -401,26 +401,18 @@ These rules could be run as follows:
 
     >>> from pyke import knowledge_engine
     >>> engine = knowledge_engine.engine(__file__)
-    >>> engine.assert_('family', 'son_of', ('michael', 'bruce'))
-    >>> engine.assert_('family', 'son_of', ('bruce', 'thomas'))
-    >>> engine.assert_('family', 'son_of', ('thomas', 'frederik'))
-    >>> engine.assert_('family', 'son_of', ('frederik', 'hiram'))
-    >>> engine.activate('fc_example')     # This is where the rules are run!
-    >>> engine.get_kb('family').dump_specific_facts()
-    father_son('bruce', 'michael', ())
+    >>> engine.activate('fc_related')     # This is where the rules are run!
+    >>> engine.get_kb('family1').dump_specific_facts()
+    father_son('bruce', 'david', ())
     father_son('thomas', 'bruce', ())
     father_son('frederik', 'thomas', ())
     father_son('hiram', 'frederik', ())
-    father_son('thomas', 'michael', ('grand',))
+    father_son('thomas', 'david', ('grand',))
     father_son('frederik', 'bruce', ('grand',))
     father_son('hiram', 'thomas', ('grand',))
-    father_son('frederik', 'michael', ('great', 'grand'))
+    father_son('frederik', 'david', ('great', 'grand'))
     father_son('hiram', 'bruce', ('great', 'grand'))
-    father_son('hiram', 'michael', ('great', 'great', 'grand'))
-    son_of('michael', 'bruce')
-    son_of('bruce', 'thomas')
-    son_of('thomas', 'frederik')
-    son_of('frederik', 'hiram')
+    father_son('hiram', 'david', ('great', 'great', 'grand'))
 
 
 .. _Run the Example: `Running the Example`_

@@ -160,9 +160,3 @@ def wsgi_app(environ, start_response):
     start_response(status, headers)
     return document
 
-def test():
-    import doctest
-    sys.exit(doctest.testmod()[0])
-
-if __name__ == "__main__":
-    test()
