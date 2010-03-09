@@ -33,7 +33,7 @@ Here's how I got there (all directories relative to
 
     to automatically set PYTHONPATH to be able to run from any clone.
 
-11. Extranious change to examples/family_relations/family.kfb for keyword
+11. Extraneous change to examples/family_relations/family.kfb for keyword
     expansion problem.
 
 12. Remove .svn directories from:

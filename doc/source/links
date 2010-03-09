@@ -87,7 +87,7 @@
 .. _.krb file: pyke_syntax/krb_syntax/index.html
 .. _.krb files: `.krb file`_
 .. _.krb: `.krb file`_
-.. _krb_traceback: using_pyke/index.html#krb-traceback
+.. _krb_traceback: using_pyke/other_functions.html#krb-traceback
 .. _Literal patterns: logic_programming/pattern_matching/literal_patterns.html
 .. _loading: `knowledge_engine.engine`_
 .. _Logic Programming: http://en.wikipedia.org/wiki/Logic_programming
@@ -126,7 +126,7 @@
 .. _premise lp: logic_programming/rules/index.html#premises-and-conclusions
 .. _premise syntax: pyke_syntax/krb_syntax/bc_rule.html#when-clause
 .. _premises: premise_
-.. _print_stats: using_pyke/index.html#other-functions
+.. _print_stats: using_pyke/other_functions.html#miscellaneous
 .. _programming in the large: http://portal.acm.org/citation.cfm?id=808431
 .. _program in the large: `programming in the large`_
 .. _program startup: using_pyke/creating_engine.html
@@ -152,7 +152,7 @@
 .. _Rebuilding the HTML Documentation: about_pyke/modifying_pyke.html#rebuilding-the-html-documentation
 .. _regular expression syntax: http://docs.python.org/library/re.html#regular-expression-syntax
 .. _relative import: http://www.python.org/dev/peps/pep-0328/
-.. _reset: using_pyke/index.html#setting-up-different-cases
+.. _reset: using_pyke/index.html#using-different-facts-for-different-cases
 .. _rest2web: http://sourceforge.net/projects/rest2web
 .. _rule base category: knowledge_bases/rule_bases.html#rule-base-categories
 .. _rule base: knowledge_bases/rule_bases.html

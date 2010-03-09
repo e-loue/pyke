@@ -63,9 +63,9 @@ often you just want the first answer:
 
     Returns the first proof found as a 2-tuple: a dict of bindings for the
     pattern variables, and a plan_.  The plan is ``None`` if no plan was
-    generated; otherwise, it is a Python function as described below__.
+    generated; otherwise, it is a Python function as described here__.
 
-.. __: #running-and-pickling-plans
+.. __: other_functions.html#running-and-pickling-plans
 
     Args must be specified as keyword arguments and are set as the value of
     the corresponding pattern variable.

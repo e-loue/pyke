@@ -74,7 +74,7 @@ No special code is required to unpickle a plan.  Just unpickle and call it.
 (Unpickling the plan only imports one small Pyke module to be able to run
 the plan).
 
-.. __: pyke_syntax/krb_syntax/bc_rule.html
+.. __: ../pyke_syntax/krb_syntax/bc_rule.html
 
 
 Tracing Rules
