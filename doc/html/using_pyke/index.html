@@ -101,7 +101,7 @@ pickle files.</li>
 </li>
 <li><p class="first">Activate <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.activate('bc_father_son')
+&gt;&gt;&gt; my_engine.activate('bc_related')
 </pre>
 <p>You may chose one or more rule bases to activate.</p>
 <div class="note">
@@ -112,7 +112,7 @@ pickle files.</li>
 </li>
 <li><p class="first"><a class="reference external" href="proving_goals.html">Prove</a> <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a>.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(bruce, $son)')
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_related.father_son(bruce, $son, ())')
 ({'son': 'david'}, None)
 </pre>
 <p>The goal might be met by simply matching an already known <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">fact</a>, or
@@ -124,8 +124,8 @@ In this case, the <a class="reference external" href="../logic_programming/rules
 operate against the same set of known facts.</p>
 <blockquote>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(thomas, $son)')
-({'son': 'bruce'}, None)
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_related.father_son(thomas, $son, ())')
+({'son': 'tim'}, None)
 </pre>
 </blockquote>
 </div>
@@ -143,19 +143,19 @@ operate against the same set of known facts.</p>
 </li>
 <li><p class="first"><a class="reference external" href="adding_facts.html">Assert</a> <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a>.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.assert_('family', 'son_of', ('david', 'spike'))
+&gt;&gt;&gt; my_engine.assert_('family2', 'son_of', ('spike', 'david'))
 </pre>
 <p>These facts must be asserted prior to activating the rule bases so that
 they are available to the <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining rules</a>.</p>
 </li>
 <li><p class="first">Activate <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.activate('bc_father_son')
+&gt;&gt;&gt; my_engine.activate('bc_related')
 </pre>
 </li>
 <li><p class="first">Prove <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a>.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_related.father_son(david, $son, ())')
 ({'son': 'spike'}, None)
 </pre>
 </li>
@@ -176,21 +176,24 @@ different rule bases, you need to <a class="reference external" href="index.html
 </li>
 <li><p class="first"><a class="reference external" href="adding_facts.html">Assert</a> <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a> for first case.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.assert_('family', 'son_of', ('david', 'spike'))
+&gt;&gt;&gt; my_engine.assert_('family2', 'son_of', ('spike', 'david'))
 </pre>
 </li>
 <li><p class="first">Activate <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.activate('bc_father_son')
+&gt;&gt;&gt; my_engine.activate('bc_related')
 </pre>
 </li>
 <li><p class="first">Prove <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a> for first case.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_related.father_son(david, $son, ())')
 ({'son': 'spike'}, None)
 </pre>
 </li>
 <li><p class="first">Reset the Pyke engine.</p>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_engine.reset()
+</pre>
 <p>This erases all of the case specific facts that you asserted in step 2, as
 well as all of the facts asserted by the <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining rules</a>.</p>
 <p>It also deactivates all of the <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>, so you'll need to call
@@ -198,17 +201,17 @@ activate again after asserting your facts.</p>
 </li>
 <li><p class="first">Assert <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a> for second case.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.assert_('family', 'son_of', ('david', 'felix'))
+&gt;&gt;&gt; my_engine.assert_('family2', 'son_of', ('felix', 'david'))
 </pre>
 </li>
 <li><p class="first">Activate <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.activate('bc_father_son')
+&gt;&gt;&gt; my_engine.activate('bc_related')
 </pre>
 </li>
 <li><p class="first">Prove <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a> for second case.</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_related.father_son(david, $son, ())')
 ({'son': 'felix'}, None)
 </pre>
 </li>
@@ -252,7 +255,7 @@ in.</p>
 
   <div id="last-modified">
     Page last modified
-    Fri, Mar 05 2010.
+    Mon, Mar 08 2010.
 
   </div>
 

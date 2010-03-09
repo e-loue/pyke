@@ -81,7 +81,7 @@
 >>> my_engine = knowledge_engine.engine(__file__)
 >>> my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas'))
 >>> my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce'))
->>> my_engine.activate('bc_father_son') -->
+>>> my_engine.activate('bc_related0') -->
 <p>Though Pyke has the capability to return multiple answers to a single goal,
 often you just want the first answer:</p>
 <dl class="docutils">
@@ -89,7 +89,7 @@ often you just want the first answer:</p>
 <dd><p class="first"><tt class="docutils literal"><span class="pre">goal</span></tt> is a Pyke goal (as a string).  This may include <a class="reference external" href="../logic_programming/pattern_matching/pattern_variables.html">pattern
 variables</a> (which start with a '$').</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(thomas, david, $depth)')
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_related0.father_son(thomas, david, $depth)')
 ({'depth': ('grand',)}, None)
 </pre>
 <p class="last">Returns the first proof found as a 2-tuple: a dict of bindings for the
@@ -102,7 +102,7 @@ generated; otherwise, it is a Python function as described <a class="reference e
 the corresponding pattern variable.</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; vars, plan = \
-...   my_engine.prove_1_goal('bc_father_son.father_son($father, $son, $depth)',
+...   my_engine.prove_1_goal('bc_related0.father_son($father, $son, $depth)',
 ...                          father='thomas',
 ...                          son='david')
 &gt;&gt;&gt; sorted(vars.items(), key=lambda item: item[0])
@@ -111,10 +111,10 @@ the corresponding pattern variable.</p>
 <p>Prove_1_goal raises <tt class="docutils literal"><span class="pre">pyke.knowledge_engine.CanNotProve</span></tt> if no proof is
 found:</p>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(thomas, bogus, $depth)')
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_related0.father_son(thomas, bogus, $depth)')
 Traceback (most recent call last):
     ...
-CanNotProve: Can not prove bc_father_son.father_son(thomas, bogus, $depth)
+CanNotProve: Can not prove bc_related0.father_son(thomas, bogus, $depth)
 </pre>
 </blockquote>
 <dl class="docutils">
@@ -127,7 +127,7 @@ proof is found:</p>
 </pre>
 <pre class="doctest-block">
 &gt;&gt;&gt; with my_engine.prove_goal(
-...        'bc_father_son.father_son(thomas, $son, $depth)') as gen:
+...        'bc_related0.father_son(thomas, $son, $depth)') as gen:
 ...     for vars, plan in gen:
 ...         print vars['son'], vars['depth']
 bruce ()
@@ -137,7 +137,7 @@ david ('grand',)
 specified with keyword arguments:</p>
 <pre class="last doctest-block">
 &gt;&gt;&gt; with my_engine.prove_goal(
-...        'bc_father_son.father_son($father, $son, $depth)',
+...        'bc_related0.father_son($father, $son, $depth)',
 ...        father='thomas') as gen:
 ...     for vars, plan in gen:
 ...         print vars['son'], vars['depth']
@@ -155,7 +155,7 @@ goal statements once at program startup:</p>
 &gt;&gt;&gt; from pyke import goal
 </pre>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_goal = goal.compile('bc_father_son.father_son($father, $son, $depth)')
+&gt;&gt;&gt; my_goal = goal.compile('bc_related0.father_son($father, $son, $depth)')
 </pre>
 </blockquote>
 <p>Then use <tt class="docutils literal"><span class="pre">my_goal.prove_1</span></tt> and <tt class="docutils literal"><span class="pre">my_goal.prove</span></tt> as many times as you'd
@@ -174,28 +174,6 @@ bruce ()
 david ('grand',)
 </pre>
 </blockquote>
-</div>
-<div class="section" id="running-and-pickling-plans">
-<h2>Running and Pickling Plans</h2>
-<p>Once you've obtained a <a class="reference external" href="../logic_programming/plans.html">plan</a> from <tt class="docutils literal"><span class="pre">prove_1_goal</span></tt> or <tt class="docutils literal"><span class="pre">prove_goal</span></tt>, you just
-call it like a normal Python function.  The arguments required are simply those
-specified, if any, in the <a class="reference external" href="../pyke_syntax/krb_syntax/bc_rule.html#taking-clause">taking clause</a> of the <a class="reference external" href="../pyke_syntax/krb_syntax/bc_rule.html">rule</a> proving the top-level
-goal.</p>
-<p>You may call the plan function any number of times.  You may even pickle
-the plan for later use.  But the plans are constructed out of
-<a class="reference external" href="http://docs.python.org/library/functools.html">functools.partial</a> functions that need to be registered with copy_reg if
-you are running Python 2.x:</p>
-<blockquote>
-<pre class="doctest-block">
-&gt;&gt;&gt; import copy_reg
-&gt;&gt;&gt; import functools
-&gt;&gt;&gt; copy_reg.pickle(functools.partial,
-...                 lambda p: (functools.partial, (p.func,) + p.args))
-</pre>
-</blockquote>
-<p>No special code is required to unpickle a plan.  Just unpickle and call it.
-(Unpickling the plan only imports one small Pyke module to be able to run
-the plan).</p>
 <!-- ADD_LINKS MARKER -->
 </div>
 </div>
@@ -235,7 +213,7 @@ in.</p>
 
   <div id="last-modified">
     Page last modified
-    Fri, Mar 05 2010.
+    Mon, Mar 08 2010.
 
   </div>
 

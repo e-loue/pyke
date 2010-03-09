@@ -49,7 +49,7 @@ Proving Goals
    >>> my_engine = knowledge_engine.engine(__file__)
    >>> my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas'))
    >>> my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce'))
-   >>> my_engine.activate('bc_father_son')
+   >>> my_engine.activate('bc_related0')
 
 Though Pyke has the capability to return multiple answers to a single goal,
 often you just want the first answer:
@@ -58,7 +58,7 @@ often you just want the first answer:
     ``goal`` is a Pyke goal (as a string).  This may include `pattern
     variables`_ (which start with a '$').
 
-    >>> my_engine.prove_1_goal('bc_father_son.father_son(thomas, david, $depth)')
+    >>> my_engine.prove_1_goal('bc_related0.father_son(thomas, david, $depth)')
     ({'depth': ('grand',)}, None)
 
     Returns the first proof found as a 2-tuple: a dict of bindings for the
@@ -71,7 +71,7 @@ often you just want the first answer:
     the corresponding pattern variable.
 
     >>> vars, plan = \
-    ...   my_engine.prove_1_goal('bc_father_son.father_son($father, $son, $depth)',
+    ...   my_engine.prove_1_goal('bc_related0.father_son($father, $son, $depth)',
     ...                          father='thomas',
     ...                          son='david')
     >>> sorted(vars.items(), key=lambda item: item[0])
@@ -80,10 +80,10 @@ often you just want the first answer:
     Prove_1_goal raises ``pyke.knowledge_engine.CanNotProve`` if no proof is
     found:
 
-    >>> my_engine.prove_1_goal('bc_father_son.father_son(thomas, bogus, $depth)')
+    >>> my_engine.prove_1_goal('bc_related0.father_son(thomas, bogus, $depth)')
     Traceback (most recent call last):
         ...
-    CanNotProve: Can not prove bc_father_son.father_son(thomas, bogus, $depth)
+    CanNotProve: Can not prove bc_related0.father_son(thomas, bogus, $depth)
 
 *some_engine*.prove_goal(goal, \*\*args)
     This returns a context manager for a generator yielding 2-tuples, as
@@ -93,7 +93,7 @@ often you just want the first answer:
     >>> from __future__ import with_statement
 
     >>> with my_engine.prove_goal(
-    ...        'bc_father_son.father_son(thomas, $son, $depth)') as gen:
+    ...        'bc_related0.father_son(thomas, $son, $depth)') as gen:
     ...     for vars, plan in gen:
     ...         print vars['son'], vars['depth']
     bruce ()
@@ -103,7 +103,7 @@ often you just want the first answer:
     specified with keyword arguments:
 
     >>> with my_engine.prove_goal(
-    ...        'bc_father_son.father_son($father, $son, $depth)',
+    ...        'bc_related0.father_son($father, $son, $depth)',
     ...        father='thomas') as gen:
     ...     for vars, plan in gen:
     ...         print vars['son'], vars['depth']
@@ -111,14 +111,14 @@ often you just want the first answer:
     david ('grand',)
 
 Compiling Goals at Program Startup
-----------------------------------
+==================================
 
 Similar to Python's regular expression library, ``re``, you may compile your
 goal statements once at program startup:
 
     >>> from pyke import goal
 
-    >>> my_goal = goal.compile('bc_father_son.father_son($father, $son, $depth)')
+    >>> my_goal = goal.compile('bc_related0.father_son($father, $son, $depth)')
 
 Then use ``my_goal.prove_1`` and ``my_goal.prove`` as many times as you'd
 like:
@@ -132,28 +132,4 @@ like:
     ...         print vars['son'], vars['depth']
     bruce ()
     david ('grand',)
-
-Running and Pickling Plans
-----------------------------
-
-Once you've obtained a plan_ from ``prove_1_goal`` or ``prove_goal``, you just
-call it like a normal Python function.  The arguments required are simply those
-specified, if any, in the `taking clause`_ of the rule__ proving the top-level
-goal.
-
-You may call the plan function any number of times.  You may even pickle
-the plan for later use.  But the plans are constructed out of
-`functools.partial`_ functions that need to be registered with copy_reg if
-you are running Python 2.x:
-
-    >>> import copy_reg
-    >>> import functools
-    >>> copy_reg.pickle(functools.partial,
-    ...                 lambda p: (functools.partial, (p.func,) + p.args))
-
-No special code is required to unpickle a plan.  Just unpickle and call it.
-(Unpickling the plan only imports one small Pyke module to be able to run
-the plan).
-
-.. __: ../pyke_syntax/krb_syntax/bc_rule.html
 

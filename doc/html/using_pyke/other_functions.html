@@ -81,15 +81,17 @@
 ...                'examples')
 >>> from pyke import knowledge_engine
 >>> my_engine = knowledge_engine.engine(__file__)
->>> my_engine.activate('bc_father_son') -->
-<p>Once you've obtained a <a class="reference external" href="../logic_programming/plans.html">plan</a> from <tt class="docutils literal"><span class="pre">prove_1</span></tt> or <tt class="docutils literal"><span class="pre">prove_n</span></tt>, you just call
-it like a normal Python function.  The arguments required are simply those
+>>> my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas'))
+>>> my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce'))
+>>> my_engine.activate('bc_related0') -->
+<p>Once you've obtained a <a class="reference external" href="../logic_programming/plans.html">plan</a> from <a class="reference external" href="proving_goals.html">prove_goal</a> or <a class="reference external" href="proving_goals.html">prove_1_goal</a>, you just
+call it like a normal Python function.  The arguments required are simply those
 specified, if any, in the <a class="reference external" href="../pyke_syntax/krb_syntax/bc_rule.html#taking-clause">taking clause</a> of the <a class="reference external" href="pyke_syntax/krb_syntax/bc_rule.html">rule</a> proving the top-level
 goal.</p>
 <p>You may call the plan function any number of times.  You may even pickle
 the plan for later use.  But the plans are constructed out of
-<a class="reference external" href="http://docs.python.org/library/functools.html">functools.partial</a> functions, so you need to register this with <a class="reference external" href="http://docs.python.org/library/copy_reg.html">copy_reg</a>
-before pickling the plan:</p>
+<a class="reference external" href="http://docs.python.org/library/functools.html">functools.partial</a> functions, that need to be registered with <a class="reference external" href="http://docs.python.org/library/copy_reg.html">copy_reg</a>
+if you are running Python 2.x:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; import copy_reg
@@ -108,10 +110,10 @@ the plan).</p>
 takes two arguments: the rule base name, and the name of the rule to trace:</p>
 <blockquote>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.trace('bc_father_son', 'grand_father_son')
-&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(thomas, david, $depth)')
-bc_father_son.grand_father_son('thomas', 'david', '$depth')
-bc_father_son.grand_father_son succeeded with ('thomas', 'david', ('grand',))
+&gt;&gt;&gt; my_engine.trace('bc_related0', 'grand_father_son')
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_related0.father_son(thomas, david, $depth)')
+bc_related0.grand_father_son('thomas', 'david', '$depth')
+bc_related0.grand_father_son succeeded with ('thomas', 'david', ('grand',))
 ({'depth': ('grand',)}, None)
 </pre>
 </blockquote>
@@ -119,8 +121,8 @@ bc_father_son.grand_father_son succeeded with ('thomas', 'david', ('grand',))
 in effect until you call <tt class="docutils literal"><span class="pre">untrace</span></tt>:</p>
 <blockquote>
 <pre class="doctest-block">
-&gt;&gt;&gt; my_engine.untrace('bc_father_son', 'grand_father_son')
-&gt;&gt;&gt; my_engine.prove_1_goal('bc_father_son.father_son(thomas, david, $depth)')
+&gt;&gt;&gt; my_engine.untrace('bc_related0', 'grand_father_son')
+&gt;&gt;&gt; my_engine.prove_1_goal('bc_related0.father_son(thomas, david, $depth)')
 ({'depth': ('grand',)}, None)
 </pre>
 </blockquote>
@@ -148,7 +150,7 @@ Python functions between subgoal proofs.</p>
 ... except:
 ...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
 Traceback (most recent call last):
-  File &quot;&lt;doctest other_functions.txt[12]&gt;&quot;, line 2, in &lt;module&gt;
+  File &quot;&lt;doctest other_functions.txt[19]&gt;&quot;, line 2, in &lt;module&gt;
     my_engine.prove_1_goal('error_test.goal()')
   File &quot;...knowledge_engine.py&quot;, line 359, in prove_1_goal
     return goal.compile(goal_str).prove_1(self, **args)
@@ -237,7 +239,7 @@ in.</p>
 
   <div id="last-modified">
     Page last modified
-    Fri, Mar 05 2010.
+    Mon, Mar 08 2010.
 
   </div>
 

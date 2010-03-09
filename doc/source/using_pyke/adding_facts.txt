@@ -51,7 +51,7 @@ Asserting New Facts
 *some_engine*.add_universal_fact(kb_name, fact_name, arguments)
     The ``add_universal_fact`` function is called once per fact_.  These
     facts_ are never deleted and apply to all *cases*.
-    
+
     Alternatively, you can place universal facts in a `.kfb file`_ so that
     they are loaded automatically.
 

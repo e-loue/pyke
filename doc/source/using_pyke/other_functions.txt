@@ -51,17 +51,19 @@ Running and Pickling Plans
    ...                'examples')
    >>> from pyke import knowledge_engine
    >>> my_engine = knowledge_engine.engine(__file__)
-   >>> my_engine.activate('bc_father_son')
+   >>> my_engine.add_universal_fact('family', 'son_of', ('bruce', 'thomas'))
+   >>> my_engine.add_universal_fact('family', 'son_of', ('david', 'bruce'))
+   >>> my_engine.activate('bc_related0')
 
-Once you've obtained a plan_ from ``prove_1`` or ``prove_n``, you just call
-it like a normal Python function.  The arguments required are simply those
+Once you've obtained a plan_ from `prove_goal`_ or `prove_1_goal`_, you just
+call it like a normal Python function.  The arguments required are simply those
 specified, if any, in the `taking clause`_ of the rule__ proving the top-level
 goal.
 
 You may call the plan function any number of times.  You may even pickle
 the plan for later use.  But the plans are constructed out of
-`functools.partial`_ functions, so you need to register this with copy_reg_
-before pickling the plan:
+`functools.partial`_ functions, that need to be registered with copy_reg_
+if you are running Python 2.x:
 
     >>> import copy_reg
     >>> import functools
@@ -81,17 +83,17 @@ Tracing Rules
 Individual rules may be traced to aid in debugging.  The ``trace`` function
 takes two arguments: the rule base name, and the name of the rule to trace:
 
-    >>> my_engine.trace('bc_father_son', 'grand_father_son')
-    >>> my_engine.prove_1_goal('bc_father_son.father_son(thomas, david, $depth)')
-    bc_father_son.grand_father_son('thomas', 'david', '$depth')
-    bc_father_son.grand_father_son succeeded with ('thomas', 'david', ('grand',))
+    >>> my_engine.trace('bc_related0', 'grand_father_son')
+    >>> my_engine.prove_1_goal('bc_related0.father_son(thomas, david, $depth)')
+    bc_related0.grand_father_son('thomas', 'david', '$depth')
+    bc_related0.grand_father_son succeeded with ('thomas', 'david', ('grand',))
     ({'depth': ('grand',)}, None)
 
 This can be done either before or after rule base activation and will remain
 in effect until you call ``untrace``:
 
-    >>> my_engine.untrace('bc_father_son', 'grand_father_son')
-    >>> my_engine.prove_1_goal('bc_father_son.father_son(thomas, david, $depth)')
+    >>> my_engine.untrace('bc_related0', 'grand_father_son')
+    >>> my_engine.prove_1_goal('bc_related0.father_son(thomas, david, $depth)')
     ({'depth': ('grand',)}, None)
 
 
@@ -119,7 +121,7 @@ Python functions between subgoal proofs.
     ... except:
     ...     krb_traceback.print_exc(None, sys.stdout)   # sys.stdout needed for doctest
     Traceback (most recent call last):
-      File "<doctest other_functions.txt[12]>", line 2, in <module>
+      File "<doctest other_functions.txt[19]>", line 2, in <module>
         my_engine.prove_1_goal('error_test.goal()')
       File "...knowledge_engine.py", line 359, in prove_1_goal
         return goal.compile(goal_str).prove_1(self, **args)

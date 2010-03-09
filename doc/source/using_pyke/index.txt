@@ -74,7 +74,7 @@ The simplest use of Pyke involves three steps:
 
 #.  Activate `rule bases`_.
 
-    >>> my_engine.activate('bc_father_son')
+    >>> my_engine.activate('bc_related')
 
     You may chose one or more rule bases to activate.
     
@@ -86,7 +86,7 @@ The simplest use of Pyke involves three steps:
 
 #.  Prove_ goal_.
 
-    >>> my_engine.prove_1_goal('bc_father_son.father_son(bruce, $son)')
+    >>> my_engine.prove_1_goal('bc_related.father_son(bruce, $son, ())')
     ({'son': 'david'}, None)
 
     The goal might be met by simply matching an already known fact_, or
@@ -96,8 +96,8 @@ Then if you want to prove another goal, you can just repeat the last step.
 In this case, the `forward-chaining rules`_ are only run once and all goals
 operate against the same set of known facts.
 
-    >>> my_engine.prove_1_goal('bc_father_son.father_son(thomas, $son)')
-    ({'son': 'bruce'}, None)
+    >>> my_engine.prove_1_goal('bc_related.father_son(thomas, $son, ())')
+    ({'son': 'tim'}, None)
 
 Dynamically Asserting Facts
 ===========================
@@ -112,18 +112,18 @@ To dynamically assert_ facts_ within your Python program, a new step is added:
 
 #.  Assert_ facts_.
 
-    >>> my_engine.assert_('family', 'son_of', ('david', 'spike'))
+    >>> my_engine.assert_('family2', 'son_of', ('spike', 'david'))
 
     These facts must be asserted prior to activating the rule bases so that
     they are available to the `forward-chaining rules`_.
 
 #.  Activate `rule bases`_.
 
-    >>> my_engine.activate('bc_father_son')
+    >>> my_engine.activate('bc_related')
 
 #.  Prove goal_.
 
-    >>> my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+    >>> my_engine.prove_1_goal('bc_related.father_son(david, $son, ())')
     ({'son': 'spike'}, None)
 
 Using Different Facts for Different Cases
@@ -140,18 +140,20 @@ different rule bases, you need to reset_ the Pyke engine:
 
 #.  Assert_ facts_ for first case.
 
-    >>> my_engine.assert_('family', 'son_of', ('david', 'spike'))
+    >>> my_engine.assert_('family2', 'son_of', ('spike', 'david'))
 
 #.  Activate `rule bases`_.
 
-    >>> my_engine.activate('bc_father_son')
+    >>> my_engine.activate('bc_related')
 
 #.  Prove goal_ for first case.
 
-    >>> my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+    >>> my_engine.prove_1_goal('bc_related.father_son(david, $son, ())')
     ({'son': 'spike'}, None)
 
 #.  Reset the Pyke engine.
+
+    >>> my_engine.reset()
 
     This erases all of the case specific facts that you asserted in step 2, as
     well as all of the facts asserted by the `forward-chaining rules`_.
@@ -161,14 +163,14 @@ different rule bases, you need to reset_ the Pyke engine:
 
 #.  Assert facts_ for second case.
 
-    >>> my_engine.assert_('family', 'son_of', ('david', 'felix'))
+    >>> my_engine.assert_('family2', 'son_of', ('felix', 'david'))
 
 #.  Activate `rule bases`_.
 
-    >>> my_engine.activate('bc_father_son')
+    >>> my_engine.activate('bc_related')
 
 #.  Prove goal_ for second case.
 
-    >>> my_engine.prove_1_goal('bc_father_son.father_son(david, $son)')
+    >>> my_engine.prove_1_goal('bc_related.father_son(david, $son, ())')
     ({'son': 'felix'}, None)
 
