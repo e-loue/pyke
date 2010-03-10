@@ -143,6 +143,10 @@ class engine(object):
                 # This import must succeed!
                 tp = _get_target_pkg(target_package_name + 
                                        '.compiled_pyke_files')
+                if tp is None:
+                    raise AssertionError("%s: compiled with different version "
+                                             "of Pyke" %
+                                           target_package_name)
                 tp.reset(check_sources=False)
                 target_pkgs[target_package_name] = tp
             return
@@ -198,10 +202,13 @@ class engine(object):
             if debug:
                 print >> sys.stderr, "_create_target_pkg target_name:", \
                                      target_name
+            tp = None
             try:
                 # See if compiled_pyke_files already exists.
                 tp = _get_target_pkg(target_name)
             except ImportError:
+                pass
+            if tp is None:
                 if debug:
                     print >> sys.stderr, "_create_target_pkg: no target module"
                 tp = target_pkg.target_pkg(target_name, target_filename)
@@ -420,9 +427,38 @@ class engine(object):
         self.get_rb(rb_name).untrace(rule_name)
 
 def _get_target_pkg(target_name):
-    if target_name in sys.modules:
-        return getattr(reload(sys.modules[target_name]), 'targets')
-    return getattr(target_pkg.import_(target_name), 'targets')
+    if debug: print >> sys.stderr, "_get_target_pkg", target_name
+    module = target_pkg.import_(target_name)
+    path = module.__file__
+    if debug: print >> sys.stderr, "_get_target_pkg __file__ is", path
+    if path.endswith(('.pyc', '.pyo')): path = path[:-1]
+    compiled_path = path + ('o' if sys.flags.optimize else 'c')
+    if debug:
+        print >> sys.stderr, "source path is", path
+        if os.path.exists(path):
+            print >> sys.stderr, "source path exists"
+            print >> sys.stderr, "source path mtime", os.path.getmtime(path)
+        else:
+            print >> sys.stderr, "source path does not exist"
+        print >> sys.stderr, "compiled path is", compiled_path
+        if os.path.exists(compiled_path):
+            print >> sys.stderr, "compiled path exists"
+            print >> sys.stderr, "compiled path mtime", \
+                                 os.path.getmtime(compiled_path)
+        else:
+            print >> sys.stderr, "compiled path does not exist"
+    if not os.path.exists(compiled_path) or \
+          os.path.exists(path) and \
+          os.path.getmtime(path) > os.path.getmtime(compiled_path):
+        if debug:
+            print >> sys.stderr, "_get_target_pkg doing reload for", target_name
+        module = reload(module)
+    if getattr(module, 'target_pkg_version', None) != pyke.target_pkg_version:
+        if debug:
+            print >> sys.stderr, "_get_target_pkg doing invalid version for", \
+                                 target_name
+        return None
+    return getattr(module, 'get_target_pkg')()
 
 def _pythonify_path(path):
     r'''Returns path_to_package, package_name, remainder_path, zip_file_flag.

@@ -123,7 +123,7 @@ Python functions between subgoal proofs.
     Traceback (most recent call last):
       File "<doctest other_functions.txt[19]>", line 2, in <module>
         my_engine.prove_1_goal('error_test.goal()')
-      File "...knowledge_engine.py", line 359, in prove_1_goal
+      File "...knowledge_engine.py", line 366, in prove_1_goal
         return goal.compile(goal_str).prove_1(self, **args)
       File "...goal.py", line 47, in prove_1
         return iter(it).next()

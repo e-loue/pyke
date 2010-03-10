@@ -24,6 +24,7 @@ FILES TO CHANGE:
     - pyke/__init__.py
         - line 3: version = '1.0.2'
         - line 5: compiler_version = 1  (does this need to be incremented?)
+        - line 7: target_pkg_version = 1  (does this need to be incremented?)
     - doc/source/index.txt
         - line 43: Release 1.0
 

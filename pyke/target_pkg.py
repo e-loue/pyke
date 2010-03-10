@@ -322,20 +322,28 @@ class target_pkg(object):
             with open(self.filename, 'w') as f:
                 f.write("# compiled_pyke_files.py\n\n")
                 f.write("from pyke import target_pkg\n\n")
-                f.write("pyke_version = %r\n\n" % pyke.version)
-                f.write("compiler_version = %r\n\n" % pyke.compiler_version)
-                f.write("try:\n");
+                f.write("pyke_version = %r\n" % pyke.version)
+                f.write("compiler_version = %r\n" % pyke.compiler_version)
+                f.write("target_pkg_version = %r\n\n" % pyke.target_pkg_version)
+                f.write("try:\n")
                 f.write("    loader = __loader__\n")
-                f.write("except NameError:\n");
-                f.write("    loader = None\n\n");
-                f.write("targets = target_pkg.target_pkg(__name__, __file__, "
+                f.write("except NameError:\n")
+                f.write("    loader = None\n\n")
+                f.write("def get_target_pkg():\n")
+                f.write("    return target_pkg.target_pkg(__name__, __file__, "
                         "pyke_version, loader, {\n")
                 for key, value in self.sources.iteritems():
                     if debug: print >> sys.stderr, "write got:", key, value
                     if (key[0], key[1]) in self.source_packages:
                         if debug: print >> sys.stderr, "writing:", key, value
-                        f.write("    %r: %r,\n" % (key, value))
-                f.write("  },\n  compiler_version)\n")
+                        f.write("         %r:\n" % (key,))
+                        f.write("           %r,\n" % (value,))
+                f.write("        },\n")
+                f.write("        compiler_version)\n\n")
+            if os.path.exists(self.filename + 'c'):
+                os.remove(self.filename + 'c')
+            if os.path.exists(self.filename + 'o'):
+                os.remove(self.filename + 'o')
 
     def load(self, engine, load_fc = True, load_bc = True,
                            load_fb = True, load_qb = True):
