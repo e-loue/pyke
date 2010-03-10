@@ -8,6 +8,7 @@
 .. _anonymous variable: `anonymous variable lp`_
 .. _anonymous variable lp: logic_programming/pattern_matching/pattern_variables.html#anonymous-pattern-variables
 .. _anonymous variable syntax: pyke_syntax/krb_syntax/pattern.html#anonymous-variable
+.. _asserting new facts: using_pyke/adding_facts.html
 .. _ask_tty: knowledge_bases/question_bases.html#presenting-questions-to-your-end-users
 .. _assert: using_pyke/adding_facts.html
 .. _asserted: assert_
@@ -32,6 +33,7 @@
 .. _cooking functions: about_pyke/cooking_functions.html
 .. _copy_reg: http://docs.python.org/library/copy_reg.html
 .. _create an engine: using_pyke/creating_engine.html
+.. _creating an inference engine: `create an engine`_
 .. _cut operator: http://en.wikipedia.org/wiki/Cut_%28logic_programming%29
 .. _doctest: http://docs.python.org/library/doctest.html
 .. _doctest-tools: http://code.google.com/p/doctest-tools/
@@ -137,6 +139,7 @@
 .. _prove_n: `prove`_
 .. _prove: using_pyke/proving_goals.html
 .. _proving: prove_
+.. _proving goals: prove_
 .. _PyCon 2008: http://us.pycon.org/2008/about/
 .. _Pyke: http://groups.google.com/group/pyke
 .. _Pyke project download page: http://sourceforge.net/projects/pyke/files/

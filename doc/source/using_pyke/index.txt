@@ -54,13 +54,13 @@ Getting Started
 
 The simplest use of Pyke involves three steps:
 
-#.  `Create an engine`_ object.
+`Create an engine`_ object.
 
     >>> from pyke import knowledge_engine
 
     >>> my_engine = knowledge_engine.engine(__file__)
 
-    The step compiles the Pyke source files, if out of date, and loads the
+    This step compiles the Pyke source files, if out of date, and loads the
     `knowledge bases`_.
 
     There are three kinds of Pyke source files:
@@ -72,19 +72,25 @@ The simplest use of Pyke involves three steps:
     #.  `.kqb files`_ define `question bases`_, which are compiled into .qbc
         pickle files.
 
-#.  Activate `rule bases`_.
+    See `Creating an Inference Engine`_ to control where the compiled files
+    are written, load knowledge bases from multiple directories, distribute
+    your application without your knowledge base files, or distribute using
+    egg files.
+
+Activate `rule bases`_.
 
     >>> my_engine.activate('bc_related')
 
-    You may chose one or more rule bases to activate.
-    
+    You may activate one rule base for each `rule base category`_.  Simply
+    pass multiple arguments to ``activate``.
+
     .. note::
 
        Even if you only have one rule base, you must still activate it.
 
     This is when the `forward-chaining rules`_ are run.
 
-#.  Prove_ goal_.
+Prove_ goal_.
 
     >>> my_engine.prove_1_goal('bc_related.father_son(bruce, $son, ())')
     ({'son': 'david'}, None)
@@ -92,39 +98,43 @@ The simplest use of Pyke involves three steps:
     The goal might be met by simply matching an already known fact_, or
     through the use of `backward-chaining rules`_.
 
-Then if you want to prove another goal, you can just repeat the last step.
-In this case, the `forward-chaining rules`_ are only run once and all goals
-operate against the same set of known facts.
+    Then if you want to prove another goal, you can just repeat the last step.
+    In this case, the `forward-chaining rules`_ are only run once and all goals
+    operate against the same set of known facts.
 
-    >>> my_engine.prove_1_goal('bc_related.father_son(thomas, $son, ())')
-    ({'son': 'tim'}, None)
+    >>> my_engine.prove_1_goal('bc_related.father_son(thomas, $grandson, (grand))')
+    ({'grandson': 'david'}, None)
+
+    See `Proving Goals`_ to pass different arguments into goals, compile the
+    goal statements once in advance, and to retrieve multiple answers for a
+    goal.
 
 Dynamically Asserting Facts
 ===========================
 
-To dynamically assert_ facts_ within your Python program, a new step is added:
+To dynamically assert_ facts_ within your Python program, a new step is
+added:
 
-#.  Create an engine_ object.
-
-    >>> from pyke import knowledge_engine
+    Create the engine object:
 
     >>> my_engine = knowledge_engine.engine(__file__)
 
-#.  Assert_ facts_.
+Assert_ facts_.
 
-    >>> my_engine.assert_('family2', 'son_of', ('spike', 'david'))
+>>> my_engine.assert_('family2', 'son_of', ('spike_the_dog', 'david'))
 
-    These facts must be asserted prior to activating the rule bases so that
-    they are available to the `forward-chaining rules`_.
+These facts must be asserted prior to activating the rule bases so that they
+are available to the `forward-chaining rules`_.  This example shows asserting
+case specific facts that are deleted before running the next case (as shown
+in the next section, below).  But you can also assert universal facts that
+apply to all cases.  See `Asserting New Facts`_ for more information.
 
-#.  Activate `rule bases`_.
+    After asserting your facts, activate your rule bases and prove your goal
+    as before:
 
     >>> my_engine.activate('bc_related')
-
-#.  Prove goal_.
-
-    >>> my_engine.prove_1_goal('bc_related.father_son(david, $son, ())')
-    ({'son': 'spike'}, None)
+    >>> my_engine.prove_1_goal('bc_related.father_son(bruce, $grandson, (grand))')
+    ({'grandson': 'spike_the_dog'}, None)
 
 Using Different Facts for Different Cases
 =========================================
@@ -132,45 +142,31 @@ Using Different Facts for Different Cases
 But if you want to prove goals against different sets of facts or using
 different rule bases, you need to reset_ the Pyke engine:
 
-#.  Create an ``engine`` object.
-
-    >>> from pyke import knowledge_engine
+    Only need this once:
 
     >>> my_engine = knowledge_engine.engine(__file__)
 
-#.  Assert_ facts_ for first case.
+    First case, as before:
 
-    >>> my_engine.assert_('family2', 'son_of', ('spike', 'david'))
-
-#.  Activate `rule bases`_.
-
+    >>> my_engine.assert_('family2', 'son_of', ('spike_the_dog', 'david'))
     >>> my_engine.activate('bc_related')
+    >>> my_engine.prove_1_goal('bc_related.father_son(bruce, $grandson, (grand))')
+    ({'grandson': 'spike_the_dog'}, None)
 
-#.  Prove goal_ for first case.
+Reset the Pyke engine.
 
-    >>> my_engine.prove_1_goal('bc_related.father_son(david, $son, ())')
-    ({'son': 'spike'}, None)
+>>> my_engine.reset()
 
-#.  Reset the Pyke engine.
+This erases all of the case specific facts that you asserted in step 2, as
+well as all of the facts asserted by the `forward-chaining rules`_.
 
-    >>> my_engine.reset()
+It also deactivates all of the `rule bases`_, so you'll need to call
+activate again after asserting your facts.
 
-    This erases all of the case specific facts that you asserted in step 2, as
-    well as all of the facts asserted by the `forward-chaining rules`_.
+    Second case:
 
-    It also deactivates all of the `rule bases`_, so you'll need to call
-    activate again after asserting your facts.
-
-#.  Assert facts_ for second case.
-
-    >>> my_engine.assert_('family2', 'son_of', ('felix', 'david'))
-
-#.  Activate `rule bases`_.
-
+    >>> my_engine.assert_('family2', 'son_of', ('felix_the_cat', 'david'))
     >>> my_engine.activate('bc_related')
-
-#.  Prove goal_ for second case.
-
-    >>> my_engine.prove_1_goal('bc_related.father_son(david, $son, ())')
-    ({'son': 'felix'}, None)
+    >>> my_engine.prove_1_goal('bc_related.father_son(bruce, $grandson, (grand))')
+    ({'grandson': 'felix_the_cat'}, None)
 
