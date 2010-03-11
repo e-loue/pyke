@@ -153,7 +153,7 @@ See also Examples_.
 Viewing the HTML Documentation
 ==============================
 
-This HTML documentation may be viewed directly from you hard drive.  The HTML
+This HTML documentation may be viewed directly from your hard drive.  The HTML
 files are in the ``doc/html`` directory.  Start with ``doc/html/index.html``.
 
 
@@ -165,7 +165,7 @@ You'll see the following directories.
 * ``doc``
 
   - the ``html`` directory has all of the HTML documentation ready to browse
-    off your hard drive.  Start with doc/html/index.html.
+    off of your hard drive.  Start with doc/html/index.html.
   - the ``source`` directory has all of the sources that were used to
     generated the HTML documentation.  See `Rebuilding the HTML Documentation`_.
   - the ``examples`` directory just has a copy of the examples used by the

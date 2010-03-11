@@ -105,10 +105,11 @@ release_1
   Python2.x and Python3.x versions of Pyke.
 
 pyke
-  Use this for major new features.  I merge the changes made in release_1 into
-  the pyke repository (but not the other way around).  And I merge the changes
+  Use this for major new features that would result in a major new release
+  (e.g., release 1.2).  I merge the changes made in release_1 into the pyke
+  repository (but maybe not the other way around).  And I merge the changes
   made in the pyke repository into the pre_2to3 repository.  So the code here
-  also goes into both the Python2.x and Python3.x versions of Pyke.
+  goes into both the Python2.x and Python3.x future versions of Pyke.
 
 pre_2to3_r1
   Use this for bug fixes, code and documentation cleanup, and anything else
@@ -116,7 +117,8 @@ pre_2to3_r1
   Python3.x version of Pyke.  I merge the changes made in release_1 into the
   pre_2to3_r1 repository (but not the other way around).  And I merge the
   changes made in the pre_2to3_r1 repository into the pre_2to3 repository.
-  So changes here only go into the Python3.x version of Pyke.
+  So changes here only go into the next point release of the Python3.x version
+  of Pyke.
 
   .. warning::
      This code is maintained in a state just prior to running Python's
@@ -138,7 +140,7 @@ pre_2to3_r1
        * ``run_2to3``
        * ``testpyke`` -3.1
        * python setup.py -q sdist --formats zip
-       * insert '3.1' after 'pyke' in the name of the source distribution zip
+       * insert '3' after 'pyke' in the name of the source distribution zip
          file.
   
      ``Run_pre_test`` assumes that you either have the keywording options set
@@ -199,8 +201,8 @@ or just run the "testall.py" program from the doctest-tools package::
 Compiling the Compiler.krb File
 ===============================
 
-Pyke uses itself to compile your `knowledge base`_ sources (`.kfb`_, `.kqb`_
-and `.krb`_ files) into Python source files.
+Pyke uses itself to compile your `rule base`_ sources (`.krb`_ files) into
+Python source (``.py``) files.
 
 The knowledge base file that Pyke uses for this is
 pyke/krb_compiler/compiler.krb.  This gets compiled into compiler_bc.py, which
@@ -292,7 +294,7 @@ documentation (i.e., change the .txt files in doc/source).
 To test all of the code examples in the documents, use the ``testall.py``
 command from the `doctest-tools`_ package::
 
-    $ cd doc
+    $ cd doc/source
     $ testall.py
 
 

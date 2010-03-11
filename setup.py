@@ -10,7 +10,6 @@ setup(
         'pyke.krb_compiler': ['*.krb'],
         'pyke.krb_compiler.ply': ['README', 'README.pyke'],
     },
-    data_files = [('pyke', ['LICENSE', 'README.txt'])],
 
     # old setuptools stuff:
     #install_requires = [],
