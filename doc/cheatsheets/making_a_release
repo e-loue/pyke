@@ -19,8 +19,8 @@ FILES TO CHANGE:
         - line 44:   ...  pyke3-1.0.3.zip
         - line 59: Add any new examples
     - setup.py
-        - line 13:  version = "1.0.2",
-        - line 44:  "http://downloads.sourceforge.net/pyke/pyke-1.0.2.zip",
+        - line 7:  version = "1.0.2",
+        - line 37: "http://downloads.sourceforge.net/pyke/pyke-1.0.2.zip",
     - pyke/__init__.py
         - line 3: version = '1.0.2'
         - line 5: compiler_version = 1  (does this need to be incremented?)
@@ -29,6 +29,8 @@ FILES TO CHANGE:
         - line 43: Release 1.0
 
 RUN MAKE_RELEASE
+
+    This can be re-run if errors are encountered.
 
     $ ./make_release 1.0.3 > /tmp/make_release.out 2>&1 &
     $ tail -f /tmp/make_release.out

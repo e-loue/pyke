@@ -24,7 +24,8 @@ restindex
     crumb: Other functions
     page-description:
         Other miscellaneous functions available that you might be interested
-        in.
+        in, such as tracing rules and smart error tracebacks that show lines
+        from your .krb files.
     /description
     format: rest
     encoding: utf8
