@@ -286,3 +286,4 @@ echo
 
 rsync -avP --delete -e ssh doc/html/ mtnyogi,pyke@web.sourceforge.net:htdocs/
 
+echo Done!
