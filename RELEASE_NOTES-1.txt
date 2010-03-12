@@ -1,3 +1,63 @@
+1.1 RELEASE NOTES Mar 11, 2010
+==============================
+
+This release has a whole new interface from your Python program into Pyke.
+This was a result of attending the mython sprint at PyCon 2010, and thanks go
+to Jon Riehl of the mython project (see mython.org) for giving me the idea for
+this.
+
+The two big changes are:
+
+1.  Redid the engine constructor to make it easier to specify where your
+    Pyke source files are.  Now you can generally just do
+    knowledge_engine.engine(__file__) without worrying about your PYTHONPATH.
+
+2.  Redid the engine.prove methods to take a goal statement as a string in
+    Pyke syntax.  This lets you use fully general patterns without having to
+    create the Pyke pattern objects or create Pyke contexts.
+
+The Using Pyke section of the documentation has been completely re-written.
+
+Nothing in the .kfb, .krb or .kqb files has changed.
+
+
+INCOMPATIBILITIES WITH 1.0.4 RELEASE:
+
+    - knowledge_engine.engine constructor path argument has changed.  See
+      Using Pyke => Creating an Engine web page.
+    - engine.prove_1, engine.prove_n and engine.prove have been deprecated in
+      favor of new engine.prove_goal and engine.prove_1_goal methods.  See the
+      Using Pyke => Proving Goals page.
+    - You now need doctest-tools version 1.0a3 to run the unit tests.
+    - Renamed all example test.py files to run.py (to not interfere with
+      Python's test package).
+
+FEATURE ENHANCEMENTS:
+
+    - Added new engine.prove_goal and engine.prove_1_goal to replace the
+      engine.prove_1, engine.prove_n and engine.prove methods, which are now
+      deprecated.
+    - Also can compile goal statements at module load time with new
+      goal.compile (much like re.compile).
+    - Redid how paths to Pyke source files are specified in engine
+      constructor.  Now you can generally just call
+      knowledge_engine.engine(__file__) and not have to worry about what's on
+      your PYTHONPATH.
+    - Moved example .tst files into Test/examples so that they are not
+      cluttering up the examples directories.
+    - Added blank lines between methods, deleted doctest calls (now using
+      doctest-tools instead).
+    - Rewrote the Using Pyke section of the documentation.
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Fixed bug #2913426: KFB Breaks Without Trailing Newline
+      This was also a problem with KRB files.
+    - Fixed bug #2968963: installation creates extraneous pyke dir.
+
+
 1.0.4 RELEASE NOTES Nov 4, 2009
 ===============================
 

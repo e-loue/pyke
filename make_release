@@ -81,6 +81,14 @@ do_fetch() {
 
 echo
 echo "*************************************************************************"
+echo "                         Deleting .pyc files"
+echo "*************************************************************************"
+echo
+
+find . -name '*.pyc' -exec rm {} +
+
+echo
+echo "*************************************************************************"
 echo "                      Rebuilding compiler_bc.py"
 echo "*************************************************************************"
 echo
@@ -223,7 +231,7 @@ rm -rf build dist pyke.egg-info
 python setup.py -q sdist --formats zip
 cp ../"$PRE_2TO3_R1"_temp_test/dist/pyke*.zip dist
 rm -rf ../"$PRE_2TO3_R1"_temp_test
-cp RELEASE_NOTES-1.0.txt dist
+cp RELEASE_NOTES-1.txt dist
 
 echo
 echo "*************************************************************************"
