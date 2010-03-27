@@ -533,8 +533,7 @@ class kqb_parser(object):
             if self.column >= len(self.line): self.readline()
 
 def parse_kqb(filename):
-    dirs, base = os.path.split(filename)
-    name = base[:-4]
+    name = os.path.basename(filename)[:-4]
     with open(filename, 'rU') as f:
         base = question_base.question_base(name)
         parser = kqb_parser(f)

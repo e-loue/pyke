@@ -482,7 +482,7 @@ def _pythonify_path(path):
                 else:
                     ans = path, remainder_package_name, '', True
         parent_path, dir = os.path.split(path)
-        if parent_path == '' or parent_path == '/' and dir == '':
+        if parent_path == '' or parent_path == path:
             break
         if _is_package_dir(path):
             if package_name:

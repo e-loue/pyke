@@ -21,8 +21,8 @@ def run_command(start_dir, outfilename):
         if path.startswith('http://'): return ' ' + path
 
         # Prepend link_dir to path
-        if link_dir.startswith('./'): path = os.path.join(link_dir[2:], path)
-        elif link_dir != '.': path = os.path.join(link_dir, path)
+        if link_dir.startswith('./'): path = link_dir[2:] + '/' + path
+        elif link_dir != '.': path = link_dir + '/' + path
 
         # Prepare dir (start_dir, minus initial './')
         if start_dir == '.': dir = ''
@@ -30,12 +30,14 @@ def run_command(start_dir, outfilename):
         else: dir = start_dir
 
         rest=' '
-        while dir:
+        last_dir = None
+        while dir and dir != last_dir:
             if path.startswith(dir + '/'):
                 ans = rest + path[len(dir) + 1:]
                 #print "doctor(%s) abbr:" % (path.rstrip(),), ans
                 return ans
             rest += '../'
+            last_dir = dir
             dir, ignore = os.path.split(dir)
         ans = rest + path
         #print "doctor(%s) abs:" % (path.rstrip(),), ans

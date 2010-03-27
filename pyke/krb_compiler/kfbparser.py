@@ -155,8 +155,7 @@ def parse(this_module, filename, check_tables = False, debug = 0):
     '''
     global Fact_base
     init(this_module, check_tables, debug)
-    dirs, base = os.path.split(filename)
-    name = base[:-4]
+    name = os.path.basename(filename)[:-4]
     Fact_base = fact_base.fact_base(None, name, False)
     with open(filename) as f:
         scanner.init(scanner, debug, check_tables, True)
