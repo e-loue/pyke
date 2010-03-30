@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# run.py
+# driver.py
 
 from __future__ import with_statement
 from pyke import knowledge_engine

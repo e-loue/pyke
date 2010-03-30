@@ -25,18 +25,18 @@ example.krb
     relationship when run.  (This is a poor use of plans, but demonstrates the
     syntax and underlying principles).
 
-run.py
+driver.py
     Driver program.  Read this code to see how to call Pyke!
     
     Run:
 
-        >>> import run
+        >>> import driver
 
         # All of the *test functions below default to 'bruce', but I won't use
         # that here because it generates a lot of output!
 
         # uses fc_example.krb
-        >>> run.fc_test('michael_k')           # doctest: +ELLIPSIS
+        >>> driver.fc_test('michael_k')           # doctest: +ELLIPSIS
         doing proof
         michael_k, amanda are ('father', 'daughter')
         michael_k, tammy are ('father', 'daughter')
@@ -50,7 +50,7 @@ run.py
         fc time ..., ... asserts/sec
 
         # uses bc_example.krb
-        >>> run.bc_test('gary')                # doctest: +ELLIPSIS
+        >>> driver.bc_test('gary')                # doctest: +ELLIPSIS
         doing proof
         gary, justin_m are ('father', 'son')
         <BLANKLINE>
@@ -62,7 +62,7 @@ run.py
         bc time ..., ... goals/sec
 
         # uses bc2_example.krb
-        >>> run.bc2_test('chad')               # doctest: +ELLIPSIS
+        >>> driver.bc2_test('chad')               # doctest: +ELLIPSIS
         doing proof
         chad, tyler are ('father', 'son')
         chad, tiffany are ('father', 'daughter')
@@ -75,7 +75,7 @@ run.py
         bc time ..., ... goals/sec
 
         # uses example.krb
-        >>> run.test('paul')                   # doctest: +ELLIPSIS
+        >>> driver.test('paul')                   # doctest: +ELLIPSIS
         doing proof
         paul, nick are father, son
         paul, katrina are father, daughter
@@ -92,7 +92,7 @@ run.py
 
         # this has three parameters that all default to None:
         #     person1, person2 and relationship
-        >>> run.general(person1='bruce',                # uses bc2_example.krb
+        >>> driver.general(person1='bruce',             # uses bc2_example.krb
         ...             relationship=('father', 'son')) # doctest: +ELLIPSIS
         doing proof
         bruce, m_thomas are ('father', 'son')

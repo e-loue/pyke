@@ -7,9 +7,9 @@
     ...                         'examples/family_relations')
     >>> sys.path.append(new_path)
 
-    >>> import run
+    >>> import driver
 
-    >>> run.fc_test()      # doctest: +ELLIPSIS
+    >>> driver.fc_test()      # doctest: +ELLIPSIS
     doing proof
     bruce, thomas are ('son', 'father')
     bruce, norma are ('son', 'mother')
@@ -57,7 +57,7 @@
                 0 successes, 0 failures
     fc time ..., ... asserts/sec
 
-    >>> run.bc_test()      # doctest: +ELLIPSIS
+    >>> driver.bc_test()      # doctest: +ELLIPSIS
     doing proof
     bruce, thomas are ('son', 'father')
     bruce, norma are ('son', 'mother')
@@ -105,7 +105,7 @@
     family: 9 fact names, 94 universal facts, 0 case_specific facts
     bc time ..., ... goals/sec
 
-    >>> run.bc2_test()      # doctest: +ELLIPSIS
+    >>> driver.bc2_test()      # doctest: +ELLIPSIS
     doing proof
     bruce, thomas are ('son', 'father')
     bruce, norma are ('son', 'mother')
@@ -153,7 +153,7 @@
     family: 9 fact names, 94 universal facts, 0 case_specific facts
     bc time ..., ... goals/sec
 
-    >>> run.test()      # doctest: +ELLIPSIS
+    >>> driver.test()      # doctest: +ELLIPSIS
     doing proof
     bruce, thomas are son, father
     bruce, norma are son, mother
@@ -203,7 +203,7 @@
     bc time ..., ... goals/sec
     total time ...
 
-    >>> run.general('bruce')      # doctest: +ELLIPSIS
+    >>> driver.general('bruce')      # doctest: +ELLIPSIS
     doing proof
     bruce, thomas are ('son', 'father')
     bruce, norma are ('son', 'mother')

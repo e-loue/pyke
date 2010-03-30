@@ -54,8 +54,8 @@ are all in an ``examples`` directory::
 
     $ cd examples/towers_of_hanoi
     $ python
-    >>> import run
-    >>> run.test(2)
+    >>> import driver
+    >>> driver.test(2)
     got 1: ((0, 1), (0, 2), (1, 2))
     got 2: ((0, 2), (0, 1), (2, 0), (1, 2), (0, 2))
 
@@ -89,7 +89,7 @@ them:
 - A mix of forward-chaining and backward-chaining with some use of plans_ added
   too.
 
-The run.py program also demonstrates how to use krb_traceback_ and the
+The driver.py program also demonstrates how to use krb_traceback_ and the
 print_stats_ function.
 
 

@@ -1,4 +1,4 @@
-# run.py
+# driver.py
 
 from __future__ import with_statement
 import sys
@@ -10,7 +10,7 @@ engine = knowledge_engine.engine(__file__)
 def fc_test():
     engine.reset()
     try:
-        engine.activate('fc_findall')
+        engine.activate('fc_forall')
     except:
         krb_traceback.print_exc()
         sys.exit(1)
@@ -18,11 +18,10 @@ def fc_test():
 def bc_test():
     engine.reset()
     try:
-        engine.activate('bc_findall')
-        with engine.prove_goal('bc_findall.cousins_of($child, $cousins)') \
-          as gen:
+        engine.activate('bc_forall')
+        with engine.prove_goal('bc_forall.no_step_siblings($child)') as gen:
             for vars, plan in gen:
-                print "%s has %s as cousins" % (vars['child'], vars['cousins'])
+                print vars['child']
     except:
         krb_traceback.print_exc()
         sys.exit(1)

@@ -7,14 +7,14 @@
     ...                         'examples/forall')
     >>> sys.path.append(new_path)
 
-    >>> import run
+    >>> import driver
 
-    >>> run.fc_test()
+    >>> driver.fc_test()
     arthur2 has no step brothers or sisters
     helen has no step brothers or sisters
     roberta has no step brothers or sisters
 
-    >>> run.bc_test()
+    >>> driver.bc_test()
     arthur2
     helen
     roberta

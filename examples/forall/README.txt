@@ -7,16 +7,16 @@ files showing examples of use of the 'forall'/'require' clause in both cases.
 
 These rules find all people who have no step brothers or sisters.
 
-    >>> import run
+    >>> import driver
 
     # uses fc_forall.krb
-    >>> run.fc_test()
+    >>> driver.fc_test()
     arthur2 has no step brothers or sisters
     helen has no step brothers or sisters
     roberta has no step brothers or sisters
 
     # uses bc_forall.krb
-    >>> run.bc_test()
+    >>> driver.bc_test()
     arthur2
     helen
     roberta

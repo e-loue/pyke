@@ -15,7 +15,7 @@ knapsack.krb
 
     $Knapsack is a subset of $Pantry whose total weight is <= $Capacity.
 
-run.py
+driver.py
     run(pantry, capacity)
         Uses the legal_knapsack goal to enumerate all of the possible
         knapsacks within the stated capacity.  Returns the total_calories and
@@ -23,8 +23,8 @@ run.py
 
         The final example on page 36 at the site above would be:
 
-        >>> import run
-        >>> run.run((('bread',4,9200),
+        >>> import driver
+        >>> driver.run((('bread',4,9200),
         ...          ('pasta',2,4500),
         ...          ('peanutButter',1,6700),
         ...          ('babyFood',3,6900)),
