@@ -116,10 +116,10 @@ knowledge_engine.engine(\*paths, \*\*kws)
     >>> from doc.examples import some_module
     >>> my_engine = knowledge_engine.engine(some_module)
 
-    In the all three cases, the final .py or .pyc file is stripped from the
-    value of the module's __file__ attribute to get the directory that the
-    package is in.  This directory will then be recursively searched for Pyke
-    source files.
+    In the all three cases, the final filename is stripped from the value of
+    the module's __file__ attribute to get the directory that the package
+    is in.  This directory will then be recursively searched for Pyke source
+    files.
 
     If you change some of your Pyke source files, you can create a new engine
     object to compile and reload the generated Python modules without

@@ -466,7 +466,7 @@ def _pythonify_path(path):
     If zip_file_flag is set, remainder_path is ''.
     '''
     path = os.path.normpath(os.path.abspath(path))
-    if path.endswith(('.py', '.pyc', '.pyo')):
+    if path.endswith(('.py', '.pyw', '.pyc', '.pyo')):
         path = os.path.dirname(path)
     package_name = ''
     remainder_path = ''
@@ -506,6 +506,7 @@ def _pythonify_path(path):
 def _is_package_dir(path):
     if not os.path.isdir(path): return False
     return os.path.exists(os.path.join(path, '__init__.py')) or \
+           os.path.exists(os.path.join(path, '__init__.pyw')) or \
            os.path.exists(os.path.join(path, '__init__.pyc')) or \
            os.path.exists(os.path.join(path, '__init__.pyo'))
 
