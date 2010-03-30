@@ -426,33 +426,55 @@ class engine(object):
     def untrace(self, rb_name, rule_name):
         self.get_rb(rb_name).untrace(rule_name)
 
+Compiled_suffix = None
+
 def _get_target_pkg(target_name):
+    global Compiled_suffix
     if debug: print >> sys.stderr, "_get_target_pkg", target_name
     module = target_pkg.import_(target_name)
     path = module.__file__
     if debug: print >> sys.stderr, "_get_target_pkg __file__ is", path
-    if path.endswith(('.pyc', '.pyo')): path = path[:-1]
-    compiled_path = path + ('o' if sys.flags.optimize else 'c')
-    if debug:
-        print >> sys.stderr, "source path is", path
-        if os.path.exists(path):
-            print >> sys.stderr, "source path exists"
-            print >> sys.stderr, "source path mtime", os.path.getmtime(path)
+    do_reload = False
+    if path.endswith('.py'):
+        if Compiled_suffix is None:
+            # We don't know whether this compiles to .pyc or .pyo yet, so do a
+            # reload just to be sure...
+            do_reload = True
         else:
-            print >> sys.stderr, "source path does not exist"
-        print >> sys.stderr, "compiled path is", compiled_path
-        if os.path.exists(compiled_path):
-            print >> sys.stderr, "compiled path exists"
-            print >> sys.stderr, "compiled path mtime", \
-                                 os.path.getmtime(compiled_path)
-        else:
-            print >> sys.stderr, "compiled path does not exist"
-    if not os.path.exists(compiled_path) or \
-          os.path.exists(path) and \
-          os.path.getmtime(path) > os.path.getmtime(compiled_path):
+            source_path = path
+            path = path[:-3] + Compiled_suffix
+    else:
+        assert path.endswith(('.pyc', '.pyo')), \
+               'unknown file extension: %r' % (path,)
+        Compiled_suffix = path[-4:]
+        source_path = path[:-1]
+    if not do_reload:
+        if debug:
+            print >> sys.stderr, "source path is", source_path
+            if os.path.exists(source_path):
+                print >> sys.stderr, "source path exists"
+                print >> sys.stderr, "source path mtime", \
+                                     os.path.getmtime(source_path)
+            else:
+                print >> sys.stderr, "source path does not exist"
+            print >> sys.stderr, "compiled path is", path
+            if os.path.exists(path):
+                print >> sys.stderr, "compiled path exists"
+                print >> sys.stderr, "compiled path mtime", \
+                                     os.path.getmtime(path)
+            else:
+                print >> sys.stderr, "compiled path does not exist"
+        if not os.path.exists(path) or \
+              os.path.exists(source_path) and \
+              os.path.getmtime(source_path) > os.path.getmtime(path):
+            do_reload = True
+    if do_reload:
         if debug:
             print >> sys.stderr, "_get_target_pkg doing reload for", target_name
         module = reload(module)
+        suffix = module.__file__[-4:]
+        if suffix in ('.pyc', '.pyo'):
+            Compiled_suffix = suffix
     if getattr(module, 'target_pkg_version', None) != pyke.target_pkg_version:
         if debug:
             print >> sys.stderr, "_get_target_pkg doing invalid version for", \
