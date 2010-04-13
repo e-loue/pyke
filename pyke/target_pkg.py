@@ -115,9 +115,15 @@ class target_pkg(object):
                         # This import better work!
                         import_(self.package_name[:last_dot]).__file__)
                     if filename is not None:
-                        assert os.path.normpath(package_parent_dir) == \
-                                 os.path.normpath(
-                                   os.path.dirname(os.path.dirname(filename)))
+                        assert os.path.normpath(
+                                 os.path.abspath(package_parent_dir)) == \
+                               os.path.normpath(
+                                 os.path.dirname(os.path.dirname(filename))), \
+                          "Internal error: %r != %r" % (
+                            os.path.normpath(
+                              os.path.abspath(package_parent_dir)),
+                            os.path.normpath(
+                              os.path.dirname(os.path.dirname(filename))))
                 if debug:
                     print >> sys.stderr, "target_pkg package_parent_dir:", \
                                          package_parent_dir
