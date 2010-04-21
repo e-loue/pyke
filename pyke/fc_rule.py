@@ -50,7 +50,7 @@
 
 '''
 
-from pyke import contexts
+from pyke import contexts, fact_base
 
 import itertools
 
@@ -79,7 +79,7 @@ class fc_rule(rule):
     def register_rule(self):
         for i, (kb_name, fact_name, arg_patterns, multi_match) \
          in enumerate(self.foreach_facts):
-            self.rule_base.engine.get_kb(kb_name) \
+            self.rule_base.engine.get_kb(kb_name, fact_base.fact_base) \
                 .add_fc_rule_ref(fact_name, self, i)
 
     def reset(self):
