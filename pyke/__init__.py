@@ -1,6 +1,6 @@
 # $Id$
 
-version = '1.1'
+version = '1.1.1'
 
 compiler_version = 1
 

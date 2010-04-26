@@ -1,6 +1,6 @@
 Pyke: Python Knowledge Engine
 
-Version: 1.1
+Version: 1.1.1
 
 Both forward-chaining and backward-chaining rules (which may include python
 code) are compiled into python. Can also automatically assemble python
@@ -38,10 +38,10 @@ TO INSTALL:
     1. Download and unzip the source distribution for the version of Python
        that you want to use.
 
-       If you want to use Python 2.5 or 2.6, you need to use the pyke-1.1.zip
+       If you want to use Python 2.5 or 2.6, you need to use the pyke-1.1.1.zip
        sources.
 
-       If you want to use Python 3.x, you need to use the pyke3-1.1.zip
+       If you want to use Python 3.x, you need to use the pyke3-1.1.1.zip
        sources.
 
     2. Open a command line window in the directory above.

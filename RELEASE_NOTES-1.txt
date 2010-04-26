@@ -1,3 +1,39 @@
+1.1.1 RELEASE NOTES Apr 26, 2010
+================================
+
+This release has several bug fixes, and implements one small feature request.
+
+
+INCOMPATIBILITIES WITH 1.1 RELEASE:
+
+    - The run.py modules in the examples were renamed to driver.py so as not
+      to conflict with the "run" module in IDLE.
+
+FEATURE ENHANCEMENTS:
+
+    - Feature Request #2991566:
+      Automatically create fact bases mentioned in fc rules
+
+BUGS FIXED:
+
+The following bugs have been fixed:
+
+    - Bug #2991564: IndentationError: unindent does not match any outer indentat
+        - this fixed an obscure bug in forward-chaining rules with a forall
+          clause that has a require clause ending with a python premise.
+    - Bug #2991558: AttributeError: 'module' object has no attribute 'flags'
+        - this fixed a problem running Pyke on Python 2.5
+    - Bug #2990998: "run" module also appears in IDLE tool.
+        - it's not clear whether this fixed any problems or not w.r.t. IDLE,
+          but just in case...
+        - Also note that a bug has been reported against IDLE which prevents
+          using the __file__ idiom with the Run -> Run Module (F5) command
+          from the IDLE editor window.  See http://bugs.python.org/issue8515
+          for the status of this bug and for a patch that was submitted.
+    - Bug #2990993: Pyke goes into infinite loop on Windows
+        - this fixed a problem running Pyke on Windows
+
+
 1.1 RELEASE NOTES Mar 11, 2010
 ==============================
 

@@ -8,7 +8,7 @@ Do "hg log" to see what's changed:
 
     $ hg log -v -r .:48
 
-Prepend notes to: RELEASE_NOTES-1.0.txt
+Prepend notes to: RELEASE_NOTES-1.txt
 
 FILES TO CHANGE:
     - README.txt
@@ -45,7 +45,7 @@ UPDATE RELEASE FILES ON SOURCEFORGE:
 
     Go into the release directory
 
-    left click on RELEASE_NOTES-1.0.txt
+    left click on RELEASE_NOTES-1.txt
     check the "Release Note" checkbox
     click Save
     left click on pyke-1.0.2.tar.gz
