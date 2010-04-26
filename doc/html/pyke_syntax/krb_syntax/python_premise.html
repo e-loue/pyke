@@ -95,7 +95,7 @@ meaning is as follows:</p>
 <dd><p class="first"><em>python_exp</em> is evaluated and the result <a class="reference external" href="../../logic_programming/pattern_matching/index.html">matched</a> with <a class="reference external" href="pattern.html">pattern</a>.
 If the result does not match, the clause fails.</p>
 <p class="last">The clause always fails on <a class="reference external" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>, meaning that it only produces
-a single result (contrasted with <tt class="docutils literal"><span class="pre">in</span></tt>).</p>
+a single result (contrasted with <tt class="docutils literal">in</tt>).</p>
 </dd>
 <dt><a class="reference external" href="pattern.html">pattern</a> 'in' python_exp</dt>
 <dd><p class="first"><em>python_exp</em> is evaluated to produce a Python <em>iterable</em> and the first
@@ -121,15 +121,15 @@ python_statements ::= 'python' python_statement
 </pre>
 <p>This clause allows the inclusion of arbitrary Python statements in your
 <a class="reference external" href="../../logic_programming/rules/index.html">rules</a>.  This premise always succeeds; and then fails on <a class="reference external" href="../../logic_programming/rules/index.html#backtracking">backtracking</a>.</p>
-<p>The current <tt class="docutils literal"><span class="pre">knowledge_engine</span></tt> object is available within python_statements
-as the variable called <tt class="docutils literal"><span class="pre">engine</span></tt>.</p>
+<p>The current <tt class="docutils literal">knowledge_engine</tt> object is available within python_statements
+as the variable called <tt class="docutils literal">engine</tt>.</p>
 <div class="caution">
 <p class="first admonition-title">Caution!</p>
 <p>Always keep in mind the difference between <a class="reference external" href="pattern.html#pattern-variable">pattern variables</a> and
-<em>Python variables</em>.  Pattern variables are always indicated with a <tt class="docutils literal"><span class="pre">$</span></tt>
+<em>Python variables</em>.  Pattern variables are always indicated with a <tt class="docutils literal">$</tt>
 and are only bound to a value during inferencing.</p>
 <ol class="last arabic">
-<li><p class="first">Thus, a <tt class="docutils literal"><span class="pre">python_statement</span></tt> may not set a pattern variable.  Storing a
+<li><p class="first">Thus, a <tt class="docutils literal">python_statement</tt> may not set a pattern variable.  Storing a
 value computed by Python into a pattern variable can only be done using
 the python_premise:</p>
 <pre class="literal-block">

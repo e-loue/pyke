@@ -72,7 +72,7 @@
                 <a name="startcontent" id="startcontent"></a>
                 <div class="document" id="creating-an-inference-engine-object">
 <h1 class="title">Creating an Inference Engine Object</h1>
-<p>The <tt class="docutils literal"><span class="pre">engine</span></tt> object is your gateway into Pyke.  Each engine object manages
+<p>The <tt class="docutils literal">engine</tt> object is your gateway into Pyke.  Each engine object manages
 multiple <a class="reference external" href="../knowledge_bases/index.html">knowledge bases</a> related to accomplishing some task.</p>
 <p>You may create multiple Pyke engines, each with it's own knowledge bases to
 accomplish different disconnected tasks.</p>
@@ -88,7 +88,7 @@ your application.</p>
 files from the egg.  By including the compiled files in your application's
 distribution, you don't need to include your Pyke source files if you don't
 want to.</p>
-<p>Once you have an <tt class="docutils literal"><span class="pre">engine</span></tt> object; generally, all of the Pyke functions that
+<p>Once you have an <tt class="docutils literal">engine</tt> object; generally, all of the Pyke functions that
 you need are provided directly by this object:</p>
 <!-- this code is hidden and will set __file__ to the doc/examples directory.
 >>> import os
@@ -107,22 +107,22 @@ compiled into one or more target packages.  Multiple target packages
 would be used when more than one application wants to share a set of
 <a class="reference external" href="../knowledge_bases/index.html">knowledge bases</a>, perhaps adding some of its own knowledge that it
 compiles into its own target package.</p>
-<p>Each <tt class="docutils literal"><span class="pre">path</span></tt> argument specifies a Pyke source directory and an optional
+<p>Each <tt class="docutils literal">path</tt> argument specifies a Pyke source directory and an optional
 target package.  The source directories do not have to be Python package
 directories, but the target packages do.</p>
-<p>The target package defaults to <tt class="docutils literal"><span class="pre">.compiled_krb</span></tt>.  The leading dot (.)
+<p>The target package defaults to <tt class="docutils literal">.compiled_krb</tt>.  The leading dot (.)
 indicates that the compiled_krb directory will be subordinate to the
 lowest Python package directory on the path to the Pyke source directory.
 This uses Python's <a class="reference external" href="http://www.python.org/dev/peps/pep-0328/">relative import</a> notation, so multiple dots go up to
 higher directories (one per dot).  If the target package does not start
 with a dot, it is taken to be an absolute package path and will be located
-using Python's sys.path like a normal Python <tt class="docutils literal"><span class="pre">import</span></tt>.</p>
+using Python's sys.path like a normal Python <tt class="docutils literal">import</tt>.</p>
 <p>The Pyke source directory may be specified as a path (a string) or by
 passing a Python module.  If a module is passed, its __file__ attribute
 is used.  If the path points to a file, rather than a directory, the final
 filename is discarded.  In the simple case, when the Pyke source files are
-in the same directory as the module creating the <tt class="docutils literal"><span class="pre">engine</span></tt> object, you
-can just pass <tt class="docutils literal"><span class="pre">__file__</span></tt> as the sole argument.</p>
+in the same directory as the module creating the <tt class="docutils literal">engine</tt> object, you
+can just pass <tt class="docutils literal">__file__</tt> as the sole argument.</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
 &gt;&gt;&gt; my_engine = knowledge_engine.engine(__file__)
@@ -137,18 +137,18 @@ can just pass <tt class="docutils literal"><span class="pre">__file__</span></tt
 &gt;&gt;&gt; from doc.examples import some_module
 &gt;&gt;&gt; my_engine = knowledge_engine.engine(some_module)
 </pre>
-<p>In the all three cases, the final .py or .pyc file is stripped from the
-value of the module's __file__ attribute to get the directory that the
-package is in.  This directory will then be recursively searched for Pyke
-source files.</p>
+<p>In the all three cases, the final filename is stripped from the value of
+the module's __file__ attribute to get the directory that the package
+is in.  This directory will then be recursively searched for Pyke source
+files.</p>
 <p>If you change some of your Pyke source files, you can create a new engine
 object to compile and reload the generated Python modules without
 restarting your program.  But note that you'll need to rerun the
-<tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> calls that you made (a reason to use <a class="reference external" href="../pyke_syntax/kfb_syntax.html">.kfb files</a>
+<tt class="docutils literal">add_universal_fact</tt> calls that you made (a reason to use <a class="reference external" href="../pyke_syntax/kfb_syntax.html">.kfb files</a>
 instead).</p>
 <p>All of the compiled Python .py source files and .fbc/.qbc pickle files
 generated from each source directory are placed, by default, in a
-<tt class="docutils literal"><span class="pre">compiled_krb</span></tt> target package.  You may specify a different target
+<tt class="docutils literal">compiled_krb</tt> target package.  You may specify a different target
 package for any source directory by passing that source directory
 along with the target package name as a 2-tuple.  Thus, specifying the
 default target package explicitly would look like:</p>
@@ -160,23 +160,23 @@ default target package explicitly would look like:</p>
 if it does not already exist.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">You will probably want to add <tt class="docutils literal"><span class="pre">compiled_krb</span></tt> (or whatever you've
+<p class="last">You will probably want to add <tt class="docutils literal">compiled_krb</tt> (or whatever you've
 chosen to call it) to your source code repository's list of files to
 ignore.</p>
 </div>
 <p>If you want to distribute your application <em>without</em> the knowledge bases,
-you can use the 2-tuple notation with <tt class="docutils literal"><span class="pre">None</span></tt> as the source directory.
+you can use the 2-tuple notation with <tt class="docutils literal">None</tt> as the source directory.
 In this case, all of the Pyke source files must already be compiled,
 and Pyke will simply load these files.  Also, the target package must be
 specified in absolute form (with no leading dots).</p>
 <p>Finally, there are four optional keyword arguments that you may also pass
-to the <tt class="docutils literal"><span class="pre">engine</span></tt> constructor.  These are all booleans that default to
-<tt class="docutils literal"><span class="pre">True</span></tt>:</p>
+to the <tt class="docutils literal">engine</tt> constructor.  These are all booleans that default to
+<tt class="docutils literal">True</tt>:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">load_fb</span></tt> -- load fact bases</li>
-<li><tt class="docutils literal"><span class="pre">load_fc</span></tt> -- load forward-chaining rules</li>
-<li><tt class="docutils literal"><span class="pre">load_bc</span></tt> -- load backward-chaining rules and</li>
-<li><tt class="docutils literal"><span class="pre">load_qb</span></tt> -- load question bases</li>
+<li><tt class="docutils literal">load_fb</tt> -- load fact bases</li>
+<li><tt class="docutils literal">load_fc</tt> -- load forward-chaining rules</li>
+<li><tt class="docutils literal">load_bc</tt> -- load backward-chaining rules and</li>
+<li><tt class="docutils literal">load_qb</tt> -- load question bases</li>
 </ul>
 <p>These parameters must be passed as keyword parameters and let you
 selectively load the various kinds of compiled files.</p>
@@ -220,7 +220,7 @@ from your .krb files.</p>
 
   <div id="last-modified">
     Page last modified
-    Fri, Mar 05 2010.
+    Mon, Mar 29 2010.
 
   </div>
 

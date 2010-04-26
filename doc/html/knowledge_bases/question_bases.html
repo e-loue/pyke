@@ -86,7 +86,7 @@ the end user's answer.</p>
 <div class="section" id="kqb-files">
 <h2>KQB files</h2>
 <p>Each question base is defined by a <a class="reference external" href="../pyke_syntax/kqb_syntax.html">.kqb file</a>.  The name of each question
-base is the filename of the .kqb file (with the <tt class="docutils literal"><span class="pre">.kqb</span></tt> suffix removed).
+base is the filename of the .kqb file (with the <tt class="docutils literal">.kqb</tt> suffix removed).
 This must be a legal Python identifier.</p>
 <p>These .kqb files are compiled and loaded automatically when you create your
 <a class="reference external" href="../using_pyke/creating_engine.html">knowledge_engine.engine</a> object.</p>
@@ -100,7 +100,7 @@ question.</p>
 <div class="section" id="example">
 <h2>Example</h2>
 <p>In writing a program to diagnose car problems, you might have a
-<tt class="docutils literal"><span class="pre">user_question</span></tt> question base with questions like:</p>
+<tt class="docutils literal">user_question</tt> question base with questions like:</p>
 <pre class="literal-block">
 engine_starts($ans)
     Can you start the engine?
@@ -138,12 +138,12 @@ user_question.noise_from('under the hood', False)
 </ul>
 <p>You may write your own module to present questions to end users.  Look at the
 modules provided by Pyke for guidance.</p>
-<p>To ask a question, Pyke looks for an <tt class="docutils literal"><span class="pre">ask_module</span></tt> attribute on:</p>
+<p>To ask a question, Pyke looks for an <tt class="docutils literal">ask_module</tt> attribute on:</p>
 <ol class="arabic simple">
 <li>the question_base object, then</li>
 <li>the <a class="reference external" href="../using_pyke/creating_engine.html">knowledge_engine.engine</a> object</li>
 </ol>
-<p>If the <a class="reference external" href="../using_pyke/creating_engine.html">knowledge_engine.engine</a> object does not have an <tt class="docutils literal"><span class="pre">ask_module</span></tt>
+<p>If the <a class="reference external" href="../using_pyke/creating_engine.html">knowledge_engine.engine</a> object does not have an <tt class="docutils literal">ask_module</tt>
 attribute, ask_tty is imported (by default) and stored there.</p>
 <!-- This code is hidden.  It will add '' to sys.path, change to the doc.examples
 directory and store the directory path in __file__ for the code section
@@ -181,7 +181,7 @@ are compiled and loaded into your Python program.</p>
 </div>
 <div class="right-item"><a href="question_bases.html">Question Bases</a><p>Explanation of question bases and .kqb files.</p>
 </div>
-<div class="right-item"><a href="special.html">Special</a><p>Explanation of the <tt class="docutils literal"><span class="pre">special</span></tt> knowledge base.</p>
+<div class="right-item"><a href="special.html">Special</a><p>Explanation of the <tt class="docutils literal">special</tt> knowledge base.</p>
 </div>
 
             </div>

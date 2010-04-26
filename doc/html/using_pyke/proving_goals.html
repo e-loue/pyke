@@ -86,14 +86,14 @@
 often you just want the first answer:</p>
 <dl class="docutils">
 <dt><em>some_engine</em>.prove_1_goal(goal, **args)</dt>
-<dd><p class="first"><tt class="docutils literal"><span class="pre">goal</span></tt> is a Pyke goal (as a string).  This may include <a class="reference external" href="../logic_programming/pattern_matching/pattern_variables.html">pattern
+<dd><p class="first"><tt class="docutils literal">goal</tt> is a Pyke goal (as a string).  This may include <a class="reference external" href="../logic_programming/pattern_matching/pattern_variables.html">pattern
 variables</a> (which start with a '$').</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; my_engine.prove_1_goal('bc_related0.father_son(thomas, david, $depth)')
 ({'depth': ('grand',)}, None)
 </pre>
 <p class="last">Returns the first proof found as a 2-tuple: a dict of bindings for the
-pattern variables, and a <a class="reference external" href="../logic_programming/plans.html">plan</a>.  The plan is <tt class="docutils literal"><span class="pre">None</span></tt> if no plan was
+pattern variables, and a <a class="reference external" href="../logic_programming/plans.html">plan</a>.  The plan is <tt class="docutils literal">None</tt> if no plan was
 generated; otherwise, it is a Python function as described <a class="reference external" href="other_functions.html#running-and-pickling-plans">here</a>.</p>
 </dd>
 </dl>
@@ -108,7 +108,7 @@ the corresponding pattern variable.</p>
 &gt;&gt;&gt; sorted(vars.items(), key=lambda item: item[0])
 [('depth', ('grand',)), ('father', 'thomas'), ('son', 'david')]
 </pre>
-<p>Prove_1_goal raises <tt class="docutils literal"><span class="pre">pyke.knowledge_engine.CanNotProve</span></tt> if no proof is
+<p>Prove_1_goal raises <tt class="docutils literal">pyke.knowledge_engine.CanNotProve</tt> if no proof is
 found:</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; my_engine.prove_1_goal('bc_related0.father_son(thomas, bogus, $depth)')
@@ -120,7 +120,7 @@ CanNotProve: Can not prove bc_related0.father_son(thomas, bogus, $depth)
 <dl class="docutils">
 <dt><em>some_engine</em>.prove_goal(goal, **args)</dt>
 <dd><p class="first">This returns a context manager for a generator yielding 2-tuples, as
-above.  Unlike <tt class="docutils literal"><span class="pre">prove_1_goal</span></tt> it does not raise an exception if no
+above.  Unlike <tt class="docutils literal">prove_1_goal</tt> it does not raise an exception if no
 proof is found:</p>
 <pre class="doctest-block">
 &gt;&gt;&gt; from __future__ import with_statement
@@ -133,7 +133,7 @@ proof is found:</p>
 bruce ()
 david ('grand',)
 </pre>
-<p>Like <tt class="docutils literal"><span class="pre">prove_1_goal</span></tt>, above, <a class="reference external" href="../logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> in the <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a> may be
+<p>Like <tt class="docutils literal">prove_1_goal</tt>, above, <a class="reference external" href="../logic_programming/pattern_matching/pattern_variables.html">pattern variables</a> in the <a class="reference external" href="../logic_programming/rules/backward_chaining.html">goal</a> may be
 specified with keyword arguments:</p>
 <pre class="last doctest-block">
 &gt;&gt;&gt; with my_engine.prove_goal(
@@ -148,7 +148,7 @@ david ('grand',)
 </dl>
 <div class="section" id="compiling-goals-at-program-startup">
 <h2>Compiling Goals at Program Startup</h2>
-<p>Similar to Python's regular expression library, <tt class="docutils literal"><span class="pre">re</span></tt>, you may compile your
+<p>Similar to Python's regular expression library, <tt class="docutils literal">re</tt>, you may compile your
 goal statements once at program startup:</p>
 <blockquote>
 <pre class="doctest-block">
@@ -158,7 +158,7 @@ goal statements once at program startup:</p>
 &gt;&gt;&gt; my_goal = goal.compile('bc_related0.father_son($father, $son, $depth)')
 </pre>
 </blockquote>
-<p>Then use <tt class="docutils literal"><span class="pre">my_goal.prove_1</span></tt> and <tt class="docutils literal"><span class="pre">my_goal.prove</span></tt> as many times as you'd
+<p>Then use <tt class="docutils literal">my_goal.prove_1</tt> and <tt class="docutils literal">my_goal.prove</tt> as many times as you'd
 like:</p>
 <blockquote>
 <pre class="doctest-block">

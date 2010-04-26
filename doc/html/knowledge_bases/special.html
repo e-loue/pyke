@@ -73,13 +73,13 @@
                 <div class="document" id="special">
 <h1 class="title">Special</h1>
 <p>There is only one instance of this 'special' knowledge base, called
-<tt class="docutils literal"><span class="pre">special</span></tt>.</p>
-<p>The <tt class="docutils literal"><span class="pre">special</span></tt> knowledge base is a collection of miscellaneous helper
+<tt class="docutils literal">special</tt>.</p>
+<p>The <tt class="docutils literal">special</tt> knowledge base is a collection of miscellaneous helper
 <em>knowledge entities</em> that determine whether a statement is true or not in
 various interesting ways.</p>
 <p>Thus, each entity in this <a class="reference external" href="index.html">knowledge base</a> is a Python function that does
 something &quot;special&quot; when run.</p>
-<p>The <tt class="docutils literal"><span class="pre">special</span></tt> functions are:</p>
+<p>The <tt class="docutils literal">special</tt> functions are:</p>
 <blockquote>
 <ul class="simple">
 <li><a class="reference internal" href="#claim-goal">claim_goal</a></li>
@@ -90,7 +90,7 @@ something &quot;special&quot; when run.</p>
 </blockquote>
 <div class="section" id="claim-goal">
 <h2>Claim_goal</h2>
-<p>The <tt class="docutils literal"><span class="pre">claim_goal</span></tt> function has no arguments:</p>
+<p>The <tt class="docutils literal">claim_goal</tt> function has no arguments:</p>
 <pre class="literal-block">
 special.claim_goal()
 </pre>
@@ -112,8 +112,8 @@ n_dogs
     when
         $phrase = &quot;%d dogs&quot; % $n
 </pre>
-<p>The problem here is that both rules might be used when <tt class="docutils literal"><span class="pre">n</span></tt> is 1, but the
-second rule isn't appropriate in this case.  <tt class="docutils literal"><span class="pre">Special.claim_goal()</span></tt> may
+<p>The problem here is that both rules might be used when <tt class="docutils literal">n</tt> is 1, but the
+second rule isn't appropriate in this case.  <tt class="docutils literal">Special.claim_goal()</tt> may
 be used to fix this, as follows:</p>
 <pre class="literal-block">
 one_dog
@@ -126,22 +126,22 @@ n_dogs
     when
         $phrase = &quot;%d dogs&quot; % $n
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> prevents the second rule from being used when
-<tt class="docutils literal"><span class="pre">n</span></tt> is 1.</p>
+<p>The <tt class="docutils literal">special.claim_goal()</tt> prevents the second rule from being used when
+<tt class="docutils literal">n</tt> is 1.</p>
 </div>
 <div class="section" id="explanation">
 <h3>Explanation</h3>
-<p>When a <a class="reference external" href="../logic_programming/rules/index.html">rule</a> executes <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> in its <tt class="docutils literal"><span class="pre">when</span></tt>
+<p>When a <a class="reference external" href="../logic_programming/rules/index.html">rule</a> executes <tt class="docutils literal">special.claim_goal()</tt> in its <tt class="docutils literal">when</tt>
 clause, none of the rest of the rules will be tried for that <a class="reference external" href="../pyke_syntax/krb_syntax/bc_rule.html#use-clause">goal</a>.
-Thus, when <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is <a class="reference external" href="../logic_programming/rules/index.html#backtracking">backtracked</a> over, the goal fails
+Thus, when <tt class="docutils literal">special.claim_goal()</tt> is <a class="reference external" href="../logic_programming/rules/index.html#backtracking">backtracked</a> over, the goal fails
 immediately without trying any more rules for it.</p>
-<p>This ends up acting like an &quot;else&quot;.  You place it in the <tt class="docutils literal"><span class="pre">when</span></tt> clause
+<p>This ends up acting like an &quot;else&quot;.  You place it in the <tt class="docutils literal">when</tt> clause
 after the <a class="reference external" href="../logic_programming/rules/index.html#premises-and-conclusions">premises</a> that show that this rule <strong>must</strong> be the correct one
 to use.  Then the subsequent rules will only be tried if these premises
-fail, such that <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> is never executed.</p>
+fail, such that <tt class="docutils literal">special.claim_goal()</tt> is never executed.</p>
 <p>This means that you don't need to add extra premises in each subsequent rule
 to make sure that these premises have <strong>not</strong> occurred.</p>
-<p>Without the <tt class="docutils literal"><span class="pre">special.claim_goal()</span></tt> in the prior example, you would have to
+<p>Without the <tt class="docutils literal">special.claim_goal()</tt> in the prior example, you would have to
 write:</p>
 <pre class="literal-block">
 one_dog
@@ -169,23 +169,23 @@ Python library.</p>
 on to subprocess.Popen:</p>
 <blockquote>
 <ul class="simple">
-<li>The <tt class="docutils literal"><span class="pre">$command</span></tt> parameter (required).<ul>
+<li>The <tt class="docutils literal">$command</tt> parameter (required).<ul>
 <li>This is a tuple indicating the program to run along with its command
-line arguments, such as <tt class="docutils literal"><span class="pre">(ls,</span> <span class="pre">'-l')</span></tt>.</li>
+line arguments, such as <tt class="docutils literal">(ls, <span class="pre">'-l')</span></tt>.</li>
 </ul>
 </li>
-<li>The <tt class="docutils literal"><span class="pre">$cwd</span></tt> parameter (optional).<ul>
+<li>The <tt class="docutils literal">$cwd</tt> parameter (optional).<ul>
 <li>This specifies the <em>current working directory</em> to run the command in.</li>
-<li>If omitted or <tt class="docutils literal"><span class="pre">None</span></tt> the current working directory is not changed.</li>
+<li>If omitted or <tt class="docutils literal">None</tt> the current working directory is not changed.</li>
 </ul>
 </li>
-<li>The <tt class="docutils literal"><span class="pre">$stdin</span></tt> parameter (optional).<ul>
+<li>The <tt class="docutils literal">$stdin</tt> parameter (optional).<ul>
 <li>This is a string that is fed to the command as its stdin.<ul>
 <li>If the command expects multiple lines of input, this string must
-include embedded newlines (e.g., <tt class="docutils literal"><span class="pre">'line</span> <span class="pre">1\nline</span> <span class="pre">2\n'</span></tt>).</li>
+include embedded newlines (e.g., <tt class="docutils literal">'line 1\nline 2\n'</tt>).</li>
 </ul>
 </li>
-<li>If omitted or <tt class="docutils literal"><span class="pre">None</span></tt>, no stdin is provided to the command.</li>
+<li>If omitted or <tt class="docutils literal">None</tt>, no stdin is provided to the command.</li>
 </ul>
 </li>
 </ul>
@@ -218,7 +218,7 @@ special.command($stdout, $command [, $cwd [, $stdin]])
 </pre>
 <p>This just looks at the stdout of the command.  Any output from the command
 to stderr is unavailable.</p>
-<p>The <tt class="docutils literal"><span class="pre">$stdout</span></tt> is a tuple of lines with the trailing newlines removed.</p>
+<p>The <tt class="docutils literal">$stdout</tt> is a tuple of lines with the trailing newlines removed.</p>
 <p>This raises <a class="reference external" href="http://docs.python.org/library/subprocess.html#exceptions">subprocess.CalledProcessError</a> if the command returns a non-zero
 exit status.</p>
 <blockquote>
@@ -269,7 +269,7 @@ CalledProcessError: Command 'false' returned non-zero exit status 1
 special.general_command($output, $command [, $cwd [, $stdin]])
 </pre>
 <p>This is the fully general form that gives you all output from the command.</p>
-<p>The <tt class="docutils literal"><span class="pre">$output</span></tt> is a three tuple: (exit_status, stdout, stderr).  Both stdout
+<p>The <tt class="docutils literal">$output</tt> is a three tuple: (exit_status, stdout, stderr).  Both stdout
 and stderr are single strings (with embedded newlines).</p>
 <blockquote>
 <pre class="doctest-block">
@@ -306,7 +306,7 @@ are compiled and loaded into your Python program.</p>
 </div>
 <div class="right-item"><a href="question_bases.html">Question Bases</a><p>Explanation of question bases and .kqb files.</p>
 </div>
-<div class="right-item"><a href="special.html">Special</a><p>Explanation of the <tt class="docutils literal"><span class="pre">special</span></tt> knowledge base.</p>
+<div class="right-item"><a href="special.html">Special</a><p>Explanation of the <tt class="docutils literal">special</tt> knowledge base.</p>
 </div>
 
             </div>

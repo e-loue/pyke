@@ -106,7 +106,7 @@ the plan).</p>
 </div>
 <div class="section" id="tracing-rules">
 <h2>Tracing Rules</h2>
-<p>Individual rules may be traced to aid in debugging.  The <tt class="docutils literal"><span class="pre">trace</span></tt> function
+<p>Individual rules may be traced to aid in debugging.  The <tt class="docutils literal">trace</tt> function
 takes two arguments: the rule base name, and the name of the rule to trace:</p>
 <blockquote>
 <pre class="doctest-block">
@@ -118,7 +118,7 @@ bc_related0.grand_father_son succeeded with ('thomas', 'david', ('grand',))
 </pre>
 </blockquote>
 <p>This can be done either before or after rule base activation and will remain
-in effect until you call <tt class="docutils literal"><span class="pre">untrace</span></tt>:</p>
+in effect until you call <tt class="docutils literal">untrace</tt>:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; my_engine.untrace('bc_related0', 'grand_father_son')
@@ -133,7 +133,7 @@ in effect until you call <tt class="docutils literal"><span class="pre">untrace<
 line numbers to the <a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb file</a> rule names, lines and line numbers in a
 Python traceback.  This makes it much easier to read the tracebacks that occur
 during proofs.</p>
-<p>The <tt class="docutils literal"><span class="pre">krb_traceback</span></tt> module has exactly the same functions as the standard
+<p>The <tt class="docutils literal">krb_traceback</tt> module has exactly the same functions as the standard
 Python <a class="reference external" href="http://docs.python.org/library/traceback.html">traceback</a> module, but they convert the generated Python function
 information into .krb file information.  They also delete the intervening
 Python functions between subgoal proofs.</p>
@@ -181,19 +181,19 @@ KeyError: '$bar not bound'
 <p>There are a few more functions that may be useful in special situations.</p>
 <dl class="docutils">
 <dt><em>some_engine</em>.add_case_specific_fact(kb_name, fact_name, args)</dt>
-<dd>This is an alternate to the <tt class="docutils literal"><span class="pre">assert_</span></tt> function.</dd>
+<dd>This is an alternate to the <tt class="docutils literal">assert_</tt> function.</dd>
 <dt><em>some_engine</em>.get_kb(kb_name)</dt>
-<dd>Finds and returns the <a class="reference external" href="../knowledge_bases/index.html">knowledge base</a> by the name <tt class="docutils literal"><span class="pre">kb_name</span></tt>.  Raises
-<tt class="docutils literal"><span class="pre">KeyError</span></tt> if not found.  Note that for <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>, this returns the
-active <a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a> where <tt class="docutils literal"><span class="pre">kb_name</span></tt> is the <a class="reference external" href="../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name.
+<dd>Finds and returns the <a class="reference external" href="../knowledge_bases/index.html">knowledge base</a> by the name <tt class="docutils literal">kb_name</tt>.  Raises
+<tt class="docutils literal">KeyError</tt> if not found.  Note that for <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a>, this returns the
+active <a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a> where <tt class="docutils literal">kb_name</tt> is the <a class="reference external" href="../knowledge_bases/rule_bases.html#rule-base-categories">rule base category</a> name.
 Thus, not all <a class="reference external" href="../knowledge_bases/rule_bases.html">rule bases</a> are accessible through this call.</dd>
 <dt><em>some_engine</em>.get_rb(rb_name)</dt>
-<dd>Finds and returns the <a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a> by the name <tt class="docutils literal"><span class="pre">rb_name</span></tt>.  Raises
-<tt class="docutils literal"><span class="pre">KeyError</span></tt> if not found.  This works for any <a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a>, whether it
+<dd>Finds and returns the <a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a> by the name <tt class="docutils literal">rb_name</tt>.  Raises
+<tt class="docutils literal">KeyError</tt> if not found.  This works for any <a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a>, whether it
 is <a class="reference external" href="../knowledge_bases/rule_bases.html#rule-base-activation">active</a> or not.</dd>
 <dt><em>some_engine</em>.print_stats([f = sys.stdout])</dt>
-<dd>Prints a brief set of statistics for each knowledge base to file <tt class="docutils literal"><span class="pre">f</span></tt>.
-These are reset by the <tt class="docutils literal"><span class="pre">reset</span></tt> function.  This will show how many facts
+<dd>Prints a brief set of statistics for each knowledge base to file <tt class="docutils literal">f</tt>.
+These are reset by the <tt class="docutils literal">reset</tt> function.  This will show how many facts
 were asserted, and counts of how many forward-chaining rules were fired
 and rerun, as well as counts of how many backward-chaining goals were
 tried, and how many backward-chaining rules matched, succeeded and failed.

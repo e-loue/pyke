@@ -73,15 +73,15 @@
 <h1 class="title">KQB Syntax</h1>
 <p>This uses a different lexical structure than <a class="reference external" href="index.html#lexical-structure">KRB files</a>.  Textual parameter
 substitution is done with the standard Python <a class="reference external" href="http://docs.python.org/library/string.html#template-strings">string.Template</a> class, which
-specifies parameters with a <tt class="docutils literal"><span class="pre">$</span></tt>, much like <a class="reference external" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a>.  In the
+specifies parameters with a <tt class="docutils literal">$</tt>, much like <a class="reference external" href="krb_syntax/pattern.html#pattern-variable">pattern variables</a>.  In the
 following descriptions, substitution parameters are acted upon in
-<tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>, but not in <tt class="docutils literal"><span class="pre">TEXT</span></tt>.</p>
-<p>The name of the <a class="reference external" href="../knowledge_bases/question_bases.html">question base</a> is simple the filename with the <tt class="docutils literal"><span class="pre">.kqb</span></tt>
+<tt class="docutils literal">PARAMETRIZED_TEXT</tt>, but not in <tt class="docutils literal">TEXT</tt>.</p>
+<p>The name of the <a class="reference external" href="../knowledge_bases/question_bases.html">question base</a> is simple the filename with the <tt class="docutils literal">.kqb</tt>
 suffix stripped.  This must be a valid Python identifier.</p>
 <div class="section" id="parametrized-text">
 <h2>PARAMETRIZED_TEXT</h2>
-<p><tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> may span multiple lines.  Each subsequent line must
-be indented at least as much as the first character of <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>
+<p><tt class="docutils literal">PARAMETRIZED_TEXT</tt> may span multiple lines.  Each subsequent line must
+be indented at least as much as the first character of <tt class="docutils literal">PARAMETRIZED_TEXT</tt>
 on the first line.  Line breaks and indentation are preserved.  So syntax
 like:</p>
 <pre class="literal-block">
@@ -97,7 +97,7 @@ match '!' PARAMETRIZED_TEXT
 
           - what do you think?
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> here would be:</p>
+<p>The <tt class="docutils literal">PARAMETRIZED_TEXT</tt> here would be:</p>
 <pre class="literal-block">
 This is the start of the
 parametrized text.
@@ -127,12 +127,12 @@ question ::= IDENTIFIER '(' [{parameter,}] ')' NL INDENT
 parameter ::= '$' IDENTIFIER
 </pre>
 <p>Each question has a name and a fixed number of parameters.  This is followed
-by one or more lines of <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> that will be presented as the
+by one or more lines of <tt class="docutils literal">PARAMETRIZED_TEXT</tt> that will be presented as the
 question to answer.  These are terminated by a line containing only <tt class="docutils literal"><span class="pre">---</span></tt>.</p>
 <p>One of the parameters is designated as the <em>answer</em> parameter on the line
 immediately following the terminating <tt class="docutils literal"><span class="pre">---</span></tt>.  This is the only parameter
 that may be unbound when a rule uses this question.</p>
-<p>For example, the file <tt class="docutils literal"><span class="pre">user_questions.kqb</span></tt> might contain:</p>
+<p>For example, the file <tt class="docutils literal">user_questions.kqb</tt> might contain:</p>
 <pre class="literal-block">
 ate($meal, $ans)
     Did you eat $meal?
@@ -151,7 +151,7 @@ user_questions.ate(lunch, False)
 <pre class="literal-block">
 user_questions.ate($meal, False)
 </pre>
-<p>There are several different kinds of <tt class="docutils literal"><span class="pre">question_types</span></tt>, each corresponding to
+<p>There are several different kinds of <tt class="docutils literal">question_types</tt>, each corresponding to
 a different way that the user might answer the question:</p>
 <pre class="literal-block">
 question_type ::= yn_type
@@ -162,9 +162,9 @@ question_type ::= yn_type
                 | select_1_type
                 | select_n_type
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">integer_type</span></tt>, <tt class="docutils literal"><span class="pre">number_type</span></tt>, <tt class="docutils literal"><span class="pre">float_type</span></tt> and <tt class="docutils literal"><span class="pre">string_type</span></tt> may
+<p>The <tt class="docutils literal">integer_type</tt>, <tt class="docutils literal">number_type</tt>, <tt class="docutils literal">float_type</tt> and <tt class="docutils literal">string_type</tt> may
 include a <a class="reference internal" href="#match">match</a> to force the user to enter a sensible answer.</p>
-<p>All of these may also include a <a class="reference internal" href="#review">review</a>, which is just <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>
+<p>All of these may also include a <a class="reference internal" href="#review">review</a>, which is just <tt class="docutils literal">PARAMETRIZED_TEXT</tt>
 that will be displayed when the user's answer matches a certain <a class="reference internal" href="#match">match</a> value.</p>
 <p>Question_type links:</p>
 <ul class="simple">
@@ -216,7 +216,7 @@ hours_since_last_meal($ans)
 number_type ::= 'number' ['(' match ')'] NL [review]
 </pre>
 <p>The user enters either an integer or a floating point number.  If the user
-enters an integer, a Python <tt class="docutils literal"><span class="pre">int</span></tt> is returned.  Otherwise a Python <tt class="docutils literal"><span class="pre">float</span></tt>
+enters an integer, a Python <tt class="docutils literal">int</tt> is returned.  Otherwise a Python <tt class="docutils literal">float</tt>
 is returned.</p>
 <p>If the <a class="reference internal" href="#match">match</a> is specified, the number must match it or the user is asked
 to try again.</p>
@@ -235,7 +235,7 @@ miles_to($dest, $ans)
 float_type ::= 'float' ['(' match ')'] NL [review]
 </pre>
 <p>The user enters an integer or a floating point number.  But the answer
-returned is always a Python <tt class="docutils literal"><span class="pre">float</span></tt>.</p>
+returned is always a Python <tt class="docutils literal">float</tt>.</p>
 <p>If the <a class="reference internal" href="#match">match</a> is specified, the number must match it or the user is asked
 to try again.</p>
 <p>Example:</p>
@@ -267,11 +267,11 @@ users_name($name)
 <div class="section" id="match">
 <h2>Match</h2>
 <p>There are several kinds of simple_matches that may be or-ed together with
-<tt class="docutils literal"><span class="pre">|</span></tt>:</p>
+<tt class="docutils literal">|</tt>:</p>
 <pre class="literal-block">
 match ::= simple_match {'|' simple_match}
 </pre>
-<p>The match succeeds if any of the <tt class="docutils literal"><span class="pre">simple_matches</span></tt> succeed.</p>
+<p>The match succeeds if any of the <tt class="docutils literal">simple_matches</tt> succeed.</p>
 <pre class="literal-block">
 simple_match ::= '(' match ')'
                | [ STRING ] [ '[' TEXT ']' ] '/' REGEXP_TEXT '/'
@@ -328,7 +328,7 @@ simple_match ::= value '=' simple_match
 </pre>
 <p>The '=' means &quot;substituted for&quot;.  The <a class="reference internal" href="#match">match</a> fails if the match after the '='
 fails.  Otherwise it returns the value before the '=' rather than what the
-user entered.  Note that you can or (<tt class="docutils literal"><span class="pre">|</span></tt>) several of these together to
+user entered.  Note that you can or (<tt class="docutils literal">|</tt>) several of these together to
 translate several different matched values.</p>
 <p>Example:</p>
 <pre class="literal-block">
@@ -358,10 +358,10 @@ STRING.  These are mostly used in reviews.</p>
 <pre class="literal-block">
 review ::= {match '!' PARAMETRIZED_TEXT NL}
 </pre>
-<p>All of the <tt class="docutils literal"><span class="pre">reviews</span></tt> must be at the same indent level.</p>
+<p>All of the <tt class="docutils literal">reviews</tt> must be at the same indent level.</p>
 <p>The review is applied after the answer has been validated (validation possibly
 changes the value).</p>
-<p>Each <a class="reference internal" href="#match">match</a> is checked and all of the matching review's <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt>
+<p>Each <a class="reference internal" href="#match">match</a> is checked and all of the matching review's <tt class="docutils literal">PARAMETRIZED_TEXT</tt>
 messages are displayed to the user.</p>
 <p>Examples:</p>
 <pre class="literal-block">
@@ -390,7 +390,7 @@ following:
 >>> import os
 >>> os.chdir("../../examples")
 >>> __file__ = os.getcwd() -->
-<p>Asking <tt class="docutils literal"><span class="pre">stupid_question</span></tt> and answering &quot;y&quot; to it:</p>
+<p>Asking <tt class="docutils literal">stupid_question</tt> and answering &quot;y&quot; to it:</p>
 <pre class="literal-block">
 &gt;&gt;&gt; from pyke import knowledge_engine
 
@@ -475,16 +475,16 @@ problems($list)
 <pre class="literal-block">
 alternatives ::= {value ':' PARAMETRIZED_TEXT NL [alt_review]}
 </pre>
-<p>All of the <tt class="docutils literal"><span class="pre">alternatives</span></tt> must be at the same indent level.</p>
-<p>The user only sees the <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> values.  The <tt class="docutils literal"><span class="pre">value</span></tt>
-associated with the selected <tt class="docutils literal"><span class="pre">PARAMETRIZED_TEXT</span></tt> is returned (but the user
-never sees it).  The <tt class="docutils literal"><span class="pre">value</span></tt> <em>tags</em> the alternative.</p>
+<p>All of the <tt class="docutils literal">alternatives</tt> must be at the same indent level.</p>
+<p>The user only sees the <tt class="docutils literal">PARAMETRIZED_TEXT</tt> values.  The <tt class="docutils literal">value</tt>
+associated with the selected <tt class="docutils literal">PARAMETRIZED_TEXT</tt> is returned (but the user
+never sees it).  The <tt class="docutils literal">value</tt> <em>tags</em> the alternative.</p>
 <pre class="literal-block">
 alt_review ::= '!' '=' value NL
              | '!' PARAMETRIZED_TEXT NL
 </pre>
 <p>Each alternative may have it's own review associated with it.</p>
-<p>The <tt class="docutils literal"><span class="pre">'!'</span> <span class="pre">'='</span> <span class="pre">value</span></tt> form uses the same review text as the previous
+<p>The <tt class="docutils literal">'!' '=' value</tt> form uses the same review text as the previous
 alternative with that <em>tag</em>.  Note that this can not refer forward to a
 following alternative.</p>
 <p>The second form specifies the review text for this alternative directly.</p>

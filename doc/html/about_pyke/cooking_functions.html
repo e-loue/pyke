@@ -95,20 +95,20 @@ foo called with cooked: a, standard: b
 </blockquote>
 <p>But your real intention is that it appear to be a function taking one
 parameter, with the first parameter cooked in.</p>
-<p>This is done with the <tt class="docutils literal"><span class="pre">partial</span></tt> class of the <a class="reference external" href="http://docs.python.org/library/functools.html">functools</a> module in the
+<p>This is done with the <tt class="docutils literal">partial</tt> class of the <a class="reference external" href="http://docs.python.org/library/functools.html">functools</a> module in the
 standard Python library.</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; from functools import partial
 </pre>
 </blockquote>
-<p>And then using <tt class="docutils literal"><span class="pre">partial</span></tt> to cook the first parameter:</p>
+<p>And then using <tt class="docutils literal">partial</tt> to cook the first parameter:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; cooked1 = partial(foo, 'cooked_value1')
 </pre>
 </blockquote>
-<p>Now <tt class="docutils literal"><span class="pre">cooked_foo</span></tt> is a function that takes one parameter:</p>
+<p>Now <tt class="docutils literal">cooked_foo</tt> is a function that takes one parameter:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; cooked1('value1')
@@ -155,7 +155,7 @@ subordinate function a cooked parameter:</p>
 ...     return child_fun(a)
 </pre>
 </blockquote>
-<p>And now you can cook which function <tt class="docutils literal"><span class="pre">bar</span></tt> calls the same way you cook any
+<p>And now you can cook which function <tt class="docutils literal">bar</tt> calls the same way you cook any
 other parameter:</p>
 <blockquote>
 <pre class="doctest-block">
@@ -195,12 +195,12 @@ bar called with: (3, 2, 5)
 <p>In general, you may want to cook several values for each function.  Some of
 these values may specify which subordinate functions to call, others may just
 fix certain constant values for the function.</p>
-<p>Pyke does this using a single extra parameter called <tt class="docutils literal"><span class="pre">context</span></tt>, which is a
+<p>Pyke does this using a single extra parameter called <tt class="docutils literal">context</tt>, which is a
 read-only dictionary.  It can then prepare this dictionary with as many values
 as it needs and then cook the whole dictionary into the function using
-<tt class="docutils literal"><span class="pre">partial</span></tt>.</p>
+<tt class="docutils literal">partial</tt>.</p>
 <p>Pyke translates each individual access to a cooked parameter into a dictionary
-lookup on <tt class="docutils literal"><span class="pre">context</span></tt> that looks up that parameter name:</p>
+lookup on <tt class="docutils literal">context</tt> that looks up that parameter name:</p>
 <pre class="literal-block">
 context['parameter_name']
 </pre>

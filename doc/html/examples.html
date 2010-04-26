@@ -72,12 +72,12 @@ sys.path for the code section following:
 >>> os.chdir("../..")  # get out of documents directory back to root dir
 >>> os.chdir("examples/towers_of_hanoi") -->
 <p>Several examples are included to help you become familiar with Pyke.  These
-are all in an <tt class="docutils literal"><span class="pre">examples</span></tt> directory:</p>
+are all in an <tt class="docutils literal">examples</tt> directory:</p>
 <pre class="literal-block">
 $ cd examples/towers_of_hanoi
 $ python
-&gt;&gt;&gt; import run
-&gt;&gt;&gt; run.test(2)
+&gt;&gt;&gt; import driver
+&gt;&gt;&gt; driver.test(2)
 got 1: ((0, 1), (0, 2), (1, 2))
 got 2: ((0, 2), (0, 1), (2, 0), (1, 2), (0, 2))
 </pre>
@@ -107,7 +107,7 @@ run 100 times faster!</li>
 <li>A mix of forward-chaining and backward-chaining with some use of <a class="reference external" href="logic_programming/plans.html">plans</a> added
 too.</li>
 </ul>
-<p>The run.py program also demonstrates how to use <a class="reference external" href="using_pyke/other_functions.html#krb-traceback">krb_traceback</a> and the
+<p>The driver.py program also demonstrates how to use <a class="reference external" href="using_pyke/other_functions.html#krb-traceback">krb_traceback</a> and the
 <a class="reference external" href="using_pyke/other_functions.html#miscellaneous">print_stats</a> function.</p>
 </div>
 <div class="section" id="knapsack">
@@ -138,9 +138,9 @@ between tables A and B (1 A row has many B rows), the B table inherits the
 columns from the A table through it's link to table A.  The Pyke rules will
 automatically figure out the table joins for this.</p>
 <p>The program automatically introspects the schema information.  For this
-example, it assumes that <tt class="docutils literal"><span class="pre">id</span></tt> is the primary key for each table, and that
+example, it assumes that <tt class="docutils literal">id</tt> is the primary key for each table, and that
 when one table links to another, it uses the target table name suffixed with
-<tt class="docutils literal"><span class="pre">_id</span></tt> as the column name.</p>
+<tt class="docutils literal">_id</tt> as the column name.</p>
 <p>This example was originally done using <a class="reference external" href="http://www.mysql.com/">MySQL</a> and includes the .sql files to
 create the database, tables, and example data.  The example has since been
 converted to use the Sqlite3 database to make it easier to run, as Sqlite3
@@ -155,8 +155,8 @@ and is a very real example of generating <a class="reference external" href="log
 <h2>Web_framework</h2>
 <p>This example completes the Python web framework demo by adding rules to
 automatically generate code to render HTML templates from the <a class="reference external" href="http://py-templates.sourceforge.net/htmltemplate/index.html">HTMLTemplate</a>
-package (you can run <tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">HTMLTemplate</span></tt> or <tt class="docutils literal"><span class="pre">easy_install</span>
-<span class="pre">HTMLTemplate</span></tt> to install the HTMLTemplate package).  This example uses the
+package (you can run <tt class="docutils literal">pip install HTMLTemplate</tt> or <tt class="docutils literal">easy_install
+HTMLTemplate</tt> to install the HTMLTemplate package).  This example uses the
 <a class="reference external" href="examples.html#sqlgen">sqlgen</a> example, above, to generate the SQL statements.</p>
 <p>An HTMLTemplate does not include anything resembling program code in it, so
 that your graphics designers can completely own the html files without the
@@ -224,7 +224,7 @@ into named repositories called <em>knowledge bases</em>.</p>
 
   <div id="last-modified">
     Page last modified
-    Fri, Mar 05 2010.
+    Mon, Mar 29 2010.
 
   </div>
 

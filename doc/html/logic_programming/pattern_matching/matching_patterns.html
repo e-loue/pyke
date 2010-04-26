@@ -134,14 +134,14 @@ of storing <em>variables</em> within its data structures.</p>
 </div>
 <div class="section" id="pathological-question">
 <h2>Pathological Question</h2>
-<p>What is the bound value of pattern variable <tt class="docutils literal"><span class="pre">$y</span></tt> after matching the
+<p>What is the bound value of pattern variable <tt class="docutils literal">$y</tt> after matching the
 following two tuple patterns:</p>
 <blockquote>
 <dl class="docutils">
 <dt>Tuple pattern A:</dt>
-<dd><tt class="docutils literal"><span class="pre">((ho,</span> <span class="pre">$_,</span> <span class="pre">($a,</span> <span class="pre">$a)),</span> <span class="pre">($a,</span> <span class="pre">$a,</span> <span class="pre">$b),</span> <span class="pre">($a,</span> <span class="pre">*$b))</span></tt></dd>
+<dd><tt class="docutils literal">((ho, $_, ($a, <span class="pre">$a)),</span> ($a, $a, $b), ($a, *$b))</tt></dd>
 <dt>Tuple pattern B:</dt>
-<dd><tt class="docutils literal"><span class="pre">($x,</span> <span class="pre">$x,</span> <span class="pre">$y)</span></tt></dd>
+<dd><tt class="docutils literal">($x, $x, $y)</tt></dd>
 </dl>
 </blockquote>
 <p>The answer is <a class="reference external" href="pathological_answer.html">here</a> (but no peeking!).</p>

@@ -81,7 +81,7 @@
 >>> my_engine = knowledge_engine.engine(__file__) -->
 <dl class="docutils">
 <dt><em>some_engine</em>.add_universal_fact(kb_name, fact_name, arguments)</dt>
-<dd><p class="first">The <tt class="docutils literal"><span class="pre">add_universal_fact</span></tt> function is called once per <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">fact</a>.  These
+<dd><p class="first">The <tt class="docutils literal">add_universal_fact</tt> function is called once per <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">fact</a>.  These
 <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">facts</a> are never deleted and apply to all <em>cases</em>.</p>
 <p>Alternatively, you can place universal facts in a <a class="reference external" href="../pyke_syntax/kfb_syntax.html">.kfb file</a> so that
 they are loaded automatically.</p>
@@ -99,11 +99,11 @@ they are loaded automatically.</p>
 son_of('bruce', 'thomas')
 son_of('david', 'bruce')
 </pre>
-<p class="last">These facts are accessed as <tt class="docutils literal"><span class="pre">kb_name.fact_name(arguments)</span></tt> within the
+<p class="last">These facts are accessed as <tt class="docutils literal">kb_name.fact_name(arguments)</tt> within the
 <a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb files</a>.</p>
 </dd>
 <dt><em>some_engine</em>.assert_(kb_name, fact_name, arguments)</dt>
-<dd><p class="first">Call <tt class="docutils literal"><span class="pre">assert_</span></tt> for each starting <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">fact</a> for this case.  Like universal
+<dd><p class="first">Call <tt class="docutils literal">assert_</tt> for each starting <a class="reference external" href="../knowledge_bases/fact_bases.html#facts">fact</a> for this case.  Like universal
 facts, you may have multiple facts with the same name so long as they
 have different arguments.</p>
 <pre class="doctest-block">
@@ -123,7 +123,7 @@ son_of('david', 'bruce')
 </pre>
 <p>There is no difference within the <a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb files</a> of how universal facts
 verses case specific facts are used.  The only difference between the two
-types of facts is that the case specific facts are deleted when a <tt class="docutils literal"><span class="pre">reset</span></tt>
+types of facts is that the case specific facts are deleted when a <tt class="docutils literal">reset</tt>
 is done.</p>
 <pre class="last doctest-block">
 &gt;&gt;&gt; my_engine.reset()

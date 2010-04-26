@@ -81,51 +81,51 @@
                 <div class="document" id="pattern-variables">
 <h1 class="title">Pattern Variables</h1>
 <p>To take this to the next level, you might want to ask &quot;Who are the sons of
-Thomas and Norma?&quot;.  In this case, you are passing <tt class="docutils literal"><span class="pre">Thomas</span></tt> and <tt class="docutils literal"><span class="pre">Norma</span></tt>
+Thomas and Norma?&quot;.  In this case, you are passing <tt class="docutils literal">Thomas</tt> and <tt class="docutils literal">Norma</tt>
 <em>into</em> Pyke, and you'd like Pyke to pass something back <em>out</em> to you as part of
 the answer (in addition to the thumbs up).</p>
-<p>Pattern variables serve as output parameters.  They start with a <tt class="docutils literal"><span class="pre">$</span></tt>:</p>
+<p>Pattern variables serve as output parameters.  They start with a <tt class="docutils literal">$</tt>:</p>
 <pre class="literal-block">
 family.son_of($son, Thomas, Norma)
 </pre>
-<p>You can use whatever name you like after the <tt class="docutils literal"><span class="pre">$</span></tt>.  Pyke will answer with a
-thumbs up <em>binding</em> <tt class="docutils literal"><span class="pre">$son</span></tt> to <tt class="docutils literal"><span class="pre">Bruce</span></tt>.  If you don't like that answer, you
+<p>You can use whatever name you like after the <tt class="docutils literal">$</tt>.  Pyke will answer with a
+thumbs up <em>binding</em> <tt class="docutils literal">$son</tt> to <tt class="docutils literal">Bruce</tt>.  If you don't like that answer, you
 can reject that answer and ask Pyke for another answer (&quot;nope, try again!&quot;).
 Each time Pyke finds another son for Thomas and Norma, it answers with another
-thumbs up and <tt class="docutils literal"><span class="pre">$son</span></tt> <em>bound</em> to a different value.</p>
-<p>If you reject the last son of <tt class="docutils literal"><span class="pre">Thomas</span></tt> and <tt class="docutils literal"><span class="pre">Norma</span></tt> (or if <tt class="docutils literal"><span class="pre">Thomas</span></tt> and
-<tt class="docutils literal"><span class="pre">Norma</span></tt> have no sons in the first place), Pyke will answer with a thumbs
+thumbs up and <tt class="docutils literal">$son</tt> <em>bound</em> to a different value.</p>
+<p>If you reject the last son of <tt class="docutils literal">Thomas</tt> and <tt class="docutils literal">Norma</tt> (or if <tt class="docutils literal">Thomas</tt> and
+<tt class="docutils literal">Norma</tt> have no sons in the first place), Pyke will answer with a thumbs
 down.</p>
-<p>We say that Pyke <em>binds</em> <tt class="docutils literal"><span class="pre">Bruce</span></tt> to the pattern variable <tt class="docutils literal"><span class="pre">$son</span></tt> when it
+<p>We say that Pyke <em>binds</em> <tt class="docutils literal">Bruce</tt> to the pattern variable <tt class="docutils literal">$son</tt> when it
 comes back with its first thumbs up.  When we tell Pyke &quot;nope, try again!&quot;,
-Pyke must first <em>unbind</em> <tt class="docutils literal"><span class="pre">$son</span></tt> before it can go on and <em>bind</em> it to the
+Pyke must first <em>unbind</em> <tt class="docutils literal">$son</tt> before it can go on and <em>bind</em> it to the
 next value.  The &quot;nope&quot; part does the <em>unbinding</em>, and the &quot;try again&quot; part
 does the <em>binding</em> again to a new value.</p>
 <p>So at any point in time, a pattern variable is either <em>bound</em> to a value or
 <em>unbound</em>.  If we follow a particular pattern variable through time, we might
 see that it is alternately bound and unbound many times as Pyke tries to find
 a suitable answer to your question.  Specifically, when Pyke comes back with
-the final thumbs down, <tt class="docutils literal"><span class="pre">$son</span></tt> is unbound.</p>
+the final thumbs down, <tt class="docutils literal">$son</tt> is unbound.</p>
 <div class="section" id="anonymous-pattern-variables">
 <h2>Anonymous Pattern Variables</h2>
 <p>Suppose we want to know who Norma's sons are?  In this case we don't care
 about the father.  We use <em>anonymous variables</em> as &quot;don't care&quot; placeholders.</p>
 <p>An anonymous variable is any pattern variable who's name starts with an
-underscore (<tt class="docutils literal"><span class="pre">_</span></tt>).  The rest of the name doesn't matter and just serves as
-documentation (and so <tt class="docutils literal"><span class="pre">$_</span></tt> is all that's strictly needed).</p>
+underscore (<tt class="docutils literal">_</tt>).  The rest of the name doesn't matter and just serves as
+documentation (and so <tt class="docutils literal">$_</tt> is all that's strictly needed).</p>
 <p>So &quot;Who are Norma's sons?&quot; looks like:</p>
 <pre class="literal-block">
 family.son_of($son, $_father, Norma)
 </pre>
-<p>We're giving Norma as input to Pyke, and asking for the <tt class="docutils literal"><span class="pre">$son</span></tt> as output and
-telling Pyke that we don't care about the <tt class="docutils literal"><span class="pre">$_father</span></tt>.</p>
+<p>We're giving Norma as input to Pyke, and asking for the <tt class="docutils literal">$son</tt> as output and
+telling Pyke that we don't care about the <tt class="docutils literal">$_father</tt>.</p>
 <p>Anonymous variables are never bound to values.  (So you could say that they
 are always unbound).</p>
 </div>
 <div class="section" id="pattern-variable-identity">
 <h2>Pattern Variable Identity</h2>
 <p>Now this is very important, so pay attention!  The same pattern variable
-<em>name</em> means the same <em>pattern variable</em>.  Thus, if you say <tt class="docutils literal"><span class="pre">$son</span></tt> twice,
+<em>name</em> means the same <em>pattern variable</em>.  Thus, if you say <tt class="docutils literal">$son</tt> twice,
 it's the <em>same</em> pattern variable.  And, a pattern variable can only be bound
 to one value (at a time), so you mean the <em>same</em> data value must appear in
 both places.</p>

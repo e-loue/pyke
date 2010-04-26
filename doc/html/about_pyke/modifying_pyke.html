@@ -100,14 +100,14 @@ sourceforge.</p>
 <h3>Mercurial Keyword Extension</h3>
 <p>The Pyke sources use the Mercurial <a class="reference external" href="http://mercurial.selenic.com/wiki/KeywordExtension">Keyword Extension</a> as a holdover from
 when the repository used Subversion rather than Mercurial.</p>
-<p>The <tt class="docutils literal"><span class="pre">hgrc_keywords</span></tt> file has been provided to enable and configure this
+<p>The <tt class="docutils literal">hgrc_keywords</tt> file has been provided to enable and configure this
 extension for Pyke use.  You can append this file to either your personal
 .hgrc configuration file (which would then apply to all of your Mercurial
 projects) or the project .hg/hgrc file (see <a class="reference external" href="http://www.selenic.com/mercurial/hgrc.5.html">hgrc</a> in the Mercurial wiki).</p>
-<p>If you use a <tt class="docutils literal"><span class="pre">post-clone</span></tt> <a class="reference external" href="http://www.selenic.com/mercurial/hgrc.5.html#hooks">Mercurial hook</a>, or append <tt class="docutils literal"><span class="pre">hgrc_keywords</span></tt>
+<p>If you use a <tt class="docutils literal"><span class="pre">post-clone</span></tt> <a class="reference external" href="http://www.selenic.com/mercurial/hgrc.5.html#hooks">Mercurial hook</a>, or append <tt class="docutils literal">hgrc_keywords</tt>
 manually after cloning, the keywords won't be expanded properly when the
 project is first cloned.  But they will be expanded properly if the clone is
-done with the -U option and then an <tt class="docutils literal"><span class="pre">hg</span> <span class="pre">update</span></tt> done in the newly cloned
+done with the -U option and then an <tt class="docutils literal">hg update</tt> done in the newly cloned
 repository (after the changes to .hg/hgrc have been made).</p>
 <p>The keyword expansions are only used by the tools that generate the html
 documentation (see <a class="reference external" href="modifying_pyke.html#rebuilding-the-html-documentation">Rebuilding the HTML Documentation</a>, below).</p>
@@ -144,26 +144,26 @@ of Pyke.</p>
 <p class="first admonition-title">Warning</p>
 <p>This code is maintained in a state just prior to running Python's
 <a class="reference external" href="http://docs.python.org/library/2to3.html">2to3</a> tool on it.  So you can't just run the code here directly.</p>
-<p>The <tt class="docutils literal"><span class="pre">run_2to3</span></tt> script runs 2to3 on the current copy of the sources.  Do
+<p>The <tt class="docutils literal">run_2to3</tt> script runs 2to3 on the current copy of the sources.  Do
 <strong>not</strong> run this in a repository clone that you still want to use to do
 commits!  Instead, commit all of your changes, then clone the repository
-and do <tt class="docutils literal"><span class="pre">run_2to3</span></tt> in the clone.  If anything doesn't work, go back to
+and do <tt class="docutils literal">run_2to3</tt> in the clone.  If anything doesn't work, go back to
 the first repository to fix it, delete the clone, and repeat the whole
 process.  This was done to minimize merge conflicts caused by the 2to3
 changes.</p>
-<p>The <tt class="docutils literal"><span class="pre">run_pre_test</span></tt> script will:</p>
+<p>The <tt class="docutils literal">run_pre_test</tt> script will:</p>
 <ul class="simple">
 <li>clone the current repository</li>
 <li>then in the clone do:<ul>
-<li><tt class="docutils literal"><span class="pre">run_2to3</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">testpyke</span></tt> -3.1</li>
+<li><tt class="docutils literal">run_2to3</tt></li>
+<li><tt class="docutils literal">testpyke</tt> -3.1</li>
 <li>python setup.py -q sdist --formats zip</li>
 <li>insert '3' after 'pyke' in the name of the source distribution zip
 file.</li>
 </ul>
 </li>
 </ul>
-<p class="last"><tt class="docutils literal"><span class="pre">Run_pre_test</span></tt> assumes that you either have the keywording options set
+<p class="last"><tt class="docutils literal">Run_pre_test</tt> assumes that you either have the keywording options set
 in your personal .hgrc file, or have clone hooks in place to copy these
 into the .hg/hgrc file of all clones within your pyke work area.  See
 <a class="reference internal" href="#mercurial-keyword-extension">Mercurial Keyword Extension</a>, above.</p>
@@ -172,12 +172,12 @@ into the .hg/hgrc file of all clones within your pyke work area.  See
 <dt>pre_2to3</dt>
 <dd>Normally I merge changes from the pyke repository and the pre_2to3_r1
 repository into pre_2to3 so that nothing needs to be done in this repository.
-Most major new features would be developed in the <tt class="docutils literal"><span class="pre">pyke</span></tt> repository and
+Most major new features would be developed in the <tt class="docutils literal">pyke</tt> repository and
 merged into pre_2to3.  Making changes to pre_2to3 directly would only be
 done when those changes are for major new features that only apply to the
 Python3.x version of Pyke.</dd>
 </dl>
-<p>So, for example, if you wanted to work on the <tt class="docutils literal"><span class="pre">release_1</span></tt> repository, you
+<p>So, for example, if you wanted to work on the <tt class="docutils literal">release_1</tt> repository, you
 would:</p>
 <pre class="literal-block">
 $ mkdir pyke_repos
@@ -222,7 +222,7 @@ $ testall.py
 <div class="section" id="compiling-the-compiler-krb-file">
 <h2>Compiling the Compiler.krb File</h2>
 <p>Pyke uses itself to compile your <a class="reference external" href="../knowledge_bases/rule_bases.html">rule base</a> sources (<a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb</a> files) into
-Python source (<tt class="docutils literal"><span class="pre">.py</span></tt>) files.</p>
+Python source (<tt class="docutils literal">.py</tt>) files.</p>
 <p>The knowledge base file that Pyke uses for this is
 pyke/krb_compiler/compiler.krb.  This gets compiled into compiler_bc.py, which
 is stored in the source code repository.</p>
@@ -259,10 +259,10 @@ True
 <h2>Running Unit Tests</h2>
 <p>The <a class="reference external" href="http://code.google.com/p/doctest-tools/">doctest-tools</a> package is required to run the unit tests (see
 <a class="reference external" href="installing_pyke.html#other-required-packages">Other Required Packages</a> for more details).</p>
-<p>The <tt class="docutils literal"><span class="pre">testall.py</span></tt> and <tt class="docutils literal"><span class="pre">testdoc.py</span></tt> scripts from <tt class="docutils literal"><span class="pre">doctest-tools</span></tt> can be run
+<p>The <tt class="docutils literal">testall.py</tt> and <tt class="docutils literal">testdoc.py</tt> scripts from <tt class="docutils literal"><span class="pre">doctest-tools</span></tt> can be run
 anywhere.</p>
-<p>In addition, the top-level directory contains a <tt class="docutils literal"><span class="pre">testpyke</span></tt> script that will
-delete all of the compiled_krb directories, then run <tt class="docutils literal"><span class="pre">testall.py</span></tt> twice.  The
+<p>In addition, the top-level directory contains a <tt class="docutils literal">testpyke</tt> script that will
+delete all of the compiled_krb directories, then run <tt class="docutils literal">testall.py</tt> twice.  The
 first run must recompile all of the <a class="reference external" href="../knowledge_bases/index.html">knowledge base</a> sources (<a class="reference external" href="../pyke_syntax/krb_syntax/index.html">.krb</a>,
 <a class="reference external" href="../pyke_syntax/kfb_syntax.html">.kfb</a> and <a class="reference external" href="../pyke_syntax/kqb_syntax.html">.kqb</a> files) into the compiled_krb directories in order to run
 the tests.  The second run reuses the files compiled in the first run.  This
@@ -271,11 +271,11 @@ knowledge base sources or not.</p>
 </div>
 <div class="section" id="rebuilding-the-html-documentation">
 <h2>Rebuilding the HTML Documentation</h2>
-<p>The <tt class="docutils literal"><span class="pre">doc/html</span></tt> directory contains all of the documents that you are reading
+<p>The <tt class="docutils literal">doc/html</tt> directory contains all of the documents that you are reading
 now.  These are ready to browse directly from your hard drive if you'd like.</p>
 <p>The documentation is generated using the <a class="reference external" href="http://sourceforge.net/projects/rest2web">rest2web</a> package, which uses
 <a class="reference external" href="http://sourceforge.net/projects/docutils">docutils</a> (see <a class="reference external" href="installing_pyke.html#other-required-packages">Other Required Packages</a> for more details).</p>
-<p>The sources for the documentation are in <tt class="docutils literal"><span class="pre">doc/source</span></tt>.  Each .txt file there
+<p>The sources for the documentation are in <tt class="docutils literal">doc/source</tt>.  Each .txt file there
 is converted into an .html file in the doc/html directory by running:</p>
 <pre class="literal-block">
 $ cd doc/source
@@ -284,8 +284,8 @@ $ bin/gen_html
 <p>This takes about 9 seconds.  It:</p>
 <ol class="arabic simple">
 <li>Temporarily appends hyperlink references onto all of the *.txt files.</li>
-<li>Runs <tt class="docutils literal"><span class="pre">r2w</span></tt> to regenerate the files in <tt class="docutils literal"><span class="pre">doc/html</span></tt><ul>
-<li>except for those in <tt class="docutils literal"><span class="pre">doc/html/stylesheets</span></tt> and <tt class="docutils literal"><span class="pre">doc/html/images</span></tt>.</li>
+<li>Runs <tt class="docutils literal">r2w</tt> to regenerate the files in <tt class="docutils literal">doc/html</tt><ul>
+<li>except for those in <tt class="docutils literal">doc/html/stylesheets</tt> and <tt class="docutils literal">doc/html/images</tt>.</li>
 </ul>
 </li>
 <li>Strips all of the hyperlink references from the *.txt files.</li>
@@ -299,9 +299,9 @@ Extension</a>.  See <a class="reference internal" href="#mercurial-keyword-exten
 </div>
 <p>I've gone ahead and placed the generated html files in the source repository
 so that you can browse the documentation locally without having to run
-<tt class="docutils literal"><span class="pre">bin/gen_html</span></tt>.  So you only need these procedures if you change the
+<tt class="docutils literal">bin/gen_html</tt>.  So you only need these procedures if you change the
 documentation (i.e., change the .txt files in doc/source).</p>
-<p>To test all of the code examples in the documents, use the <tt class="docutils literal"><span class="pre">testall.py</span></tt>
+<p>To test all of the code examples in the documents, use the <tt class="docutils literal">testall.py</tt>
 command from the <a class="reference external" href="http://code.google.com/p/doctest-tools/">doctest-tools</a> package:</p>
 <pre class="literal-block">
 $ cd doc/source

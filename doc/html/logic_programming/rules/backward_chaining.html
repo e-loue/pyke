@@ -165,14 +165,14 @@ one statement in the <em>use</em> clause.</p>
 with the addition of the <em>brothers</em>, <em>uncle_nephew</em> and <em>cousins</em> rules.</p>
 </div>
 <p>We can draw something similar to a function call graph with these rules:</p>
-<div align="center" class="figure">
+<div class="figure align-center">
 <img alt="../../images/bc_rules.png" src="../../images/bc_rules.png" style="width: 509.0px; height: 583.0px;" />
 <p class="caption">Example Rules</p>
 </div>
 <p>These <a class="reference external" href="index.html">rules</a> are not used until you ask Pyke to <a class="reference external" href="../../using_pyke/proving_goals.html">prove</a> a goal.</p>
 <p>The easiest way to do this is with <em>some_engine.prove_1_goal</em> or
 <em>some_engine.prove_goal</em>.  <a class="reference external" href="../../using_pyke/proving_goals.html">Prove_1_goal</a> only returns the first proof found
-and then stops (or raises <tt class="docutils literal"><span class="pre">pyke.knowledge_engine.CanNotProve</span></tt>).  <a class="reference external" href="../../using_pyke/proving_goals.html">Prove_goal</a>
+and then stops (or raises <tt class="docutils literal">pyke.knowledge_engine.CanNotProve</tt>).  <a class="reference external" href="../../using_pyke/proving_goals.html">Prove_goal</a>
 returns a context manager for a generator that generates all possible proofs
 (which, in some cases, might be infinite).</p>
 <p>Both functions return the <a class="reference external" href="../pattern_matching/pattern_variables.html">pattern variable</a> variable bindings, along with
@@ -180,15 +180,15 @@ the <a class="reference external" href="../plans.html">plan</a>.</p>
 </div>
 <div class="section" id="backtracking-with-backward-chaining-rules">
 <h2>Backtracking with Backward-Chaining Rules</h2>
-<p>For this example, these are the starting set of <tt class="docutils literal"><span class="pre">family2</span></tt> facts:</p>
+<p>For this example, these are the starting set of <tt class="docutils literal">family2</tt> facts:</p>
 <pre class="literal-block">
 1  son_of(tim, thomas)
 2  son_of(fred, thomas)
 3  son_of(bruce, thomas)
 4  son_of(david, bruce)
 </pre>
-<p>And we want to know who fred's nephews are.  So we'd ask <tt class="docutils literal"><span class="pre">uncle_nephew(fred,</span>
-<span class="pre">$nephew,</span> <span class="pre">$prefix)</span></tt>.</p>
+<p>And we want to know who fred's nephews are.  So we'd ask <tt class="docutils literal">uncle_nephew(fred,
+$nephew, $prefix)</tt>.</p>
 <p>Here are the steps (in parenthesis) in the inferencing up until the first
 failure is encountered (with the line number from the example preceding each
 line):</p>
@@ -222,7 +222,7 @@ has tried 3 different rules and they have all failed (5.1, 5.2 and 5.3).</p>
 <p>If you think of the rules as functions, the situation now looks like this
 (the step numbers that succeeded circled in black, and steps that failed
 circled in red):</p>
-<div align="center" class="figure">
+<div class="figure align-center">
 <img alt="../../images/bc_backtracking.png" src="../../images/bc_backtracking.png" style="width: 590.0px; height: 465.0px;" />
 <p class="caption">We Need to Backtrack!</p>
 </div>
@@ -232,14 +232,14 @@ the steps from all rules into one list.  Thus, when step 5 fails, Pyke backs
 up to step 4 and tries to find another solution to that step.</p>
 <p>If another solution is found, Pyke proceeds forward again from that point.  If
 no other solutions are found, Pyke backs up another step.</p>
-<p>When Pyke goes back to step 4, the next solution binds <tt class="docutils literal"><span class="pre">$son</span></tt> to <tt class="docutils literal"><span class="pre">fred</span></tt>.
-This fails the subsequent check in the <tt class="docutils literal"><span class="pre">brothers</span></tt> rule:</p>
+<p>When Pyke goes back to step 4, the next solution binds <tt class="docutils literal">$son</tt> to <tt class="docutils literal">fred</tt>.
+This fails the subsequent check in the <tt class="docutils literal">brothers</tt> rule:</p>
 <pre class="literal-block">
 20          check $brother1 != $brother2
 </pre>
-<p>And so Pyke goes back to step 4 once again.  The next solution binds <tt class="docutils literal"><span class="pre">$son</span></tt>
-to <tt class="docutils literal"><span class="pre">bruce</span></tt>.  This succeeds for <tt class="docutils literal"><span class="pre">brother</span></tt> and is passed down to
-<tt class="docutils literal"><span class="pre">father_son</span></tt> which returns <tt class="docutils literal"><span class="pre">david</span></tt> as <tt class="docutils literal"><span class="pre">fred's</span></tt> nephew.</p>
+<p>And so Pyke goes back to step 4 once again.  The next solution binds <tt class="docutils literal">$son</tt>
+to <tt class="docutils literal">bruce</tt>.  This succeeds for <tt class="docutils literal">brother</tt> and is passed down to
+<tt class="docutils literal">father_son</tt> which returns <tt class="docutils literal">david</tt> as <tt class="docutils literal">fred's</tt> nephew.</p>
 <p>Further backtracking reveals no other solutions.</p>
 <div class="section" id="backtracking-summary">
 <h3>Backtracking Summary</h3>
@@ -247,7 +247,7 @@ to <tt class="docutils literal"><span class="pre">bruce</span></tt>.  This succe
 <ol class="arabic simple">
 <li>The <a class="reference external" href="index.html#backtracking">backtracking</a> algorithm: &quot;<strong>fail</strong> goes <em>up</em> (or <em>back</em>) while
 <strong>success</strong> goes <em>down</em> (or <em>forward</em>)&quot; is not limited to the steps within a
-<em>single</em> rule's <tt class="docutils literal"><span class="pre">when</span></tt> clause; but includes the <em>entire</em> chain of
+<em>single</em> rule's <tt class="docutils literal">when</tt> clause; but includes the <em>entire</em> chain of
 inferencing from the very start of trying to prove the top level goal.</li>
 <li>This execution model is not available within traditional programming
 languages like Python.</li>
@@ -276,12 +276,12 @@ following:
 <p>Nothing happens this time when we activate the rule base, because there are no
 forward-chaining rules here.</p>
 <p>We want to ask the question: &quot;Who are Fred's nephews?&quot;.  This translates
-into the Pyke statement: <tt class="docutils literal"><span class="pre">bc_related.uncle_nephew(fred,</span> <span class="pre">$v1,</span> <span class="pre">$v2)</span></tt>.</p>
+into the Pyke statement: <tt class="docutils literal">bc_related.uncle_nephew(fred, $v1, $v2)</tt>.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
-<p class="last">Note that we're using the name of the rule base, <tt class="docutils literal"><span class="pre">bc_related</span></tt> rather than
-the fact base, <tt class="docutils literal"><span class="pre">family2</span></tt> here; because we expect this answer to come from
-the <tt class="docutils literal"><span class="pre">bc_related</span></tt> rule base.</p>
+<p class="last">Note that we're using the name of the rule base, <tt class="docutils literal">bc_related</tt> rather than
+the fact base, <tt class="docutils literal">family2</tt> here; because we expect this answer to come from
+the <tt class="docutils literal">bc_related</tt> rule base.</p>
 </div>
 <p>This is 'bc_related', 'uncle_nephew', with ('fred',) followed by 2 pattern
 variables as arguments:</p>

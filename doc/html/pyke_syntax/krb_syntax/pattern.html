@@ -88,7 +88,7 @@ pattern ::= 'None' | 'True' | 'False'
           | '(' [{pattern,}] ['*' variable] ')'
 </pre>
 <p>IDENTIFIER acts like a STRING here, meaning that it is taken as a literal
-value.  All variables in patterns must be preceded by a <tt class="docutils literal"><span class="pre">$</span></tt>.</p>
+value.  All variables in patterns must be preceded by a <tt class="docutils literal">$</tt>.</p>
 <p>Pyke does not currently support complex NUMBERS (for no good reason -- email
 me if you need them).</p>
 </div>
@@ -98,7 +98,7 @@ me if you need them).</p>
 <pre class="literal-block">
 variable ::= '$'IDENTIFIER
 </pre>
-<p>The variable must not have a space between the <tt class="docutils literal"><span class="pre">$</span></tt> and the <tt class="docutils literal"><span class="pre">IDENTIFIER</span></tt>.</p>
+<p>The variable must not have a space between the <tt class="docutils literal">$</tt> and the <tt class="docutils literal">IDENTIFIER</tt>.</p>
 </div>
 <div class="section" id="anonymous-variable">
 <h2>Anonymous Variable</h2>
@@ -110,10 +110,10 @@ used to document the use of the anonymous variable.</p>
 </div>
 <div class="section" id="rest-variable">
 <h2>Rest Variable</h2>
-<p>The <tt class="docutils literal"><span class="pre">*variable</span></tt> at the end of a tuple pattern will match the rest of the
-tuple.  Thus, <tt class="docutils literal"><span class="pre">variable</span></tt> is <em>always</em> bound to a (possibly empty) tuple.</p>
+<p>The <tt class="docutils literal">*variable</tt> at the end of a tuple pattern will match the rest of the
+tuple.  Thus, <tt class="docutils literal">variable</tt> is <em>always</em> bound to a (possibly empty) tuple.</p>
 <p>The syntax is taken from rest parameter syntax in Python function definitions.
-The difference here is that the variable needs a <tt class="docutils literal"><span class="pre">$</span></tt> on it.</p>
+The difference here is that the variable needs a <tt class="docutils literal">$</tt> on it.</p>
 <p>You may use either a named variable or an anonymous variable here.</p>
 <!-- ADD_LINKS MARKER -->
 </div>

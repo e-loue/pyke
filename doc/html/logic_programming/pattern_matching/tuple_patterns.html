@@ -86,7 +86,7 @@ separated list of patterns within parenthesis:</p>
 (1, $x, &quot;buckle my shoe&quot;)
 </pre>
 <p>You can also write a <em>rest</em> pattern variable at the end using an asterisk
-(<tt class="docutils literal"><span class="pre">*</span></tt>):</p>
+(<tt class="docutils literal">*</tt>):</p>
 <pre class="literal-block">
 ($a, fie, $b, *$c)
 </pre>
@@ -96,24 +96,24 @@ tuple.</p>
 <p>Examples:</p>
 <blockquote>
 <ul class="simple">
-<li>matching <tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">$x,</span> <span class="pre">&quot;buckle</span> <span class="pre">my</span> <span class="pre">shoe&quot;)</span></tt> to <tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">&quot;buckle</span> <span class="pre">my</span> <span class="pre">shoe&quot;)</span></tt>
-matches, binding <tt class="docutils literal"><span class="pre">$x</span></tt> to 2.</li>
-<li>matching <tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">$x,</span> <span class="pre">&quot;buckle</span> <span class="pre">my</span> <span class="pre">shoe&quot;)</span></tt> to <tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">&quot;buckle</span> <span class="pre">my</span> <span class="pre">belt&quot;)</span></tt>
+<li>matching <tt class="docutils literal">(1, $x, &quot;buckle my shoe&quot;)</tt> to <tt class="docutils literal">(1, 2, &quot;buckle my shoe&quot;)</tt>
+matches, binding <tt class="docutils literal">$x</tt> to 2.</li>
+<li>matching <tt class="docutils literal">(1, $x, &quot;buckle my shoe&quot;)</tt> to <tt class="docutils literal">(1, 2, &quot;buckle my belt&quot;)</tt>
 does not match because the third pattern within the tuple pattern fails
 to match the third value in the matched tuple.</li>
-<li>matching <tt class="docutils literal"><span class="pre">($a,</span> <span class="pre">fie,</span> <span class="pre">$b,</span> <span class="pre">*$c)</span></tt> to <tt class="docutils literal"><span class="pre">(fee,</span> <span class="pre">fie,</span> <span class="pre">foe,</span> <span class="pre">fum)</span></tt>
-matches, binding <tt class="docutils literal"><span class="pre">$a</span></tt> to <tt class="docutils literal"><span class="pre">fee</span></tt>, <tt class="docutils literal"><span class="pre">$b</span></tt> to <tt class="docutils literal"><span class="pre">foe</span></tt> and <tt class="docutils literal"><span class="pre">$c</span></tt> to
-<tt class="docutils literal"><span class="pre">(fum)</span></tt>.</li>
-<li>matching <tt class="docutils literal"><span class="pre">($a,</span> <span class="pre">fie,</span> <span class="pre">$b,</span> <span class="pre">*$c)</span></tt> to <tt class="docutils literal"><span class="pre">(fee,</span> <span class="pre">fie,</span> <span class="pre">foe)</span></tt>
-matches, binding <tt class="docutils literal"><span class="pre">$a</span></tt> to <tt class="docutils literal"><span class="pre">fee</span></tt>, <tt class="docutils literal"><span class="pre">$b</span></tt> to <tt class="docutils literal"><span class="pre">foe</span></tt> and <tt class="docutils literal"><span class="pre">$c</span></tt> to
-<tt class="docutils literal"><span class="pre">()</span></tt>.</li>
-<li>matching <tt class="docutils literal"><span class="pre">($a,</span> <span class="pre">fie,</span> <span class="pre">$b,</span> <span class="pre">*$c)</span></tt> to <tt class="docutils literal"><span class="pre">(fee,</span> <span class="pre">fie)</span></tt> does not match because
+<li>matching <tt class="docutils literal">($a, fie, $b, *$c)</tt> to <tt class="docutils literal">(fee, fie, foe, fum)</tt>
+matches, binding <tt class="docutils literal">$a</tt> to <tt class="docutils literal">fee</tt>, <tt class="docutils literal">$b</tt> to <tt class="docutils literal">foe</tt> and <tt class="docutils literal">$c</tt> to
+<tt class="docutils literal">(fum)</tt>.</li>
+<li>matching <tt class="docutils literal">($a, fie, $b, *$c)</tt> to <tt class="docutils literal">(fee, fie, foe)</tt>
+matches, binding <tt class="docutils literal">$a</tt> to <tt class="docutils literal">fee</tt>, <tt class="docutils literal">$b</tt> to <tt class="docutils literal">foe</tt> and <tt class="docutils literal">$c</tt> to
+<tt class="docutils literal">()</tt>.</li>
+<li>matching <tt class="docutils literal">($a, fie, $b, *$c)</tt> to <tt class="docutils literal">(fee, fie)</tt> does not match because
 the data value has to have a length of at least three.</li>
 </ul>
 </blockquote>
 <div class="hint">
 <p class="first admonition-title">Hint</p>
-<p class="last">You can use <tt class="docutils literal"><span class="pre">(*$foo)</span></tt> to only match a tuple.  It will bind <tt class="docutils literal"><span class="pre">$foo</span></tt> to
+<p class="last">You can use <tt class="docutils literal"><span class="pre">(*$foo)</span></tt> to only match a tuple.  It will bind <tt class="docutils literal">$foo</tt> to
 the entire tuple, but will fail to match any other data type.</p>
 </div>
 <!-- ADD_LINKS MARKER -->

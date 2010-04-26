@@ -83,14 +83,14 @@
 <p>This is the answer to the following question:</p>
 <div class="section" id="pathological-question">
 <h2>Pathological Question</h2>
-<p>What is the bound value of pattern variable <tt class="docutils literal"><span class="pre">$y</span></tt> after matching the
+<p>What is the bound value of pattern variable <tt class="docutils literal">$y</tt> after matching the
 following two tuple patterns:</p>
 <blockquote>
 <dl class="docutils">
 <dt>Tuple pattern A:</dt>
-<dd><tt class="docutils literal"><span class="pre">((ho,</span> <span class="pre">$_,</span> <span class="pre">($a,</span> <span class="pre">$a)),</span> <span class="pre">($a,</span> <span class="pre">$a,</span> <span class="pre">$b),</span> <span class="pre">($a,</span> <span class="pre">*$b))</span></tt></dd>
+<dd><tt class="docutils literal">((ho, $_, ($a, <span class="pre">$a)),</span> ($a, $a, $b), ($a, *$b))</tt></dd>
 <dt>Tuple pattern B:</dt>
-<dd><tt class="docutils literal"><span class="pre">($x,</span> <span class="pre">$x,</span> <span class="pre">$y)</span></tt></dd>
+<dd><tt class="docutils literal">($x, $x, $y)</tt></dd>
 </dl>
 </blockquote>
 </div>
@@ -99,42 +99,42 @@ following two tuple patterns:</p>
 <p>Let's take this step by step, matching each element of the two tuple patterns
 in turn.</p>
 <ol class="arabic">
-<li><p class="first">Match <tt class="docutils literal"><span class="pre">(ho,</span> <span class="pre">$_,</span> <span class="pre">($a,</span> <span class="pre">$a))</span></tt> to <tt class="docutils literal"><span class="pre">$x</span></tt>.</p>
+<li><p class="first">Match <tt class="docutils literal">(ho, $_, ($a, $a))</tt> to <tt class="docutils literal">$x</tt>.</p>
 <p>This succeeds with the following binding:</p>
 <dl class="docutils">
-<dt><tt class="docutils literal"><span class="pre">$x</span></tt>:</dt>
-<dd><p class="first last"><tt class="docutils literal"><span class="pre">(ho,</span> <span class="pre">$_,</span> <span class="pre">($a,</span> <span class="pre">$a))</span></tt></p>
+<dt><tt class="docutils literal">$x</tt>:</dt>
+<dd><p class="first last"><tt class="docutils literal">(ho, $_, ($a, $a))</tt></p>
 </dd>
 </dl>
 </li>
-<li><p class="first">Match <tt class="docutils literal"><span class="pre">($a,</span> <span class="pre">$a,</span> <span class="pre">$b)</span></tt> to <tt class="docutils literal"><span class="pre">$x</span></tt>.</p>
-<p>Because <tt class="docutils literal"><span class="pre">$x</span></tt> is bound to a value, this becomes the same as matching:</p>
+<li><p class="first">Match <tt class="docutils literal">($a, $a, $b)</tt> to <tt class="docutils literal">$x</tt>.</p>
+<p>Because <tt class="docutils literal">$x</tt> is bound to a value, this becomes the same as matching:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">($a,</span> <span class="pre">$a,</span> <span class="pre">$b)</span></tt> to</li>
-<li><tt class="docutils literal"><span class="pre">(ho,</span> <span class="pre">$_,</span> <span class="pre">($a,</span> <span class="pre">$a))</span></tt></li>
+<li><tt class="docutils literal">($a, $a, $b)</tt> to</li>
+<li><tt class="docutils literal">(ho, $_, ($a, $a))</tt></li>
 </ul>
 <p>Which succeeds, binding:</p>
 <dl class="docutils">
-<dt><tt class="docutils literal"><span class="pre">$a</span></tt>:</dt>
-<dd><p class="first last"><tt class="docutils literal"><span class="pre">ho</span></tt></p>
+<dt><tt class="docutils literal">$a</tt>:</dt>
+<dd><p class="first last"><tt class="docutils literal">ho</tt></p>
 </dd>
-<dt><tt class="docutils literal"><span class="pre">$b</span></tt>:</dt>
-<dd><p class="first last"><tt class="docutils literal"><span class="pre">($a,</span> <span class="pre">$a)</span></tt></p>
+<dt><tt class="docutils literal">$b</tt>:</dt>
+<dd><p class="first last"><tt class="docutils literal">($a, $a)</tt></p>
 </dd>
 </dl>
-<p><tt class="docutils literal"><span class="pre">$_</span></tt> is an anonymous variable, so it is not bound (or bound to).</p>
+<p><tt class="docutils literal">$_</tt> is an anonymous variable, so it is not bound (or bound to).</p>
 </li>
-<li><p class="first">Match <tt class="docutils literal"><span class="pre">($a,</span> <span class="pre">*$b)</span></tt> to <tt class="docutils literal"><span class="pre">$y</span></tt>.</p>
-<p>Because both <tt class="docutils literal"><span class="pre">$a</span></tt> and <tt class="docutils literal"><span class="pre">$b</span></tt> have bound values, this becomes the same as
+<li><p class="first">Match <tt class="docutils literal">($a, *$b)</tt> to <tt class="docutils literal">$y</tt>.</p>
+<p>Because both <tt class="docutils literal">$a</tt> and <tt class="docutils literal">$b</tt> have bound values, this becomes the same as
 matching:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">(ho,</span> <span class="pre">ho,</span> <span class="pre">ho)</span></tt> to</li>
-<li><tt class="docutils literal"><span class="pre">$y</span></tt></li>
+<li><tt class="docutils literal">(ho, ho, ho)</tt> to</li>
+<li><tt class="docutils literal">$y</tt></li>
 </ul>
 <p>Which succeeds, binding:</p>
 <dl class="docutils">
-<dt><tt class="docutils literal"><span class="pre">$y</span></tt>:</dt>
-<dd><p class="first last"><tt class="docutils literal"><span class="pre">(ho,</span> <span class="pre">ho,</span> <span class="pre">ho)</span></tt></p>
+<dt><tt class="docutils literal">$y</tt>:</dt>
+<dd><p class="first last"><tt class="docutils literal">(ho, ho, ho)</tt></p>
 </dd>
 </dl>
 </li>
@@ -142,17 +142,17 @@ matching:</p>
 <p>So the overall match succeeds with the following bindings:</p>
 <blockquote>
 <dl class="docutils">
-<dt><tt class="docutils literal"><span class="pre">$x</span></tt>:</dt>
-<dd><tt class="docutils literal"><span class="pre">(ho,</span> <span class="pre">$_,</span> <span class="pre">($a,</span> <span class="pre">$a))</span></tt></dd>
-<dt><tt class="docutils literal"><span class="pre">$a</span></tt>:</dt>
-<dd><tt class="docutils literal"><span class="pre">ho</span></tt></dd>
-<dt><tt class="docutils literal"><span class="pre">$b</span></tt>:</dt>
-<dd><tt class="docutils literal"><span class="pre">($a,</span> <span class="pre">$a)</span></tt></dd>
-<dt><tt class="docutils literal"><span class="pre">$y</span></tt>:</dt>
-<dd><tt class="docutils literal"><span class="pre">(ho,</span> <span class="pre">ho,</span> <span class="pre">ho)</span></tt></dd>
+<dt><tt class="docutils literal">$x</tt>:</dt>
+<dd><tt class="docutils literal">(ho, $_, ($a, $a))</tt></dd>
+<dt><tt class="docutils literal">$a</tt>:</dt>
+<dd><tt class="docutils literal">ho</tt></dd>
+<dt><tt class="docutils literal">$b</tt>:</dt>
+<dd><tt class="docutils literal">($a, $a)</tt></dd>
+<dt><tt class="docutils literal">$y</tt>:</dt>
+<dd><tt class="docutils literal">(ho, ho, ho)</tt></dd>
 </dl>
 </blockquote>
-<p>And so <tt class="docutils literal"><span class="pre">$y</span></tt> is <tt class="docutils literal"><span class="pre">(ho,</span> <span class="pre">ho,</span> <span class="pre">ho)</span></tt>!</p>
+<p>And so <tt class="docutils literal">$y</tt> is <tt class="docutils literal">(ho, ho, ho)</tt>!</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">If you got this right, you should really be using Pyke!</p>

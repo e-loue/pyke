@@ -201,10 +201,10 @@ following:
 ...     'plan_example.transfer((bruce, checking), (bruce, savings))')
 </pre>
 </blockquote>
-<p><tt class="docutils literal"><span class="pre">plan1</span></tt> is now a program to transfer X amount
+<p><tt class="docutils literal">plan1</tt> is now a program to transfer X amount
 from 'bruce', 'checking' to 'bruce', 'savings'.  Using the above rule names
 as function names, plan1 looks like this:</p>
-<div align="center" class="figure">
+<div class="figure align-center">
 <img alt="../images/plan1.png" src="../images/plan1.png" style="width: 187.0px; height: 118.0px;" />
 <p class="caption">Plan1</p>
 </div>
@@ -226,7 +226,7 @@ withdraw 50 from bruce checking
 deposit 50 to bruce savings
 </pre>
 </blockquote>
-<p>Notice the strings: <tt class="docutils literal"><span class="pre">bruce</span></tt>, <tt class="docutils literal"><span class="pre">checking</span></tt> and <tt class="docutils literal"><span class="pre">savings</span></tt> in the output.
+<p>Notice the strings: <tt class="docutils literal">bruce</tt>, <tt class="docutils literal">checking</tt> and <tt class="docutils literal">savings</tt> in the output.
 These were specified as <a class="reference external" href="pattern_matching/pattern_variables.html">pattern variables</a> in the code and are <a class="reference external" href="../about_pyke/cooking_functions.html">cooked</a>
 into the plan along with the function call graph.</p>
 <p>Let's create a second program:</p>
@@ -238,10 +238,10 @@ into the plan along with the function call graph.</p>
 ...                           '(my_other_bank, bruce, savings))')
 </pre>
 </blockquote>
-<p><tt class="docutils literal"><span class="pre">plan2</span></tt> is now a program to transfer X amount
+<p><tt class="docutils literal">plan2</tt> is now a program to transfer X amount
 from 'my_other_bank', 'bruce', 'checking' to 'bruce', 'savings'.
 Plan2 looks like this:</p>
-<div align="center" class="figure">
+<div class="figure align-center">
 <img alt="../images/plan2.png" src="../images/plan2.png" style="width: 187.0px; height: 195.0px;" />
 <p class="caption">Plan2</p>
 </div>
@@ -268,7 +268,7 @@ deposit 150 to bruce savings
 </pre>
 </blockquote>
 <p>Plan3 looks like this:</p>
-<div align="center" class="figure">
+<div class="figure align-center">
 <img alt="../images/plan3.png" src="../images/plan3.png" style="width: 264.0px; height: 198.0px;" />
 <p class="caption">Plan3</p>
 </div>

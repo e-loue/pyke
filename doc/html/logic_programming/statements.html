@@ -88,7 +88,7 @@ relationship between these three things:</p>
 son_of(Bruce, Thomas, Norma)
 </pre>
 <p>We can give these condensed sentence structures any names that we want.  In
-this case, I chose <tt class="docutils literal"><span class="pre">son_of</span></tt>.  I might have also chosen &quot;parents_of&quot;, which
+this case, I chose <tt class="docutils literal">son_of</tt>.  I might have also chosen &quot;parents_of&quot;, which
 might conjure the following English sentence:</p>
 <pre class="literal-block">
 &quot;The parents of Bruce are Thomas (his father) and Norma (his mother).&quot;
@@ -97,13 +97,13 @@ might conjure the following English sentence:</p>
 <pre class="literal-block">
 &quot;Bruce's parents are Thomas (his father) and Norma (his mother).&quot;
 </pre>
-<p>But the <tt class="docutils literal"><span class="pre">son_of</span></tt> form carries the additional information that Bruce is a son
+<p>But the <tt class="docutils literal">son_of</tt> form carries the additional information that Bruce is a son
 rather than a daughter.  So this is the form used in the family_relations
 example.</p>
 <div class="caution">
 <p class="first admonition-title">Caution!</p>
 <p class="last">Statements are not functions!
-When we wear our Python hats, <tt class="docutils literal"><span class="pre">son_of(Bruce,</span> <span class="pre">Thomas,</span> <span class="pre">Norma)</span></tt> looks like a
+When we wear our Python hats, <tt class="docutils literal">son_of(Bruce, Thomas, Norma)</tt> looks like a
 function call!  We might expect that it can be executed to <em>do</em> something
 and possibly return a value.  But when we wear our Pyke hats, this is just
 a statement, or a piece of data.  It doesn't <em>do</em> anything and it <strong>never</strong>
@@ -131,7 +131,7 @@ son_of(Bruce, Thomas, Norma)
 son_of(Bruce, Thomas, Norma)
 </pre>
 <p>Finally, we see that the position of each argument is important.  In our
-<tt class="docutils literal"><span class="pre">son_of</span></tt> example, the meaning of each argument is:</p>
+<tt class="docutils literal">son_of</tt> example, the meaning of each argument is:</p>
 <pre class="literal-block">
 son_of(son, father, mother)
 </pre>
@@ -160,8 +160,8 @@ bases; and beneath each knowledge base, one level of statements.</p>
 </div>
 <p>So statements have three components:</p>
 <ol class="arabic simple">
-<li>The name of a knowledge base.  For example, <tt class="docutils literal"><span class="pre">family</span></tt>.</li>
-<li>The name of a <em>knowledge entity</em>.  For example, <tt class="docutils literal"><span class="pre">son_of</span></tt>.</li>
+<li>The name of a knowledge base.  For example, <tt class="docutils literal">family</tt>.</li>
+<li>The name of a <em>knowledge entity</em>.  For example, <tt class="docutils literal">son_of</tt>.</li>
 <li>The statement arguments.  These are just Python data.  Currently in Pyke,
 there is a push for these arguments to be immutable.</li>
 </ol>
@@ -172,7 +172,7 @@ statement ::= IDENTIFIER '.' IDENTIFIER '(' {argument,} ')'
 <div class="section" id="knowledge-base">
 <h3>Knowledge Base</h3>
 <p>The first IDENTIFIER is the name of the knowledge base.  In our
-family_relations example, this is <tt class="docutils literal"><span class="pre">family</span></tt>.</p>
+family_relations example, this is <tt class="docutils literal">family</tt>.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">You'll see that within <a class="reference external" href="rules/backward_chaining.html">backward-chaining rules</a>, the name of the
@@ -185,9 +185,9 @@ later.</p>
 <h3>Knowledge Entity</h3>
 <p>The second IDENTIFIER is the name of the <em>knowledge entity</em>.  This is the
 relationship between the arguments.  You could also think of this as the
-statement <em>type</em> or <em>topic</em>.  For example, <tt class="docutils literal"><span class="pre">son_of</span></tt> is a <em>type</em> of statement
+statement <em>type</em> or <em>topic</em>.  For example, <tt class="docutils literal">son_of</tt> is a <em>type</em> of statement
 with three arguments: (son, father, mother).  Or the (son, father, mother)
-arguments are about the <em>topic</em> <tt class="docutils literal"><span class="pre">son_of</span></tt>.</p>
+arguments are about the <em>topic</em> <tt class="docutils literal">son_of</tt>.</p>
 </div>
 <div class="section" id="arguments">
 <h3>Arguments</h3>

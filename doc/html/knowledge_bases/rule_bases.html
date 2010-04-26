@@ -108,8 +108,8 @@ manageable.</p>
 <li><p class="first">To enable your Python program to choose between different rule bases
 that are tailored to different specific situations.</p>
 <p>For example, some of the rules governing the automatic generation of SQL
-statements may vary depending upon the target database (e.g., <tt class="docutils literal"><span class="pre">mysql</span></tt>,
-<tt class="docutils literal"><span class="pre">postgresql</span></tt>, <tt class="docutils literal"><span class="pre">oracle</span></tt>).</p>
+statements may vary depending upon the target database (e.g., <tt class="docutils literal">mysql</tt>,
+<tt class="docutils literal">postgresql</tt>, <tt class="docutils literal">oracle</tt>).</p>
 <p>In this case, you want to be able to tell Pyke which of several rule bases
 to use on each invocation, depending upon which target database you will
 be accessing.  You would never use more than one of these rule bases at
@@ -129,15 +129,15 @@ the same time, so these rule bases are mutually exclusive.</p>
 to have <strong>one</strong> <a class="reference external" href="rule_bases.html#rule-base-activation">active</a> rule base.</p>
 <p>Thus, you place rule bases that you want to have active simultaneously into
 <em>different</em> rule base categories; and place rule bases that are mutually
-exclusive with each other (e.g., the <tt class="docutils literal"><span class="pre">mysql</span></tt>, <tt class="docutils literal"><span class="pre">postgresql</span></tt> and <tt class="docutils literal"><span class="pre">oracle</span></tt>
+exclusive with each other (e.g., the <tt class="docutils literal">mysql</tt>, <tt class="docutils literal">postgresql</tt> and <tt class="docutils literal">oracle</tt>
 rule bases) into the <em>same</em> rule base category.</p>
 <p>Each rule base category has a unique name.  In the example above you would
-want two rule base categories: <tt class="docutils literal"><span class="pre">database</span></tt> and <tt class="docutils literal"><span class="pre">html_generation</span></tt>.</p>
+want two rule base categories: <tt class="docutils literal">database</tt> and <tt class="docutils literal">html_generation</tt>.</p>
 <p>The rule base category name is used as the <em>knowledge base name</em> for
 statements within rules of one rule base category that want to refer to
 rules within another rule base category.  For example, rule bases in the
-<tt class="docutils literal"><span class="pre">html_generation</span></tt> category would need to use <tt class="docutils literal"><span class="pre">database.insert(...)</span></tt> to
-refer to the <tt class="docutils literal"><span class="pre">insert</span></tt> rules in the <tt class="docutils literal"><span class="pre">database</span></tt> category.</p>
+<tt class="docutils literal">html_generation</tt> category would need to use <tt class="docutils literal"><span class="pre">database.insert(...)</span></tt> to
+refer to the <tt class="docutils literal">insert</tt> rules in the <tt class="docutils literal">database</tt> category.</p>
 </div>
 <div class="section" id="rule-base-inheritance">
 <h2>Rule Base Inheritance</h2>
@@ -156,14 +156,14 @@ from that root rule base are in the same rule base category.</p>
 <p>The name of the rule base category is simply the name of its root
 rule base.</p>
 </blockquote>
-<p>So, our <tt class="docutils literal"><span class="pre">database</span></tt> and <tt class="docutils literal"><span class="pre">html_generation</span></tt> example would look like this:</p>
-<div align="center" class="figure">
+<p>So, our <tt class="docutils literal">database</tt> and <tt class="docutils literal">html_generation</tt> example would look like this:</p>
+<div class="figure align-center">
 <img alt="../images/rule_base_categories.png" src="../images/rule_base_categories.png" style="width: 450.0px; height: 424.0px;" />
 <p class="caption">Rule Base Categories</p>
 </div>
-<p>We have one root rule base called <tt class="docutils literal"><span class="pre">database</span></tt> and it has derived rule bases
-called <tt class="docutils literal"><span class="pre">mysql</span></tt>, <tt class="docutils literal"><span class="pre">postgresql</span></tt> and <tt class="docutils literal"><span class="pre">oracle</span></tt>.  And a second root rule base
-called <tt class="docutils literal"><span class="pre">html_generation</span></tt> with <tt class="docutils literal"><span class="pre">firefox</span></tt> and <tt class="docutils literal"><span class="pre">internet_explorer</span></tt>.</p>
+<p>We have one root rule base called <tt class="docutils literal">database</tt> and it has derived rule bases
+called <tt class="docutils literal">mysql</tt>, <tt class="docutils literal">postgresql</tt> and <tt class="docutils literal">oracle</tt>.  And a second root rule base
+called <tt class="docutils literal">html_generation</tt> with <tt class="docutils literal">firefox</tt> and <tt class="docutils literal">internet_explorer</tt>.</p>
 <p>The two root rule bases define two rule base categories:</p>
 <ul class="simple">
 <li>database, which includes:<ul>
@@ -192,8 +192,8 @@ time.</p>
 <p>Within each of these rule bases, if the knowledge base name is omitted from a
 statement within a <a class="reference external" href="../logic_programming/rules/backward_chaining.html">backward-chaining rule</a>, it defaults to the
 <a class="reference external" href="rule_bases.html#rule-base-categories">rule base category</a> of that rule base, <em>not</em> the rule base itself.
-Thus, <tt class="docutils literal"><span class="pre">insert(...)</span></tt> within <tt class="docutils literal"><span class="pre">postgresql</span></tt> would mean
-<tt class="docutils literal"><span class="pre">database.insert(...)</span></tt>, and <tt class="docutils literal"><span class="pre">make_tag(...)</span></tt> within <tt class="docutils literal"><span class="pre">firefox</span></tt> would mean
+Thus, <tt class="docutils literal"><span class="pre">insert(...)</span></tt> within <tt class="docutils literal">postgresql</tt> would mean
+<tt class="docutils literal"><span class="pre">database.insert(...)</span></tt>, and <tt class="docutils literal"><span class="pre">make_tag(...)</span></tt> within <tt class="docutils literal">firefox</tt> would mean
 <tt class="docutils literal"><span class="pre">html_generation.make_tag(...)</span></tt>.</p>
 <div class="important">
 <p class="first admonition-title">Important</p>
@@ -201,13 +201,13 @@ Thus, <tt class="docutils literal"><span class="pre">insert(...)</span></tt> wit
 implicitly) <em>always</em> refers to the <a class="reference external" href="rule_bases.html#rule-base-activation">active</a> rule base within that category.
 This may not be the rule base with that name (the root rule base), or even
 the rule base making implicit use of the rule base category.  For example,
-<tt class="docutils literal"><span class="pre">insert(...)</span></tt> within <tt class="docutils literal"><span class="pre">postgresql</span></tt> will end up referring to <tt class="docutils literal"><span class="pre">insert</span></tt>
-rules within the <tt class="docutils literal"><span class="pre">oracle</span></tt> rule base when <tt class="docutils literal"><span class="pre">oracle</span></tt> is the active rule
+<tt class="docutils literal"><span class="pre">insert(...)</span></tt> within <tt class="docutils literal">postgresql</tt> will end up referring to <tt class="docutils literal">insert</tt>
+rules within the <tt class="docutils literal">oracle</tt> rule base when <tt class="docutils literal">oracle</tt> is the active rule
 base.</p>
 </div>
 <p>All rules referring to foreign <a class="reference internal" href="#rule-base-categories">rule base categories</a> must explicitly use the
-rule base category name.  For example, to refer to the <tt class="docutils literal"><span class="pre">insert</span></tt> rule for
-databases, within the <tt class="docutils literal"><span class="pre">html_generation</span></tt> category, you would have to say
+rule base category name.  For example, to refer to the <tt class="docutils literal">insert</tt> rule for
+databases, within the <tt class="docutils literal">html_generation</tt> category, you would have to say
 <tt class="docutils literal"><span class="pre">database.insert(...)</span></tt>.</p>
 <p>In this way, all of the rules will work no matter which rule base is active
 within each rule base category.</p>
@@ -229,14 +229,14 @@ set of rules that may be used to try to prove this <a class="reference external"
 derived rules will be tried first.  If all of these fail, then the parent
 rules are tried.</p>
 <p>If you don't want the parent rules to be used for a particular <a class="reference external" href="../pyke_syntax/krb_syntax/bc_rule.html#use-clause">goal</a>,
-you must list that goal name in the <tt class="docutils literal"><span class="pre">without</span></tt> clause of the <a class="reference external" href="../pyke_syntax/krb_syntax/index.html#extending-clause">extending</a>
+you must list that goal name in the <tt class="docutils literal">without</tt> clause of the <a class="reference external" href="../pyke_syntax/krb_syntax/index.html#extending-clause">extending</a>
 statement at the beginning of the derived rule base.</p>
 </li>
 </ul>
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">All <a class="reference external" href="../logic_programming/rules/forward_chaining.html">forward-chaining rules</a> in the parent rule base are always included
-in the derived rule base.  The <tt class="docutils literal"><span class="pre">without</span></tt> clause only applies to
+in the derived rule base.  The <tt class="docutils literal">without</tt> clause only applies to
 backward-chaining rules.</p>
 </div>
 </div>
@@ -255,8 +255,8 @@ rule base may be activated from that point on.  Because these children
 rule bases only adds new rules, and doesn't take any away.  Thus, any
 forward-chaining rule run during the activation of the first rule base
 are not invalidated by activating the second rule base.</p>
-<p>In our database example, your program could activate the root <tt class="docutils literal"><span class="pre">database</span></tt>
-rule base and let the forward-chaining rules within the <tt class="docutils literal"><span class="pre">database</span></tt> rule
+<p>In our database example, your program could activate the root <tt class="docutils literal">database</tt>
+rule base and let the forward-chaining rules within the <tt class="docutils literal">database</tt> rule
 base figure out which derived rule base to activate depending on the
 particular database in use at the time the program is run.</p>
 <!-- ADD_LINKS MARKER -->
@@ -279,7 +279,7 @@ are compiled and loaded into your Python program.</p>
 </div>
 <div class="right-item"><a href="question_bases.html">Question Bases</a><p>Explanation of question bases and .kqb files.</p>
 </div>
-<div class="right-item"><a href="special.html">Special</a><p>Explanation of the <tt class="docutils literal"><span class="pre">special</span></tt> knowledge base.</p>
+<div class="right-item"><a href="special.html">Special</a><p>Explanation of the <tt class="docutils literal">special</tt> knowledge base.</p>
 </div>
 
             </div>
